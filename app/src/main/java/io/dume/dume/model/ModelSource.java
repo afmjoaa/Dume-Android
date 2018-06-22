@@ -3,10 +3,10 @@ package io.dume.dume.model;
 
 import java.util.Random;
 
-import io.dume.dume.interfaces.Model;
+import io.dume.dume.homepage.MainContract;
 
-public class ModelSource implements Model.StringData {
-    Model.StringData.DataListener listener;
+public class ModelSource implements MainContract.Model {
+    CallBack listener;
 
     @Override
     public int getRandomNumber() {
@@ -14,7 +14,7 @@ public class ModelSource implements Model.StringData {
     }
 
     @Override
-    public void setListener(DataListener listener) {
+    public void setListener(CallBack listener) {
         this.listener = listener;
     }
 }

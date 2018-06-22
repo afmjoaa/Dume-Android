@@ -1,19 +1,16 @@
-package io.dume.dume.presenter;
+package io.dume.dume.homepage;
 
 import android.util.Log;
 
-import io.dume.dume.interfaces.Model;
-import io.dume.dume.interfaces.Views;
-import io.dume.dume.interfaces.Presenter;
 import io.dume.dume.model.ModelSource;
 
-public class PresenterMainActivity implements Presenter.MainActivityPresenter, Model.StringData.DataListener {
+public class MainPresenter implements MainContract.Presenter, MainContract.Model.CallBack {
 
-    private static final String TAG = PresenterMainActivity.class.getSimpleName().toString();
-    Views.MainActivityView view;
-    Model.StringData model;
+    private static final String TAG = MainPresenter.class.getSimpleName().toString();
+    MainContract.View view;
+    MainContract.Model model;
 
-    public PresenterMainActivity(Views.MainActivityView view, ModelSource model) {
+    public MainPresenter(MainContract.View view, ModelSource model) {
         this.view = view;
         this.model = model;
         init();
