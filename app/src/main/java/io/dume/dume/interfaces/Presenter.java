@@ -9,7 +9,6 @@ public interface Presenter {
 
     interface WelcomeActivityPresenter {
         void showPages();
-
         void destroy();
     }
 
