@@ -17,8 +17,16 @@ public interface MainContract {
     }
 
     interface Model {
+        /**
+         * it returns a random number bound of 5000
+         * @return int
+         */
         int getRandomNumber();
 
+        /**
+         * set a callback listener before calling model data its nullable
+         * @param listener
+         */
         void setListener(CallBack listener);
 
         interface CallBack {
