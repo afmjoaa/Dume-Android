@@ -1,25 +1,21 @@
-package io.dume.dume.activity;
+package io.dume.dume.homepage;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.TextView;
 
 import io.dume.dume.R;
-import io.dume.dume.interfaces.Views;
-import io.dume.dume.interfaces.Presenter;
 import io.dume.dume.model.ModelSource;
-import io.dume.dume.presenter.PresenterMainActivity;
 
-public class MainActivity extends AppCompatActivity implements Views.MainActivityView {
-    private Presenter.MainActivityPresenter presenter;
+public class MainActivity extends AppCompatActivity implements MainContract.View {
+    private MainContract.Presenter presenter;
     private TextView textView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        presenter = new PresenterMainActivity(this, new ModelSource());
+        presenter = new MainPresenter(this, new ModelSource());
     }
 
     @Override
@@ -33,7 +29,7 @@ public class MainActivity extends AppCompatActivity implements Views.MainActivit
     }
 
 
-    public void toggle(View view) {
+    public void toggle(android.view.View view) {
         presenter.onButtonClicked();
 
     }
