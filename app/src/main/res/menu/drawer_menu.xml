@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group>
+        <item android:title="Dashboard" />
+        <item android:title="Messages" />
+        <item android:title="Manage Skills" />
+        <item android:title="Payments" />
+        <item android:title="Agreements" />
+        <item android:title="Profile Settings" />
+        <item android:title="App Settings" />
+        <item android:title="Forum" />
+    </group>
+</menu>
