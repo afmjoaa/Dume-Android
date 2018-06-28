@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         /*Advance Configuration of Initialized Objects*/
         setSupportActionBar(toolbar);
         actionBar = getSupportActionBar();
+        assert actionBar != null;
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeAsUpIndicator(R.drawable.humberger_icon);
 
