@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
 
     public void toggle(android.view.View view) {
         presenter.onButtonClicked();
+        Toast.makeText(this, "this is a bullshit ", Toast.LENGTH_SHORT).show();
 
     }
 
