@@ -55,6 +55,13 @@
                 android:onClick="toggle"
                 android:text="Toggle"
                 android:theme="@style/MyDarkBlueButton" />
+
+            <View
+                android:id="@+id/view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:minHeight="30dp"
+                android:visibility="visible" />
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 
