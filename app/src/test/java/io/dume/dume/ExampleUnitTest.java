@@ -2,8 +2,8 @@ package io.dume.dume;
 
 import org.junit.Test;
 
-import io.dume.dume.teacher.homepage.MainContract;
-import io.dume.dume.teacher.homepage.MainPresenter;
+import io.dume.dume.teacher.homepage.TeacherContract;
+import io.dume.dume.teacher.homepage.TeacherPresenter;
 import io.dume.dume.teacher.model.ModelSource;
 
 import static org.junit.Assert.*;
@@ -32,12 +32,12 @@ public class ExampleUnitTest {
     }
 
 
-    interface MockContract extends MainContract {
+    interface MockContract extends TeacherContract {
 
     }
 
-    class MockPresenter extends MainPresenter {
-        public MockPresenter(MainContract.View view, ModelSource model) {
+    class MockPresenter extends TeacherPresenter {
+        public MockPresenter(TeacherContract.View view, ModelSource model) {
             super(view, model);
         }
     }

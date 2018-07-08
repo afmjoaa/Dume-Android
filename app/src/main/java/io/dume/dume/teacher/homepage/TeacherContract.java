@@ -1,6 +1,6 @@
 package io.dume.dume.teacher.homepage;
 
-public interface MainContract {
+public interface TeacherContract {
 
 
     interface View {

@@ -4,13 +4,13 @@ import android.util.Log;
 
 import io.dume.dume.teacher.model.ModelSource;
 
-public class MainPresenter implements MainContract.Presenter, MainContract.Model.CallBack {
+public class TeacherPresenter implements TeacherContract.Presenter, TeacherContract.Model.CallBack {
 
-    private static final String TAG = MainPresenter.class.getSimpleName().toString();
-    MainContract.View view;
-    MainContract.Model model;
+    private static final String TAG = TeacherPresenter.class.getSimpleName().toString();
+    TeacherContract.View view;
+    TeacherContract.Model model;
 
-    public MainPresenter(MainContract.View view, ModelSource model) {
+    public TeacherPresenter(TeacherContract.View view, ModelSource model) {
         this.view = view;
         this.model = model;
         init();

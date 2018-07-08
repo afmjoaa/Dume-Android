@@ -14,8 +14,8 @@ import android.widget.Toast;
 import io.dume.dume.R;
 import io.dume.dume.teacher.model.ModelSource;
 
-public class MainActivity extends AppCompatActivity implements MainContract.View {
-    private MainContract.Presenter presenter;
+public class TeacherActivtiy extends AppCompatActivity implements TeacherContract.View {
+    private TeacherContract.Presenter presenter;
     private TextView textView;
     private Toolbar toolbar;
     private ActionBar actionBar;
@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        presenter = new MainPresenter(this, new ModelSource());
+        presenter = new TeacherPresenter(this, new ModelSource());
     }
 
     @Override
