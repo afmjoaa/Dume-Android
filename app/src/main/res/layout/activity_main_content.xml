@@ -14,8 +14,33 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:title="@string/app_name"
-            app:subtitle="share skill"
-            app:layout_scrollFlags="scroll|enterAlways" />
+            app:layout_scrollFlags="scroll|enterAlwaysCollapsed"
+            app:titleTextColor="#7e7e7e">
+
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="end"
+                android:layout_marginEnd="5dp"
+                android:layout_marginRight="5dp">
+
+                <ImageView
+                    android:id="@+id/profile_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/profile_icon" />
+
+                <View
+                    android:id="@+id/first_dot"
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:layout_marginBottom="5dp"
+                    android:background="@drawable/dot_circle_background" />
+
+            </android.support.constraint.ConstraintLayout>
+        </android.support.v7.widget.Toolbar>
+
+
     </android.support.design.widget.AppBarLayout>
 
     <android.support.v4.widget.NestedScrollView
@@ -34,7 +59,7 @@
                 android:id="@+id/my_textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Click Button :)"
+                android:text="255"
                 android:textSize="25sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -57,6 +82,7 @@
                 android:theme="@style/MyDarkBlueButton" />
 
             <View
+
                 android:id="@+id/view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

@@ -5,7 +5,7 @@
     android:id="@+id/drawerLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".homepage.MainActivity"
+    tools:context=".teacher.homepage.MainActivity"
     tools:openDrawer="start">
 
     <include layout="@layout/activity_main_content" />

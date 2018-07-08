@@ -1,21 +1,18 @@
-package io.dume.dume.homepage;
+package io.dume.dume.teacher.homepage;
 
-import android.content.res.Configuration;
-import android.support.annotation.NonNull;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import io.dume.dume.R;
-import io.dume.dume.model.ModelSource;
+import io.dume.dume.teacher.model.ModelSource;
 
 public class MainActivity extends AppCompatActivity implements MainContract.View {
     private MainContract.Presenter presenter;
@@ -70,5 +67,11 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        //  getMenuInflater().inflate(R.menu.actionbar_menu, menu);
+        return super.onCreateOptionsMenu(menu);
     }
 }

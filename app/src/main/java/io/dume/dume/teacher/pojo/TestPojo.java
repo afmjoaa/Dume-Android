@@ -1,4 +1,4 @@
-package io.dume.dume.pojo;
+package io.dume.dume.teacher.pojo;
 
 public class TestPojo {
     private String name;
