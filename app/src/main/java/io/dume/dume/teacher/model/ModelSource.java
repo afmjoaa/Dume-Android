@@ -1,9 +1,9 @@
-package io.dume.dume.model;
+package io.dume.dume.teacher.model;
 
 
 import java.util.Random;
 
-import io.dume.dume.homepage.MainContract;
+import io.dume.dume.teacher.homepage.MainContract;
 
 public class ModelSource implements MainContract.Model {
     CallBack listener;

@@ -1,12 +1,10 @@
 package io.dume.dume;
 
-import android.util.Log;
-
 import org.junit.Test;
 
-import io.dume.dume.homepage.MainContract;
-import io.dume.dume.homepage.MainPresenter;
-import io.dume.dume.model.ModelSource;
+import io.dume.dume.teacher.homepage.MainContract;
+import io.dume.dume.teacher.homepage.MainPresenter;
+import io.dume.dume.teacher.model.ModelSource;
 
 import static org.junit.Assert.*;
 

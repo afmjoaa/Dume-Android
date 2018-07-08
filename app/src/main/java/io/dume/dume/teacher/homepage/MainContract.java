@@ -1,4 +1,4 @@
-package io.dume.dume.homepage;
+package io.dume.dume.teacher.homepage;
 
 public interface MainContract {
 

@@ -1,8 +1,8 @@
-package io.dume.dume.homepage;
+package io.dume.dume.teacher.homepage;
 
 import android.util.Log;
 
-import io.dume.dume.model.ModelSource;
+import io.dume.dume.teacher.model.ModelSource;
 
 public class MainPresenter implements MainContract.Presenter, MainContract.Model.CallBack {
 
