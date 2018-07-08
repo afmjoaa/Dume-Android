@@ -9,8 +9,10 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:colorBackground">@color/colorNarvik</item>
         <item name="colorControlHighlight">@color/colorDarkAzure</item>
-        <item name="coordinatorLayoutStyle">@style/Widget.Design.CoordinatorLayout</item>
+    </style>
 
+    <style name="SplashTheme" parent="AppTheme">
+        <item name="android:windowBackground">@drawable/splash_background</item>
     </style>
 
     <style name="MyDarkBlueButton" parent="Widget.AppCompat.Button.Colored">
