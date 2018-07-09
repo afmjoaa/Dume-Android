@@ -2,6 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="io.dume.dume">
 
+    <!-- when a object needs internet to execute a job -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <!-- if any object needs to read local storage -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -19,7 +25,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".student.homepage.StudentActivity" />
-        <activity android:name=".auth.AuthenticationActivity" />
+        <activity
+            android:name=".auth.AuthActivity"
+            android:theme="@style/LoginTheme" />
     </application>
 
 </manifest>

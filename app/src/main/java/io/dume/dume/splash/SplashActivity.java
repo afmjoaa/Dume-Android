@@ -3,10 +3,9 @@ package io.dume.dume.splash;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.content.res.FontResourcesParserCompat;
 import android.support.v7.app.AppCompatActivity;
 
-import io.dume.dume.auth.AuthenticationActivity;
+import io.dume.dume.auth.AuthActivity;
 import io.dume.dume.student.homepage.StudentActivity;
 import io.dume.dume.teacher.homepage.TeacherActivtiy;
 
@@ -23,7 +22,7 @@ public class SplashActivity extends AppCompatActivity implements SplashContract.
 
     @Override
     public void gotoLoginActivity() {
-        startActivity(new Intent(this, AuthenticationActivity.class));
+        startActivity(new Intent(this, AuthActivity.class));
         finish();
     }
 

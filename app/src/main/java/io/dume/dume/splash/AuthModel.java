@@ -9,7 +9,7 @@ public class AuthModel implements SplashContract.Auth {
 
     @Override
     public boolean isUserLoggedIn() {
-        return true;
+        return false;
     }
 
     @Override

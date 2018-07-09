@@ -1,9 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".auth.AuthenticationActivity">
+    tools:context=".auth.AuthActivity">
 
-</android.support.constraint.ConstraintLayout>
+    <com.daimajia.slider.library.SliderLayout
+        android:id="@+id/slidingLayout"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+      >
+
+        <com.daimajia.slider.library.Indicators.PagerIndicator
+            android:id="@+id/page_indicator"
+            android:layout_width="200dp"
+            android:layout_height="25dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            app:selected_color="#0095BF"
+            app:unselected_color="#dbfafafa"
+            app:shape="rect"
+            app:selected_padding_left="2dp"
+            app:selected_padding_right="2dp"
+            app:unselected_padding_left="2dp"
+            app:unselected_padding_right="2dp"
+            app:selected_width="6dp"
+            app:selected_height="6dp"
+            app:unselected_width="6dp"
+            app:unselected_height="6dp"/>
+    </com.daimajia.slider.library.SliderLayout>
+
+</android.support.design.widget.CoordinatorLayout>

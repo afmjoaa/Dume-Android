@@ -60,4 +60,12 @@ dependencies {
     implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion"
     //  firebase
     implementation 'com.google.firebase:firebase-core:16.0.1'
+
+    /*Android Slider for Login Screen*/
+
+
+    implementation 'com.nineoldandroids:library:2.4.0'
+    implementation 'com.daimajia.slider:library:1.1.5@aar'
+    /*Image Loading Library*/
+    implementation 'com.squareup.picasso:picasso:2.3.2'
 }

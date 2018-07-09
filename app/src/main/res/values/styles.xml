@@ -9,6 +9,8 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:colorBackground">@color/colorNarvik</item>
         <item name="colorControlHighlight">@color/colorDarkAzure</item>
+
+
     </style>
 
     <style name="SplashTheme" parent="AppTheme">
@@ -18,6 +20,11 @@
     <style name="MyDarkBlueButton" parent="Widget.AppCompat.Button.Colored">
         <item name="colorButtonNormal">@color/colorDarkBlue</item>
         <item name="android:textColor">@color/colorWhite</item>
+    </style>
+
+    <style name="LoginTheme" parent="AppTheme">
+        <item name="android:windowTranslucentStatus">true</item>
+
     </style>
 
 </resources>
