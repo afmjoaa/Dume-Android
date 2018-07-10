@@ -1,21 +1,23 @@
 package io.dume.dume.auth;
 
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.view.Window;
+import android.widget.RelativeLayout;
 
 
-import com.daimajia.slider.library.Indicators.PagerIndicator;
 import com.daimajia.slider.library.SliderLayout;
-import com.daimajia.slider.library.SliderTypes.DefaultSliderView;
+import com.daimajia.slider.library.Tricks.ViewPagerEx;
 
 import io.dume.dume.R;
+import io.dume.dume.splash.FeaturedSliderAdapter;
 
 
 public class AuthActivity extends AppCompatActivity implements AuthContract.View {
     SliderLayout sliderLayout;
     AuthContract.Presenter presenter;
+    private String[] stringArray;
 
 
     @Override
@@ -31,11 +33,19 @@ public class AuthActivity extends AppCompatActivity implements AuthContract.View
 
     @Override
     public void init() {
+        stringArray = getResources().getStringArray(R.array.featured_text_array);
         sliderLayout.setCustomIndicator(findViewById(R.id.page_indicator));
-        sliderLayout.addSlider(new DefaultSliderView(this).image("https://images.pexels.com/photos/731082/pexels-photo-731082.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=550&w=300"));
-        sliderLayout.addSlider(new DefaultSliderView(this).image("https://i.pinimg.com/originals/25/03/75/250375dc394e38a32bdd8b7ea485c44f.jpg"));
-        sliderLayout.addSlider(new DefaultSliderView(this).image("https://images.pexels.com/photos/139935/pexels-photo-139935.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"));
-        sliderLayout.addSlider(new DefaultSliderView(this).image("https://images.pexels.com/photos/1210494/pexels-photo-1210494.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"));
+        sliderLayout.addSlider(new FeaturedSliderAdapter(this).image(R.drawable.slide_background).
+                description(stringArray[0]));
+        sliderLayout.addSlider(new FeaturedSliderAdapter(this).image(R.drawable.slide_background).
+                description(stringArray[1]));
+        sliderLayout.addSlider(new FeaturedSliderAdapter(this).image(R.drawable.slide_background).
+                description(stringArray[2]));
+        sliderLayout.addSlider(new FeaturedSliderAdapter(this).image(R.drawable.slide_background).
+                description(stringArray[3]));
+        sliderLayout.addSlider(new FeaturedSliderAdapter(this).image(R.drawable.slide_background).
+                description(stringArray[4]));
+
     }
 
     @Override

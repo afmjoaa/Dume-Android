@@ -3,7 +3,7 @@
 
     <item android:drawable="@color/colorDeepIcon" />
 
-    <item android:width="100dp" android:height="100dp">
+    <item >
         <bitmap
             android:antialias="true"
             android:gravity="center"

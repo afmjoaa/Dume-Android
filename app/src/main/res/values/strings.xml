@@ -2,4 +2,11 @@
     <string name="app_name">Dume</string>
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
+    <string-array name="featured_text_array" >
+        <item> Searching Teachers, Mentors, Couching or boot camp Dume got you all  covered</item>
+        <item> Dume will find you the best mentor on your demand, whenever you need</item>
+        <item> Finding tution was never been easier, just sign in as a mentor and get  started </item>
+        <item> Reach maximam people with Dume and let your talent shine </item>
+        <item> You never really learn something until you teach it, So start sharing your skill with dume </item>
+    </string-array>
 </resources>

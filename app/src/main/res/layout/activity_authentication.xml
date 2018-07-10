@@ -10,7 +10,14 @@
         android:id="@+id/slidingLayout"
         android:layout_width="match_parent"
         android:layout_height="250dp"
-      >
+        android:background="@drawable/slide_background">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/dume_large_icon" />
 
         <com.daimajia.slider.library.Indicators.PagerIndicator
             android:id="@+id/page_indicator"
@@ -20,16 +27,16 @@
             android:layout_centerHorizontal="true"
             android:gravity="center"
             app:selected_color="#0095BF"
-            app:unselected_color="#dbfafafa"
-            app:shape="rect"
+            app:selected_height="6dp"
             app:selected_padding_left="2dp"
             app:selected_padding_right="2dp"
+            app:selected_width="6dp"
+            app:shape="rect"
+            app:unselected_color="#dbfafafa"
+            app:unselected_height="6dp"
             app:unselected_padding_left="2dp"
             app:unselected_padding_right="2dp"
-            app:selected_width="6dp"
-            app:selected_height="6dp"
-            app:unselected_width="6dp"
-            app:unselected_height="6dp"/>
+            app:unselected_width="6dp" />
     </com.daimajia.slider.library.SliderLayout>
 
 </android.support.design.widget.CoordinatorLayout>
