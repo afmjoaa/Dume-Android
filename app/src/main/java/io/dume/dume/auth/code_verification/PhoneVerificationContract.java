@@ -11,6 +11,21 @@ public interface PhoneVerificationContract {
 
         void getUpComingData();
 
+        void onVerificationFailed(String msg);
+
+        void gotoTeacherActivity();
+
+        void gotoStudentActivity();
+
+        void showProgress();
+
+        void hideProgress();
+
+        void updateTimer(long millis);
+
+        void onTimerCompleted();
+
+
     }
 
     interface Model {
@@ -19,6 +34,8 @@ public interface PhoneVerificationContract {
 
     interface Presenter {
         void enqueue();
+
+        void onPinConfirm(String pin);
 
     }
 }

@@ -18,8 +18,10 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:elevation="0dp"
+            app:collapsedTitleTextAppearance="?android:textAppearanceMedium"
             app:contentScrim="@color/colorDefaultAndroid"
             app:expandedTitleMarginStart="20dp"
+            app:expandedTitleTextAppearance="?android:textAppearanceLarge"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:title="Phone Verification"
             app:titleEnabled="true">
@@ -44,11 +46,77 @@
         android:layout_marginLeft="10dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:text="@string/app_name" />
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/detailsTxt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Enter the 4 digit verification code sent
+to you at +8801712-123456   " />
+
+            <EditText
+                android:id="@+id/pinEditTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="5dp"
+                android:background="@drawable/edit_text_background"
+                android:hint="Pin Code"
+                android:inputType="phone"
+                android:padding="8dp"
+                android:typeface="sans" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <Button
+                        android:id="@+id/resendButton"
+                        style="@style/MyDarkBlueButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Resend Code"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/timerTxt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Resend Code in 12 Second"
+                        android:visibility="visible" />
+
+                    <TextView
+                        android:id="@+id/editPhn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Edit Phone Number"
+                        android:textColor="@color/colorAccent" />
+                </LinearLayout>
+
+                <android.support.design.widget.FloatingActionButton
+                    android:id="@+id/verifyFab"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|end"
+                    android:layout_margin="10dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="end"
+                    android:src="@drawable/right_arrow_icon"
+                    app:rippleColor="@color/colorDarkAzure" />
+            </LinearLayout>
+        </LinearLayout>
 
 
     </android.support.v4.widget.NestedScrollView>
