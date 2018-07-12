@@ -32,7 +32,6 @@ public class FeaturedSliderAdapter extends BaseSliderView {
     @Override
     public View getView() {
         int i = randomNumber.nextInt(5) + 1;
-
         View v = LayoutInflater.from(getContext()).inflate(R.layout.render_type_text, null);
         RelativeLayout slideContainer = v.findViewById(R.id.slideContainer);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {

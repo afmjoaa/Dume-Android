@@ -2,11 +2,27 @@
     <string name="app_name">Dume</string>
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
-    <string-array name="featured_text_array" >
+    <string-array name="student_text_array">
         <item> Searching Teachers, Mentors, Couching or boot camp Dume got you all  covered</item>
         <item> Dume will find you the best mentor on your demand, whenever you need</item>
         <item> Finding tution was never been easier, just sign in as a mentor and get  started </item>
         <item> Reach maximam people with Dume and let your talent shine </item>
         <item> You never really learn something until you teach it, So start sharing your skill with dume </item>
     </string-array>
+    <string-array name="teacher_text_array">
+        <item> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus viverra et lectus a gravida. </item>
+        <item> Dume will find you the best mentor on your demand, whenever you need</item>
+        <item>Nam placerat nisi ut accumsan dapibus. Etiam et sagittis justo </item>
+        <item> Reach maximam people with Dume and let your talent shine </item>
+        <item> You never really learn something until you teach it, So start sharing your skill with dume </item>
+    </string-array>
+    <string-array name="bootcamp_text_array">
+        <item> Nam placerat nisi ut accumsan dapibus. Etiam et sagittis justo</item>
+        <item>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus viverra et lectus</item>
+        <item> Finding tution was never been easier, just sign in as a mentor and get  started </item>
+        <item> Reach maximam people with Dume and let your talent shine </item>
+        <item> You never really learn something until you teach it, So start sharing your skill with dume </item>
+    </string-array>
+
+
 </resources>

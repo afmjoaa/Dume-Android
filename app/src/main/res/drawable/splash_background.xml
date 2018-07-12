@@ -3,10 +3,10 @@
 
     <item android:drawable="@color/colorDeepIcon" />
 
-    <item >
+    <item>
         <bitmap
             android:antialias="true"
             android:gravity="center"
-            android:src="@mipmap/ic_launcher"  />
+            android:src="@drawable/icon_launcher" />
     </item>
 </layer-list>

@@ -2,11 +2,13 @@
 <resources>
     <color name="colorPrimary">#ECE9E0</color>
     <color name="colorPrimaryDark">#000000</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent">#108174</color>
     <color name="colorNarvik">#ECE9E0</color>
     <color name="colorDarkBlue">#2A2E43</color>
     <color name="colorWhite">#ffffff</color>
     <color name="colorDarkAzure">#3497FD</color>
     <color name="colorDeepIcon">#4C5264</color>
-
+    <color name="colorBlack">#000000</color>
+    <color name="colorIconTint">#00796B</color>
+    <color name="colorDefaultAndroid">#ECE9E0</color>
 </resources>

@@ -7,6 +7,7 @@
 
     <!-- if any object needs to read local storage -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <application
         android:allowBackup="true"
@@ -21,6 +22,7 @@
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -28,6 +30,8 @@
         <activity
             android:name=".auth.AuthActivity"
             android:theme="@style/LoginTheme" />
+        <activity android:name=".auth.code_verification.PhoneVerificationActivity" />
+        <activity android:name=".auth.register.RegisterActivity"></activity>
     </application>
 
 </manifest>
