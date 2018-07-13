@@ -31,10 +31,10 @@
                 android:background="@drawable/slide_background">
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="105dp"
+                    android:layout_height="55dp"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="30dp"
                     android:src="@drawable/dume_large_icon" />
 
                 <com.daimajia.slider.library.Indicators.PagerIndicator
