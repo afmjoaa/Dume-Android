@@ -1,9 +1,8 @@
 package io.dume.dume.auth;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
+import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.BottomNavigationView;
@@ -30,6 +29,8 @@ import android.widget.Toast;
 
 import com.daimajia.slider.library.SliderLayout;
 
+import java.util.Locale;
+
 import io.dume.dume.R;
 import io.dume.dume.auth.code_verification.PhoneVerificationActivity;
 import io.dume.dume.auth.register.RegisterActivity;
@@ -39,11 +40,9 @@ import io.dume.dume.splash.FeaturedSliderAdapter;
 public class AuthActivity extends AppCompatActivity implements AuthContract.View, BottomNavigationView.OnNavigationItemSelectedListener, TextView.OnEditorActionListener, TextWatcher {
     SliderLayout sliderLayout;
     AuthContract.Presenter presenter;
-    private String[] studentTextArray;
+    private String[] promoTextArray;
     private BottomNavigationView bottomNavigationView;
     private EditText phoneEditText;
-    private String[] teacherTextArray;
-    private String[] bootcampTextArray;
     private Toolbar toolbar;
     private CollapsingToolbarLayout collapsingToolbarLayout;
     private AppBarLayout appBar;
@@ -53,6 +52,8 @@ public class AuthActivity extends AppCompatActivity implements AuthContract.View
     private FloatingActionButton floatingButoon;
     private TextView numberCounter;
     private static final String TAG = "AuthActivity";
+    private String[] changingTextArray;
+    private TextView changingTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,9 +66,8 @@ public class AuthActivity extends AppCompatActivity implements AuthContract.View
 
     @Override
     public void init() {
-        studentTextArray = getResources().getStringArray(R.array.student_text_array);
-        teacherTextArray = getResources().getStringArray(R.array.teacher_text_array);
-        bootcampTextArray = getResources().getStringArray(R.array.bootcamp_text_array);
+        promoTextArray = getResources().getStringArray(R.array.promo_text_array);
+        changingTextArray = getResources().getStringArray(R.array.changing_text_array);
         sliderLayout.setCustomIndicator(findViewById(R.id.page_indicator));
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
         bottomNavigationView.setSelectedItemId(R.id.student_nav);
@@ -81,6 +81,21 @@ public class AuthActivity extends AppCompatActivity implements AuthContract.View
         phoneEditText.setOnClickListener(view -> appBar.setExpanded(false, true));
         floatingButoon.setOnClickListener(view -> presenter.onPhoneValidation(phoneEditText.getText().toString()));
         phoneEditText.addTextChangedListener(this);
+
+        Typeface custom_font = Typeface.createFromAsset(getAssets(),  "fonts/Roboto-Medium.ttf");
+        changingTextView.setTypeface(custom_font);
+        //initializing sliderLayout
+        sliderLayout.addSlider(new FeaturedSliderAdapter(this).image(R.drawable.slide_background).
+                description(promoTextArray[0]));
+        sliderLayout.addSlider(new FeaturedSliderAdapter(this).image(R.drawable.slide_background).
+                description(promoTextArray[1]));
+        sliderLayout.addSlider(new FeaturedSliderAdapter(this).image(R.drawable.slide_background).
+                description(promoTextArray[2]));
+        sliderLayout.addSlider(new FeaturedSliderAdapter(this).image(R.drawable.slide_background).
+                description(promoTextArray[3]));
+        sliderLayout.addSlider(new FeaturedSliderAdapter(this).image(R.drawable.slide_background).
+                description(promoTextArray[4]));
+        sliderLayout.startAutoCycle(1000,5000,true);
 
     }
 
@@ -105,56 +120,24 @@ public class AuthActivity extends AppCompatActivity implements AuthContract.View
         countryCode = findViewById(R.id.countryCode);
         floatingButoon = findViewById(R.id.floating_button);
         numberCounter = findViewById(R.id.phoneCount);
+        changingTextView = findViewById(R.id.changingText);
     }
 
     @Override
     public void onStudentSelected() {
+        changingTextView.setText(changingTextArray[0]);
 
-        sliderLayout.removeAllSliders();
-        sliderLayout.addSlider(new FeaturedSliderAdapter(this).image(R.drawable.slide_background).
-                description(studentTextArray[0]));
-        sliderLayout.addSlider(new FeaturedSliderAdapter(this).image(R.drawable.slide_background).
-                description(studentTextArray[1]));
-        sliderLayout.addSlider(new FeaturedSliderAdapter(this).image(R.drawable.slide_background).
-                description(studentTextArray[2]));
-        sliderLayout.addSlider(new FeaturedSliderAdapter(this).image(R.drawable.slide_background).
-                description(studentTextArray[3]));
-        sliderLayout.addSlider(new FeaturedSliderAdapter(this).image(R.drawable.slide_background).
-                description(studentTextArray[4]));
     }
 
     @Override
     public void onTeacherSelected() {
-
-        sliderLayout.removeAllSliders();
-        sliderLayout.addSlider(new FeaturedSliderAdapter(this).image(R.drawable.slide_background).
-                description(teacherTextArray[0]));
-        sliderLayout.addSlider(new FeaturedSliderAdapter(this).image(R.drawable.slide_background).
-                description(teacherTextArray[1]));
-        sliderLayout.addSlider(new FeaturedSliderAdapter(this).image(R.drawable.slide_background).
-                description(teacherTextArray[2]));
-        sliderLayout.addSlider(new FeaturedSliderAdapter(this).image(R.drawable.slide_background).
-                description(teacherTextArray[3]));
-        sliderLayout.addSlider(new FeaturedSliderAdapter(this).image(R.drawable.slide_background).
-                description(teacherTextArray[4]));
+        changingTextView.setText(changingTextArray[1]);
 
     }
 
     @Override
     public void onBootcampSelected() {
-
-        sliderLayout.removeAllSliders();
-        sliderLayout.addSlider(new FeaturedSliderAdapter(this).image(R.drawable.slide_background).
-                description(bootcampTextArray[0]));
-        sliderLayout.addSlider(new FeaturedSliderAdapter(this).image(R.drawable.slide_background).
-                description(bootcampTextArray[1]));
-        sliderLayout.addSlider(new FeaturedSliderAdapter(this).image(R.drawable.slide_background).
-                description(bootcampTextArray[2]));
-        sliderLayout.addSlider(new FeaturedSliderAdapter(this).image(R.drawable.slide_background).
-                description(bootcampTextArray[3]));
-        sliderLayout.addSlider(new FeaturedSliderAdapter(this).image(R.drawable.slide_background).
-                description(bootcampTextArray[4]));
-
+        changingTextView.setText(changingTextArray[2]);
 
     }
 

@@ -6,8 +6,9 @@
     <color name="colorNarvik">#ECE9E0</color>
     <color name="colorDarkBlue">#2A2E43</color>
     <color name="colorWhite">#ffffff</color>
+    <color name="colorOffWhite">#F0F0F7</color>
     <color name="colorDarkAzure">#3497FD</color>
-    <color name="colorDeepIcon">#4C5264</color>
+    <color name="colorDeepIcon">#0f1e26</color>
     <color name="colorBlack">#000000</color>
     <color name="colorIconTint">#00796B</color>
     <color name="colorDefaultAndroid">#ECE9E0</color>

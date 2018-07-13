@@ -10,15 +10,13 @@
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbarLayout"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:elevation="0dp">
+        android:layout_height="270dp"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/collapsing_toolbar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:elevation="0dp"
             app:contentScrim="@color/colorDefaultAndroid"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:titleEnabled="false">
@@ -27,34 +25,39 @@
             <com.daimajia.slider.library.SliderLayout
                 android:id="@+id/slidingLayout"
                 android:layout_width="match_parent"
-                android:layout_height="250dp"
-                android:background="@drawable/slide_background">
+                android:layout_height="wrap_content"
+                android:background="@drawable/slide_background"
+                android:clipToPadding="false"
+                android:paddingBottom="10dp">
 
                 <ImageView
-                    android:layout_width="105dp"
-                    android:layout_height="55dp"
+                    android:layout_width="110dp"
+                    android:layout_height="60dp"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="30dp"
+                    android:contentDescription="@string/dume"
+                    android:elevation="30dp"
                     android:src="@drawable/dume_large_icon" />
 
                 <com.daimajia.slider.library.Indicators.PagerIndicator
                     android:id="@+id/page_indicator"
                     android:layout_width="200dp"
                     android:layout_height="25dp"
+                    android:paddingBottom="10dp"
                     android:layout_alignParentBottom="true"
                     android:layout_centerHorizontal="true"
                     android:gravity="center"
-                    app:selected_color="#0095BF"
-                    app:selected_height="6dp"
+                    app:selected_color="#4C5264"
+                    app:selected_height="8dp"
                     app:selected_padding_left="2dp"
                     app:selected_padding_right="2dp"
-                    app:selected_width="6dp"
-                    app:shape="rect"
-                    app:unselected_color="#dbfafafa"
-                    app:unselected_height="6dp"
+                    app:selected_width="8dp"
+                    app:shape="oval"
+                    app:unselected_color="#D0E9FA"
+                    app:unselected_height="8dp"
                     app:unselected_padding_left="2dp"
                     app:unselected_padding_right="2dp"
-                    app:unselected_width="6dp" />
+                    app:unselected_width="8dp" />
             </com.daimajia.slider.library.SliderLayout>
 
             <android.support.v7.widget.Toolbar
@@ -74,8 +77,10 @@
         android:id="@+id/scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="center_vertical"
-        android:layout_marginLeft="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        app:layout_anchor="@+id/scroll_view"
+        app:layout_anchorGravity="top|center"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
@@ -91,6 +96,19 @@
     </android.support.v4.widget.NestedScrollView>
 
 
+    <TextView
+        android:id="@+id/socialConnect"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:paddingBottom="10dp"
+        app:layout_anchor="@id/bottomNav"
+        app:layout_anchorGravity="top|start"
+        android:layout_gravity="top"
+        android:textSize="15sp"
+        android:text="@string/socialConnect" />
+
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/bottomNav"
         android:layout_width="match_parent"
@@ -99,6 +117,8 @@
         android:background="?android:attr/windowBackground"
         app:itemIconTint="@drawable/color_state_list"
         app:itemTextColor="@drawable/color_state_list"
-        app:menu="@menu/bottom_nav_menu" />
+        app:menu="@menu/bottom_nav_menu" >
+
+    </android.support.design.widget.BottomNavigationView>
 
 </android.support.design.widget.CoordinatorLayout>
