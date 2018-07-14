@@ -12,4 +12,10 @@
     <color name="colorBlack">#000000</color>
     <color name="colorIconTint">#00796B</color>
     <color name="colorDefaultAndroid">#ECE9E0</color>
+
+
+    <color name="textColorPrimary">#c1c1</color>
+    <color name="windowBackground">#FFFFFF</color>
+    <color name="navigationBarColor">#afafaf</color>
+    <color name="MystyleWindowBackground">#ffffff</color>
 </resources>

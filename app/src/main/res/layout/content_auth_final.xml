@@ -8,10 +8,307 @@
     tools:context=".auth.auth_final.AuthFinalActivity"
     tools:showIn="@layout/activity_auth_final">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
-        android:text="@string/large_text" />
+        android:layout_marginTop="20dp"
+        android:layout_gravity="start"
+        android:orientation="vertical">
+
+
+        <!--bullshit testing-->
+        <LinearLayout
+            android:id="@+id/user_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginStart="20dp"
+            android:orientation="horizontal"
+            android:baselineAligned="false">
+
+            <LinearLayout
+                android:id="@+id/linear_firstname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_firstname"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/input_firstname"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="First Name"
+                        android:inputType="textEmailAddress" />
+                </android.support.design.widget.TextInputLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:layout_marginLeft="5dp">
+
+                    <TextView
+                        android:id="@+id/firstname_err_msg"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Validation Errors"
+                        android:textColor="@color/colorBlack"
+                        android:visibility="invisible" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linear_lastname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_lastname"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/input_lastname"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Last Name"
+                        android:inputType="textEmailAddress" />
+                </android.support.design.widget.TextInputLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:layout_marginLeft="5dp">
+
+                    <TextView
+                        android:id="@+id/lastname_err_msg"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Validation Errors"
+                        android:textColor="@color/colorBlack"
+                        android:visibility="invisible" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linear_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginStart="20dp"
+            android:orientation="vertical">
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/input_layout_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/input_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/hint_email"
+                    android:inputType="textEmailAddress" />
+            </android.support.design.widget.TextInputLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_marginLeft="5dp">
+
+                <TextView
+                    android:id="@+id/email_err_msg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Validation Errors"
+                    android:textColor="@color/colorBlack"
+                    android:visibility="invisible" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginStart="20dp"
+            android:orientation="vertical"
+            app:layout_anchor="@id/linear_email">
+
+
+            <LinearLayout
+                android:id="@+id/thirdElement"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginTop="5dp"
+                    android:src="@drawable/bd_flag" />
+
+                <TextView
+                    android:id="@+id/countryCode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginTop="5dp"
+                    android:text="+88"
+                    android:textSize="18sp" />
+
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_mobile_number"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/phoneNumberEditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:descendantFocusability="beforeDescendants"
+                        android:focusableInTouchMode="true"
+                        android:hint="Mobile Number"
+                        android:imeOptions="actionDone"
+                        android:inputType="phone"
+                        android:nextFocusLeft="@id/phoneNumberEditText"
+                        android:nextFocusUp="@id/phoneNumberEditText"
+                        android:singleLine="true"
+                        android:textSize="18sp" />
+                </android.support.design.widget.TextInputLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end">
+
+                <TextView
+                    android:id="@+id/phoneCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:text="0"
+                    android:visibility="invisible" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginStart="20dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/plain_privacy_text1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:text="@string/privacy_notice1"
+                android:textAlignment="viewStart"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toTopOf="@+id/plain_privacy_text3"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="1.0" />
+
+            <TextView
+                android:id="@+id/plain_privacy_text2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:text="@string/privacy_notice2"
+                android:textAlignment="viewStart"
+                android:textSize="14sp"
+                app:layout_constraintTop_toBottomOf="@id/plain_privacy_text1"
+                app:layout_constraintBottom_toTopOf="@+id/hiperlink_privacy_text"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <TextView
+                android:id="@+id/hiperlink_terms_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:text="@string/hiperlink_term_text"
+                android:textAlignment="textStart"
+                android:textColor="@color/colorDarkAzure"
+                android:textSize="14sp"
+                app:layout_constraintStart_toEndOf="@+id/plain_privacy_text2"
+                app:layout_constraintTop_toBottomOf="@+id/plain_privacy_text1"
+                app:layout_constraintBottom_toTopOf="@+id/hiperlink_privacy_text"
+                tools:layout_editor_absoluteY="37dp" />
+
+            <TextView
+                android:id="@+id/plain_privacy_text3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:text="@string/privacy_notice3"
+                android:textAlignment="viewStart"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toTopOf="@+id/hiperlink_privacy_text"
+                app:layout_constraintTop_toBottomOf="@+id/plain_privacy_text1"
+                app:layout_constraintStart_toEndOf="@+id/hiperlink_terms_text" />
+
+            <TextView
+                android:id="@+id/hiperlink_privacy_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:text="@string/hiperlink_privacy_text"
+                android:textAlignment="textStart"
+                android:textColor="@color/colorDarkAzure"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/hiperlink_terms_text" />
+
+        </android.support.constraint.ConstraintLayout>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/floating_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_gravity="top|end"
+            android:clickable="true"
+            android:focusable="true"
+            android:src="@drawable/right_arrow_icon"
+            app:rippleColor="@color/colorDarkAzure" />
+
+
+
+    </LinearLayout>
+
+
 
 </android.support.v4.widget.NestedScrollView>

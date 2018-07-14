@@ -8,6 +8,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.ActionBar;
@@ -32,6 +33,7 @@ import com.daimajia.slider.library.SliderLayout;
 import java.util.Locale;
 
 import io.dume.dume.R;
+import io.dume.dume.auth.auth_final.AuthFinalActivity;
 import io.dume.dume.auth.code_verification.PhoneVerificationActivity;
 import io.dume.dume.auth.register.RegisterActivity;
 import io.dume.dume.splash.FeaturedSliderAdapter;
@@ -61,6 +63,15 @@ public class AuthActivity extends AppCompatActivity implements AuthContract.View
         setContentView(R.layout.activity_authentication);
         presenter = new AuthPresenter(this, null);
         presenter.enqueue();
+
+        //        testing code here
+        changingTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent k = new Intent(AuthActivity.this, AuthFinalActivity.class);
+                startActivity(k);
+            }
+        });
     }
 
 

@@ -10,38 +10,42 @@
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/app_bar_height"
-        android:fitsSystemWindows="true"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:layout_height="@dimen/appbarLayoutHeight"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar">
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/toolbar_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
-            app:contentScrim="?attr/colorPrimary"
+            app:contentScrim="@color/colorDefaultAndroid"
+            app:expandedTitleTextAppearance="@style/MyTextApprncExp"
+            app:collapsedTitleTextAppearance="@style/MyTextApprncCol"
+            app:collapsedTitleGravity="start"
+            app:expandedTitleGravity="start"
+            app:expandedTitleMarginStart="@dimen/expTittleMarginStart"
+            app:expandedTitleMarginTop="@dimen/expTittleMarginTop"
+            app:expandedTitleMarginBottom="@dimen/expTittleMarginBottom"
+            app:scrimVisibleHeightTrigger="@dimen/scrimVisibleHeightTrigger"
+            app:title="Confirm your information"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:toolbarId="@+id/toolbar">
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
+                android:layout_height="55dp"
+                app:buttonGravity="bottom"
                 app:layout_collapseMode="pin"
-                app:popupTheme="@style/AppTheme.PopupOverlay" />
+                app:titleMarginStart="0dp"
+                app:titleMarginTop="2dp"
+                app:titleMarginBottom="0dp"
+                app:navigationIcon="@drawable/back_arraw_icon" />
 
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 
     <include layout="@layout/content_auth_final" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/fab_margin"
-        app:layout_anchor="@id/app_bar"
-        app:layout_anchorGravity="bottom|end"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
 
 </android.support.design.widget.CoordinatorLayout>
