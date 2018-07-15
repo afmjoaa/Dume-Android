@@ -33,7 +33,7 @@
         <activity android:name=".auth.code_verification.PhoneVerificationActivity" />
         <activity android:name=".auth.register.RegisterActivity" />
         <activity
-            android:name=".auth.auth_final.AuthFinalActivity"
+            android:name=".auth.auth_final.AuthRegisterActivity"
             android:label="@string/title_activity_auth_final"
             android:theme="@style/MyStyle" />
     </application>

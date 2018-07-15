@@ -68,5 +68,6 @@ dependencies {
     implementation 'com.daimajia.slider:library:1.1.5@aar'
     /*Image Loading Library*/
     implementation 'com.squareup.picasso:picasso:2.3.2'
+    implementation 'com.google.firebase:firebase-auth:16.0.2'
 
 }

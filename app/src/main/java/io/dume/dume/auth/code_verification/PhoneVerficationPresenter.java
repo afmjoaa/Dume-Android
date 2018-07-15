@@ -4,13 +4,16 @@ import android.os.CountDownTimer;
 
 import java.util.logging.Handler;
 
+import io.dume.dume.auth.AuthContract;
+import io.dume.dume.auth.AuthModel;
+
 public class PhoneVerficationPresenter implements PhoneVerificationContract.Presenter {
     PhoneVerificationContract.View view;
     PhoneVerificationContract.Model model;
 
-    public PhoneVerficationPresenter(PhoneVerificationContract.View view, PhoneVerificationContract.Model model) {
+    public PhoneVerficationPresenter(PhoneVerificationContract.View view, PhoneVerificationContract.Model authModel) {
         this.view = view;
-        this.model = model;
+        this.model = authModel;
     }
 
     @Override
@@ -34,11 +37,25 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
 
     @Override
     public void onPinConfirm(String pin) {
-        view.showProgress();
-        new android.os.Handler().postDelayed(() -> {
-            view.hideProgress();
-            view.gotoTeacherActivity();
-        }, 2000);
+        model.verifyCode(pin, new PhoneVerificationContract.Model.CodeVerificationCallBack() {
+            @Override
+            public void onStart() {
+                view.showProgress();
+            }
+
+            @Override
+            public void onSuccess() {
+                view.hideProgress();
+                view.gotoTeacherActivity();
+            }
+
+            @Override
+            public void onFail(String error) {
+                view.hideProgress();
+                view.onVerificationFailed(error);
+            }
+        });
+
 
     }
 }

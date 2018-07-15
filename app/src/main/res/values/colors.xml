@@ -18,4 +18,5 @@
     <color name="windowBackground">#FFFFFF</color>
     <color name="navigationBarColor">#afafaf</color>
     <color name="MystyleWindowBackground">#ffffff</color>
+    <color name="colorAsh">#e6e4e6e6</color>
 </resources>
