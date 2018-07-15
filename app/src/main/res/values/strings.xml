@@ -31,8 +31,14 @@
     <string name="privacy_notice3">and&#160;</string>
     <string name="hiperlink_term_text">Terms &amp; Conditions&#160;</string>
     <string name="hiperlink_privacy_text">Privacy Policy.</string>
+<<<<<<< HEAD
     <string name="title_activity_social_init">SocialInitActivity</string>
     <string name="facebook">Facebook</string>
     <string name="google">Google</string>
 
+=======
+    <string name="lorem_para">
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent arcu tellus, tincidunt at hendrerit nec, rhoncus non ligula. Cras vehicula cursus felis, at malesuada augue consequat ut. Vestibulum tincidunt enim magna, id luctus orci fermentum vitae. Integer feugiat euismod purus, vel vulputate dui condimentum vel. Vivamus dignissim, nisi quis elementum tincidunt, arcu eros condimentum lectus, in blandit lorem elit eu lectus. Nam dapibus mattis est non feugiat. Quisque tristique elit in risus laoreet convallis. Etiam efficitur cursus elit non tempus. Ut aliquam ante at mi auctor pellentesque. Donec id mi elementum, finibus ante vitae, ullamcorper augue. Pellentesque tempor nunc et ligula egestas, quis vulputate turpis pellentesque. Morbi fringilla aliquam volutpat. Ut consequat, lectus eu feugiat imperdiet, neque sapien gravida lacus, quis ultricies nunc sapien eu nisi.
+</string>
+>>>>>>> enam
 </resources>

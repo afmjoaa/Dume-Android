@@ -5,14 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".auth.auth_final.AuthFinalActivity"
+    tools:context=".auth.auth_final.AuthRegisterActivity"
     tools:showIn="@layout/activity_auth_final">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
         android:layout_gravity="start"
+        android:layout_marginTop="20dp"
         android:orientation="vertical">
 
 
@@ -24,8 +24,8 @@
             android:layout_marginBottom="10dp"
             android:layout_marginEnd="20dp"
             android:layout_marginStart="20dp"
-            android:orientation="horizontal"
-            android:baselineAligned="false">
+            android:baselineAligned="false"
+            android:orientation="horizontal">
 
             <LinearLayout
                 android:id="@+id/linear_firstname"
@@ -59,7 +59,9 @@
                         android:layout_height="wrap_content"
                         android:text="Validation Errors"
                         android:textColor="@color/colorBlack"
-                        android:visibility="invisible" />
+                        android:visibility="invisible"
+
+                        />
 
                 </LinearLayout>
 
@@ -249,22 +251,23 @@
                 android:text="@string/privacy_notice2"
                 android:textAlignment="viewStart"
                 android:textSize="14sp"
-                app:layout_constraintTop_toBottomOf="@id/plain_privacy_text1"
                 app:layout_constraintBottom_toTopOf="@+id/hiperlink_privacy_text"
-                app:layout_constraintStart_toStartOf="parent"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/plain_privacy_text1" />
 
             <TextView
                 android:id="@+id/hiperlink_terms_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="start"
+                android:onClick="onViewClick"
                 android:text="@string/hiperlink_term_text"
                 android:textAlignment="textStart"
                 android:textColor="@color/colorDarkAzure"
                 android:textSize="14sp"
+                app:layout_constraintBottom_toTopOf="@+id/hiperlink_privacy_text"
                 app:layout_constraintStart_toEndOf="@+id/plain_privacy_text2"
                 app:layout_constraintTop_toBottomOf="@+id/plain_privacy_text1"
-                app:layout_constraintBottom_toTopOf="@+id/hiperlink_privacy_text"
                 tools:layout_editor_absoluteY="37dp" />
 
             <TextView
@@ -276,14 +279,15 @@
                 android:textAlignment="viewStart"
                 android:textSize="14sp"
                 app:layout_constraintBottom_toTopOf="@+id/hiperlink_privacy_text"
-                app:layout_constraintTop_toBottomOf="@+id/plain_privacy_text1"
-                app:layout_constraintStart_toEndOf="@+id/hiperlink_terms_text" />
+                app:layout_constraintStart_toEndOf="@+id/hiperlink_terms_text"
+                app:layout_constraintTop_toBottomOf="@+id/plain_privacy_text1" />
 
             <TextView
                 android:id="@+id/hiperlink_privacy_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="start"
+                android:onClick="onViewClick"
                 android:text="@string/hiperlink_privacy_text"
                 android:textAlignment="textStart"
                 android:textColor="@color/colorDarkAzure"
@@ -297,18 +301,18 @@
             android:id="@+id/floating_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:layout_marginRight="20dp"
             android:layout_gravity="top|end"
+            android:layout_marginBottom="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginRight="20dp"
             android:clickable="true"
             android:focusable="true"
+            android:onClick="onViewClick"
             android:src="@drawable/right_arrow_icon"
             app:rippleColor="@color/colorDarkAzure" />
 
 
-
     </LinearLayout>
-
 
 
 </android.support.v4.widget.NestedScrollView>

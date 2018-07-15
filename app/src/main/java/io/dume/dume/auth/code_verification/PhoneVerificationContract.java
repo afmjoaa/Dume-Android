@@ -29,6 +29,16 @@ public interface PhoneVerificationContract {
     }
 
     interface Model {
+        void verifyCode(String code, CodeVerificationCallBack listener);
+
+        interface CodeVerificationCallBack {
+            void onStart();
+
+            void onSuccess();
+
+            void onFail(String error);
+
+        }
 
     }
 

@@ -2,21 +2,20 @@ package io.dume.dume.auth.code_verification;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import io.dume.dume.R;
+import io.dume.dume.auth.AuthModel;
 import io.dume.dume.student.homepage.StudentActivity;
 import io.dume.dume.teacher.homepage.TeacherActivtiy;
 
@@ -31,12 +30,13 @@ public class PhoneVerificationActivity extends AppCompatActivity implements Phon
     private ProgressDialog progressDialog;
     private TextView timerTextView;
     private Button resendButton;
+    private Bundle bundleData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_phone_verification);
-        presenter = new PhoneVerficationPresenter(this, new PhoneVerificationModel());
+        presenter = new PhoneVerficationPresenter(this, new AuthModel(this, this));
         presenter.enqueue();
     }
 
@@ -46,7 +46,11 @@ public class PhoneVerificationActivity extends AppCompatActivity implements Phon
         fab.setOnClickListener(view -> presenter.onPinConfirm(pinEditText.getText().toString()));
         progressDialog = new ProgressDialog(this);
         progressDialog.setTitle("Please Wait");
-        progressDialog.setMessage("");
+        progressDialog.setMessage("Trying to match code");
+        bundleData = this.getIntent().getBundleExtra("bundle");
+        String phone_number = bundleData.getString("phone_number");
+        detailsTextView.setText("Enter the 6 digit verification code sent\n" +
+                "to you at +88" + phone_number);
     }
 
     @Override
@@ -106,7 +110,7 @@ public class PhoneVerificationActivity extends AppCompatActivity implements Phon
 
     @Override
     public void updateTimer(long millis) {
-        timerTextView.setText("Resend Code in " + millis / 1000 + " Seconds");
+        timerTextView.setText(String.format("Resend Code in %d Seconds", millis / 1000));
     }
 
     @Override

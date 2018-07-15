@@ -10,7 +10,7 @@ public interface SplashContract {
         void gotoStudentActivity();
     }
 
-    interface Auth {
+    interface Model {
         boolean isUserLoggedIn();
         void onAccountTypeFound(AuthCallbackListener listener);
 
@@ -20,7 +20,7 @@ public interface SplashContract {
         void enqueue();
     }
 
-    /*Callback for Data/Auth Model*/
+    /*Callback for Data/Model Model*/
     interface AuthCallbackListener {
         void onTeacherFound();
 

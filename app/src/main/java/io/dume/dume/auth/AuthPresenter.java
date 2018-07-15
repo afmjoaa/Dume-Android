@@ -1,5 +1,6 @@
 package io.dume.dume.auth;
 
+import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.MenuItem;
 
@@ -10,10 +11,12 @@ public class AuthPresenter implements AuthContract.Presenter {
 
     AuthContract.View view;
     AuthContract.Model model;
+    private Bundle mBundle;
 
     public AuthPresenter(AuthContract.View view, @Nullable AuthContract.Model model) {
         this.view = view;
         this.model = model;
+        mBundle = new Bundle();
     }
 
     @Override
@@ -21,6 +24,8 @@ public class AuthPresenter implements AuthContract.Presenter {
         view.findView();
         view.initActionBar();
         view.init();
+
+
     }
 
     @Override
@@ -54,7 +59,32 @@ public class AuthPresenter implements AuthContract.Presenter {
             view.onValidationFailed("Only Digits Allowed (0-9)");
         } else if (phoneNumber.length() != 11) {
             view.onValidationFailed("Should be 11 Digits");
-        } else view.onValidationSuccess(phoneNumber);
+        } else if (model.isExistingUser(phoneNumber)) {
+            view.showProgress("User Found. Sending Code", "We are sending 6 digits code to your given phone number. please wait a bit");
+            model.sendMessage("+88" + phoneNumber, new AuthContract.Model.Callback() {
+                @Override
+                public void onFail(String error) {
+                    view.hideProgress();
+                    view.onValidationFailed(error);
+                    view.showToast(error);
+                }
+
+                @Override
+                public void onSuccess(String s) {
+                    view.hideProgress();
+                    mBundle.putString("verification_id", s);
+                    mBundle.putInt("station", 1);
+                    mBundle.putString("phone_number", phoneNumber);
+                    view.goToVerificationActivity(mBundle);
+                }
+            });
+
+        } else {
+            mBundle.putInt("station", 1);
+            mBundle.putString("phone_number", phoneNumber);
+            view.goToRegesterActivity(mBundle);
+
+        }
     }
 
 
@@ -69,8 +99,11 @@ public class AuthPresenter implements AuthContract.Presenter {
         }
     }
 
+
     @Override
-    public void isExistingUser(String phoneNumber) {
-        view.goToVerificationActivity();
+    public void setBundle() {
+        if (model.getIntent().getBundleExtra("bundle") != null) {
+            view.fillBundle(model.getIntent().getBundleExtra("bundle"));
+        }
     }
 }

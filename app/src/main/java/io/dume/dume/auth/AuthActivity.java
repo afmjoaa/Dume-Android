@@ -1,21 +1,18 @@
 package io.dume.dume.auth;
 
-import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -27,15 +24,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 import com.daimajia.slider.library.SliderLayout;
 
-import java.util.Locale;
-
 import io.dume.dume.R;
-import io.dume.dume.auth.auth_final.AuthFinalActivity;
+import io.dume.dume.auth.auth_final.AuthRegisterActivity;
 import io.dume.dume.auth.code_verification.PhoneVerificationActivity;
-import io.dume.dume.auth.register.RegisterActivity;
 import io.dume.dume.auth.social_init.SocialInitActivity;
 import io.dume.dume.splash.FeaturedSliderAdapter;
 
@@ -57,28 +50,28 @@ public class AuthActivity extends AppCompatActivity implements AuthContract.View
     private static final String TAG = "AuthActivity";
     private String[] changingTextArray;
     private TextView changingTextView;
+
     private TextView socialConnect;
+
+    private ProgressDialog progressDialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_authentication);
-        presenter = new AuthPresenter(this, null);
+        presenter = new AuthPresenter(this, new AuthModel(this, this));
         presenter.enqueue();
 
-        //        testing code here
-        changingTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent k = new Intent(AuthActivity.this, AuthFinalActivity.class);
-                startActivity(k);
-            }
-        });
 
         socialConnect.setOnClickListener(view -> {
             Intent k = new Intent(AuthActivity.this, SocialInitActivity.class);
             startActivity(k);
         });
+
+        presenter.setBundle();
+        changingTextView.setOnClickListener(view -> startActivity(new Intent(AuthActivity.this, AuthRegisterActivity.class)));
+
     }
 
 
@@ -99,8 +92,10 @@ public class AuthActivity extends AppCompatActivity implements AuthContract.View
         phoneEditText.setOnClickListener(view -> appBar.setExpanded(false, true));
         floatingButoon.setOnClickListener(view -> presenter.onPhoneValidation(phoneEditText.getText().toString()));
         phoneEditText.addTextChangedListener(this);
+        progressDialog = new ProgressDialog(this);
 
-        Typeface custom_font = Typeface.createFromAsset(getAssets(),  "fonts/Roboto-Regular.ttf");
+        Typeface custom_font = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Regular.ttf");
+
         changingTextView.setTypeface(custom_font);
         //initializing sliderLayout
         sliderLayout.addSlider(new FeaturedSliderAdapter(this).image(R.drawable.slide_background).
@@ -113,7 +108,7 @@ public class AuthActivity extends AppCompatActivity implements AuthContract.View
                 description(promoTextArray[3]));
         sliderLayout.addSlider(new FeaturedSliderAdapter(this).image(R.drawable.slide_background).
                 description(promoTextArray[4]));
-        sliderLayout.startAutoCycle(1000,5000,true);
+        sliderLayout.startAutoCycle(1000, 5000, true);
 
     }
 
@@ -139,7 +134,7 @@ public class AuthActivity extends AppCompatActivity implements AuthContract.View
         floatingButoon = findViewById(R.id.floating_button);
         numberCounter = findViewById(R.id.phoneCount);
         changingTextView = findViewById(R.id.changingText);
-        socialConnect= findViewById(R.id.socialConnect);
+        socialConnect = findViewById(R.id.socialConnect);
     }
 
     @Override
@@ -187,7 +182,7 @@ public class AuthActivity extends AppCompatActivity implements AuthContract.View
 
     @Override
     public void onValidationSuccess(String number) {
-        presenter.isExistingUser(number);
+        Toast.makeText(this, "Validation Success", Toast.LENGTH_SHORT).show();
     }
 
 
@@ -197,14 +192,41 @@ public class AuthActivity extends AppCompatActivity implements AuthContract.View
     }
 
     @Override
-    public void goToVerificationActivity() {
+    public void goToVerificationActivity(Bundle bundle) {
         Intent intent = new Intent(this, PhoneVerificationActivity.class);
+        intent.putExtra("bundle", bundle);
         startActivity(intent);
     }
 
     @Override
-    public void goToRegesterActivity() {
-        Intent intent = new Intent(this, RegisterActivity.class);
+    public void goToRegesterActivity(Bundle bundle) {
+        Intent intent = new Intent(this, AuthRegisterActivity.class);
+        bundle.putString("account_major", bottomNavigationView.getSelectedItemId() == R.id.student_nav ? "student" : "teacher");
+        intent.putExtra("bundle", bundle);
+        startActivity(intent);
+
+    }
+
+    @Override
+    public void showProgress(String titile, String message) {
+        progressDialog.setTitle(titile);
+        progressDialog.setMessage(message);
+        progressDialog.show();
+    }
+
+    @Override
+    public void hideProgress() {
+        progressDialog.dismiss();
+    }
+
+    @Override
+    public void showToast(String toast) {
+        Toast.makeText(this, toast, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void fillBundle(Bundle bundle) {
+        phoneEditText.setText(bundle.getString("phone_number", ""));
     }
 
 
@@ -255,6 +277,17 @@ public class AuthActivity extends AppCompatActivity implements AuthContract.View
         Log.w(TAG, "afterTextChanged: " + editable.toString());
     }
 
+    @Override
+    protected void onPause() {
+        progressDialog.dismiss();
+        super.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        progressDialog.dismiss();
+        super.onDestroy();
+    }
 }
 
 
