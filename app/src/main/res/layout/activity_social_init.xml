@@ -4,15 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    tools:context=".auth.auth_final.AuthFinalActivity">
+    tools:context=".auth.social_init.SocialInitActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/appbarLayoutHeight"
-        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        android:fitsSystemWindows="true"
         android:stateListAnimator="@drawable/appbar_always_elevated"
+        android:theme="@style/AppTheme.AppBarOverlay"
         tools:targetApi="lollipop">
 
         <android.support.design.widget.CollapsingToolbarLayout
@@ -20,7 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
-            app:contentScrim="@color/colorDefaultAndroid"
+            app:contentScrim="?attr/colorPrimary"
             app:expandedTitleTextAppearance="@style/MyTextApprncExp"
             app:collapsedTitleTextAppearance="@style/MyTextApprncCol"
             app:collapsedTitleGravity="start"
@@ -29,7 +29,7 @@
             app:expandedTitleMarginTop="@dimen/expTittleMarginTop"
             app:expandedTitleMarginBottom="@dimen/expTittleMarginBottom"
             app:scrimVisibleHeightTrigger="@dimen/scrimVisibleHeightTrigger"
-            app:title="Confirm your information"
+            app:title="Choose an account"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:toolbarId="@+id/toolbar">
 
@@ -37,17 +37,17 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/toolbarLayoutHeight"
-                app:buttonGravity="bottom"
                 app:layout_collapseMode="pin"
+                app:buttonGravity="bottom"
                 app:titleMarginStart="@dimen/titleMarginStart"
                 app:titleMarginTop="@dimen/titleMarginTop"
                 app:titleMarginBottom="@dimen/titleMarginBottom"
-                app:navigationIcon="@drawable/back_arraw_icon" />
+                app:navigationIcon="@drawable/back_arraw_icon"
+                app:popupTheme="@style/AppTheme.PopupOverlay" />
 
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_auth_final" />
-
+    <include layout="@layout/content_social_init" />
 
 </android.support.design.widget.CoordinatorLayout>

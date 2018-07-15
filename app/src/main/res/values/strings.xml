@@ -31,5 +31,8 @@
     <string name="privacy_notice3">and&#160;</string>
     <string name="hiperlink_term_text">Terms &amp; Conditions&#160;</string>
     <string name="hiperlink_privacy_text">Privacy Policy.</string>
+    <string name="title_activity_social_init">SocialInitActivity</string>
+    <string name="facebook">Facebook</string>
+    <string name="google">Google</string>
 
 </resources>

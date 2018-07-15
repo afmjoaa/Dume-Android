@@ -11,7 +11,9 @@
         android:id="@+id/appbarLayout"
         android:layout_width="match_parent"
         android:layout_height="260dp"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        android:stateListAnimator="@drawable/appbar_always_elevated"
+        tools:targetApi="lollipop">
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/collapsing_toolbar"
@@ -65,7 +67,12 @@
                 android:layout_height="80dp"
                 app:buttonGravity="bottom"
                 app:layout_collapseMode="pin"
-                app:navigationIcon="@drawable/back_arraw_icon" />
+                app:navigationIcon="@drawable/back_arraw_icon"
+                app:logo="@drawable/signin_logo"
+                app:expandedTitleTextAppearance="@style/MyTextApprncExp"
+                app:collapsedTitleTextAppearance="@style/MyTextApprncCol"
+                app:collapsedTitleGravity="start"
+                app:expandedTitleGravity="start"/>
 
         </android.support.design.widget.CollapsingToolbarLayout>
 

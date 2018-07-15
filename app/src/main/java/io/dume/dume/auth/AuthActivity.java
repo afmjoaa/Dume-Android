@@ -36,6 +36,7 @@ import io.dume.dume.R;
 import io.dume.dume.auth.auth_final.AuthFinalActivity;
 import io.dume.dume.auth.code_verification.PhoneVerificationActivity;
 import io.dume.dume.auth.register.RegisterActivity;
+import io.dume.dume.auth.social_init.SocialInitActivity;
 import io.dume.dume.splash.FeaturedSliderAdapter;
 
 
@@ -56,6 +57,7 @@ public class AuthActivity extends AppCompatActivity implements AuthContract.View
     private static final String TAG = "AuthActivity";
     private String[] changingTextArray;
     private TextView changingTextView;
+    private TextView socialConnect;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +73,11 @@ public class AuthActivity extends AppCompatActivity implements AuthContract.View
                 Intent k = new Intent(AuthActivity.this, AuthFinalActivity.class);
                 startActivity(k);
             }
+        });
+
+        socialConnect.setOnClickListener(view -> {
+            Intent k = new Intent(AuthActivity.this, SocialInitActivity.class);
+            startActivity(k);
         });
     }
 
@@ -93,7 +100,7 @@ public class AuthActivity extends AppCompatActivity implements AuthContract.View
         floatingButoon.setOnClickListener(view -> presenter.onPhoneValidation(phoneEditText.getText().toString()));
         phoneEditText.addTextChangedListener(this);
 
-        Typeface custom_font = Typeface.createFromAsset(getAssets(),  "fonts/Roboto-Medium.ttf");
+        Typeface custom_font = Typeface.createFromAsset(getAssets(),  "fonts/Roboto-Regular.ttf");
         changingTextView.setTypeface(custom_font);
         //initializing sliderLayout
         sliderLayout.addSlider(new FeaturedSliderAdapter(this).image(R.drawable.slide_background).
@@ -132,6 +139,7 @@ public class AuthActivity extends AppCompatActivity implements AuthContract.View
         floatingButoon = findViewById(R.id.floating_button);
         numberCounter = findViewById(R.id.phoneCount);
         changingTextView = findViewById(R.id.changingText);
+        socialConnect= findViewById(R.id.socialConnect);
     }
 
     @Override

@@ -14,8 +14,9 @@
     <color name="colorDefaultAndroid">#ECE9E0</color>
 
 
-    <color name="textColorPrimary">#c1c1</color>
+    <color name="textColorPrimary">#575757</color>
     <color name="windowBackground">#FFFFFF</color>
     <color name="navigationBarColor">#afafaf</color>
     <color name="MystyleWindowBackground">#ffffff</color>
+    <color name="transparent">#00ffffff</color>
 </resources>

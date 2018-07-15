@@ -36,6 +36,10 @@
             android:name=".auth.auth_final.AuthFinalActivity"
             android:label="@string/title_activity_auth_final"
             android:theme="@style/MyStyle" />
+        <activity
+            android:name=".auth.social_init.SocialInitActivity"
+            android:label="@string/title_activity_social_init"
+            android:theme="@style/MyStyle"/>
     </application>
 
 </manifest>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".auth.social_init.SocialInitActivity"
+    tools:showIn="@layout/activity_social_init">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/button1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="25dp"
+            android:paddingRight="30dp"
+            android:paddingEnd="30dp"
+            android:paddingStart="15dp"
+            android:paddingLeft="15dp"
+            style="?android:attr/borderlessButtonStyle"
+            android:drawableLeft="@drawable/facebook_icon"
+            android:drawablePadding="21dp"
+            android:drawableStart="@drawable/facebook_icon"
+            android:gravity="start|center_vertical"
+            android:text="@string/facebook"
+            android:textAllCaps="false"
+            tools:targetApi="lollipop" />
+
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginStart="20dp"
+            android:paddingRight="47dp"
+            android:paddingEnd="47dp"
+            android:paddingStart="15dp"
+            android:paddingLeft="15dp"
+            style="?android:attr/borderlessButtonStyle"
+            android:drawableLeft="@drawable/google_icon"
+            android:drawablePadding="16dp"
+            android:drawableStart="@drawable/google_icon"
+            android:gravity="start|center_vertical"
+            android:text="@string/google"
+            android:textAllCaps="false"
+            tools:targetApi="lollipop" />
+    </LinearLayout>
+
+</android.support.v4.widget.NestedScrollView>

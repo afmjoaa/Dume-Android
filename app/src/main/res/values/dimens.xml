@@ -2,8 +2,15 @@
     <dimen name="text_margin">16dp</dimen>
 
     <dimen name="appbarLayoutHeight">100dp</dimen>
+    <dimen name="toolbarLayoutHeight">55dp</dimen>
     <dimen name="expTittleMarginBottom">0dp</dimen>
     <dimen name="expTittleMarginTop">50dp</dimen>
     <dimen name="expTittleMarginStart">20dp</dimen>
     <dimen name="scrimVisibleHeightTrigger">10dp</dimen>
+    <dimen name="app_bar_height">180dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="titleMarginStart">0dp</dimen>
+    <dimen name="titleMarginTop">2dp</dimen>
+    <dimen name="titleMarginBottom">0dp</dimen>
+
 </resources>
