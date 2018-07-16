@@ -48,6 +48,7 @@ public class PhoneVerificationActivity extends AppCompatActivity implements Phon
         setContentView(R.layout.activity_phone_verification);
         presenter = new PhoneVerficationPresenter(this, new AuthModel(this, this));
         presenter.enqueue();
+
     }
 
     @Override
