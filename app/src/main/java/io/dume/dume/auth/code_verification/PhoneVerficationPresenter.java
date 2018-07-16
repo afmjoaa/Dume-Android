@@ -2,14 +2,15 @@ package io.dume.dume.auth.code_verification;
 
 import android.os.CountDownTimer;
 
-import java.util.logging.Handler;
+import com.google.firebase.auth.PhoneAuthProvider;
 
 import io.dume.dume.auth.AuthContract;
-import io.dume.dume.auth.AuthModel;
+import io.dume.dume.auth.DataStore;
 
 public class PhoneVerficationPresenter implements PhoneVerificationContract.Presenter {
     PhoneVerificationContract.View view;
     PhoneVerificationContract.Model model;
+    private CountDownTimer countDownTimer;
 
     public PhoneVerficationPresenter(PhoneVerificationContract.View view, PhoneVerificationContract.Model authModel) {
         this.view = view;
@@ -21,7 +22,7 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
         view.findView();
         view.initActionBar();
         view.init();
-        CountDownTimer countDownTimer = new CountDownTimer(60000, 1000) {
+        countDownTimer = new CountDownTimer(60000, 1000) {
             @Override
             public void onTick(long l) {
                 view.updateTimer(l);
@@ -32,7 +33,8 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
                 view.onTimerCompleted();
             }
         };
-        countDownTimer.start();
+        startTimer();
+
     }
 
     @Override
@@ -40,7 +42,7 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
         model.verifyCode(pin, new PhoneVerificationContract.Model.CodeVerificationCallBack() {
             @Override
             public void onStart() {
-                view.showProgress();
+                view.showProgress("Authenticating");
             }
 
             @Override
@@ -57,5 +59,31 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
         });
 
 
+    }
+
+    @Override
+    public void onResendCode() {
+        view.showProgress("Resending Code");
+        model.onResendCode(new AuthContract.Model.Callback() {
+            @Override
+            public void onFail(String error) {
+                view.hideProgress();
+                view.showToast(error);
+            }
+
+            @Override
+            public void onSuccess(String id, PhoneAuthProvider.ForceResendingToken forceResendingToken) {
+                view.hideProgress();
+                view.showToast("Code sent. Please check your mobile phone");
+                DataStore.resendingToken = forceResendingToken;
+                startTimer();
+            }
+        });
+    }
+
+    @Override
+    public void startTimer() {
+        view.onTimerStarted();
+        countDownTimer.start();
     }
 }

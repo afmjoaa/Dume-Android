@@ -1,9 +1,9 @@
 package io.dume.dume.auth;
 
 import android.content.Intent;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.view.MenuItem;
+
+import com.google.firebase.auth.PhoneAuthProvider;
 
 public interface AuthContract {
     interface View {
@@ -31,9 +31,9 @@ public interface AuthContract {
 
         void onValidationFailed(String err);
 
-        void goToVerificationActivity(Bundle bundle);
+        void goToVerificationActivity(DataStore dataStore);
 
-        void goToRegesterActivity(Bundle bundle);
+        void goToRegesterActivity(DataStore dataStore);
 
         void showProgress(String titile, String message);
 
@@ -41,7 +41,7 @@ public interface AuthContract {
 
         void showToast(String toast);
 
-        void fillBundle(Bundle bundle);
+        void restoreData(DataStore dataStore);
 
 
     }
@@ -55,7 +55,8 @@ public interface AuthContract {
 
             void onFail(String error);
 
-            void onSuccess(String id);
+            void onSuccess(String id, PhoneAuthProvider.ForceResendingToken forceResendingToken);
+
 
         }
 

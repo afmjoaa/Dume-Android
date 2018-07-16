@@ -20,6 +20,7 @@ public class AuthModel implements AuthContract.Model, SplashContract.Model, Phon
     Context context;
     private final FirebaseAuth mAuth;
     private final Intent mIntent;
+    private DataStore datastore = null;
 
 
     public AuthModel(Activity activity, Context context) {
@@ -27,7 +28,12 @@ public class AuthModel implements AuthContract.Model, SplashContract.Model, Phon
         this.activity = activity;
         mAuth = FirebaseAuth.getInstance();
         mIntent = this.activity.getIntent();
+        if (mIntent.getSerializableExtra("datastore") != null) {
+            datastore = (DataStore) mIntent.getSerializableExtra("datastore");
+        }
+
     }
+
 
     @Override
     public void sendMessage(String phoneNumber, Callback listener) {
@@ -45,7 +51,7 @@ public class AuthModel implements AuthContract.Model, SplashContract.Model, Phon
 
             @Override
             public void onCodeSent(String s, PhoneAuthProvider.ForceResendingToken forceResendingToken) {
-                listener.onSuccess(s);
+                listener.onSuccess(s, forceResendingToken);
                 super.onCodeSent(s, forceResendingToken);
             }
         });
@@ -58,17 +64,16 @@ public class AuthModel implements AuthContract.Model, SplashContract.Model, Phon
 
     @Override
     public boolean isExistingUser(String phoneNumber) {
-        return false;
+        return true;
     }
 
     @Override
     public void verifyCode(String code, PhoneVerificationContract.Model.CodeVerificationCallBack listener) {
-        if (listener != null && mIntent != null) {
+        if (listener != null && datastore != null) {
             listener.onStart();
-            PhoneAuthCredential credential = PhoneAuthProvider.getCredential(mIntent.getBundleExtra("bundle").getString("verification_id", ""), code);
+            PhoneAuthCredential credential = PhoneAuthProvider.getCredential(datastore.getVerificationId(), code);
             mAuth.signInWithCredential(credential).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
-
                     listener.onSuccess();
                 } else {
                     if (task.getException() != null) {
@@ -82,8 +87,30 @@ public class AuthModel implements AuthContract.Model, SplashContract.Model, Phon
     }
 
     @Override
+    public void onResendCode(Callback listener) {
+        PhoneAuthProvider.getInstance().verifyPhoneNumber("+88" + datastore.getPhoneNumber(), 60, TimeUnit.SECONDS, activity, new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+            @Override
+            public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
+
+            }
+
+            @Override
+            public void onVerificationFailed(FirebaseException e) {
+                listener.onFail(e.getLocalizedMessage());
+            }
+
+            @Override
+            public void onCodeSent(String s, PhoneAuthProvider.ForceResendingToken forceResendingToken) {
+                listener.onSuccess(s, forceResendingToken);
+                super.onCodeSent(s, forceResendingToken);
+            }
+        }, DataStore.resendingToken);
+
+    }
+
+    @Override
     public boolean isUserLoggedIn() {
-        return mAuth.getCurrentUser() == null ? false : true;
+        return mAuth.getCurrentUser() != null;
     }
 
     @Override

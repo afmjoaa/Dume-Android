@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.MenuItem;
 
+import com.google.firebase.auth.PhoneAuthProvider;
+
 import io.dume.dume.R;
 import io.dume.dume.util.DumeUtils;
 
@@ -12,11 +14,13 @@ public class AuthPresenter implements AuthContract.Presenter {
     AuthContract.View view;
     AuthContract.Model model;
     private Bundle mBundle;
+    private final DataStore dataStore;
 
     public AuthPresenter(AuthContract.View view, @Nullable AuthContract.Model model) {
         this.view = view;
         this.model = model;
         mBundle = new Bundle();
+        dataStore = DataStore.getInstance();
     }
 
     @Override
@@ -70,19 +74,18 @@ public class AuthPresenter implements AuthContract.Presenter {
                 }
 
                 @Override
-                public void onSuccess(String s) {
+                public void onSuccess(String s, PhoneAuthProvider.ForceResendingToken forceResendingToken) {
                     view.hideProgress();
-                    mBundle.putString("verification_id", s);
-                    mBundle.putInt("station", 1);
-                    mBundle.putString("phone_number", phoneNumber);
-                    view.goToVerificationActivity(mBundle);
+                    dataStore.setVerificationId(s);
+                    DataStore.resendingToken = forceResendingToken;
+                    dataStore.setPhoneNumber(phoneNumber);
+                    view.goToVerificationActivity(dataStore);
                 }
             });
 
         } else {
-            mBundle.putInt("station", 1);
-            mBundle.putString("phone_number", phoneNumber);
-            view.goToRegesterActivity(mBundle);
+            dataStore.setPhoneNumber(phoneNumber);
+            view.goToRegesterActivity(dataStore);
 
         }
     }
@@ -102,8 +105,8 @@ public class AuthPresenter implements AuthContract.Presenter {
 
     @Override
     public void setBundle() {
-        if (model.getIntent().getBundleExtra("bundle") != null) {
-            view.fillBundle(model.getIntent().getBundleExtra("bundle"));
+        if (model.getIntent().getSerializableExtra("datastore") != null) {
+            view.restoreData((DataStore) model.getIntent().getSerializableExtra("datastore"));
         }
     }
 }

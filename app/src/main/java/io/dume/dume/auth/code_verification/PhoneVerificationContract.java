@@ -1,5 +1,7 @@
 package io.dume.dume.auth.code_verification;
 
+import io.dume.dume.auth.AuthContract;
+
 public interface PhoneVerificationContract {
 
     interface View {
@@ -17,7 +19,8 @@ public interface PhoneVerificationContract {
 
         void gotoStudentActivity();
 
-        void showProgress();
+
+        void showProgress(String title);
 
         void hideProgress();
 
@@ -25,11 +28,17 @@ public interface PhoneVerificationContract {
 
         void onTimerCompleted();
 
+        void showToast(String toast);
+
+        void onTimerStarted();
+
 
     }
 
     interface Model {
         void verifyCode(String code, CodeVerificationCallBack listener);
+
+        void onResendCode(AuthContract.Model.Callback listener);
 
         interface CodeVerificationCallBack {
             void onStart();
@@ -37,6 +46,7 @@ public interface PhoneVerificationContract {
             void onSuccess();
 
             void onFail(String error);
+
 
         }
 
@@ -47,5 +57,8 @@ public interface PhoneVerificationContract {
 
         void onPinConfirm(String pin);
 
+        void onResendCode();
+
+        void startTimer();
     }
 }
