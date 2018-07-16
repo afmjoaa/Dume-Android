@@ -62,15 +62,8 @@ public class AuthActivity extends AppCompatActivity implements AuthContract.View
         setContentView(R.layout.activity_authentication);
         presenter = new AuthPresenter(this, new AuthModel(this, this));
         presenter.enqueue();
-
-
-        socialConnect.setOnClickListener(view -> {
-            Intent k = new Intent(AuthActivity.this, SocialInitActivity.class);
-            startActivity(k);
-        });
-
+        socialConnect.setOnClickListener(view -> startActivity(new Intent(AuthActivity.this, SocialInitActivity.class)));
         presenter.setBundle();
-        changingTextView.setOnClickListener(view -> startActivity(new Intent(AuthActivity.this, AuthRegisterActivity.class)));
 
     }
 

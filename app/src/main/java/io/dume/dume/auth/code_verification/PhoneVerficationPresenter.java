@@ -55,7 +55,5 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
                 view.onVerificationFailed(error);
             }
         });
-
-
     }
 }

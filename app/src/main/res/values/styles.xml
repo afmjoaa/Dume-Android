@@ -44,8 +44,7 @@
         <item name="colorPrimary">#f5f5f5</item>
         <item name="colorPrimaryDark">#c2c5cb</item>
         <item name="android:windowBackground">@color/MystyleWindowBackground</item>
-        <!-- <item name="android:navigationBarColor" tools:targetApi="lollipop">@color/colorAsh</item>
-         <item name="android:textColorPrimary">@color/colorAsh</item-->>
+        <item name="android:navigationBarColor" tools:targetApi="lollipop">@color/colorAsh</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
 
     </style>

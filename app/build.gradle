@@ -69,5 +69,5 @@ dependencies {
     /*Image Loading Library*/
     implementation 'com.squareup.picasso:picasso:2.3.2'
     implementation 'com.google.firebase:firebase-auth:16.0.2'
-
+    implementation 'com.google.android.gms:play-services-auth:15.0.1'
 }
