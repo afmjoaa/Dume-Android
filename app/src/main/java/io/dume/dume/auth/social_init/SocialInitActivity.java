@@ -3,13 +3,10 @@ package io.dume.dume.auth.social_init;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
@@ -19,13 +16,11 @@ import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
-import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
@@ -83,8 +78,7 @@ public class SocialInitActivity extends AppCompatActivity {
                     signOut();
                     passToNextActivity();
                 } else {
-                    // Todo check for facebook login or else
-
+                    // doing nothing here no
                 }
             }
         };
@@ -122,42 +116,36 @@ public class SocialInitActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             Log.d("Tag", "signInWithCredential:success");
-                            //   updateUI(user);
                         } else {
                             Log.w("Tag", "signInWithCredential:failure", task.getException());
-                            //   updateUI(null);
                         }
-                        // ...
                     }
                 });
     }
 
-//    facebook success error methods
-private void handleFacebookAccessToken(AccessToken token) {
+    //    facebook success error methods
+    private void handleFacebookAccessToken(AccessToken token) {
 //    Log.d(TAG, "handleFacebookAccessToken:" + token);
 
-    AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
-    mAuth.signInWithCredential(credential)
-            .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                @Override
-                public void onComplete(@NonNull Task<AuthResult> task) {
-                    if (task.isSuccessful()) {
-                        // Sign in success, update UI with the signed-in user's information
-                        Log.d("fbtag", "signInWithCredential:success");
-                        FirebaseUser user = mAuth.getCurrentUser();
-//                        updateUI(user);
-                    } else {
-                        // If sign in fails, display a message to the user.
-                        Log.w("fbtag", "signInWithCredential:failure", task.getException());
-                        Toast.makeText(SocialInitActivity.this, "Authentication failed.",
-                                Toast.LENGTH_SHORT).show();
-//                        updateUI(null);
+        AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d("fbtag", "signInWithCredential:success");
+                            FirebaseUser user = mAuth.getCurrentUser();
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w("fbtag", "signInWithCredential:failure", task.getException());
+                            Toast.makeText(SocialInitActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+
                     }
-
-                }
-            });
-}
-
+                });
+    }
 
     //################################## My part start here###########################
     private void init() {
@@ -223,6 +211,7 @@ private void handleFacebookAccessToken(AccessToken token) {
     }
 
     private void signInWithFacebook() {
+        // add more request to the arraylist
         LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile"));
     }
 
