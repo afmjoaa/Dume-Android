@@ -17,14 +17,19 @@ import com.google.firebase.auth.PhoneAuthProvider;
 
 import java.util.concurrent.TimeUnit;
 
+import dmax.dialog.SpotsDialog;
 import io.dume.dume.R;
+import io.dume.dume.auth.AuthActivity;
+import io.dume.dume.auth.DataStore;
 import io.dume.dume.auth.code_verification.PhoneVerificationActivity;
 import io.dume.dume.util.DumeUtils;
 
 public class AuthRegisterActivity extends AppCompatActivity {
     EditText firstname, lastName, email, phoneNumber;
     private AlertDialog.Builder dialogBuilder;
-    private Bundle mBundle;
+    private DataStore datastore = null;
+    private android.app.AlertDialog sendingCodeDialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,18 +38,18 @@ public class AuthRegisterActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         init();
-        if (getIntent().getBundleExtra("bundle") != null) {
-            setBundle(getIntent().getBundleExtra("bundle"));
-            mBundle = getIntent().getBundleExtra("bundle");
+        if (getIntent().getSerializableExtra("datastore") != null) {
+            datastore = (DataStore) getIntent().getSerializableExtra("datastore");
+            restoreData(datastore);
         }
 
     }
 
-    private void setBundle(Bundle bundle) {
-        firstname.setText(bundle.getString("first_name", ""));
-        lastName.setText(bundle.getString("last_name", ""));
-        email.setText(bundle.getString("email", ""));
-        phoneNumber.setText(bundle.getString("phone_number"));
+    private void restoreData(DataStore dataStore) {
+        firstname.setText(dataStore.getFirstName() == null ? "" : dataStore.getFirstName());
+        lastName.setText(dataStore.getLastName() == null ? "" : dataStore.getLastName());
+        email.setText(dataStore.getEmail() == null ? "" : dataStore.getEmail());
+        phoneNumber.setText(dataStore.getPhoneNumber() == null ? "" : dataStore.getPhoneNumber());
     }
 
     private void init() {
@@ -55,6 +60,7 @@ public class AuthRegisterActivity extends AppCompatActivity {
         dialogBuilder = new AlertDialog.Builder(this);
         dialogBuilder.setMessage("We sending a code to your mobile number");
         dialogBuilder.setTitle("Sending....");
+        sendingCodeDialog = new SpotsDialog.Builder().setContext(this).setMessage("Sending Code").build();
     }
 
     @Override
@@ -67,62 +73,68 @@ public class AuthRegisterActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.aboutMenu) {
             Toast.makeText(this, "About", Toast.LENGTH_SHORT).show();
+        } else {
+            this.startActivity(new Intent(this, AuthActivity.class).putExtra("datastore", datastore).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
+            this.finish();
         }
+
         return super.onOptionsItemSelected(item);
     }
 
     public void onViewClick(View view) {
         switch (view.getId()) {
             case R.id.floating_button:
-                if (mBundle != null) {
 
-                    if (firstname.getText().toString().isEmpty() || lastName.getText().toString().isEmpty() || phoneNumber.getText().toString().isEmpty() || email.getText().toString().isEmpty()) {
-                        Toast.makeText(this, "Hey Man !!! Fill up all the data.", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    String phoneStr = this.phoneNumber.getText().toString();
-                    if (phoneStr.isEmpty()) {
-                        phoneNumber.setError("Should not be empty");
-                        return;
-                    } else if (!DumeUtils.isInteger(phoneStr)) {
-                        phoneNumber.setError("Only Digits Allowed (0-9)");
-                        return;
-                    } else if (phoneStr.length() != 11) {
-                        phoneNumber.setError("Should be 11 Digits");
-                        return;
-                    }
-                    AlertDialog alertDialog = dialogBuilder.create();
-                    alertDialog.show();
-                    PhoneAuthProvider.getInstance().verifyPhoneNumber("+88" + phoneStr, 60, TimeUnit.SECONDS, this, new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
-                        @Override
-                        public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
 
-                        }
-
-                        @Override
-                        public void onVerificationFailed(FirebaseException e) {
-                            alertDialog.dismiss();
-                            Toast.makeText(AuthRegisterActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-                        }
-
-                        @Override
-                        public void onCodeSent(String s, PhoneAuthProvider.ForceResendingToken forceResendingToken) {
-                            super.onCodeSent(s, forceResendingToken);
-                            alertDialog.dismiss();
-                            Intent intent = new Intent(getApplicationContext(), PhoneVerificationActivity.class);
-                            mBundle.putString("first_name", firstname.getText().toString());
-                            mBundle.putString("last_name", lastName.getText().toString());
-                            mBundle.putString("email", email.getText().toString());
-                            mBundle.putString("phone_number", phoneNumber.getText().toString());
-                            mBundle.putString("verification_id", s);
-                            intent.putExtra("bundle", mBundle);
-                            startActivity(intent);
-
-                        }
-                    });
-
-                    /**/
+                if (firstname.getText().toString().isEmpty() || lastName.getText().toString().isEmpty() || phoneNumber.getText().toString().isEmpty() || email.getText().toString().isEmpty()) {
+                    Toast.makeText(this, "Hey Man !!! Fill up all the data.", Toast.LENGTH_SHORT).show();
+                    return;
                 }
+                String phoneStr = this.phoneNumber.getText().toString();
+                if (phoneStr.isEmpty()) {
+                    phoneNumber.setError("Should not be empty");
+                    return;
+                } else if (!DumeUtils.isInteger(phoneStr)) {
+                    phoneNumber.setError("Only Digits Allowed (0-9)");
+                    return;
+                } else if (phoneStr.length() != 11) {
+                    phoneNumber.setError("Should be 11 Digits");
+                    return;
+                }
+                sendingCodeDialog.show();
+                PhoneAuthProvider.getInstance().verifyPhoneNumber("+88" + phoneStr, 60, TimeUnit.SECONDS, this, new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+                    @Override
+                    public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
+
+                    }
+
+                    @Override
+                    public void onVerificationFailed(FirebaseException e) {
+                        sendingCodeDialog.dismiss();
+                        Toast.makeText(AuthRegisterActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onCodeSent(String verificationId, PhoneAuthProvider.ForceResendingToken forceResendingToken) {
+                        super.onCodeSent(verificationId, forceResendingToken);
+                        sendingCodeDialog.dismiss();
+                        Intent intent = new Intent(getApplicationContext(), PhoneVerificationActivity.class);
+                        datastore.setFirstName(firstname.getText().toString());
+                        datastore.setLastName(lastName.getText().toString());
+                        datastore.setEmail(email.getText().toString());
+                        datastore.setPhoneNumber(phoneNumber.getText().toString());
+                        DataStore.resendingToken = forceResendingToken;
+                        datastore.setVerificationId(verificationId);
+                        datastore.setSTATION(2);
+                        intent.putExtra("datastore", datastore);
+                        startActivity(intent);
+                        finish();
+
+                    }
+                });
+
+                /**/
+
                 break;
             case R.id.hiperlink_privacy_text:
                 dialogBuilder.setTitle("Privacy Policy");
@@ -137,4 +149,10 @@ public class AuthRegisterActivity extends AppCompatActivity {
         }
 
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
+
 }

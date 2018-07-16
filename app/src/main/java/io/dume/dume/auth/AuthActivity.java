@@ -1,5 +1,6 @@
 package io.dume.dume.auth;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -26,6 +27,7 @@ import android.widget.Toast;
 
 import com.daimajia.slider.library.SliderLayout;
 
+import dmax.dialog.SpotsDialog;
 import io.dume.dume.R;
 import io.dume.dume.auth.auth_final.AuthRegisterActivity;
 import io.dume.dume.auth.code_verification.PhoneVerificationActivity;
@@ -54,6 +56,8 @@ public class AuthActivity extends AppCompatActivity implements AuthContract.View
     private TextView socialConnect;
 
     private ProgressDialog progressDialog;
+    private SpotsDialog.Builder spotsBuilder;
+    private AlertDialog spotDialog;
 
 
     @Override
@@ -94,7 +98,13 @@ public class AuthActivity extends AppCompatActivity implements AuthContract.View
         phoneEditText.addTextChangedListener(this);
         progressDialog = new ProgressDialog(this);
 
-        Typeface custom_font = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Regular.ttf");
+
+
+        spotsBuilder = new SpotsDialog.Builder().setContext(this);
+        spotsBuilder.setCancelable(false);
+        spotsBuilder.setMessage("Loading");
+        spotDialog = spotsBuilder.build();
+        Typeface custom_font = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Medium.ttf");
 
         changingTextView.setTypeface(custom_font);
         //initializing sliderLayout
@@ -192,31 +202,31 @@ public class AuthActivity extends AppCompatActivity implements AuthContract.View
     }
 
     @Override
-    public void goToVerificationActivity(Bundle bundle) {
+    public void goToVerificationActivity(DataStore dataStore) {
         Intent intent = new Intent(this, PhoneVerificationActivity.class);
-        intent.putExtra("bundle", bundle);
+        intent.putExtra("datastore", dataStore);
         startActivity(intent);
+        finish();
     }
 
     @Override
-    public void goToRegesterActivity(Bundle bundle) {
+    public void goToRegesterActivity(DataStore dataStore) {
         Intent intent = new Intent(this, AuthRegisterActivity.class);
-        bundle.putString("account_major", bottomNavigationView.getSelectedItemId() == R.id.student_nav ? "student" : "teacher");
-        intent.putExtra("bundle", bundle);
+        dataStore.setAccountManjor(bottomNavigationView.getSelectedItemId() == R.id.student_nav ? "student" : "teacher");
+        intent.putExtra("datastore", dataStore);
         startActivity(intent);
+        finish();
 
     }
 
     @Override
     public void showProgress(String titile, String message) {
-        progressDialog.setTitle(titile);
-        progressDialog.setMessage(message);
-        progressDialog.show();
+        spotDialog.show();
     }
 
     @Override
     public void hideProgress() {
-        progressDialog.dismiss();
+        spotDialog.dismiss();
     }
 
     @Override
@@ -225,8 +235,8 @@ public class AuthActivity extends AppCompatActivity implements AuthContract.View
     }
 
     @Override
-    public void fillBundle(Bundle bundle) {
-        phoneEditText.setText(bundle.getString("phone_number", ""));
+    public void restoreData(DataStore dataStore) {
+        phoneEditText.setText(dataStore.getPhoneNumber());
     }
 
 
@@ -279,13 +289,13 @@ public class AuthActivity extends AppCompatActivity implements AuthContract.View
 
     @Override
     protected void onPause() {
-        progressDialog.dismiss();
+        spotDialog.dismiss();
         super.onPause();
     }
 
     @Override
     protected void onDestroy() {
-        progressDialog.dismiss();
+        spotDialog.dismiss();
         super.onDestroy();
     }
 }
