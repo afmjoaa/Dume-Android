@@ -1,6 +1,7 @@
 package io.dume.dume.auth.code_verification;
 
 import io.dume.dume.auth.AuthContract;
+import io.dume.dume.auth.AuthGlobalModel;
 
 public interface PhoneVerificationContract {
 
@@ -35,7 +36,7 @@ public interface PhoneVerificationContract {
 
     }
 
-    interface Model {
+    interface Model extends AuthGlobalModel {
         void verifyCode(String code, CodeVerificationCallBack listener);
 
         void onResendCode(AuthContract.Model.Callback listener);

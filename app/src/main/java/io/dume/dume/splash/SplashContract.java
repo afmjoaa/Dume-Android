@@ -1,5 +1,7 @@
 package io.dume.dume.splash;
 
+import io.dume.dume.auth.AuthGlobalModel;
+
 public interface SplashContract {
     interface View {
 
@@ -10,9 +12,8 @@ public interface SplashContract {
         void gotoStudentActivity();
     }
 
-    interface Model {
-        boolean isUserLoggedIn();
-        void onAccountTypeFound(AuthCallbackListener listener);
+    interface Model extends AuthGlobalModel {
+
 
     }
 
@@ -21,10 +22,6 @@ public interface SplashContract {
     }
 
     /*Callback for Data/Model Model*/
-    interface AuthCallbackListener {
-        void onTeacherFound();
 
-        void onStudentFound();
-    }
 }
 

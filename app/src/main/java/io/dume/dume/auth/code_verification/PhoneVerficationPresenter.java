@@ -2,6 +2,7 @@ package io.dume.dume.auth.code_verification;
 
 import android.os.CountDownTimer;
 
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.PhoneAuthProvider;
 
 import io.dume.dume.auth.AuthContract;
@@ -63,8 +64,13 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
 
     @Override
     public void onResendCode() {
-        view.showProgress("Resending Code");
+
         model.onResendCode(new AuthContract.Model.Callback() {
+            @Override
+            public void onStart() {
+                view.showProgress("Resending Code");
+            }
+
             @Override
             public void onFail(String error) {
                 view.hideProgress();
@@ -77,6 +83,11 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
                 view.showToast("Code sent. Please check your mobile phone");
                 DataStore.resendingToken = forceResendingToken;
                 startTimer();
+            }
+
+            @Override
+            public void onAutoSuccess(AuthResult authResult) {
+
             }
         });
     }

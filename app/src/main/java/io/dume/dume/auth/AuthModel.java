@@ -3,9 +3,11 @@ package io.dume.dume.auth;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
 
@@ -42,6 +44,18 @@ public class AuthModel implements AuthContract.Model, SplashContract.Model, Phon
             @Override
             public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
 
+                mAuth.signInWithCredential(phoneAuthCredential).addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        listener.onAutoSuccess(task.getResult());
+                    } else if (task.isCanceled()) {
+                        listener.onFail("Authentication Canceled");
+                    } else if (task.isComplete()) {
+                        Log.w(TAG, "onComplete: task completed");
+                    }
+
+                }).addOnFailureListener(e -> {
+                    listener.onFail(e.getLocalizedMessage());
+                });
             }
 
             @Override
@@ -91,7 +105,7 @@ public class AuthModel implements AuthContract.Model, SplashContract.Model, Phon
         PhoneAuthProvider.getInstance().verifyPhoneNumber("+88" + datastore.getPhoneNumber(), 60, TimeUnit.SECONDS, activity, new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
             @Override
             public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
-
+                listener.onFail("OnVerificationCalled");
             }
 
             @Override
@@ -114,8 +128,14 @@ public class AuthModel implements AuthContract.Model, SplashContract.Model, Phon
     }
 
     @Override
-    public void onAccountTypeFound(SplashContract.AuthCallbackListener listener) {
-        listener.onTeacherFound();
+    public FirebaseUser getUser() {
+        return mAuth.getCurrentUser();
     }
+
+    @Override
+    public void onAccountTypeFound(FirebaseUser user, AccountTypeFoundListener listener) {
+
+    }
+
 
 }

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.MenuItem;
 
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.PhoneAuthProvider;
 
 import io.dume.dume.R;
@@ -64,8 +65,12 @@ public class AuthPresenter implements AuthContract.Presenter {
         } else if (phoneNumber.length() != 11) {
             view.onValidationFailed("Should be 11 Digits");
         } else if (model.isExistingUser(phoneNumber)) {
-            view.showProgress("User Found. Sending Code", "We are sending 6 digits code to your given phone number. please wait a bit");
             model.sendMessage("+88" + phoneNumber, new AuthContract.Model.Callback() {
+                @Override
+                public void onStart() {
+                    view.showProgress("User Found. Sending Code", "We are sending 6 digits code to your given phone number. please wait a bit");
+                }
+
                 @Override
                 public void onFail(String error) {
                     view.hideProgress();
@@ -80,6 +85,12 @@ public class AuthPresenter implements AuthContract.Presenter {
                     DataStore.resendingToken = forceResendingToken;
                     dataStore.setPhoneNumber(phoneNumber);
                     view.goToVerificationActivity(dataStore);
+                }
+
+                @Override
+                public void onAutoSuccess(AuthResult authResult) {
+
+
                 }
             });
 

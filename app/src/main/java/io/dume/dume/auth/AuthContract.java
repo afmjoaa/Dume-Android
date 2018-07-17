@@ -3,6 +3,7 @@ package io.dume.dume.auth;
 import android.content.Intent;
 import android.view.MenuItem;
 
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.PhoneAuthProvider;
 
 public interface AuthContract {
@@ -46,16 +47,20 @@ public interface AuthContract {
 
     }
 
-    interface Model {
+    interface Model extends AuthGlobalModel {
+
         void sendMessage(String phoneNumber, Callback listener);
 
         Intent getIntent();
 
         interface Callback {
+            void onStart();
 
             void onFail(String error);
 
             void onSuccess(String id, PhoneAuthProvider.ForceResendingToken forceResendingToken);
+
+            void onAutoSuccess(AuthResult authResult);
 
 
         }
