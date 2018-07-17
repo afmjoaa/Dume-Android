@@ -1,5 +1,6 @@
 package io.dume.dume.auth.social_init;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -33,7 +34,9 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import java.util.Arrays;
 import java.util.Objects;
 
+import dmax.dialog.SpotsDialog;
 import io.dume.dume.R;
+import io.dume.dume.auth.DataStore;
 import io.dume.dume.auth.auth_final.AuthRegisterActivity;
 
 public class SocialInitActivity extends AppCompatActivity {
@@ -43,7 +46,9 @@ public class SocialInitActivity extends AppCompatActivity {
     FirebaseAuth.AuthStateListener mAuthListener;
     private CallbackManager mCallbackManager;
     public final static int RC_SIGN_IN = 2;
-    private Bundle mBundle;
+    private DataStore dataStore;
+    private SpotsDialog.Builder spotsBuilder;
+    private AlertDialog spotDialog;
 
     @Override
     protected void onStart() {
@@ -55,7 +60,10 @@ public class SocialInitActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_social_init);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        spotsBuilder = new SpotsDialog.Builder().setContext(this);
+        spotsBuilder.setCancelable(false);
+        spotsBuilder.setMessage("Loading");
+        spotDialog = spotsBuilder.build();
 
         init();
 
@@ -64,16 +72,15 @@ public class SocialInitActivity extends AppCompatActivity {
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
-                    // Todo catch the data in bundle and change the activity with passing bundle
-                    Toast.makeText(SocialInitActivity.this, "successfully log in ", Toast.LENGTH_SHORT).show();
-
+                    Toast.makeText(SocialInitActivity.this, "success", Toast.LENGTH_SHORT).show();
                     String str = user.getDisplayName();
                     String[] splited = str.split(" ");
-                    mBundle.putString("first_name", splited[0]);
-                    mBundle.putString("last_name", splited[1]);
-                    mBundle.putString("email", user.getEmail());
-                    mBundle.putString("phone_number", user.getPhoneNumber());
-                    mBundle.putString("photo_url", Objects.requireNonNull(user.getPhotoUrl()).toString());
+
+                    dataStore.setEmail(user.getEmail());
+                    dataStore.setFirstName(splited[0]);
+                    dataStore.setLastName(splited[1]);
+                    dataStore.setPhoneNumber(user.getPhoneNumber());
+                    dataStore.setPhotoUri(Objects.requireNonNull(user.getPhotoUrl()).toString());
 
                     signOut();
                     passToNextActivity();
@@ -98,8 +105,7 @@ public class SocialInitActivity extends AppCompatActivity {
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 firebaseAuthWithGoogle(account);
             } catch (ApiException e) {
-                // Google Sign In failed, update UI appropriately
-                Log.w("Tag", "Google sign in failed due to canceling", e);
+                //  Log.w("Tag", "Google sign in failed due to canceling", e);
             }
         }
 
@@ -115,9 +121,11 @@ public class SocialInitActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            Log.d("Tag", "signInWithCredential:success");
+//                            Log.d("Tag", "signInWithCredential:success");
                         } else {
-                            Log.w("Tag", "signInWithCredential:failure", task.getException());
+//                            Log.w("Tag", "signInWithCredential:failure", task.getException());
+                            Toast.makeText(SocialInitActivity.this, "failed.", Toast.LENGTH_SHORT).show();
+
                         }
                     }
                 });
@@ -125,7 +133,6 @@ public class SocialInitActivity extends AppCompatActivity {
 
     //    facebook success error methods
     private void handleFacebookAccessToken(AccessToken token) {
-//    Log.d(TAG, "handleFacebookAccessToken:" + token);
 
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
         mAuth.signInWithCredential(credential)
@@ -133,14 +140,10 @@ public class SocialInitActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d("fbtag", "signInWithCredential:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
+//                            Log.d("fbtag", "signInWithCredential:success");
                         } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w("fbtag", "signInWithCredential:failure", task.getException());
-                            Toast.makeText(SocialInitActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
+//                            Log.w("fbtag", "signInWithCredential:failure", task.getException());
+                            Toast.makeText(SocialInitActivity.this, "failed.", Toast.LENGTH_SHORT).show();
                         }
 
                     }
@@ -149,7 +152,7 @@ public class SocialInitActivity extends AppCompatActivity {
 
     //################################## My part start here###########################
     private void init() {
-        mBundle = new Bundle();
+        dataStore = DataStore.getInstance();
         // google initialization part
         mAuth = FirebaseAuth.getInstance();
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -166,14 +169,13 @@ public class SocialInitActivity extends AppCompatActivity {
                 new FacebookCallback<LoginResult>() {
                     @Override
                     public void onSuccess(LoginResult loginResult) {
-                        Log.d("Success", "Login");
+//                        Log.d("Success", "Login");
                         handleFacebookAccessToken(loginResult.getAccessToken());
-
                     }
 
                     @Override
                     public void onCancel() {
-                        Log.d("login canceled", "Login");
+//                        Log.d("login canceled", "Login");
                     }
 
                     @Override
@@ -186,9 +188,11 @@ public class SocialInitActivity extends AppCompatActivity {
     public void onSocialViewClicked(View view) {
         switch (view.getId()) {
             case R.id.facebook_btn:
+                spotDialog.show();
                 signInWithFacebook();
                 break;
             case R.id.google_btn:
+                spotDialog.show();
                 signInWithGoogle();
                 break;
         }
@@ -197,8 +201,10 @@ public class SocialInitActivity extends AppCompatActivity {
 
     public void passToNextActivity() {
         Intent intent = new Intent(getApplicationContext(), AuthRegisterActivity.class);
-        intent.putExtra("bundle", mBundle);
+        intent.putExtra("datastore", dataStore);
         startActivity(intent);
+        spotDialog.dismiss();
+        finish();
     }
 
     public void signOut() {
@@ -212,7 +218,13 @@ public class SocialInitActivity extends AppCompatActivity {
 
     private void signInWithFacebook() {
         // add more request to the arraylist
-        LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile"));
+        LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile", "email"));
+    }
+
+    @Override
+    protected void onDestroy() {
+        spotDialog.dismiss();
+        super.onDestroy();
     }
 
 }
