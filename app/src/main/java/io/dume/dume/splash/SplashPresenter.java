@@ -1,8 +1,9 @@
 package io.dume.dume.splash;
-
 import android.util.Log;
 
-import io.dume.dume.auth.AuthGlobalModel;
+
+import io.dume.dume.auth.AuthGlobalContract;
+
 
 public class SplashPresenter implements SplashContract.Presenter {
     SplashContract.View view;
@@ -18,7 +19,7 @@ public class SplashPresenter implements SplashContract.Presenter {
     public void enqueue() {
         Log.w(TAG, "enqueue: ");
         if (model.isUserLoggedIn()) {
-            model.onAccountTypeFound(model.getUser(), new AuthGlobalModel.AccountTypeFoundListener() {
+            model.onAccountTypeFound(model.getUser(), new AuthGlobalContract.AccountTypeFoundListener() {
                 @Override
                 public void onStart() {
                     Log.w(TAG, "onStart: ");

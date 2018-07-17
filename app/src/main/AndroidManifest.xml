@@ -28,7 +28,7 @@
         </activity>
         <activity android:name=".student.homepage.StudentActivity" />
         <activity
-            android:name=".auth.AuthActivity"
+            android:name=".auth.auth.AuthActivity"
             android:theme="@style/LoginTheme" />
         <activity android:name=".auth.code_verification.PhoneVerificationActivity" />
 

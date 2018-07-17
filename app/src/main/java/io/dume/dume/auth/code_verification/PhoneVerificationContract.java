@@ -1,11 +1,11 @@
 package io.dume.dume.auth.code_verification;
 
-import io.dume.dume.auth.AuthContract;
-import io.dume.dume.auth.AuthGlobalModel;
+import io.dume.dume.auth.AuthGlobalContract;
+import io.dume.dume.auth.auth.AuthContract;
 
 public interface PhoneVerificationContract {
 
-    interface View {
+    interface View extends AuthGlobalContract.View {
         void init();
 
         void initActionBar();
@@ -15,11 +15,6 @@ public interface PhoneVerificationContract {
         void getUpComingData();
 
         void onVerificationFailed(String msg);
-
-        void gotoTeacherActivity();
-
-        void gotoStudentActivity();
-
 
         void showProgress(String title);
 
@@ -36,7 +31,7 @@ public interface PhoneVerificationContract {
 
     }
 
-    interface Model extends AuthGlobalModel {
+    interface Model extends AuthGlobalContract.Model {
         void verifyCode(String code, CodeVerificationCallBack listener);
 
         void onResendCode(AuthContract.Model.Callback listener);

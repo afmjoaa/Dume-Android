@@ -18,7 +18,7 @@ import android.widget.Toast;
 
 import dmax.dialog.SpotsDialog;
 import io.dume.dume.R;
-import io.dume.dume.auth.AuthActivity;
+import io.dume.dume.auth.auth.AuthActivity;
 import io.dume.dume.auth.AuthModel;
 import io.dume.dume.auth.DataStore;
 import io.dume.dume.auth.auth_final.AuthRegisterActivity;

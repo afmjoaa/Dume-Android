@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
 
 import dmax.dialog.SpotsDialog;
 import io.dume.dume.R;
-import io.dume.dume.auth.AuthActivity;
+import io.dume.dume.auth.auth.AuthActivity;
 import io.dume.dume.auth.DataStore;
 import io.dume.dume.auth.code_verification.PhoneVerificationActivity;
 import io.dume.dume.util.DumeUtils;

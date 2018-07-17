@@ -5,8 +5,9 @@ import android.os.CountDownTimer;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.PhoneAuthProvider;
 
-import io.dume.dume.auth.AuthContract;
+import io.dume.dume.auth.AuthGlobalContract;
 import io.dume.dume.auth.DataStore;
+import io.dume.dume.auth.auth.AuthContract;
 
 public class PhoneVerficationPresenter implements PhoneVerificationContract.Presenter {
     PhoneVerificationContract.View view;
@@ -85,7 +86,29 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
 
             @Override
             public void onAutoSuccess(AuthResult authResult) {
+                model.onAccountTypeFound(authResult.getUser(), new AuthGlobalContract.AccountTypeFoundListener() {
+                    @Override
+                    public void onStart() {
+                        view.showProgress("Authenticating...");
+                    }
 
+                    @Override
+                    public void onTeacherFound() {
+                        view.hideProgress();
+                        view.gotoTeacherActivity();
+                    }
+
+                    @Override
+                    public void onStudentFound() {
+                        view.hideProgress();
+                        view.gotoStudentActivity();
+                    }
+
+                    @Override
+                    public void onFail(String exeption) {
+                        view.showToast(exeption);
+                    }
+                });
             }
         });
     }
