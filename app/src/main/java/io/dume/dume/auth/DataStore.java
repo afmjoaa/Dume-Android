@@ -1,5 +1,7 @@
 package io.dume.dume.auth;
 
+import android.net.Uri;
+
 import com.google.firebase.auth.PhoneAuthProvider;
 
 import java.io.Serializable;
@@ -16,6 +18,7 @@ public class DataStore implements Serializable {
     private static DataStore dataStoreObj;
     private String verificationId = null;
     private String email = null;
+    private String photoUrl = null;
 
     public String getEmail() {
         return email;
@@ -23,6 +26,15 @@ public class DataStore implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+
+    public String getPhotoUri() {
+        return photoUrl;
+    }
+
+    public void setPhotoUri(String photoUrl) {
+        this.photoUrl = photoUrl;
     }
 
     public void setVerificationId(String verificationId) {
