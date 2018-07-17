@@ -106,7 +106,18 @@ public class AuthModel implements AuthContract.Model, SplashContract.Model, Phon
         PhoneAuthProvider.getInstance().verifyPhoneNumber("+88" + datastore.getPhoneNumber(), 60, TimeUnit.SECONDS, activity, new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
             @Override
             public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
-                listener.onFail("OnVerificationCalled");
+                mAuth.signInWithCredential(phoneAuthCredential).addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        listener.onAutoSuccess(task.getResult());
+                    } else if (task.isCanceled()) {
+                        listener.onFail("Authentication Canceled");
+                    } else if (task.isComplete()) {
+                        Log.w(TAG, "onComplete: task completed");
+                    }
+
+                }).addOnFailureListener(e -> {
+                    listener.onFail(e.getLocalizedMessage());
+                });
             }
 
             @Override
@@ -134,8 +145,8 @@ public class AuthModel implements AuthContract.Model, SplashContract.Model, Phon
     }
 
     @Override
-    public void onAccountTypeFound(FirebaseUser user, AccountTypeFoundListener listener) {
-
+    public void onAccountTypeFound(FirebaseUser user, AuthGlobalContract.AccountTypeFoundListener listener) {
+        listener.onTeacherFound();
     }
 
 

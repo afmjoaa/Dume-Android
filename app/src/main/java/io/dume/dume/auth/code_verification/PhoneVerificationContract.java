@@ -31,7 +31,7 @@ public interface PhoneVerificationContract {
 
     }
 
-    interface Model extends AuthGlobalContract {
+    interface Model extends AuthGlobalContract.Model {
         void verifyCode(String code, CodeVerificationCallBack listener);
 
         void onResendCode(AuthContract.Model.Callback listener);
