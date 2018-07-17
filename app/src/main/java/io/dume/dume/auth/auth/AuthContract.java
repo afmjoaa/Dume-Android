@@ -1,4 +1,4 @@
-package io.dume.dume.auth;
+package io.dume.dume.auth.auth;
 
 import android.content.Intent;
 import android.view.MenuItem;
@@ -6,8 +6,11 @@ import android.view.MenuItem;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.PhoneAuthProvider;
 
+import io.dume.dume.auth.AuthGlobalContract;
+import io.dume.dume.auth.DataStore;
+
 public interface AuthContract {
-    interface View {
+    interface View extends AuthGlobalContract.View {
         void init();
 
         void initActionBar();
@@ -47,7 +50,7 @@ public interface AuthContract {
 
     }
 
-    interface Model extends AuthGlobalModel {
+    interface Model extends AuthGlobalContract.Model {
 
         void sendMessage(String phoneNumber, Callback listener);
 
@@ -80,7 +83,6 @@ public interface AuthContract {
         void onPhoneValidation(String phoneNumber);
 
         void onAppBarStateChange(AppbarStateChangeListener.State state);
-
 
         void setBundle();
 

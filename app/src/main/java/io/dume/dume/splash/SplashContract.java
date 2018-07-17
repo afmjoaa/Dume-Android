@@ -1,19 +1,13 @@
 package io.dume.dume.splash;
 
-import io.dume.dume.auth.AuthGlobalModel;
+import io.dume.dume.auth.AuthGlobalContract;
 
 public interface SplashContract {
-    interface View {
-
+    interface View extends AuthGlobalContract.View {
         void gotoLoginActivity();
-
-        void gotoTeacherActivity();
-
-        void gotoStudentActivity();
     }
 
-    interface Model extends AuthGlobalModel {
-
+    interface Model extends AuthGlobalContract.Model {
 
     }
 

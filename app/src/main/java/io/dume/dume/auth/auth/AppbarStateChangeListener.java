@@ -1,4 +1,4 @@
-package io.dume.dume.auth;
+package io.dume.dume.auth.auth;
 
 import android.support.design.widget.AppBarLayout;
 

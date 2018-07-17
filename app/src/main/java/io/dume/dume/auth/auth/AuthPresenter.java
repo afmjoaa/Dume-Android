@@ -1,4 +1,4 @@
-package io.dume.dume.auth;
+package io.dume.dume.auth.auth;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -8,6 +8,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.PhoneAuthProvider;
 
 import io.dume.dume.R;
+import io.dume.dume.auth.AuthGlobalContract;
+import io.dume.dume.auth.DataStore;
 import io.dume.dume.util.DumeUtils;
 
 public class AuthPresenter implements AuthContract.Presenter {
@@ -68,7 +70,7 @@ public class AuthPresenter implements AuthContract.Presenter {
             model.sendMessage("+88" + phoneNumber, new AuthContract.Model.Callback() {
                 @Override
                 public void onStart() {
-                    view.showProgress("User Found. Sending Code", "We are sending 6 digits code to your given phone number. please wait a bit");
+                    view.showProgress("Sending Code....", "");
                 }
 
                 @Override
@@ -89,7 +91,31 @@ public class AuthPresenter implements AuthContract.Presenter {
 
                 @Override
                 public void onAutoSuccess(AuthResult authResult) {
+                    view.hideProgress();
+                    model.onAccountTypeFound(authResult.getUser(), new AuthGlobalContract.AccountTypeFoundListener() {
+                        @Override
+                        public void onStart() {
+                            view.showProgress("Getting User Info", "");
+                        }
 
+                        @Override
+                        public void onTeacherFound() {
+                            view.hideProgress();
+                            view.gotoTeacherActivity();
+                        }
+
+                        @Override
+                        public void onStudentFound() {
+                            view.hideProgress();
+                            view.gotoStudentActivity();
+                        }
+
+                        @Override
+                        public void onFail(String exeption) {
+                            view.hideProgress();
+                            view.showToast(exeption);
+                        }
+                    });
 
                 }
             });

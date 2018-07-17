@@ -1,4 +1,4 @@
-package io.dume.dume.auth;
+package io.dume.dume.auth.auth;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -29,10 +29,14 @@ import com.daimajia.slider.library.SliderLayout;
 
 import dmax.dialog.SpotsDialog;
 import io.dume.dume.R;
+import io.dume.dume.auth.AuthModel;
+import io.dume.dume.auth.DataStore;
 import io.dume.dume.auth.auth_final.AuthRegisterActivity;
 import io.dume.dume.auth.code_verification.PhoneVerificationActivity;
 import io.dume.dume.auth.social_init.SocialInitActivity;
 import io.dume.dume.splash.FeaturedSliderAdapter;
+import io.dume.dume.student.homepage.StudentActivity;
+import io.dume.dume.teacher.homepage.TeacherActivtiy;
 
 
 public class AuthActivity extends AppCompatActivity implements AuthContract.View, BottomNavigationView.OnNavigationItemSelectedListener, TextView.OnEditorActionListener, TextWatcher {
@@ -99,11 +103,9 @@ public class AuthActivity extends AppCompatActivity implements AuthContract.View
         progressDialog = new ProgressDialog(this);
 
 
-
         spotsBuilder = new SpotsDialog.Builder().setContext(this);
         spotsBuilder.setCancelable(false);
-        spotsBuilder.setMessage("Loading");
-        spotDialog = spotsBuilder.build();
+
         Typeface custom_font = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Medium.ttf");
 
         changingTextView.setTypeface(custom_font);
@@ -221,6 +223,8 @@ public class AuthActivity extends AppCompatActivity implements AuthContract.View
 
     @Override
     public void showProgress(String titile, String message) {
+        spotsBuilder.setMessage(titile);
+        spotDialog = spotsBuilder.build();
         spotDialog.show();
     }
 
@@ -297,6 +301,18 @@ public class AuthActivity extends AppCompatActivity implements AuthContract.View
     protected void onDestroy() {
         spotDialog.dismiss();
         super.onDestroy();
+    }
+
+    @Override
+    public void gotoTeacherActivity() {
+        startActivity(new Intent(this, TeacherActivtiy.class));
+        finish();
+    }
+
+    @Override
+    public void gotoStudentActivity() {
+        startActivity(new Intent(this, StudentActivity.class));
+        finish();
     }
 }
 

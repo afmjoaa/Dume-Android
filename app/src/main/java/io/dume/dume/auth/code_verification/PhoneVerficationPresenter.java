@@ -5,7 +5,7 @@ import android.os.CountDownTimer;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.PhoneAuthProvider;
 
-import io.dume.dume.auth.AuthContract;
+import io.dume.dume.auth.auth.AuthContract;
 import io.dume.dume.auth.DataStore;
 
 public class PhoneVerficationPresenter implements PhoneVerificationContract.Presenter {
