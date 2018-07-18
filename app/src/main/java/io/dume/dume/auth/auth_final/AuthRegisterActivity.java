@@ -83,6 +83,7 @@ public class AuthRegisterActivity extends AppCompatActivity {
 
     public void onViewClick(View view) {
         switch (view.getId()) {
+
             case R.id.floating_button:
 
 

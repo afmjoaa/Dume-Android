@@ -6,10 +6,13 @@ import android.content.Intent;
 import android.util.Log;
 
 import com.google.firebase.FirebaseException;
+import com.google.firebase.FirebaseTooManyRequestsException;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.internal.api.FirebaseNoSignedInUserException;
 
 import java.util.concurrent.TimeUnit;
 
@@ -55,7 +58,15 @@ public class AuthModel implements AuthContract.Model, SplashContract.Model, Phon
                     }
 
                 }).addOnFailureListener(e -> {
-                    listener.onFail(e.getLocalizedMessage());
+                    if (e instanceof FirebaseNoSignedInUserException) {
+                        listener.onFail("FirebaseNoSignedInUserException");
+                    } else if (e instanceof FirebaseTooManyRequestsException) {
+                        listener.onFail("FirebaseTooManyRequestsException");
+                    } else if (e instanceof FirebaseAuthInvalidUserException) {
+
+                    }
+
+                    listener.onFail(e.getLocalizedMessage() + e.getClass().getName());
                 });
             }
 
@@ -79,7 +90,7 @@ public class AuthModel implements AuthContract.Model, SplashContract.Model, Phon
 
     @Override
     public boolean isExistingUser(String phoneNumber) {
-        return true;
+        return false;
     }
 
     @Override
@@ -142,6 +153,11 @@ public class AuthModel implements AuthContract.Model, SplashContract.Model, Phon
     @Override
     public FirebaseUser getUser() {
         return mAuth.getCurrentUser();
+    }
+
+    @Override
+    public DataStore getData() {
+        return datastore;
     }
 
     @Override

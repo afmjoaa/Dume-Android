@@ -9,6 +9,8 @@ public interface AuthGlobalContract {
 
         FirebaseUser getUser();
 
+        DataStore getData();
+
         void onAccountTypeFound(FirebaseUser user, AccountTypeFoundListener listener);
 
     }

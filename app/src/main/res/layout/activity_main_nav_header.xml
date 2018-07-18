@@ -12,10 +12,20 @@
         android:src="@mipmap/icon_launcher" />
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/userNameNavTxt"
+        android:layout_width="227dp"
+        android:layout_height="40dp"
         android:layout_gravity="bottom"
         android:text="@string/app_name"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+        android:textColor="@color/colorAsh"
+        android:textSize="30dp" />
+
+    <Button
+        android:id="@+id/signOutButton"
+        style="@style/MyDarkBlueButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:text="Sign Out" />
 
 </FrameLayout>
