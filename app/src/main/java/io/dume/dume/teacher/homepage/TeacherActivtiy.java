@@ -1,5 +1,6 @@
 package io.dume.dume.teacher.homepage;
 
+import android.content.Intent;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -11,7 +12,10 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import io.dume.dume.R;
+import io.dume.dume.auth.auth.AuthActivity;
 import io.dume.dume.teacher.model.ModelSource;
 
 public class TeacherActivtiy extends AppCompatActivity implements TeacherContract.View {
@@ -46,7 +50,7 @@ public class TeacherActivtiy extends AppCompatActivity implements TeacherContrac
         actionBar = getSupportActionBar();
         assert actionBar != null;
         actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeAsUpIndicator(R.drawable.humberger_icon);
+        actionBar.setHomeAsUpIndicator(R.drawable.drawer_menu);
 
         initAdvance();
     }
@@ -56,6 +60,11 @@ public class TeacherActivtiy extends AppCompatActivity implements TeacherContrac
 
     public void toggle(android.view.View view) {
         presenter.onButtonClicked();
+        if(FirebaseAuth.getInstance().getCurrentUser() != null){
+            FirebaseAuth.getInstance().signOut();
+            Intent intent = new Intent(getApplicationContext(), AuthActivity.class);
+            startActivity(intent);
+        }
         Toast.makeText(this, "this is a bullshit ", Toast.LENGTH_SHORT).show();
     }
 
@@ -74,4 +83,5 @@ public class TeacherActivtiy extends AppCompatActivity implements TeacherContrac
         //  getMenuInflater().inflate(R.menu.actionbar_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
+
 }

@@ -286,13 +286,19 @@ public class AuthActivity extends AppCompatActivity implements AuthContract.View
 
     @Override
     protected void onPause() {
-        spotDialog.dismiss();
+        if (spotDialog != null) {
+
+            spotDialog.dismiss();
+        }
         super.onPause();
     }
 
     @Override
     protected void onDestroy() {
-        spotDialog.dismiss();
+        if (spotDialog != null) {
+
+            spotDialog.dismiss();
+        }
         super.onDestroy();
     }
 

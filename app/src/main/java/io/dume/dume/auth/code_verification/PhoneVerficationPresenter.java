@@ -50,7 +50,7 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
             @Override
             public void onSuccess() {
                 view.hideProgress();
-                view.gotoTeacherActivity();
+                view.gotoStudentActivity();
             }
 
             @Override

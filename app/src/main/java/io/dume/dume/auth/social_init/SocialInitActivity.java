@@ -75,7 +75,6 @@ public class SocialInitActivity extends AppCompatActivity {
                     Toast.makeText(SocialInitActivity.this, "success", Toast.LENGTH_SHORT).show();
                     String str = user.getDisplayName();
                     String[] splited = str.split(" ");
-
                     dataStore.setEmail(user.getEmail());
                     dataStore.setFirstName(splited[0]);
                     dataStore.setLastName(splited[1]);
@@ -105,6 +104,9 @@ public class SocialInitActivity extends AppCompatActivity {
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 firebaseAuthWithGoogle(account);
             } catch (ApiException e) {
+                if (spotDialog != null) {
+                    spotDialog.dismiss();
+                }
                 //  Log.w("Tag", "Google sign in failed due to canceling", e);
             }
         }
@@ -123,6 +125,9 @@ public class SocialInitActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
 //                            Log.d("Tag", "signInWithCredential:success");
                         } else {
+                            if (spotDialog != null) {
+                                spotDialog.dismiss();
+                            }
 //                            Log.w("Tag", "signInWithCredential:failure", task.getException());
                             Toast.makeText(SocialInitActivity.this, "failed.", Toast.LENGTH_SHORT).show();
 
@@ -143,6 +148,9 @@ public class SocialInitActivity extends AppCompatActivity {
 //                            Log.d("fbtag", "signInWithCredential:success");
                         } else {
 //                            Log.w("fbtag", "signInWithCredential:failure", task.getException());
+                            if (spotDialog != null) {
+                                spotDialog.dismiss();
+                            }
                             Toast.makeText(SocialInitActivity.this, "failed.", Toast.LENGTH_SHORT).show();
                         }
 
@@ -175,11 +183,17 @@ public class SocialInitActivity extends AppCompatActivity {
 
                     @Override
                     public void onCancel() {
+                        if (spotDialog != null) {
+                            spotDialog.dismiss();
+                        }
 //                        Log.d("login canceled", "Login");
                     }
 
                     @Override
                     public void onError(FacebookException exception) {
+                        if (spotDialog != null) {
+                            spotDialog.dismiss();
+                        }
                         Toast.makeText(SocialInitActivity.this, exception.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 });
@@ -203,7 +217,9 @@ public class SocialInitActivity extends AppCompatActivity {
         Intent intent = new Intent(getApplicationContext(), AuthRegisterActivity.class);
         intent.putExtra("datastore", dataStore);
         startActivity(intent);
-        spotDialog.dismiss();
+        if (spotDialog != null) {
+            spotDialog.dismiss();
+        }
         finish();
     }
 
@@ -223,7 +239,10 @@ public class SocialInitActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        spotDialog.dismiss();
+        if (spotDialog != null) {
+            spotDialog.dismiss();
+        }
+        mAuth.removeAuthStateListener(mAuthListener);
         super.onDestroy();
     }
 

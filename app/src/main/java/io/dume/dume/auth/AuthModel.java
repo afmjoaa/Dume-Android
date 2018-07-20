@@ -146,7 +146,7 @@ public class AuthModel implements AuthContract.Model, SplashContract.Model, Phon
 
     @Override
     public void onAccountTypeFound(FirebaseUser user, AuthGlobalContract.AccountTypeFoundListener listener) {
-        listener.onTeacherFound();
+        listener.onStudentFound();
     }
 
 

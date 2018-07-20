@@ -1,7 +1,7 @@
 <resources>
     <dimen name="text_margin">16dp</dimen>
 
-    <dimen name="appbarLayoutHeight">100dp</dimen>
+    <dimen name="appbarLayoutHeight">110dp</dimen>
     <dimen name="toolbarLayoutHeight">55dp</dimen>
     <dimen name="expTittleMarginBottom">0dp</dimen>
     <dimen name="expTittleMarginTop">50dp</dimen>
@@ -12,5 +12,10 @@
     <dimen name="titleMarginStart">0dp</dimen>
     <dimen name="titleMarginTop">2dp</dimen>
     <dimen name="titleMarginBottom">0dp</dimen>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="nav_header_vertical_spacing">8dp</dimen>
+    <dimen name="nav_header_height">176dp</dimen>
 
 </resources>

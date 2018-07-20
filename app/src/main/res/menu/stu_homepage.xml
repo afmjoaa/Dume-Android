@@ -1,0 +1,39 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".MainActivity">
+
+    <item
+        android:id="@+id/action_cut"
+        android:title="title_action_cut"
+        android:orderInCategory="1"
+        android:icon="@drawable/chat_icon"
+        app:showAsAction="always"
+        />
+
+    <item
+        android:id="@+id/action_copy"
+        android:title="title_action_copy"
+        android:orderInCategory="2"
+        android:icon="@drawable/noti_icon"
+        app:showAsAction="always"
+        />
+
+    <item
+        android:id="@+id/action_delete"
+        android:title="title_action_delete"
+        android:orderInCategory="3"
+        android:icon="@drawable/record_icon"
+        app:showAsAction="always"
+        />
+
+    <item
+        android:id="@+id/action_share"
+        android:title="title_action_share"
+        android:orderInCategory="4"
+        android:icon="@drawable/alias_profile_icon"
+        app:showAsAction="always"
+        />
+
+</menu>
+
