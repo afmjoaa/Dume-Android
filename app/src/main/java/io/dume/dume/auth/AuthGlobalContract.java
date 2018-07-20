@@ -9,6 +9,8 @@ public interface AuthGlobalContract {
 
         FirebaseUser getUser();
 
+        DataStore getData();
+
         void onAccountTypeFound(FirebaseUser user, AccountTypeFoundListener listener);
 
     }
@@ -28,6 +30,16 @@ public interface AuthGlobalContract {
         void onStudentFound();
 
         void onFail(String exeption);
+    }
+
+    interface OnExistingUserCallback {
+        void onStart();
+
+        void onUserFound();
+
+        void onNewUserFound();
+
+        void onError(String err);
     }
 }
 

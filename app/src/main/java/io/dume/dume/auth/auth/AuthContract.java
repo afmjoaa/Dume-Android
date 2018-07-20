@@ -68,7 +68,7 @@ public interface AuthContract {
 
         }
 
-        boolean isExistingUser(String phoneNumber);
+        boolean isExistingUser(String phoneNumber, AuthGlobalContract.OnExistingUserCallback listener );
 
 
     }

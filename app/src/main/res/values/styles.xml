@@ -7,7 +7,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:colorBackground">@color/colorWhite</item>
+        <item name="android:colorBackground">@color/colorNarvik</item>
         <item name="colorControlHighlight">@color/colorDarkAzure</item>
 
     </style>
@@ -28,13 +28,15 @@
 
     <style name="LoginTheme" parent="MyStyle">
         <item name="android:windowTranslucentStatus" tools:targetApi="kitkat">true</item>
-        <item name="android:statusBarColor" tools:targetApi="lollipop">@android:color/transparent</item>
+        <item name="android:statusBarColor" tools:targetApi="lollipop">@android:color/transparent
+        </item>
         <item name="colorPrimaryDark">@android:color/transparent</item>
         <item name="android:navigationBarColor" tools:targetApi="lollipop">#000000</item>
 
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="MyStyle" parent="Theme.AppCompat.Light.NoActionBar">
