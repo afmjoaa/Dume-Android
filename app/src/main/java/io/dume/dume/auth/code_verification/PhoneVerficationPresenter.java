@@ -18,6 +18,7 @@ import java.util.Map;
 import io.dume.dume.auth.AuthGlobalContract;
 import io.dume.dume.auth.DataStore;
 import io.dume.dume.auth.auth.AuthContract;
+import io.dume.dume.util.DumeUtils;
 
 public class PhoneVerficationPresenter implements PhoneVerificationContract.Presenter {
     PhoneVerificationContract.View view;
@@ -54,6 +55,10 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
 
     @Override
     public void onPinConfirm(String pin) {
+        if (pin.isEmpty() || !DumeUtils.isInteger(pin)) {
+            view.showToast("Enter a valid pin");
+            return;
+        }
         model.verifyCode(pin, new PhoneVerificationContract.Model.CodeVerificationCallBack() {
             @Override
             public void onStart() {
@@ -62,7 +67,6 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
 
             @Override
             public void onSuccess() {
-
                 view.hideProgress();
                 if (DataStore.STATION == 2) {
                     saveUserToDb(model.getData());
@@ -136,6 +140,7 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
 
             @Override
             public void onFail(String exeption) {
+                view.hideProgress();
                 view.showToast(exeption);
             }
         });

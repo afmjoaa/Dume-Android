@@ -1,6 +1,8 @@
 package io.dume.dume.auth.auth;
 
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -58,6 +60,7 @@ public class AuthActivity extends AppCompatActivity implements AuthContract.View
     private TextView socialConnect;
     private SpotsDialog.Builder spotsBuilder;
     private AlertDialog spotDialog;
+    private Context context;
 
 
     @Override
@@ -74,6 +77,7 @@ public class AuthActivity extends AppCompatActivity implements AuthContract.View
 
     @Override
     public void init() {
+        context = this;
         promoTextArray = getResources().getStringArray(R.array.promo_text_array);
         changingTextArray = getResources().getStringArray(R.array.changing_text_array);
         sliderLayout.setCustomIndicator(findViewById(R.id.page_indicator));
@@ -211,9 +215,12 @@ public class AuthActivity extends AppCompatActivity implements AuthContract.View
 
     @Override
     public void showProgress(String titile, String message) {
-        spotDialog = spotsBuilder.setMessage(titile).build();
-        spotDialog.show();
-        Log.w(TAG, "showProgress: ");
+        if (!((Activity) context).isFinishing()) {
+            spotDialog = spotsBuilder.setMessage(titile).build();
+            spotDialog.show();
+            Log.w(TAG, "showProgress: ");
+        }
+
     }
 
     @Override

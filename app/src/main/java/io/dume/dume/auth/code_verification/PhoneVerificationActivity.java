@@ -1,6 +1,8 @@
 package io.dume.dume.auth.code_verification;
 
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
@@ -18,9 +20,9 @@ import android.widget.Toast;
 
 import dmax.dialog.SpotsDialog;
 import io.dume.dume.R;
-import io.dume.dume.auth.auth.AuthActivity;
 import io.dume.dume.auth.AuthModel;
 import io.dume.dume.auth.DataStore;
+import io.dume.dume.auth.auth.AuthActivity;
 import io.dume.dume.auth.auth_final.AuthRegisterActivity;
 import io.dume.dume.student.homepage.StudentActivity;
 import io.dume.dume.teacher.homepage.TeacherActivtiy;
@@ -40,6 +42,7 @@ public class PhoneVerificationActivity extends AppCompatActivity implements Phon
     private SpotsDialog.Builder spotsBuilder;
     private AlertDialog alertDialog;
     private AlertDialog dialog = null;
+    private Context context;
 
 
     @Override
@@ -53,6 +56,7 @@ public class PhoneVerificationActivity extends AppCompatActivity implements Phon
 
     @Override
     public void init() {
+        context = this;
         pinEditText.setOnClickListener(view -> appbar.setExpanded(false));
         fab.setOnClickListener(view -> presenter.onPinConfirm(pinEditText.getText().toString()));
         resendButton.setOnClickListener(view -> presenter.onResendCode());
@@ -109,8 +113,11 @@ public class PhoneVerificationActivity extends AppCompatActivity implements Phon
 
     @Override
     public void showProgress(String title) {
-        dialog = spotsBuilder.setMessage(title).build();
-        dialog.show();
+        if (!((Activity) context).isFinishing()) {
+            dialog = spotsBuilder.setMessage(title).build();
+            dialog.show();
+        }
+
     }
 
     @Override
@@ -160,19 +167,27 @@ public class PhoneVerificationActivity extends AppCompatActivity implements Phon
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        goBack();
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void goBack() {
         Class intentClass;
-        if (dataStore.getSTATION() == 1) {
+        if (DataStore.STATION == 1) {
             intentClass = AuthActivity.class;
         } else {
             intentClass = AuthRegisterActivity.class;
         }
         this.startActivity(new Intent(this, intentClass).putExtra("datastore", dataStore).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
         this.finish();
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
     public void onBackPressed() {
 
+    }
+
+    public void onPhoneEdit(View view) {
+        goBack();
     }
 }
