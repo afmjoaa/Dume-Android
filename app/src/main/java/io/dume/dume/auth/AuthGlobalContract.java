@@ -31,5 +31,15 @@ public interface AuthGlobalContract {
 
         void onFail(String exeption);
     }
+
+    interface OnExistingUserCallback {
+        void onStart();
+
+        void onUserFound();
+
+        void onNewUserFound();
+
+        void onError(String err);
+    }
 }
 

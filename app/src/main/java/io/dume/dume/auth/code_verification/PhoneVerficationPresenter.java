@@ -10,7 +10,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.PhoneAuthProvider;
-
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,12 +24,12 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
     PhoneVerificationContract.Model model;
     private CountDownTimer countDownTimer;
     private static final String TAG = "PhoneVerficationPresent";
-  //  private final FirebaseFirestore fireStore;
+    private final FirebaseFirestore fireStore;
 
     public PhoneVerficationPresenter(PhoneVerificationContract.View view, PhoneVerificationContract.Model authModel) {
         this.view = view;
         this.model = authModel;
-      //  fireStore = FirebaseFirestore.getInstance();
+        fireStore = FirebaseFirestore.getInstance();
     }
 
     @Override
@@ -104,6 +104,7 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
 
             @Override
             public void onAutoSuccess(AuthResult authResult) {
+                view.hideProgress();
                 if (DataStore.STATION == 2) {
                     saveUserToDb(model.getData());
                 } else {
@@ -155,13 +156,12 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
             user.put("phone_number", dataStore.getPhoneNumber());
             user.put("avatar", dataStore.getPhotoUri());
             user.put("email", dataStore.getEmail());
-/*
+            view.showProgress("Saving User...");
             fireStore.collection("users").document(model.getUser().getUid()).set(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     view.hideProgress();
                     nextActivity();
-
                     Log.w(TAG, "onComplete: User Added");
                 }
             }).addOnFailureListener(new OnFailureListener() {
@@ -170,7 +170,7 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
                     Log.w(TAG, "onFailure: User Not Added  " + e.getLocalizedMessage());
                 }
             });
-*/
+
 
         } else {
             Log.w(TAG, "saveUserToDb: " + "Datastore null or user not logged in");

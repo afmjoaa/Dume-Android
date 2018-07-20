@@ -12,9 +12,19 @@ import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.FirebaseFirestoreSettings;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.internal.api.FirebaseNoSignedInUserException;
 
+import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
+
+import javax.annotation.Nullable;
 
 import io.dume.dume.auth.auth.AuthContract;
 import io.dume.dume.auth.code_verification.PhoneVerificationContract;
@@ -27,6 +37,7 @@ public class AuthModel implements AuthContract.Model, SplashContract.Model, Phon
     private final FirebaseAuth mAuth;
     private final Intent mIntent;
     private DataStore datastore = null;
+    private final FirebaseFirestore firestore;
 
 
     public AuthModel(Activity activity, Context context) {
@@ -37,6 +48,11 @@ public class AuthModel implements AuthContract.Model, SplashContract.Model, Phon
         if (mIntent.getSerializableExtra("datastore") != null) {
             datastore = (DataStore) mIntent.getSerializableExtra("datastore");
         }
+        firestore = FirebaseFirestore.getInstance();
+        FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
+                .setTimestampsInSnapshotsEnabled(true)
+                .build();
+        firestore.setFirestoreSettings(settings);
 
     }
 
@@ -59,11 +75,11 @@ public class AuthModel implements AuthContract.Model, SplashContract.Model, Phon
 
                 }).addOnFailureListener(e -> {
                     if (e instanceof FirebaseNoSignedInUserException) {
-                        listener.onFail("FirebaseNoSignedInUserException");
+                        listener.onFail("Already signed in");
                     } else if (e instanceof FirebaseTooManyRequestsException) {
-                        listener.onFail("FirebaseTooManyRequestsException");
+                        listener.onFail("You tried too times");
                     } else if (e instanceof FirebaseAuthInvalidUserException) {
-
+                        listener.onFail("Invalid User");
                     }
 
                     listener.onFail(e.getLocalizedMessage() + e.getClass().getName());
@@ -89,12 +105,37 @@ public class AuthModel implements AuthContract.Model, SplashContract.Model, Phon
     }
 
     @Override
-    public boolean isExistingUser(String phoneNumber) {
+    public boolean isExistingUser(@Nullable String phoneNumber, AuthGlobalContract.OnExistingUserCallback listener) {
+        Log.w(TAG, "isExistingUser: ");
+        listener.onStart();
+        // final boolean[] isexists = {false};
+        firestore.collection("users").whereEqualTo("phone_number", phoneNumber).addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                List<DocumentSnapshot> documents = null;
+                if (queryDocumentSnapshots != null) {
+                    documents = queryDocumentSnapshots.getDocuments();
+                    if (documents.size() >= 1) {
+                        listener.onUserFound();
+                    } else {
+                        listener.onNewUserFound();
+                    }
+                } else {
+                    listener.onError("Internal Error. No queryDocumentSpanshot Returned By Google");
+                }
+                if (e != null) {
+                    listener.onError(e.getLocalizedMessage());
+                }
+
+            }
+        });
+
         return false;
     }
 
     @Override
     public void verifyCode(String code, PhoneVerificationContract.Model.CodeVerificationCallBack listener) {
+
         if (listener != null && datastore != null) {
             listener.onStart();
             PhoneAuthCredential credential = PhoneAuthProvider.getCredential(datastore.getVerificationId(), code);
@@ -162,7 +203,20 @@ public class AuthModel implements AuthContract.Model, SplashContract.Model, Phon
 
     @Override
     public void onAccountTypeFound(FirebaseUser user, AuthGlobalContract.AccountTypeFoundListener listener) {
-        listener.onTeacherFound();
+        listener.onStart();
+        firestore.collection("users").document(user.getUid()).addSnapshotListener((documentSnapshot, e) -> {
+            if (documentSnapshot != null) {
+                String account_major = Objects.requireNonNull(documentSnapshot.get("account_major")).toString();
+                if (account_major.equals("teacher")) {
+                    listener.onTeacherFound();
+                } else {
+                    listener.onStudentFound();
+                }
+            } else {
+                listener.onFail("Does not found any user");
+                Log.w(TAG, "onAccountTypeFound: document is not null");
+            }
+        });
     }
 
 

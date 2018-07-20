@@ -1,7 +1,6 @@
 package io.dume.dume.auth.auth;
 
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -56,10 +55,7 @@ public class AuthActivity extends AppCompatActivity implements AuthContract.View
     private static final String TAG = "AuthActivity";
     private String[] changingTextArray;
     private TextView changingTextView;
-
     private TextView socialConnect;
-
-    private ProgressDialog progressDialog;
     private SpotsDialog.Builder spotsBuilder;
     private AlertDialog spotDialog;
 
@@ -93,12 +89,11 @@ public class AuthActivity extends AppCompatActivity implements AuthContract.View
         phoneEditText.setOnClickListener(view -> appBar.setExpanded(false, true));
         floatingButoon.setOnClickListener(view -> presenter.onPhoneValidation(phoneEditText.getText().toString()));
         phoneEditText.addTextChangedListener(this);
-        progressDialog = new ProgressDialog(this);
 
 
         spotsBuilder = new SpotsDialog.Builder().setContext(this);
         spotsBuilder.setCancelable(false);
-
+        spotDialog = new AlertDialog.Builder(this).create();
         Typeface custom_font = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Medium.ttf");
 
         changingTextView.setTypeface(custom_font);
@@ -216,14 +211,19 @@ public class AuthActivity extends AppCompatActivity implements AuthContract.View
 
     @Override
     public void showProgress(String titile, String message) {
-        spotsBuilder.setMessage(titile);
-        spotDialog = spotsBuilder.build();
+        spotDialog = spotsBuilder.setMessage(titile).build();
         spotDialog.show();
+        Log.w(TAG, "showProgress: ");
     }
 
     @Override
     public void hideProgress() {
-        spotDialog.dismiss();
+        if (spotDialog.isShowing()) {
+            spotDialog.dismiss();
+            Log.w(TAG, "hideProgress: ");
+        }
+
+
     }
 
     @Override
@@ -286,13 +286,17 @@ public class AuthActivity extends AppCompatActivity implements AuthContract.View
 
     @Override
     protected void onPause() {
-        spotDialog.dismiss();
+        if (spotDialog.isShowing()) {
+            spotDialog.dismiss();
+        }
         super.onPause();
     }
 
     @Override
     protected void onDestroy() {
-        spotDialog.dismiss();
+        if (spotDialog.isShowing()) {
+            spotDialog.dismiss();
+        }
         super.onDestroy();
     }
 

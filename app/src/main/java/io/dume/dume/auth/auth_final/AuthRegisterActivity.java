@@ -1,27 +1,41 @@
 package io.dume.dume.auth.auth_final;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseException;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import dmax.dialog.SpotsDialog;
 import io.dume.dume.R;
-import io.dume.dume.auth.auth.AuthActivity;
+import io.dume.dume.auth.AuthGlobalContract;
+import io.dume.dume.auth.AuthModel;
 import io.dume.dume.auth.DataStore;
+import io.dume.dume.auth.auth.AuthActivity;
 import io.dume.dume.auth.code_verification.PhoneVerificationActivity;
+import io.dume.dume.student.homepage.StudentActivity;
+import io.dume.dume.teacher.homepage.TeacherActivtiy;
 import io.dume.dume.util.DumeUtils;
 
 public class AuthRegisterActivity extends AppCompatActivity {
@@ -29,7 +43,9 @@ public class AuthRegisterActivity extends AppCompatActivity {
     private AlertDialog.Builder dialogBuilder;
     private DataStore datastore = null;
     private android.app.AlertDialog sendingCodeDialog;
-
+    private FirebaseFirestore firestore;
+    private Activity activity;
+    private static final String TAG = "AuthRegisterActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +58,7 @@ public class AuthRegisterActivity extends AppCompatActivity {
             datastore = (DataStore) getIntent().getSerializableExtra("datastore");
             restoreData(datastore);
         }
+        activity = this;
 
     }
 
@@ -57,10 +74,8 @@ public class AuthRegisterActivity extends AppCompatActivity {
         lastName = findViewById(R.id.input_lastname);
         email = findViewById(R.id.input_email);
         phoneNumber = findViewById(R.id.phoneNumberEditText);
-        dialogBuilder = new AlertDialog.Builder(this);
-        dialogBuilder.setMessage("We sending a code to your mobile number");
-        dialogBuilder.setTitle("Sending....");
-        sendingCodeDialog = new SpotsDialog.Builder().setContext(this).setMessage("Sending Code").build();
+        sendingCodeDialog = new SpotsDialog.Builder().setContext(this).setMessage("Loading...").build();
+        firestore = FirebaseFirestore.getInstance();
     }
 
     @Override
@@ -83,10 +98,7 @@ public class AuthRegisterActivity extends AppCompatActivity {
 
     public void onViewClick(View view) {
         switch (view.getId()) {
-
             case R.id.floating_button:
-
-
                 if (firstname.getText().toString().isEmpty() || lastName.getText().toString().isEmpty() || phoneNumber.getText().toString().isEmpty() || email.getText().toString().isEmpty()) {
                     Toast.makeText(this, "Hey Man !!! Fill up all the data.", Toast.LENGTH_SHORT).show();
                     return;
@@ -101,40 +113,193 @@ public class AuthRegisterActivity extends AppCompatActivity {
                 } else if (phoneStr.length() != 11) {
                     phoneNumber.setError("Should be 11 Digits");
                     return;
+                } else if (!DumeUtils.isValidEmailAddress(email.getText().toString())) {
+                    email.setError("Please provide a valid email address");
+                    return;
                 }
-                sendingCodeDialog.show();
-                PhoneAuthProvider.getInstance().verifyPhoneNumber("+88" + phoneStr, 60, TimeUnit.SECONDS, this, new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+
+                new AuthModel(this, this).isExistingUser(phoneStr, new AuthGlobalContract.OnExistingUserCallback() {
                     @Override
-                    public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
+                    public void onStart() {
+                        showDialog("Querying Database");
+                    }
+
+                    @Override
+                    public void onUserFound() {
+                        hideDialog();
+                        PhoneAuthProvider.getInstance().verifyPhoneNumber("+88" + phoneStr, 60, TimeUnit.SECONDS, activity, new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+                            @Override
+                            public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
+                                Log.w(TAG, "onVerificationCompleted: OnExistingUser");
+                                FirebaseAuth.getInstance().signInWithCredential(phoneAuthCredential).addOnCompleteListener(authResultTask -> {
+                                    if (authResultTask.isSuccessful()) {
+                                        hideDialog();
+                                        new AuthModel(activity, getApplicationContext()).onAccountTypeFound(authResultTask.getResult().getUser(), new AuthGlobalContract.AccountTypeFoundListener() {
+                                            @Override
+                                            public void onStart() {
+                                                showDialog("Authenticating...");
+                                            }
+
+                                            @Override
+                                            public void onTeacherFound() {
+                                                hideDialog();
+                                                startActivity(new Intent(AuthRegisterActivity.this, TeacherActivtiy.class));
+                                                finish();
+                                            }
+
+                                            @Override
+                                            public void onStudentFound() {
+                                                hideDialog();
+                                                startActivity(new Intent(AuthRegisterActivity.this, StudentActivity.class));
+                                                finish();
+                                            }
+
+                                            @Override
+                                            public void onFail(String exeption) {
+                                                hideDialog();
+                                                toast(exeption);
+                                            }
+                                        });
+
+                                    } else if (authResultTask.getException() != null) {
+                                        hideDialog();
+                                        toast(authResultTask.getException().getLocalizedMessage());
+                                    }
+
+                                });
+                            }
+
+                            @Override
+                            public void onVerificationFailed(FirebaseException e) {
+                                sendingCodeDialog.dismiss();
+                                Toast.makeText(AuthRegisterActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void onCodeSent(String verificationId, PhoneAuthProvider.ForceResendingToken forceResendingToken) {
+                                super.onCodeSent(verificationId, forceResendingToken);
+                                hideDialog();
+                                Intent intent = new Intent(getApplicationContext(), PhoneVerificationActivity.class);
+                                datastore.setFirstName(firstname.getText().toString());
+                                datastore.setLastName(lastName.getText().toString());
+                                datastore.setEmail(email.getText().toString());
+                                datastore.setPhoneNumber(phoneNumber.getText().toString());
+                                DataStore.resendingToken = forceResendingToken;
+                                datastore.setVerificationId(verificationId);
+                                datastore.setSTATION(2);
+                                intent.putExtra("datastore", datastore);
+                                startActivity(intent);
+                                finish();
+
+                            }
+                        });
+
 
                     }
 
                     @Override
-                    public void onVerificationFailed(FirebaseException e) {
-                        sendingCodeDialog.dismiss();
-                        Toast.makeText(AuthRegisterActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                    public void onNewUserFound() {
+                        showDialog("Saving User...");
+                        PhoneAuthProvider.getInstance().verifyPhoneNumber("+88" + phoneStr, 60, TimeUnit.SECONDS, activity, new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+                            @Override
+                            public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
+                                Log.w(TAG, "onVerificationCompleted: OnNewUser");
+                                FirebaseAuth.getInstance().signInWithCredential(phoneAuthCredential).addOnCompleteListener(authResultTask -> {
+
+                                    if (authResultTask.isSuccessful()) {
+                                        datastore.setFirstName(firstname.getText().toString());
+                                        datastore.setLastName(lastName.getText().toString());
+                                        datastore.setEmail(email.getText().toString());
+                                        datastore.setPhoneNumber(phoneNumber.getText().toString());
+                                        Map<String, Object> user = new HashMap<>();
+                                        user.put("first_name", datastore.getFirstName());
+                                        user.put("last_name", datastore.getLastName());
+                                        user.put("account_major", datastore.getAccountManjor());
+                                        user.put("phone_number", datastore.getPhoneNumber());
+                                        user.put("avatar", datastore.getPhotoUri());
+                                        user.put("email", datastore.getEmail());
+
+                                        firestore.collection("users").document(authResultTask.getResult().getUser().getUid()).set(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+
+                                                new AuthModel(AuthRegisterActivity.this, getApplicationContext()).onAccountTypeFound(authResultTask.getResult().getUser(), new AuthGlobalContract.AccountTypeFoundListener() {
+                                                    @Override
+                                                    public void onStart() {
+
+                                                    }
+
+                                                    @Override
+                                                    public void onTeacherFound() {
+                                                        hideDialog();
+                                                        startActivity(new Intent(AuthRegisterActivity.this, TeacherActivtiy.class));
+                                                        finish();
+                                                    }
+
+                                                    @Override
+                                                    public void onStudentFound() {
+                                                        hideDialog();
+                                                        startActivity(new Intent(AuthRegisterActivity.this, StudentActivity.class));
+                                                        finish();
+                                                    }
+
+                                                    @Override
+                                                    public void onFail(String exeption) {
+                                                        hideDialog();
+                                                        toast(exeption);
+                                                    }
+                                                });
+                                            }
+
+
+                                        }).addOnFailureListener((OnFailureListener) e -> {
+                                            sendingCodeDialog.dismiss();
+                                            toast(e.getLocalizedMessage());
+                                        });
+
+                                    } else if (authResultTask.getException() != null) {
+                                        hideDialog();
+                                        toast(authResultTask.getException().getLocalizedMessage());
+                                    }
+
+                                });
+                            }
+
+                            @Override
+                            public void onVerificationFailed(FirebaseException e) {
+                                hideDialog();
+                                Toast.makeText(AuthRegisterActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void onCodeSent(String verificationId, PhoneAuthProvider.ForceResendingToken forceResendingToken) {
+                                super.onCodeSent(verificationId, forceResendingToken);
+                                hideDialog();
+                                Intent intent = new Intent(getApplicationContext(), PhoneVerificationActivity.class);
+                                datastore.setFirstName(firstname.getText().toString());
+                                datastore.setLastName(lastName.getText().toString());
+                                datastore.setEmail(email.getText().toString());
+                                datastore.setPhoneNumber(phoneNumber.getText().toString());
+                                DataStore.resendingToken = forceResendingToken;
+                                datastore.setVerificationId(verificationId);
+                                datastore.setSTATION(2);
+                                intent.putExtra("datastore", datastore);
+                                startActivity(intent);
+                                finish();
+
+                            }
+                        });
+
                     }
 
                     @Override
-                    public void onCodeSent(String verificationId, PhoneAuthProvider.ForceResendingToken forceResendingToken) {
-                        super.onCodeSent(verificationId, forceResendingToken);
-                        sendingCodeDialog.dismiss();
-                        Intent intent = new Intent(getApplicationContext(), PhoneVerificationActivity.class);
-                        datastore.setFirstName(firstname.getText().toString());
-                        datastore.setLastName(lastName.getText().toString());
-                        datastore.setEmail(email.getText().toString());
-                        datastore.setPhoneNumber(phoneNumber.getText().toString());
-                        DataStore.resendingToken = forceResendingToken;
-                        datastore.setVerificationId(verificationId);
-                        datastore.setSTATION(2);
-                        intent.putExtra("datastore", datastore);
-                        startActivity(intent);
-                        finish();
-
+                    public void onError(String err) {
+                        toast(err);
                     }
                 });
 
-                /**/
+
+                /**  */
 
                 break;
             case R.id.hiperlink_privacy_text:
@@ -151,9 +316,25 @@ public class AuthRegisterActivity extends AppCompatActivity {
 
     }
 
+    void showDialog(String msg) {
+        sendingCodeDialog.setMessage(msg);
+        sendingCodeDialog.show();
+    }
+
+    void hideDialog() {
+        if (sendingCodeDialog.isShowing()) {
+            sendingCodeDialog.dismiss();
+        }
+    }
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+    }
+
+    private void toast(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+
     }
 
 }
