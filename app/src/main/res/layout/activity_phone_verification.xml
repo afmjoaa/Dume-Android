@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".auth.auth_final.AuthRegisterActivity">
+    tools:context=".auth.code_verification.PhoneVerificationActivity">
 
 
     <android.support.design.widget.AppBarLayout
@@ -100,6 +100,7 @@ to you at " />
                         android:id="@+id/editPhn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:onClick="onPhoneEdit"
                         android:text="Edit Phone Number"
                         android:textColor="@color/colorAccent" />
                 </LinearLayout>

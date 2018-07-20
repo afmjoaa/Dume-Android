@@ -1,10 +1,11 @@
 package io.dume.dume.auth.auth_final;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -40,12 +41,13 @@ import io.dume.dume.util.DumeUtils;
 
 public class AuthRegisterActivity extends AppCompatActivity {
     EditText firstname, lastName, email, phoneNumber;
-    private AlertDialog.Builder dialogBuilder;
+    private AlertDialog dialog;
     private DataStore datastore = null;
-    private android.app.AlertDialog sendingCodeDialog;
+    private SpotsDialog.Builder spotBuilder;
     private FirebaseFirestore firestore;
     private Activity activity;
     private static final String TAG = "AuthRegisterActivity";
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +61,7 @@ public class AuthRegisterActivity extends AppCompatActivity {
             restoreData(datastore);
         }
         activity = this;
+        dialog = new AlertDialog.Builder(this).create();
 
     }
 
@@ -70,11 +73,12 @@ public class AuthRegisterActivity extends AppCompatActivity {
     }
 
     private void init() {
+        context = this;
         firstname = findViewById(R.id.input_firstname);
         lastName = findViewById(R.id.input_lastname);
         email = findViewById(R.id.input_email);
         phoneNumber = findViewById(R.id.phoneNumberEditText);
-        sendingCodeDialog = new SpotsDialog.Builder().setContext(this).setMessage("Loading...").build();
+        spotBuilder = new SpotsDialog.Builder().setContext(this);
         firestore = FirebaseFirestore.getInstance();
     }
 
@@ -126,7 +130,9 @@ public class AuthRegisterActivity extends AppCompatActivity {
 
                     @Override
                     public void onUserFound() {
+                        DataStore.STATION = 1;
                         hideDialog();
+                        showDialog("Authenticating...");
                         PhoneAuthProvider.getInstance().verifyPhoneNumber("+88" + phoneStr, 60, TimeUnit.SECONDS, activity, new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
                             @Override
                             public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
@@ -171,7 +177,7 @@ public class AuthRegisterActivity extends AppCompatActivity {
 
                             @Override
                             public void onVerificationFailed(FirebaseException e) {
-                                sendingCodeDialog.dismiss();
+                                hideDialog();
                                 Toast.makeText(AuthRegisterActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                             }
 
@@ -186,7 +192,6 @@ public class AuthRegisterActivity extends AppCompatActivity {
                                 datastore.setPhoneNumber(phoneNumber.getText().toString());
                                 DataStore.resendingToken = forceResendingToken;
                                 datastore.setVerificationId(verificationId);
-                                datastore.setSTATION(2);
                                 intent.putExtra("datastore", datastore);
                                 startActivity(intent);
                                 finish();
@@ -199,13 +204,13 @@ public class AuthRegisterActivity extends AppCompatActivity {
 
                     @Override
                     public void onNewUserFound() {
+                        hideDialog();
                         showDialog("Saving User...");
                         PhoneAuthProvider.getInstance().verifyPhoneNumber("+88" + phoneStr, 60, TimeUnit.SECONDS, activity, new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
                             @Override
                             public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
                                 Log.w(TAG, "onVerificationCompleted: OnNewUser");
                                 FirebaseAuth.getInstance().signInWithCredential(phoneAuthCredential).addOnCompleteListener(authResultTask -> {
-
                                     if (authResultTask.isSuccessful()) {
                                         datastore.setFirstName(firstname.getText().toString());
                                         datastore.setLastName(lastName.getText().toString());
@@ -222,7 +227,6 @@ public class AuthRegisterActivity extends AppCompatActivity {
                                         firestore.collection("users").document(authResultTask.getResult().getUser().getUid()).set(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                                             @Override
                                             public void onComplete(@NonNull Task<Void> task) {
-
                                                 new AuthModel(AuthRegisterActivity.this, getApplicationContext()).onAccountTypeFound(authResultTask.getResult().getUser(), new AuthGlobalContract.AccountTypeFoundListener() {
                                                     @Override
                                                     public void onStart() {
@@ -253,7 +257,7 @@ public class AuthRegisterActivity extends AppCompatActivity {
 
 
                                         }).addOnFailureListener((OnFailureListener) e -> {
-                                            sendingCodeDialog.dismiss();
+                                            hideDialog();
                                             toast(e.getLocalizedMessage());
                                         });
 
@@ -268,7 +272,7 @@ public class AuthRegisterActivity extends AppCompatActivity {
                             @Override
                             public void onVerificationFailed(FirebaseException e) {
                                 hideDialog();
-                                Toast.makeText(AuthRegisterActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                                toast(e.getLocalizedMessage());
                             }
 
                             @Override
@@ -294,6 +298,7 @@ public class AuthRegisterActivity extends AppCompatActivity {
 
                     @Override
                     public void onError(String err) {
+                        hideDialog();
                         toast(err);
                     }
                 });
@@ -303,27 +308,32 @@ public class AuthRegisterActivity extends AppCompatActivity {
 
                 break;
             case R.id.hiperlink_privacy_text:
-                dialogBuilder.setTitle("Privacy Policy");
+                /*dialogBuilder.setTitle("Privacy Policy");
                 dialogBuilder.setMessage(R.string.lorem_para);
-                dialogBuilder.create().show();
+                dialogBuilder.create().show();*/
                 break;
             case R.id.hiperlink_terms_text:
-                dialogBuilder.setTitle("Terms and Conditions");
+                /*dialogBuilder.setTitle("Terms and Conditions");
                 dialogBuilder.setMessage(R.string.lorem_para);
-                dialogBuilder.create().show();
+                dialogBuilder.create().show();*/
                 break;
         }
 
     }
 
     void showDialog(String msg) {
-        sendingCodeDialog.setMessage(msg);
-        sendingCodeDialog.show();
+        if (!((Activity) context).isFinishing()) {
+            spotBuilder.setMessage(msg);
+            dialog = spotBuilder.build();
+            dialog.show();
+            Log.w(TAG, "showDialog: ");
+        }
     }
 
     void hideDialog() {
-        if (sendingCodeDialog.isShowing()) {
-            sendingCodeDialog.dismiss();
+        if (dialog.isShowing()) {
+            dialog.dismiss();
+            Log.w(TAG, "hideDialog: ");
         }
     }
 
@@ -336,5 +346,6 @@ public class AuthRegisterActivity extends AppCompatActivity {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
 
     }
+
 
 }
