@@ -9,6 +9,7 @@
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowTranslucentNavigation">true</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
+        <item name="android:activatedBackgroundIndicator">@drawable/drawer_activated_bg_indicator</item>
     </style>
 
 </resources>

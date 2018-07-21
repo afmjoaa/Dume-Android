@@ -66,6 +66,7 @@
         <item name="colorPrimaryDark">#00ffffff</item>
         <item name="android:windowActionBarOverlay">true</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
+        <item name="android:activatedBackgroundIndicator">@drawable/drawer_activated_bg_indicator</item>
     </style>
 
 

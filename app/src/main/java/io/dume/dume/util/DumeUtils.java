@@ -10,4 +10,5 @@ public class DumeUtils {
     public static boolean isInteger(String string) {
         return TextUtils.isDigitsOnly(string);
     }
+
 }
