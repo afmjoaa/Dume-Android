@@ -203,6 +203,7 @@ public class AuthModel implements AuthContract.Model, SplashContract.Model, Phon
 
     @Override
     public void onAccountTypeFound(FirebaseUser user, AuthGlobalContract.AccountTypeFoundListener listener) {
+
         listener.onStart();
         firestore.collection("users").document(user.getUid()).addSnapshotListener((documentSnapshot, e) -> {
             if (documentSnapshot != null) {

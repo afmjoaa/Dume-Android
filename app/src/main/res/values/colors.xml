@@ -18,5 +18,11 @@
     <color name="MystyleWindowBackground">#ffffff</color>
     <color name="transparent">#00ffffff</color>
     <color name="colorAsh">#e6e4e6e6</color>
+    <color name="semi_transpatent_ashe">#4b737474</color>
+    <color name="stu_text_color">#4C5264</color>
+    <color name="blue">#4770ED</color>
+    <color name="red">#ff0000</color>
+    <color name="color_navigation_list_background">#263238</color>
+    <color name="color_selector_navigation_item">#FFFFFF</color>
 
 </resources>

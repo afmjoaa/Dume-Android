@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <item
+        android:enabled="false"
+        android:title=" ">
+        <menu>
+            <item
+                android:enabled="false"
+                android:title=" " />
+        </menu>
+    </item>
+    <item
+        android:enabled="false"
+        android:title=" " />
+    <item
+        android:enabled="false"
+        android:title=" " />
+
+
+    <group
+        android:checkableBehavior="single"
+        android:visible="true">
+        <item
+            android:id="@+id/home_id"
+            android:icon="@drawable/home_icon"
+            android:title="Home" />
+        <item
+            android:id="@+id/records"
+            android:icon="@drawable/records_icon"
+            android:title="Records" />
+        <item
+            android:id="@+id/payments"
+            android:icon="@drawable/payments_icon"
+            android:title="Payments" />
+        <item
+            android:id="@+id/messages"
+            android:icon="@drawable/messages_drawer_icon"
+            android:title="Messages" />
+        <item
+            android:id="@+id/notifications"
+            android:icon="@drawable/notification_drawer_icon"
+            android:title="Notifications" />
+        <item
+            android:id="@+id/free_cashback"
+            android:icon="@drawable/free_cash_icon"
+            android:title="Free Cashback" />
+        <item
+            android:id="@+id/settings"
+            android:icon="@drawable/settings_icon"
+            android:title="Settings" />
+        <item
+            android:id="@+id/forum"
+            android:icon="@drawable/forum_icon"
+            android:title="Forum" />
+        <item
+            android:id="@+id/help"
+            android:icon="@drawable/help_icon"
+            android:title="Help" />
+    </group>
+
+    <item
+        android:id="@+id/select_account"
+        android:title="Switch Profile"
+        android:checkable="true"
+        android:visible="false">
+        <menu>
+            <item
+                android:id="@+id/student"
+                android:icon="@drawable/student_account_icon"
+                android:title="Student" />
+            <item
+                android:id="@+id/mentor"
+                android:icon="@drawable/mentor_icon"
+                android:title="Mentor" />
+            <item
+                android:id="@+id/boot_camp"
+                android:icon="@drawable/boot_camp_icon"
+                android:title="Boot Camp" />
+        </menu>
+    </item>
+
+
+    <item
+        android:id="@+id/information_item"
+        android:title="Informations">
+        <menu>
+            <item
+                android:id="@+id/about_us"
+                android:icon="@drawable/about_us_icon"
+                android:title="About Us" />
+            <item
+                android:id="@+id/privacy_policy"
+                android:icon="@drawable/pp_icon"
+                android:title="Privacy policy" />
+        </menu>
+    </item>
+    <item
+        android:enabled="false"
+        android:title=" " />
+
+</menu>
