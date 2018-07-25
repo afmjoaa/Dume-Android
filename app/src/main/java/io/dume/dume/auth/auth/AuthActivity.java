@@ -16,9 +16,11 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
+import android.text.SpannableString;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -99,8 +101,9 @@ public class AuthActivity extends AppCompatActivity implements AuthContract.View
         spotsBuilder.setCancelable(false);
         spotDialog = new AlertDialog.Builder(this).create();
         Typeface custom_font = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Medium.ttf");
+        Typeface cairoRegular = Typeface.createFromAsset(getAssets(), "fonts/Cairo_Regular.ttf");
 
-        changingTextView.setTypeface(custom_font);
+        //changingTextView.setTypeface(custom_font);
         //initializing sliderLayout
         sliderLayout.addSlider(new FeaturedSliderAdapter(this).image(R.drawable.slide_background).
                 description(promoTextArray[0]));
@@ -113,6 +116,18 @@ public class AuthActivity extends AppCompatActivity implements AuthContract.View
         sliderLayout.addSlider(new FeaturedSliderAdapter(this).image(R.drawable.slide_background).
                 description(promoTextArray[4]));
         sliderLayout.startAutoCycle(1000, 5000, true);
+
+        for (int i = 0; i < bottomNavigationView.getMenu().size(); i++) {
+            MenuItem item = bottomNavigationView.getMenu().getItem(i);
+            Menu menu = bottomNavigationView.getMenu();
+            if (item.getMenuInfo() != null) {
+                Log.w(TAG, "init: " + item.getMenuInfo());
+            } else Log.w(TAG, "init: null");
+            SpannableString spannableString = new SpannableString(item.getTitle());
+            spannableString.setSpan(cairoRegular, 0, item.getTitle().length(), 0);
+            item.setTitle(spannableString);
+
+        }
 
     }
 

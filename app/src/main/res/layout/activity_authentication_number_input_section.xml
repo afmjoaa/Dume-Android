@@ -18,8 +18,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:text="Start learning with Dume"
-            android:textSize="16sp"/>
+            android:text="Start Learning With Dume"
+            android:textSize="16sp"
+            app:fontFamily="@font/cairo_regular"/>
     </LinearLayout>
 
     <LinearLayout
@@ -44,6 +45,7 @@
             android:layout_marginRight="5dp"
             android:layout_marginTop="5dp"
             android:text="+88"
+            android:fontFamily="@font/cairo_regular"
             android:textSize="18sp" />
 
         <android.support.design.widget.TextInputLayout
@@ -63,6 +65,7 @@
                 android:nextFocusLeft="@id/phoneNumberEditText"
                 android:nextFocusUp="@id/phoneNumberEditText"
                 android:singleLine="true"
+                android:fontFamily="@font/cairo_regular"
                 android:textSize="18sp" />
         </android.support.design.widget.TextInputLayout>
 
