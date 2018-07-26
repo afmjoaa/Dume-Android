@@ -24,5 +24,10 @@
     <color name="red">#ff0000</color>
     <color name="color_navigation_list_background">#263238</color>
     <color name="color_selector_navigation_item">#FFFFFF</color>
+    <color name="drawer_active_item">#11212a</color>
+    <color name="snackbar_red">#80d90000</color>
+    <color name="badge_red">#fff56161</color>
+    <color name="badge_yellow">#fff4f094</color>
+    <color name="badge_green">#fface0ac</color>
 
 </resources>

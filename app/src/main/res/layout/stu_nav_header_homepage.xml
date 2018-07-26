@@ -80,6 +80,7 @@
     </LinearLayout>
 
     <Button
+
         android:id="@+id/switch_account_btn"
         style="?android:attr/borderlessButtonStyle"
         android:layout_width="wrap_content"
@@ -96,8 +97,10 @@
         android:gravity="start|center_vertical"
         android:paddingLeft="15dp"
         android:paddingStart="15dp"
+        android:paddingRight="10dp"
         android:onClick="onNavigationHeaderClick"
-        android:stateListAnimator="@null" />
+        android:stateListAnimator="@null"
+        android:paddingEnd="10dp" />
 
 </android.support.design.widget.CoordinatorLayout>
 

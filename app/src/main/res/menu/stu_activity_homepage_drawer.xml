@@ -63,22 +63,24 @@
 
     <item
         android:id="@+id/select_account"
-        android:title="Switch Profile"
         android:checkable="true"
+        android:title="Switch Profile"
         android:visible="false">
         <menu>
-            <item
-                android:id="@+id/student"
-                android:icon="@drawable/student_account_icon"
-                android:title="Student" />
-            <item
-                android:id="@+id/mentor"
-                android:icon="@drawable/mentor_icon"
-                android:title="Mentor" />
-            <item
-                android:id="@+id/boot_camp"
-                android:icon="@drawable/boot_camp_icon"
-                android:title="Boot Camp" />
+            <group android:visible="true">
+                <item
+                    android:id="@+id/student"
+                    android:icon="@drawable/student_account_icon"
+                    android:title="Student" />
+                <item
+                    android:id="@+id/mentor"
+                    android:icon="@drawable/mentor_icon"
+                    android:title="Mentor" />
+                <item
+                    android:id="@+id/boot_camp"
+                    android:icon="@drawable/boot_camp_icon"
+                    android:title="Boot Camp" />
+            </group>
         </menu>
     </item>
 
@@ -97,8 +99,5 @@
                 android:title="Privacy policy" />
         </menu>
     </item>
-    <item
-        android:enabled="false"
-        android:title=" " />
 
 </menu>

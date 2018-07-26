@@ -18,8 +18,12 @@
         android:id="@+id/nav_view"
         android:layout_width="300dp"
         android:layout_height="match_parent"
+
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
+        app:itemBackground="@drawable/drawer_item_background"
+        app:itemIconTint="@drawable/drawer_item_icontint"
+        app:itemTextColor="@drawable/drawer_item_textcolor"
         app:menu="@menu/stu_activity_homepage_drawer">
 
         <include layout="@layout/stu_nav_header_homepage"/>

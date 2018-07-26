@@ -4,8 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-
 import io.dume.dume.auth.AuthModel;
 import io.dume.dume.auth.auth.AuthActivity;
 import io.dume.dume.student.homepage.StudentActivity;
@@ -20,6 +18,7 @@ public class SplashActivity extends AppCompatActivity implements SplashContract.
         super.onCreate(savedInstanceState);
         presenter = new SplashPresenter(this, new AuthModel(this, this));
         presenter.enqueue();
+        presenter.init(this);
         }
 
     @Override

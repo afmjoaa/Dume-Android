@@ -68,8 +68,9 @@
         <item name="colorPrimaryDark">#00ffffff</item>
         <item name="android:windowActionBarOverlay">true</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
-        <item name="android:activatedBackgroundIndicator">@drawable/drawer_activated_bg_indicator</item>
+        <item name="coordinatorLayoutStyle">@style/Widget.Design.CoordinatorLayout</item>
     </style>
+    <!--<item name="android:activatedBackgroundIndicator">@drawable/drawer_item_textcolor</item>-->
 
 
     <style name="CustomActionBar" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar">

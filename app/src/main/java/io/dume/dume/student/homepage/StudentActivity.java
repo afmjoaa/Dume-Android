@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
+import com.google.android.gms.maps.MapsInitializer;
 import com.google.firebase.auth.FirebaseAuth;
 
 import io.dume.dume.R;
@@ -21,7 +22,7 @@ public class StudentActivity extends AppCompatActivity {
     public void onStudentViewClicked(View view) {
         switch (view.getId()) {
             case R.id.signOutBtn:
-                if(FirebaseAuth.getInstance().getCurrentUser() != null){
+                if (FirebaseAuth.getInstance().getCurrentUser() != null) {
                     FirebaseAuth.getInstance().signOut();
                     Intent intent = new Intent(getApplicationContext(), AuthActivity.class);
                     startActivity(intent);
@@ -29,6 +30,10 @@ public class StudentActivity extends AppCompatActivity {
                 break;
             case R.id.testingActivityBtn:
                 startActivity(new Intent(this, StuHomepageActivity.class));
+                break;
+
+            case R.id.testingMapBtn:
+                startActivity(new Intent(this, MapsActivity.class));
                 break;
         }
 

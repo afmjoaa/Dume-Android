@@ -46,5 +46,11 @@
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="search_mentors">Search Mentors</string>
+    <string name="messages">Messages</string>
+    <string name="notifications">Notifications</string>
+    <string name="records">Records</string>
+    <string name="profile">Profile</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="refresh">Refresh</string>
 
 </resources>

@@ -7,9 +7,9 @@
         <item name="colorPrimaryDark">#00ffffff</item>
         <item name="android:windowActionBarOverlay">true</item>
         <item name="android:windowTranslucentStatus">true</item>
-        <item name="android:windowTranslucentNavigation">true</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
-        <item name="android:activatedBackgroundIndicator">@drawable/drawer_activated_bg_indicator</item>
+        <item name="coordinatorLayoutStyle">@style/Widget.Design.CoordinatorLayout</item>
     </style>
 
+    <!--<item name="android:windowTranslucentNavigation">true</item>-->
 </resources>

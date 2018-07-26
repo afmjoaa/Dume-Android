@@ -4,34 +4,34 @@
     tools:context=".MainActivity">
 
     <item
-        android:id="@+id/action_cut"
-        android:title="title_action_cut"
+        android:id="@+id/al_messages"
+        android:title="@string/messages"
         android:orderInCategory="1"
-        android:icon="@drawable/chat_icon"
+        android:icon="@drawable/al_chat_icon"
         app:showAsAction="always"
         />
 
     <item
-        android:id="@+id/action_copy"
-        android:title="title_action_copy"
+        android:id="@+id/al_notifications"
+        android:title="@string/notifications"
         android:orderInCategory="2"
-        android:icon="@drawable/noti_icon"
+        android:icon="@drawable/al_noti_icon"
         app:showAsAction="always"
         />
 
     <item
-        android:id="@+id/action_delete"
-        android:title="title_action_delete"
+        android:id="@+id/al_records"
+        android:title="@string/records"
         android:orderInCategory="3"
-        android:icon="@drawable/record_icon"
+        android:icon="@drawable/al_records_icon"
         app:showAsAction="always"
         />
 
     <item
-        android:id="@+id/action_share"
-        android:title="title_action_share"
+        android:id="@+id/al_display_pic"
+        android:title="@string/profile"
         android:orderInCategory="4"
-        android:icon="@drawable/alias_profile_icon"
+        android:icon="@drawable/al_alias_profile_icon"
         app:showAsAction="always"
         />
 
