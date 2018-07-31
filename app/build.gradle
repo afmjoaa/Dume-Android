@@ -13,6 +13,10 @@ android {
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
     }
+    dexOptions {
+        javaMaxHeapSize "2048M"
+        jumboMode = true
+    }
     buildTypes {
         release {
             minifyEnabled false
@@ -64,9 +68,7 @@ dependencies {
     implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion"
     //  firebase
     implementation 'com.google.firebase:firebase-core:16.0.1'
-
     /*Android Slider for Login Screen*/
-
     implementation 'com.nineoldandroids:library:2.4.0'
     implementation 'com.daimajia.slider:library:1.1.5@aar'
     /*Image Loading Library*/
@@ -76,8 +78,15 @@ dependencies {
     implementation 'com.google.android.gms:play-services-auth:15.0.1'
     implementation 'com.facebook.android:facebook-android-sdk:[4,5)'
     implementation 'com.squareup.okhttp:okhttp:2.7.2'
-
     implementation 'com.squareup.okhttp:okhttp-urlconnection:1.6.0'
-    implementation 'com.google.firebase:firebase-firestore:17.0.3'
+    implementation 'com.google.firebase:firebase-firestore:17.0.4'
     implementation 'com.android.support:multidex:1.0.3'
+//    google play services
+    implementation 'com.google.android.gms:play-services-gcm:15.0.1'
+    implementation 'com.google.android.gms:play-services-location:15.0.1'
+    implementation 'com.google.android.gms:play-services-maps:15.0.1'
+    implementation 'com.google.android.gms:play-services-places:15.0.1'
+//    implementation 'com.google.android.gms:play-services-nearby:15.0.1'
+//    implementation 'com.google.android.gms:play-services:12.0.1'
+
 }
