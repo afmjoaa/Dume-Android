@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/nav_header_height"
+    android:background="@drawable/drawer_header_photo"
+    android:gravity="bottom"
+    android:orientation="vertical"
+    android:theme="@style/ThemeOverlay.AppCompat.Dark">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="bottom"
+        android:orientation="vertical"
+        android:paddingBottom="0dp"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin">
+
+        <ImageView
+            android:id="@+id/user_dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="@dimen/nav_header_vertical_spacing"
+            android:contentDescription="@string/nav_header_desc"
+            android:onClick="onNavigationHeaderClick"
+            app:srcCompat="@drawable/demo_alias_dp" />
+
+        <TextView
+            android:id="@+id/user_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/nav_header_vertical_spacing"
+            android:text="Demo User"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textColor="#EBF6FE"
+            android:textSize="17sp" />
+
+        <TextView
+            android:id="@+id/user_addressing"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="1dp"
+            android:text="m@demouser" />
+
+        <TextView
+            android:id="@+id/user-rating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="1dp"
+            android:text="4.89  ★" />
+
+        <TextView
+            android:id="@+id/do_more"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="15dp"
+            android:text="Do more with your account"
+            android:textColor="#434343"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/make_money_mentoring"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="1dp"
+            android:paddingBottom="9dp"
+            android:text="Make money mentoring"
+            android:textColor="#434343"
+            android:textSize="14sp" />
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:backgroundTint="@color/colorBlack"
+            android:background="?android:attr/listDivider" />
+
+    </LinearLayout>
+
+    <Button
+
+        android:id="@+id/switch_account_btn"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="55dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginRight="5dp"
+        android:drawableEnd="@drawable/more_icon"
+        android:drawableLeft="@drawable/student_account_icon"
+        android:drawablePadding="0dp"
+        android:drawableRight="@drawable/more_icon"
+        android:drawableStart="@drawable/student_account_icon"
+        android:gravity="start|center_vertical"
+        android:paddingLeft="15dp"
+        android:paddingStart="15dp"
+        android:paddingRight="10dp"
+        android:onClick="onNavigationHeaderClick"
+        android:stateListAnimator="@null"
+        android:paddingEnd="10dp" />
+
+</android.support.design.widget.CoordinatorLayout>
+

@@ -39,5 +39,21 @@
 </string>
     <string name="facebook_app_id">2108291549389177</string>
     <string name="fb_login_protocol_scheme">fb2108291549389177</string>
+<<<<<<< Updated upstream
+=======
+    <string name="title_activity_stu_homepage">stuHomepageActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="search_mentors">Search Mentors</string>
+    <string name="messages">Messages</string>
+    <string name="notifications">Notifications</string>
+    <string name="records">Records</string>
+    <string name="profile">Profile</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="refresh">Refresh</string>
+>>>>>>> Stashed changes
 
 </resources>

@@ -1,5 +1,7 @@
 package io.dume.dume.splash;
 
+import android.app.Activity;
+
 import io.dume.dume.auth.AuthGlobalContract;
 
 public interface SplashContract {
@@ -12,6 +14,7 @@ public interface SplashContract {
     }
 
     interface Presenter {
+        void init(Activity myActivity);
         void enqueue();
     }
 

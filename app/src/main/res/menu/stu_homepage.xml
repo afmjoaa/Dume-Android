@@ -1,0 +1,39 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".MainActivity">
+
+    <item
+        android:id="@+id/al_messages"
+        android:title="@string/messages"
+        android:orderInCategory="1"
+        android:icon="@drawable/al_chat_icon"
+        app:showAsAction="always"
+        />
+
+    <item
+        android:id="@+id/al_notifications"
+        android:title="@string/notifications"
+        android:orderInCategory="2"
+        android:icon="@drawable/al_noti_icon"
+        app:showAsAction="always"
+        />
+
+    <item
+        android:id="@+id/al_records"
+        android:title="@string/records"
+        android:orderInCategory="3"
+        android:icon="@drawable/al_records_icon"
+        app:showAsAction="always"
+        />
+
+    <item
+        android:id="@+id/al_display_pic"
+        android:title="@string/profile"
+        android:orderInCategory="4"
+        android:icon="@drawable/al_alias_profile_icon"
+        app:showAsAction="always"
+        />
+
+</menu>
+

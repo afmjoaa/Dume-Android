@@ -1,5 +1,10 @@
 package io.dume.dume.splash;
+import android.app.Activity;
+import android.graphics.Color;
+import android.os.Build;
 import android.util.Log;
+import android.view.Window;
+import android.view.WindowManager;
 
 
 import io.dume.dume.auth.AuthGlobalContract;
@@ -13,6 +18,18 @@ public class SplashPresenter implements SplashContract.Presenter {
     public SplashPresenter(SplashContract.View view, SplashContract.Model model) {
         this.view = view;
         this.model = model;
+    }
+
+    @Override
+    public void init(Activity myActivity) {
+        // Status bar :: Transparent
+        Window window = myActivity.getWindow();
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+        {
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.setStatusBarColor(Color.TRANSPARENT);
+        }
     }
 
     @Override

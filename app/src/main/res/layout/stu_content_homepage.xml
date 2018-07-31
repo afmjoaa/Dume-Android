@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/s_R_Layout"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".student.homepage.StuHomepageActivity"
+    tools:showIn="@layout/stu_app_bar_homepage">
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/search_mentor_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="50dp"
+                android:alpha="65"
+                android:backgroundTint="@color/semi_transpatent_ashe"
+                android:drawableLeft="@drawable/search_icon"
+                android:drawablePadding="20dp"
+                android:drawableStart="@drawable/search_icon"
+                android:gravity="start|center_vertical"
+                android:paddingBottom="18dp"
+                android:paddingTop="18dp"
+                android:shadowColor="@color/semi_transpatent_ashe"
+                android:stateListAnimator="@drawable/appbar_no_elevation"
+                android:text="@string/search_mentors"
+                android:textAllCaps="false"
+                android:textColor="@color/stu_text_color"
+                android:textSize="18sp"
+                android:textStyle="normal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:targetApi="lollipop" />
+
+        </LinearLayout>
+
+
+    </android.support.v4.widget.NestedScrollView>
+
+</android.support.v4.widget.SwipeRefreshLayout>
