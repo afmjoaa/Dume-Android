@@ -18,8 +18,6 @@
     <color name="MystyleWindowBackground">#ffffff</color>
     <color name="transparent">#00ffffff</color>
     <color name="colorAsh">#e6e4e6e6</color>
-<<<<<<< Updated upstream
-=======
     <color name="semi_transpatent_ashe">#4b737474</color>
     <color name="stu_text_color">#4C5264</color>
     <color name="blue">#4770ED</color>
@@ -31,6 +29,5 @@
     <color name="badge_red">#fff56161</color>
     <color name="badge_yellow">#fff4f094</color>
     <color name="badge_green">#fface0ac</color>
->>>>>>> Stashed changes
 
 </resources>
