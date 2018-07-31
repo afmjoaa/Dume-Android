@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".model.AuthActivity">
+    tools:context=".auth.auth.AuthActivity">
 
 
     <android.support.design.widget.AppBarLayout
@@ -12,16 +12,20 @@
         android:layout_width="match_parent"
         android:layout_height="260dp"
         android:stateListAnimator="@drawable/appbar_always_elevated"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        android:theme="@style/ThemeOverlay.AppCompat.Light"
+        app:elevation="0dp"
         tools:targetApi="lollipop">
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/collapsing_toolbar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:contentScrim="@color/colorDefaultAndroid"
+            app:collapsedTitleGravity="bottom"
+            app:collapsedTitleTextAppearance="@style/MyTextApprncCol"
+
+            app:contentScrim="@color/colorWhite"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            app:titleEnabled="false">
+            app:titleEnabled="true">
 
 
             <com.daimajia.slider.library.SliderLayout
@@ -65,15 +69,12 @@
                 android:id="@+id/authToolbar"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
+                android:gravity="bottom"
                 app:buttonGravity="bottom"
-                app:collapsedTitleGravity="start"
-                app:collapsedTitleTextAppearance="@style/MyTextApprncCol"
-                app:expandedTitleGravity="start"
-                app:expandedTitleTextAppearance="@style/MyTextApprncExp"
                 app:layout_collapseMode="pin"
-                app:logo="@drawable/signin_logo"
                 app:navigationIcon="@drawable/back_arraw_icon"
-                app:titleTextAppearance="@font/cairo_extralight" />
+                app:popupTheme="@style/AppTheme.PopupOverlay"
+                app:title="Sign In" />
 
         </android.support.design.widget.CollapsingToolbarLayout>
 

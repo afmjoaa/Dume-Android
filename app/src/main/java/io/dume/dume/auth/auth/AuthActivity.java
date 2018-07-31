@@ -63,6 +63,7 @@ public class AuthActivity extends AppCompatActivity implements AuthContract.View
     private SpotsDialog.Builder spotsBuilder;
     private AlertDialog spotDialog;
     private Context context;
+    private Typeface cairoRegular;
 
 
     @Override
@@ -101,7 +102,7 @@ public class AuthActivity extends AppCompatActivity implements AuthContract.View
         spotsBuilder.setCancelable(false);
         spotDialog = new AlertDialog.Builder(this).create();
         Typeface custom_font = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Medium.ttf");
-        Typeface cairoRegular = Typeface.createFromAsset(getAssets(), "fonts/Cairo_Regular.ttf");
+        cairoRegular = Typeface.createFromAsset(getAssets(), "fonts/Cairo_Regular.ttf");
 
         //changingTextView.setTypeface(custom_font);
         //initializing sliderLayout
@@ -126,9 +127,9 @@ public class AuthActivity extends AppCompatActivity implements AuthContract.View
             SpannableString spannableString = new SpannableString(item.getTitle());
             spannableString.setSpan(cairoRegular, 0, item.getTitle().length(), 0);
             item.setTitle(spannableString);
-
         }
-
+        collapsingToolbarLayout.setExpandedTitleTypeface(cairoRegular);
+        collapsingToolbarLayout.setCollapsedTitleTypeface(cairoRegular);
     }
 
     @Override
@@ -178,12 +179,14 @@ public class AuthActivity extends AppCompatActivity implements AuthContract.View
     public void onAppBarLayoutExpanded() {
         toolbar.setVisibility(View.INVISIBLE);
         floatingButoon.hide();
+        collapsingToolbarLayout.setTitle("");
     }
 
     @Override
     public void onAppBarLayoutCollapsed() {
         toolbar.setVisibility(View.VISIBLE);
         floatingButoon.show();
+        collapsingToolbarLayout.setTitle("Sign In");
     }
 
     @Override

@@ -78,5 +78,5 @@ dependencies {
 
     implementation 'com.squareup.okhttp:okhttp-urlconnection:1.6.0'
     implementation 'com.google.firebase:firebase-firestore:17.0.3'
-    implementation  'com.android.support:multidex:1.0.3'
+    implementation 'com.android.support:multidex:1.0.3'
 }

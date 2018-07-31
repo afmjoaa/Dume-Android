@@ -11,8 +11,8 @@
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/appbarLayoutHeight"
-        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         android:stateListAnimator="@drawable/appbar_always_elevated"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         tools:targetApi="lollipop">
 
         <android.support.design.widget.CollapsingToolbarLayout
@@ -20,29 +20,32 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
-            app:contentScrim="@color/colorDefaultAndroid"
-            app:expandedTitleTextAppearance="@style/MyTextApprncExp"
-            app:collapsedTitleTextAppearance="@style/MyTextApprncCol"
+            android:theme="@style/CollapsingToolBarStyle"
             app:collapsedTitleGravity="start"
+            app:collapsedTitleTextAppearance="@style/MyTextApprncCol"
+            app:contentScrim="@color/colorDefaultAndroid"
             app:expandedTitleGravity="start"
+            app:expandedTitleMarginBottom="@dimen/expTittleMarginBottom"
             app:expandedTitleMarginStart="@dimen/expTittleMarginStart"
             app:expandedTitleMarginTop="@dimen/expTittleMarginTop"
-            app:expandedTitleMarginBottom="@dimen/expTittleMarginBottom"
-            app:scrimVisibleHeightTrigger="@dimen/scrimVisibleHeightTrigger"
-            app:title="Confirm your information"
+            app:expandedTitleTextAppearance="@style/MyTextApprncExp"
+
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:scrimVisibleHeightTrigger="@dimen/scrimVisibleHeightTrigger"
+            app:title="Sign Up"
             app:toolbarId="@+id/toolbar">
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/toolbarLayoutHeight"
+
                 app:buttonGravity="bottom"
                 app:layout_collapseMode="pin"
-                app:titleMarginStart="@dimen/titleMarginStart"
-                app:titleMarginTop="@dimen/titleMarginTop"
+                app:navigationIcon="@drawable/back_arraw_icon"
                 app:titleMarginBottom="@dimen/titleMarginBottom"
-                app:navigationIcon="@drawable/back_arraw_icon" />
+                app:titleMarginStart="@dimen/titleMarginStart"
+                app:titleMarginTop="@dimen/titleMarginTop" />
 
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>

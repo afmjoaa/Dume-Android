@@ -162,7 +162,7 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
             user.put("avatar", dataStore.getPhotoUri());
             user.put("email", dataStore.getEmail());
             view.showProgress("Saving User...");
-            fireStore.collection("users").document(model.getUser().getUid()).set(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+            fireStore.collection("mini_users").document(model.getUser().getUid()).set(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     view.hideProgress();
