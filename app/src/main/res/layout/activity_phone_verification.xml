@@ -15,6 +15,7 @@
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/verifyCollapsingToolbar"
+            style="@style/Widget.BottomNavigationView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:elevation="0dp"
@@ -65,6 +66,7 @@ to you at " />
                 android:layout_gravity="center"
                 android:layout_margin="5dp"
                 android:background="@drawable/edit_text_background"
+                android:fontFamily="monospace"
                 android:hint="Pin Code"
                 android:inputType="phone"
                 android:padding="8dp"

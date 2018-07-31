@@ -11,17 +11,21 @@
         android:id="@+id/appbarLayout"
         android:layout_width="match_parent"
         android:layout_height="260dp"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         android:stateListAnimator="@drawable/appbar_always_elevated"
+        android:theme="@style/ThemeOverlay.AppCompat.Light"
+        app:elevation="0dp"
         tools:targetApi="lollipop">
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/collapsing_toolbar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:contentScrim="@color/colorDefaultAndroid"
+            app:collapsedTitleGravity="bottom"
+            app:collapsedTitleTextAppearance="@style/MyTextApprncCol"
+
+            app:contentScrim="@color/colorWhite"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            app:titleEnabled="false">
+            app:titleEnabled="true">
 
 
             <com.daimajia.slider.library.SliderLayout
@@ -44,10 +48,10 @@
                     android:id="@+id/page_indicator"
                     android:layout_width="200dp"
                     android:layout_height="25dp"
-                    android:paddingBottom="10dp"
                     android:layout_alignParentBottom="true"
                     android:layout_centerHorizontal="true"
                     android:gravity="center"
+                    android:paddingBottom="10dp"
                     app:selected_color="#4C5264"
                     app:selected_height="8dp"
                     app:selected_padding_left="2dp"
@@ -65,14 +69,12 @@
                 android:id="@+id/authToolbar"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
+                android:gravity="bottom"
                 app:buttonGravity="bottom"
                 app:layout_collapseMode="pin"
                 app:navigationIcon="@drawable/back_arraw_icon"
-                app:logo="@drawable/signin_logo"
-                app:expandedTitleTextAppearance="@style/MyTextApprncExp"
-                app:collapsedTitleTextAppearance="@style/MyTextApprncCol"
-                app:collapsedTitleGravity="start"
-                app:expandedTitleGravity="start"/>
+                app:popupTheme="@style/AppTheme.PopupOverlay"
+                app:title="Sign In" />
 
         </android.support.design.widget.CollapsingToolbarLayout>
 
@@ -106,24 +108,26 @@
         android:id="@+id/socialConnect"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="top"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
+        android:fontFamily="@font/cairo_regular"
         android:paddingBottom="10dp"
-        app:layout_anchor="@id/bottomNav"
-        app:layout_anchorGravity="top|start"
-        android:layout_gravity="top"
+        android:text="@string/socialConnect"
         android:textSize="15sp"
-        android:text="@string/socialConnect" />
+        app:layout_anchor="@id/bottomNav"
+        app:layout_anchorGravity="top|start" />
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/bottomNav"
+        style="@style/Widget.BottomNavigationView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:background="?android:attr/windowBackground"
         app:itemIconTint="@drawable/color_state_list"
         app:itemTextColor="@drawable/color_state_list"
-        app:menu="@menu/bottom_nav_menu" >
+        app:menu="@menu/bottom_nav_menu">
 
     </android.support.design.widget.BottomNavigationView>
 

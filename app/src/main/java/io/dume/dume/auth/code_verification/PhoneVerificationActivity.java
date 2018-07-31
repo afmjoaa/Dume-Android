@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -63,10 +64,12 @@ public class PhoneVerificationActivity extends AppCompatActivity implements Phon
         spotsBuilder = new SpotsDialog.Builder().setContext(this);
         dataStore = (DataStore) this.getIntent().getSerializableExtra("datastore");
         detailsTextView.setText("Enter the 6 digit verification code sent to you at +88 " + dataStore.getPhoneNumber());
+        detailsTextView.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Cairo-ExtraLight.ttf"));
     }
 
     @Override
     public void initActionBar() {
+        toolbar.setTitleTextAppearance(this, R.style.Widget_BottomNavigationView);
         setSupportActionBar(toolbar);
         ActionBar supportActionBar = getSupportActionBar();
         if (supportActionBar != null) {

@@ -88,6 +88,7 @@
         <activity
             android:name=".student.homepage.MapsActivity"
             android:label="@string/title_activity_maps"></activity>
+
     </application>
 
 </manifest>

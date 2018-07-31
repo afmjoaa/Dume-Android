@@ -109,7 +109,7 @@ public class AuthModel implements AuthContract.Model, SplashContract.Model, Phon
         Log.w(TAG, "isExistingUser: ");
         listener.onStart();
         // final boolean[] isexists = {false};
-        firestore.collection("users").whereEqualTo("phone_number", phoneNumber).addSnapshotListener(new EventListener<QuerySnapshot>() {
+        firestore.collection("mini_users").whereEqualTo("phone_number", phoneNumber).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 List<DocumentSnapshot> documents = null;
@@ -205,7 +205,7 @@ public class AuthModel implements AuthContract.Model, SplashContract.Model, Phon
     public void onAccountTypeFound(FirebaseUser user, AuthGlobalContract.AccountTypeFoundListener listener) {
 
         listener.onStart();
-        firestore.collection("users").document(user.getUid()).addSnapshotListener((documentSnapshot, e) -> {
+        firestore.collection("mini_users").document(user.getUid()).addSnapshotListener((documentSnapshot, e) -> {
             if (documentSnapshot != null) {
                 String account_major = Objects.requireNonNull(documentSnapshot.get("account_major")).toString();
                 if (account_major.equals("teacher")) {

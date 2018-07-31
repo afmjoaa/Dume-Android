@@ -8,6 +8,12 @@ import android.view.View;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.firebase.auth.FirebaseAuth;
 
+import android.view.View;
+
+import com.google.android.gms.maps.MapsInitializer;
+import com.google.firebase.auth.FirebaseAuth;
+
+
 import io.dume.dume.R;
 import io.dume.dume.auth.auth.AuthActivity;
 

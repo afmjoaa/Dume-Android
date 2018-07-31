@@ -1,5 +1,7 @@
 package io.dume.dume.teacher.homepage;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.os.Bundle;
 import android.content.Intent;
 import android.support.v4.view.GravityCompat;
@@ -7,6 +9,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
@@ -18,6 +21,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import io.dume.dume.R;
 import io.dume.dume.auth.auth.AuthActivity;
 import io.dume.dume.teacher.model.ModelSource;
+import io.dume.dume.util.DumeUtils;
 
 public class TeacherActivtiy extends AppCompatActivity implements TeacherContract.View {
     private TeacherContract.Presenter presenter;
@@ -26,6 +30,7 @@ public class TeacherActivtiy extends AppCompatActivity implements TeacherContrac
     private ActionBar actionBar;
     private DrawerLayout drawerLayout;
     private Button signOutButton;
+    private static final String TAG = "TeacherActivtiy";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +63,8 @@ public class TeacherActivtiy extends AppCompatActivity implements TeacherContrac
     }
 
     private void initAdvance() {
+
+
     }
 
     public void toggle(android.view.View view) {

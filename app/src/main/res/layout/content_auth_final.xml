@@ -44,8 +44,8 @@
                         android:id="@+id/input_firstname"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/cairo_regular"
                         android:hint="First Name"
-
                         android:inputType="textEmailAddress" />
                 </android.support.design.widget.TextInputLayout>
 
@@ -85,6 +85,7 @@
                         android:id="@+id/input_lastname"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/cairo_regular"
                         android:hint="Last Name"
                         android:inputType="textEmailAddress" />
                 </android.support.design.widget.TextInputLayout>
@@ -123,12 +124,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <EditText
+                <AutoCompleteTextView
                     android:id="@+id/input_email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/cairo_regular"
                     android:hint="@string/hint_email"
-                    android:inputType="textEmailAddress" />
+                    android:inputType="textEmailAddress"
+
+
+                    />
             </android.support.design.widget.TextInputLayout>
 
             <LinearLayout
@@ -195,6 +200,7 @@
                         android:layout_height="wrap_content"
                         android:descendantFocusability="beforeDescendants"
                         android:focusableInTouchMode="true"
+                        android:fontFamily="@font/cairo_regular"
                         android:hint="Mobile Number"
                         android:imeOptions="actionDone"
                         android:inputType="phone"
@@ -236,6 +242,7 @@
                 android:id="@+id/plain_privacy_text1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/cairo_regular"
                 android:gravity="start"
                 android:text="@string/privacy_notice1"
                 android:textAlignment="viewStart"
@@ -249,6 +256,7 @@
                 android:id="@+id/plain_privacy_text2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/cairo_regular"
                 android:gravity="start"
                 android:text="@string/privacy_notice2"
                 android:textAlignment="viewStart"
@@ -261,6 +269,7 @@
                 android:id="@+id/hiperlink_terms_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/cairo_regular"
                 android:gravity="start"
                 android:onClick="onViewClick"
                 android:text="@string/hiperlink_term_text"
@@ -276,6 +285,7 @@
                 android:id="@+id/plain_privacy_text3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/cairo_regular"
                 android:gravity="start"
                 android:text="@string/privacy_notice3"
                 android:textAlignment="viewStart"
@@ -288,6 +298,7 @@
                 android:id="@+id/hiperlink_privacy_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/cairo_regular"
                 android:gravity="start"
                 android:onClick="onViewClick"
                 android:text="@string/hiperlink_privacy_text"
