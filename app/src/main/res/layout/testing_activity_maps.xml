@@ -15,28 +15,28 @@
         android:layout_height="match_parent" />
 
     <RelativeLayout
-        android:id="@+id/relativeLayout_img_text"
+        android:id="@+id/relativeLayout_btn"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="48dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginTop="60dp"
-        android:background="#fff"
-        android:elevation="10dp"
-        android:padding="0dp">
+        android:background="@drawable/round_corner_rela_layout"
+        android:elevation="5dp"
+        android:padding="0dp"
+        android:visibility="invisible">
 
         <Button
             android:id="@+id/search_mentor_btn"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="0dp"
-            android:alpha="65"
-            android:backgroundTint="@color/semi_transpatent_ashe"
+            android:backgroundTint="@color/colorWhite"
             android:drawableLeft="@drawable/search_icon"
             android:drawablePadding="20dp"
             android:drawableStart="@drawable/search_icon"
             android:gravity="start|center_vertical"
-            android:shadowColor="@color/semi_transpatent_ashe"
+            android:shadowColor="@color/colorWhite"
             android:stateListAnimator="@drawable/appbar_no_elevation"
             android:text="@string/search_mentors"
             android:textAllCaps="false"
@@ -44,6 +44,49 @@
             android:textSize="18sp"
             android:textStyle="normal"
             tools:targetApi="lollipop" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout_img_text"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="60dp"
+        android:background="@drawable/round_corner_rela_layout"
+        android:elevation="5dp"
+        android:padding="0dp">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/search_image_view"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:layout_marginStart="15dp"
+            android:contentDescription="@string/search_icon"
+            app:srcCompat="@drawable/ic_place_black_24dp"
+            android:backgroundTint="@color/icon_color"
+            tools:targetApi="lollipop" />
+
+        <AutoCompleteTextView
+            android:id="@+id/input_search"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_toEndOf="@id/search_image_view"
+            android:layout_toRightOf="@id/search_image_view"
+            android:background="@null"
+            android:hint="@string/enter_search_point"
+            android:inputType="text"
+            android:textColor="@color/textColorPrimary"
+            android:textSize="18sp"
+            android:singleLine="true"
+            android:imeOptions="actionSearch"
+            android:imeActionLabel="Search"/>
 
     </RelativeLayout>
 

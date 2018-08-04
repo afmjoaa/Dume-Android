@@ -52,5 +52,7 @@
     <string name="profile">Profile</string>
     <string name="title_activity_maps">Map</string>
     <string name="refresh">Refresh</string>
+    <string name="search_icon">ic search</string>
+    <string name="enter_search_point">Enter Search Point</string>
 
 </resources>

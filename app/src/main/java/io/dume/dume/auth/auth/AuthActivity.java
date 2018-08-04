@@ -89,7 +89,7 @@ public class AuthActivity extends AppCompatActivity implements AuthContract.View
         phoneEditText.setOnEditorActionListener(this);
         appBar.addOnOffsetChangedListener(new AppbarStateChangeListener() {
             @Override
-            void onStateChanged(AppBarLayout appBarLayout, State state) {
+            public void onStateChanged(AppBarLayout appBarLayout, State state) {
                 presenter.onAppBarStateChange(state);
             }
         });

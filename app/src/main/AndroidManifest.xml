@@ -5,6 +5,7 @@
     <!-- when a object needs internet to execute a job -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
 
     <!-- if any object needs to read local storage -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -90,7 +91,7 @@
         </activity>
         <!-- facebook finishes here -->
         <activity
-            android:name=".student.homepage.StuHomepageActivity"
+            android:name=".student.homepage.HomePageActivity"
             android:label=""
             android:theme="@style/AppTheme.NoActionBar" />
 

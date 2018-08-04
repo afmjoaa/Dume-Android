@@ -56,7 +56,9 @@
         <item name="android:textStyle">normal</item>
         <item name="android:fontFamily" tools:targetApi="jelly_bean">@font/cairo_regular</item>
 
-    </style> <style name="AccountTitleExpand" parent="Base.TextAppearance.AppCompat.Large">
+    </style>
+
+    <style name="AccountTitleExpand" parent="Base.TextAppearance.AppCompat.Large">
         <item name="android:textColor">#d9d9d9</item>
         <item name="android:textSize">25sp</item>
         <item name="android:textStyle">normal</item>
@@ -70,6 +72,19 @@
         <item name="android:textStyle">bold</item>
         <item name="android:layout_marginTop">10dp</item>
         <item name="android:fontFamily" tools:targetApi="jelly_bean">@font/cairo_regular</item>
+    </style>
+
+    <style name="MyTextApprncExp.darkBg" parent="MyTextApprncExp">
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:textSize">25sp</item>
+
+    </style>
+
+    <style name="MyTextApprncCol.darkBg" parent="MyTextApprncCol">
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textSize">20sp</item>
+
     </style>
 
 
@@ -96,5 +111,18 @@
         <item name="android:windowActionBarOverlay">true</item>
         <item name="windowActionBarOverlay">true</item>
     </style>
+<!--testing here -->
+
+
+    <style name="EnamTextAppearanceNormal" parent="Base.TextAppearance.AppCompat.Small">
+        <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="AccountToolbarStyle" parent="ThemeOverlay.AppCompat.ActionBar">
+        <item name="colorControlNormal">@color/colorWhite</item>
+    </style>
+
+
 
 </resources>

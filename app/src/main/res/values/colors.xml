@@ -10,6 +10,7 @@
     <color name="colorDarkAzure">#3497FD</color>
     <color name="colorDeepIcon">#0f1e26</color>
     <color name="colorBlack">#000000</color>
+    <color name="colorBlackMusk">#00000000</color>
     <color name="colorIconTint">#00796B</color>
     <color name="colorDefaultAndroid">#ECE9E0</color>
     <color name="textColorPrimary">#575757</color>
@@ -29,5 +30,6 @@
     <color name="badge_red">#fff56161</color>
     <color name="badge_yellow">#fff4f094</color>
     <color name="badge_green">#fface0ac</color>
+    <color name="icon_color">#4C5264</color>
 
 </resources>

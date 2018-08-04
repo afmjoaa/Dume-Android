@@ -34,7 +34,6 @@ public class AuthPresenter implements AuthContract.Presenter {
         view.initActionBar();
         view.init();
 
-
     }
 
     @Override
