@@ -11,6 +11,7 @@
     <include layout="@layout/activity_main_content" />
 
     <android.support.design.widget.NavigationView
+        android:id="@+id/navigationView"
         android:layout_width="250dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"

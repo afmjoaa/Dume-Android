@@ -29,5 +29,7 @@
     <color name="badge_red">#fff56161</color>
     <color name="badge_yellow">#fff4f094</color>
     <color name="badge_green">#fface0ac</color>
-
+    <color name="colorLink">#4F81BD</color>
+    <color name="colorMaterialBlack">#818181</color>
+    <color name="colorDimBlack">#8ae1e0e0</color>
 </resources>

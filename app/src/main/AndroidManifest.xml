@@ -15,6 +15,7 @@
          location permissions for the 'MyLocation' functionality. 
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
 
     <application
         android:allowBackup="true"
@@ -87,7 +88,10 @@
 
         <activity
             android:name=".student.homepage.MapsActivity"
-            android:label="@string/title_activity_maps"></activity>
+            android:label="@string/title_activity_maps" />
+        <activity android:name=".teacher.mentor_settings.AccountSettings" />
+        <activity android:name=".teacher.mentor_settings.basicinfo.EditAccount" />
+        <activity android:name=".teacher.mentor_settings.academic.AcademicActivity"></activity>
 
     </application>
 

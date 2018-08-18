@@ -1,0 +1,40 @@
+<android.support.design.widget.AppBarLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/settingsAppbar"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:theme="@style/Base.ThemeOverlay.AppCompat.Dark">
+
+    <android.support.design.widget.CollapsingToolbarLayout
+        android:id="@+id/accountCollapsing"
+        android:layout_width="match_parent"
+        android:layout_height="90dp"
+        android:background="@color/colorBlack"
+        app:collapsedTitleTextAppearance="@style/CollapsingToolbarCollapsed"
+        app:expandedTitleMargin="15dp"
+        app:expandedTitleMarginBottom="20dp"
+        app:expandedTitleMarginStart="20dp"
+        app:expandedTitleTextAppearance="@style/CollapsingToolbarExpanded"
+        app:layout_scrollFlags="scroll|exitUntilCollapsed"
+        app:title="Account Settings"
+        app:titleEnabled="true">
+
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/accountToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:theme="@style/AccountToolbarStyle"
+            app:layout_collapseMode="pin"
+            app:popupTheme="@style/Base.ThemeOverlay.AppCompat.Dark"
+            app:title="Account Settings">
+
+
+        </android.support.v7.widget.Toolbar>
+
+
+    </android.support.design.widget.CollapsingToolbarLayout>
+
+</android.support.design.widget.AppBarLayout>
+
+

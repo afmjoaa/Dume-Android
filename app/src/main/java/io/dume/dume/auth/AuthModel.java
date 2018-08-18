@@ -17,11 +17,11 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.internal.api.FirebaseNoSignedInUserException;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Nullable;
@@ -38,6 +38,7 @@ public class AuthModel implements AuthContract.Model, SplashContract.Model, Phon
     private final Intent mIntent;
     private DataStore datastore = null;
     private final FirebaseFirestore firestore;
+    private ListenerRegistration listenerRegistration;
 
 
     public AuthModel(Activity activity, Context context) {
@@ -53,7 +54,7 @@ public class AuthModel implements AuthContract.Model, SplashContract.Model, Phon
                 .setTimestampsInSnapshotsEnabled(true)
                 .build();
         firestore.setFirestoreSettings(settings);
-
+        Log.w(TAG, "AuthModel: " + firestore.hashCode());
     }
 
 
@@ -203,11 +204,16 @@ public class AuthModel implements AuthContract.Model, SplashContract.Model, Phon
 
     @Override
     public void onAccountTypeFound(FirebaseUser user, AuthGlobalContract.AccountTypeFoundListener listener) {
-
         listener.onStart();
-        firestore.collection("mini_users").document(user.getUid()).addSnapshotListener((documentSnapshot, e) -> {
+        listenerRegistration = firestore.collection("mini_users").document(user.getUid()).addSnapshotListener((documentSnapshot, e) -> {
             if (documentSnapshot != null) {
-                String account_major = Objects.requireNonNull(documentSnapshot.get("account_major")).toString();
+
+                Log.w(TAG, "onAccountTypeFound: " + documentSnapshot.toString());
+                Log.e(TAG, "Fucked Here : " + documentSnapshot.toString());
+                String account_major = "";
+                Object o = documentSnapshot.get("account_major");
+                account_major = o == null ? "" : o.toString();
+                assert account_major != null;
                 if (account_major.equals("teacher")) {
                     listener.onTeacherFound();
                 } else {
@@ -218,6 +224,14 @@ public class AuthModel implements AuthContract.Model, SplashContract.Model, Phon
                 Log.w(TAG, "onAccountTypeFound: document is not null");
             }
         });
+
+    }
+
+    @Override
+    public void detachListener() {
+        if (listenerRegistration != null) {
+            listenerRegistration.remove();
+        }
     }
 
 

@@ -18,7 +18,7 @@ public interface SplashContract {
         void enqueue();
     }
 
-    /*Callback for Data/Model Model*/
+    /*Callback for Data/EditModel EditModel*/
 
 }
 

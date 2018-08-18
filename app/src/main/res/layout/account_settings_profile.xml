@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/profile_container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
+        android:src="@drawable/avatar" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:duplicateParentState="true"
+
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="-13dp"
+                android:includeFontPadding="false"
+                android:text="Thats Enam"
+                android:textAppearance="@style/EnamTextAppearanceNormal"
+                android:textColor="@color/colorBlack" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="-13dp"
+
+
+                android:includeFontPadding="false"
+                android:text="+880 15361-00076"
+                android:textAppearance="@style/EnamTextAppearanceNormal"
+                android:textColor="@color/colorBlack" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:includeFontPadding="false"
+                android:text="surelastmail@gmail.com"
+                android:textAppearance="@style/EnamTextAppearanceNormal"
+                android:textColor="@color/colorBlack" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="right">
+
+            <Button
+                android:id="@+id/accountEditButton"
+                style="@style/MyEditButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/ic_action_edit_button_colored"
+                android:drawableStart="@drawable/ic_action_edit_button_colored"
+                android:gravity="center"
+                android:onClick="onViewClicked"
+                android:text="Edit"
+                android:textColor="@color/colorLink" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+</LinearLayout>

@@ -1,11 +1,11 @@
 package io.dume.dume.splash;
+
 import android.app.Activity;
 import android.graphics.Color;
 import android.os.Build;
 import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
-
 
 import io.dume.dume.auth.AuthGlobalContract;
 
@@ -24,8 +24,7 @@ public class SplashPresenter implements SplashContract.Presenter {
     public void init(Activity myActivity) {
         // Status bar :: Transparent
         Window window = myActivity.getWindow();
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-        {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             window.setStatusBarColor(Color.TRANSPARENT);
@@ -44,12 +43,14 @@ public class SplashPresenter implements SplashContract.Presenter {
 
                 @Override
                 public void onTeacherFound() {
+                    model.detachListener();
                     view.gotoTeacherActivity();
                     Log.w(TAG, "onTeacherFound: ");
                 }
 
                 @Override
                 public void onStudentFound() {
+                    model.detachListener();
                     view.gotoStudentActivity();
                     Log.w(TAG, "onStudentFound: ");
                 }

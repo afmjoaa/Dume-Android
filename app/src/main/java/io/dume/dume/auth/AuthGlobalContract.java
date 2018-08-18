@@ -13,6 +13,8 @@ public interface AuthGlobalContract {
 
         void onAccountTypeFound(FirebaseUser user, AccountTypeFoundListener listener);
 
+        void detachListener();
+
     }
 
     interface View {

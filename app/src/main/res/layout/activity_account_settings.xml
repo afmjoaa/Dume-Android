@@ -2,47 +2,93 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/transitionContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorWhite"
     tools:context=".teacher.mentor_settings.AccountSettings">
 
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/settingsAppbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/Base.ThemeOverlay.AppCompat.Dark">
+    <include layout="@layout/activity_header" />
 
-        <android.support.design.widget.CollapsingToolbarLayout
-            android:id="@+id/accountCollapsing"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:background="@color/colorBlack"
-            app:expandedTitleMarginStart="20dp"
-            app:collapsedTitleTextAppearance="@style/MyTextApprncExp"
-            app:title="Account Settings"
-            app:titleEnabled="true">
-
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/accountToolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                app:popupTheme="@style/Base.ThemeOverlay.AppCompat.Dark"
-                app:title="Account Settings">
-
-            </android.support.v7.widget.Toolbar>
-
-        </android.support.design.widget.CollapsingToolbarLayout>
-    </android.support.design.widget.AppBarLayout>
+    <io.dume.dume.custom_view.HorizontalLoadView
+        android:id="@+id/horizontalLoading"
+        android:layout_width="15dp"
+        android:layout_height="10dp"
+        app:layout_anchor="@id/accountScrolling"
+        app:layout_anchorGravity="top" />
 
     <android.support.v4.widget.NestedScrollView
+        android:id="@+id/accountScrolling"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@string/app_name" />
+            android:layout_height="wrap_content"
+            android:descendantFocusability="blocksDescendants"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/profileSection"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="onViewClicked"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
+                    android:text="Basic Information"
+                    android:textAllCaps="true"
+                    android:textColor="@color/colorMaterialBlack" />
+
+                <include layout="@layout/account_settings_profile" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/basicInfoRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone" />
+
+                <FrameLayout
+                    android:id="@+id/framLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/shadow_background">
+
+                    <ImageView
+                        android:id="@+id/indicatorImg"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="bottom|center"
+                        android:layout_margin="0dp"
+                        android:contentDescription="Hawwa"
+                        android:focusableInTouchMode="false"
+                        android:src="@drawable/ic_action_down" />
+                </FrameLayout>
+
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/colorAsh" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/accountRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+        </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>
 
