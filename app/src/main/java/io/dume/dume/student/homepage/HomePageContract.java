@@ -2,12 +2,16 @@ package io.dume.dume.student.homepage;
 
 import android.view.MenuItem;
 
+import com.google.android.gms.location.LocationServices;
+
 public interface HomePageContract {
     interface View {
 
         void onSwitchAccount();
 
         void configHomePage();
+
+        void configCallbackInterfaces();
 
         void init();
 
@@ -26,19 +30,34 @@ public interface HomePageContract {
         void onShowBottomSheet();
 
         void onBottomSheetClicked();
+
+        void gotoProfilePage();
+
+        void gotoGrabingInfoPage();
+
     }
 
-        interface Presenter {
+    interface Presenter {
 
-            void homePageEnqueue();
+        void homePageEnqueue();
 
-            void onViewIntracted(android.view.View view);
+        void onViewIntracted(android.view.View view);
 
-            void onMenuItemInteracted(MenuItem item);
-        }
+        void onMenuItemInteracted(MenuItem item);
 
-        interface Model {
-
-            void hawwa();
-        }
+        void checkNetworkAndGps();
     }
+
+    interface Model {
+
+        void hawwa();
+    }
+
+    interface ParentCallback {
+
+        void onNetworkPause();
+
+        void onNetworkResume();
+
+    }
+}

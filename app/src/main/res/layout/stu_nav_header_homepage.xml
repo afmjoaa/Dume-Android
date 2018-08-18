@@ -18,38 +18,50 @@
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin">
 
-        <ImageView
-            android:id="@+id/user_dp"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginTop="@dimen/nav_header_vertical_spacing"
-            android:contentDescription="@string/nav_header_desc"
-            android:onClick="onNavigationHeaderClick"
-            app:srcCompat="@drawable/demo_alias_dp" />
-
-        <TextView
-            android:id="@+id/user_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="@dimen/nav_header_vertical_spacing"
-            android:text="Demo User"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:textColor="#EBF6FE"
-            android:textSize="17sp" />
-
-        <TextView
-            android:id="@+id/user_addressing"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingTop="1dp"
-            android:text="m@demouser" />
+            android:layout_margin="0dp"
+            android:padding="0dp"
+            android:onClick="onHomePageViewClicked"
+            android:id="@+id/profile_data"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/user-rating"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingTop="1dp"
-            android:text="4.89  ★" />
+
+            <ImageView
+                android:id="@+id/user_dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="@dimen/nav_header_vertical_spacing"
+                android:contentDescription="@string/nav_header_desc"
+                android:onClick="onNavigationHeaderClick"
+                app:srcCompat="@drawable/demo_alias_dp" />
+
+            <TextView
+                android:id="@+id/user_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/nav_header_vertical_spacing"
+                android:text="Demo User"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textColor="#EBF6FE"
+                android:textSize="17sp" />
+
+            <TextView
+                android:id="@+id/user_addressing"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="1dp"
+                android:text="m@demouser" />
+
+            <TextView
+                android:id="@+id/user-rating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="1dp"
+                android:text="4.89  ★" />
+
+        </LinearLayout>
 
         <TextView
             android:id="@+id/do_more"
@@ -64,8 +76,8 @@
             android:id="@+id/make_money_mentoring"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingTop="1dp"
             android:paddingBottom="9dp"
+            android:paddingTop="1dp"
             android:text="Make money mentoring"
             android:textColor="#434343"
             android:textSize="14sp" />
@@ -74,8 +86,8 @@
             android:id="@+id/divider"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:backgroundTint="@color/colorBlack"
-            android:background="?android:attr/listDivider" />
+            android:background="?android:attr/listDivider"
+            android:backgroundTint="@color/colorBlack" />
 
     </LinearLayout>
 
@@ -95,12 +107,12 @@
         android:drawableRight="@drawable/more_icon"
         android:drawableStart="@drawable/student_account_icon"
         android:gravity="start|center_vertical"
-        android:paddingLeft="15dp"
-        android:paddingStart="15dp"
-        android:paddingRight="10dp"
         android:onClick="onNavigationHeaderClick"
-        android:stateListAnimator="@null"
-        android:paddingEnd="10dp" />
+        android:paddingEnd="10dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="10dp"
+        android:paddingStart="15dp"
+        android:stateListAnimator="@null" />
 
 </android.support.design.widget.CoordinatorLayout>
 

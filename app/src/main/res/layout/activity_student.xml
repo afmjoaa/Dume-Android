@@ -32,7 +32,6 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
-        android:background="@drawable/com_facebook_tooltip_blue_background"
         android:onClick="onStudentViewClicked"
         android:text="Sign out"
         app:layout_constraintBottom_toBottomOf="parent"

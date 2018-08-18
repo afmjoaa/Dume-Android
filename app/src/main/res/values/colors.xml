@@ -26,10 +26,15 @@
     <color name="color_navigation_list_background">#263238</color>
     <color name="color_selector_navigation_item">#FFFFFF</color>
     <color name="drawer_active_item">#11212a</color>
-    <color name="snackbar_red">#80d90000</color>
+    <color name="snackbar_red">#d90000</color>
     <color name="badge_red">#fff56161</color>
     <color name="badge_yellow">#fff4f094</color>
     <color name="badge_green">#fface0ac</color>
     <color name="icon_color">#4C5264</color>
+    <color name="progressBarColor">#00796B</color>
+    <color name="black_overlay">#66000000</color>
+    <color name="tab_overlay">#50000000</color>
+    <color name="myToolbarIconColor">#2D354A</color>
+    <color name="tab_text_color">#636669</color>
 
 </resources>

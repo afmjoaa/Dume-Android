@@ -39,7 +39,9 @@ public class StudentPresenter implements StudentContract.Presenter {
                 mView.onSignOut();
                 break;
             case R.id.testingActivityBtn:
-                mView.goToStudentHOmePage();
+                if (isServicesOK()) {
+                    mView.goToStudentHOmePage();
+                }
                 break;
             case R.id.testingMapBtn:
                 if (isServicesOK()) {

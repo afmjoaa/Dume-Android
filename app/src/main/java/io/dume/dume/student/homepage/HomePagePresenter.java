@@ -2,8 +2,14 @@ package io.dume.dume.student.homepage;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
+import android.location.LocationManager;
 import android.os.Build;
+import android.provider.Settings;
+import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -32,12 +38,12 @@ public class HomePagePresenter implements HomePageContract.Presenter {
     }
 
     @Override
-
     public void homePageEnqueue() {
         mView.findView();
         mView.init();
-        settingStatusBarTransparent();
+        mView.configCallbackInterfaces();
         mView.configHomePage();
+//        checkNetworkAndGps();
     }
 
     @Override
@@ -57,6 +63,13 @@ public class HomePagePresenter implements HomePageContract.Presenter {
             case R.id.bottom_sheet:
                 mView.onBottomSheetClicked();
                 break;
+            case R.id.profile_data:
+                mView.gotoProfilePage();
+                break;
+            case R.id.search_mentor_btn:
+                mView.gotoGrabingInfoPage();
+                break;
+
         }
 
     }
@@ -88,34 +101,51 @@ public class HomePagePresenter implements HomePageContract.Presenter {
             case R.id.al_notifications:
                 mView.updateNotificationsBadge(++mNotificationsCount);
                 break;
-
         }
 
     }
 
-    private void settingStatusBarTransparent() {
+    @Override
+    public void checkNetworkAndGps() {
+        LocationManager lm = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
+        boolean gps_enabled = false;
+        boolean network_enabled = false;
 
-        if (Build.VERSION.SDK_INT >= 19 && Build.VERSION.SDK_INT < 21) {
-            setWindowFlag(activity, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, true);
+        try {
+            gps_enabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        } catch(Exception ex) {
+            Log.e(TAG, "checkNetworkAndGps: ",ex );
         }
-        if (Build.VERSION.SDK_INT >= 19) {
-            activity.getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+
+        try {
+            network_enabled = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+        } catch(Exception ex) {
+            Log.e(TAG, "checkNetworkAndGps: ",ex );
         }
-        //make fully Android Transparent Status bar
-        if (Build.VERSION.SDK_INT >= 21) {
-            setWindowFlag(activity, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, false);
-            activity.getWindow().setStatusBarColor(Color.TRANSPARENT);
+
+        if(!gps_enabled && !network_enabled) {
+            // notify user
+            AlertDialog.Builder dialog = new AlertDialog.Builder(context);
+            dialog.setMessage(context.getResources().getString(R.string.gps_network_not_enabled));
+            dialog.setPositiveButton(context.getResources().getString(R.string.open_location_settings), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface paramDialogInterface, int paramInt) {
+                    // TODO Auto-generated method stub
+                    Intent myIntent = new Intent( Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                    context.startActivity(myIntent);
+                    //get gps
+                }
+            });
+            dialog.setNegativeButton(context.getString(R.string.Cancel), new DialogInterface.OnClickListener() {
+
+                @Override
+                public void onClick(DialogInterface paramDialogInterface, int paramInt) {
+                    // TODO Auto-generated method stub
+
+                }
+            });
+            dialog.show();
         }
     }
 
-    private static void setWindowFlag(Activity activity, final int bits, boolean on) {
-        Window win = activity.getWindow();
-        WindowManager.LayoutParams winParams = win.getAttributes();
-        if (on) {
-            winParams.flags |= bits;
-        } else {
-            winParams.flags &= ~bits;
-        }
-        win.setAttributes(winParams);
-    }
 }
