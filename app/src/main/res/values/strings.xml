@@ -77,4 +77,5 @@
         <item>Buddha</item>
         <item>Others</item>
     </string-array>
+    <string name="title_activity_location_picker">Map</string>
 </resources>

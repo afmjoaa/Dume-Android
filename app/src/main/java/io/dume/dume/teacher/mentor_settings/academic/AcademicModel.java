@@ -1,10 +1,5 @@
 package io.dume.dume.teacher.mentor_settings.academic;
 
-import android.support.annotation.NonNull;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -76,5 +71,13 @@ public class AcademicModel implements AcademicContract.Model {
     @Override
     public void detachFirebaseListener() {
 
+    }
+
+    @Override
+    public void removeFromDatabase(String itemUid, ModelCallback listener) {
+        listener.onStart();
+        firestore.collection("users").document("mentors").collection("mentor_profile").
+                document(Objects.requireNonNull(mAuth.getUid())).collection("academic_qualification").
+                document(itemUid).delete().addOnSuccessListener(aVoid -> listener.onSuccess()).addOnFailureListener(e -> listener.onFail(e.toString()));
     }
 }

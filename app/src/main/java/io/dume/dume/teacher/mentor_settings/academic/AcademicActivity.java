@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatSpinner;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.SpinnerAdapter;
 import android.widget.Toast;
 
@@ -33,13 +34,31 @@ public class AcademicActivity extends AppCompatActivity implements AcademicContr
     private List<String> fromArray;
     private List<String> toArray;
     private MentorSpinnerAdapter toSpinnerAdapter;
-    private int EDIT, ADD;
+    private static String ACTION_EDIT = "edit", ACTION_ADD = "add";
+    public static String ACTION = null;
+    private ImageView deleteBtn;
+    private String itemUid;
+    public static boolean isDeleted = false;
+
+    @Override
+    public String getAction() {
+        return ACTION == null ? "" : ACTION;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_academic);
-        DumeUtils.configureAppbar(this, "Add Education");
+        if (getIntent().getAction() == ACTION_EDIT) {
+            ACTION = ACTION_EDIT;
+            DumeUtils.configureAppbar(this, "Edit Education");
+            deleteBtn = findViewById(R.id.deleteButtonHeader);
+            deleteBtn.setVisibility(View.VISIBLE);
+        } else {
+            ACTION = ACTION_ADD;
+            DumeUtils.configureAppbar(this, "Add Education");
+        }
+
         presenter = new AcademicPresenter(this, AcademicModel.getInstance());
         presenter.enqueue();
     }
@@ -58,11 +77,14 @@ public class AcademicActivity extends AppCompatActivity implements AcademicContr
             @Override
             public void onDismissed(Snackbar transientBottomBar, int event) {
                 super.onDismissed(transientBottomBar, event);
-                AcademicActivity.super.onBackPressed();
+                if (isDeleted) {
+                    AcademicActivity.super.onBackPressed();
+                } else if (ACTION.equals("edit")) {
+
+                } else AcademicActivity.super.onBackPressed();
             }
         });
         snakbar.show();
-
     }
 
     @Override
@@ -83,6 +105,28 @@ public class AcademicActivity extends AppCompatActivity implements AcademicContr
     @Override
     public String getDescription() {
         return desEdt.getText().toString();
+    }
+
+    @Override
+    public void getBundle() {
+        if (getIntent().getAction() == ACTION_EDIT) {
+            Bundle bundle = getIntent().getExtras();
+            if (bundle != null) {
+                instiEdt.setText(bundle.getString("institution"));
+                int from = fromArray.indexOf(bundle.getString("from"));
+                fromSpn.setSelection(from);
+                int to = toArray.indexOf(bundle.getString("to"));
+                toSpn.setSelection(to);
+                degreeEdt.setText(bundle.getString("degree"));
+                desEdt.setText(bundle.getString("description"));
+                itemUid = bundle.getString("itemUid");
+            }
+        }
+    }
+
+    @Override
+    public String getItemUid() {
+        return itemUid;
     }
 
     @Override
@@ -124,14 +168,9 @@ public class AcademicActivity extends AppCompatActivity implements AcademicContr
     @Override
     public void setListener() {
         fb.setOnClickListener(this);
-
-
+        deleteBtn.setOnClickListener(this);
     }
 
-    @Override
-    public int getFlag() {
-        return 0;
-    }
 
     @Override
     public String getDegree() {

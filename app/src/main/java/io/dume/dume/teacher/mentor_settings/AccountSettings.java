@@ -180,7 +180,7 @@ public class AccountSettings extends AppCompatActivity implements AccountSetting
 
     @Override
     public void addAcademic() {
-        startActivity(new Intent(this, AcademicActivity.class));
+        startActivity(new Intent(this, AcademicActivity.class).setAction("edit"));
     }
 
 

@@ -14,13 +14,14 @@ public interface AcademicContract {
 
         String getDescription();
 
+        void getBundle();
+
         boolean isGraduate();
 
         void configView();
 
         void setListener();
 
-        int getFlag();
 
         String getDegree();
 
@@ -30,6 +31,10 @@ public interface AcademicContract {
 
         void goBack();
 
+        String getItemUid();
+
+        String getAction();
+
     }
 
     interface Model {
@@ -38,6 +43,8 @@ public interface AcademicContract {
         void addToDatabase(String school, String degree, String from, String to, String description);
 
         void attachCallback(ModelCallback listener);
+
+        void removeFromDatabase(String itemUid, ModelCallback modelCallback);
 
         void detachFirebaseListener();
 
