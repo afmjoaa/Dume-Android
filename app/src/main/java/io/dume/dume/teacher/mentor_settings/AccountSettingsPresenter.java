@@ -19,6 +19,7 @@ public class AccountSettingsPresenter implements AccountSettingsContract.Present
     @Override
     public void enqueue() {
         view.setViewConfig();
+        view.setUpBadge();
 
 
     }

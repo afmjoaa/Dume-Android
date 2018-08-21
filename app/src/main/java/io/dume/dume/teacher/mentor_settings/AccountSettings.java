@@ -10,12 +10,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.tomergoldst.tooltips.ToolTip;
@@ -31,7 +34,7 @@ import java.util.ArrayList;
 
 import io.dume.dume.R;
 import io.dume.dume.custom_view.HorizontalLoadView;
-import io.dume.dume.teacher.adapters.AccountSettingsAdapter;
+import io.dume.dume.student.homepage.MapsActivity;
 import io.dume.dume.teacher.adapters.BasicInfoAdapter;
 import io.dume.dume.teacher.mentor_settings.academic.AcademicActivity;
 import io.dume.dume.teacher.mentor_settings.basicinfo.EditAccount;
@@ -43,14 +46,17 @@ public class AccountSettings extends AppCompatActivity implements AccountSetting
     private CollapsingToolbarLayout collapsingToolbarLayout;
     private HorizontalLoadView horizontalLoadView;
     private AccountSettingsContract.Presenter presenter;
-    private RecyclerView recyclerView;
-    private RecyclerView basicRecyclerView;
+
+    private RecyclerView basicRecyclerView, badgeRV;
     private Animation slideDown;
     private LinearLayout profileContainer;
     private ImageView indicator;
     private FrameLayout frameLayout;
     private static final String TAG = "AccountSettings";
     private ToolTipsManager toolTipsManager;
+    private TextView profileSecTxt;
+    private RecyclerView academicRV;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,12 +76,11 @@ public class AccountSettings extends AppCompatActivity implements AccountSetting
         profileContainer = findViewById(R.id.profileSection);
         indicator = findViewById(R.id.indicatorImg);
         frameLayout = findViewById(R.id.framLayout);
-        recyclerView = findViewById(R.id.accountRecyclerView);
         basicRecyclerView = findViewById(R.id.basicInfoRecyclerView);
+        academicRV = findViewById(R.id.academic_list);
+        badgeRV = findViewById(R.id.badgeRecyclerView);
         basicRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         basicRecyclerView.setNestedScrollingEnabled(false);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this, OrientationHelper.VERTICAL, false));
-        recyclerView.setNestedScrollingEnabled(false);
         slideDown = AnimationUtils.loadAnimation(this, R.anim.slide_down);
         toolTipsManager = new ToolTipsManager();
     }
@@ -98,7 +103,6 @@ public class AccountSettings extends AppCompatActivity implements AccountSetting
 
     @Override
     public void gatherDataInListView(ArrayList<String> datalist) {
-        recyclerView.setAdapter(new AccountSettingsAdapter(this, datalist));
         ArrayList<KeyValueModel> keyValueModels = new ArrayList<>();
         keyValueModels.add(new KeyValueModel("Age", "20"));
         keyValueModels.add(new KeyValueModel("Sex", "Male"));
@@ -108,6 +112,16 @@ public class AccountSettings extends AppCompatActivity implements AccountSetting
         basicRecyclerView.setAdapter(new BasicInfoAdapter(keyValueModels));
     }
 
+    @Override
+    public void setUpBadge() {
+        badgeRV.setLayoutManager(new LinearLayoutManager(this, OrientationHelper.HORIZONTAL, false));
+        badgeRV.setAdapter(new BadgeAdapter());
+    }
+
+    @Override
+    public void setUpAcademic() {
+
+    }
 
     @Override
     public void showBasicInfo() {
@@ -170,7 +184,7 @@ public class AccountSettings extends AppCompatActivity implements AccountSetting
 
     @Override
     public void addLocation() {
-
+        startActivity(new Intent(this, MapsActivity.class));
     }
 
     @Override
@@ -191,4 +205,34 @@ public class AccountSettings extends AppCompatActivity implements AccountSetting
     }
 
 
+}
+
+class BadgeAdapter extends RecyclerView.Adapter<BadgeAdapter.BadgeImageHolder> {
+
+
+    @NonNull
+    @Override
+    public BadgeImageHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View badgeImage = LayoutInflater.from(parent.getContext()).inflate(R.layout.account_settings_badge_item, parent, false);
+        return new BadgeImageHolder(badgeImage);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull BadgeImageHolder holder, int position) {
+
+    }
+
+    @Override
+    public int getItemCount() {
+        return 10;
+    }
+
+    class BadgeImageHolder extends RecyclerView.ViewHolder {
+        ImageView badgeImageView;
+
+        BadgeImageHolder(View itemView) {
+            super(itemView);
+            badgeImageView = itemView.findViewById(R.id.badgeImageView);
+        }
+    }
 }

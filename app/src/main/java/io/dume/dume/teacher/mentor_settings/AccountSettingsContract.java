@@ -29,6 +29,10 @@ public interface AccountSettingsContract {
         void updateLocation();
 
         void addAcademic();
+
+        void setUpBadge();
+
+        void setUpAcademic();
     }
 
     interface Presenter {
