@@ -1,14 +1,19 @@
 package io.dume.dume.student.homepage;
 
 import android.Manifest;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
+import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
@@ -42,15 +47,18 @@ import java.util.Objects;
 
 import io.dume.dume.R;
 import io.dume.dume.auth.auth.AppbarStateChangeListener;
-import io.dume.dume.broadcastReceiver.MyGpsHandler;
+import io.dume.dume.service.LocationServiceHandler;
+import io.dume.dume.service.MyLocationService;
+import io.dume.dume.student.grabingLocation.GrabingLocationActivity;
 import io.dume.dume.student.grabinginfo.GrabingInfoActivity;
 import io.dume.dume.student.pojo.CusStuAppComMapActivity;
+import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
 import io.dume.dume.student.profilepage.ProfilePageActivity;
 import io.dume.dume.util.DumeUtils;
 
 public class HomePageActivity extends CusStuAppComMapActivity implements HomePageContract.View,
         NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback, HomePageContract.ParentCallback,
-        MyGpsHandler {
+        MyGpsLocationChangeListener {
 
     private static final String TAG = "HomePageActivity";
     HomePageContract.Presenter mPresenter;
@@ -79,36 +87,100 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
     private AppBarLayout secondaryAppBarLayout;
     private RelativeLayout relativeLayoutHack;
     private LinearLayout profileDataLayout;
-
     private GoogleMap mMap;
-    private Boolean isNight;
     private View map;
-    private int hour;
     private LinearLayout primaryNavContainer;
     private Toolbar secondaryToolbar;
     private CollapsingToolbarLayout secondaryCollapsableToolbar;
-    private View compassButton;
     private static final int fromFlag = 1;
     private HomePageContract.ParentCallback parentCallback;
     private carbon.widget.LinearLayout secondaryNavContainer;
     private SupportMapFragment mapFragment;
+    private Intent locationServiceIntent;
 
+    private MyLocationService mLocationService;
+    boolean mLocationServiceIsBound;
+    MyServiceConnection mConn;
+    private LocationServiceHandler locationServiceHandler;
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+//        stopService(locationServiceIntent);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mConn = new MyServiceConnection();
+        getApplicationContext().bindService(locationServiceIntent, mConn, Context.BIND_AUTO_CREATE);
+        if(DumeUtils.isGpsEnabled(this)){
+            MAPCONTAINER.setVisibility(View.VISIBLE);
+            primaryNavContainer.setVisibility(View.VISIBLE);
+            secondaryNavContainer.setVisibility(View.GONE);
+        }else{
+            MAPCONTAINER.setVisibility(View.INVISIBLE);
+            primaryNavContainer.setVisibility(View.GONE);
+            secondaryNavContainer.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (mLocationServiceIsBound) {
+            getApplicationContext().unbindService(mConn);
+            mLocationServiceIsBound = false;
+        }
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.stu_activity_homepage);
         setActivityContextMap(this, fromFlag);
-        networkChangeReceiverForGps.setGpsListener(this);
-        settingStatusBarTransparent();
-        setIsNight();
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         getLocationPermission(mapFragment);
-        mPresenter = new HomePagePresenter(this, this, new HomePageModel());
+        mPresenter = new HomePagePresenter(this, new HomePageModel());
         mPresenter.homePageEnqueue();
+        settingStatusBarTransparent();
+        setIsNight();
         isNightConfig();
 
+        locationServiceIntent = new Intent(this, MyLocationService.class);
+//        locationServiceIntent.putExtra("FROM", "HomePageActivity" );
+//        startService(locationServiceIntent);
     }
+
+
+    class MyServiceConnection implements ServiceConnection {
+        private final String TAG = "BOOMBOOMTESTEPS";
+
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            Log.d(TAG, "onServiceConnected()");
+            MyLocationService.LocalBinder binder = (MyLocationService.LocalBinder) service;
+            HomePageActivity.this.mLocationService = (MyLocationService) binder.getService();
+           /* if (mLocationService == null) {
+                Log.e(TAG, "onServiceConnected: you haven't fucked that");
+            } else {
+                Log.e(TAG, "onServiceConnected: urecaaaaaaaaaaaaaaaaaaaa");
+            }*/
+           if(mLocationService != null){
+               mLocationService.setLocationServiceHandler(locationServiceHandler);
+           }
+            mLocationServiceIsBound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            Log.d(TAG, "onServiceDisconnected()");
+            mLocationService = null;
+            mLocationServiceIsBound = false;
+        }
+    }
+
 
     @Override
     public void findView() {
@@ -164,15 +236,57 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
 
 
     @Override
-    public void configCallbackInterfaces() {
+    public void makingCallbackInterfaces() {
+        locationServiceHandler = new LocationServiceHandler() {
+            @Override
+            public void onGpsProviderDisabled() {
+                //Toast.makeText(HomePageActivity.this, "Gps Disabled by callback", Toast.LENGTH_SHORT).show();
+                MAPCONTAINER.setVisibility(View.INVISIBLE);
+                primaryNavContainer.setVisibility(View.GONE);
+                secondaryNavContainer.setVisibility(View.VISIBLE);
+            }
 
+            @Override
+            public void onGpsProviderEnabled() {
+                //Toast.makeText(HomePageActivity.this, "Gps enabled by callback", Toast.LENGTH_SHORT).show();
+                MAPCONTAINER.setVisibility(View.VISIBLE);
+                primaryNavContainer.setVisibility(View.VISIBLE);
+                secondaryNavContainer.setVisibility(View.GONE);
+                onCenterCurrentLocation();
+            }
+
+            @Override
+            public void onNetworkDisabled() {
+
+            }
+
+            @Override
+            public void onNetworkEnabled() {
+
+            }
+
+            @Override
+            public void onlocationChangedByGps(Location location) {
+
+            }
+
+            @Override
+            public void onlocationChangedByNetwork(Location location) {
+
+            }
+
+            @Override
+            public void onLocationServiceHandlerError(Exception e) {
+
+            }
+        };
     }
 
 
     @Override
     public void configHomePage() {
-        fab.setAlpha(0.80f);
-        bottomSheetFab.setAlpha(0.80f);
+        fab.setAlpha(0.90f);
+        bottomSheetFab.setAlpha(0.90f);
 
         // Toolbar :: Transparent
         toolbar.getBackground().setAlpha(0);
@@ -184,6 +298,16 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
         bottomSheetCallbackConfig();
         //setting up parent callback listener
         setParentCallback(this);
+
+        if(DumeUtils.isGpsEnabled(this)){
+            MAPCONTAINER.setVisibility(View.VISIBLE);
+            primaryNavContainer.setVisibility(View.VISIBLE);
+            secondaryNavContainer.setVisibility(View.GONE);
+        }else{
+            MAPCONTAINER.setVisibility(View.INVISIBLE);
+            primaryNavContainer.setVisibility(View.GONE);
+            secondaryNavContainer.setVisibility(View.VISIBLE);
+        }
 
 
     }
@@ -257,7 +381,7 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
         DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badgeOne, 0xfff4f094, Color.BLACK, mRecAcceptedCount, 8.0f, -3.4f);
         DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badge, 0xfface0ac, Color.BLACK, mRecPendingCount, 12.0f, 3.0f);
 
-        if (isNight) {
+        if (ISNIGHT) {
             Drawable alProfileDrawable = ResourcesCompat.getDrawable(getResources(), R.drawable.alias_profile_icon, null);
             alProfileDrawable = DrawableCompat.wrap(Objects.requireNonNull(alProfileDrawable));
             DrawableCompat.setTint(alProfileDrawable, Color.WHITE);
@@ -301,7 +425,7 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
         if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED) {
             if (firstTime) {
                 fab.animate().translationYBy((float) (-60.0f * (getResources().getDisplayMetrics().density))).setDuration(100).start();
-                compassButton.animate().translationYBy((float) (-54.0f * (getResources().getDisplayMetrics().density))).setDuration(100).start();
+                COMPASSBTN.animate().translationYBy((float) (-54.0f * (getResources().getDisplayMetrics().density))).setDuration(100).start();
                 firstTime = false;
             }
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
@@ -318,7 +442,7 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
         if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_HIDDEN) {
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
             fab.animate().translationYBy((float) (-60.0f * (getResources().getDisplayMetrics().density))).setDuration(100).start();
-            compassButton.animate().translationYBy((float) (-54.0f * (getResources().getDisplayMetrics().density))).setDuration(100).start();
+            COMPASSBTN.animate().translationYBy((float) (-54.0f * (getResources().getDisplayMetrics().density))).setDuration(100).start();
 
             if (bottomSheetFab.getVisibility() == View.VISIBLE) {
                 bottomSheetFab.setVisibility(View.GONE);
@@ -326,7 +450,7 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
         } else if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED) {
             if (firstTime) {
                 fab.animate().translationYBy((float) (-60.0f * (getResources().getDisplayMetrics().density))).setDuration(100).start();
-                compassButton.animate().translationYBy((float) (-54.0f * (getResources().getDisplayMetrics().density))).setDuration(100).start();
+                COMPASSBTN.animate().translationYBy((float) (-54.0f * (getResources().getDisplayMetrics().density))).setDuration(100).start();
                 firstTime = false;
             }
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
@@ -353,10 +477,10 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
 
                 if (BottomSheetBehavior.STATE_HIDDEN == newState) {
                     fab.animate().translationYBy((float) (60.0f * (getResources().getDisplayMetrics().density))).setDuration(60).start();
-                    compassButton.animate().translationYBy((float) (54.0f * (getResources().getDisplayMetrics().density))).setDuration(60).start();
+                    COMPASSBTN.animate().translationYBy((float) (54.0f * (getResources().getDisplayMetrics().density))).setDuration(60).start();
                     bottomSheetFab.setVisibility(View.VISIBLE);
                 } else if (BottomSheetBehavior.STATE_COLLAPSED == newState) {
-                    if (isNight) setLightStatusBarIcon();
+                    if (ISNIGHT) setLightStatusBarIcon();
                     else setDarkStatusBarIcon();
                     nestedScrollViewContent.setVisibility(View.VISIBLE);
                     viewMusk.setVisibility(View.GONE);
@@ -397,7 +521,7 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
 
                 if (slideOffset > 0.0f && slideOffset < 1.0f) {
                     fab.animate().scaleX(1 - slideOffset).scaleY(1 - slideOffset).setDuration(0).start();
-                    compassButton.animate().scaleX(1 - slideOffset).scaleY(1 - slideOffset).setDuration(0).start();
+                    COMPASSBTN.animate().scaleX(1 - slideOffset).scaleY(1 - slideOffset).setDuration(0).start();
                     llBottomSheet.animate().scaleX(1 + (slideOffset * 0.05f)).setDuration(0).start();
                     viewMusk.animate().alpha(2 * slideOffset).setDuration(0).start();
 
@@ -426,11 +550,17 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
         startActivity(new Intent(this, GrabingInfoActivity.class));
     }
 
+    @Override
+    public void gotoGrabingLocationPage() {
+        startActivity(new Intent(this, GrabingLocationActivity.class));
+
+    }
+
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         Log.d(TAG, "onMapReady: map is ready");
-        if (isNight) {
+        if (ISNIGHT) {
             setLightStatusBarIcon();
             MapStyleOptions style = MapStyleOptions.loadRawResourceStyle(
                     this, R.raw.map_style_night_no_landmarks);
@@ -443,39 +573,7 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
         }
         mMap = googleMap;
         onMapReadyListener(mMap);
-        //TODO: setting up the parent map activity
-        if (MLOCATIONPERMISSIONGRANTED) {
-            //TODO: centering the current location
-            getDeviceLocation(mMap);
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                    && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-//                getLocationPermission(mapFragment);
-                return;
-            }
-            mMap.setMyLocationEnabled(true);
-            mMap.getUiSettings().setMyLocationButtonEnabled(false);
-            mMap.getUiSettings().setCompassEnabled(true);
-            mMap.getUiSettings().setIndoorLevelPickerEnabled(true);
-
-            if (mMap.getUiSettings().isCompassEnabled()) {
-                //this works for me
-                compassButton = map.findViewWithTag("GoogleMapCompass");
-                RelativeLayout.LayoutParams rlp = (RelativeLayout.LayoutParams) compassButton.getLayoutParams();
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                    rlp.addRule(RelativeLayout.ALIGN_PARENT_START);
-                    rlp.addRule(RelativeLayout.ALIGN_START);
-                }
-                rlp.addRule(RelativeLayout.ALIGN_TOP, 0);
-                rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0);
-                rlp.addRule(RelativeLayout.ALIGN_BOTTOM);
-                rlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-                rlp.topMargin = (int) (20 * (getResources().getDisplayMetrics().density));
-                rlp.bottomMargin = (int) (20 * (getResources().getDisplayMetrics().density));
-                rlp.leftMargin = (int) (16 * (getResources().getDisplayMetrics().density));
-                rlp.rightMargin = (int) (16 * (getResources().getDisplayMetrics().density));
-            }
-        }
+        onMapReadyGeneralConfig();
     }
 
     public void navigationTogglerConfig() {
@@ -484,7 +582,7 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
             /** Called when a drawer has settled in a completely closed state. */
             public void onDrawerClosed(View view) {
                 super.onDrawerClosed(view);
-                if (isNight) setLightStatusBarIcon();
+                if (ISNIGHT) setLightStatusBarIcon();
                 else setDarkStatusBarIcon();
                 switchAcountBtn.setCompoundDrawablesWithIntrinsicBounds(leftDrawable, null, more, null);
                 mainMenu();
@@ -505,13 +603,8 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
     }
 
 
-    public void setIsNight() {
-        hour = getCurrentHour();
-        isNight = hour < 5 || hour > 18;
-    }
-
     public void isNightConfig() {
-        if (isNight) {
+        if (ISNIGHT) {
             Drawable navDrawable = ResourcesCompat.getDrawable(getResources(), R.drawable.drawer_menu, null);
             navDrawable = DrawableCompat.wrap(Objects.requireNonNull(navDrawable));
             DrawableCompat.setTint(navDrawable, Color.WHITE);
@@ -594,27 +687,10 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
         bottomSheetFab.setVisibility(View.VISIBLE);
     }
 
-
     @Override
-    public void onGpsPause() {
-        MAPCONTAINER.setVisibility(View.INVISIBLE);
-        primaryNavContainer.setVisibility(View.GONE);
-        secondaryNavContainer.setVisibility(View.VISIBLE);
-    }
+    public void onMyGpsLocationChanged(Location location) {
 
-    @Override
-    public void onGpsResume() {
-        MAPCONTAINER.setVisibility(View.VISIBLE);
-        primaryNavContainer.setVisibility(View.VISIBLE);
-        secondaryNavContainer.setVisibility(View.GONE);
-//        getDeviceLocation(mMap);
     }
-
-    @Override
-    public void onGpsError(Exception e) {
-        Log.e(TAG, "onGpsError: Error function called" + e);
-    }
-
 
     /*
       Updates the count of notifications in the ActionBar starts here.

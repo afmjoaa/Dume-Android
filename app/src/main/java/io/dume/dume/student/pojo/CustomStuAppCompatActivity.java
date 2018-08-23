@@ -41,13 +41,16 @@ public class CustomStuAppCompatActivity extends AppCompatActivity implements MyC
     private View decor;
     private static final String TAG = "CustomStuAppCompatActiv";
     private static final int ERROR_DIALOG_REQUEST = 9001;
-    private NetworkChangeReceiver networkChangeReceiver;
+    protected NetworkChangeReceiver networkChangeReceiver;
     protected Context context;
     protected Activity activity;
     protected Snackbar snackbar;
     protected View rootView;
     protected static int fromFlag = 0;
     protected HomePageContract.ParentCallback parentCallback;
+
+    protected static Boolean ISNIGHT;
+    protected static int HOUR;
 
     public void setActivityContext(Context context, int i) {
         this.context = context;
@@ -65,6 +68,21 @@ public class CustomStuAppCompatActivity extends AppCompatActivity implements MyC
     protected void onDestroy() {
         super.onDestroy();
         unregisterReceiver(networkChangeReceiver);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        int status = NetworkUtil.getConnectivityStatusString(context);
+        if (status == NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
+            if(snackbar != null){
+                snackbar.show();
+            }
+        } else {
+            if (snackbar != null) {
+                snackbar.dismiss();
+            }
+        }
     }
 
     @Override
@@ -266,6 +284,10 @@ public class CustomStuAppCompatActivity extends AppCompatActivity implements MyC
         Log.e(TAG, "onNetworkError: Error function called" + e);
     }
 
+    public void setIsNight() {
+        HOUR = getCurrentHour();
+        ISNIGHT = HOUR < 5 || HOUR > 19;
+    }
     //    setTimeout function homemade
     public static void setTimeout(Runnable runnable, int delay) {
         new Thread(() -> {

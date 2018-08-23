@@ -9,6 +9,11 @@ public interface GrabingLocaitonContract {
 
         void findView();
 
+        void makingCallbackInterfaces();
+
+        void onCenterCurrentLocation();
+
+        void onShowBottomSheet();
     }
 
     interface Presenter {

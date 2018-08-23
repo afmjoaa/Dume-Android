@@ -7,7 +7,7 @@
     android:fitsSystemWindows="true"
     tools:context=".student.homepage.MapsActivity">
 
-    <io.dume.dume.student.pojo.WindowInsetsFrameLayout
+    <io.dume.dume.customView.WindowInsetsFrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/map_container"
@@ -22,7 +22,7 @@
             android:layout_height="match_parent"
             android:fitsSystemWindows="true" />
 
-    </io.dume.dume.student.pojo.WindowInsetsFrameLayout>
+    </io.dume.dume.customView.WindowInsetsFrameLayout>
 
     <RelativeLayout
         android:id="@+id/relativeLayout_btn"

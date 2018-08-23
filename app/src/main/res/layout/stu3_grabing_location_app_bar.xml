@@ -1,100 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout android:id="@+id/app_bar_coordinator_layout"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/parent_coor_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".student.grabingLocation.GrabingLocationActivity"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    tools:context=".student.grabingLocation.GrabingLocationActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/my_appbarLayout"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/appbarLayoutHeight"
-        android:stateListAnimator="@drawable/appbar_no_elevation"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_white_bottom_round"
+        android:elevation="5dp"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        app:carbon_elevation="5dp">
 
-        <android.support.design.widget.CollapsingToolbarLayout
-            android:id="@+id/toolbar_layout"
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fitsSystemWindows="true"
-            app:collapsedTitleGravity="start"
-            app:collapsedTitleTextAppearance="@style/MyTextApprncCol"
-            app:expandedTitleGravity="start"
-            app:expandedTitleMarginBottom="@dimen/expTittleMarginBottom"
-            app:expandedTitleMarginStart="@dimen/expTittleMarginStart"
-            app:expandedTitleMarginTop="@dimen/expTittleMarginTop"
-            app:expandedTitleTextAppearance="@style/MyTextApprncExp"
-            app:layout_scrollFlags="scroll|enterAlways"
-            app:scrimVisibleHeightTrigger="@dimen/scrimVisibleHeightTrigger"
-            app:title=""
-            app:toolbarId="@+id/toolbar">
+            android:layout_height="?attr/actionBarSize"
+            android:layout_margin="0dp"
+            android:background="@color/colorWhite"
+            android:stateListAnimator="@drawable/appbar_no_elevation"
+            app:navigationIcon="@drawable/ic_arrow_back_default_24dp"
+            app:popupTheme="@style/AppTheme.PopupOverlay"
+            app:theme="@style/CustomActionBar"
+            app:title="Select search point"
+            app:titleMargin="0dp"
+            app:titleTextAppearance="@style/MyTextApprncCol.grabLocaiton"
+            tools:targetApi="lollipop">
 
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar"
+
+        </android.support.v7.widget.Toolbar>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="10dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginLeft="22dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginStart="22dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <carbon.widget.ImageView
+                android:id="@+id/search_image_view"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginEnd="30dp"
+                android:layout_marginRight="30dp"
+                android:contentDescription="@string/search_icon"
+                app:carbon_backgroundTint="@color/icon_color"
+                app:srcCompat="@drawable/ic_place_black_24dp" />
+
+            <carbon.widget.RelativeLayout
+                android:id="@+id/search_mentor_btn"
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:layout_margin="0dp"
-                android:background="?attr/colorPrimary"
-                android:stateListAnimator="@drawable/appbar_no_elevation"
-                app:navigationIcon="@drawable/back_arraw_icon"
-                app:popupTheme="@style/AppTheme.PopupOverlay"
-                app:theme="@style/CustomActionBar"
-                tools:targetApi="lollipop" />
+                android:layout_height="40dp"
+                android:layout_gravity="center_vertical"
+                android:background="@color/semi_transparnt_btn_color"
+                android:padding="0dp"
+                app:carbon_cornerRadius="5dp"
+                app:carbon_elevation="0dp">
 
-        </android.support.design.widget.CollapsingToolbarLayout>
+                <carbon.widget.AutoCompleteEditText
+                    android:id="@+id/input_search"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_toEndOf="@id/search_image_view"
+                    android:layout_toRightOf="@id/search_image_view"
+                    android:background="@null"
+                    android:gravity="center_vertical"
+                    android:hint="@string/enter_anchor_point"
+                    android:singleLine="false"
+                    android:text=""
+                    android:textColor="@color/stu_text_color"
+                    android:textColorHint="#9e9e9e"
+                    android:textSize="16sp"
+                    app:carbon_fontFamily="@font/cairo_regular" />
+
+            </carbon.widget.RelativeLayout>
+        </LinearLayout>
 
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/secondary_Appbar"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/appbarLayoutHeight"
-        android:visibility="gone"
-        android:alpha="0.0"
-        android:fitsSystemWindows="true"
-        android:theme="@style/Base.ThemeOverlay.AppCompat.Dark">
-
-        <android.support.design.widget.CollapsingToolbarLayout
-            android:id="@+id/secondary_collapsing_toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/colorBlack"
-            android:fitsSystemWindows="true"
-            app:collapsedTitleGravity="start"
-            app:collapsedTitleTextAppearance="@style/MyTextApprncCol.darkBg"
-            app:expandedTitleGravity="start"
-            app:expandedTitleMargin="15dp"
-            app:expandedTitleMarginBottom="@dimen/expTittleMarginBottom"
-            app:expandedTitleMarginStart="@dimen/expTittleMarginStart"
-            app:expandedTitleMarginTop="@dimen/expTittleMarginTop"
-            app:expandedTitleTextAppearance="@style/MyTextApprncExp.darkBg"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            app:scrimVisibleHeightTrigger="@dimen/scrimVisibleHeightTrigger"
-            app:title="Messages"
-            app:titleEnabled="true">
-
-
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/Secondary_toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:theme="@style/AccountToolbarStyle"
-                app:buttonGravity="bottom"
-                app:layout_collapseMode="pin"
-                app:navigationIcon="@drawable/ic_arrow_back_white_24dp"
-                app:popupTheme="@style/Base.ThemeOverlay.AppCompat.Dark"
-                app:title="Messages"
-                app:titleMarginBottom="@dimen/titleMarginBottom"
-                app:titleMarginStart="@dimen/titleMarginStart"
-                app:titleMarginTop="@dimen/titleMarginTop">
-
-
-            </android.support.v7.widget.Toolbar>
-
-        </android.support.design.widget.CollapsingToolbarLayout>
-    </android.support.design.widget.AppBarLayout>
 
     <RelativeLayout
         android:id="@+id/relativeLayout_hack"
@@ -103,73 +99,22 @@
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
         android:layout_marginTop="70dp"
+        android:alpha="0"
         android:background="@drawable/bg_round_corner_rela_layout"
         android:elevation="0dp"
-        android:alpha="0"
         android:padding="0dp"
         android:visibility="visible">
 
     </RelativeLayout>
 
     <!--including the specific search location bar here -->
-    <include
-        layout="@layout/stu_content_homepage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="60dp" />
-
-    <android.support.design.widget.CoordinatorLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <android.support.v4.widget.NestedScrollView
-            android:id="@+id/bottom_sheet"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="110dp"
-            android:background="@drawable/bottom_sheet_bg"
-            android:elevation="5dp"
-            android:onClick="onGrabingLocationViewClicked"
-            app:behavior_hideable="true"
-            app:behavior_peekHeight="56dp"
-            app:layout_behavior="@string/bottom_sheet_behavior">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="16dp"
-                    android:text="@string/fucking_testing_lorum"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="80dp"
-                    android:background="@color/colorAccent"
-                    android:gravity="center"
-                    android:text="bottom_sheet_peek"
-                    android:textColor="@android:color/white" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:text="bottom_sheet_content"
-                    android:textColor="@android:color/white" />
-            </LinearLayout>
+    <!-- <include
+         layout="@layout/stu_content_homepage"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_marginTop="60dp" />-->
 
 
-        </android.support.v4.widget.NestedScrollView>
-
-    </android.support.design.widget.CoordinatorLayout>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/bottom_sheet_fab"
@@ -185,8 +130,7 @@
         app:backgroundTint="@color/colorWhite"
         app:elevation="1dp"
         app:fabSize="mini"
-        app:layout_anchor="@+id/bottom_sheet"
-        app:layout_anchorGravity="top|center"
+        android:visibility="gone"
         app:srcCompat="@drawable/less_icon" />
 
     <android.support.design.widget.FloatingActionButton

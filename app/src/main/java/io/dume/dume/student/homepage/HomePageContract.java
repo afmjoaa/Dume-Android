@@ -11,7 +11,7 @@ public interface HomePageContract {
 
         void configHomePage();
 
-        void configCallbackInterfaces();
+        void makingCallbackInterfaces();
 
         void init();
 
@@ -34,6 +34,8 @@ public interface HomePageContract {
         void gotoProfilePage();
 
         void gotoGrabingInfoPage();
+
+        void gotoGrabingLocationPage();
 
     }
 

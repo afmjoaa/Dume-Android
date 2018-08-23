@@ -4,16 +4,12 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.location.LocationManager;
-import android.os.Build;
 import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 
 import io.dume.dume.R;
 
@@ -30,10 +26,10 @@ public class HomePagePresenter implements HomePageContract.Presenter {
     private int mRecPendingCount = 0, mRecAcceptedCount = 0, mRecCurrentCount = 0;
 
 
-    public HomePagePresenter(Context context, HomePageContract.View mView, HomePageContract.Model mModel) {
+    public HomePagePresenter(Context context, HomePageContract.Model mModel) {
         this.context = context;
         this.activity = (Activity) context;
-        this.mView = mView;
+        this.mView = (HomePageContract.View) context;
         this.mModel = mModel;
     }
 
@@ -41,7 +37,7 @@ public class HomePagePresenter implements HomePageContract.Presenter {
     public void homePageEnqueue() {
         mView.findView();
         mView.init();
-        mView.configCallbackInterfaces();
+        mView.makingCallbackInterfaces();
         mView.configHomePage();
 //        checkNetworkAndGps();
     }
@@ -67,7 +63,9 @@ public class HomePagePresenter implements HomePageContract.Presenter {
                 mView.gotoProfilePage();
                 break;
             case R.id.search_mentor_btn:
-                mView.gotoGrabingInfoPage();
+                //mView.gotoGrabingInfoPage();
+                mView.gotoGrabingLocationPage();
+
                 break;
 
         }

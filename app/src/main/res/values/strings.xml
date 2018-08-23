@@ -83,5 +83,25 @@
     <string name="noNet_snack_text">Can\'t reach the Dume network.</string>
     <string name="N0_Gps_Text">Your search anchor point isn\'t showed on the map. If you turn on your phone\'s location services, Dume will auto locate the point.</string>
     <string name="Turn_on_location">Turn on Location Services</string>
-
+    <string name="marker_icon">marker_icon</string>
+    <string name="enter_anchor_point">Enter anchor point</string>
+    <string-array name="BanglaMedium">
+        <item>One</item>
+        <item>Two</item>
+        <item>Three</item>
+        <item>Four</item>
+        <item>Five</item>
+        <item>Six</item>
+        <item>Seven</item>
+    </string-array>
+    <string-array name="EnglishMedium">
+        <item>One</item>
+        <item>Two</item>
+        <item>Three</item>
+        <item>Four</item>
+        <item>Five</item>
+        <item>Six</item>
+        <item>Seven</item>
+        <item>O-level</item>
+    </string-array>
 </resources>

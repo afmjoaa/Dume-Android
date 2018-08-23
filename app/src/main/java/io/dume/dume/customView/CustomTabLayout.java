@@ -1,4 +1,4 @@
-package io.dume.dume.student.pojo;
+package io.dume.dume.customView;
 
 import android.content.Context;
 import android.support.design.widget.TabLayout;

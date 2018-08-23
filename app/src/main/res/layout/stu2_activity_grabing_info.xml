@@ -100,7 +100,7 @@
             </android.support.v7.widget.Toolbar>
 
 
-            <io.dume.dume.student.pojo.CustomTabLayout
+            <io.dume.dume.customView.CustomTabLayout
                 android:id="@+id/tabs"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -153,7 +153,7 @@
                     android:icon="@drawable/ic_cross_check"
                     android:text="Cross Check" />
 
-            </io.dume.dume.student.pojo.CustomTabLayout>
+            </io.dume.dume.customView.CustomTabLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"

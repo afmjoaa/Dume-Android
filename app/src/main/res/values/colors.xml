@@ -36,5 +36,6 @@
     <color name="tab_overlay">#50000000</color>
     <color name="myToolbarIconColor">#2D354A</color>
     <color name="tab_text_color">#636669</color>
+    <color name="semi_transparnt_btn_color">#33989d9d</color>
 
 </resources>

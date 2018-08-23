@@ -113,7 +113,7 @@
         <activity
             android:name=".student.grabingLocation.GrabingLocationActivity"
             android:label="@string/title_activity_grabing_location"
-            android:theme="@style/AppTheme.NoActionBar.transparent"/>
+            android:theme="@style/AppTheme.NoActionBar.transparent" />
         <activity android:name=".student.pojo.CusStuAppComMapActivity" />
 
         <receiver
@@ -121,10 +121,13 @@
             android:label="NetworkChangeReceiver">
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
-                <action android:name="android.location.PROVIDERS_CHANGED" />
-                <category android:name="android.intent.category.DEFAULT" />
+                <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
             </intent-filter>
         </receiver>
+        <service
+            android:name=".service.MyLocationService"
+            android:enabled="true"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE" />
     </application>
 
 </manifest>

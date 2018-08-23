@@ -1,7 +1,9 @@
 package io.dume.dume.broadcastReceiver;
 
-public interface MyGpsHandler {
+public interface MyGpsHandlerOne {
     void onGpsPause();
+
     void onGpsResume();
+
     void onGpsError(Exception e);
 }

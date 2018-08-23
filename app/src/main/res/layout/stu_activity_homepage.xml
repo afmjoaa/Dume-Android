@@ -10,7 +10,7 @@
     tools:openDrawer="start">
 
 
-    <io.dume.dume.student.pojo.WindowInsetsFrameLayout
+    <io.dume.dume.customView.WindowInsetsFrameLayout
         android:id="@+id/map_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -25,7 +25,7 @@
             android:background="@drawable/background_vector"
             android:fitsSystemWindows="true" />
 
-    </io.dume.dume.student.pojo.WindowInsetsFrameLayout>
+    </io.dume.dume.customView.WindowInsetsFrameLayout>
 
 
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -42,7 +42,7 @@
 
     <include
         layout="@layout/stu_app_bar_homepage"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
 
