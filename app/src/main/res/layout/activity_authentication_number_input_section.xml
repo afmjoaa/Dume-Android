@@ -94,7 +94,7 @@
             android:layout_margin="10dp"
             android:clickable="true"
             android:focusable="true"
-            android:src="@drawable/right_arrow_icon"
+            app:srcCompat="@drawable/ic_arrow_forward_white_24dp"
             app:rippleColor="@color/colorDarkAzure" />
     </LinearLayout>
 </LinearLayout>

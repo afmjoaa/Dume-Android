@@ -23,8 +23,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_gravity="center_vertical|end"
-        android:id="@+id/snackbar_btn"
-        >
+        android:id="@+id/snackbar_btn">
 
         <ImageView
             android:id="@+id/custom_snackbar_btnImage"

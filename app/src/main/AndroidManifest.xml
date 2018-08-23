@@ -3,8 +3,10 @@
     package="io.dume.dume">
 
     <!-- when a object needs internet to execute a job -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <!-- if any object needs to read local storage -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -17,7 +19,7 @@
     -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+
 
     <application
         android:name="android.support.multidex.MultiDexApplication"
@@ -28,6 +30,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <!--google map api metadata -->
+
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
@@ -38,11 +41,11 @@
       You need a different API key for each encryption key, including the release key that is used to
       sign the APK for publishing.
       You can define the keys for the debug and release targets in src/debug/ and src/release/.
-       -->
+        -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
-        <!--google map api metadata finishes here -->
+        <!-- google map api metadata finishes here -->
 
         <activity android:name=".teacher.homepage.TeacherActivtiy" />
         <activity
@@ -91,10 +94,9 @@
         </activity>
         <!-- facebook finishes here -->
         <activity
-            android:name=".student.homepage.StuHomepageActivity"
+            android:name=".student.homepage.HomePageActivity"
             android:label=""
             android:theme="@style/AppTheme.NoActionBar" />
-
         <activity
             android:name=".student.homepage.MapsActivity"
             android:label="@string/title_activity_maps" />
@@ -106,6 +108,33 @@
             android:name=".teacher.mentor_settings.LocationPicker"
             android:label="@string/title_activity_location_picker" />
 
+        <activity
+            android:name=".student.profilepage.ProfilePageActivity"
+            android:label="@string/title_activity_profile_page"
+            android:theme="@style/profilePageTheme" />
+        <activity android:name=".student.pojo.CustomStuAppCompatActivity" />
+        <activity
+            android:name=".student.grabinginfo.GrabingInfoActivity"
+            android:label="@string/title_activity_grabing_info"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".student.grabingLocation.GrabingLocationActivity"
+            android:label="@string/title_activity_grabing_location"
+            android:theme="@style/AppTheme.NoActionBar.transparent" />
+        <activity android:name=".student.pojo.CusStuAppComMapActivity" />
+
+        <receiver
+            android:name=".broadcastReceiver.NetworkChangeReceiver"
+            android:label="NetworkChangeReceiver">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+                <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
+            </intent-filter>
+        </receiver>
+        <service
+            android:name=".service.MyLocationService"
+            android:enabled="true"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE" />
     </application>
 
 </manifest>

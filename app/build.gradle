@@ -29,6 +29,9 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    dataBinding {
+        enabled = true
+    }
 }
 
 ext {
@@ -45,6 +48,7 @@ dependencies {
     implementation 'com.android.support:appcompat-v7:27.1.1'
     implementation 'com.android.support.constraint:constraint-layout:1.1.2'
     implementation 'com.google.android.gms:play-services-maps:15.0.1'
+    implementation 'com.android.support:support-v4:27.1.1'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
@@ -73,13 +77,13 @@ dependencies {
     implementation 'com.daimajia.slider:library:1.1.5@aar'
     /*Image Loading Library*/
     implementation 'com.squareup.picasso:picasso:2.3.2'
-    implementation 'com.google.firebase:firebase-auth:16.0.2'
+    implementation 'com.google.firebase:firebase-auth:16.0.3'
     implementation 'com.github.d-max:spots-dialog:1.1@aar'
-    implementation 'com.google.android.gms:play-services-auth:15.0.1'
-    implementation 'com.facebook.android:facebook-android-sdk:[4,5)'
+    implementation 'com.google.android.gms:play-services-auth:16.0.0'
+    implementation 'com.facebook.android:facebook-android-sdk:4.35.0'
     implementation 'com.squareup.okhttp:okhttp:2.7.2'
     implementation 'com.squareup.okhttp:okhttp-urlconnection:1.6.0'
-    implementation 'com.google.firebase:firebase-firestore:17.0.4'
+    implementation 'com.google.firebase:firebase-firestore:17.1.0'
     implementation 'com.android.support:multidex:1.0.3'
 
 //    google play services
@@ -89,6 +93,8 @@ dependencies {
     implementation 'com.google.android.gms:play-services-places:15.0.1'
 //    implementation 'com.google.android.gms:play-services-nearby:15.0.1'
 //    implementation 'com.google.android.gms:play-services:12.0.1'
+    implementation 'com.github.warkiz.widget:indicatorseekbar:2.0.9'
+    implementation 'tk.zielony:carbon:0.15.0.1'
 
     implementation 'de.hdodenhof:circleimageview:2.2.0'
     implementation 'com.andkulikov:transitionseverywhere:1.8.0'

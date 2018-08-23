@@ -32,12 +32,12 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
-        android:background="@drawable/com_facebook_tooltip_blue_background"
-        android:text="Sign out"
         android:onClick="onStudentViewClicked"
+        android:text="Sign out"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
     <Button
         android:id="@+id/testingActivityBtn"
         android:layout_width="wrap_content"
@@ -48,9 +48,9 @@
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:backgroundTint="#599dc2"
+        android:onClick="onStudentViewClicked"
         android:text="Testing Activity"
         android:textAllCaps="false"
-        android:onClick="onStudentViewClicked"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -66,6 +66,7 @@
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:backgroundTint="#54bcae"
+        android:onClick="onStudentViewClicked"
         android:text="Testing map"
         android:textAllCaps="false"
         app:layout_constraintBottom_toBottomOf="parent"

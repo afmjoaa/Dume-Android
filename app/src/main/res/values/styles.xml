@@ -63,9 +63,15 @@
         <item name="android:fontFamily" tools:targetApi="jelly_bean">@font/cairo_regular</item>
     </style>
 
+
     <style name="CollapsingToolbarExpanded" parent="Base.TextAppearance.AppCompat.Large">
         <item name="android:textColor">@color/colorWhite</item>
         <item name="android:textSize">28sp</item>
+    </style>
+
+    <style name="AccountTitleExpand" parent="Base.TextAppearance.AppCompat.Large">
+        <item name="android:textColor">#d9d9d9</item>
+        <item name="android:textSize">25sp</item>
         <item name="android:textStyle">normal</item>
 
     </style>
@@ -85,6 +91,29 @@
         <item name="android:fontFamily" tools:targetApi="jelly_bean">@font/cairo_regular</item>
     </style>
 
+    <style name="MyTextApprncCol.textGone" parent="MyTextApprncCol">
+        <item name="android:textSize">0sp</item>
+    </style>
+
+    <style name="MyTextApprncExp.darkBg" parent="MyTextApprncExp">
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:textSize">25sp</item>
+
+    </style>
+
+    <style name="MyTextApprncCol.darkBg" parent="MyTextApprncCol">
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textSize">20sp</item>
+
+    </style>
+
+    <style name="MyTextApprncCol.grabLocaiton" parent="MyTextApprncCol">
+        <item name="android:textColor">#575757</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
 
     <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="windowActionBar">false</item>
@@ -96,6 +125,8 @@
         <item name="coordinatorLayoutStyle">@style/Widget.Design.CoordinatorLayout</item>
     </style>
     <!--<item name="android:activatedBackgroundIndicator">@drawable/drawer_item_textcolor</item>-->
+
+
 
     <style name="Widget.BottomNavigationView" parent="Widget.Design.BottomNavigationView">
         <item name="fontFamily">@font/cairo_regular</item>
@@ -109,6 +140,61 @@
         <item name="android:windowActionBarOverlay">true</item>
         <item name="windowActionBarOverlay">true</item>
     </style>
+    <!--testing here -->
+
+    <style name="profilePageTheme" parent="AppTheme.NoActionBar">
+        <item name="metaButtonBarStyle">?android:attr/buttonBarStyle</item>
+        <item name="metaButtonBarButtonStyle">?android:attr/buttonBarButtonStyle</item>
+    </style>
+
+    <style name="FullscreenActionBarStyle" parent="Widget.AppCompat.ActionBar">
+        <item name="android:background">@color/black_overlay</item>
+    </style>
+
+    <!--toolbar theme starts here -->
+    <style name="ThemeToolbar" parent="AppTheme">
+        <!-- navigation icon color -->
+        <item name="colorControlNormal">@color/myToolbarIconColor</item>
+        <!-- color of the menu overflow icon -->
+        <item name="colorPrimary">@color/black_overlay</item>
+        <item name="windowActionBarOverlay">true</item>
+        <item name="windowActionBar">false</item>
+    </style>
+
+    <style name="ThemeToolbar.toolbar" parent="ThemeToolbar">
+        <item name="colorPrimary">#00ffffff</item>
+    </style>
+
+    <!--toolbar theme finishes here -->
+    <!--@android:color/transparent-->
+
+    <style name="tabColorStateList">
+        <item name="android:textSize">15sp</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textColor">@color/tab_colorstate_list</item>
+    </style>
+
+    <!--testing theme for translucedent -->
+  <!--  <style name="myToolbarNavigationButtonStyle" parent="@style/Widget.AppCompat.Toolbar.Button.Navigation">
+        <item name="android:minWidth">0dp</item>
+        <item name="android:padding">0dp</item>
+        <item name="android:scaleType">centerInside</item>
+    </style>
+
+    <style name="myToolbarStyle" parent="@style/Widget.AppCompat.Toolbar">
+        <item name="android:paddingRight">0dp</item>
+    </style>-->
+
+    <style name="AppTheme.NoActionBar.transparent" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="colorPrimary">#9d9d9d</item>
+        <item name="colorPrimaryDark">#cac8c8</item>
+        <item name="android:windowActionBarOverlay">true</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
+        <item name="coordinatorLayoutStyle">@style/Widget.Design.CoordinatorLayout</item>
+    </style>
+
 
     <style name="EnamTextAppearanceNormal" parent="Base.TextAppearance.AppCompat.Small">
         <item name="android:textColor">@color/colorBlack</item>

@@ -38,6 +38,6 @@ public class TeacherPresenter implements TeacherContract.Presenter, TeacherContr
 
     @Override
     public void onError(String msg) {
-        Log.w(TAG, "onError: " + msg);
+        Log.w(TAG, "onGpsError: " + msg);
     }
 }

@@ -39,7 +39,6 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/toolbarLayoutHeight"
-
                 app:buttonGravity="bottom"
                 app:layout_collapseMode="pin"
                 app:navigationIcon="@drawable/back_arraw_icon"
@@ -51,6 +50,5 @@
     </android.support.design.widget.AppBarLayout>
 
     <include layout="@layout/content_auth_final" />
-
 
 </android.support.design.widget.CoordinatorLayout>
