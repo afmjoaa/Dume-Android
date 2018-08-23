@@ -45,6 +45,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="center_vertical"
         android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
@@ -70,7 +71,7 @@ to you at " />
                 android:hint="Pin Code"
                 android:inputType="phone"
                 android:padding="8dp"
-                android:typeface="sans" />
+             />
 
             <LinearLayout
                 android:layout_width="match_parent"

@@ -4,7 +4,7 @@
 
     <!-- when a object needs internet to execute a job -->
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <!-- if any object needs to read local storage -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -15,17 +15,18 @@
          Google Maps Android API v2, but you must specify either coarse or fine
          location permissions for the 'MyLocation' functionality. 
     -->
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
 
     <application
+        android:name="android.support.multidex.MultiDexApplication"
         android:allowBackup="true"
         android:icon="@mipmap/icon_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/icon_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        android:name="android.support.multidex.MultiDexApplication" >
+        android:theme="@style/AppTheme">
         <!--google map api metadata -->
         <meta-data
             android:name="com.google.android.gms.version"
@@ -96,8 +97,14 @@
 
         <activity
             android:name=".student.homepage.MapsActivity"
-            android:label="@string/title_activity_maps">
-        </activity>
+            android:label="@string/title_activity_maps" />
+
+        <activity android:name=".teacher.mentor_settings.AccountSettings" />
+        <activity android:name=".teacher.mentor_settings.basicinfo.EditAccount" />
+        <activity android:name=".teacher.mentor_settings.academic.AcademicActivity" />
+        <activity
+            android:name=".teacher.mentor_settings.LocationPicker"
+            android:label="@string/title_activity_location_picker" />
 
     </application>
 

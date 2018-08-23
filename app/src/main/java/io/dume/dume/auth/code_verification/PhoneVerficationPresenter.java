@@ -161,6 +161,10 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
             user.put("phone_number", dataStore.getPhoneNumber());
             user.put("avatar", dataStore.getPhotoUri());
             user.put("email", dataStore.getEmail());
+            user.put("gender", "");
+            user.put("religion", "");
+            user.put("birth_date", "");
+
             view.showProgress("Saving User...");
             fireStore.collection("mini_users").document(model.getUser().getUid()).set(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override

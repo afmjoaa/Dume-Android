@@ -7,7 +7,9 @@
         <item android:title="Manage Skills" />
         <item android:title="Payments" />
         <item android:title="Agreements" />
-        <item android:title="Profile Settings" />
+        <item
+            android:id="@+id/prifile"
+            android:title="Profile Settings" />
         <item android:title="App Settings" />
         <item android:title="Forum" />
     </group>

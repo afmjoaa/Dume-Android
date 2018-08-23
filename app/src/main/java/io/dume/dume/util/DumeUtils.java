@@ -1,9 +1,13 @@
 package io.dume.dume.util;
 
 import android.content.Context;
-import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
+import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 
 import java.util.regex.Matcher;
@@ -12,6 +16,10 @@ import java.util.regex.Pattern;
 import io.dume.dume.R;
 
 public class DumeUtils {
+    public static int GALLARY_IMAGE = 1;
+    public static int CAMERA_IMAGE = 2;
+
+
     public static String getApplicationName() {
         return "Dume";
     }
@@ -61,5 +69,22 @@ public class DumeUtils {
         badge.setChar(character);
         icon.mutate();
         icon.setDrawableByLayerId(R.id.ic_badge, badge);
+    }
+
+    public static void configureAppbar(Context context, String title) {
+        AppCompatActivity activity = (AppCompatActivity) context;
+        Toolbar toolbar = activity.findViewById(R.id.accountToolbar);
+        activity.setSupportActionBar(toolbar);
+        ActionBar supportActionBar = activity.getSupportActionBar();
+
+        if (supportActionBar != null) {
+            supportActionBar.setDisplayHomeAsUpEnabled(true);
+            supportActionBar.setDisplayShowHomeEnabled(true);
+        }
+        CollapsingToolbarLayout collapsingToolbarLayout = activity.findViewById(R.id.accountCollapsing);
+        collapsingToolbarLayout.setCollapsedTitleTypeface(Typeface.createFromAsset(activity.getAssets(), "fonts/Cairo-Light.ttf"));
+        collapsingToolbarLayout.setExpandedTitleTypeface(Typeface.createFromAsset(activity.getAssets(), "fonts/Cairo-Light.ttf"));
+        collapsingToolbarLayout.setTitle(title);
+
     }
 }
