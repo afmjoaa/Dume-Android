@@ -4,6 +4,8 @@ import android.view.View;
 
 import java.util.ArrayList;
 
+import io.dume.dume.teacher.pojo.User;
+
 public interface AccountSettingsContract {
     interface MentorView {
         void setViewConfig();
@@ -46,6 +48,8 @@ public interface AccountSettingsContract {
     interface MentorModel {
         int getData();
 
+        ArrayList<User> getUser(DataListener listener);
+
         void getDataArray(DataListener listener);
 
         interface DataListener
@@ -55,5 +59,7 @@ public interface AccountSettingsContract {
 
             void onFailure(String message);
         }
+
+        /* void getUserInfo();*/
     }
 }
