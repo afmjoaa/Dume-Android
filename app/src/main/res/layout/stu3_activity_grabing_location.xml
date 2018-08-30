@@ -15,7 +15,6 @@
         android:id="@+id/map_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-
         android:fitsSystemWindows="true">
 
 
@@ -35,7 +34,7 @@
             android:layout_gravity="center"
             android:layout_marginBottom="30dp"
             android:gravity="center"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/locationMarkertext"
@@ -53,63 +52,66 @@
                 android:id="@+id/imageMarker"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:srcCompat="@drawable/ic_current_location_marker_start"
-                android:contentDescription="@string/marker_icon" />
+                android:contentDescription="@string/marker_icon"
+                app:srcCompat="@drawable/ic_current_location_marker_start" />
         </LinearLayout>
 
     </io.dume.dume.customView.WindowInsetsFrameLayout>
-    <android.support.v4.widget.NestedScrollView
+
+    <io.dume.dume.custom_view.HorizontalLoadView
+        android:id="@+id/loadView"
+        android:layout_width="20dp"
+        android:layout_height="10dp"
+        android:elevation="20dp"
+        android:translationY="5dp"
+        app:layout_anchor="@id/my_appbarLayout_cardView"
+        app:layout_anchorGravity="bottom"
+        app:rect_color="@color/carbon_black" />
+
+    <LinearLayout
         android:id="@+id/searchBottomSheet"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginLeft="10dp"
-        app:elevation="5dp"
         android:layout_marginRight="10dp"
         android:background="@drawable/bottom_sheet_bg"
-        app:behavior_peekHeight="100dp"
+        app:behavior_peekHeight="75dp"
+        app:elevation="8dp"
         app:layout_behavior="@string/bottom_sheet_behavior">
 
-        <carbon.widget.LinearLayout
+        <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="match_parent">
 
-            <android.support.v7.widget.AppCompatTextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="16dp"
-                android:text="@string/fucking_testing_lorum"
-                android:textSize="15sp" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:background="@color/colorAccent"
-                android:gravity="center"
-                android:text="bottom_sheet_peek"
-                android:textColor="@android:color/white" />
-
-            <TextView
+            <carbon.widget.LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="bottom_sheet_content"
-                android:textColor="@android:color/white" />
-        </carbon.widget.LinearLayout>
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:orientation="vertical">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recycler_view_autoPlaces"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                </android.support.v7.widget.RecyclerView>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recycler_view_manual"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                </android.support.v7.widget.RecyclerView>
+
+            </carbon.widget.LinearLayout>
+
+        </android.support.v4.widget.NestedScrollView>
 
 
-    </android.support.v4.widget.NestedScrollView>
-    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/view_musk"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/colorBlack"
-        android:fitsSystemWindows="true"
-        android:orientation="vertical"
-        android:visibility="gone">
+    </LinearLayout>
 
-    </FrameLayout>
-   <!-- android:onClick="onGrabingLocationViewClicked"-->
+    <!-- android:onClick="onGrabingLocationViewClicked"-->
 
 
     <include

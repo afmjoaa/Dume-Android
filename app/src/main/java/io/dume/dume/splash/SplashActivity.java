@@ -7,7 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import io.dume.dume.auth.AuthModel;
 import io.dume.dume.auth.auth.AuthActivity;
-import io.dume.dume.student.homepage.StudentActivity;
+import io.dume.dume.student.homePage.StudentActivity;
 import io.dume.dume.teacher.homepage.TeacherActivtiy;
 
 public class SplashActivity extends AppCompatActivity implements SplashContract.View {

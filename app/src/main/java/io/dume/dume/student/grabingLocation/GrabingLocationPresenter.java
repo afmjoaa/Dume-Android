@@ -37,6 +37,11 @@ public class GrabingLocationPresenter implements GrabingLocaitonContract.Present
             case R.id.bottom_sheet_fab:
                 mView.onShowBottomSheet();
                 break;
+            case R.id.discard_image:
+                mView.onDiscardSearchClicked();
+                break;
+            case R.id.location_done_btn:
+                mView.onLocationDoneBtnClicked();
 
         }
 

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".student.homepage.MapsActivity">
+    tools:context=".student.homePage.MapsActivity">
 
     <io.dume.dume.customView.WindowInsetsFrameLayout
         android:layout_width="match_parent"

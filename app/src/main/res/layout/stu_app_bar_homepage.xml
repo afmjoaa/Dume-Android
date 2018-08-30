@@ -5,7 +5,7 @@
     android:id="@+id/parent_coor_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".student.homepage.HomePageActivity">
+    tools:context=".student.homePage.HomePageActivity">
 
 
     <android.support.design.widget.AppBarLayout
@@ -115,9 +115,9 @@
         <carbon.widget.RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="30dp"
-            android:layout_marginTop="15dp"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
+            android:layout_marginTop="15dp"
             android:background="#eceff1"
             android:padding="0dp"
             app:carbon_cornerRadius="6dp"

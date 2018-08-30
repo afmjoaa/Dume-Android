@@ -38,7 +38,7 @@ import io.dume.dume.auth.auth_final.AuthRegisterActivity;
 import io.dume.dume.auth.code_verification.PhoneVerificationActivity;
 import io.dume.dume.auth.social_init.SocialInitActivity;
 import io.dume.dume.splash.FeaturedSliderAdapter;
-import io.dume.dume.student.homepage.StudentActivity;
+import io.dume.dume.student.homePage.StudentActivity;
 import io.dume.dume.teacher.homepage.TeacherActivtiy;
 
 

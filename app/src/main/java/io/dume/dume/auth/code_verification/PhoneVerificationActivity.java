@@ -25,7 +25,7 @@ import io.dume.dume.auth.AuthModel;
 import io.dume.dume.auth.DataStore;
 import io.dume.dume.auth.auth.AuthActivity;
 import io.dume.dume.auth.auth_final.AuthRegisterActivity;
-import io.dume.dume.student.homepage.StudentActivity;
+import io.dume.dume.student.homePage.StudentActivity;
 import io.dume.dume.teacher.homepage.TeacherActivtiy;
 
 public class PhoneVerificationActivity extends AppCompatActivity implements PhoneVerificationContract.View {

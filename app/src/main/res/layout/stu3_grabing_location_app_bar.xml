@@ -7,105 +7,122 @@
     android:layout_height="match_parent"
     tools:context=".student.grabingLocation.GrabingLocationActivity">
 
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/my_appbarLayout"
+    <carbon.beta.AppBarLayout
+        android:id="@+id/my_appbarLayout_cardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_white_bottom_round"
-        android:elevation="5dp"
         android:theme="@style/AppTheme.AppBarOverlay"
-        app:carbon_elevation="5dp">
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:layout_margin="0dp"
-            android:background="@color/colorWhite"
-            android:stateListAnimator="@drawable/appbar_no_elevation"
-            app:navigationIcon="@drawable/ic_arrow_back_default_24dp"
-            app:popupTheme="@style/AppTheme.PopupOverlay"
-            app:theme="@style/CustomActionBar"
-            app:title="Select search point"
-            app:titleMargin="0dp"
-            app:titleTextAppearance="@style/MyTextApprncCol.grabLocaiton"
-            tools:targetApi="lollipop">
-
-
-        </android.support.v7.widget.Toolbar>
+        app:carbon_elevation="16dp">
+        <!--android:background="@drawable/bg_white_bottom_round"-->
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginBottom="10dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginLeft="22dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginStart="22dp"
-            android:gravity="center"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
-            <carbon.widget.ImageView
-                android:id="@+id/search_image_view"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginEnd="30dp"
-                android:layout_marginRight="30dp"
-                android:contentDescription="@string/search_icon"
-                app:carbon_backgroundTint="@color/icon_color"
-                app:srcCompat="@drawable/ic_place_black_24dp" />
-
-            <carbon.widget.RelativeLayout
-                android:id="@+id/search_mentor_btn"
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_gravity="center_vertical"
-                android:background="@color/semi_transparnt_btn_color"
-                android:padding="0dp"
-                app:carbon_cornerRadius="5dp"
-                app:carbon_elevation="0dp">
+                android:layout_height="?attr/actionBarSize"
+                android:layout_margin="0dp"
+                android:background="@color/colorWhite"
+                android:stateListAnimator="@drawable/appbar_no_elevation"
+                app:navigationIcon="@drawable/ic_arrow_back_default_24dp"
+                app:popupTheme="@style/AppTheme.PopupOverlay"
+                app:theme="@style/CustomActionBar"
+                app:title="Select search point"
+                app:titleMargin="0dp"
+                app:titleTextAppearance="@style/MyTextApprncCol.grabLocaiton"
+                tools:targetApi="lollipop">
 
-                <carbon.widget.AutoCompleteEditText
-                    android:id="@+id/input_search"
+
+            </android.support.v7.widget.Toolbar>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="10dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginLeft="22dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginStart="22dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <carbon.widget.ImageView
+                    android:id="@+id/search_image_view"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="30dp"
+                    android:layout_marginRight="30dp"
+                    android:contentDescription="@string/search_icon"
+                    app:carbon_backgroundTint="@color/icon_color"
+                    app:srcCompat="@drawable/ic_place_black_24dp" />
+
+                <carbon.widget.RelativeLayout
+                    android:id="@+id/input_search_container"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginStart="10dp"
-                    android:layout_toEndOf="@id/search_image_view"
-                    android:layout_toRightOf="@id/search_image_view"
-                    android:background="@null"
-                    android:gravity="center_vertical"
-                    android:hint="@string/enter_anchor_point"
-                    android:singleLine="false"
-                    android:text=""
-                    android:textColor="@color/stu_text_color"
-                    android:textColorHint="#9e9e9e"
-                    android:textSize="16sp"
-                    app:carbon_fontFamily="@font/cairo_regular" />
+                    android:layout_height="40dp"
+                    android:layout_gravity="center_vertical"
+                    android:background="@color/semi_transparnt_btn_color"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:padding="0dp"
+                    app:carbon_cornerRadius="5dp"
+                    app:carbon_elevation="0dp">
 
-            </carbon.widget.RelativeLayout>
+                    <carbon.widget.EditText
+                        android:id="@+id/input_search"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="30dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="30dp"
+                        android:layout_marginStart="10dp"
+                        android:background="@null"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:gravity="center_vertical"
+                        android:hint="@string/enter_anchor_point"
+                        android:inputType="text"
+                        android:singleLine="false"
+                        android:text=""
+                        android:textColor="@color/stu_text_color"
+                        android:textColorHint="#9e9e9e"
+                        android:textSize="16sp"
+                        app:carbon_fontFamily="@font/cairo_regular">
+
+                        <requestFocus />
+
+                    </carbon.widget.EditText>
+
+                    <carbon.widget.ImageView
+                        android:id="@+id/discard_image"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginRight="10dp"
+                        android:contentDescription="@string/search_icon"
+                        android:onClick="onGrabingLocationViewClicked"
+                        android:tint="@color/icon_color"
+                        android:visibility="invisible"
+                        app:srcCompat="@drawable/ic_discard" />
+
+                </carbon.widget.RelativeLayout>
+
+            </LinearLayout>
+
         </LinearLayout>
 
-    </android.support.design.widget.AppBarLayout>
+    </carbon.beta.AppBarLayout>
 
-
-    <RelativeLayout
-        android:id="@+id/relativeLayout_hack"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:layout_marginTop="70dp"
-        android:alpha="0"
-        android:background="@drawable/bg_round_corner_rela_layout"
-        android:elevation="0dp"
-        android:padding="0dp"
-        android:visibility="visible">
-
-    </RelativeLayout>
 
     <!--including the specific search location bar here -->
     <!-- <include
@@ -114,38 +131,58 @@
          android:layout_height="wrap_content"
          android:layout_marginTop="60dp" />-->
 
-
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/bottom_sheet_fab"
-        style="?android:attr/borderlessButtonStyle"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/fab_margin"
-        android:layout_marginLeft="@dimen/fab_margin"
-        android:layout_marginRight="@dimen/fab_margin"
-        android:layout_marginTop="@dimen/fab_margin"
-        android:onClick="onGrabingLocationViewClicked"
-        android:stateListAnimator="@drawable/appbar_no_elevation"
-        app:backgroundTint="@color/colorWhite"
-        app:elevation="1dp"
-        app:fabSize="mini"
-        android:visibility="gone"
-        app:srcCompat="@drawable/less_icon" />
+        android:layout_gravity="top|end"
+        android:orientation="vertical"
+        app:layout_anchor="@id/location_done_btn"
+        app:layout_anchorGravity="top|end">
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        style="?android:attr/borderlessButtonStyle"
-        android:layout_width="wrap_content"
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|end"
+            android:layout_marginBottom="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="16dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:onClick="onGrabingLocationViewClicked"
+            android:visibility="invisible"
+            app:backgroundTint="@color/colorWhite"
+            app:fabSize="mini"
+            app:srcCompat="@drawable/geo_icon" />
+
+    </LinearLayout>
+
+
+    <carbon.widget.Button
+        android:id="@+id/location_done_btn"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:background="@color/carbon_black"
         android:onClick="onGrabingLocationViewClicked"
-        app:backgroundTint="@color/colorWhite"
-        app:fabSize="mini"
-        app:srcCompat="@drawable/geo_icon" />
+        android:text="Done"
+        android:textAllCaps="false"
+        android:textColor="@color/carbon_white"
+        android:textSize="18sp"
+        android:visibility="invisible"
+        app:carbon_cornerRadius="5dp"
+        app:carbon_elevation="5dp"
+        app:carbon_fontFamily="@font/cairo_regular"
+        app:carbon_rippleColor="#80ffffff"
+        app:carbon_rippleStyle="background">
+
+    </carbon.widget.Button>
 
 </android.support.design.widget.CoordinatorLayout>

@@ -19,6 +19,7 @@ import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -45,6 +46,8 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
+import carbon.widget.Button;
+import android.support.design.widget.FloatingActionButton;
 import io.dume.dume.R;
 import io.dume.dume.customView.TouchableWrapper;
 
@@ -76,12 +79,17 @@ public class CusStuAppComMapActivity extends CustomStuAppCompatActivity implemen
     protected Task<LocationSettingsResponse> result;
     protected FusedLocationProviderClient mFusedLocationProviderClient;
     protected GoogleApiClient mGoogleApiClient;
+    protected boolean touchedFirstTime = false;
 
     //public variable
     public static final float DEFAULT_ZOOM = 15f;
     public static Boolean MLOCATIONPERMISSIONGRANTED = false;
     private ImageView myImageMarker;
     private MyGpsLocationChangeListener myGpsLocationChangeListener;
+    private Button locationDoneBtn;
+    private LinearLayout searchBottomSheet;
+    private carbon.widget.RelativeLayout inputSearchContainer;
+    private FloatingActionButton fab;
 
 
     public void setActivityContextMap(Context context, int i) {
@@ -215,6 +223,11 @@ public class CusStuAppComMapActivity extends CustomStuAppCompatActivity implemen
             toggleGpsControlBtn = rootView.findViewById(R.id.toggle_gps_dialogue_btn);
         } else if (fromFlag == 2) {
             myImageMarker = MAPCONTAINER.findViewById(R.id.imageMarker);
+            searchBottomSheet = rootView.findViewById(R.id.searchBottomSheet);
+            locationDoneBtn = rootView.findViewById(R.id.location_done_btn);
+            inputSearchContainer = rootView.findViewById(R.id.input_search_container);
+            fab = rootView.findViewById(R.id.fab);
+
         }
     }
 
@@ -232,6 +245,15 @@ public class CusStuAppComMapActivity extends CustomStuAppCompatActivity implemen
             Drawable d = myImageMarker.getDrawable();
             if (d instanceof Animatable) {
                 ((Animatable) d).start();
+            }
+        }
+        if(fromFlag == 2){
+            inputSearchContainer.requestFocus();
+            searchBottomSheet.setVisibility(View.INVISIBLE);
+            locationDoneBtn.setVisibility(View.VISIBLE);
+            if(touchedFirstTime){
+                fab.animate().translationYBy((float) (6.0f * (getResources().getDisplayMetrics().density))).setDuration(60).start();
+                touchedFirstTime = false;
             }
         }
 

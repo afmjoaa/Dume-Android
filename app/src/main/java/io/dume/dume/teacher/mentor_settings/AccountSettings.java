@@ -34,7 +34,7 @@ import java.util.ArrayList;
 
 import io.dume.dume.R;
 import io.dume.dume.custom_view.HorizontalLoadView;
-import io.dume.dume.student.homepage.MapsActivity;
+import io.dume.dume.student.homePage.MapsActivity;
 import io.dume.dume.teacher.adapters.BasicInfoAdapter;
 import io.dume.dume.teacher.mentor_settings.academic.AcademicActivity;
 import io.dume.dume.teacher.mentor_settings.basicinfo.EditAccount;

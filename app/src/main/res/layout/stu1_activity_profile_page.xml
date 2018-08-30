@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/colorBlack"
     android:fitsSystemWindows="true"
-    tools:context=".student.profilepage.ProfilePageActivity">
+    tools:context=".student.profilePage.ProfilePageActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"

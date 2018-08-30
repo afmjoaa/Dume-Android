@@ -3,7 +3,7 @@
     package="io.dume.dume">
 
     <!-- when a object needs internet to execute a job -->
-    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
@@ -20,7 +20,6 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
-
     <application
         android:name="android.support.multidex.MultiDexApplication"
         android:allowBackup="true"
@@ -29,7 +28,8 @@
         android:roundIcon="@mipmap/icon_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <!--google map api metadata -->
+
+        <!-- google map api metadata -->
 
         <meta-data
             android:name="com.google.android.gms.version"
@@ -57,7 +57,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".student.homepage.StudentActivity" />
+        <activity android:name=".student.homePage.StudentActivity" />
         <activity
             android:name=".auth.auth.AuthActivity"
             android:theme="@style/LoginTheme" />
@@ -94,27 +94,25 @@
         </activity>
         <!-- facebook finishes here -->
         <activity
-            android:name=".student.homepage.HomePageActivity"
+            android:name=".student.homePage.HomePageActivity"
             android:label=""
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".student.homepage.MapsActivity"
+            android:name=".student.homePage.MapsActivity"
             android:label="@string/title_activity_maps" />
-
         <activity android:name=".teacher.mentor_settings.AccountSettings" />
         <activity android:name=".teacher.mentor_settings.basicinfo.EditAccount" />
         <activity android:name=".teacher.mentor_settings.academic.AcademicActivity" />
         <activity
             android:name=".teacher.mentor_settings.LocationPicker"
             android:label="@string/title_activity_location_picker" />
-
         <activity
-            android:name=".student.profilepage.ProfilePageActivity"
+            android:name=".student.profilePage.ProfilePageActivity"
             android:label="@string/title_activity_profile_page"
             android:theme="@style/profilePageTheme" />
         <activity android:name=".student.pojo.CustomStuAppCompatActivity" />
         <activity
-            android:name=".student.grabinginfo.GrabingInfoActivity"
+            android:name=".student.grabingInfo.GrabingInfoActivity"
             android:label="@string/title_activity_grabing_info"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
@@ -131,10 +129,64 @@
                 <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
             </intent-filter>
         </receiver>
+
         <service
             android:name=".service.MyLocationService"
             android:enabled="true"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE" />
+
+        <activity
+            android:name=".student.heatMap.HeatMapActivity"
+            android:theme="@style/AppTheme.NoActionBar.transparent" />
+        <activity
+            android:name=".student.grabingPackage.GrabingPackageActivity"
+            android:label="@string/title_activity_grabing_package"
+            android:theme="@style/AppTheme.NoActionBar.transparent" />
+        <activity
+            android:name=".student.studentSettings.StudentSettingsActivity"
+            android:label="@string/title_activity_student_settings" />
+        <activity
+            android:name=".student.studentPayment.StudentPaymentActivity"
+            android:label="@string/title_activity_student_payment"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".student.studentHelp.StudentHelpActivity"
+            android:label="@string/title_activity_student_help"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".student.searchResultTabview.SearchResultTabviewActivity"
+            android:label="@string/title_activity_search_result_tabview"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".student.searchResult.SearchResultActivity"
+            android:label="@string/title_activity_search_result" />
+        <activity
+            android:name=".student.searchLoading.SearchLoadingActivity"
+            android:label="@string/title_activity_search_loading" />
+        <activity
+            android:name=".student.recordsPage.RecordsPageActivity"
+            android:label="@string/title_activity_records_page"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".student.recordsPending.RecordsPendingActivity"
+            android:label="@string/title_activity_records_pendding"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".student.recordsRejected.RecordsRejectedActivity"
+            android:label="@string/title_activity_records_rejected"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".student.recordsCurrent.RecordsCurrentActivity"
+            android:label="@string/title_activity_records_current"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".student.recordsCompleted.RecordsCompletedActivity"
+            android:label="@string/title_activity_records_completed"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".student.recordsAccepted.RecordsAcceptedActivity"
+            android:label="@string/title_activity_records_accepted"
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>

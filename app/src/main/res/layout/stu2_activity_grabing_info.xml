@@ -2,22 +2,31 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main_content"
+    android:id="@+id/parent_coor_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background_vector"
     android:fitsSystemWindows="true"
-    tools:context=".student.grabinginfo.GrabingInfoActivity">
+    tools:context=".student.grabingInfo.GrabingInfoActivity">
 
-    <RelativeLayout
-        android:id="@+id/testingLayout"
+
+  <!--  <io.dume.dume.customView.WindowInsetsFrameLayout
+        android:id="@+id/map_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="top"
-        android:elevation="12dp"
-        android:gravity="center_horizontal"
-        android:translationZ="12dp"
-        android:visibility="gone"></RelativeLayout>
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true">
+
+
+        <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/background_vector"
+            android:fitsSystemWindows="true" />
+    </io.dume.dume.customView.WindowInsetsFrameLayout>-->
+
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"
@@ -77,7 +86,7 @@
                     android:gravity="center"
                     android:orientation="horizontal">
 
-                    <Button
+                    <carbon.widget.Button
                         style="?android:attr/borderlessButtonStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -86,14 +95,14 @@
                         android:drawablePadding="10dp"
                         android:drawableRight="@drawable/more_icon"
                         android:drawableStart="@drawable/alias_profile_icon"
-                        android:drawableTint="#575757"
+                        app:carbon_tint="#575757"
                         android:paddingEnd="15dp"
                         android:paddingLeft="15dp"
                         android:paddingRight="15dp"
                         android:paddingStart="15dp"
                         android:text="For Me"
                         android:textAllCaps="false"
-                        android:textSize="18dp"
+                        android:textSize="18sp"
                         android:textStyle="normal" />
                 </LinearLayout>
 
@@ -158,10 +167,10 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="20dp"
+                android:layout_gravity="top"
                 android:layout_marginTop="162dp"
                 android:elevation="16dp"
                 android:orientation="horizontal"
-                android:layout_gravity="top"
                 android:stateListAnimator="@drawable/appbar_always_elevated">
 
                 <TextView

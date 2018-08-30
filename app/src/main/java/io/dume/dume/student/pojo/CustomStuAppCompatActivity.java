@@ -15,7 +15,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -33,7 +32,7 @@ import java.util.Calendar;
 import io.dume.dume.R;
 import io.dume.dume.broadcastReceiver.MyConnectivityHandler;
 import io.dume.dume.broadcastReceiver.NetworkChangeReceiver;
-import io.dume.dume.student.homepage.HomePageContract;
+import io.dume.dume.student.homePage.HomePageContract;
 import io.dume.dume.util.MyApplication;
 import io.dume.dume.util.NetworkUtil;
 
@@ -142,10 +141,8 @@ public class CustomStuAppCompatActivity extends AppCompatActivity implements MyC
         CoordinatorLayout.LayoutParams parentParams = (CoordinatorLayout.LayoutParams) layout.getLayoutParams();
         parentParams.height = (int) (30 * (getResources().getDisplayMetrics().density));
 
-        //Id for your bottomNavBar or TabLayout
-        parentParams.setAnchorId(R.id.bottom_sheet);
-        parentParams.anchorGravity = Gravity.TOP;
-        parentParams.gravity = Gravity.TOP;
+        //can set those things like that ..
+        //parentParams.gravity = Gravity.TOP;
 
         layout.setLayoutParams(parentParams);
         layout.addView(snackView, 0);
