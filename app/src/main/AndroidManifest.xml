@@ -186,7 +186,7 @@
         <activity
             android:name=".student.recordsAccepted.RecordsAcceptedActivity"
             android:label="@string/title_activity_records_accepted"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
     </application>
 
 </manifest>

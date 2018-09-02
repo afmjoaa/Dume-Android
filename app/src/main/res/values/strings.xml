@@ -327,4 +327,10 @@
     <string name="title_activity_records_current">"Current records "</string>
     <string name="title_activity_records_completed">"Completed records "</string>
     <string name="title_activity_records_accepted">Accepted requests</string>
+
+    <string-array name="AccountType">
+        <item>Student</item>
+        <item>Mentor</item>
+        <item>Boot Camp</item>
+    </string-array>
 </resources>

@@ -1,8 +1,14 @@
 package io.dume.dume.student.grabingPackage;
 
+import android.location.Location;
+import android.os.Build;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -17,20 +23,36 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.view.ViewTreeObserver;
 import android.widget.TextView;
 
+import carbon.beta.AppBarLayout;
+import carbon.widget.LinearLayout;
 import io.dume.dume.R;
+import io.dume.dume.custom_view.HorizontalLoadView;
+import io.dume.dume.student.pojo.CusStuAppComMapActivity;
+import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
+import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
 
-public class GrabingPackageActivity extends AppCompatActivity implements GrabingPackageContract.View{
+public class GrabingPackageActivity extends CusStuAppComMapActivity implements GrabingPackageContract.View,
+        MyGpsLocationChangeListener {
 
     private GrabingPackageContract.Presenter mPresenter;
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
+    protected static int fromFlag = 4;
+    private BottomSheetBehavior bottomSheetBehavior;
+    private HorizontalLoadView loadView;
+    private carbon.widget.LinearLayout llBottomSheet;
+    private CoordinatorLayout coordinatorLayout;
+    private AppBarLayout myAppBarLayout;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.stu4_activity_grabing_package);
+        setActivityContextMap(this, fromFlag);
         mPresenter = new GrabingPackagePresenter(this, new GrabingPackageModel());
         mPresenter.grabingPackagePageEnqueue();
 
@@ -48,14 +70,48 @@ public class GrabingPackageActivity extends AppCompatActivity implements Grabing
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        loadView = findViewById(R.id.loadView);
+        llBottomSheet = findViewById(R.id.packageBottomSheet);
+        coordinatorLayout = (CoordinatorLayout) findViewById(R.id.my_main_container);
+        myAppBarLayout = findViewById(R.id.my_appbarLayout);
+
+
+        if (!loadView.isRunningAnimation()) {
+            loadView.startLoading();
+        }
+        bottomSheetBehavior = BottomSheetBehavior.from(llBottomSheet);
+
+        ViewTreeObserver vto = llBottomSheet.getViewTreeObserver();
+        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+            public void onGlobalLayout() {
+
+                llBottomSheet.getLayoutParams().height = (llBottomSheet.getHeight() - myAppBarLayout.getHeight() - (int) (10 * (getResources().getDisplayMetrics().density)));
+                llBottomSheet.requestLayout();
+                bottomSheetBehavior.onLayoutChild(coordinatorLayout, llBottomSheet, ViewCompat.LAYOUT_DIRECTION_LTR);
+                ViewTreeObserver obs = llBottomSheet.getViewTreeObserver();
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    obs.removeOnGlobalLayoutListener(this);
+                } else {
+                    obs.removeGlobalOnLayoutListener(this);
+                }
+            }
+
+        });
+
+        bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+                llBottomSheet.animate().scaleX(1 + (slideOffset * 0.058f)).setDuration(0).start();
             }
         });
+
 
     }
 
@@ -69,12 +125,8 @@ public class GrabingPackageActivity extends AppCompatActivity implements Grabing
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
@@ -97,11 +149,16 @@ public class GrabingPackageActivity extends AppCompatActivity implements Grabing
 
     }
 
+    @Override
+    public void onMyGpsLocationChanged(Location location) {
+
+    }
+
     /**
      * A placeholder fragment containing a simple view.
      */
     public static class PlaceholderFragment extends Fragment {
-         /**
+        /**
          * The fragment argument representing the section number for this
          * fragment.
          */
@@ -110,7 +167,7 @@ public class GrabingPackageActivity extends AppCompatActivity implements Grabing
         public PlaceholderFragment() {
         }
 
-         /**
+        /**
          * Returns a new instance of this fragment for the given section
          * number.
          */
@@ -132,10 +189,7 @@ public class GrabingPackageActivity extends AppCompatActivity implements Grabing
         }
     }
 
-     /**
-     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
-     * one of the sections/tabs/pages.
-     **/
+
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
         public SectionsPagerAdapter(FragmentManager fm) {

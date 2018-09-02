@@ -21,6 +21,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -87,7 +88,7 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
     private RecyclerView autoCompleteRecyView;
     private RecyclerView menualCompleteRecyView;
     private static final LatLngBounds LAT_LNG_BOUNDS = new LatLngBounds(new LatLng(-40, -168), new LatLng(71, 136));
-    private carbon.widget.EditText inputSearch;
+    private EditText inputSearch;
     private CompositeDisposable compositeDisposable;
     private PlaceAutoRecyAda recyclerAutoAdapter;
     private PlaceMenualRecyAda recyclerMenualAdapter;

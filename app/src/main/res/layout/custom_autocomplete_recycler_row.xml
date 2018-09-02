@@ -29,23 +29,23 @@
             android:layout_gravity="center_vertical"
             android:orientation="vertical">
 
-            <carbon.widget.TextView
+            <TextView
                 android:id="@+id/text_one"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"
                 android:layout_gravity="center_vertical"
                 android:textAppearance="?android:attr/textAppearanceListItem"
-                app:carbon_fontFamily="@font/cairo_regular" />
+                app:fontFamily="@font/cairo_regular" />
 
-            <carbon.widget.TextView
+            <TextView
                 android:id="@+id/text_two"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:layout_gravity="center_vertical"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                app:carbon_fontFamily="@font/cairo_regular" />
+                app:fontFamily="@font/cairo_regular"/>
         </LinearLayout>
 
     </LinearLayout>

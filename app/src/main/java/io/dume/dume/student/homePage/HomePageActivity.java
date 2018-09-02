@@ -288,6 +288,7 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
         drawer.setScrimColor(getResources().getColor(R.color.black_overlay));
 
         // Toolbar :: Transparent
+        toolbar.bringToFront();
         toolbar.getBackground().setAlpha(0);
         // Status bar :: dark
         setDarkStatusBarIcon();

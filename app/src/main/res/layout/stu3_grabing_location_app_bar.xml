@@ -74,7 +74,7 @@
                     app:carbon_cornerRadius="5dp"
                     app:carbon_elevation="0dp">
 
-                    <carbon.widget.EditText
+                    <EditText
                         android:id="@+id/input_search"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -94,11 +94,11 @@
                         android:textColor="@color/stu_text_color"
                         android:textColorHint="#9e9e9e"
                         android:textSize="16sp"
-                        app:carbon_fontFamily="@font/cairo_regular">
+                        app:fontFamily="@font/cairo_regular">
 
                         <requestFocus />
 
-                    </carbon.widget.EditText>
+                    </EditText>
 
                     <carbon.widget.ImageView
                         android:id="@+id/discard_image"
