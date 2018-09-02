@@ -208,17 +208,12 @@ public class CustomStuAppCompatActivity extends AppCompatActivity implements MyC
             setWindowFlag(activity, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, false);
             activity.getWindow().setStatusBarColor(Color.TRANSPARENT);
         }
-    }
 
-    private static void setWindowFlag(Activity activity, final int bits, boolean on) {
-        Window win = activity.getWindow();
-        WindowManager.LayoutParams winParams = win.getAttributes();
-        if (on) {
-            winParams.flags |= bits;
-        } else {
-            winParams.flags &= ~bits;
-        }
-        win.setAttributes(winParams);
+        //lollipop only support white status bar icon color so have to fix it by the status bar util library
+        //by making translucent status bar and test thoroughly
+        //StatusBarUtil.setTranslucent(this, 100);
+        // StatusBarUtil.setTransparent(this);
+        //StatusBarUtil.setColor(Activity activity, int color)
     }
 
     //make transparent status bar icon color dark
@@ -235,6 +230,17 @@ public class CustomStuAppCompatActivity extends AppCompatActivity implements MyC
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             decor.setSystemUiVisibility(0);
         }
+    }
+
+    private static void setWindowFlag(Activity activity, final int bits, boolean on) {
+        Window win = activity.getWindow();
+        WindowManager.LayoutParams winParams = win.getAttributes();
+        if (on) {
+            winParams.flags |= bits;
+        } else {
+            winParams.flags &= ~bits;
+        }
+        win.setAttributes(winParams);
     }
 
     //    checking google service for map implementation and availability
@@ -285,15 +291,5 @@ public class CustomStuAppCompatActivity extends AppCompatActivity implements MyC
         HOUR = getCurrentHour();
         ISNIGHT = HOUR < 5 || HOUR > 19;
     }
-    //    setTimeout function homemade
-    public static void setTimeout(Runnable runnable, int delay) {
-        new Thread(() -> {
-            try {
-                Thread.sleep(delay);
-                runnable.run();
-            } catch (Exception e) {
-                Log.e(TAG, "setTimeout: " + e);
-            }
-        }).start();
-    }
+   //testing starts here
 }

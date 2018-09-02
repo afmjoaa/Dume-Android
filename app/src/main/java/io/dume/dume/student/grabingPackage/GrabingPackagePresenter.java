@@ -20,7 +20,9 @@ public class GrabingPackagePresenter implements GrabingPackageContract.Presenter
 
     @Override
     public void grabingPackagePageEnqueue() {
-
+        mView.findView();
+        mView.initGrabingPackagePage();
+        mView.configGrabingPackagePage();
     }
 
     @Override

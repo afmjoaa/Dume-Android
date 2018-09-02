@@ -140,7 +140,7 @@
             android:theme="@style/AppTheme.NoActionBar.transparent" />
         <activity
             android:name=".student.grabingPackage.GrabingPackageActivity"
-            android:label="@string/title_activity_grabing_package"
+            android:label=""
             android:theme="@style/AppTheme.NoActionBar.transparent" />
         <activity
             android:name=".student.studentSettings.StudentSettingsActivity"

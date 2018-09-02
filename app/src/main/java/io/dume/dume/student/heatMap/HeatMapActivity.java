@@ -70,6 +70,7 @@ public class HeatMapActivity extends CusStuAppComMapActivity implements OnMapRea
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         getLocationPermission(mapFragment);
@@ -90,7 +91,10 @@ public class HeatMapActivity extends CusStuAppComMapActivity implements OnMapRea
         toolbarContainer = findViewById(R.id.toolbar_container);
         viewMusk = findViewById(R.id.view_musk);
         parentCoorLayout = findViewById(R.id.parent_coor_layout);
-        toolbarContainer.bringToFront();
+//        toolbarContainer.bringToFront();
+        myAppBarLayout.bringToFront();
+        myAppBarLayout.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+
 
         chooseAccouTypeBtn.setOnClickListener(new VisibleToggleClickListener() {
 

@@ -143,8 +143,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="10dp"
                     android:layout_below="@+id/toolbar_container"
-                    android:background="@color/transparent" />
-
+                    android:background="@null" />
 
             </RelativeLayout>
 

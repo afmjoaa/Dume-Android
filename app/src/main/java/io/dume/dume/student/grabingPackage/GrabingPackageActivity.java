@@ -2,36 +2,29 @@ package io.dume.dume.student.grabingPackage;
 
 import android.location.Location;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.view.ViewCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
-import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-
 import android.view.ViewTreeObserver;
 import android.widget.TextView;
 
-import carbon.beta.AppBarLayout;
-import carbon.widget.LinearLayout;
 import io.dume.dume.R;
 import io.dume.dume.custom_view.HorizontalLoadView;
 import io.dume.dume.student.pojo.CusStuAppComMapActivity;
-import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
 import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
 
 public class GrabingPackageActivity extends CusStuAppComMapActivity implements GrabingPackageContract.View,
@@ -46,6 +39,8 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
     private carbon.widget.LinearLayout llBottomSheet;
     private CoordinatorLayout coordinatorLayout;
     private AppBarLayout myAppBarLayout;
+    private TabLayout tabLayout;
+    private Toolbar toolbar;
 
 
     @Override
@@ -56,31 +51,43 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
         mPresenter = new GrabingPackagePresenter(this, new GrabingPackageModel());
         mPresenter.grabingPackagePageEnqueue();
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-        // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
-        mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        mViewPager.setAdapter(mSectionsPagerAdapter);
 
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
 
+    }
+
+    @Override
+    public void findView() {
         loadView = findViewById(R.id.loadView);
         llBottomSheet = findViewById(R.id.packageBottomSheet);
         coordinatorLayout = (CoordinatorLayout) findViewById(R.id.my_main_container);
         myAppBarLayout = findViewById(R.id.my_appbarLayout);
+        tabLayout = (TabLayout) findViewById(R.id.tabs);
+        mViewPager = (ViewPager) findViewById(R.id.container);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
 
+
+    }
+
+    @Override
+    public void initGrabingPackagePage() {
+        //setting the support action bar
+        setSupportActionBar(toolbar);
+        //status bar and action bar transparent
+        settingStatusBarTransparent();
+        setDarkStatusBarIcon();
+        myAppBarLayout.bringToFront();
+        myAppBarLayout.setBackgroundColor(getResources().getColor(android.R.color.transparent));
 
         if (!loadView.isRunningAnimation()) {
             loadView.startLoading();
         }
-        bottomSheetBehavior = BottomSheetBehavior.from(llBottomSheet);
 
+        //bottom sheet height fix
         ViewTreeObserver vto = llBottomSheet.getViewTreeObserver();
         vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -99,7 +106,11 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
             }
 
         });
+    }
 
+    @Override
+    public void configGrabingPackagePage() {
+        bottomSheetBehavior = BottomSheetBehavior.from(llBottomSheet);
         bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
@@ -108,13 +119,10 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
 
             @Override
             public void onSlide(@NonNull View bottomSheet, float slideOffset) {
-                llBottomSheet.animate().scaleX(1 + (slideOffset * 0.058f)).setDuration(0).start();
+                //llBottomSheet.animate().scaleX(1 + (slideOffset * 0.058f)).setDuration(0).start();
             }
         });
-
-
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -134,20 +142,6 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void configGrabingPackagePage() {
-
-    }
-
-    @Override
-    public void initGrabingPackagePage() {
-
-    }
-
-    @Override
-    public void findView() {
-
-    }
 
     @Override
     public void onMyGpsLocationChanged(Location location) {
@@ -188,7 +182,6 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
             return rootView;
         }
     }
-
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 

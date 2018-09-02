@@ -12,34 +12,19 @@
         android:id="@+id/my_appbarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:stateListAnimator="@drawable/appbar_no_elevation"
+        android:elevation="0dp"
+        app:elevation="0dp"
         android:theme="@style/AppTheme.AppBarOverlay">
-
-        <android.support.design.widget.CollapsingToolbarLayout
-            android:id="@+id/toolbar_layout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fitsSystemWindows="true"
-            app:collapsedTitleGravity="start"
-            app:expandedTitleGravity="start"
-            app:layout_scrollFlags="snap"
-            app:scrimVisibleHeightTrigger="@dimen/scrimVisibleHeightTrigger"
-            app:title=""
-            app:toolbarId="@+id/toolbar">
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:layout_margin="0dp"
-                android:background="?attr/colorPrimary"
-                android:stateListAnimator="@drawable/appbar_no_elevation"
+                app:layout_scrollFlags="snap"
                 app:navigationIcon="@drawable/ic_arrow_back_black_24dp"
                 app:popupTheme="@style/AppTheme.PopupOverlay"
-                app:theme="@style/CustomActionBar"
-                tools:targetApi="lollipop" />
-
-        </android.support.design.widget.CollapsingToolbarLayout>
+                app:theme="@style/CustomActionBar" />
 
     </android.support.design.widget.AppBarLayout>
 

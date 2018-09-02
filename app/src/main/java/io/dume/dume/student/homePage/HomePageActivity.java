@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.graphics.Color;
 import android.graphics.drawable.Animatable;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.location.Location;
@@ -38,6 +39,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.MapStyleOptions;
+import com.jaeger.library.StatusBarUtil;
 
 import java.util.Objects;
 
@@ -142,6 +144,7 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
         mPresenter = new HomePagePresenter(this, new HomePageModel());
         mPresenter.homePageEnqueue();
         settingStatusBarTransparent();
+        setDarkStatusBarIcon();
         setIsNight();
         isNightConfig();
 
@@ -288,8 +291,13 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
         drawer.setScrimColor(getResources().getColor(R.color.black_overlay));
 
         // Toolbar :: Transparent
-        toolbar.bringToFront();
-        toolbar.getBackground().setAlpha(0);
+        /*toolbar.bringToFront();
+        toolbar.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+        toolbar.getBackground().setAlpha(0);*/
+        defaultAppBerLayout.bringToFront();
+        defaultAppBerLayout.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+        //getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(android.R.color.transparent)));
+
         // Status bar :: dark
         setDarkStatusBarIcon();
         //setting toggle behavior for navigation drawer
