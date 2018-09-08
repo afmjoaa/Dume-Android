@@ -41,6 +41,11 @@ ext {
     rxJava = '2.1.16'
 }
 
+repositories {
+    maven { url "https://raw.github.com/laenger/maven-releases/master/releases" }
+    maven { url "https://jitpack.io" }
+}
+
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     //noinspection GradleCompatible
@@ -94,6 +99,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-places:15.0.1'
 //    implementation 'com.google.android.gms:play-services-nearby:15.0.1'
 //    implementation 'com.google.android.gms:play-services:12.0.1'
+    //for seek bar modification added by joaa
     implementation 'com.github.warkiz.widget:indicatorseekbar:2.0.9'
     implementation 'tk.zielony:carbon:0.15.0.1'
 
@@ -104,5 +110,20 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.7.1'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
 
+    //for status bar modification transparent translucent blah blah added by joaa
     implementation 'com.jaeger.statusbarutil:library:1.5.1'
+    //for image corner modification added by joaa
+    implementation 'com.joooonho:selectableroundedimageview:1.0.1'
+    //for viewpager inside bottom sheet
+    implementation "biz.laenger.android:vpbs:0.0.5"
+    //library for weekday selection toggle bar
+    dependencies {
+        implementation 'com.github.TouchBoarder:weekdays-buttons-bar:v1.0.2'
+    }
+    //glowing loader for search loading activity
+    implementation 'com.github.varunest:TheGlowingLoader:1.0.5'
+    //circular progress bar for ratings
+    implementation 'com.jackandphantom.android:circularprogressbar:1.2.0'
+    //horizontal progress bar for rating
+    implementation 'com.github.hadiidbouk:ChartProgressBar-Android:2.0.6'
 }

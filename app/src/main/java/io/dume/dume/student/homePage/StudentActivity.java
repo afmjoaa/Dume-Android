@@ -11,6 +11,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import io.dume.dume.R;
 import io.dume.dume.auth.auth.AuthActivity;
 import io.dume.dume.student.grabingPackage.GrabingPackageActivity;
+import io.dume.dume.student.searchLoading.SearchLoadingActivity;
+import io.dume.dume.student.searchResult.SearchResultActivity;
 
 public class StudentActivity extends AppCompatActivity implements StudentContract.View {
     StudentContract.Presenter presenter;
@@ -33,7 +35,7 @@ public class StudentActivity extends AppCompatActivity implements StudentContrac
 
     @Override
     public void goToMapView() {
-        startActivity(new Intent(this, GrabingPackageActivity.class));
+        startActivity(new Intent(this, SearchResultActivity.class));
     }
 
     @Override

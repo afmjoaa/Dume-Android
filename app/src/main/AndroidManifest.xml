@@ -159,10 +159,16 @@
             android:theme="@style/AppTheme" />
         <activity
             android:name=".student.searchResult.SearchResultActivity"
-            android:label="@string/title_activity_search_result" />
+            android:label=""
+            android:theme="@style/AppTheme.NoActionBar.transparent"/>
+
+
         <activity
             android:name=".student.searchLoading.SearchLoadingActivity"
-            android:label="@string/title_activity_search_loading" />
+            android:label=""
+            android:theme="@style/AppTheme.NoActionBar.transparent"/>
+
+
         <activity
             android:name=".student.recordsPage.RecordsPageActivity"
             android:label="@string/title_activity_records_page"

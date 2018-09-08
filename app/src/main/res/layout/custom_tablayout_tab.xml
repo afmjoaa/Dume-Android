@@ -26,7 +26,6 @@
         android:shadowColor="@android:color/black"
         android:textColor="@color/tab_colorstate_list"
         android:textSize="15sp"
-
         tools:text="Home" />
 
 </LinearLayout>

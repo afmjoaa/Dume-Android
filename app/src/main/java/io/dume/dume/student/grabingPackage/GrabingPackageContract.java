@@ -9,6 +9,7 @@ public interface GrabingPackageContract {
 
         void findView();
 
+        void executeSearchActivity();
     }
 
     interface Presenter {

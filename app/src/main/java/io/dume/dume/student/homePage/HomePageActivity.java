@@ -614,7 +614,6 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
         home.setChecked(true);
     }
 
-
     public void isNightConfig() {
         if (ISNIGHT) {
             Drawable navDrawable = ResourcesCompat.getDrawable(getResources(), R.drawable.drawer_menu, null);

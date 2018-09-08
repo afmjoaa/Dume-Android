@@ -333,4 +333,11 @@
         <item>Mentor</item>
         <item>Boot Camp</item>
     </string-array>
+
+    <string-array name="GrabingPackageTabtext">
+        <item>Days/Week</item>
+        <item>Preferred Days</item>
+        <item>Start Time</item>
+    </string-array>
+
 </resources>

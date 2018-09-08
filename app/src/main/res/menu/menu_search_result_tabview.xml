@@ -1,10 +1,32 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="io.dume.dume.student.searchResultTabview.SearchResultTabviewActivity">
+    tools:context="io.dume.dume.student.searchResultTabview.SearchResultActivity">
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/action_more"
+        android:icon="@drawable/ic_more_vert_black_24dp"
         android:orderInCategory="100"
-        android:title="@string/action_settings"
-        app:showAsAction="never" />
+        android:title=""
+        app:showAsAction="always">
+        <menu>
+            <item
+                android:id="@+id/action_search_set"
+                android:icon="@drawable/ic_search_settings"
+                android:title="Search Set"
+                android:orderInCategory="1"
+                app:showAsAction="ifRoom" />
+            <item
+                android:id="@+id/action_help"
+                android:icon="@drawable/ic_help_outline_black_24dp"
+                android:title="Help"
+                android:orderInCategory="2"
+                app:showAsAction="ifRoom" />
+        </menu>
+    </item>
+    <item
+        android:id="@+id/action_list_view"
+        android:icon="@drawable/ic_scatter_view"
+        android:orderInCategory="3"
+        android:title="Scatter view"
+        app:showAsAction="always" />
 </menu>

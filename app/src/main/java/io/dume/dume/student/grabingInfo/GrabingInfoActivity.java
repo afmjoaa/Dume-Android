@@ -37,6 +37,7 @@ import java.util.Objects;
 
 import io.dume.dume.R;
 import io.dume.dume.student.grabingLocation.GrabingLocationActivity;
+import io.dume.dume.student.grabingPackage.GrabingPackageActivity;
 import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
 
 public class GrabingInfoActivity extends CustomStuAppCompatActivity implements GrabingInfoContract.View {
@@ -118,7 +119,7 @@ public class GrabingInfoActivity extends CustomStuAppCompatActivity implements G
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
                 if (tabLayout.getSelectedTabPosition() == 5) {
-                    gotoGrabingLocation();
+                    gotoGrabingPackage();
                 }
 
             }
@@ -222,9 +223,14 @@ public class GrabingInfoActivity extends CustomStuAppCompatActivity implements G
         toolbar.getBackground().setAlpha(0);
     }
 
+    //unused function here
     private void gotoGrabingLocation() {
         Log.d(TAG, "gotoGrabingLocation: fucking function called");
         startActivity(new Intent(this, GrabingLocationActivity.class));
+    }
+
+    private void gotoGrabingPackage() {
+        startActivity(new Intent(this, GrabingPackageActivity.class));
     }
 
 

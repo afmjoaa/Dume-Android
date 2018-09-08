@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.view.View;
 
+import io.dume.dume.R;
+
 public class SearchResultPresenter implements SearchResultContract.Presenter {
 
     private SearchResultContract.View mView;
@@ -20,11 +22,18 @@ public class SearchResultPresenter implements SearchResultContract.Presenter {
 
     @Override
     public void searchResultEnqueue() {
-
+        mView.findView();
+        mView.initSearchResult();
+        mView.configSearchResult();
     }
 
     @Override
     public void onSearchResultIntracted(View view) {
+        switch (view.getId()) {
+            /*case R.id.package_search_btn:
+                mView.executeSearchActivity();
+                break;*/
 
+        }
     }
 }

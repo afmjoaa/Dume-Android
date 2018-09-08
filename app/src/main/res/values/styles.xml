@@ -98,14 +98,14 @@
     <style name="MyTextApprncExp.darkBg" parent="MyTextApprncExp">
         <item name="android:textColor">#ffffff</item>
         <item name="android:textSize">25sp</item>
-
+        <item name="android:fontFamily" tools:targetApi="jelly_bean">@font/cairo_regular</item>
     </style>
 
     <style name="MyTextApprncCol.darkBg" parent="MyTextApprncCol">
         <item name="android:textColor">#ffffff</item>
         <item name="android:textStyle">normal</item>
         <item name="android:textSize">20sp</item>
-
+        <item name="android:fontFamily" tools:targetApi="jelly_bean">@font/cairo_regular</item>
     </style>
 
     <style name="MyTextApprncCol.grabLocaiton" parent="MyTextApprncCol">
@@ -215,6 +215,34 @@
     <style name="mySpinnerItemStyle" parent="@android:style/Widget.Holo.DropDownItem.Spinner">
         <item name="android:textColor">@color/colorBlack</item>
         <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="myButtonStyle" parent="Base.Widget.AppCompat.Button">
+        <item name="android:background">@drawable/my_btn_background</item>
+    </style>
+
+   <!-- <style name="Base.Widget.AppCompat.Button" parent="android:Widget">
+        <item name="android:background">@drawable/abc_btn_default_mtrl_shape</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceButton</item>
+        <item name="android:minHeight">48dip</item>
+        <item name="android:minWidth">88dip</item>
+        <item name="android:focusable">true</item>
+        <item name="android:clickable">true</item>
+        <item name="android:gravity">center_vertical|center_horizontal</item>
+    </style>-->
+
+    <!--testing testing -->
+    <style name="ScrollItem">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">60dp</item>
+    </style>
+
+    <style name="ScrollItem.A">
+        <item name="android:background">?attr/colorControlHighlight</item>
+    </style>
+
+    <style name="ScrollItem.B">
+        <item name="android:background">?attr/colorAccent</item>
     </style>
 
 </resources>

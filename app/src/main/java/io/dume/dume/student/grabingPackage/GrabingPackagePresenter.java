@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.view.View;
 
+import io.dume.dume.R;
+
 public class GrabingPackagePresenter implements GrabingPackageContract.Presenter {
 
     private GrabingPackageContract.View mView;
@@ -27,6 +29,11 @@ public class GrabingPackagePresenter implements GrabingPackageContract.Presenter
 
     @Override
     public void onGrabingPackageViewIntracted(View view) {
+        switch (view.getId()) {
+            case R.id.package_search_btn:
+                mView.executeSearchActivity();
+                break;
 
+        }
     }
 }

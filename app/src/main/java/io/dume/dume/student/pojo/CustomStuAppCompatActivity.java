@@ -50,6 +50,7 @@ public class CustomStuAppCompatActivity extends AppCompatActivity implements MyC
 
     protected static Boolean ISNIGHT;
     protected static int HOUR;
+    private CoordinatorLayout v;
 
     public void setActivityContext(Context context, int i) {
         this.context = context;
@@ -74,7 +75,7 @@ public class CustomStuAppCompatActivity extends AppCompatActivity implements MyC
         super.onStart();
         int status = NetworkUtil.getConnectivityStatusString(context);
         if (status == NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
-            if(snackbar != null){
+            if (snackbar != null) {
                 snackbar.show();
             }
         } else {
@@ -122,7 +123,7 @@ public class CustomStuAppCompatActivity extends AppCompatActivity implements MyC
     }
 
     public void createNetworkCheckSnackbar() {
-        View v = rootView.findViewById(R.id.parent_coor_layout);
+        v = rootView.findViewById(R.id.parent_coor_layout);
         snackbar = Snackbar.make(v, "Replace with your own action", Snackbar.LENGTH_INDEFINITE);
         Snackbar.SnackbarLayout layout = (Snackbar.SnackbarLayout) snackbar.getView();
 
@@ -162,7 +163,7 @@ public class CustomStuAppCompatActivity extends AppCompatActivity implements MyC
 
                 int status = NetworkUtil.getConnectivityStatusString(context);
                 if (status == NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
-                    if(snackbar != null){
+                    if (snackbar != null) {
                         snackbar.show();
                     }
                     //setTimeout(() -> imageView.setVisibility(View.INVISIBLE), 1250);
@@ -270,7 +271,7 @@ public class CustomStuAppCompatActivity extends AppCompatActivity implements MyC
 
     @Override
     public void pause() {
-        if(snackbar != null){
+        if (snackbar != null) {
             snackbar.show();
         }
     }
@@ -291,5 +292,5 @@ public class CustomStuAppCompatActivity extends AppCompatActivity implements MyC
         HOUR = getCurrentHour();
         ISNIGHT = HOUR < 5 || HOUR > 19;
     }
-   //testing starts here
+    //testing starts here
 }

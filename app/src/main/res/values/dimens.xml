@@ -2,6 +2,7 @@
     <dimen name="text_margin">16dp</dimen>
 
     <dimen name="appbarLayoutHeight">110dp</dimen>
+    <dimen name="appbarLayoutHeightLow">100dp</dimen>
     <dimen name="toolbarLayoutHeight">55dp</dimen>
     <dimen name="expTittleMarginBottom">0dp</dimen>
     <dimen name="expTittleMarginTop">50dp</dimen>
