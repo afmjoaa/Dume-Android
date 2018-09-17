@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".student.recordsCurrent.RecordsCurrentActivity"
-    tools:showIn="@layout/activity_records_current">
+    tools:showIn="@layout/stu13_activity_records_current">
 
     <TextView
         android:layout_width="wrap_content"

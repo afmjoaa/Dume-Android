@@ -20,21 +20,26 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import io.dume.dume.R;
+import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
+import io.dume.dume.util.DumeUtils;
 
-public class RecordsPageActivity extends AppCompatActivity implements RecordsPageContract.View {
+public class RecordsPageActivity extends CustomStuAppCompatActivity implements RecordsPageContract.View {
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
     private RecordsPageContract.Presenter mPresenter;
+    private static final int fromFlag = 25;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.stu8_activity_records_page);
+        setActivityContext(this, fromFlag);
         mPresenter = new RecordsPagePresenter(this, new RecordsPageModel());
         mPresenter.recordsPageEnqueue();
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        DumeUtils.configureAppbar(this, "Records");
+
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -75,7 +80,7 @@ public class RecordsPageActivity extends AppCompatActivity implements RecordsPag
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_sync_now) {
             return true;
         }
 

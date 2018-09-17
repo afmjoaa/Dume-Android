@@ -30,6 +30,9 @@ public class SearchLoadingPresenter implements SearchLoadingContract.Presenter {
     @Override
     public void onSearchLoadingIntracted(View view) {
         switch (view.getId()) {
+            case R.id.loading_cancel_btn:
+                mView.gotoSearchResult();
+                break;
             /*case R.id.package_search_btn:
                 mView.executeSearchActivity();
                 break;*/

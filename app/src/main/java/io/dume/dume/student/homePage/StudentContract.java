@@ -11,6 +11,11 @@ public interface StudentContract {
 
         void configView();
 
+        void goTORecordsActivity();
+
+        void goTORecordsActivity2();
+
+        void goTORecordsActivity3();
     }
 
     interface Presenter {

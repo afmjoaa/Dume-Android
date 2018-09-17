@@ -1,0 +1,25 @@
+<vector
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:name="vector"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <group android:name="group">
+        <path
+            android:name="path"
+            android:pathData="M 19 4 L 18 4 L 18 2 L 16 2 L 16 4 L 8 4 L 8 2 L 6 2 L 6 4 L 5 4 C 4.65 4 4.305 4.093 4.002 4.269 C 3.699 4.444 3.448 4.697 3.274 5.001 C 3.099 5.305 3.008 5.65 3.01 6 L 3 20 C 3 20.53 3.211 21.039 3.586 21.414 C 3.961 21.789 4.47 22 5 22 L 19 22 C 19.53 21.998 20.038 21.787 20.412 21.412 C 20.787 21.038 20.998 20.53 21 20 L 21 6 C 20.998 5.47 20.787 4.962 20.412 4.588 C 20.038 4.213 19.53 4.002 19 4 Z M 19 20 L 5 20 L 5 9 L 19 9 Z"
+            android:fillColor="@color/textColorPrimary"
+            android:strokeWidth="1"/>
+        <path
+            android:name="path_1"
+            android:pathData="M 12.24 16.406 C 11.975 16.406 11.72 16.494 11.533 16.65 C 11.345 16.806 11.24 17.018 11.24 17.239 C 11.24 17.46 11.345 17.672 11.533 17.828 C 11.72 17.984 11.975 18.072 12.24 18.072 C 12.505 18.072 12.76 17.984 12.947 17.828 C 13.135 17.672 13.24 17.46 13.24 17.239 C 13.24 17.018 13.135 16.806 12.947 16.65 C 12.76 16.494 12.505 16.406 12.24 16.406 Z"
+            android:fillColor="@color/textColorPrimary"
+            android:strokeWidth="1"/>
+        <path
+            android:name="path_2"
+            android:pathData="M 11.24 10.573 L 13.24 10.573 L 13.24 15.573 L 11.24 15.573 Z"
+            android:fillColor="@color/textColorPrimary"
+            android:strokeWidth="1"/>
+    </group>
+</vector>

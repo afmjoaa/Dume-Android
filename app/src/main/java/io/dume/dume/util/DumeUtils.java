@@ -7,6 +7,7 @@ import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -29,6 +30,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import io.dume.dume.R;
+
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class DumeUtils {
     public static int GALLARY_IMAGE = 1;
@@ -81,6 +84,24 @@ public class DumeUtils {
         icon.setDrawableByLayerId(id, badge);
     }
 
+    public static void setTextOverDrawable(Context context, LayerDrawable icon, int id, int textColor, String data) {
+
+        TextDrawable badge;
+
+        // Reuse drawable if possible
+        Drawable reuse = icon.findDrawableByLayerId(id);
+        if (reuse != null && reuse instanceof TextDrawable) {
+            badge = (TextDrawable) reuse;
+        } else {
+            badge = new TextDrawable(context);
+        }
+        badge.setCircleTextColor(textColor);
+
+        badge.setString(data);
+        icon.mutate();
+        icon.setDrawableByLayerId(id, badge);
+    }
+
     public static void setBadgeChar(Context context, LayerDrawable icon, int color, int textColor, char character, float x, float y) {
 
         BadgeDrawable badge;
@@ -113,6 +134,9 @@ public class DumeUtils {
         collapsingToolbarLayout.setCollapsedTitleTypeface(Typeface.createFromAsset(activity.getAssets(), "fonts/Cairo-Light.ttf"));
         collapsingToolbarLayout.setExpandedTitleTypeface(Typeface.createFromAsset(activity.getAssets(), "fonts/Cairo-Light.ttf"));
         collapsingToolbarLayout.setTitle(title);
+
+        Drawable drawable = ContextCompat.getDrawable(getApplicationContext(),R.drawable.ic_more_vert_black_24dp);
+        toolbar.setOverflowIcon(drawable);
     }
 
 

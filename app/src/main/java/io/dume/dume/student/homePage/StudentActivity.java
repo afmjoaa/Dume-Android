@@ -11,6 +11,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import io.dume.dume.R;
 import io.dume.dume.auth.auth.AuthActivity;
 import io.dume.dume.student.grabingPackage.GrabingPackageActivity;
+import io.dume.dume.student.recordsAccepted.RecordsAcceptedActivity;
+import io.dume.dume.student.recordsCurrent.RecordsCurrentActivity;
+import io.dume.dume.student.recordsPending.RecordsPendingActivity;
+import io.dume.dume.student.recordsRejected.RecordsRejectedActivity;
 import io.dume.dume.student.searchLoading.SearchLoadingActivity;
 import io.dume.dume.student.searchResult.SearchResultActivity;
 
@@ -46,6 +50,23 @@ public class StudentActivity extends AppCompatActivity implements StudentContrac
 
     @Override
     public void configView() {
+
+    }
+
+    @Override
+    public void goTORecordsActivity() {
+        startActivity(new Intent(this, RecordsPendingActivity.class));
+    }
+
+    @Override
+    public void goTORecordsActivity2() {
+        startActivity(new Intent(this, RecordsCurrentActivity.class));
+
+    }
+
+    @Override
+    public void goTORecordsActivity3() {
+        startActivity(new Intent(this, RecordsRejectedActivity.class));
 
     }
 

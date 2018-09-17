@@ -48,6 +48,17 @@ public class StudentPresenter implements StudentContract.Presenter {
                     mView.goToMapView();
                 }
                 break;
+
+            case R.id.testingRecords_btn:
+                mView.goTORecordsActivity();
+                break;
+
+            case R.id.testingRecords_btn_2:
+                mView.goTORecordsActivity2();
+                break;
+            case R.id.testingRecords_btn_3:
+                mView.goTORecordsActivity3();
+                break;
         }
     }
 

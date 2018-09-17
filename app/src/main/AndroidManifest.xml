@@ -156,7 +156,7 @@
         <activity
             android:name=".student.searchResultTabview.SearchResultTabviewActivity"
             android:label="@string/title_activity_search_result_tabview"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme.NoActionBar.transparent.default" />
         <activity
             android:name=".student.searchResult.SearchResultActivity"
             android:label=""
@@ -172,27 +172,27 @@
         <activity
             android:name=".student.recordsPage.RecordsPageActivity"
             android:label="@string/title_activity_records_page"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme.NoActionBar.transparent.default" />
         <activity
             android:name=".student.recordsPending.RecordsPendingActivity"
             android:label="@string/title_activity_records_pendding"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme.NoActionBar.transparent.pending" />
         <activity
             android:name=".student.recordsRejected.RecordsRejectedActivity"
             android:label="@string/title_activity_records_rejected"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme.NoActionBar.transparent.rejected" />
         <activity
             android:name=".student.recordsCurrent.RecordsCurrentActivity"
             android:label="@string/title_activity_records_current"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme.NoActionBar.transparent.current" />
         <activity
             android:name=".student.recordsCompleted.RecordsCompletedActivity"
             android:label="@string/title_activity_records_completed"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme.NoActionBar.transparent.completed" />
         <activity
             android:name=".student.recordsAccepted.RecordsAcceptedActivity"
             android:label="@string/title_activity_records_accepted"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme.NoActionBar.transparent.accepted" />
     </application>
 
 </manifest>

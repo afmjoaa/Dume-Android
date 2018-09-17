@@ -18,6 +18,15 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="@+id/constraintLayout"
         tools:layout_constraintLeft_creator="1"
+        android:textColor="@color/textColorPrimary"
         tools:layout_constraintTop_creator="1" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@+id/section_label"
+        android:layout_margin="@dimen/text_margin"
+        android:textColor="@color/textColorPrimary"
+        android:text="@string/large_text" />
 
 </android.support.constraint.ConstraintLayout>

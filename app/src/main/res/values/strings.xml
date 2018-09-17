@@ -327,6 +327,9 @@
     <string name="title_activity_records_current">"Current records "</string>
     <string name="title_activity_records_completed">"Completed records "</string>
     <string name="title_activity_records_accepted">Accepted requests</string>
+    <string name="review_text">Hey Aaron, thanks for the call yesterday. So pleased that you found the topics we covered useful, and looking forward to seeing what you create. Definitely check out Photoshop too, some great tools for editing photos
+     fuck fuck fuck</string>
+    <string name="sync_now">Sync Now</string>
 
     <string-array name="AccountType">
         <item>Student</item>
@@ -339,5 +342,38 @@
         <item>Preferred Days</item>
         <item>Start Time</item>
     </string-array>
+
+    <string-array name="QualificationInstitutionText">
+        <item>Institution</item>
+        <item>RUMC</item>
+        <item>NDC</item>
+        <item>BUET</item>
+        <item>BUET</item>
+    </string-array>
+
+    <string-array name="QualificationExamText">
+        <item>Exam</item>
+        <item>O Lvl</item>
+        <item>A Lvl</item>
+        <item>Grad</item>
+        <item>Post_Grad</item>
+    </string-array>
+
+    <string-array name="QualificationSessionText">
+        <item>Session</item>
+        <item>2008</item>
+        <item>2010</item>
+        <item>2014</item>
+        <item>2016</item>
+    </string-array>
+
+    <string-array name="QualificationResultText">
+        <item>Result</item>
+        <item>GPA - 5.00</item>
+        <item>GPA - 5.00</item>
+        <item>CGPA - 4.00</item>
+        <item>CGPA - 4.00</item>
+    </string-array>
+
 
 </resources>

@@ -1,5 +1,6 @@
 package io.dume.dume.student.searchResultTabview;
 
+import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -20,17 +21,22 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import io.dume.dume.R;
+import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
+import io.dume.dume.student.searchResult.SearchResultActivity;
 
-public class SearchResultTabviewActivity extends AppCompatActivity implements SearchResultTabviewContract.View {
+public class SearchResultTabviewActivity extends CustomStuAppCompatActivity implements SearchResultTabviewContract.View {
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
     private SearchResultTabviewContract.Presenter mPresenter;
+    private static final int fromFlag = 7;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.stu5_activity_search_result_tabview);
+        setActivityContext(this, fromFlag);
         mPresenter = new SearchResultTabviewPresenter(this, new SearchResultTabviewModel());
         mPresenter.searchResultTabviewEnqueue();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -69,16 +75,20 @@ public class SearchResultTabviewActivity extends AppCompatActivity implements Se
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (id) {
+            case R.id.action_search_set:
+                //Toast.makeText(MainActivity.this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.action_help:
+                //Toast.makeText(MainActivity.this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.action_scatter_view:
+                //Toast.makeText(MainActivity.this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(this, SearchResultActivity.class));
+                break;
         }
-
         return super.onOptionsItemSelected(item);
     }
 

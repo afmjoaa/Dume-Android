@@ -92,6 +92,7 @@ public class HomePagePresenter implements HomePageContract.Presenter {
                 break;
             case R.id.al_records:
                 mView.updateRecordsBadge(++mRecPendingCount, ++mRecAcceptedCount, ++mRecCurrentCount);
+                mView.gotoRecordsPage();
                 break;
             case R.id.al_messages:
                 mView.updateChatBadge(++mChatCount);

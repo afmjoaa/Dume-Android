@@ -20,6 +20,9 @@ public class RecordsPendingPresenter implements RecordsPendingContract.Presenter
 
     @Override
     public void recordsPendingEnqueue() {
+        mView.findView();
+        mView.initRecordsPending();
+        mView.configRecordsPending();
 
     }
 

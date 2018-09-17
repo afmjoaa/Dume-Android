@@ -9,6 +9,7 @@ public interface SearchLoadingContract {
 
         void findView();
 
+        void gotoSearchResult();
     }
 
     interface Presenter {

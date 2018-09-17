@@ -1,5 +1,6 @@
 package io.dume.dume.student.searchLoading;
 
+import android.content.Intent;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.widget.Button;
 import android.widget.FrameLayout;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -24,6 +26,7 @@ import com.varunest.loader.TheGlowingLoader;
 import io.dume.dume.R;
 import io.dume.dume.student.pojo.CusStuAppComMapActivity;
 import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
+import io.dume.dume.student.searchResult.SearchResultActivity;
 
 public class SearchLoadingActivity extends CusStuAppComMapActivity implements OnMapReadyCallback,
         SearchLoadingContract.View, MyGpsLocationChangeListener {
@@ -41,6 +44,7 @@ public class SearchLoadingActivity extends CusStuAppComMapActivity implements On
     private TheGlowingLoader loaderView;
     private Toolbar defaultToolbar;
     private AppBarLayout defaultAppbarLayout;
+    private Button loadingCancelBtn;
 
 
     @Override
@@ -69,6 +73,7 @@ public class SearchLoadingActivity extends CusStuAppComMapActivity implements On
         defaultToolbar = findViewById(R.id.toolbar);
         secondaryToolbar = findViewById(R.id.secondary_toolbar);
         viewMuskOne = findViewById(R.id.secondary_view_musk);
+        loadingCancelBtn = findViewById(R.id.loading_cancel_btn);
     }
 
     @Override
@@ -156,5 +161,14 @@ public class SearchLoadingActivity extends CusStuAppComMapActivity implements On
     @Override
     public void onMyGpsLocationChanged(Location location) {
 
+    }
+
+    @Override
+    public void gotoSearchResult() {
+        startActivity(new Intent(this, SearchResultActivity.class));
+    }
+
+    public void onSearchLoadingViewCLicked(View view) {
+        mPresenter.onSearchLoadingIntracted(view);
     }
 }

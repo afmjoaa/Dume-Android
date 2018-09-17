@@ -36,6 +36,8 @@ public interface HomePageContract {
         void gotoGrabingLocationPage();
 
         void gotoHeatMapActivity();
+
+        void gotoRecordsPage();
     }
 
     interface Presenter {

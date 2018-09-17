@@ -53,6 +53,7 @@ import io.dume.dume.student.heatMap.HeatMapActivity;
 import io.dume.dume.student.pojo.CusStuAppComMapActivity;
 import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
 import io.dume.dume.student.profilePage.ProfilePageActivity;
+import io.dume.dume.student.recordsPage.RecordsPageActivity;
 import io.dume.dume.util.DumeUtils;
 
 public class HomePageActivity extends CusStuAppComMapActivity implements HomePageContract.View,
@@ -566,6 +567,11 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
     @Override
     public void gotoHeatMapActivity() {
         startActivity(new Intent(this, HeatMapActivity.class));
+    }
+
+    @Override
+    public void gotoRecordsPage() {
+        startActivity(new Intent(this, RecordsPageActivity.class));
     }
 
 
