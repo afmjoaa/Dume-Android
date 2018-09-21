@@ -3,8 +3,11 @@ package io.dume.dume.teacher.mentor_settings;
 import android.view.View;
 
 import java.util.ArrayList;
+import java.util.Map;
 
-import io.dume.dume.teacher.pojo.User;
+import io.dume.dume.inter_face.UserQueryListener;
+import io.dume.dume.teacher.pojo.Education;
+import io.dume.dume.teacher.pojo.GlobalListener;
 
 public interface AccountSettingsContract {
     interface MentorView {
@@ -35,6 +38,10 @@ public interface AccountSettingsContract {
         void setUpBadge();
 
         void setUpAcademic();
+
+        void updateUserInfo(Map<String, Object> data);
+
+        void updatAcademicList(ArrayList<Education> arrayList);
     }
 
     interface Presenter {
@@ -48,7 +55,9 @@ public interface AccountSettingsContract {
     interface MentorModel {
         int getData();
 
-        ArrayList<User> getUser(DataListener listener);
+        void queryUserData(UserQueryListener listener);
+
+        void queryAcademicData(GlobalListener.AcademicQuery listener);
 
         void getDataArray(DataListener listener);
 
