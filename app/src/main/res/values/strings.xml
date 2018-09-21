@@ -330,6 +330,8 @@
     <string name="review_text">Hey Aaron, thanks for the call yesterday. So pleased that you found the topics we covered useful, and looking forward to seeing what you create. Definitely check out Photoshop too, some great tools for editing photos
      fuck fuck fuck</string>
     <string name="sync_now">Sync Now</string>
+    <string name="math_amp_physics"><![CDATA[Math & Physics]]></string>
+    <string name="up_arrow">up_arrow</string>
 
     <string-array name="AccountType">
         <item>Student</item>
@@ -341,6 +343,21 @@
         <item>Days/Week</item>
         <item>Preferred Days</item>
         <item>Start Time</item>
+    </string-array>
+
+    <string-array name="RecordsPageTabtext">
+        <item>Pending</item>
+        <item>Accepted</item>
+        <item>Current</item>
+        <item>Completed</item>
+        <item>Rejected</item>
+    </string-array>
+
+    <string-array name="SearchResultTabViewTabtext">
+        <item>Salary</item>
+        <item>Performance</item>
+        <item>Expertise</item>
+        <item>A-Ratio</item>
     </string-array>
 
     <string-array name="QualificationInstitutionText">

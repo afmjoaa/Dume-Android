@@ -1,9 +1,13 @@
 package io.dume.dume.student.recordsPage;
 
+import android.os.Handler;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 
 import android.support.v4.app.Fragment;
@@ -17,7 +21,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 import io.dume.dume.R;
 import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
@@ -29,6 +39,16 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
     private ViewPager mViewPager;
     private RecordsPageContract.Presenter mPresenter;
     private static final int fromFlag = 25;
+    private TabLayout tabLayout;
+
+    private int[] navIcons = {
+            R.drawable.ic_task_pending,
+            R.drawable.ic_task_accepted,
+            R.drawable.ic_task_current,
+            R.drawable.ic_task_completed,
+            R.drawable.ic_task_rejected
+    };
+    private SwipeRefreshLayout swipeRefreshLayout;
 
 
     @Override
@@ -48,19 +68,45 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout = (TabLayout) findViewById(R.id.tabs);
+
+        // loop through all navigation tabs
+        for (int i = 0; i < tabLayout.getTabCount(); i++) {
+            // inflate the Parent LinearLayout Container for the tab
+            // from the layout nav_tab.xml file that we created 'R.layout.nav_tab
+            LinearLayout tab = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.custom_tablayout_tab, null);
+            String navLabels[] = getResources().getStringArray(R.array.RecordsPageTabtext);
+
+            // get child TextView and ImageView from this layout for the icon and label
+            TextView tab_label = (TextView) tab.findViewById(R.id.nav_label);
+            ImageView tab_icon = (ImageView) tab.findViewById(R.id.nav_icon);
+            tab_label.setText(navLabels[i]);
+            tab_icon.setImageResource(navIcons[i]);
+
+            // finally publish this custom view to navigation tab
+            Objects.requireNonNull(tabLayout.getTabAt(i)).setCustomView(tab);
+        }
+        // finishes here ................
 
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+
+    }
+
+    @Override
+    public void findView() {
+
+
+    }
+
+    @Override
+    public void initRecordsPage() {
+
+    }
+
+    @Override
+    public void configRecordsPage() {
 
     }
 
@@ -87,30 +133,13 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void configRecordsPage() {
 
-    }
-
-    @Override
-    public void initRecordsPage() {
-
-    }
-
-    @Override
-    public void findView() {
-
-    }
-
-    /**
-     * A placeholder fragment containing a simple view.
-     */
     public static class PlaceholderFragment extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
         private static final String ARG_SECTION_NUMBER = "section_number";
+        private RecyclerView recordRecyclerView;
+        private RecordsPageActivity myThisActivity;
+        private SwipeRefreshLayout swipeRefreshLayout;
+
 
         public PlaceholderFragment() {
         }
@@ -128,19 +157,37 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
         }
 
         @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+            myThisActivity = (RecordsPageActivity) getActivity();
             View rootView = inflater.inflate(R.layout.stu8_fragment_records_page, container, false);
-            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
+//            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
+//            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
+            recordRecyclerView = rootView.findViewById(R.id.records_page_recycle_view);
+            swipeRefreshLayout = rootView.findViewById(R.id.swipeToRefreshRecords);
+
+            swipeRefreshLayout.setColorSchemeResources(android.R.color.holo_orange_light, android.R.color.holo_green_light,
+                    android.R.color.holo_red_light, android.R.color.holo_blue_light);
+            swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            swipeRefreshLayout.setRefreshing(false);
+                        }
+                    }, 5000);
+                }
+            });
+
+            //setting the recycler view
+            List<RecordsRecyData> recordData = new ArrayList<>();
+            RecordsRecyAdapter recordsRecyAda = new RecordsRecyAdapter(myThisActivity, recordData);
+            recordRecyclerView.setAdapter(recordsRecyAda);
+            recordRecyclerView.setLayoutManager(new LinearLayoutManager(myThisActivity));
             return rootView;
         }
     }
 
-    /**
-     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
-     * one of the sections/tabs/pages.
-     */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
         public SectionsPagerAdapter(FragmentManager fm) {
@@ -157,7 +204,7 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return 3;
+            return 5;
         }
     }
 }

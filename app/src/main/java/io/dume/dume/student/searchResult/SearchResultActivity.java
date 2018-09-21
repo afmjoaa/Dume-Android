@@ -57,8 +57,10 @@ import carbon.widget.ImageView;
 import io.dume.dume.R;
 import io.dume.dume.student.pojo.CusStuAppComMapActivity;
 import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
+import io.dume.dume.student.recordsPending.RecordsPendingActivity;
 import io.dume.dume.student.searchResultTabview.SearchResultTabviewActivity;
 import io.dume.dume.util.DumeUtils;
+import io.dume.dume.util.OnSwipeTouchListener;
 import io.dume.dume.util.VisibleToggleClickListener;
 
 public class SearchResultActivity extends CusStuAppComMapActivity implements OnMapReadyCallback,
@@ -111,6 +113,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
     private LinearLayout basicInfo;
     private LinearLayout basicInfoInsider;
     private LinearLayout.LayoutParams basicInfoInsiderLayoutParams;
+    private OnSwipeTouchListener onSwipeTouchListener;
 
 
     @Override
@@ -138,7 +141,6 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-
             }
 
             @Override
@@ -550,6 +552,38 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
 
         });
 
+
+        //testing the swipe here
+        onSwipeTouchListener = new OnSwipeTouchListener(this) {
+            @Override
+            protected void onSwipeRight() {
+                Toast.makeText(SearchResultActivity.this, "Right Swipe", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            protected void onSwipeLeft() {
+                Toast.makeText(SearchResultActivity.this, "Left Swipe", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            protected void onSwipeTop() {
+            }
+
+            @Override
+            protected void onSwipeBottom() {
+            }
+        };
+
+        basicInfo.setOnTouchListener(onSwipeTouchListener);
+
+
+    }
+
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev){
+        onSwipeTouchListener.getGestureDetector().onTouchEvent(ev);
+        return super.dispatchTouchEvent(ev);
     }
 
     @Override

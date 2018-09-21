@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/hostRelativeLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <carbon.widget.ImageView
+        android:id="@+id/mentor_display_pic"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="12dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="12dp"
+        android:src="@drawable/demo_testing_image"
+        app:carbon_cornerRadius="6dp"
+        app:carbon_elevation="4dp" />
+
+
+    <LinearLayout
+        android:id="@+id/vertical_textview_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="26dp"
+        android:layout_marginStart="26dp"
+        android:layout_toEndOf="@id/mentor_display_pic"
+        android:layout_toRightOf="@id/mentor_display_pic"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/mentor_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginTop="3dp"
+            android:singleLine="true"
+            android:text="A.F.M. Mohimenul Joaa"
+            android:textAppearance="?android:attr/textAppearanceListItem"
+            app:fontFamily="@font/cairo_regular" />
+
+
+        <LinearLayout
+            android:id="@+id/msg_delivery_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:visibility="visible">
+
+            <ImageView
+                android:id="@+id/mentor_filter_icon"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginEnd="6dp"
+                android:layout_marginRight="6dp"
+                android:contentDescription="ic_delivery"
+                app:srcCompat="@drawable/ic_tic_salary" />
+
+            <TextView
+                android:id="@+id/mentor_filter_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:text=".. 10k BDT"
+                android:textAllCaps="false"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/textColorPrimary"
+                android:textSize="12sp"
+                app:fontFamily="@font/cairo_regular" />
+
+        </LinearLayout>
+
+        <me.zhanghai.android.materialratingbar.MaterialRatingBar
+            android:id="@+id/mentor_rating_bar"
+            style="@style/Widget.MaterialRatingBar.RatingBar.Indicator.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:rating="3.5"
+            android:stepSize="0.01"
+            android:visibility="gone"
+            app:mrb_fillBackgroundStars="true"
+            app:mrb_progressBackgroundTint="@color/star_rating_background"
+            app:mrb_progressTint="@color/star_rating_color" />
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/divider2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentBottom="true"
+        android:background="#41a7a7a7" />
+
+</RelativeLayout>

@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nested_host_linearlayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    tools:context=".student.recordsPending.RecordsPendingActivity$PlaceholderFragment"
+    tools:showIn="@layout/stu9_activity_records_pendding">
+
+
+    <RelativeLayout
+        android:id="@+id/recordsHostLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/left_vertical_host_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="10dp"
+            android:gravity="start"
+            android:orientation="vertical">
+
+            <carbon.widget.ImageView
+                android:id="@+id/student_display_pic"
+                app:carbon_cornerRadius="6dp"
+                app:carbon_elevation="4dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginBottom="1dp"
+                android:src="@drawable/demo_testing_image" />
+
+            <TextView
+                android:id="@+id/student_name"
+                app:fontFamily="@font/cairo_regular"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="dony"
+                android:textColor="@color/textColorPrimary"
+                android:textSize="16sp" />
+
+            <me.zhanghai.android.materialratingbar.MaterialRatingBar
+                android:id="@+id/student_rating_bar"
+                style="@style/Widget.MaterialRatingBar.RatingBar.Indicator.Small"
+                app:mrb_fillBackgroundStars="true"
+                app:mrb_progressBackgroundTint="@color/star_rating_background"
+                app:mrb_progressTint="@color/star_rating_color"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:rating="3.5"
+                android:stepSize="0.01" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/center_vertical_host_layout"
+            tools:ignore="RelativeOverlap"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="16dp"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/subject_in_demand"
+                app:fontFamily="@font/cairo_regular"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/math_amp_physics"
+                android:textAllCaps="false"
+                android:textColor="@color/textColorPrimary"
+                android:textSize="14sp" />
+
+            <ImageView
+                app:srcCompat="@drawable/ic_exchhange_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="Exchange" />
+
+            <TextView
+                android:id="@+id/salary_in_demand"
+                app:fontFamily="@font/cairo_regular"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="10k BDT"
+                android:textAllCaps="false"
+                android:textColor="@color/textColorPrimary"
+                android:textSize="14sp" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/right_vertical_host_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="10dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="10dp"
+            android:gravity="end"
+            android:orientation="vertical">
+
+            <carbon.widget.ImageView
+                android:id="@+id/mentor_display_pic"
+                app:carbon_cornerRadius="6dp"
+                app:carbon_elevation="4dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginBottom="1dp"
+                android:src="@drawable/demo_testing_image" />
+
+            <TextView
+                android:id="@+id/mentor_name"
+                app:fontFamily="@font/cairo_regular"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Fatema"
+                android:textColor="@color/textColorPrimary"
+                android:textSize="16sp" />
+
+            <me.zhanghai.android.materialratingbar.MaterialRatingBar
+                android:id="@+id/mentor_rating_bar"
+                style="@style/Widget.MaterialRatingBar.RatingBar.Indicator.Small"
+                app:mrb_fillBackgroundStars="true"
+                app:mrb_progressBackgroundTint="@color/star_rating_background"
+                app:mrb_progressTint="@color/star_rating_color"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginStart="16dp"
+                android:rating="3.5"
+                android:rotation="180"
+                android:stepSize="0.01" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/msg_delivery_info"
+            tools:ignore="UseCompoundDrawables"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/center_vertical_host_layout"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="3dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/delivery_time"
+                app:fontFamily="@font/cairo_regular"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="9:11 PM"
+                android:textAllCaps="false"
+                android:textColor="@color/star_rating_color"
+                android:textSize="12sp" />
+
+            <ImageView
+                android:id="@+id/delivery_status_image_view"
+                app:srcCompat="@drawable/ic_sms_seen"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:contentDescription="ic_delivery" />
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/divider2"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/left_vertical_host_layout"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="4dp"
+            android:background="#41a7a7a7" />
+
+        <Button
+            android:id="@+id/pendding_cancel_btn"
+            style="@style/myButtonStyle"
+            app:fontFamily="@font/cairo_regular"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/divider2"
+            android:layout_marginBottom="2dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="2dp"
+            android:text="Confirm Request"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
+        <View
+            android:id="@+id/divider3"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/pendding_cancel_btn"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:background="#3ca7a7a7" />
+
+
+    </RelativeLayout>
+</LinearLayout>

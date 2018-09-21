@@ -6,8 +6,8 @@
     android:layout_height="match_parent"
     android:fillViewport="true"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".student.recordsPage.RecordsPageActivity"
-    tools:showIn="@layout/stu8_activity_records_page">
+    tools:context=".student.searchResultTabview.SearchResultTabviewActivity"
+    tools:showIn="@layout/stu5_activity_search_result_tabview">
 
     <android.support.v4.view.ViewPager
         android:id="@+id/container"

@@ -76,5 +76,9 @@
 
     <color name="status_completed">#412196f3</color>
     <color name="toolbar_completed">#e3f2fd</color>
+    
+    <color name="tabViewPager">#eceff1</color>
+    <color name="tabFirstItem">#ffffff</color>
+    <color name="tabSecondItem">#edeff1</color>
 
 </resources>

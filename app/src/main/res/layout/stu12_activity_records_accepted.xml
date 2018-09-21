@@ -50,7 +50,7 @@
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_records_accepted" />
+    <include layout="@layout/stu12_content_records_accepted" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"

@@ -20,6 +20,9 @@ public class RecordsPagePresenter implements RecordsPageContract.Presenter {
 
     @Override
     public void recordsPageEnqueue() {
+        mView.findView();
+        mView.initRecordsPage();
+        mView.configRecordsPage();
 
     }
 

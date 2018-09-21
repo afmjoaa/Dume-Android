@@ -262,18 +262,18 @@
         <item name="android:background">@drawable/my_btn_background_white</item>
     </style>
 
-    <!--testing testing -->
+
     <!--<style name="ScrollItem">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">60dp</item>
+        <item name="android:layout_height">wrap_content</item>
     </style>
 
     <style name="ScrollItem.A">
-        <item name="android:background">?attr/colorControlHighlight</item>
+        <item name="android:background">@color/tabFirstItem</item>
     </style>
 
     <style name="ScrollItem.B">
-        <item name="android:background">?attr/colorAccent</item>
+        <item name="android:background">@color/tabSecondItem</item>
     </style>-->
 
 </resources>

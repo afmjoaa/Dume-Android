@@ -1,0 +1,57 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_tab"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/nav_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="0dp"
+        android:scaleType="centerInside"
+        android:tint="@color/tab_colorstate_list"
+        app:srcCompat="@drawable/ic_payment" />
+
+    <LinearLayout
+        android:id="@+id/horizontal_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/nav_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawablePadding="4dp"
+            android:lineSpacingExtra="10dp"
+            android:lineSpacingMultiplier="4"
+            android:shadowColor="@android:color/black"
+            android:textColor="@color/tab_colorstate_list"
+            android:textSize="15sp"
+            app:fontFamily="@font/cairo_regular"
+            tools:text="Home" />
+
+
+        <ImageView
+            android:id="@+id/up_arrow_orientation_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginBottom="0dp"
+            android:paddingEnd="0dp"
+            android:paddingLeft="6dp"
+            android:paddingRight="0dp"
+            android:paddingStart="6dp"
+            android:scaleType="centerInside"
+            android:tint="@color/tab_colorstate_list"
+            app:srcCompat="@drawable/ic_up_up_text_right"
+            android:contentDescription="@string/up_arrow" />
+
+    </LinearLayout>
+
+
+</LinearLayout>

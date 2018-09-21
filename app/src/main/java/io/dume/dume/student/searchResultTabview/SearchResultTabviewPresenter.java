@@ -20,6 +20,9 @@ public class SearchResultTabviewPresenter implements SearchResultTabviewContract
 
     @Override
     public void searchResultTabviewEnqueue() {
+        mView.findView();
+        mView.initSearchResultTabview();
+        mView.configSearchResultTabview();
 
     }
 
