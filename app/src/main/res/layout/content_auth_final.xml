@@ -37,7 +37,6 @@
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/input_layout_firstname"
                     android:layout_width="match_parent"
-
                     android:layout_height="wrap_content">
 
                     <EditText
@@ -130,10 +129,8 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/cairo_regular"
                     android:hint="@string/hint_email"
-                    android:inputType="textEmailAddress"
+                    android:inputType="textEmailAddress" />
 
-
-                    />
             </android.support.design.widget.TextInputLayout>
 
             <LinearLayout
@@ -321,7 +318,7 @@
             android:clickable="true"
             android:focusable="true"
             android:onClick="onViewClick"
-            android:src="@drawable/right_arrow_icon"
+            app:srcCompat="@drawable/ic_arrow_forward_white_24dp"
             app:rippleColor="@color/colorDarkAzure" />
 
 

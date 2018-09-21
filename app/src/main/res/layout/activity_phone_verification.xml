@@ -117,7 +117,7 @@ to you at " />
                     android:clickable="true"
                     android:focusable="true"
                     android:gravity="end"
-                    android:src="@drawable/right_arrow_icon"
+                    app:srcCompat="@drawable/ic_arrow_forward_white_24dp"
                     app:rippleColor="@color/colorDarkAzure" />
             </LinearLayout>
         </LinearLayout>

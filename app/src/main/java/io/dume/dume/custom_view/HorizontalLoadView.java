@@ -40,7 +40,7 @@ public class HorizontalLoadView extends View implements ValueAnimator.AnimatorUp
         valueAnimator = ValueAnimator.ofInt(15, mDisplayWidth - 30);
         valueAnimator.setRepeatMode(ValueAnimator.REVERSE);
         valueAnimator.setRepeatCount(ValueAnimator.INFINITE);
-        valueAnimator.setDuration(500);
+        valueAnimator.setDuration(750);
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         paint.setStyle(Paint.Style.FILL);
         if (attr != null) {

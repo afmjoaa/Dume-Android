@@ -1,0 +1,28 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="io.dume.dume.student.searchResultTabview.SearchResultActivity">
+    
+    <item
+        android:id="@+id/action_list_view"
+        android:icon="@drawable/ic_format_list_bulleted_black_24dp"
+        android:orderInCategory="3"
+        android:title="List view"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_search_set"
+        android:icon="@drawable/ic_search_settings"
+        android:orderInCategory="100"
+        android:title="Search Set"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_help"
+        android:icon="@drawable/ic_help_outline_black_24dp"
+        android:orderInCategory="101"
+        android:title="@string/help"
+        app:showAsAction="never" />
+
+
+</menu>

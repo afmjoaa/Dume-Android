@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/ic_performance"
+        android:drawable="@drawable/image_hezagon"
+        android:gravity="center" />
+    <item
+        android:id="@+id/rating_star_icon"
+        android:drawable="@drawable/ic_rating_star"
+        android:left="0dp"
+        android:right="0dp"
+        android:top="0dp"
+        android:bottom="13dp"
+        android:gravity="center_horizontal|bottom"/>
+
+    <!-- set a place holder Drawable so android:drawable isn't null -->
+    <item
+        android:id="@+id/ic_badge"
+        android:drawable="@drawable/image_hezagon" />
+</layer-list>

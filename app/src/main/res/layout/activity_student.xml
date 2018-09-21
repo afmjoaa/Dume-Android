@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".student.homepage.StudentActivity">
+    tools:context=".student.homePage.StudentActivity">
 
     <TextView
         android:id="@+id/textView"
@@ -32,12 +32,12 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
-        android:background="@drawable/com_facebook_tooltip_blue_background"
-        android:text="Sign out"
         android:onClick="onStudentViewClicked"
+        android:text="Sign out"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
     <Button
         android:id="@+id/testingActivityBtn"
         android:layout_width="wrap_content"
@@ -48,13 +48,12 @@
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:backgroundTint="#599dc2"
+        android:onClick="onStudentViewClicked"
         android:text="Testing Activity"
         android:textAllCaps="false"
-        android:onClick="onStudentViewClicked"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:targetApi="lollipop" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/testingMapBtn"
@@ -73,4 +72,61 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         tools:targetApi="lollipop" />
+
+
+
+    <Button
+        android:id="@+id/testingRecords_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:backgroundTint="#54bcae"
+        android:onClick="onStudentViewClicked"
+        android:text="Testing records"
+        android:textAllCaps="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:targetApi="lollipop" />
+
+    <Button
+        android:id="@+id/testingRecords_btn_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="100dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:backgroundTint="#54bcae"
+        android:onClick="onStudentViewClicked"
+        android:text="Testing records accepted"
+        android:textAllCaps="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:targetApi="lollipop" />
+    <Button
+        android:id="@+id/testingRecords_btn_3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="50dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:backgroundTint="#54bcae"
+        android:onClick="onStudentViewClicked"
+        android:text="Testing records completed"
+        android:textAllCaps="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:targetApi="lollipop" />
+
+
 </android.support.constraint.ConstraintLayout>

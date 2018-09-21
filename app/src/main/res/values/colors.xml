@@ -10,9 +10,12 @@
     <color name="colorDarkAzure">#3497FD</color>
     <color name="colorDeepIcon">#0f1e26</color>
     <color name="colorBlack">#000000</color>
+    <color name="colorBlackMusk">#00000000</color>
     <color name="colorIconTint">#00796B</color>
     <color name="colorDefaultAndroid">#ECE9E0</color>
     <color name="textColorPrimary">#575757</color>
+    <color name="textColorSecondary">#989D9D</color>
+    <color name="textColorSecondaryDark">#78909c</color>
     <color name="windowBackground">#FFFFFF</color>
     <color name="navigationBarColor">#afafaf</color>
     <color name="MystyleWindowBackground">#ffffff</color>
@@ -25,11 +28,58 @@
     <color name="color_navigation_list_background">#263238</color>
     <color name="color_selector_navigation_item">#FFFFFF</color>
     <color name="drawer_active_item">#11212a</color>
-    <color name="snackbar_red">#80d90000</color>
+    <color name="snackbar_red">#d90000</color>
     <color name="badge_red">#fff56161</color>
     <color name="badge_yellow">#fff4f094</color>
-    <color name="badge_green">#fface0ac</color>
+    <color name="badge_green">#ace0ac</color>
     <color name="colorLink">#4F81BD</color>
     <color name="colorMaterialBlack">#818181</color>
     <color name="colorDimBlack">#8ae1e0e0</color>
+    <color name="icon_color">#4C5264</color>
+    <color name="progressBarColor">#00796B</color>
+    <color name="black_overlay">#66000000</color>
+    <color name="dark_black_overlay">#be000000</color>
+    <color name="loader_color_one">#29b6f6</color>
+    <color name="tab_overlay">#50000000</color>
+    <color name="myToolbarIconColor">#2D354A</color>
+    <color name="tab_text_color">#636669</color>
+    <color name="semi_transparnt_btn_color">#33989d9d</color>
+    <color name="particle_light_blue">#73e8ff</color>
+    <color name="particle_dark_blue">#0086c3</color>
+    <color name="cancle_red">#f4511e</color>
+    <color name="highlight_red">#b91400</color>
+
+    <color name="bar_title_color">#000000</color>
+    <color name="bar_title_txt_selected_color">#eaa</color>
+    <color name="empty">#80cfd8dc</color>
+    <color name="pin_background">#2c2c65</color>
+    <color name="pin_text">#212121</color>
+    <color name="progress">#4db6ac</color>
+    <color name="progress_click">#00695c</color>
+    <color name="progress_disable">@android:color/darker_gray</color>
+
+    <color name="star_rating_color">#60C3FF</color>
+    <color name="star_rating_background">#D4DCE2</color>
+    <color name="review_like_color">#2699FB</color>
+    
+    <color name="status_pending">#41F56161</color>
+    <color name="toolbar_pending">#ffebee</color>
+
+    <color name="status_rejected">#41607d8b</color>
+    <color name="toolbar_rejected">#eceff1</color>
+
+    <color name="status_accepted">#41ffeb3b</color>
+    <color name="toolbar_accepted">#fffde7</color>
+
+    <color name="status_current">#414caf50</color>
+    <color name="toolbar_current">#e8f5e9</color>
+
+    <color name="status_completed">#412196f3</color>
+    <color name="toolbar_completed">#e3f2fd</color>
+    
+    <color name="tabViewPager">#eceff1</color>
+    <color name="tabFirstItem">#ffffff</color>
+    <color name="tabSecondItem">#edeff1</color>
+    <color name="testing_color">#eceff1</color>
+
 </resources>

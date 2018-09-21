@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/parent_coor_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_vector"
+    android:fitsSystemWindows="true"
+    tools:context=".student.grabingInfo.GrabingInfoActivity">
+
+
+  <!--  <io.dume.dume.customView.WindowInsetsFrameLayout
+        android:id="@+id/map_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true">
+
+
+        <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/background_vector"
+            android:fitsSystemWindows="true" />
+    </io.dume.dume.customView.WindowInsetsFrameLayout>-->
+
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/drop_shadow_bottom"
+        android:stateListAnimator="@drawable/appbar_no_elevation"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        app:theme="@style/ThemeToolbar"
+        tools:targetApi="lollipop">
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/toolbar_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fitsSystemWindows="true"
+            app:collapsedTitleGravity="start"
+            app:collapsedTitleTextAppearance="@style/MyTextApprncCol.textGone"
+            app:contentScrim="?android:attr/colorPrimary"
+            app:expandedTitleGravity="center_horizontal|top"
+            app:expandedTitleMarginBottom="@dimen/expTittleMarginBottom"
+            app:expandedTitleMarginEnd="@dimen/expTittleMarginStart"
+            app:expandedTitleMarginStart="@dimen/expTittleMarginStart"
+            app:expandedTitleMarginTop="60dp"
+            app:expandedTitleTextAppearance="@style/MyTextApprncExp"
+            app:layout_scrollFlags="enterAlways|snap"
+            app:scrimVisibleHeightTrigger="@dimen/scrimVisibleHeightTrigger"
+            app:theme="@style/ThemeToolbar"
+            app:title="Grabing Search Info"
+            app:toolbarId="@+id/toolbar">
+
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_weight="1"
+                android:background="?attr/colorPrimary"
+                android:gravity="center_horizontal"
+                app:buttonGravity="bottom"
+                app:layout_collapseMode="pin"
+                app:layout_scrollFlags="enterAlways|snap"
+                app:navigationIcon="@drawable/ic_arrow_back_black_24dp"
+                app:popupTheme="@style/AppTheme.PopupOverlay"
+                app:theme="@style/ThemeToolbar.toolbar"
+                app:title="@string/app_name"
+                app:titleMarginBottom="@dimen/titleMarginBottom"
+                app:titleMarginStart="@dimen/titleMarginStart"
+                app:titleMarginTop="@dimen/titleMarginTop">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="30dp"
+                    android:layout_marginRight="30dp"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <carbon.widget.Button
+                        style="?android:attr/borderlessButtonStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableEnd="@drawable/more_icon"
+                        android:drawableLeft="@drawable/alias_profile_icon"
+                        android:drawablePadding="10dp"
+                        android:drawableRight="@drawable/more_icon"
+                        android:drawableStart="@drawable/alias_profile_icon"
+                        app:carbon_tint="#575757"
+                        android:paddingEnd="15dp"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15dp"
+                        android:paddingStart="15dp"
+                        android:text="For Me"
+                        android:textAllCaps="false"
+                        android:textSize="18sp"
+                        android:textStyle="normal" />
+                </LinearLayout>
+
+            </android.support.v7.widget.Toolbar>
+
+
+            <io.dume.dume.customView.CustomTabLayout
+                android:id="@+id/tabs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="90dp"
+                android:stateListAnimator="@drawable/appbar_always_elevated"
+                app:tabGravity="fill"
+                app:tabIndicatorHeight="3dp"
+                app:tabMode="scrollable"
+                app:tabTextAppearance="@style/tabColorStateList">
+
+                <android.support.design.widget.TabItem
+                    android:id="@+id/tabItem"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:icon="@drawable/ic_medium"
+                    android:text="Medium" />
+
+                <android.support.design.widget.TabItem
+                    android:id="@+id/tabItem2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:icon="@drawable/ic_class"
+                    android:text="Class" />
+
+                <android.support.design.widget.TabItem
+                    android:id="@+id/tabItem3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:icon="@drawable/ic_subject"
+                    android:text="Subject" />
+
+                <android.support.design.widget.TabItem
+                    android:id="@+id/tabItem4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:icon="@drawable/ic_payment"
+                    android:text="Payment" />
+
+                <android.support.design.widget.TabItem
+                    android:id="@+id/tabItem5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:icon="@drawable/ic_gender_preference"
+                    android:text="Gender Preference" />
+
+                <android.support.design.widget.TabItem
+                    android:id="@+id/tabItem6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:icon="@drawable/ic_cross_check"
+                    android:text="Cross Check" />
+
+            </io.dume.dume.customView.CustomTabLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:layout_gravity="top"
+                android:layout_marginTop="162dp"
+                android:elevation="16dp"
+                android:orientation="horizontal"
+                android:stateListAnimator="@drawable/appbar_always_elevated">
+
+                <TextView
+                    android:id="@+id/hint_id_1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="Ex.Others"
+                    android:textSize="12sp"
+                    android:textStyle="normal" />
+
+                <TextView
+                    android:id="@+id/hint_id_2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="Ex.O Level"
+                    android:textSize="12sp"
+                    android:textStyle="normal" />
+
+                <TextView
+                    android:id="@+id/hint_id_3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="Ex.Physics"
+                    android:textSize="12sp"
+                    android:textStyle="normal" />
+
+            </LinearLayout>
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="@dimen/fab_margin"
+        app:srcCompat="@drawable/ic_arrow_forward_white_24dp" />
+
+</android.support.design.widget.CoordinatorLayout>

@@ -43,7 +43,7 @@ import io.dume.dume.auth.AuthModel;
 import io.dume.dume.auth.DataStore;
 import io.dume.dume.auth.auth.AuthActivity;
 import io.dume.dume.auth.code_verification.PhoneVerificationActivity;
-import io.dume.dume.student.homepage.StudentActivity;
+import io.dume.dume.student.homePage.StudentActivity;
 import io.dume.dume.teacher.homepage.TeacherActivtiy;
 import io.dume.dume.util.DumeUtils;
 

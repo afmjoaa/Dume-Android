@@ -34,7 +34,6 @@ public class AuthPresenter implements AuthContract.Presenter {
         view.initActionBar();
         view.init();
 
-
     }
 
     @Override
@@ -159,7 +158,7 @@ public class AuthPresenter implements AuthContract.Presenter {
 
             @Override
             public void onError(String err) {
-                Log.w(TAG, "onError: hiding dialog");
+                Log.w(TAG, "onGpsError: hiding dialog");
                 view.hideProgress();
                 view.showToast(err);
             }

@@ -1,0 +1,1199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/my_main_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_vector"
+    android:fitsSystemWindows="true"
+    tools:context=".student.searchLoading.SearchLoadingActivity">
+
+    <io.dume.dume.customView.WindowInsetsFrameLayout
+        android:id="@+id/map_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true">
+
+        <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/background_vector"
+            android:fitsSystemWindows="true" />
+
+    </io.dume.dume.customView.WindowInsetsFrameLayout>
+
+
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/view_musk"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorBlack"
+        android:fitsSystemWindows="true"
+        android:orientation="vertical"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:id="@+id/searchBottomSheet"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        app:behavior_peekHeight="150dp"
+        app:elevation="8dp"
+        app:layout_behavior="@string/bottom_sheet_behavior">
+        <!--150dp-->
+        <android.support.v4.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <carbon.widget.LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <!--basic info layout-->
+                <LinearLayout
+                    android:id="@+id/basic_info"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/bg_round_corner_rela_layout"
+                    android:orientation="vertical"
+                    android:paddingBottom="8dp"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp">
+
+
+                    <LinearLayout
+                        android:id="@+id/changing_orientation_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="6dp"
+                        android:layout_marginTop="6dp"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:id="@+id/basic_info_insider_layout"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:orientation="horizontal">
+
+                            <Button
+                                android:id="@+id/swipe_left"
+                                style="@style/Widget.AppCompat.Button.Borderless"
+                                android:layout_width="40dp"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginEnd="80dp"
+                                android:layout_marginLeft="2dp"
+                                android:layout_marginRight="80dp"
+                                android:layout_marginStart="2dp"
+                                android:drawableLeft="@drawable/ic_swipe_left"
+                                android:drawableStart="@drawable/ic_swipe_left"
+                                android:gravity="center"
+                                android:paddingEnd="14dp"
+                                android:paddingLeft="6dp"
+                                android:paddingRight="14dp"
+                                android:paddingStart="6dp"
+                                android:visibility="gone" />
+
+                            <carbon.widget.ImageView
+                                android:id="@+id/mentor_dp"
+                                android:layout_width="50dp"
+                                android:layout_height="50dp"
+                                android:layout_gravity="center"
+                                android:layout_margin="8dp"
+                                app:carbon_cornerRadius="25dp"
+                                app:carbon_elevation="6dp"
+                                app:srcCompat="@drawable/image_loading_search" />
+
+                            <Button
+                                android:id="@+id/swipe_right"
+                                style="@style/Widget.AppCompat.Button.Borderless"
+                                android:layout_width="40dp"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginEnd="2dp"
+                                android:layout_marginLeft="80dp"
+                                android:layout_marginRight="2dp"
+                                android:layout_marginStart="80dp"
+                                android:drawableRight="@drawable/ic_swipe_right"
+                                android:drawableEnd="@drawable/ic_swipe_right"
+                                android:gravity="center"
+                                android:paddingEnd="6dp"
+                                android:paddingLeft="14dp"
+                                android:paddingRight="6dp"
+                                android:paddingStart="14dp"
+                                android:visibility="gone" />
+
+                        </LinearLayout>
+
+
+                        <LinearLayout
+                            android:id="@+id/vertical_textview_container"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginEnd="12dp"
+                            android:layout_marginLeft="12dp"
+                            android:layout_marginRight="12dp"
+                            android:layout_marginStart="12dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/text_one"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginTop="4dp"
+                                android:text="Mohoshina Tajim Joyti"
+                                android:textAlignment="center"
+                                android:textAppearance="?android:attr/textAppearanceListItem"
+                                android:textSize="16sp"
+                                app:fontFamily="@font/cairo_regular" />
+
+                            <TextView
+                                android:id="@+id/text_two"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:text="21 year old"
+                                android:textAppearance="?android:attr/textAppearanceSmall"
+                                android:textSize="12sp"
+                                app:fontFamily="@font/cairo_regular" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+
+                    <View
+                        android:id="@+id/divider2"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#3ca7a7a7" />
+
+                    <Button
+                        style="@style/myButtonStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="2dp"
+                        android:layout_marginTop="2dp"
+                        android:text="Confirm Request"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
+                        android:textSize="16sp"
+                        app:fontFamily="@font/cairo_regular" />
+
+                    <View
+                        android:id="@+id/divider3"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#3ca7a7a7" />
+
+                </LinearLayout>
+
+                <!--salary layout-->
+                <LinearLayout
+                    android:id="@+id/salary_host_linearlayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:orientation="vertical">
+
+                    <carbon.widget.LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_round_corner_rela_layout"
+                        android:baselineAligned="false"
+                        android:orientation="vertical"
+                        android:paddingLeft="16dp"
+                        android:paddingRight="16dp">
+
+                        <Button
+                            android:id="@+id/show_salary_btn"
+                            style="@style/Widget.AppCompat.Button.Borderless"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:clickable="false"
+                            android:text="Salary : 10k BDT"
+                            android:textAllCaps="false"
+                            android:textColor="@color/highlight_red"
+                            android:textSize="16sp"
+                            app:fontFamily="@font/cairo_regular" />
+
+                    </carbon.widget.LinearLayout>
+
+                </LinearLayout>
+
+                <!--rating layout -->
+                <LinearLayout
+                    android:id="@+id/rating_host_linearlayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:orientation="vertical">
+
+                    <carbon.widget.LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_round_corner_rela_layout"
+                        android:baselineAligned="false"
+                        android:orientation="vertical"
+                        android:paddingLeft="16dp"
+                        android:paddingRight="16dp"
+                        app:carbon_elevation="8dp">
+
+                        <Button
+                            android:id="@+id/show_additional_rating_btn"
+                            style="@style/Widget.AppCompat.Button.Borderless"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:drawableBottom="@drawable/ic_down_arrow_small"
+                            android:drawablePadding="2dp"
+                            android:text="Feature Rating"
+                            android:textAllCaps="false"
+                            android:textColor="@color/textColorPrimary"
+                            android:textSize="16sp"
+                            app:fontFamily="@font/cairo_regular" />
+
+                    </carbon.widget.LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/rating_layout_vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:background="@drawable/bg_white_bottom_round"
+                        android:orientation="vertical"
+                        android:paddingBottom="8dp"
+                        android:paddingLeft="16dp"
+                        android:paddingRight="16dp"
+                        android:paddingTop="8dp"
+                        android:translationY="-2dp">
+
+                        <LinearLayout
+                            android:id="@+id/rating_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:baselineAligned="false"
+                            android:orientation="horizontal"
+                            android:paddingBottom="8dp"
+                            android:paddingTop="8dp">
+
+                            <RelativeLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1">
+
+                                <TextView
+                                    android:id="@+id/rating_title_performance"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentTop="true"
+                                    android:layout_centerHorizontal="true"
+                                    android:singleLine="true"
+                                    android:text="Performance"
+                                    android:textAlignment="center"
+                                    android:textSize="12sp"
+                                    app:fontFamily="@font/cairo_regular" />
+
+                                <carbon.widget.ImageView
+                                    android:id="@+id/main_rating_performance"
+                                    android:layout_width="56dp"
+                                    android:layout_height="56dp"
+                                    android:layout_below="@+id/rating_title_performance"
+                                    android:layout_centerHorizontal="true"
+                                    android:layout_marginTop="2dp"
+                                    app:carbon_cornerRadius="28dp"
+                                    app:srcCompat="@drawable/rating_performance_layer_list" />
+
+
+                                <TextView
+                                    android:id="@+id/txtStatus"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentBottom="true"
+                                    android:layout_below="@+id/main_rating_performance"
+                                    android:layout_centerHorizontal="true"
+                                    android:background="@drawable/bg_rating_textview"
+                                    android:drawableEnd="@drawable/ic_person_small"
+                                    android:drawablePadding="5dp"
+                                    android:drawableRight="@drawable/ic_person_small"
+                                    android:gravity="center"
+                                    android:paddingBottom="1dp"
+                                    android:paddingLeft="6dp"
+                                    android:paddingRight="6dp"
+                                    android:paddingTop="1dp"
+                                    android:singleLine="true"
+                                    android:text="1234"
+                                    android:textColor="@color/white"
+                                    android:textSize="8sp"
+                                    android:translationY="-9dp" />
+
+                            </RelativeLayout>
+
+                            <RelativeLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1">
+
+                                <TextView
+                                    android:id="@+id/rating_title_accept_ratio"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentTop="true"
+                                    android:layout_centerHorizontal="true"
+                                    android:singleLine="true"
+                                    android:text="A-Ratio"
+                                    android:textAlignment="center"
+                                    android:textSize="12sp"
+                                    app:fontFamily="@font/cairo_regular" />
+
+                                <com.jackandphantom.circularprogressbar.CircleProgressbar
+                                    android:id="@+id/rating_main_accept_ratio"
+                                    android:layout_width="52dp"
+                                    android:layout_height="52dp"
+                                    android:layout_below="@+id/rating_title_accept_ratio"
+                                    android:layout_centerHorizontal="true"
+                                    android:layout_marginTop="3dp"
+                                    android:background="@drawable/rating_accept_ratio_layer_list"
+                                    android:rotation="180"
+                                    app:cpb_backgroundProgressColor="#4b686969"
+                                    app:cpb_backgroundProgressWidth="4"
+                                    app:cpb_clockwise="true"
+                                    app:cpb_foregroundProgressColor="#00796B"
+                                    app:cpb_foregroundProgressWidth="6"
+                                    app:cpb_progress="80"
+                                    app:cpb_roundedCorner="true" />
+
+                                <TextView
+                                    android:id="@+id/txtStatus_accept_ratio"
+                                    android:layout_width="35dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentBottom="true"
+                                    android:layout_below="@+id/rating_main_accept_ratio"
+                                    android:layout_centerHorizontal="true"
+                                    android:background="@drawable/bg_rating_textview"
+                                    android:drawablePadding="5dp"
+                                    android:gravity="center"
+                                    android:paddingBottom="1dp"
+                                    android:paddingLeft="6dp"
+                                    android:paddingRight="6dp"
+                                    android:paddingTop="1dp"
+                                    android:singleLine="true"
+                                    android:text="80 %"
+                                    android:textColor="@color/white"
+                                    android:textSize="8sp"
+                                    android:translationY="-6dp" />
+
+
+                            </RelativeLayout>
+
+                            <RelativeLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1">
+
+                                <TextView
+                                    android:id="@+id/rating_title_Professionalism"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentTop="true"
+                                    android:layout_centerHorizontal="true"
+                                    android:drawablePadding="5dp"
+                                    android:singleLine="true"
+                                    android:text="Expertise"
+                                    android:textAlignment="center"
+                                    android:textSize="12sp"
+                                    app:fontFamily="@font/cairo_regular" />
+
+                                <com.jackandphantom.circularprogressbar.CircleProgressbar
+                                    android:id="@+id/rating_main_professionalism"
+                                    android:layout_width="52dp"
+                                    android:layout_height="52dp"
+                                    android:layout_below="@+id/rating_title_Professionalism"
+                                    android:layout_centerHorizontal="true"
+                                    android:layout_marginTop="3dp"
+                                    android:background="@drawable/rating_profisionalism_layer_list"
+                                    android:rotation="180"
+                                    app:cpb_backgroundProgressColor="#4b686969"
+                                    app:cpb_backgroundProgressWidth="4"
+                                    app:cpb_clockwise="true"
+                                    app:cpb_foregroundProgressColor="#00796B"
+                                    app:cpb_foregroundProgressWidth="6"
+                                    app:cpb_progress="50"
+                                    app:cpb_roundedCorner="true" />
+
+                                <TextView
+                                    android:id="@+id/txtStatus_professionalism"
+                                    android:layout_width="35dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentBottom="true"
+                                    android:layout_below="@+id/rating_main_professionalism"
+                                    android:layout_centerHorizontal="true"
+                                    android:background="@drawable/bg_rating_textview"
+                                    android:drawablePadding="5dp"
+                                    android:gravity="center"
+                                    android:paddingBottom="1dp"
+                                    android:paddingLeft="6dp"
+                                    android:paddingRight="6dp"
+                                    android:paddingTop="1dp"
+                                    android:singleLine="true"
+                                    android:text="50 %"
+                                    android:textColor="@color/white"
+                                    android:textSize="8sp"
+                                    android:translationY="-6dp" />
+
+                            </RelativeLayout>
+
+                            <RelativeLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1">
+
+                                <TextView
+                                    android:id="@+id/rating_title_experience"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentTop="true"
+                                    android:layout_centerHorizontal="true"
+                                    android:drawablePadding="5dp"
+                                    android:singleLine="true"
+                                    android:text="Experience "
+                                    android:textAlignment="center"
+                                    android:textSize="12sp"
+                                    app:fontFamily="@font/cairo_regular" />
+
+                                <carbon.widget.ImageView
+                                    android:id="@+id/main_rating_experience"
+                                    android:layout_width="56dp"
+                                    android:layout_height="56dp"
+                                    android:layout_below="@+id/rating_title_experience"
+                                    android:layout_centerHorizontal="true"
+                                    android:layout_marginTop="2dp"
+                                    app:carbon_cornerRadius="28dp"
+                                    app:srcCompat="@drawable/rating_experience_layer_list" />
+
+
+                                <TextView
+                                    android:id="@+id/txtStatus_experience"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentBottom="true"
+                                    android:layout_below="@+id/main_rating_experience"
+                                    android:layout_centerHorizontal="true"
+                                    android:background="@drawable/bg_rating_textview"
+                                    android:drawableEnd="@drawable/ic_person_small"
+                                    android:drawablePadding="5dp"
+                                    android:drawableRight="@drawable/ic_person_small"
+                                    android:gravity="center"
+                                    android:paddingBottom="1dp"
+                                    android:paddingLeft="6dp"
+                                    android:paddingRight="6dp"
+                                    android:paddingTop="1dp"
+                                    android:singleLine="true"
+                                    android:text="1234"
+                                    android:textColor="@color/white"
+                                    android:textSize="8sp"
+                                    android:translationY="-9dp" />
+                            </RelativeLayout>
+
+                        </LinearLayout>
+
+                        <RelativeLayout
+                            android:id="@+id/rating_other_skills"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:id="@+id/rating_skills"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentTop="true"
+                                android:layout_centerHorizontal="true"
+                                android:background="@drawable/bg_rating_tittle"
+                                android:paddingBottom="2dp"
+                                android:paddingLeft="20dp"
+                                android:paddingRight="20dp"
+                                android:paddingTop="2dp"
+                                android:singleLine="true"
+                                android:text="Skills"
+                                android:textAlignment="center"
+                                android:textColor="@color/colorBlack"
+                                android:textSize="12sp"
+                                app:fontFamily="@font/cairo_regular" />
+
+                            <com.hadiidbouk.charts.ChartProgressBar
+                                android:id="@+id/myChartProgressBar"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_centerInParent="true"
+                                android:gravity="center"
+                                app:hdBarCanBeClick="true"
+                                app:hdBarHeight="160dp"
+                                app:hdBarRadius="10dp"
+                                app:hdBarTitleColor="@color/textColorPrimary"
+                                app:hdBarTitleMarginTop="9dp"
+                                app:hdBarTitleSelectedColor="@color/colorBlack"
+                                app:hdBarTitleTxtSize="12sp"
+                                app:hdBarWidth="7dp"
+                                app:hdEmptyColor="@color/empty"
+                                app:hdMaxValue="10"
+                                app:hdPinBackgroundColor="@color/pin_background"
+                                app:hdPinDrawable="@drawable/ic_pin"
+                                app:hdPinMarginBottom="20dp"
+                                app:hdPinMarginEnd="11dp"
+                                app:hdPinPaddingBottom="5dp"
+                                app:hdPinTextColor="@color/pin_text"
+                                app:hdPinTxtSize="12sp"
+                                app:hdProgressClickColor="@color/progress_click"
+                                app:hdProgressColor="@color/progress"
+                                app:hdProgressDisableColor="@color/progress_disable" />
+
+                        </RelativeLayout>
+
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <!--achievement layout -->
+                <LinearLayout
+                    android:id="@+id/achievement_host_linearlayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:orientation="vertical">
+
+                    <carbon.widget.LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_round_corner_rela_layout"
+                        android:baselineAligned="false"
+                        android:orientation="vertical"
+                        android:paddingLeft="16dp"
+                        android:paddingRight="16dp"
+                        app:carbon_elevation="8dp">
+
+                        <Button
+                            android:id="@+id/show_achievement_btn"
+                            style="@style/Widget.AppCompat.Button.Borderless"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:drawableBottom="@drawable/ic_down_arrow_small"
+                            android:drawablePadding="2dp"
+                            android:text="Achievements"
+                            android:textAllCaps="false"
+                            android:textColor="@color/textColorPrimary"
+                            android:textSize="16sp"
+                            app:fontFamily="@font/cairo_regular" />
+
+                    </carbon.widget.LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/achievement_layout_vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:background="@drawable/bg_white_bottom_round"
+                        android:orientation="vertical"
+                        android:paddingBottom="8dp"
+                        android:paddingLeft="16dp"
+                        android:paddingRight="16dp"
+                        android:paddingTop="8dp"
+                        android:translationY="-2dp">
+
+
+                        <LinearLayout
+                            android:id="@+id/achievement_layout_horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:baselineAligned="false"
+                            android:orientation="horizontal"
+                            android:paddingBottom="8dp"
+                            android:paddingTop="8dp">
+
+                            <RelativeLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1">
+
+
+                                <carbon.widget.ImageView
+                                    android:id="@+id/achievement_joined_image"
+                                    android:layout_width="46dp"
+                                    android:layout_height="46dp"
+                                    android:layout_alignParentTop="true"
+                                    android:layout_centerHorizontal="true"
+                                    android:layout_marginBottom="2dp"
+                                    android:layout_marginTop="2dp"
+                                    app:srcCompat="@drawable/ic_badge_joined" />
+
+                                <TextView
+                                    android:id="@+id/achievement_joined_text"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_below="@+id/achievement_joined_image"
+                                    android:layout_centerHorizontal="true"
+                                    android:singleLine="true"
+                                    android:text="Joined"
+                                    android:textAlignment="center"
+                                    android:textSize="13sp"
+                                    app:fontFamily="@font/cairo_regular" />
+
+                            </RelativeLayout>
+
+                            <RelativeLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1">
+
+
+                                <carbon.widget.ImageView
+                                    android:id="@+id/achievement_inaugural_image"
+                                    android:layout_width="46dp"
+                                    android:layout_height="46dp"
+                                    android:layout_alignParentTop="true"
+                                    android:layout_centerHorizontal="true"
+                                    android:layout_marginBottom="2dp"
+                                    android:layout_marginTop="2dp"
+                                    app:srcCompat="@drawable/ic_badge_disable" />
+
+                                <TextView
+                                    android:id="@+id/achievement_inaugural_text"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_below="@+id/achievement_inaugural_image"
+                                    android:layout_centerHorizontal="true"
+                                    android:singleLine="true"
+                                    android:text="Inaugural"
+                                    android:textAlignment="center"
+                                    android:textSize="13sp"
+                                    app:fontFamily="@font/cairo_regular" />
+
+                            </RelativeLayout>
+
+                            <RelativeLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1">
+
+
+                                <carbon.widget.ImageView
+                                    android:id="@+id/achievement_leading_image"
+                                    android:layout_width="46dp"
+                                    android:layout_height="46dp"
+                                    android:layout_alignParentTop="true"
+                                    android:layout_centerHorizontal="true"
+                                    android:layout_marginBottom="2dp"
+                                    android:layout_marginTop="2dp"
+                                    app:srcCompat="@drawable/ic_badge_disable" />
+
+                                <TextView
+                                    android:id="@+id/achievement_leading_text"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_below="@+id/achievement_leading_image"
+                                    android:layout_centerHorizontal="true"
+                                    android:singleLine="true"
+                                    android:text="Leading"
+                                    android:textAlignment="center"
+                                    android:textSize="13sp"
+                                    app:fontFamily="@font/cairo_regular" />
+
+                            </RelativeLayout>
+
+                            <RelativeLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1">
+
+
+                                <carbon.widget.ImageView
+                                    android:id="@+id/achievement_premier_image"
+                                    android:layout_width="46dp"
+                                    android:layout_height="46dp"
+                                    android:layout_alignParentTop="true"
+                                    android:layout_centerHorizontal="true"
+                                    android:layout_marginBottom="2dp"
+                                    android:layout_marginTop="2dp"
+                                    app:srcCompat="@drawable/ic_badge_disable" />
+
+                                <TextView
+                                    android:id="@+id/achievement_premier_text"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_below="@+id/achievement_premier_image"
+                                    android:layout_centerHorizontal="true"
+                                    android:singleLine="true"
+                                    android:text="Premier"
+                                    android:textAlignment="center"
+                                    android:textSize="13sp"
+                                    app:fontFamily="@font/cairo_regular" />
+
+                            </RelativeLayout>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <!--more info layout-->
+                <LinearLayout
+                    android:id="@+id/more_info_host_linearlayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:orientation="vertical">
+
+                    <carbon.widget.LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_round_corner_rela_layout"
+                        android:baselineAligned="false"
+                        android:orientation="vertical"
+                        android:paddingLeft="16dp"
+                        android:paddingRight="16dp"
+                        app:carbon_elevation="8dp">
+
+                        <Button
+                            android:id="@+id/show_more_info_btn"
+                            style="@style/Widget.AppCompat.Button.Borderless"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:drawableBottom="@drawable/ic_down_arrow_small"
+                            android:drawablePadding="2dp"
+                            android:text="More Info"
+                            android:textAllCaps="false"
+                            android:textColor="@color/textColorPrimary"
+                            android:textSize="16sp"
+                            app:fontFamily="@font/cairo_regular" />
+
+                    </carbon.widget.LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/more_info_layout_vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:background="@drawable/bg_white_bottom_round"
+                        android:orientation="vertical"
+                        android:paddingBottom="8dp"
+                        android:paddingLeft="16dp"
+                        android:paddingRight="16dp"
+                        android:paddingTop="8dp"
+                        android:translationY="-2dp">
+
+                        <TextView
+                            android:id="@+id/textview_current_status"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="0dp"
+                            android:drawableLeft="@drawable/ic_keyboard_arrow_right_black_24dp"
+                            android:drawablePadding="6dp"
+                            android:drawableStart="@drawable/ic_keyboard_arrow_right_black_24dp"
+                            android:gravity="center_vertical"
+                            android:paddingBottom="2dp"
+                            android:paddingTop="2dp"
+                            android:singleLine="true"
+                            android:text="Current Status : EECE Student in MIST"
+                            android:textAllCaps="false"
+                            android:textColor="@color/textColorPrimary"
+                            android:textSize="13sp"
+                            android:textStyle="normal"
+                            app:fontFamily="@font/cairo_regular" />
+
+                        <TextView
+                            android:id="@+id/textview_currently_mentoring"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="0dp"
+                            android:drawableLeft="@drawable/ic_keyboard_arrow_right_black_24dp"
+                            android:drawablePadding="6dp"
+                            android:drawableStart="@drawable/ic_keyboard_arrow_right_black_24dp"
+                            android:gravity="center_vertical"
+                            android:paddingBottom="2dp"
+                            android:paddingTop="2dp"
+                            android:singleLine="true"
+                            android:text="Currently Mentoring : 3 Student"
+                            android:textAllCaps="false"
+                            android:textColor="@color/textColorPrimary"
+                            android:textSize="13sp"
+                            android:textStyle="normal"
+                            app:fontFamily="@font/cairo_regular" />
+
+                        <TextView
+                            android:id="@+id/textview_marital_status"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="0dp"
+                            android:drawableLeft="@drawable/ic_keyboard_arrow_right_black_24dp"
+                            android:drawablePadding="6dp"
+                            android:drawableStart="@drawable/ic_keyboard_arrow_right_black_24dp"
+                            android:gravity="center_vertical"
+                            android:paddingBottom="2dp"
+                            android:paddingTop="2dp"
+                            android:singleLine="true"
+                            android:text="Marital Status : Single"
+                            android:textAllCaps="false"
+                            android:textColor="@color/textColorPrimary"
+                            android:textSize="13sp"
+                            android:textStyle="normal"
+                            app:fontFamily="@font/cairo_regular" />
+
+                        <TextView
+                            android:id="@+id/textview_qualifications"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="0dp"
+                            android:drawableLeft="@drawable/ic_keyboard_arrow_right_black_24dp"
+                            android:drawablePadding="6dp"
+                            android:drawableStart="@drawable/ic_keyboard_arrow_right_black_24dp"
+                            android:paddingBottom="5dp"
+                            android:paddingTop="5dp"
+                            android:singleLine="true"
+                            android:text="Qualifications :"
+                            android:textAllCaps="false"
+                            android:textColor="@color/textColorPrimary"
+                            android:textSize="13sp"
+                            android:textStyle="normal"
+                            app:fontFamily="@font/cairo_regular" />
+
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/recycler_view_qualifications"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp">
+
+                        </android.support.v7.widget.RecyclerView>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <!--agreement terms layout-->
+                <LinearLayout
+                    android:id="@+id/agreement_term_host_linearlayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:orientation="vertical">
+
+                    <carbon.widget.LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_round_corner_rela_layout"
+                        android:baselineAligned="false"
+                        android:orientation="vertical"
+                        android:paddingLeft="16dp"
+                        android:paddingRight="16dp"
+                        app:carbon_elevation="8dp">
+
+                        <Button
+                            android:id="@+id/show_agreement_terms_btn"
+                            style="@style/Widget.AppCompat.Button.Borderless"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:drawableBottom="@drawable/ic_down_arrow_small"
+                            android:drawablePadding="2dp"
+                            android:text="Agreement Terms"
+                            android:textAllCaps="false"
+                            android:textColor="@color/textColorPrimary"
+                            android:textSize="16sp"
+                            app:fontFamily="@font/cairo_regular" />
+
+                    </carbon.widget.LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/agreement_term_layout_vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:background="@drawable/bg_white_bottom_round"
+                        android:orientation="vertical"
+                        android:paddingBottom="8dp"
+                        android:paddingLeft="16dp"
+                        android:paddingRight="16dp"
+                        android:paddingTop="8dp"
+                        android:translationY="-2dp">
+
+                        <TextView
+                            android:id="@+id/textview_starting_date"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="0dp"
+                            android:drawableLeft="@drawable/ic_keyboard_arrow_right_black_24dp"
+                            android:drawablePadding="6dp"
+                            android:drawableStart="@drawable/ic_keyboard_arrow_right_black_24dp"
+                            android:gravity="center_vertical"
+                            android:paddingBottom="2dp"
+                            android:paddingTop="2dp"
+                            android:singleLine="true"
+                            android:text="Starting Date &amp; Time : Tue, Apr 13, 5.00PM"
+                            android:textAllCaps="false"
+                            android:textColor="@color/textColorPrimary"
+                            android:textSize="13sp"
+                            android:textStyle="normal"
+                            app:fontFamily="@font/cairo_regular" />
+
+
+                        <TextView
+                            android:id="@+id/textview_preferred_day"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="0dp"
+                            android:drawableLeft="@drawable/ic_keyboard_arrow_right_black_24dp"
+                            android:drawablePadding="6dp"
+                            android:drawableStart="@drawable/ic_keyboard_arrow_right_black_24dp"
+                            android:gravity="center_vertical"
+                            android:paddingBottom="2dp"
+                            android:paddingTop="2dp"
+                            android:singleLine="true"
+                            android:text="Preferred Day : Sun, Mon, Tue"
+                            android:textAllCaps="false"
+                            android:textColor="@color/textColorPrimary"
+                            android:textSize="13sp"
+                            android:textStyle="normal"
+                            app:fontFamily="@font/cairo_regular" />
+
+                        <TextView
+                            android:id="@+id/textview_days_week"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="0dp"
+                            android:drawableLeft="@drawable/ic_keyboard_arrow_right_black_24dp"
+                            android:drawablePadding="6dp"
+                            android:drawableStart="@drawable/ic_keyboard_arrow_right_black_24dp"
+                            android:paddingBottom="2dp"
+                            android:paddingTop="2dp"
+                            android:singleLine="true"
+                            android:text="Days/Week : Three"
+                            android:textAllCaps="false"
+                            android:textColor="@color/textColorPrimary"
+                            android:textSize="13sp"
+                            android:textStyle="normal"
+                            app:fontFamily="@font/cairo_regular" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <!--location layout-->
+                <LinearLayout
+                    android:id="@+id/location_host_linearlayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:orientation="vertical">
+
+                    <carbon.widget.LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_round_corner_rela_layout"
+                        android:baselineAligned="false"
+                        android:orientation="vertical"
+                        android:paddingLeft="16dp"
+                        android:paddingRight="16dp"
+                        app:carbon_elevation="8dp">
+
+                        <Button
+                            android:id="@+id/show_location_btn"
+                            style="@style/Widget.AppCompat.Button.Borderless"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:drawableBottom="@drawable/ic_down_arrow_small"
+                            android:drawablePadding="2dp"
+                            android:text="Location"
+                            android:textAllCaps="false"
+                            android:textColor="@color/textColorPrimary"
+                            android:textSize="16sp"
+                            app:fontFamily="@font/cairo_regular" />
+
+                    </carbon.widget.LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/location_layout_vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="180dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:background="@drawable/bg_white_bottom_round"
+                        android:orientation="vertical"
+                        android:paddingBottom="10dp"
+                        android:paddingLeft="16dp"
+                        android:paddingRight="16dp"
+                        android:paddingTop="12dp"
+                        android:translationY="-2dp">
+
+                        <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+                            xmlns:map="http://schemas.android.com/apk/res-auto"
+                            android:id="@+id/mapOne"
+                            android:name="com.google.android.gms.maps.MapFragment"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            map:cameraZoom="15"
+                            map:liteMode="true"
+                            map:mapType="normal" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <!--review layout-->
+                <LinearLayout
+                    android:id="@+id/review_host_linearlayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:orientation="vertical">
+
+                    <carbon.widget.LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_round_corner_rela_layout"
+                        android:baselineAligned="false"
+                        android:orientation="vertical"
+                        android:paddingLeft="16dp"
+                        android:paddingRight="16dp"
+                        app:carbon_elevation="8dp">
+
+                        <Button
+                            android:id="@+id/review_info_btn"
+                            style="@style/Widget.AppCompat.Button.Borderless"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:drawableBottom="@drawable/ic_down_arrow_small"
+                            android:drawablePadding="2dp"
+                            android:text="Review Highlights"
+                            android:textAllCaps="false"
+                            android:textColor="@color/textColorPrimary"
+                            android:textSize="16sp"
+                            app:fontFamily="@font/cairo_regular" />
+
+                    </carbon.widget.LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/review_layout_vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:background="@drawable/bg_white_bottom_round"
+                        android:orientation="vertical"
+                        android:paddingBottom="8dp"
+                        android:paddingLeft="16dp"
+                        android:paddingRight="16dp"
+                        android:paddingTop="8dp"
+                        android:translationY="-2dp">
+
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/recycler_view_reviews"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp">
+
+                        </android.support.v7.widget.RecyclerView>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </carbon.widget.LinearLayout>
+        </android.support.v4.widget.NestedScrollView>
+    </LinearLayout>
+
+    <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/parent_coor_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".student.searchLoading.SearchLoadingActivity">
+
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/my_appbarLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:elevation="0dp"
+            android:theme="@style/AppTheme.AppBarOverlay"
+            app:elevation="0dp">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_margin="0dp"
+                app:navigationIcon="@drawable/ic_arrow_back_default_24dp"
+                app:popupTheme="@style/AppTheme.PopupOverlay"
+                app:theme="@style/ThemeToolbar.default"
+                app:title=""
+                app:titleMargin="0dp"
+                app:titleTextAppearance="@style/MyTextApprncCol.grabLocaiton">
+
+            </android.support.v7.widget.Toolbar>
+
+        </android.support.design.widget.AppBarLayout>
+
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/secondary_Appbar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/appbarLayoutHeightLow"
+            android:alpha="0.0"
+            android:background="@color/colorBlack"
+            android:fitsSystemWindows="true"
+            android:theme="@style/Base.ThemeOverlay.AppCompat.Dark"
+            android:visibility="invisible">
+
+            <android.support.design.widget.CollapsingToolbarLayout
+                android:id="@+id/secondary_collapsing_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="90dp"
+                android:background="@color/colorBlack"
+                android:fitsSystemWindows="true"
+                app:collapsedTitleGravity="start"
+                app:collapsedTitleTextAppearance="@style/MyTextApprncCol.darkBg"
+                app:expandedTitleGravity="start"
+                app:expandedTitleMargin="15dp"
+                app:expandedTitleMarginBottom="@dimen/expTittleMarginBottom"
+                app:expandedTitleMarginStart="@dimen/expTittleMarginStart"
+                app:expandedTitleMarginTop="@dimen/expTittleMarginTop"
+                app:expandedTitleTextAppearance="@style/MyTextApprncExp.darkBg"
+                app:layout_scrollFlags="snap|enterAlways"
+                app:scrimVisibleHeightTrigger="@dimen/scrimVisibleHeightTrigger"
+                app:title="Details"
+                app:titleEnabled="true">
+
+                <android.support.v7.widget.Toolbar
+                    android:id="@+id/secondary_toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:theme="@style/AccountToolbarStyle"
+                    app:buttonGravity="bottom"
+                    app:layout_collapseMode="pin"
+                    app:navigationIcon="@drawable/ic_arrow_back_white_24dp"
+                    app:popupTheme="@style/Base.ThemeOverlay.AppCompat.Dark"
+                    app:title="Details"
+                    app:titleMarginBottom="@dimen/titleMarginBottom"
+                    app:titleMarginStart="@dimen/titleMarginStart"
+                    app:titleMarginTop="@dimen/titleMarginTop">
+
+                </android.support.v7.widget.Toolbar>
+            </android.support.design.widget.CollapsingToolbarLayout>
+        </android.support.design.widget.AppBarLayout>
+
+
+    </android.support.design.widget.CoordinatorLayout>
+
+</android.support.design.widget.CoordinatorLayout>

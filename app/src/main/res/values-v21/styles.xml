@@ -11,5 +11,17 @@
         <item name="coordinatorLayoutStyle">@style/Widget.Design.CoordinatorLayout</item>
     </style>
 
+    <style name="AppTheme.NoActionBar.transparent" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="colorPrimary">#9d9d9d</item>
+        <item name="colorPrimaryDark">#cac8c8</item>
+        <item name="android:windowActionBarOverlay">true</item>
+        <item name="android:windowTranslucentStatus">false</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
+        <item name="coordinatorLayoutStyle">@style/Widget.Design.CoordinatorLayout</item>
+    </style>
+
+
     <!--<item name="android:windowTranslucentNavigation">true</item>-->
 </resources>

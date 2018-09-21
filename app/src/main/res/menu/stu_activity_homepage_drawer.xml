@@ -33,7 +33,7 @@
             android:title="Records" />
         <item
             android:id="@+id/payments"
-            android:icon="@drawable/payments_icon"
+            android:icon="@drawable/ic_payment"
             android:title="Payments" />
         <item
             android:id="@+id/messages"
@@ -47,6 +47,10 @@
             android:id="@+id/free_cashback"
             android:icon="@drawable/free_cash_icon"
             android:title="Free Cashback" />
+        <item
+            android:id="@+id/heat_map"
+            android:icon="@drawable/ic_heat_map"
+            android:title="Heat Map" />
         <item
             android:id="@+id/settings"
             android:icon="@drawable/settings_icon"
