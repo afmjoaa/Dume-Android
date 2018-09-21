@@ -19,7 +19,10 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.transitionseverywhere.TransitionManager;
+
+import java.util.Arrays;
 
 import io.dume.dume.R;
 import io.dume.dume.custom_view.HorizontalLoadView;
@@ -67,7 +70,25 @@ public class EditAccount extends AppCompatActivity implements EditContract.View,
         avatar = findViewById(R.id.profileImage);
         loadView = findViewById(R.id.loadEdit);
         wrapper = findViewById(R.id.wrapperAccountEdit);
+        loadCarryData();
     }
+
+    private void loadCarryData() {
+        Bundle bundle = getIntent().getBundleExtra("user_data");
+        if (bundle != null) {
+            Glide.with(this).load(bundle.getString("avatar")).apply(new RequestOptions().override(100, 100)).into(avatar);
+            first.setText(bundle.getString("first_name"));
+            last.setText(bundle.getString("last_name"));
+            phone.setText(bundle.getString("phone_number"));
+            mail.setText(bundle.getString("email"));
+            religion.setSelection(Arrays.asList(getResources().getStringArray(R.array.religion)).indexOf(bundle.getString("religion")));
+            gender.setSelection(Arrays.asList(getResources().getStringArray(R.array.gender)).indexOf(bundle.getString("gender")));
+            marital.setSelection(Arrays.asList(getResources().getStringArray(R.array.marital_status)).indexOf(bundle.getString("marital")));
+            Log.e(TAG, "loadCarryData: " + bundle.toString());
+            avatarUrl = bundle.getString("avatar");
+        }
+    }
+
 
     @Override
     public void configureCallback() {

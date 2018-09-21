@@ -1,7 +1,5 @@
 package io.dume.dume.auth;
 
-import android.net.Uri;
-
 import com.google.firebase.auth.PhoneAuthProvider;
 
 import java.io.Serializable;
@@ -30,7 +28,7 @@ public class DataStore implements Serializable {
 
 
     public String getPhotoUri() {
-        return photoUrl;
+        return photoUrl == null ? "" : photoUrl;
     }
 
     public void setPhotoUri(String photoUrl) {

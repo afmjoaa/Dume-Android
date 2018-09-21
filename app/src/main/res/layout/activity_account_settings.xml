@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/transitionContainer"
+
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorWhite"
@@ -128,7 +129,8 @@
                         android:drawableTop="@drawable/warning_icon_light"
                         android:gravity="center"
                         android:text="no qualification added yet"
-                        android:textStyle="italic" />
+                        android:textStyle="italic"
+                        android:visibility="gone" />
 
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/academic_list"

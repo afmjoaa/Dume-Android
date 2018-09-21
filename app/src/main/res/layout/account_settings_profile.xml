@@ -3,9 +3,11 @@
     android:id="@+id/profile_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="10dp">
+    android:layout_margin="10dp"
+    android:alpha=".5">
 
     <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/avatarImageView"
         android:layout_width="70dp"
         android:layout_height="70dp"
         android:layout_gravity="center_vertical"
@@ -28,30 +30,31 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/userNameTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="-13dp"
                 android:includeFontPadding="false"
-                android:text="Thats Enam"
+                android:text="UserName"
                 android:textAppearance="@style/EnamTextAppearanceNormal"
                 android:textColor="@color/colorBlack" />
 
             <TextView
+                android:id="@+id/userPhoneTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="-13dp"
-
-
                 android:includeFontPadding="false"
-                android:text="+880 15361-00076"
+                android:text="+880 0000000000"
                 android:textAppearance="@style/EnamTextAppearanceNormal"
                 android:textColor="@color/colorBlack" />
 
             <TextView
+                android:id="@+id/userMailTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:includeFontPadding="false"
-                android:text="surelastmail@gmail.com"
+                android:text="usermail@website.com"
                 android:textAppearance="@style/EnamTextAppearanceNormal"
                 android:textColor="@color/colorBlack" />
         </LinearLayout>
