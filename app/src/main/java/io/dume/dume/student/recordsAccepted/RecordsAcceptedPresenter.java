@@ -20,6 +20,9 @@ public class RecordsAcceptedPresenter implements RecordsAcceptedContract.Present
 
     @Override
     public void recordsAcceptedEnqueue() {
+        mView.findView();
+        mView.initRecordsAccepted();
+        mView.configRecordsAccepted();
 
     }
 

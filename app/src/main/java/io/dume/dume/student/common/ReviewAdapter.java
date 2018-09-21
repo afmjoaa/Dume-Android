@@ -1,4 +1,4 @@
-package io.dume.dume.student.searchResult;
+package io.dume.dume.student.common;
 
 import android.content.Context;
 import android.support.annotation.NonNull;

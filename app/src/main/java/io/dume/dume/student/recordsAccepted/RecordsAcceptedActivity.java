@@ -29,18 +29,10 @@ public class RecordsAcceptedActivity extends CustomStuAppCompatActivity implemen
         DumeUtils.configureAppbar(this, "Accepted Requests");
 
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
     }
 
     @Override
-    public void configRecordsAccepted() {
+    public void findView() {
 
     }
 
@@ -50,7 +42,7 @@ public class RecordsAcceptedActivity extends CustomStuAppCompatActivity implemen
     }
 
     @Override
-    public void findView() {
+    public void configRecordsAccepted() {
 
     }
 

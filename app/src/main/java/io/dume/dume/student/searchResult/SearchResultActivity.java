@@ -19,7 +19,6 @@ import android.support.v4.view.animation.LinearOutSlowInInterpolator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -30,7 +29,6 @@ import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -55,9 +53,12 @@ import java.util.List;
 
 import carbon.widget.ImageView;
 import io.dume.dume.R;
+import io.dume.dume.student.common.QualificationAdapter;
+import io.dume.dume.student.common.QualificationData;
+import io.dume.dume.student.common.ReviewAdapter;
+import io.dume.dume.student.common.ReviewHighlightData;
 import io.dume.dume.student.pojo.CusStuAppComMapActivity;
 import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
-import io.dume.dume.student.recordsPending.RecordsPendingActivity;
 import io.dume.dume.student.searchResultTabview.SearchResultTabviewActivity;
 import io.dume.dume.util.DumeUtils;
 import io.dume.dume.util.OnSwipeTouchListener;
@@ -171,7 +172,6 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
         ageText = findViewById(R.id.text_two);
         mentorNameText = findViewById(R.id.text_one);
         ratingPerformance = findViewById(R.id.main_rating_performance);
-        ratingExperience = findViewById(R.id.main_rating_experience);
         ratingExperience = findViewById(R.id.main_rating_experience);
         circleProgressbarARatio = (CircleProgressbar) findViewById(R.id.rating_main_accept_ratio);
         circleProgressbarExpertise = (CircleProgressbar) findViewById(R.id.rating_main_professionalism);

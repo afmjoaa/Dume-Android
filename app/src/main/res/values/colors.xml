@@ -80,5 +80,6 @@
     <color name="tabViewPager">#eceff1</color>
     <color name="tabFirstItem">#ffffff</color>
     <color name="tabSecondItem">#edeff1</color>
+    <color name="testing_color">#eceff1</color>
 
 </resources>
