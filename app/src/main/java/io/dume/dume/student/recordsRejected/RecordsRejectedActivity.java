@@ -3,11 +3,17 @@ package io.dume.dume.student.recordsRejected;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 
 import io.dume.dume.R;
 import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
@@ -17,6 +23,9 @@ public class RecordsRejectedActivity extends CustomStuAppCompatActivity implemen
 
     private RecordsRejectedContract.Presenter mPresenter;
     private static final int fromFlag = 21;
+    private ViewPager pager;
+    private SectionsPagerAdapter myPagerAdapter;
+
 
 
     @Override
@@ -28,20 +37,11 @@ public class RecordsRejectedActivity extends CustomStuAppCompatActivity implemen
         mPresenter.recordsRejectedEnqueue();
         DumeUtils.configureAppbar(this, "Rejected Requests");
 
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
     }
 
     @Override
-    public void configRecordsRejected() {
-
+    public void findView() {
+        pager = (ViewPager) findViewById(R.id.rejected_page_container);
     }
 
     @Override
@@ -50,8 +50,9 @@ public class RecordsRejectedActivity extends CustomStuAppCompatActivity implemen
     }
 
     @Override
-    public void findView() {
-
+    public void configRecordsRejected() {
+        myPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        pager.setAdapter(myPagerAdapter);
     }
 
     @Override
@@ -73,4 +74,52 @@ public class RecordsRejectedActivity extends CustomStuAppCompatActivity implemen
 
         return super.onOptionsItemSelected(item);
     }
+
+    //testing code goes here
+    public static class PlaceholderFragment extends Fragment {
+
+        private static final String ARG_SECTION_NUMBER = "section_number";
+        private RecordsRejectedActivity myThisActivity;
+
+
+        public PlaceholderFragment() {
+        }
+
+        public static PlaceholderFragment newInstance(int sectionNumber) {
+            PlaceholderFragment fragment = new PlaceholderFragment();
+            Bundle args = new Bundle();
+            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+            fragment.setArguments(args);
+            return fragment;
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+            myThisActivity = (RecordsRejectedActivity) getActivity();
+            View rootView = inflater.inflate(R.layout.stu10_viewpager_layout_rejected, container, false);
+
+            return rootView;
+        }
+    }
+
+    public class SectionsPagerAdapter extends FragmentPagerAdapter {
+
+        public SectionsPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            // getItem is called to instantiate the fragment for the given page.
+            // Return a PlaceholderFragment (defined as a static inner class below).
+            return PlaceholderFragment.newInstance(position + 1);
+        }
+
+        @Override
+        public int getCount() {
+            // from database call will get the array size
+            return 4;
+        }
+    }
+
 }

@@ -26,6 +26,7 @@
             android:indeterminateTint="@color/progressBarColor"
             android:indeterminateTintMode="src_atop" />
     </RelativeLayout>
+
     <RelativeLayout
         android:id="@+id/white_bg"
         android:layout_width="match_parent"
@@ -35,8 +36,7 @@
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
         android:layout_marginTop="70dp"
-        android:background="@drawable/secondary_profilepage_bg">
-    </RelativeLayout>
+        android:background="@drawable/secondary_profilepage_bg"></RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -137,9 +137,9 @@
                 android:id="@+id/horizontal_divider"
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
-                android:layout_weight="1"
-                android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_weight="1"
                 android:background="@color/colorAsh" />
         </LinearLayout>
 
@@ -173,7 +173,6 @@
         </android.support.v7.widget.CardView>
 
 
-
     </LinearLayout>
 
 
@@ -194,11 +193,11 @@
             android:orientation="vertical">
 
             <com.warkiz.widget.IndicatorStayLayout
-                android:layout_width="match_parent"
                 android:id="@+id/complete_seekbar_staylayout"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp">
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp">
 
                 <com.warkiz.widget.IndicatorSeekBar
                     android:id="@+id/complete_seekbar"
@@ -249,9 +248,9 @@
                         android:id="@+id/input_firstname"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/cairo_regular"
                         android:hint="First Name"
-                        android:inputType="textEmailAddress" />
+                        android:inputType="textEmailAddress"
+                        app:fontFamily="@font/cairo_regular" />
                 </android.support.design.widget.TextInputLayout>
 
 
@@ -267,9 +266,9 @@
                         android:id="@+id/input_lastname"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/cairo_regular"
                         android:hint="Last Name"
-                        android:inputType="textEmailAddress" />
+                        android:inputType="textEmailAddress"
+                        app:fontFamily="@font/cairo_regular" />
                 </android.support.design.widget.TextInputLayout>
 
 
@@ -287,9 +286,9 @@
                     android:id="@+id/input_email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/cairo_regular"
                     android:hint="@string/hint_email"
-                    android:inputType="textEmailAddress" />
+                    android:inputType="textEmailAddress"
+                    app:fontFamily="@font/cairo_regular" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -305,9 +304,9 @@
                     android:id="@+id/input_current_address"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/cairo_regular"
                     android:hint="@string/current_address"
-                    android:inputType="textEmailAddress" />
+                    android:inputType="textEmailAddress"
+                    app:fontFamily="@font/cairo_regular" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -323,9 +322,9 @@
                     android:id="@+id/input_current_status"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/cairo_regular"
                     android:hint="@string/current_status"
-                    android:inputType="textEmailAddress" />
+                    android:inputType="textEmailAddress"
+                    app:fontFamily="@font/cairo_regular" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -341,9 +340,9 @@
                     android:id="@+id/input_previous_result"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/cairo_regular"
                     android:hint="@string/previous_result"
-                    android:inputType="textEmailAddress" />
+                    android:inputType="textEmailAddress"
+                    app:fontFamily="@font/cairo_regular" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -370,9 +369,9 @@
                         android:id="@+id/input_gerder"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/cairo_regular"
                         android:hint="@string/gender"
-                        android:inputType="textEmailAddress" />
+                        android:inputType="textEmailAddress"
+                        app:fontFamily="@font/cairo_regular" />
                 </android.support.design.widget.TextInputLayout>
 
 
@@ -388,9 +387,9 @@
                         android:id="@+id/input_search_radius"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/cairo_regular"
                         android:hint="@string/search_radius"
-                        android:inputType="textEmailAddress" />
+                        android:inputType="textEmailAddress"
+                        app:fontFamily="@font/cairo_regular" />
                 </android.support.design.widget.TextInputLayout>
 
 
@@ -400,10 +399,10 @@
                 android:id="@+id/done_discard_btn_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 android:layout_marginBottom="20dp"
                 android:layout_marginEnd="20dp"
                 android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
                 android:baselineAligned="false"
                 android:orientation="horizontal">
 
@@ -414,7 +413,8 @@
                     android:layout_marginRight="10dp"
                     android:layout_weight="1"
                     android:text="Disxcard Changes"
-                    android:textAllCaps="false" />
+                    android:textAllCaps="false"
+                    app:fontFamily="@font/cairo_regular" />
 
                 <Button
                     android:layout_width="match_parent"
@@ -423,7 +423,8 @@
                     android:layout_marginStart="10dp"
                     android:layout_weight="1"
                     android:text="Update Profile"
-                    android:textAllCaps="false" />
+                    android:textAllCaps="false"
+                    app:fontFamily="@font/cairo_regular" />
 
             </LinearLayout>
 

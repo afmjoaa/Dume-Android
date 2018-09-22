@@ -20,6 +20,9 @@ public class RecordsCompletedPresenter implements  RecordsCompletedContract.Pres
 
     @Override
     public void recordsCompletedEnqueue() {
+        mView.findView();
+        mView.initRecordsCompleted();
+        mView.configRecordsCompleted();
 
     }
 

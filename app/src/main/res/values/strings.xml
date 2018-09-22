@@ -327,8 +327,7 @@
     <string name="title_activity_records_current">"Current records "</string>
     <string name="title_activity_records_completed">"Completed records "</string>
     <string name="title_activity_records_accepted">Accepted requests</string>
-    <string name="review_text">Hey Aaron, thanks for the call yesterday. So pleased that you found the topics we covered useful, and looking forward to seeing what you create. Definitely check out Photoshop too, some great tools for editing photos
-     fuck fuck fuck</string>
+    <string name="review_text">Hey Aaron, thanks for the call yesterday. So pleased that you found the topics we covered useful, and looking forward to seeing what you create. Definitely check out Photoshop too, some great tools</string>
     <string name="sync_now">Sync Now</string>
     <string name="math_amp_physics"><![CDATA[Math & Physics]]></string>
     <string name="up_arrow">up_arrow</string>
@@ -391,6 +390,9 @@
         <item>CGPA - 4.00</item>
         <item>CGPA - 4.00</item>
     </string-array>
+
+    <string name="mapTag">mapTag</string>
+    <string name="arrow">arrow</string>
 
 
 </resources>

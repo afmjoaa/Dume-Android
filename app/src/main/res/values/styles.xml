@@ -262,6 +262,17 @@
         <item name="android:background">@drawable/my_btn_background_white</item>
     </style>
 
+    <style name="myButtonStyleDisable" parent="Base.Widget.AppCompat.Button">
+        <item name="android:background">@drawable/my_btn_background_disable</item>
+    </style>
+
+    <style name="BrandedSwitch.control" parent="Theme.AppCompat.Light">
+        <!-- active thumb & track color (30% transparency) -->
+        <item name="colorControlActivated">#4db6ac</item>
+        <item name="colorSwitchThumbNormal">#eeeeee</item>
+    </style>
+
+
 
     <!--<style name="ScrollItem">
         <item name="android:layout_width">match_parent</item>

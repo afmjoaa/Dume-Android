@@ -103,6 +103,16 @@ public class HomePagePresenter implements HomePageContract.Presenter {
             case R.id.heat_map:
                 mView.gotoHeatMapActivity();
                 break;
+
+            case R.id.settings:
+                mView.gotoSettingActivity();
+                break;
+            case R.id.help:
+                mView.gotoHelpActivity();
+                break;
+            case R.id.payments:
+                mView.gotoPaymentActivity();
+                break;
         }
 
     }

@@ -38,6 +38,12 @@ public interface HomePageContract {
         void gotoHeatMapActivity();
 
         void gotoRecordsPage();
+
+        void gotoSettingActivity();
+
+        void gotoHelpActivity();
+
+        void gotoPaymentActivity();
     }
 
     interface Presenter {

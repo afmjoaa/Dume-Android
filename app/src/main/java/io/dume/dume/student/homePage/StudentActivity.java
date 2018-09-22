@@ -12,6 +12,7 @@ import io.dume.dume.R;
 import io.dume.dume.auth.auth.AuthActivity;
 import io.dume.dume.student.grabingPackage.GrabingPackageActivity;
 import io.dume.dume.student.recordsAccepted.RecordsAcceptedActivity;
+import io.dume.dume.student.recordsCompleted.RecordsCompletedActivity;
 import io.dume.dume.student.recordsCurrent.RecordsCurrentActivity;
 import io.dume.dume.student.recordsPending.RecordsPendingActivity;
 import io.dume.dume.student.recordsRejected.RecordsRejectedActivity;
@@ -60,7 +61,7 @@ public class StudentActivity extends AppCompatActivity implements StudentContrac
 
     @Override
     public void goTORecordsActivity2() {
-        startActivity(new Intent(this, RecordsAcceptedActivity.class));
+        startActivity(new Intent(this, RecordsCurrentActivity.class));
 
     }
 

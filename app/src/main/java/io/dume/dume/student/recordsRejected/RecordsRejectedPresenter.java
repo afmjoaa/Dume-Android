@@ -20,6 +20,9 @@ public class RecordsRejectedPresenter implements RecordsRejectedContract.Present
 
     @Override
     public void recordsRejectedEnqueue() {
+        mView.findView();
+        mView.initRecordsRejected();
+        mView.configRecordsRejected();
 
     }
 
