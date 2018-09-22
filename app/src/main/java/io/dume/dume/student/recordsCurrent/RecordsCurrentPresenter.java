@@ -20,7 +20,9 @@ public class RecordsCurrentPresenter implements RecordsCurrentContract.Presenter
 
     @Override
     public void recordsCurrentEnqueue() {
-
+        mView.findView();
+        mView.initRecordsCurrent();
+        mView.configRecordsCurrent();
     }
 
     @Override

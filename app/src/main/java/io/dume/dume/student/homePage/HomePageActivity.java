@@ -54,6 +54,9 @@ import io.dume.dume.student.pojo.CusStuAppComMapActivity;
 import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
 import io.dume.dume.student.profilePage.ProfilePageActivity;
 import io.dume.dume.student.recordsPage.RecordsPageActivity;
+import io.dume.dume.student.studentHelp.StudentHelpActivity;
+import io.dume.dume.student.studentPayment.StudentPaymentActivity;
+import io.dume.dume.student.studentSettings.StudentSettingsActivity;
 import io.dume.dume.util.DumeUtils;
 
 public class HomePageActivity extends CusStuAppComMapActivity implements HomePageContract.View,
@@ -572,6 +575,21 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
     @Override
     public void gotoRecordsPage() {
         startActivity(new Intent(this, RecordsPageActivity.class));
+    }
+
+    @Override
+    public void gotoSettingActivity() {
+        startActivity(new Intent(this, StudentSettingsActivity.class));
+    }
+
+    @Override
+    public void gotoHelpActivity() {
+        startActivity(new Intent(this, StudentHelpActivity.class));
+    }
+
+    @Override
+    public void gotoPaymentActivity() {
+        startActivity(new Intent(this, StudentPaymentActivity.class));
     }
 
 

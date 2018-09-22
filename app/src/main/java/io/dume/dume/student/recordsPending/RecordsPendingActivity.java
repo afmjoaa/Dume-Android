@@ -64,6 +64,7 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
     @Override
     public void findView() {
         recordsHostLayout = findViewById(R.id.recordsHostLayout);
+        pager = (ViewPager) findViewById(R.id.pending_page_container);
 
     }
 
@@ -80,7 +81,6 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
         mBottomSheetDialog.setContentView(sheetView);
         mBottomSheetDialog.show();
 
-        pager = (ViewPager) findViewById(R.id.pending_page_container);
         myPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         pager.setAdapter(myPagerAdapter);
 
@@ -122,6 +122,7 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
         private ImageView ratingPerformance;
         private ImageView ratingExperience;
         boolean scrollFirstTime = true;
+        private ReviewAdapter reviewRecyAda;
 
 
         public PlaceholderFragment() {
@@ -184,7 +185,7 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
 
             //setting the review recycler view
             List<ReviewHighlightData> reviewData = new ArrayList<>();
-            ReviewAdapter reviewRecyAda = new ReviewAdapter(myThisActivity, reviewData);
+            reviewRecyAda = new ReviewAdapter(myThisActivity, reviewData);
             reviewRecyView.setAdapter(reviewRecyAda);
             reviewRecyView.setLayoutManager(new LinearLayoutManager(myThisActivity));
             reviewRecyView.addOnScrollListener(new RecyclerView.OnScrollListener() {

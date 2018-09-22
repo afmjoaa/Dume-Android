@@ -14,7 +14,7 @@
         android:id="@+id/nested_host_linearlayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/testing_color"
+        android:background="@color/tabViewPager"
         android:orientation="vertical">
 
 
@@ -253,6 +253,114 @@
                     app:fontFamily="@font/cairo_regular" />
 
             </carbon.widget.LinearLayout>
+
+        </LinearLayout>
+
+        <!--agreement terms layout-->
+        <LinearLayout
+            android:id="@+id/agreement_term_host_linearlayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:orientation="vertical">
+
+            <carbon.widget.LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_round_corner_rela_layout"
+                android:baselineAligned="false"
+                android:orientation="vertical"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                app:carbon_elevation="8dp">
+
+                <Button
+                    android:id="@+id/show_agreement_terms_btn"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableBottom="@drawable/ic_down_arrow_small"
+                    android:drawablePadding="2dp"
+                    android:text="Agreement Terms"
+                    android:textAllCaps="false"
+                    android:textColor="@color/textColorPrimary"
+                    android:textSize="16sp"
+                    app:fontFamily="@font/cairo_regular" />
+
+            </carbon.widget.LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/agreement_term_layout_vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:background="@drawable/bg_white_bottom_round"
+                android:orientation="vertical"
+                android:paddingBottom="8dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingTop="8dp"
+                android:translationY="-2dp">
+
+                <TextView
+                    android:id="@+id/textview_starting_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="0dp"
+                    android:drawableLeft="@drawable/ic_keyboard_arrow_right_black_24dp"
+                    android:drawablePadding="6dp"
+                    android:drawableStart="@drawable/ic_keyboard_arrow_right_black_24dp"
+                    android:gravity="center_vertical"
+                    android:paddingBottom="2dp"
+                    android:paddingTop="2dp"
+                    android:singleLine="true"
+                    android:text="Starting Date &amp; Time : Tue, Apr 13, 5.00PM"
+                    android:textAllCaps="false"
+                    android:textColor="@color/textColorPrimary"
+                    android:textSize="13sp"
+                    android:textStyle="normal"
+                    app:fontFamily="@font/cairo_regular" />
+
+
+                <TextView
+                    android:id="@+id/textview_preferred_day"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="0dp"
+                    android:drawableLeft="@drawable/ic_keyboard_arrow_right_black_24dp"
+                    android:drawablePadding="6dp"
+                    android:drawableStart="@drawable/ic_keyboard_arrow_right_black_24dp"
+                    android:gravity="center_vertical"
+                    android:paddingBottom="2dp"
+                    android:paddingTop="2dp"
+                    android:singleLine="true"
+                    android:text="Preferred Day : Sun, Mon, Tue"
+                    android:textAllCaps="false"
+                    android:textColor="@color/textColorPrimary"
+                    android:textSize="13sp"
+                    android:textStyle="normal"
+                    app:fontFamily="@font/cairo_regular" />
+
+                <TextView
+                    android:id="@+id/textview_days_week"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="0dp"
+                    android:drawableLeft="@drawable/ic_keyboard_arrow_right_black_24dp"
+                    android:drawablePadding="6dp"
+                    android:drawableStart="@drawable/ic_keyboard_arrow_right_black_24dp"
+                    android:paddingBottom="2dp"
+                    android:paddingTop="2dp"
+                    android:singleLine="true"
+                    android:text="Days/Week : Three"
+                    android:textAllCaps="false"
+                    android:textColor="@color/textColorPrimary"
+                    android:textSize="13sp"
+                    android:textStyle="normal"
+                    app:fontFamily="@font/cairo_regular" />
+
+            </LinearLayout>
 
         </LinearLayout>
 
@@ -901,114 +1009,6 @@
                     android:layout_marginTop="4dp">
 
                 </android.support.v7.widget.RecyclerView>
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <!--agreement terms layout-->
-        <LinearLayout
-            android:id="@+id/agreement_term_host_linearlayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:orientation="vertical">
-
-            <carbon.widget.LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_round_corner_rela_layout"
-                android:baselineAligned="false"
-                android:orientation="vertical"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                app:carbon_elevation="8dp">
-
-                <Button
-                    android:id="@+id/show_agreement_terms_btn"
-                    style="@style/Widget.AppCompat.Button.Borderless"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:drawableBottom="@drawable/ic_down_arrow_small"
-                    android:drawablePadding="2dp"
-                    android:text="Agreement Terms"
-                    android:textAllCaps="false"
-                    android:textColor="@color/textColorPrimary"
-                    android:textSize="16sp"
-                    app:fontFamily="@font/cairo_regular" />
-
-            </carbon.widget.LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/agreement_term_layout_vertical"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:background="@drawable/bg_white_bottom_round"
-                android:orientation="vertical"
-                android:paddingBottom="8dp"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:paddingTop="8dp"
-                android:translationY="-2dp">
-
-                <TextView
-                    android:id="@+id/textview_starting_date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="0dp"
-                    android:drawableLeft="@drawable/ic_keyboard_arrow_right_black_24dp"
-                    android:drawablePadding="6dp"
-                    android:drawableStart="@drawable/ic_keyboard_arrow_right_black_24dp"
-                    android:gravity="center_vertical"
-                    android:paddingBottom="2dp"
-                    android:paddingTop="2dp"
-                    android:singleLine="true"
-                    android:text="Starting Date &amp; Time : Tue, Apr 13, 5.00PM"
-                    android:textAllCaps="false"
-                    android:textColor="@color/textColorPrimary"
-                    android:textSize="13sp"
-                    android:textStyle="normal"
-                    app:fontFamily="@font/cairo_regular" />
-
-
-                <TextView
-                    android:id="@+id/textview_preferred_day"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="0dp"
-                    android:drawableLeft="@drawable/ic_keyboard_arrow_right_black_24dp"
-                    android:drawablePadding="6dp"
-                    android:drawableStart="@drawable/ic_keyboard_arrow_right_black_24dp"
-                    android:gravity="center_vertical"
-                    android:paddingBottom="2dp"
-                    android:paddingTop="2dp"
-                    android:singleLine="true"
-                    android:text="Preferred Day : Sun, Mon, Tue"
-                    android:textAllCaps="false"
-                    android:textColor="@color/textColorPrimary"
-                    android:textSize="13sp"
-                    android:textStyle="normal"
-                    app:fontFamily="@font/cairo_regular" />
-
-                <TextView
-                    android:id="@+id/textview_days_week"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="0dp"
-                    android:drawableLeft="@drawable/ic_keyboard_arrow_right_black_24dp"
-                    android:drawablePadding="6dp"
-                    android:drawableStart="@drawable/ic_keyboard_arrow_right_black_24dp"
-                    android:paddingBottom="2dp"
-                    android:paddingTop="2dp"
-                    android:singleLine="true"
-                    android:text="Days/Week : Three"
-                    android:textAllCaps="false"
-                    android:textColor="@color/textColorPrimary"
-                    android:textSize="13sp"
-                    android:textStyle="normal"
-                    app:fontFamily="@font/cairo_regular" />
 
             </LinearLayout>
 
