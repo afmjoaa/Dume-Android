@@ -64,6 +64,64 @@
                 android:paddingTop="8dp"
                 android:translationY="-2dp">
 
+                <RelativeLayout
+                    android:id="@+id/calender_header"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_calender_header"
+                    android:paddingBottom="12dp"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    android:paddingTop="12dp">
+
+                    <TextView
+                        android:id="@+id/starting_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:text="Starting Date : "
+                        android:textAllCaps="false"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="16sp"
+                        android:textStyle="normal"
+                        app:fontFamily="@font/cairo_regular" />
+
+                    <TextView
+                        android:id="@+id/finishing_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/starting_date"
+                        android:text="Finishing Date : "
+                        android:textAllCaps="false"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="16sp"
+                        android:textStyle="normal"
+                        app:fontFamily="@font/cairo_regular" />
+
+                    <ImageView
+                        android:id="@+id/current_date_imageview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:contentDescription="@string/current_date"
+                        app:srcCompat="@drawable/ic_current_date_icon" />
+
+
+                </RelativeLayout>
+
+                <com.prolificinteractive.materialcalendarview.MaterialCalendarView xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/calendarView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/bg_calender_background"
+                    app:mcv_selectionColor="#108174"
+                    app:mcv_showOtherDates="all" />
+
 
                 <RelativeLayout
                     android:id="@+id/notification_block_layout"

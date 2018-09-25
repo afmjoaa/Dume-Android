@@ -160,15 +160,11 @@
         <activity
             android:name=".student.searchResult.SearchResultActivity"
             android:label=""
-            android:theme="@style/AppTheme.NoActionBar.transparent"/>
-
-
+            android:theme="@style/AppTheme.NoActionBar.transparent" />
         <activity
             android:name=".student.searchLoading.SearchLoadingActivity"
             android:label=""
-            android:theme="@style/AppTheme.NoActionBar.transparent"/>
-
-
+            android:theme="@style/AppTheme.NoActionBar.transparent" />
         <activity
             android:name=".student.recordsPage.RecordsPageActivity"
             android:label="@string/title_activity_records_page"
@@ -193,6 +189,34 @@
             android:name=".student.recordsAccepted.RecordsAcceptedActivity"
             android:label="@string/title_activity_records_accepted"
             android:theme="@style/AppTheme.NoActionBar.transparent.accepted" />
+        <activity
+            android:name=".student.freeCashBack.FreeCashBackActivity"
+            android:label="@string/title_activity_free_cash_back"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".common.aboutUs.AboutUsActivity"
+            android:label="@string/title_activity_about_us"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".common.inboxActivity.InboxActivity"
+            android:label="@string/title_activity_inbox"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".common.privacyPolicy.PrivacyPolicyActivity"
+            android:label="@string/title_activity_privacy_policy"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".common.chatActivity.ChatActivity"
+            android:label="@string/title_activity_chat"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".common.contactActivity.ContactActivity"
+            android:label="@string/title_activity_contact"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".student.mentorAddvertise.MentorAddvertiseActivity"
+            android:label="@string/title_activity_mentor_addvertise"
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>

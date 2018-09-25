@@ -393,6 +393,14 @@
 
     <string name="mapTag">mapTag</string>
     <string name="arrow">arrow</string>
+    <string name="current_date">current_date</string>
+    <string name="title_activity_free_cash_back">FreeCashBackActivity</string>
+    <string name="title_activity_about_us">AboutUsActivity</string>
+    <string name="title_activity_inbox">InboxActivity</string>
+    <string name="title_activity_privacy_policy">Privacy Policy</string>
+    <string name="title_activity_chat">Chats</string>
+    <string name="title_activity_contact">Contacts</string>
+    <string name="title_activity_mentor_addvertise">Refer Mentors</string>
 
 
 </resources>

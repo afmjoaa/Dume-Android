@@ -125,6 +125,8 @@ public class RecordsCurrentActivity extends CustomStuAppCompatActivity implement
         private View locationMapHostContent;
         private EditText notificationEditText;
         private TimePickerFragment timePicker;
+        private EditText reminderEditText;
+        private TimePickerFragment timePickerReminder;
 
 
         public PlaceholderFragment() {
@@ -150,20 +152,63 @@ public class RecordsCurrentActivity extends CustomStuAppCompatActivity implement
             ratingExperience = rootView.findViewById(R.id.main_rating_experience);
             locationMapHost = rootView.findViewById(R.id.location_layout_vertical);
             notificationEditText = rootView.findViewById(R.id.notification_edittext);
-
+            reminderEditText = rootView.findViewById(R.id.reminder_edittext);
 
             timePicker = new TimePickerFragment();
             timePicker.setTimePickerListener(new TimePickerDialog.OnTimeSetListener() {
                 @Override
                 public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                    Toast.makeText(myThisActivity, "fuck fuck", Toast.LENGTH_SHORT).show();
+                    String AM_PM;
+                    int myHourOfDay = hourOfDay;
+                    if (hourOfDay < 12) {
+                        AM_PM = "AM";
+                    } else {
+                        AM_PM = "PM";
+                    }
+                    if (hourOfDay >= 13) {
+                        myHourOfDay = hourOfDay - 12;
+                    }else if(hourOfDay == 0){
+                        myHourOfDay = 12;
+                    }
+                    String myTime = "" + myHourOfDay + ":" + minute + " " + AM_PM;
+                    notificationEditText.setText(myTime);
                 }
             });
 
             notificationEditText.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    timePicker.show(getChildFragmentManager(), "time picker");
+                    timePicker.show(getChildFragmentManager(), "time_notification");
+                }
+            });
+
+
+            //testting the reminder here
+            timePickerReminder = new TimePickerFragment();
+            timePickerReminder.setTimePickerListener(new TimePickerDialog.OnTimeSetListener() {
+                @Override
+                public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                    String AM_PM;
+                    int myHourOfDay = hourOfDay;
+                    if (hourOfDay < 12) {
+                        AM_PM = "AM";
+                    } else {
+                        AM_PM = "PM";
+                    }
+                    if (hourOfDay >= 13) {
+                        myHourOfDay = hourOfDay - 12;
+                    }else if(hourOfDay == 0){
+                        myHourOfDay = 12;
+                    }
+                    String myTime = "" + myHourOfDay + ":" + minute + " " + AM_PM;
+                    reminderEditText.setText(myTime);
+                }
+            });
+
+            reminderEditText.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    timePicker.show(getChildFragmentManager(), "time_reminder");
                 }
             });
 
@@ -177,7 +222,6 @@ public class RecordsCurrentActivity extends CustomStuAppCompatActivity implement
                 ft.commit();
                 fm.executePendingTransactions();
             }
-
 
 
             //setting text over drawable
@@ -208,7 +252,6 @@ public class RecordsCurrentActivity extends CustomStuAppCompatActivity implement
             mChart.build();
 
 
-
             //setting the qualification recycler view
             qualificaitonRecyAda = new QualificationAdapter(myThisActivity, getQualificationData());
             qualificationRecyView.setAdapter(qualificaitonRecyAda);
@@ -235,7 +278,6 @@ public class RecordsCurrentActivity extends CustomStuAppCompatActivity implement
                     }
                 }
             });
-
 
 
             return rootView;

@@ -206,7 +206,7 @@
         <item name="coordinatorLayoutStyle">@style/Widget.Design.CoordinatorLayout</item>
     </style>
 
-   <!-- <style name="OverflowMenuStyle" parent="Widget.AppCompat.PopupMenu.Overflow">
+    <!-- <style name="OverflowMenuStyle" parent="Widget.AppCompat.PopupMenu.Overflow">
         <item name="android:dropDownHorizontalOffset">-16dp</item>
         <item name="android:dropDownVerticalOffset">16dp</item>
     </style>-->
@@ -271,7 +271,6 @@
         <item name="colorControlActivated">#4db6ac</item>
         <item name="colorSwitchThumbNormal">#eeeeee</item>
     </style>
-
 
 
     <!--<style name="ScrollItem">
