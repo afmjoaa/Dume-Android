@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".student.studentHelp.StudentHelpActivity">
+    tools:context=".student.studentSettings.StudentSettingsActivity">
+
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"
@@ -30,7 +31,7 @@
             app:expandedTitleTextAppearance="@style/MyTextApprncExp.darkBg"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:scrimVisibleHeightTrigger="@dimen/scrimVisibleHeightTrigger"
-            app:title="Help"
+            app:title="Settings"
             app:titleEnabled="true"
             app:toolbarId="@+id/accountToolbar">
 
@@ -62,8 +63,8 @@
         app:rect_color="@color/carbon_black" />
 
     <include
-        android:id="@+id/help_content"
-        layout="@layout/stunav_activity3_content_student_help" />
+        android:id="@+id/settings_content"
+        layout="@layout/stunav_activity4_content_settings" />
 
     <FrameLayout
         android:id="@+id/content"

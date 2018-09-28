@@ -24,7 +24,6 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.tomergoldst.tooltips.ToolTip;
 import com.tomergoldst.tooltips.ToolTipsManager;
 import com.transitionseverywhere.ChangeBounds;
 import com.transitionseverywhere.Recolor;
@@ -38,7 +37,7 @@ import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.dume.dume.R;
-import io.dume.dume.custom_view.HorizontalLoadView;
+import io.dume.dume.customView.HorizontalLoadView;
 import io.dume.dume.student.homePage.MapsActivity;
 import io.dume.dume.teacher.adapters.BasicInfoAdapter;
 import io.dume.dume.teacher.mentor_settings.academic.AcademicActivity;

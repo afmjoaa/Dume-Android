@@ -45,11 +45,16 @@ import java.util.Objects;
 
 import io.dume.dume.R;
 import io.dume.dume.auth.auth.AppbarStateChangeListener;
+import io.dume.dume.common.aboutUs.AboutUsActivity;
+import io.dume.dume.common.inboxActivity.InboxActivity;
+import io.dume.dume.common.privacyPolicy.PrivacyPolicyActivity;
 import io.dume.dume.service.LocationServiceHandler;
 import io.dume.dume.service.MyLocationService;
+import io.dume.dume.student.freeCashBack.FreeCashBackActivity;
 import io.dume.dume.student.grabingLocation.GrabingLocationActivity;
 import io.dume.dume.student.grabingInfo.GrabingInfoActivity;
 import io.dume.dume.student.heatMap.HeatMapActivity;
+import io.dume.dume.student.mentorAddvertise.MentorAddvertiseActivity;
 import io.dume.dume.student.pojo.CusStuAppComMapActivity;
 import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
 import io.dume.dume.student.profilePage.ProfilePageActivity;
@@ -590,6 +595,31 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
     @Override
     public void gotoPaymentActivity() {
         startActivity(new Intent(this, StudentPaymentActivity.class));
+    }
+
+    @Override
+    public void gotoInboxActivity() {
+        startActivity(new Intent(this, InboxActivity.class));
+    }
+
+    @Override
+    public void gotoFreeCashBackActivity() {
+        startActivity(new Intent(this, FreeCashBackActivity.class));
+    }
+
+    @Override
+    public void gotoAboutUsActivity() {
+        startActivity(new Intent(this, AboutUsActivity.class));
+    }
+
+    @Override
+    public void gotoPrivacyPolicyActivity() {
+        startActivity(new Intent(this, PrivacyPolicyActivity.class));
+    }
+
+    @Override
+    public void gotoMentorAddvertise() {
+        startActivity(new Intent(this, MentorAddvertiseActivity.class));
     }
 
 

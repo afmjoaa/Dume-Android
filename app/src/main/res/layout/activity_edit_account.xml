@@ -10,7 +10,7 @@
 
     <include layout="@layout/activity_header" />
 
-    <io.dume.dume.custom_view.HorizontalLoadView
+    <io.dume.dume.customView.HorizontalLoadView
         android:id="@+id/loadEdit"
         android:layout_width="15dp"
         android:layout_height="10dp"

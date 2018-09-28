@@ -55,9 +55,9 @@ public class PlaceMenualRecyAda extends RecyclerView.Adapter<PlaceMenualRecyAda.
 
     class MyViewHolder extends RecyclerView.ViewHolder {
 
-        TextView primaryText;
-        TextView secondaryText;
-        ImageView imageIcon;
+        private final TextView primaryText;
+        private final TextView secondaryText;
+        private final ImageView imageIcon;
 
         public MyViewHolder(View itemView) {
             super(itemView);

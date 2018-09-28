@@ -24,4 +24,60 @@
         android:key="notifications_new_message_vibrate"
         android:title="@string/pref_title_vibrate" />
 
+    <PreferenceCategory
+        android:title="Login"
+        android:key="pref_key_login_settings">
+
+        <Preference
+            android:key="fuck"
+            android:title="Change Password"
+            />
+
+        <EditTextPreference
+            android:key="fuck1"
+            android:title="Change Password Hint"
+            />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Security"
+        android:key="pref_key_security_settings">
+
+        <SwitchPreference
+            android:key="fuck2"
+            android:title="Auto Lock"
+            android:summary="Always prompt password login when the app is inactive for a while"
+            />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="About"
+        android:key="pref_key_about_settings">
+
+        <Preference
+            android:key="fuck3"
+            android:title="Upgrade"
+            android:summary="Pro for peace of mind or be a Patron to support our work"
+            />
+
+        <Preference
+            android:key="fuck4"
+            android:title="❤ LuaPass"
+            android:summary="Rate LuaPass on Play Store"
+            />
+
+        <Preference
+            android:key="fuck5"
+            android:title="Feedback"
+            android:summary="Email us for question, suggestion or bug report"
+            />
+
+        <Preference
+            android:key="fuck6"
+            android:title="Version"
+            />
+
+    </PreferenceCategory>
+
 </PreferenceScreen>

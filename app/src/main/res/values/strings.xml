@@ -402,5 +402,24 @@
     <string name="title_activity_contact">Contacts</string>
     <string name="title_activity_mentor_addvertise">Refer Mentors</string>
 
+    <string-array name="settingsHeader">
+        <item>General</item>
+        <item>Saved places</item>
+        <item>Account</item>
+        <item>Chats</item>
+        <item>Notifications</item>
+        <item>Invite a friend</item>
+        <item>Sign out</item>
+    </string-array>
+
+    <string-array name="helpHeader">
+        <item>What's new</item>
+        <item>Feature</item>
+        <item>FAQ</item>
+        <item>Contact us</item>
+        <item>Check for update</item>
+        <item>Terms &amp; privacy policy</item>
+        <item>App info</item>
+    </string-array>
 
 </resources>

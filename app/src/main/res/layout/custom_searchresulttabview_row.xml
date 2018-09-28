@@ -3,7 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/hostRelativeLayout"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true">
+
 
     <carbon.widget.ImageView
         android:id="@+id/mentor_display_pic"
@@ -14,6 +18,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="12dp"
+        android:clickable="false"
         android:src="@drawable/demo_testing_image"
         app:carbon_cornerRadius="6dp"
         app:carbon_elevation="4dp" />

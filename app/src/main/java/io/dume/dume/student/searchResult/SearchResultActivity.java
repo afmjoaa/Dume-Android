@@ -53,6 +53,7 @@ import java.util.List;
 
 import carbon.widget.ImageView;
 import io.dume.dume.R;
+import io.dume.dume.customView.HorizontalLoadView;
 import io.dume.dume.student.common.QualificationAdapter;
 import io.dume.dume.student.common.QualificationData;
 import io.dume.dume.student.common.ReviewAdapter;
@@ -115,6 +116,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
     private LinearLayout basicInfoInsider;
     private LinearLayout.LayoutParams basicInfoInsiderLayoutParams;
     private OnSwipeTouchListener onSwipeTouchListener;
+    private HorizontalLoadView loadView;
 
 
     @Override
@@ -195,6 +197,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
         basicInfoInsiderLayoutParams = (LinearLayout.LayoutParams) basicInfoInsider.getLayoutParams();
         swipeLeft = findViewById(R.id.swipe_left);
         swipeRight = findViewById(R.id.swipe_right);
+        loadView = findViewById(R.id.loadView);
 
     }
 
@@ -245,6 +248,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                     setDarkStatusBarIcon();
                     viewMusk.setVisibility(View.GONE);
                     secondaryAppbarLayout.setVisibility(View.INVISIBLE);
+                    loadView.setVisibility(View.GONE);
                     defaultAppbarLayout.setVisibility(View.VISIBLE);
                     changingOrientationContainer.setOrientation(LinearLayout.HORIZONTAL);
                     changingOrientationParams.height = LinearLayout.LayoutParams.WRAP_CONTENT;
@@ -268,6 +272,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                     setLightStatusBarIcon();
                     viewMusk.setVisibility(View.VISIBLE);
                     secondaryAppbarLayout.setVisibility(View.VISIBLE);
+                    loadView.setVisibility(View.VISIBLE);
                     defaultAppbarLayout.setVisibility(View.INVISIBLE);
 
                     circleProgressbarARatio.setProgressWithAnimation(80, ANIMATIONDURATION);

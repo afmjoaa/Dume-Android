@@ -1193,6 +1193,16 @@
             </android.support.design.widget.CollapsingToolbarLayout>
         </android.support.design.widget.AppBarLayout>
 
+        <io.dume.dume.customView.HorizontalLoadView
+            android:id="@+id/loadView"
+            android:layout_width="20dp"
+            android:layout_height="10dp"
+            android:elevation="20dp"
+            android:translationY="5dp"
+            app:layout_anchor="@id/secondary_Appbar"
+            app:layout_anchorGravity="bottom"
+            app:rect_color="@color/carbon_black" />
+
 
     </android.support.design.widget.CoordinatorLayout>
 

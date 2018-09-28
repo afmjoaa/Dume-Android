@@ -19,7 +19,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import io.dume.dume.R;
-import io.dume.dume.custom_view.HorizontalLoadView;
+import io.dume.dume.customView.HorizontalLoadView;
 import io.dume.dume.teacher.adapters.MentorSpinnerAdapter;
 import io.dume.dume.util.DumeUtils;
 

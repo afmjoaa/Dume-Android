@@ -1,9 +1,7 @@
 package io.dume.dume.student.studentSettings;
 
 import android.annotation.TargetApi;
-import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -11,35 +9,111 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
-import android.preference.PreferenceActivity;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.ActionBar;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
 
 import io.dume.dume.R;
+import io.dume.dume.student.common.SettingData;
+import io.dume.dume.student.common.SettingsAdapter;
+import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
 
+import java.util.ArrayList;
 import java.util.List;
 
-/**
- * A {@link PreferenceActivity} that presents a set of application settings. On
- * handset devices, settings are presented as a single list. On tablets,
- * settings are split by category, with category headers shown to the left of
- * the list of settings.
- * <p>
- * See <a href="http://developer.android.com/design/patterns/settings.html">
- * Android Design: Settings</a> for design guidelines and the <a
- * href="http://developer.android.com/guide/topics/ui/settings.html">Settings
- * API Guide</a> for more information on developing a Settings UI.
- */
-public class StudentSettingsActivity extends AppCompatPreferenceActivity implements StudentSettingsContract.View {
+import static io.dume.dume.util.DumeUtils.configAppbarTittle;
+import static io.dume.dume.util.DumeUtils.configureAppbar;
 
-    /**
-     * A preference value change listener that updates the preference's summary
-     * to reflect its new value.
-     */
+public class StudentSettingsActivity extends CustomStuAppCompatActivity
+        implements StudentSettingsContract.View {
+    private StudentSettingsContract.Presenter mPresenter;
+    private static final int fromFlag = 11;
+    private RecyclerView settingsRecycleView;
+    private SettingsAdapter settingsAdapter;
+    private View settingsContent;
+    private CollapsingToolbarLayout collapsingToolbarLayout;
+    private Toolbar toolbar;
+    private String[] settingNameArr;
+    private AppBarLayout appBarLayout;
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.stunav_activity4_settings);
+        setActivityContext(this, fromFlag);
+        mPresenter = new StudentSettingsPresenter(this, new StudentSettingsModel());
+        mPresenter.studentSettingsEnqueue();
+        configureAppbar(this, "Settings");
+
+
+        //setting the recycler view
+        settingsAdapter = new SettingsAdapter(this, getFinalData()) {
+            @Override
+            protected void OnButtonClicked(View v, int position) {
+                settingsContent.setVisibility(View.GONE);
+                switch (position) {
+                    case 0:
+                        Toast.makeText(StudentSettingsActivity.this, "0", Toast.LENGTH_SHORT).show();
+                        getFragmentManager().beginTransaction().replace(R.id.content, new NotificationPreferenceFragment()).commit();
+                        break;
+                    case 1:
+                        getFragmentManager().beginTransaction().replace(R.id.content, new NotificationPreferenceFragment()).commit();
+                        break;
+                    case 2:
+                        getFragmentManager().beginTransaction().replace(R.id.content, new DataSyncPreferenceFragment()).commit();
+                        break;
+                    case 3:
+                        Toast.makeText(StudentSettingsActivity.this, "3", Toast.LENGTH_SHORT).show();
+                        break;
+                    case 4:
+                        Toast.makeText(StudentSettingsActivity.this, "4", Toast.LENGTH_SHORT).show();
+                        break;
+                    case 5:
+                        Toast.makeText(StudentSettingsActivity.this, "5", Toast.LENGTH_SHORT).show();
+                        break;
+                    case 6:
+                        Toast.makeText(StudentSettingsActivity.this, "6", Toast.LENGTH_SHORT).show();
+                        break;
+                }
+                configAppbarTittle(StudentSettingsActivity.this, settingNameArr[position]);
+                appBarLayout.setExpanded(false);
+            }
+        };
+        settingsRecycleView.setAdapter(settingsAdapter);
+        settingsRecycleView.setLayoutManager(new LinearLayoutManager(this));
+
+    }
+
+
+    @Override
+    public void findView() {
+        settingNameArr = getResources().getStringArray(R.array.settingsHeader);
+        settingsRecycleView = findViewById(R.id.Testing_fuck_recycler);
+        settingsContent = findViewById(R.id.settings_content);
+        appBarLayout = findViewById(R.id.app_bar);
+    }
+
+    @Override
+    public void initStudentSettings() {
+
+    }
+
+    @Override
+    public void configStudentSettings() {
+
+    }
+
     private static Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = new Preference.OnPreferenceChangeListener() {
         @Override
         public boolean onPreferenceChange(Preference preference, Object value) {
@@ -87,26 +161,7 @@ public class StudentSettingsActivity extends AppCompatPreferenceActivity impleme
             return true;
         }
     };
-    private StudentSettingsContract.Presenter mPresenter;
 
-    /**
-     * Helper method to determine if the device has an extra-large screen. For
-     * example, 10" tablets are extra-large.
-     */
-    private static boolean isXLargeTablet(Context context) {
-        return (context.getResources().getConfiguration().screenLayout
-                & Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_XLARGE;
-    }
-
-    /**
-     * Binds a preference's summary to its value. More specifically, when the
-     * preference's value is changed, its summary (line of text below the
-     * preference title) is updated to reflect the value. The summary is also
-     * immediately updated upon calling this method. The exact display format is
-     * dependent on the type of preference.
-     *
-     * @see #sBindPreferenceSummaryToValueListener
-     */
     private static void bindPreferenceSummaryToValue(Preference preference) {
         // Set the listener to watch for value changes.
         preference.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
@@ -119,67 +174,25 @@ public class StudentSettingsActivity extends AppCompatPreferenceActivity impleme
                         .getString(preference.getKey(), ""));
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setupActionBar();
-        mPresenter = new StudentSettingsPresenter(this, new StudentSettingsModel());
-        mPresenter.studentSettingsEnqueue();
+    public List<SettingData> getFinalData() {
+        List<SettingData> data = new ArrayList<>();
+        int[] imageIcons = {
+                R.drawable.ic_search_settings,
+                R.drawable.ic_star_border_black_24dp,
+                R.drawable.ic_person_outline_black_24dp,
+                R.drawable.ic_settings_chat,
+                R.drawable.ic_settings_notifications,
+                R.drawable.ic_settings_invite_a_friend,
+                R.drawable.ic_settings_sign_out
+        };
 
-    }
-
-    /**
-     * Set up the {@link android.app.ActionBar}, if the API is available.
-     */
-    private void setupActionBar() {
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            // Show the Up button in the action bar.
-            actionBar.setDisplayHomeAsUpEnabled(true);
+        for (int i = 0; i < settingNameArr.length && i < imageIcons.length; i++) {
+            SettingData current = new SettingData();
+            current.settingName = settingNameArr[i];
+            current.settingIcon = imageIcons[i];
+            data.add(current);
         }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean onIsMultiPane() {
-        return isXLargeTablet(this);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public void onBuildHeaders(List<Header> target) {
-        loadHeadersFromResource(R.xml.pref_headers, target);
-    }
-
-    /**
-     * This method stops fragment injection in malicious applications.
-     * Make sure to deny any unknown fragments here.
-     */
-    protected boolean isValidFragment(String fragmentName) {
-        return PreferenceFragment.class.getName().equals(fragmentName)
-                || GeneralPreferenceFragment.class.getName().equals(fragmentName)
-                || DataSyncPreferenceFragment.class.getName().equals(fragmentName)
-                || NotificationPreferenceFragment.class.getName().equals(fragmentName);
-    }
-
-    @Override
-    public void configStudentSettings() {
-
-    }
-
-    @Override
-    public void initStudentSettings() {
-
-    }
-
-    @Override
-    public void findView() {
-
+        return data;
     }
 
     /**

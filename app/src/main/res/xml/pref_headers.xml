@@ -10,6 +10,7 @@
     <header
         android:fragment="io.dume.dume.student.studentSettings.StudentSettingsActivity$NotificationPreferenceFragment"
         android:icon="@drawable/ic_notifications_black_24dp"
+
         android:title="@string/pref_header_notifications" />
 
     <header

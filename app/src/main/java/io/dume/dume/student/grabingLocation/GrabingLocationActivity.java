@@ -51,7 +51,7 @@ import carbon.widget.Button;
 import carbon.widget.ImageView;
 import carbon.widget.RelativeLayout;
 import io.dume.dume.R;
-import io.dume.dume.custom_view.HorizontalLoadView;
+import io.dume.dume.customView.HorizontalLoadView;
 import io.dume.dume.student.grabingInfo.GrabingInfoActivity;
 import io.dume.dume.student.pojo.CusStuAppComMapActivity;
 import io.dume.dume.student.pojo.MyGpsLocationChangeListener;

@@ -10,6 +10,7 @@ import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import io.dume.dume.R;
 
@@ -62,6 +63,9 @@ public class HomePagePresenter implements HomePageContract.Presenter {
             case R.id.profile_data:
                 mView.gotoProfilePage();
                 break;
+            case R.id.mentor_add_layout:
+                mView.gotoMentorAddvertise();
+                break;
             case R.id.search_mentor_btn:
                 //mView.gotoGrabingInfoPage();
                 mView.gotoGrabingLocationPage();
@@ -113,29 +117,51 @@ public class HomePagePresenter implements HomePageContract.Presenter {
             case R.id.payments:
                 mView.gotoPaymentActivity();
                 break;
+            case R.id.forum:
+                Toast.makeText(context, "Coming soon", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.messages:
+                mView.gotoInboxActivity();
+                break;
+            case R.id.notifications:
+                //will be added later
+                break;
+            case R.id.free_cashback:
+                mView.gotoFreeCashBackActivity();
+                break;
+            case R.id.about_us:
+                mView.gotoAboutUsActivity();
+                break;
+            case R.id.privacy_policy:
+                mView.gotoPrivacyPolicyActivity();
+                break;
+            case R.id.records:
+                mView.gotoRecordsPage();
+                break;
+
         }
 
     }
 
     @Override
     public void checkNetworkAndGps() {
-        LocationManager lm = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
+        LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         boolean gps_enabled = false;
         boolean network_enabled = false;
 
         try {
             gps_enabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
-        } catch(Exception ex) {
-            Log.e(TAG, "checkNetworkAndGps: ",ex );
+        } catch (Exception ex) {
+            Log.e(TAG, "checkNetworkAndGps: ", ex);
         }
 
         try {
             network_enabled = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-        } catch(Exception ex) {
-            Log.e(TAG, "checkNetworkAndGps: ",ex );
+        } catch (Exception ex) {
+            Log.e(TAG, "checkNetworkAndGps: ", ex);
         }
 
-        if(!gps_enabled && !network_enabled) {
+        if (!gps_enabled && !network_enabled) {
             // notify user
             AlertDialog.Builder dialog = new AlertDialog.Builder(context);
             dialog.setMessage(context.getResources().getString(R.string.gps_network_not_enabled));
@@ -143,7 +169,7 @@ public class HomePagePresenter implements HomePageContract.Presenter {
                 @Override
                 public void onClick(DialogInterface paramDialogInterface, int paramInt) {
                     // TODO Auto-generated method stub
-                    Intent myIntent = new Intent( Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                    Intent myIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                     context.startActivity(myIntent);
                     //get gps
                 }

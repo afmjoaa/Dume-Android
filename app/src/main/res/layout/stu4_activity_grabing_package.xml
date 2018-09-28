@@ -26,7 +26,7 @@
     </io.dume.dume.customView.WindowInsetsFrameLayout>
 
 
-    <io.dume.dume.custom_view.HorizontalLoadView
+    <io.dume.dume.customView.HorizontalLoadView
         android:id="@+id/loadView"
         android:layout_width="20dp"
         android:layout_height="10dp"

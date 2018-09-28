@@ -44,6 +44,16 @@ public interface HomePageContract {
         void gotoHelpActivity();
 
         void gotoPaymentActivity();
+
+        void gotoInboxActivity();
+
+        void gotoFreeCashBackActivity();
+
+        void gotoAboutUsActivity();
+
+        void gotoPrivacyPolicyActivity();
+
+        void gotoMentorAddvertise();
     }
 
     interface Presenter {

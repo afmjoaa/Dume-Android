@@ -42,8 +42,10 @@ public class RecordsRecyAdapter extends RecyclerView.Adapter<RecordsRecyAdapter.
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         if(position % 2 == 0){
             holder.relativeHostLayout.setBackgroundColor(context.getResources().getColor(R.color.tabFirstItem));
+            //holder.relativeHostLayout.setBackgroundResource(R.drawable.bg_tab_first_color);
         }else {
             holder.relativeHostLayout.setBackgroundColor(context.getResources().getColor(R.color.tabSecondItem));
+            //holder.relativeHostLayout.setBackgroundResource(R.drawable.bg_tab_first_color);
         }
 
     }

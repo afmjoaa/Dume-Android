@@ -211,6 +211,12 @@
         <item name="android:dropDownVerticalOffset">16dp</item>
     </style>-->
 
+    <style name="AppTheme.NoActionBar.transparent.black" parent="AppTheme.NoActionBar.transparent">
+        <item name="colorPrimary">@color/carbon_black</item>
+        <item name="colorPrimaryDark">@color/carbon_black</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
+    </style>
+
     <style name="AppTheme.NoActionBar.transparent.default" parent="AppTheme.NoActionBar.transparent">
         <item name="colorPrimary">@color/white</item>
     </style>

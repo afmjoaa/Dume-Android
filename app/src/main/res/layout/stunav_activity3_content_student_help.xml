@@ -8,10 +8,9 @@
     tools:context=".student.studentHelp.StudentHelpActivity"
     tools:showIn="@layout/stunav_activity3_student_help">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
-        android:text="@string/large_text" />
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/help_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
 </android.support.v4.widget.NestedScrollView>

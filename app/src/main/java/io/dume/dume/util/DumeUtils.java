@@ -139,6 +139,12 @@ public class DumeUtils {
         toolbar.setOverflowIcon(drawable);
     }
 
+    public static void configAppbarTittle(Context context, String title){
+        AppCompatActivity activity = (AppCompatActivity) context;
+        CollapsingToolbarLayout collapsingToolbarLayout = activity.findViewById(R.id.accountCollapsing);
+        collapsingToolbarLayout.setTitle(title);
+    }
+
 
     public static int[] getScreenSize(Context context) {
         int[] widthHeight = new int[2];

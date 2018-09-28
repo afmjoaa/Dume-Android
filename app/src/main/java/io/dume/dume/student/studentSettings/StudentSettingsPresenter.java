@@ -20,6 +20,9 @@ public class StudentSettingsPresenter implements StudentSettingsContract.Present
 
     @Override
     public void studentSettingsEnqueue() {
+        mView.findView();
+        mView.initStudentSettings();
+        mView.configStudentSettings();
 
     }
 
