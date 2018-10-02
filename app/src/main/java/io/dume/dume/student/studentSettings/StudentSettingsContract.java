@@ -9,6 +9,7 @@ public interface StudentSettingsContract {
 
         void findView();
 
+        void gotoProfilePage();
     }
 
     interface Presenter {

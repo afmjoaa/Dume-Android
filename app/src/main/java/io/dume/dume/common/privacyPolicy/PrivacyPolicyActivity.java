@@ -8,28 +8,26 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import io.dume.dume.R;
+import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
 
-public class PrivacyPolicyActivity extends AppCompatActivity implements PrivacyPolicyActivityContact.View {
+import static io.dume.dume.util.DumeUtils.configureAppbar;
+
+public class PrivacyPolicyActivity extends CustomStuAppCompatActivity implements PrivacyPolicyActivityContact.View {
 
     private PrivacyPolicyActivityContact.Presenter mPresenter;
+    private static final String TAG = "PrivacyPolicyActivity";
+    private static final int fromFlag = 14;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.common3_activity_privacy_policy);
+        setActivityContext(this, fromFlag);
         mPresenter = new PrivacyPolicyPresenter(this, new PrivacyPolicyModel());
         mPresenter.privacyPolicyEnqueue();
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        configureAppbar(this, "Privacy policy");
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
     }
 
     @Override

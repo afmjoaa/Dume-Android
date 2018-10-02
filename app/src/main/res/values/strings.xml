@@ -401,6 +401,7 @@
     <string name="title_activity_chat">Chats</string>
     <string name="title_activity_contact">Contacts</string>
     <string name="title_activity_mentor_addvertise">Refer Mentors</string>
+    <string name="starred_messages">Starred messages</string>
 
     <string-array name="settingsHeader">
         <item>General</item>
@@ -413,13 +414,23 @@
     </string-array>
 
     <string-array name="helpHeader">
-        <item>What's new</item>
-        <item>Feature</item>
+        <item>What\'s new</item>
+        <item>Features</item>
         <item>FAQ</item>
         <item>Contact us</item>
         <item>Check for update</item>
         <item>Terms &amp; privacy policy</item>
         <item>App info</item>
     </string-array>
+
+    <string-array name="inboxHeader">
+        <item>Chats</item>
+        <item>Notifications</item>
+        <item>Calls</item>
+    </string-array>
+    <string name="title_activity_after_splash">After Splash</string>
+
+    <string name="sample_title_holder">Custom view holder</string>
+    <string name="sample_subtitle_holder">Custom view holder to extend default behaviour for a new features</string>
 
 </resources>

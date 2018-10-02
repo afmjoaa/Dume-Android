@@ -215,7 +215,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
             @Override
             public void onGlobalLayout() {
 
-                llBottomSheet.getLayoutParams().height = (llBottomSheet.getHeight() - secondaryAppbarLayout.getHeight() - (int) (6 * (getResources().getDisplayMetrics().density)));
+                llBottomSheet.getLayoutParams().height = (llBottomSheet.getHeight() - secondaryAppbarLayout.getHeight() - (int) (8 * (getResources().getDisplayMetrics().density)));
                 llBottomSheet.requestLayout();
                 bottomSheetBehavior.onLayoutChild(coordinatorLayout, llBottomSheet, ViewCompat.LAYOUT_DIRECTION_LTR);
                 ViewTreeObserver obs = llBottomSheet.getViewTreeObserver();

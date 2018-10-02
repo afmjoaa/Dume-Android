@@ -36,9 +36,10 @@
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
         android:layout_marginTop="70dp"
-        android:background="@drawable/secondary_profilepage_bg"></RelativeLayout>
+        android:background="@drawable/secondary_profilepage_bg" />
 
     <LinearLayout
+        android:id="@+id/top_basic_info"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="top"

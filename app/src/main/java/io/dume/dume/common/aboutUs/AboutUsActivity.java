@@ -8,28 +8,26 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import io.dume.dume.R;
+import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
 
-public class AboutUsActivity extends AppCompatActivity implements AboutUsContact.View {
+import static io.dume.dume.util.DumeUtils.configureAppbar;
+
+public class AboutUsActivity extends CustomStuAppCompatActivity implements AboutUsContact.View {
 
     private AboutUsContact.Presenter mPresenter;
+    private static final String TAG = "AboutUsActivity";
+    private static final int fromFlag = 13;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.common2_activity_about_us);
+        setActivityContext(this, fromFlag);
         mPresenter = new AboutUsPresenter(this, new AboutUsModel());
         mPresenter.aboutUsEnqueue();
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        configureAppbar(this, "About us");
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
     }
 
     @Override

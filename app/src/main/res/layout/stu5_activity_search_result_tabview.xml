@@ -12,52 +12,31 @@
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fitsSystemWindows="true"
         android:theme="@style/AppTheme.AppBarOverlay">
 
-        <android.support.design.widget.CollapsingToolbarLayout
-            android:id="@+id/accountCollapsing"
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/accountToolbar"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/appbarLayoutHeightLow"
-            android:fitsSystemWindows="true"
-            app:collapsedTitleGravity="start"
-            app:collapsedTitleTextAppearance="@style/MyTextApprncCol.lightBg"
-            app:contentScrim="?attr/colorPrimary"
-            app:expandedTitleGravity="start"
-            app:expandedTitleMarginBottom="@dimen/expTittleMarginBottom"
-            app:expandedTitleMarginStart="@dimen/expTittleMarginStart"
-            app:expandedTitleMarginTop="@dimen/expTittleMarginTop"
-            app:expandedTitleTextAppearance="@style/MyTextApprncExp.lightBg"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            app:scrimVisibleHeightTrigger="@dimen/scrimVisibleHeightTrigger"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_alignParentTop="true"
+            app:buttonGravity="bottom"
+            app:layout_collapseMode="pin"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:navigationIcon="@drawable/ic_arrow_back_default_24dp"
+            app:popupTheme="@style/AppTheme.PopupOverlay"
+            app:theme="@style/ThemeToolbar.default"
             app:title="Search Results"
-            app:titleEnabled="true"
-            app:toolbarId="@+id/accountToolbar">
+            app:titleTextAppearance="@style/MyTextApprncCol.lightBg" />
 
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/accountToolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                app:buttonGravity="bottom"
-                app:layout_collapseMode="pin"
-                app:navigationIcon="@drawable/ic_arrow_back_default_24dp"
-                app:popupTheme="@style/AppTheme.PopupOverlay"
-                app:theme="@style/ThemeToolbar.default"
-                app:title="Search Results"
-                app:titleMarginBottom="@dimen/titleMarginBottom"
-                app:titleMarginStart="@dimen/titleMarginStart"
-                app:titleMarginTop="@dimen/titleMarginTop" />
-
-        </android.support.design.widget.CollapsingToolbarLayout>
 
         <io.dume.dume.customView.CustomTabLayout
             android:id="@+id/tabs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:tabGravity="fill"
+            app:tabIndicatorColor="@color/colorAccent"
             app:tabIndicatorHeight="3dp"
             app:tabMode="scrollable"
-            app:tabBackground="@drawable/bg_gradient_dark_light"
             app:tabTextAppearance="@style/tabColorStateList">
 
             <android.support.design.widget.TabItem

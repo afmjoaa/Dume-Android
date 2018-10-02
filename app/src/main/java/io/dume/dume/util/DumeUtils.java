@@ -145,6 +145,21 @@ public class DumeUtils {
         collapsingToolbarLayout.setTitle(title);
     }
 
+    public static void configureAppbarWithoutColloapsing(Context context, String title) {
+        AppCompatActivity activity = (AppCompatActivity) context;
+        Toolbar toolbar = activity.findViewById(R.id.accountToolbar);
+        activity.setSupportActionBar(toolbar);
+        ActionBar supportActionBar = activity.getSupportActionBar();
+
+        if (supportActionBar != null) {
+            supportActionBar.setDisplayHomeAsUpEnabled(true);
+            supportActionBar.setDisplayShowHomeEnabled(true);
+        }
+        toolbar.setTitleTextAppearance(context,R.style.MyTextApprncColOne);
+        Drawable drawable = ContextCompat.getDrawable(getApplicationContext(),R.drawable.ic_more_vert_black_24dp);
+        toolbar.setOverflowIcon(drawable);
+    }
+
 
     public static int[] getScreenSize(Context context) {
         int[] widthHeight = new int[2];

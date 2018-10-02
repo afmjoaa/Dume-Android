@@ -1,4 +1,7 @@
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior" >
+
 
     <!-- A 'parent' preference, which enables/disables child preferences (below)
          when checked/unchecked. -->

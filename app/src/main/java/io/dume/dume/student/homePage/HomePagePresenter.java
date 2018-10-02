@@ -51,14 +51,8 @@ public class HomePagePresenter implements HomePageContract.Presenter {
                 break;
             case R.id.user_dp:
                 break;
-            case R.id.bottom_sheet_fab:
-                mView.onShowBottomSheet();
-                break;
             case R.id.fab:
                 mView.onCenterCurrentLocation();
-                break;
-            case R.id.bottom_sheet:
-                mView.onBottomSheetClicked();
                 break;
             case R.id.profile_data:
                 mView.gotoProfilePage();
@@ -92,16 +86,19 @@ public class HomePagePresenter implements HomePageContract.Presenter {
 
                 break;
             case R.id.al_display_pic:
-                mView.updateProfileBadge(mProfileChar);
+                //mView.updateProfileBadge(mProfileChar);
+                mView.gotoProfilePage();
                 break;
             case R.id.al_records:
                 mView.updateRecordsBadge(++mRecPendingCount, ++mRecAcceptedCount, ++mRecCurrentCount);
                 mView.gotoRecordsPage();
                 break;
             case R.id.al_messages:
+                mView.gotoInboxActivity();
                 mView.updateChatBadge(++mChatCount);
                 break;
             case R.id.al_notifications:
+                mView.gotoNotificationTab();
                 mView.updateNotificationsBadge(++mNotificationsCount);
                 break;
             case R.id.heat_map:
@@ -125,6 +122,7 @@ public class HomePagePresenter implements HomePageContract.Presenter {
                 break;
             case R.id.notifications:
                 //will be added later
+                mView.gotoNotificationTab();
                 break;
             case R.id.free_cashback:
                 mView.gotoFreeCashBackActivity();

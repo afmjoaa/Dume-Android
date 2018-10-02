@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.view.View;
 
+import io.dume.dume.R;
+
 public class StudentSettingsPresenter implements StudentSettingsContract.Presenter {
 
     private StudentSettingsContract.View mView;
@@ -28,6 +30,10 @@ public class StudentSettingsPresenter implements StudentSettingsContract.Present
 
     @Override
     public void onStudentSettingsIntracted(View view) {
-
+        switch (view.getId()) {
+            case R.id.basic_info_layout:
+                mView.gotoProfilePage();
+                break;
+        }
     }
 }

@@ -21,12 +21,14 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import io.dume.dume.R;
 import io.dume.dume.student.common.SettingData;
 import io.dume.dume.student.common.SettingsAdapter;
 import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
+import io.dume.dume.student.profilePage.ProfilePageActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +47,8 @@ public class StudentSettingsActivity extends CustomStuAppCompatActivity
     private Toolbar toolbar;
     private String[] settingNameArr;
     private AppBarLayout appBarLayout;
+    private RelativeLayout basicInfoLayout;
+    private RelativeLayout basicInfoLayout1;
 
 
     @Override
@@ -102,6 +106,12 @@ public class StudentSettingsActivity extends CustomStuAppCompatActivity
         settingsRecycleView = findViewById(R.id.Testing_fuck_recycler);
         settingsContent = findViewById(R.id.settings_content);
         appBarLayout = findViewById(R.id.app_bar);
+        basicInfoLayout1 = findViewById(R.id.basic_info_layout);
+    }
+
+    @Override
+    public void gotoProfilePage() {
+        startActivity(new Intent(this, ProfilePageActivity.class));
     }
 
     @Override
@@ -193,6 +203,10 @@ public class StudentSettingsActivity extends CustomStuAppCompatActivity
             data.add(current);
         }
         return data;
+    }
+
+    public void onStuSettingViewClicked(View view) {
+        mPresenter.onStudentSettingsIntracted(view);
     }
 
     /**

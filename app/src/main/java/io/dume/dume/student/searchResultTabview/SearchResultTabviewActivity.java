@@ -1,6 +1,7 @@
 package io.dume.dume.student.searchResultTabview;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Handler;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -35,6 +36,8 @@ import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
 import io.dume.dume.student.searchResult.SearchResultActivity;
 import io.dume.dume.util.DumeUtils;
 
+import static io.dume.dume.util.DumeUtils.configureAppbarWithoutColloapsing;
+
 public class SearchResultTabviewActivity extends CustomStuAppCompatActivity implements SearchResultTabviewContract.View {
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
@@ -58,7 +61,7 @@ public class SearchResultTabviewActivity extends CustomStuAppCompatActivity impl
         setActivityContext(this, fromFlag);
         mPresenter = new SearchResultTabviewPresenter(this, new SearchResultTabviewModel());
         mPresenter.searchResultTabviewEnqueue();
-        DumeUtils.configureAppbar(this, "Search Results");
+        configureAppbarWithoutColloapsing(this, "Search Results");
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
@@ -79,6 +82,7 @@ public class SearchResultTabviewActivity extends CustomStuAppCompatActivity impl
             // get child TextView and ImageView from this layout for the icon and label
             TextView tab_label = (TextView) tab.findViewById(R.id.nav_label);
             ImageView tab_icon = (ImageView) tab.findViewById(R.id.nav_icon);
+            tab_label.setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/Cairo-Light.ttf"));
             tab_label.setText(navLabels[i]);
             tab_icon.setImageResource(navIcons[i]);
 

@@ -2,6 +2,7 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/parent_coor_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
@@ -10,38 +11,56 @@
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/app_bar_height"
-        android:fitsSystemWindows="true"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:layout_height="@dimen/appbarLayoutHeightLow"
+        android:background="@color/colorBlack"
+        android:theme="@style/Base.ThemeOverlay.AppCompat.Dark">
 
         <android.support.design.widget.CollapsingToolbarLayout
-            android:id="@+id/toolbar_layout"
+            android:id="@+id/accountCollapsing"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:fitsSystemWindows="true"
+            android:background="@color/colorBlack"
+            app:collapsedTitleGravity="start"
+            app:collapsedTitleTextAppearance="@style/MyTextApprncCol.darkBg"
             app:contentScrim="?attr/colorPrimary"
+            app:expandedTitleGravity="start"
+            app:expandedTitleMarginBottom="@dimen/expTittleMarginBottom"
+            app:expandedTitleMarginStart="@dimen/expTittleMarginStart"
+            app:expandedTitleMarginTop="@dimen/expTittleMarginTop"
+            app:expandedTitleTextAppearance="@style/MyTextApprncExp.darkBg"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            app:toolbarId="@+id/toolbar">
+            app:scrimVisibleHeightTrigger="@dimen/scrimVisibleHeightTrigger"
+            app:title="Privacy policy"
+            app:titleEnabled="true"
+            app:toolbarId="@+id/accountToolbar">
 
             <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar"
+                android:id="@+id/accountToolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
+                android:theme="@style/AccountToolbarStyle"
+                app:buttonGravity="bottom"
                 app:layout_collapseMode="pin"
-                app:popupTheme="@style/AppTheme.PopupOverlay" />
+                app:navigationIcon="@drawable/ic_arrow_back_white_24dp"
+                app:popupTheme="@style/Base.ThemeOverlay.AppCompat.Dark"
+                app:theme="@style/ThemeToolbar.default"
+                app:titleMarginBottom="@dimen/titleMarginBottom"
+                app:titleMarginStart="@dimen/titleMarginStart"
+                app:titleMarginTop="@dimen/titleMarginTop" />
 
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/common3_content_privacy_policy" />
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/fab_margin"
+    <io.dume.dume.customView.HorizontalLoadView
+        android:id="@+id/loadView"
+        android:layout_width="20dp"
+        android:layout_height="12dp"
+        android:elevation="20dp"
+        android:translationY="6dp"
         app:layout_anchor="@id/app_bar"
-        app:layout_anchorGravity="bottom|end"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
+        app:layout_anchorGravity="bottom"
+        app:rect_color="@color/carbon_black" />
+
+    <include layout="@layout/common3_content_privacy_policy" />
 
 </android.support.design.widget.CoordinatorLayout>

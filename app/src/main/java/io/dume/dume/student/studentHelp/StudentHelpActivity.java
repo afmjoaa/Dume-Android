@@ -154,7 +154,7 @@ public class StudentHelpActivity extends CustomStuAppCompatActivity implements S
         public boolean onOptionsItemSelected(MenuItem item) {
             int id = item.getItemId();
             if (id == android.R.id.home) {
-                startActivity(new Intent(getActivity(), StudentSettingsActivity.class));
+                startActivity(new Intent(getActivity(), StudentHelpActivity.class));
                 return true;
             }
             return super.onOptionsItemSelected(item);
@@ -180,7 +180,7 @@ public class StudentHelpActivity extends CustomStuAppCompatActivity implements S
         public boolean onOptionsItemSelected(MenuItem item) {
             int id = item.getItemId();
             if (id == android.R.id.home) {
-                startActivity(new Intent(getActivity(), StudentSettingsActivity.class));
+                startActivity(new Intent(getActivity(), StudentHelpActivity.class));
                 return true;
             }
             return super.onOptionsItemSelected(item);

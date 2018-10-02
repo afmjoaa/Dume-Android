@@ -87,11 +87,41 @@
                         app:fontFamily="@font/cairo_regular" />
 
                     <TextView
+                        android:id="@+id/starting_date_value"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_toEndOf="@+id/starting_date"
+                        android:layout_toRightOf="@+id/starting_date"
+                        android:alpha="0.7"
+                        android:text="Tue, 13 Apr"
+                        android:textAllCaps="false"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="16sp"
+                        android:textStyle="normal"
+                        app:fontFamily="@font/cairo_regular" />
+
+                    <TextView
                         android:id="@+id/finishing_date"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/starting_date"
                         android:text="Finishing Date : "
+                        android:textAllCaps="false"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="16sp"
+                        android:textStyle="normal"
+                        app:fontFamily="@font/cairo_regular" />
+
+                    <TextView
+                        android:id="@+id/finishing_date_value"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/starting_date"
+                        android:layout_toEndOf="@+id/finishing_date"
+                        android:layout_toRightOf="@+id/finishing_date"
+                        android:text="Mon, 12 May"
+                        android:alpha="0.7"
                         android:textAllCaps="false"
                         android:textColor="@color/colorWhite"
                         android:textSize="16sp"
@@ -106,7 +136,7 @@
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
                         android:contentDescription="@string/current_date"
-                        app:srcCompat="@drawable/ic_current_date_icon" />
+                        app:srcCompat="@drawable/calender_current_icon_layer_list" />
 
 
                 </RelativeLayout>
@@ -116,8 +146,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginRight="4dp"
                     android:background="@drawable/bg_calender_background"
                     app:mcv_selectionColor="#108174"
                     app:mcv_showOtherDates="all" />

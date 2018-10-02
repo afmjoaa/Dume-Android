@@ -8,28 +8,27 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import io.dume.dume.R;
+import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
 
-public class FreeCashBackActivity extends AppCompatActivity implements FreeCashBackContact.View {
+import static io.dume.dume.util.DumeUtils.configureAppbar;
+
+public class FreeCashBackActivity extends CustomStuAppCompatActivity implements FreeCashBackContact.View {
 
     private FreeCashBackContact.Presenter mPresenter;
+    private static final int fromFlag = 15;
+    private static final String TAG = "FreeCashBackActivity";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.stu14_activity_free_cash_back);
+        setActivityContext(this, fromFlag);
         mPresenter = new FreeCashBackPresenter(this, new FreeCashBackModel());
         mPresenter.freeCashBackEnqueue();
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        configureAppbar(this, "Free cash-back");
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+
     }
 
     @Override

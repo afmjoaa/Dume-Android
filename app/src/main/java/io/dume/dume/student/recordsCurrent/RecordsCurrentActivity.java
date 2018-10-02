@@ -127,6 +127,7 @@ public class RecordsCurrentActivity extends CustomStuAppCompatActivity implement
         private TimePickerFragment timePicker;
         private EditText reminderEditText;
         private TimePickerFragment timePickerReminder;
+        private ImageView calenderCurDateImageView;
 
 
         public PlaceholderFragment() {
@@ -150,6 +151,10 @@ public class RecordsCurrentActivity extends CustomStuAppCompatActivity implement
             mChart = (ChartProgressBar) rootView.findViewById(R.id.myChartProgressBar);
             ratingPerformance = rootView.findViewById(R.id.main_rating_performance);
             ratingExperience = rootView.findViewById(R.id.main_rating_experience);
+            //testing the layer drawable for  the calender current date
+            calenderCurDateImageView = rootView.findViewById(R.id.current_date_imageview);
+
+
             locationMapHost = rootView.findViewById(R.id.location_layout_vertical);
             notificationEditText = rootView.findViewById(R.id.notification_edittext);
             reminderEditText = rootView.findViewById(R.id.reminder_edittext);
@@ -230,6 +235,10 @@ public class RecordsCurrentActivity extends CustomStuAppCompatActivity implement
 
             LayerDrawable experienceLayDraw = (LayerDrawable) ratingExperience.getDrawable();
             DumeUtils.setTextOverDrawable(myThisActivity, experienceLayDraw, R.id.ic_badge, Color.BLACK, "00");
+
+            LayerDrawable calenderCurDateLayDraw = (LayerDrawable) calenderCurDateImageView.getDrawable();
+            DumeUtils.setTextOverDrawable(myThisActivity, calenderCurDateLayDraw, R.id.ic_badge, Color.WHITE, "13");
+
 
             ArrayList<BarData> dataList = new ArrayList<>();
 

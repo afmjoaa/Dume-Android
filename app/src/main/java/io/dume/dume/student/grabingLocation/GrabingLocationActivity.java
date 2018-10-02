@@ -141,7 +141,6 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
         loadView = findViewById(R.id.loadView);
         toolbar = findViewById(R.id.toolbar);
         llBottomSheet = findViewById(R.id.searchBottomSheet);
-        bottomSheetFab = findViewById(R.id.bottom_sheet_fab);
         myAppbarlayout = findViewById(R.id.my_appbarLayout_cardView);
         coordinatorLayout = (CoordinatorLayout) findViewById(R.id.my_main_container);
         autoCompleteRecyView = findViewById(R.id.recycler_view_autoPlaces);
@@ -318,11 +317,6 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
         }
         Log.d(TAG, "onClick: clicked gps icon");
         getDeviceLocation(mMap);
-
-    }
-
-    @Override
-    public void onShowBottomSheet() {
 
     }
 

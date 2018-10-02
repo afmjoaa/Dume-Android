@@ -91,6 +91,14 @@
         <item name="android:fontFamily" tools:targetApi="jelly_bean">@font/cairo_regular</item>
     </style>
 
+    <style name="MyTextApprncColOne" parent="MyTextApprncCol">
+        <item name="android:textColor">@color/textColorPrimary</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:fontFamily">@font/cairo_light</item>
+    </style>
+
+
     <style name="MyTextApprncCol.textGone" parent="MyTextApprncCol">
         <item name="android:textSize">0sp</item>
     </style>
@@ -111,14 +119,14 @@
     <style name="MyTextApprncExp.lightBg" parent="MyTextApprncExp">
         <item name="android:textColor">@color/textColorPrimary</item>
         <item name="android:textSize">25sp</item>
-        <item name="android:fontFamily" tools:targetApi="jelly_bean">@font/cairo_regular</item>
+        <item name="android:fontFamily">@font/cairo_regular</item>
     </style>
 
     <style name="MyTextApprncCol.lightBg" parent="MyTextApprncCol">
         <item name="android:textColor">@color/textColorPrimary</item>
         <item name="android:textStyle">normal</item>
         <item name="android:textSize">20sp</item>
-        <item name="android:fontFamily" tools:targetApi="jelly_bean">@font/cairo_regular</item>
+        <item name="android:fontFamily">@font/cairo_regular</item>
     </style>
 
     <style name="MyTextApprncCol.grabLocaiton" parent="MyTextApprncCol">
@@ -138,6 +146,11 @@
         <item name="coordinatorLayoutStyle">@style/Widget.Design.CoordinatorLayout</item>
     </style>
     <!--<item name="android:activatedBackgroundIndicator">@drawable/drawer_item_textcolor</item>-->
+
+    <style name="AppTheme.NoActionBar.default" parent="AppTheme.NoActionBar">
+        <item name="colorPrimary">@color/white</item>
+        <item name="colorPrimaryDark">@color/white</item>
+    </style>
 
 
     <style name="Widget.BottomNavigationView" parent="Widget.Design.BottomNavigationView">
@@ -217,8 +230,19 @@
         <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
     </style>
 
+    <style name="AppTheme.NoActionBar.transparent.testing" parent="AppTheme.NoActionBar.transparent">
+        <item name="colorPrimary">@color/white</item>
+        <item name="colorPrimaryDark">#e0e0e0</item>
+    </style>
+
     <style name="AppTheme.NoActionBar.transparent.default" parent="AppTheme.NoActionBar.transparent">
         <item name="colorPrimary">@color/white</item>
+        <item name="colorPrimaryDark">@color/white</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar.transparent.inbox" parent="AppTheme.NoActionBar.transparent">
+        <item name="colorPrimary">@color/toolbar_inbox</item>
+        <item name="colorPrimaryDark">@color/status_inbox</item>
     </style>
 
     <style name="AppTheme.NoActionBar.transparent.pending" parent="AppTheme.NoActionBar.transparent">

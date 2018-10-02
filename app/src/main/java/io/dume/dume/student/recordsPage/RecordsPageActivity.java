@@ -1,5 +1,6 @@
 package io.dume.dume.student.recordsPage;
 
+import android.graphics.Typeface;
 import android.os.Handler;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -33,6 +34,8 @@ import io.dume.dume.R;
 import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
 import io.dume.dume.util.DumeUtils;
 
+import static io.dume.dume.util.DumeUtils.configureAppbarWithoutColloapsing;
+
 public class RecordsPageActivity extends CustomStuAppCompatActivity implements RecordsPageContract.View {
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
@@ -58,7 +61,7 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
         setActivityContext(this, fromFlag);
         mPresenter = new RecordsPagePresenter(this, new RecordsPageModel());
         mPresenter.recordsPageEnqueue();
-        DumeUtils.configureAppbar(this, "Records");
+        configureAppbarWithoutColloapsing(this, "Records");
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
@@ -80,6 +83,9 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
             // get child TextView and ImageView from this layout for the icon and label
             TextView tab_label = (TextView) tab.findViewById(R.id.nav_label);
             ImageView tab_icon = (ImageView) tab.findViewById(R.id.nav_icon);
+            tab_label.setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/Cairo-Light.ttf"));
+            /*tab_label.setTextColor(getResources().getColorStateList(R.color.tab_colorstate_light));
+            */
             tab_label.setText(navLabels[i]);
             tab_icon.setImageResource(navIcons[i]);
 

@@ -25,10 +25,6 @@ public interface HomePageContract {
 
         void updateRecordsBadge(int penCount, int acptCount, int curCount);
 
-        void onShowBottomSheet();
-
-        void onBottomSheetClicked();
-
         void gotoProfilePage();
 
         void gotoGrabingInfoPage();
@@ -54,6 +50,8 @@ public interface HomePageContract {
         void gotoPrivacyPolicyActivity();
 
         void gotoMentorAddvertise();
+
+        void gotoNotificationTab();
     }
 
     interface Presenter {

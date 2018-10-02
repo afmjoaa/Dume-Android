@@ -57,8 +57,7 @@ public class SearchLoadingActivity extends CusStuAppComMapActivity implements On
         settingStatusBarTransparent();
         setDarkStatusBarIcon();
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
+        mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         getLocationPermission(mapFragment);
     }
 
