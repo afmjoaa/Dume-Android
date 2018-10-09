@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/hostRelativeLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?android:attr/selectableItemBackground">
+
+    <carbon.widget.ImageView
+        android:id="@+id/noti_user_dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="12dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="12dp"
+        android:clickable="false"
+        android:src="@drawable/demo_testing_image"
+        app:carbon_cornerRadius="25dp" />
+
+
+    <com.jackandphantom.circularprogressbar.CircleProgressbar
+        android:id="@+id/selected_indicator"
+        android:layout_width="52dp"
+        android:layout_height="52dp"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="12dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="12dp"
+        app:cpb_backgroundProgressColor="@color/white"
+        app:cpb_backgroundProgressWidth="10"
+        app:cpb_clockwise="true"
+        app:cpb_foregroundProgressColor="@color/inbox_active_color"
+        app:cpb_foregroundProgressWidth="4"
+        app:cpb_progress="100"
+        app:cpb_roundedCorner="true" />
+
+
+    <LinearLayout
+        android:id="@+id/vertical_textview_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="26dp"
+        android:layout_marginStart="26dp"
+        android:layout_toEndOf="@id/noti_user_dp"
+        android:layout_toRightOf="@id/noti_user_dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/noti_user_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="6dp"
+            android:layout_marginRight="6dp"
+            android:layout_marginTop="3dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:maxWidth="160dp"
+            android:singleLine="true"
+            android:text="Sumon"
+            android:textAppearance="?android:attr/textAppearanceListItem"
+            app:fontFamily="@font/cairo_regular" />
+
+
+        <TextView
+            android:id="@+id/frequency_and_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="1dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:maxWidth="160dp"
+            android:text="(2) Yesterday, 11:36 PM"
+            android:textAllCaps="false"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/textColorSecondary"
+            android:textSize="12sp"
+            app:fontFamily="@font/cairo_regular" />
+
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/divider2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="16dp"
+        android:layout_marginLeft="88dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginStart="88dp"
+        android:background="#41a7a7a7" />
+
+</RelativeLayout>

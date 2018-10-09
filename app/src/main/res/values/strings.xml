@@ -430,7 +430,25 @@
     </string-array>
     <string name="title_activity_after_splash">After Splash</string>
 
-    <string name="sample_title_holder">Custom view holder</string>
-    <string name="sample_subtitle_holder">Custom view holder to extend default behaviour for a new features</string>
+    <string name="sample_title_holder">Tittle data here</string>
+    <string name="sample_subtitle_holder">Sub-tittle information here</string>
+
+    <string-array name="statusText">
+        <item>Status : pending</item>
+        <item>Status : accepted</item>
+        <item>Status : current</item>
+    </string-array>
+    <!--testing the messages holder here-->
+    <string name="copied_message">Message copied!</string>
+    <string name="hint_enter_a_message">Type a message…</string>
+    <string-array name="view_types_dialog">
+        <item name="image">Image (default)</item>
+        <item name="voice">Voice message (custom)</item>
+    </string-array>
+
+    <string name="police_stations_url">http://data.gov.au/dataset/police-station-locations/resource/76110b24-0f0a-4c29-9583-3f99eaba486c</string>
+    <string name="medicare_url">http://data.gov.au/dataset/location-of-medicare-offices/resource/5d38e1be-4011-49c4-8b8b-75405eeb1088</string>
+    <string name="police_stations">Police Stations in Victoria</string>
+    <string name="medicare">Medicare Offices</string>
 
 </resources>

@@ -146,8 +146,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
-                    android:layout_marginLeft="4dp"
-                    android:layout_marginRight="4dp"
+                    android:layout_marginLeft="6dp"
+                    android:layout_marginRight="6dp"
                     android:background="@drawable/bg_calender_background"
                     app:mcv_selectionColor="#108174"
                     app:mcv_showOtherDates="all" />

@@ -237,7 +237,7 @@ public class RecordsCurrentActivity extends CustomStuAppCompatActivity implement
             DumeUtils.setTextOverDrawable(myThisActivity, experienceLayDraw, R.id.ic_badge, Color.BLACK, "00");
 
             LayerDrawable calenderCurDateLayDraw = (LayerDrawable) calenderCurDateImageView.getDrawable();
-            DumeUtils.setTextOverDrawable(myThisActivity, calenderCurDateLayDraw, R.id.ic_badge, Color.WHITE, "13");
+            DumeUtils.setTextOverDrawable(myThisActivity, calenderCurDateLayDraw, R.id.ic_badge, Color.WHITE, "20",2);
 
 
             ArrayList<BarData> dataList = new ArrayList<>();

@@ -213,16 +213,15 @@
             android:theme="@style/AppTheme.NoActionBar.transparent.default" />
         <activity
             android:name=".common.chatActivity.ChatActivity"
-            android:label="@string/title_activity_chat"
-            android:theme="@style/AppTheme.NoActionBar.transparent.inbox" />
+            android:theme="@style/AppTheme.NoActionBar.transparent.default" />
         <activity
             android:name=".common.contactActivity.ContactActivity"
             android:label="@string/title_activity_contact"
-            android:theme="@style/AppTheme.NoActionBar.transparent.default" />
+            android:theme="@style/AppTheme.NoActionBar.transparent.testing" />
         <activity
             android:name=".afterSplashTrp.AfterSplashActivity"
             android:label="@string/title_activity_after_splash"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
     </application>
 
 </manifest>

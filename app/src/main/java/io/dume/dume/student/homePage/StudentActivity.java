@@ -9,7 +9,9 @@ import android.view.View;
 import com.google.firebase.auth.FirebaseAuth;
 
 import io.dume.dume.R;
+import io.dume.dume.afterSplashTrp.AfterSplashActivity;
 import io.dume.dume.auth.auth.AuthActivity;
+import io.dume.dume.common.chatActivity.ChatActivity;
 import io.dume.dume.student.grabingPackage.GrabingPackageActivity;
 import io.dume.dume.student.recordsAccepted.RecordsAcceptedActivity;
 import io.dume.dume.student.recordsCompleted.RecordsCompletedActivity;
@@ -56,7 +58,7 @@ public class StudentActivity extends AppCompatActivity implements StudentContrac
 
     @Override
     public void goTORecordsActivity() {
-        startActivity(new Intent(this, RecordsPendingActivity.class));
+        startActivity(new Intent(this, ChatActivity.class));
     }
 
     @Override
@@ -67,7 +69,7 @@ public class StudentActivity extends AppCompatActivity implements StudentContrac
 
     @Override
     public void goTORecordsActivity3() {
-        startActivity(new Intent(this, RecordsRejectedActivity.class));
+        startActivity(new Intent(this, AfterSplashActivity.class));
 
     }
 

@@ -6,9 +6,10 @@ import android.support.v7.app.AppCompatActivity;
 
 import io.dume.dume.R;
 import io.dume.dume.afterSplashTrp.adapter.AfterSplashPagerAdapter;
+import io.dume.dume.afterSplashTrp.adapter.DemoCardFragment;
 import me.relex.circleindicator.CircleIndicator;
 
-public class AfterSplashActivity extends AppCompatActivity {
+public class AfterSplashActivity extends AppCompatActivity implements DemoCardFragment.OnActionListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,7 +25,7 @@ public class AfterSplashActivity extends AppCompatActivity {
 
     }
 
-   /* @Override
+    @Override
     public void onAction(int id) {
         switch (id) {
             case AfterSplashPagerAdapter.ID_DEFAULT:
@@ -39,6 +40,6 @@ public class AfterSplashActivity extends AppCompatActivity {
                 //CustomMediaMessagesActivity.open(this);
                 break;
         }
-    }*/
+    }
 
 }

@@ -18,7 +18,7 @@ import me.zhanghai.android.materialratingbar.MaterialRatingBar;
 
 public class RecordsRecyAdapter extends RecyclerView.Adapter<RecordsRecyAdapter.MyViewHolder> {
 
-    private static final String TAG = "RecordsRecyAdapter";
+    private static final String TAG = "InboxChatAdapter";
     private LayoutInflater inflater;
     private Context context;
     private List<RecordsRecyData> data;

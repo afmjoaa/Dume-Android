@@ -21,8 +21,13 @@ public class TextDrawable extends Drawable {
     private Rect mTxtRect = new Rect();
     private String mCount = "";
     private boolean mWillDraw = false;
+    private Context context;
+    private float textY;
+    private int flag = -1;
+
 
     public TextDrawable(Context context) {
+        this.context = context;
         mTextSize = context.getResources().getDimension(R.dimen.text_over_drawable_size);
         mDensity = context.getResources().getDisplayMetrics().density;
 
@@ -61,7 +66,11 @@ public class TextDrawable extends Drawable {
         // Draw badge count text inside the circle.
         mTextPaint.getTextBounds(mCount, 0, mCount.length(), mTxtRect);
         float textHeight = mTxtRect.bottom - mTxtRect.top;
-        float textY = centerY + (textHeight / 2f) - (6 * mDensity);
+        if(flag == 2){
+            textY = centerY + (textHeight / 2f) + (4 * mDensity);
+        }else {
+            textY = centerY + (textHeight / 2f) - (6 * mDensity);
+        }
         canvas.drawText(mCount, centerX, textY, mTextPaint);
 
     }
@@ -77,6 +86,14 @@ public class TextDrawable extends Drawable {
 
     public void setCircleTextColor(int color) {
         mTextPaint.setColor(color);
+    }
+
+    public void setFlag(int flag) {
+        this.flag = flag;
+        if (flag == 2) {
+            mTextSize = context.getResources().getDimension(R.dimen.text_over_drawable_size_large);
+            mTextPaint.setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/Cairo_Regular.ttf"));
+        }
     }
 
     @Override

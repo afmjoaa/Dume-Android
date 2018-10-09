@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraintLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".common.inboxActivity.InboxActivity$PlaceholderFragment">
+
+    <RelativeLayout
+        android:id="@+id/hostRelativeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?android:attr/selectableItemBackground">
+
+        <carbon.widget.ImageView
+            android:id="@+id/mentor_display_pic"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_centerVertical="true"
+            android:layout_marginBottom="12dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="12dp"
+            android:clickable="false"
+            android:src="@drawable/demo_testing_image"
+            app:carbon_cornerRadius="25dp" />
+
+        <carbon.widget.ImageView
+            android:id="@+id/add_status_icon"
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:layout_marginBottom="12dp"
+            android:layout_marginLeft="52dp"
+            android:layout_marginStart="52dp"
+            android:layout_marginTop="46dp"
+            android:clickable="false"
+            app:srcCompat="@drawable/ic_add_status_icon"
+            app:carbon_cornerRadius="25dp"
+            app:carbon_elevation="3dp"/>
+
+
+        <LinearLayout
+            android:id="@+id/vertical_textview_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="26dp"
+            android:layout_marginStart="26dp"
+            android:layout_toEndOf="@id/mentor_display_pic"
+            android:layout_toRightOf="@id/mentor_display_pic"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/mentor_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginEnd="6dp"
+                android:layout_marginRight="6dp"
+                android:layout_marginTop="3dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:maxWidth="160dp"
+                android:singleLine="true"
+                android:text="My status"
+                android:textAppearance="?android:attr/textAppearanceListItem"
+                app:fontFamily="@font/cairo_regular" />
+
+            <TextView
+                android:id="@+id/mentor_filter_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:maxWidth="160dp"
+                android:text="Tap to add status update"
+                android:textAllCaps="false"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/textColorSecondary"
+                android:textSize="12sp"
+                app:fontFamily="@font/cairo_regular" />
+
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/divider2"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/mentor_display_pic"
+            android:layout_marginEnd="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginStart="16dp"
+            android:background="#41a7a7a7" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/recent_updates"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:maxWidth="160dp"
+        android:paddingBottom="4dp"
+        android:paddingLeft="16dp"
+        android:paddingStart="16dp"
+        android:paddingRight="16dp"
+        android:paddingEnd="16dp"
+        android:paddingTop="4dp"
+        android:text="Recent updates"
+        android:textAllCaps="false"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@color/inbox_active_color"
+        android:textSize="12sp"
+        android:background="#f5f5f5"
+        app:fontFamily="@font/cairo_regular" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/inbox_recycler_view_recent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
+</LinearLayout>

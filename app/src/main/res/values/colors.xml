@@ -87,11 +87,14 @@
     <color name="testing_colors">#9e9e9e</color>
     <color name="calender_bg">#288DBB8D</color>
 
+    <color name="inbox_active_color_dark">#007f57</color>
     <color name="inbox_active_color">#04AA77</color>
     <color name="inbox_inactive_color">#e6858c91</color>
+    <color name="status_viewed">#e0e0e0</color>
 
     <color name="cornflower_blue">#6274e2</color>
     <color name="cornflower_blue_dark">#303F9F</color>
     <color name="cornflower_blue_darkest">#2d3a93</color>
+    <color name="chat_ripple_color">#7800796b</color>
 
 </resources>

@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -51,7 +50,7 @@ public class InboxActivity extends CustomStuAppCompatActivity implements InboxAc
             R.drawable.ic_inbox_notification_creater,
             R.drawable.ic_inbox_call};
     private TabLayout tabLayout;
-    private int currentTabPosition = -1;
+    private int currentTabPosition = 0;
     private Intent contactFromIntent;
 
 
@@ -219,6 +218,10 @@ public class InboxActivity extends CustomStuAppCompatActivity implements InboxAc
         private static final String ARG_SECTION_NUMBER = "section_number";
         private RecyclerView inboxRecyclerView;
         private InboxActivity myThisActivity;
+        private int position = -1;
+        private View rootView;
+        private RecyclerView inboxRecycler;
+        private RecyclerView inboxRecyclerRecent;
 
 
         public PlaceholderFragment() {
@@ -236,15 +239,39 @@ public class InboxActivity extends CustomStuAppCompatActivity implements InboxAc
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
             myThisActivity = (InboxActivity) getActivity();
-            View rootView = inflater.inflate(R.layout.common1_fragment_inbox, container, false);
-            inboxRecyclerView = rootView.findViewById(R.id.inbox_recycler_view);
-            /*TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));*/
-            //setting the recycler view
-            List<SearchResultTabData> recordData = new ArrayList<>();
-            SearchResultTabRecyAda recordsRecyAda = new SearchResultTabRecyAda(myThisActivity, recordData);
-            inboxRecyclerView.setAdapter(recordsRecyAda);
-            inboxRecyclerView.setLayoutManager(new LinearLayoutManager(myThisActivity));
+            position = Objects.requireNonNull(getArguments()).getInt(ARG_SECTION_NUMBER);
+            switch (position) {
+                case 1:
+                    //setting the recycler view
+                    rootView = inflater.inflate(R.layout.common1_fragment_default_inbox, container, false);
+                    inboxRecycler = rootView.findViewById(R.id.inbox_recycler_view);
+                    List<InboxChatData> chatDialogueData = new ArrayList<>();
+                    InboxChatAdapter recordsRecyAda = new InboxChatAdapter(myThisActivity, chatDialogueData);
+                    inboxRecycler.setAdapter(recordsRecyAda);
+                    inboxRecycler.setLayoutManager(new LinearLayoutManager(myThisActivity));
+                    break;
+                case 2:
+                    rootView = inflater.inflate(R.layout.common1_fragment_inbox_notification, container, false);
+                    inboxRecyclerRecent = rootView.findViewById(R.id.inbox_recycler_view_recent);
+
+                    List<InboxNotiData> notiDialogueData = new ArrayList<>();
+                    InboxNotiAdapter notiRecyAda = new InboxNotiAdapter(myThisActivity, notiDialogueData);
+                    inboxRecyclerRecent.setAdapter(notiRecyAda);
+                    inboxRecyclerRecent.setLayoutManager(new LinearLayoutManager(myThisActivity));
+
+                    break;
+                case 3:
+                    //setting the recycler view
+                    rootView = inflater.inflate(R.layout.common1_fragment_default_inbox, container, false);
+                    inboxRecycler = rootView.findViewById(R.id.inbox_recycler_view);
+                    List<InboxCallData> callDialogueData = new ArrayList<>();
+                    InboxCallAdapter callRecyAda = new InboxCallAdapter(myThisActivity, callDialogueData);
+                    inboxRecycler.setAdapter(callRecyAda);
+                    inboxRecycler.setLayoutManager(new LinearLayoutManager(myThisActivity));
+                    break;
+
+            }
+
 
             return rootView;
         }

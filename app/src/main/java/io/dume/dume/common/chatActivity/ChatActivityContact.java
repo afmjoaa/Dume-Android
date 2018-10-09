@@ -10,6 +10,9 @@ public interface ChatActivityContact {
 
         void configChat();
 
+        void showDialogue();
+
+        void viewMuskClicked();
     }
 
     interface Presenter {

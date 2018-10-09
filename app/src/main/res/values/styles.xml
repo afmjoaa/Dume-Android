@@ -231,8 +231,9 @@
     </style>
 
     <style name="AppTheme.NoActionBar.transparent.testing" parent="AppTheme.NoActionBar.transparent">
-        <item name="colorPrimary">@color/white</item>
-        <item name="colorPrimaryDark">#e0e0e0</item>
+        <item name="colorPrimary">@color/inbox_active_color</item>
+        <item name="colorPrimaryDark">@color/inbox_active_color_dark</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
     </style>
 
     <style name="AppTheme.NoActionBar.transparent.default" parent="AppTheme.NoActionBar.transparent">
@@ -277,6 +278,7 @@
 
     <style name="AccountToolbarStyle" parent="ThemeOverlay.AppCompat.ActionBar">
         <item name="colorControlNormal">@color/colorWhite</item>
+        <!--<item name="android:textColorSecondary">@color/white</item>-->
     </style>
 
     <style name="mySpinnerItemStyle" parent="@android:style/Widget.Holo.DropDownItem.Spinner">
