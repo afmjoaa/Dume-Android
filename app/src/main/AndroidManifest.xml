@@ -115,7 +115,7 @@
         <activity
             android:name=".student.grabingInfo.GrabingInfoActivity"
             android:label="@string/title_activity_grabing_info"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar.transparent.defaultTwo" />
         <activity
             android:name=".student.grabingLocation.GrabingLocationActivity"
             android:label="@string/title_activity_grabing_location"
@@ -158,7 +158,7 @@
         <activity
             android:name=".student.searchResultTabview.SearchResultTabviewActivity"
             android:label="@string/title_activity_search_result_tabview"
-            android:theme="@style/AppTheme.NoActionBar.transparent.testing" />
+            android:theme="@style/AppTheme.NoActionBar.transparent.defaultTwo" />
         <activity
             android:name=".student.searchResult.SearchResultActivity"
             android:label=""
@@ -170,7 +170,7 @@
         <activity
             android:name=".student.recordsPage.RecordsPageActivity"
             android:label="@string/title_activity_records_page"
-            android:theme="@style/AppTheme.NoActionBar.transparent.testing" />
+            android:theme="@style/AppTheme.NoActionBar.transparent.defaultTwo" />
         <activity
             android:name=".student.recordsPending.RecordsPendingActivity"
             android:label="@string/title_activity_records_pendding"

@@ -241,9 +241,9 @@
         <item name="colorPrimaryDark">@color/white</item>
     </style>
 
-    <style name="AppTheme.NoActionBar.transparent.inbox" parent="AppTheme.NoActionBar.transparent">
-        <item name="colorPrimary">@color/toolbar_inbox</item>
-        <item name="colorPrimaryDark">@color/status_inbox</item>
+    <style name="AppTheme.NoActionBar.transparent.defaultTwo" parent="AppTheme.NoActionBar.transparent">
+        <item name="colorPrimary">@color/toolbar_defaultTwo</item>
+        <item name="colorPrimaryDark">@color/status_defaultTwo</item>
     </style>
 
     <style name="AppTheme.NoActionBar.transparent.pending" parent="AppTheme.NoActionBar.transparent">
@@ -292,6 +292,10 @@
 
     <style name="myButtonStyleWhite" parent="Base.Widget.AppCompat.Button">
         <item name="android:background">@drawable/my_btn_background_white</item>
+    </style>
+
+    <style name="myButtonStyleAccent" parent="Base.Widget.AppCompat.Button">
+        <item name="android:background">@drawable/my_btn_background_accent</item>
     </style>
 
     <style name="myButtonStyleDisable" parent="Base.Widget.AppCompat.Button">

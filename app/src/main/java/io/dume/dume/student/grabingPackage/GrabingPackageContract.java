@@ -10,6 +10,12 @@ public interface GrabingPackageContract {
         void findView();
 
         void executeSearchActivity();
+
+        void instantDumeSelected();
+
+        void regularDumeSelected();
+
+        void dumeGangSelected();
     }
 
     interface Presenter {

@@ -1201,7 +1201,8 @@
             android:translationY="5dp"
             app:layout_anchor="@id/secondary_Appbar"
             app:layout_anchorGravity="bottom"
-            app:rect_color="@color/carbon_black" />
+            app:rect_color="@color/carbon_black"
+            android:visibility="gone"/>
 
 
     </android.support.design.widget.CoordinatorLayout>

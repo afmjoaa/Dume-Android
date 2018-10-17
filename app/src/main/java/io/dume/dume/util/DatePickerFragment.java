@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 
 import java.util.Calendar;
+import java.util.Objects;
 
 public class DatePickerFragment extends DialogFragment {
     DatePickerDialog.OnDateSetListener myListener;
@@ -22,6 +23,6 @@ public class DatePickerFragment extends DialogFragment {
         int year = c.get(Calendar.YEAR);
         int month = c.get(Calendar.MONTH);
         int day = c.get(Calendar.DAY_OF_MONTH);
-        return new DatePickerDialog(getActivity(), myListener, year, month, day);
+        return new DatePickerDialog(Objects.requireNonNull(getActivity()), myListener, year, month, day);
     }
 }

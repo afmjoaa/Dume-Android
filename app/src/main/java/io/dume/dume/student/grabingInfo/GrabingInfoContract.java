@@ -9,6 +9,7 @@ public interface GrabingInfoContract {
 
         void findView();
 
+        void viewMuskClicked();
     }
 
     interface Presenter {

@@ -450,5 +450,26 @@
     <string name="medicare_url">http://data.gov.au/dataset/location-of-medicare-offices/resource/5d38e1be-4011-49c4-8b8b-75405eeb1088</string>
     <string name="police_stations">Police Stations in Victoria</string>
     <string name="medicare">Medicare Offices</string>
+    <string name="estimated_capacity">Estimated Capacity</string>
+    <string name="estimated_salary">Estimated Salary</string>
+
+    <string-array name="specificPromoText">
+        <item>Search for nearby couching-centers specific to  the topic</item>
+        <item>Search for nearby monthly mentors avaiable to the topics</item>
+        <item>Search for nearby professional genius for solution to the topic</item>
+    </string-array>
+
+    <string name="salary_details_text">The salary will be the price presented upon requesting, accepting, or
+Rejecting upon certain condition, the salary will be based on the rates
+provided.Tap salary for details.  </string>
+    <string name="done_icon">Done_icon</string>
+    <string name="switch_learner">Switch Learner</string>
+    <string name="for_me">For Me</string>
+
+    <string-array name="primaryPromoText">
+        <item>Affortable nearby couching-centers specific to the topic</item>
+        <item>Affortable nearby monthly mentors specific to the topic</item>
+        <item>Professional nearby weekly mentors specific to the topic</item>
+    </string-array>
 
 </resources>

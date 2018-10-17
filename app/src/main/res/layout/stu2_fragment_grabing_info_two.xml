@@ -17,9 +17,9 @@
 
 
     <android.support.v4.widget.NestedScrollView
-        android:id="@+id/fragment_bg"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:id="@+id/fragment_bg"
         android:background="@drawable/drop_shadow_top">
 
         <LinearLayout

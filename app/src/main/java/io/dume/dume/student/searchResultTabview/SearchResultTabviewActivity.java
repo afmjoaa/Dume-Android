@@ -2,6 +2,8 @@ package io.dume.dume.student.searchResultTabview;
 
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.graphics.drawable.Animatable;
+import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -68,10 +70,8 @@ public class SearchResultTabviewActivity extends CustomStuAppCompatActivity impl
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        tabLayout = (TabLayout) findViewById(R.id.tabs);
         // loop through all navigation tabs
         for (int i = 0; i < tabLayout.getTabCount(); i++) {
             // inflate the Parent LinearLayout Container for the tab
@@ -98,6 +98,8 @@ public class SearchResultTabviewActivity extends CustomStuAppCompatActivity impl
 
     @Override
     public void findView() {
+        tabLayout = (TabLayout) findViewById(R.id.tabs);
+        mViewPager = (ViewPager) findViewById(R.id.container);
 
     }
 
@@ -108,6 +110,71 @@ public class SearchResultTabviewActivity extends CustomStuAppCompatActivity impl
 
     @Override
     public void configSearchResultTabview() {
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                View tabView = tab.getCustomView();
+                // get inflated children Views the icon and the label by their id
+                if (tabView != null) {
+                    TextView tab_label = (TextView) tabView.findViewById(R.id.nav_label);
+                    ImageView tab_icon = (ImageView) tabView.findViewById(R.id.nav_icon);
+                    Drawable drawableIcon = tab_icon.getDrawable();
+
+                    if (drawableIcon instanceof Animatable) {
+                        ((Animatable) drawableIcon).start();
+                    }
+                }
+                int tabPosition = tab.getPosition();
+                switch (tabPosition) {
+                    case 0:
+                        break;
+                    case 1:
+                    case 2:
+                    case 3:
+                    case 4:
+                        break;
+                    default:
+                        break;
+                }
+
+
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+                View tabView = tab.getCustomView();
+                // get inflated children Views the icon and the label by their id
+                if (tabView != null) {
+                    TextView tab_label = (TextView) tabView.findViewById(R.id.nav_label);
+                }
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+                View tabView = tab.getCustomView();
+                // get inflated children Views the icon and the label by their id
+                if (tabView != null) {
+                    ImageView tab_icon = (ImageView) tabView.findViewById(R.id.nav_icon);
+                    Drawable drawableIcon = tab_icon.getDrawable();
+
+                    if (drawableIcon instanceof Animatable) {
+                        ((Animatable) drawableIcon).start();
+                    }
+                }
+                int tabPosition = tab.getPosition();
+                switch (tabPosition) {
+                    case 0:
+                        break;
+                    case 1:
+                    case 2:
+                    case 3:
+                    case 4:
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
 
     }
 

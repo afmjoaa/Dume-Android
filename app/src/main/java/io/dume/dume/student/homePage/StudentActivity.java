@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.telecom.GatewayInfo;
 import android.view.View;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -12,6 +13,7 @@ import io.dume.dume.R;
 import io.dume.dume.afterSplashTrp.AfterSplashActivity;
 import io.dume.dume.auth.auth.AuthActivity;
 import io.dume.dume.common.chatActivity.ChatActivity;
+import io.dume.dume.student.grabingInfo.GrabingInfoActivity;
 import io.dume.dume.student.grabingPackage.GrabingPackageActivity;
 import io.dume.dume.student.recordsAccepted.RecordsAcceptedActivity;
 import io.dume.dume.student.recordsCompleted.RecordsCompletedActivity;
@@ -63,7 +65,7 @@ public class StudentActivity extends AppCompatActivity implements StudentContrac
 
     @Override
     public void goTORecordsActivity2() {
-        startActivity(new Intent(this, RecordsCurrentActivity.class));
+        startActivity(new Intent(this, GrabingInfoActivity.class));
 
     }
 

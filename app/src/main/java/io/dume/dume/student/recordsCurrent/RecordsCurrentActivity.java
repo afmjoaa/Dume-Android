@@ -17,6 +17,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -163,20 +164,25 @@ public class RecordsCurrentActivity extends CustomStuAppCompatActivity implement
             timePicker.setTimePickerListener(new TimePickerDialog.OnTimeSetListener() {
                 @Override
                 public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                    String AM_PM;
-                    int myHourOfDay = hourOfDay;
-                    if (hourOfDay < 12) {
-                        AM_PM = "AM";
+                    String myTime;
+                    if (DateFormat.is24HourFormat(getActivity())) {
+                        myTime = "" + hourOfDay + ":" + minute;
                     } else {
-                        AM_PM = "PM";
+                        String AM_PM;
+                        int myHourOfDay = hourOfDay;
+                        if (hourOfDay < 12) {
+                            AM_PM = "AM";
+                        } else {
+                            AM_PM = "PM";
+                        }
+                        if (hourOfDay >= 13) {
+                            myHourOfDay = hourOfDay - 12;
+                        } else if (hourOfDay == 0) {
+                            myHourOfDay = 12;
+                        }
+                        myTime = "" + myHourOfDay + ":" + minute + " " + AM_PM;
+                        notificationEditText.setText(myTime);
                     }
-                    if (hourOfDay >= 13) {
-                        myHourOfDay = hourOfDay - 12;
-                    }else if(hourOfDay == 0){
-                        myHourOfDay = 12;
-                    }
-                    String myTime = "" + myHourOfDay + ":" + minute + " " + AM_PM;
-                    notificationEditText.setText(myTime);
                 }
             });
 
@@ -193,27 +199,32 @@ public class RecordsCurrentActivity extends CustomStuAppCompatActivity implement
             timePickerReminder.setTimePickerListener(new TimePickerDialog.OnTimeSetListener() {
                 @Override
                 public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                    String AM_PM;
-                    int myHourOfDay = hourOfDay;
-                    if (hourOfDay < 12) {
-                        AM_PM = "AM";
+                    String myTime;
+                    if (DateFormat.is24HourFormat(getActivity())) {
+                        myTime = "" + hourOfDay + ":" + minute;
                     } else {
-                        AM_PM = "PM";
+                        String AM_PM;
+                        int myHourOfDay = hourOfDay;
+                        if (hourOfDay < 12) {
+                            AM_PM = "AM";
+                        } else {
+                            AM_PM = "PM";
+                        }
+                        if (hourOfDay >= 13) {
+                            myHourOfDay = hourOfDay - 12;
+                        } else if (hourOfDay == 0) {
+                            myHourOfDay = 12;
+                        }
+                        myTime = "" + myHourOfDay + ":" + minute + " " + AM_PM;
+                        reminderEditText.setText(myTime);
                     }
-                    if (hourOfDay >= 13) {
-                        myHourOfDay = hourOfDay - 12;
-                    }else if(hourOfDay == 0){
-                        myHourOfDay = 12;
-                    }
-                    String myTime = "" + myHourOfDay + ":" + minute + " " + AM_PM;
-                    reminderEditText.setText(myTime);
                 }
             });
 
             reminderEditText.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    timePicker.show(getChildFragmentManager(), "time_reminder");
+                    timePickerReminder.show(getChildFragmentManager(), "time_reminder");
                 }
             });
 
@@ -237,7 +248,7 @@ public class RecordsCurrentActivity extends CustomStuAppCompatActivity implement
             DumeUtils.setTextOverDrawable(myThisActivity, experienceLayDraw, R.id.ic_badge, Color.BLACK, "00");
 
             LayerDrawable calenderCurDateLayDraw = (LayerDrawable) calenderCurDateImageView.getDrawable();
-            DumeUtils.setTextOverDrawable(myThisActivity, calenderCurDateLayDraw, R.id.ic_badge, Color.WHITE, "20",2);
+            DumeUtils.setTextOverDrawable(myThisActivity, calenderCurDateLayDraw, R.id.ic_badge, Color.WHITE, "20", 2);
 
 
             ArrayList<BarData> dataList = new ArrayList<>();

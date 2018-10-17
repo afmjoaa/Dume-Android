@@ -290,5 +290,14 @@ public class DumeUtils {
         InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
         Objects.requireNonNull(imm).hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
+
+    public static String firstTwo(String str) {
+        return str.length() < 2 ? str : str.substring(0, 2);
+    }
+
+    public static String firstThree(String str) {
+        return str.length() < 3 ? str : str.substring(0, 3);
+    }
+
 }
 

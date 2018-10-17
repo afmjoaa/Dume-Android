@@ -43,10 +43,10 @@
     <carbon.widget.LinearLayout
         android:id="@+id/packageBottomSheet"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="510dp"
+        android:background="@drawable/bg_white_top_round_with_shadow"
         android:orientation="vertical"
         app:behavior_peekHeight="400dp"
-        android:background="@drawable/bg_white_top_round_with_shadow"
         app:layout_behavior="@string/view_pager_bottom_sheet_behavior">
 
 
@@ -54,6 +54,24 @@
             android:id="@+id/bottom_sheet_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/individual_promo_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:text="Affortable nearby couching-centers specific to the topic"
+                android:textAlignment="center"
+                android:textColor="@color/textColorSecondary"
+                android:textSize="14sp"
+                app:fontFamily="@font/cairo_regular"
+                android:visibility="gone"/>
+
 
             <TextView
                 android:id="@+id/specific_promo_text"
@@ -83,27 +101,30 @@
                 android:gravity="center"
                 android:orientation="horizontal">
 
-                <LinearLayout
+                <RelativeLayout
+                    android:id="@+id/dume_gang_container"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_marginStart="10dp"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:layout_weight="1">
 
                     <carbon.widget.ImageView
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
-                        android:layout_gravity="center"
+                        android:id="@+id/dume_gang_image"
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
+                        android:layout_centerHorizontal="true"
                         android:layout_margin="8dp"
                         android:src="@drawable/dume_gang_image"
                         app:carbon_cornerRadius="30dp"
                         app:carbon_elevation="8dp" />
 
                     <TextView
+                        android:id="@+id/dume_gang_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
+                        android:layout_below="@+id/dume_gang_image"
+                        android:layout_centerHorizontal="true"
                         android:text="Dume Gang"
                         android:textAlignment="center"
                         android:textColor="@color/textColorPrimary"
@@ -111,37 +132,41 @@
                         app:fontFamily="@font/cairo_regular" />
 
                     <TextView
+                        android:id="@+id/dume_gang_price_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
+                        android:layout_below="@+id/dume_gang_text"
+                        android:layout_centerHorizontal="true"
                         android:text="BDT 1k-3k"
                         android:textAlignment="center"
                         android:textColor="@color/textColorSecondary"
                         android:textSize="12sp"
                         app:fontFamily="@font/cairo_regular" />
 
+                </RelativeLayout>
 
-                </LinearLayout>
-
-                <LinearLayout
+                <RelativeLayout
+                    android:id="@+id/regular_dume_container"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:layout_weight="1">
 
                     <carbon.widget.ImageView
+                        android:id="@+id/regular_dume_image"
                         android:layout_width="60dp"
                         android:layout_height="60dp"
-                        android:layout_gravity="center"
+                        android:layout_centerHorizontal="true"
                         android:layout_margin="8dp"
                         android:src="@drawable/dume_regular_grayscale_image"
                         app:carbon_cornerRadius="30dp"
                         app:carbon_elevation="0dp" />
 
                     <TextView
+                        android:id="@+id/regular_dume_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
+                        android:layout_below="@+id/regular_dume_image"
+                        android:layout_centerHorizontal="true"
                         android:text="Regular Dume"
                         android:textAlignment="center"
                         android:textColor="@color/textColorPrimary"
@@ -149,9 +174,11 @@
                         app:fontFamily="@font/cairo_regular" />
 
                     <TextView
+                        android:id="@+id/regular_dume_price_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
+                        android:layout_below="@+id/regular_dume_text"
+                        android:layout_centerHorizontal="true"
                         android:text="BDT 3k-10k"
                         android:textAlignment="center"
                         android:textColor="@color/textColorSecondary"
@@ -159,29 +186,32 @@
                         app:fontFamily="@font/cairo_regular" />
 
 
-                </LinearLayout>
+                </RelativeLayout>
 
-                <LinearLayout
+                <RelativeLayout
+                    android:id="@+id/instant_dume_container"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="10dp"
                     android:layout_marginRight="10dp"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:layout_weight="1">
 
                     <carbon.widget.ImageView
+                        android:id="@+id/instant_dume_image"
                         android:layout_width="60dp"
                         android:layout_height="60dp"
-                        android:layout_gravity="center"
+                        android:layout_centerHorizontal="true"
                         android:layout_margin="8dp"
                         android:src="@drawable/dume_instant_grayscale_image"
                         app:carbon_cornerRadius="30dp"
                         app:carbon_elevation="0dp" />
 
                     <TextView
+                        android:id="@+id/instant_dume_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
+                        android:layout_below="@id/instant_dume_image"
+                        android:layout_centerHorizontal="true"
                         android:text="Instant Dume"
                         android:textAlignment="center"
                         android:textColor="@color/textColorPrimary"
@@ -189,9 +219,11 @@
                         app:fontFamily="@font/cairo_regular" />
 
                     <TextView
+                        android:id="@+id/instant_dume_price_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
+                        android:layout_below="@+id/instant_dume_text"
+                        android:layout_centerHorizontal="true"
                         android:text="BDT 3k-6k"
                         android:textAlignment="center"
                         android:textColor="@color/textColorSecondary"
@@ -199,17 +231,89 @@
                         app:fontFamily="@font/cairo_regular" />
 
 
-                </LinearLayout>
+                </RelativeLayout>
 
             </carbon.widget.LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/more_info_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/product_container_layout"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="24dp"
+                android:layout_marginRight="24dp"
+                android:layout_marginTop="8dp"
+                android:visibility="gone">
+
+
+                <TextView
+                    android:id="@+id/capacity_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:text="@string/estimated_capacity"
+                    android:textColor="@color/textColorPrimary"
+                    android:textSize="12sp"
+                    app:fontFamily="@font/cairo_regular" />
+
+                <TextView
+                    android:id="@+id/salary_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/capacity_text"
+                    android:text="@string/estimated_salary"
+                    android:textColor="@color/textColorPrimary"
+                    android:textSize="12sp"
+                    app:fontFamily="@font/cairo_regular" />
+
+
+                <TextView
+                    android:id="@+id/capacity_text_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:text="10 Person"
+                    android:textColor="@color/textColorPrimary"
+                    android:textSize="12sp"
+                    app:fontFamily="@font/cairo_regular" />
+
+                <TextView
+                    android:id="@+id/salary_text_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@+id/capacity_text"
+                    android:text="BDT 2K-5K"
+                    android:textColor="@color/textColorPrimary"
+                    android:textSize="12sp"
+                    app:fontFamily="@font/cairo_regular" />
+
+                <TextView
+                    android:id="@+id/individual_promo_body"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/salary_text_value"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="8dp"
+                    android:gravity="start"
+                    android:text="@string/salary_details_text"
+                    android:textColor="@color/textColorSecondary"
+                    android:textSize="12sp"
+                    app:fontFamily="@font/cairo_regular" />
+
+            </RelativeLayout>
 
             <io.dume.dume.customView.CustomTabLayout
                 android:id="@+id/tabs"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/product_container_layout"
+                android:layout_below="@+id/more_info_layout"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="8dp"
                 app:tabGravity="fill"
                 app:tabIndicatorHeight="3dp"
                 app:tabMode="scrollable"
@@ -283,46 +387,41 @@
             <android.support.v4.view.ViewPager
                 android:id="@+id/container"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_below="@id/example_bar_layout"
                 android:layout_centerHorizontal="true" />
 
-            <carbon.widget.Button
+            <Button
                 android:id="@+id/package_search_btn"
+                style="@style/myButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
+                android:layout_below="@id/example_bar_layout"
                 android:layout_centerHorizontal="true"
-                android:layout_gravity="bottom|end"
-                android:layout_marginBottom="20dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:layout_marginStart="16dp"
-                android:background="@color/carbon_black"
-                android:text="Search Dume Gang"
+                android:layout_marginTop="76dp"
                 android:onClick="onGrabingPackageViewCLicked"
+                android:text="Search Dume Gang"
                 android:textAllCaps="false"
                 android:textColor="@color/carbon_white"
-                android:textSize="18sp"
-                app:carbon_cornerRadius="5dp"
-                app:carbon_elevation="5dp"
-                app:fontFamily="@font/cairo_regular"
-                app:carbon_rippleColor="#80ffffff"
-                app:carbon_rippleStyle="background" />
+                android:textSize="16sp"
+                app:fontFamily="@font/cairo_regular" />
 
 
         </carbon.widget.RelativeLayout>
 
     </carbon.widget.LinearLayout>
 
-   <!-- <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:background="@color/red"
-        android:layout_gravity="bottom|end">
+    <!-- <RelativeLayout
+         android:layout_width="match_parent"
+         android:layout_height="100dp"
+         android:background="@color/red"
+         android:layout_gravity="bottom|end">
 
-    </RelativeLayout>-->
+     </RelativeLayout>-->
 
 
     <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
