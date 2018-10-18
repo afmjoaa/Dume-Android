@@ -472,4 +472,6 @@ provided.Tap salary for details.  </string>
         <item>Professional nearby weekly mentors specific to the topic</item>
     </string-array>
 
+    <string name="dume_products">You can choose between regular, instant or boot camp/couching center with ease.\n\nDume Gang: This is our finding nearby boot camp package.\nRegular Dume : This is the regular monthly tuition which we are generally familiar with.\nInstant Dume : This is our premier package here we instantly give you a capable mentor for a certain time to teach & guide you in aspecific subject.</string>
+
 </resources>

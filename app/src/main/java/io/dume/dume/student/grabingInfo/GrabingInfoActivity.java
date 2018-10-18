@@ -349,7 +349,7 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                     tabHintLayout.setVisibility(View.VISIBLE);
                     tabLayout.setVisibility(View.VISIBLE);
                     contractLayout.setVisibility(View.GONE);
-                    viewMusk.setVisibility(View.GONE);
+                    viewMusk.setVisibility(View.INVISIBLE);
                     forMeBtn.setCompoundDrawablesWithIntrinsicBounds( R.drawable.alias_profile_icon, 0, R.drawable.ic_keyboard_arrow_down_black_24dp, 0);
                     forMeBtn.setText(R.string.for_me);
 

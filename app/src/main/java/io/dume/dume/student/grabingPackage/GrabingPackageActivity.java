@@ -366,17 +366,17 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
                     instantDumePriceText.setVisibility(View.VISIBLE);
                     if (specificPromoText.getText() == specificPromoTextArr[0]) {
                         dumeGangContainer.animate()
-                                .translationYBy((float) (-4.0f * (getResources().getDisplayMetrics().density)))
+                                .translationYBy((float) (-2.0f * (getResources().getDisplayMetrics().density)))
                                 .setDuration(60)
                                 .start();
                     } else if (specificPromoText.getText() == specificPromoTextArr[1]) {
                         regularDumeContainer.animate()
-                                .translationYBy((float) (-4.0f * (getResources().getDisplayMetrics().density)))
+                                .translationYBy((float) (-2.0f * (getResources().getDisplayMetrics().density)))
                                 .setDuration(60)
                                 .start();
                     } else {
                         instantDumeContainer.animate()
-                                .translationYBy((float) (-4.0f * (getResources().getDisplayMetrics().density)))
+                                .translationYBy((float) (-2.0f * (getResources().getDisplayMetrics().density)))
                                 .setDuration(60)
                                 .start();
                     }
@@ -384,17 +384,17 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
                     if (dragFirst) {
                         if (specificPromoText.getText() == specificPromoTextArr[0]) {
                             dumeGangContainer.animate()
-                                    .translationYBy((float) (4.0f * (getResources().getDisplayMetrics().density)))
+                                    .translationYBy((float) (2.0f * (getResources().getDisplayMetrics().density)))
                                     .setDuration(60)
                                     .start();
                         } else if (specificPromoText.getText() == specificPromoTextArr[1]) {
                             regularDumeContainer.animate()
-                                    .translationYBy((float) (4.0f * (getResources().getDisplayMetrics().density)))
+                                    .translationYBy((float) (2.0f * (getResources().getDisplayMetrics().density)))
                                     .setDuration(60)
                                     .start();
                         } else {
                             instantDumeContainer.animate()
-                                    .translationYBy((float) (4.0f * (getResources().getDisplayMetrics().density)))
+                                    .translationYBy((float) (2.0f * (getResources().getDisplayMetrics().density)))
                                     .setDuration(60)
                                     .start();
                         }
@@ -410,19 +410,19 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
                         if (specificPromoText.getText() == specificPromoTextArr[0]) {
                             dumeGangSelected();
                             dumeGangContainer.animate()
-                                    .translationYBy((float) (4.0f * (getResources().getDisplayMetrics().density)))
+                                    .translationYBy((float) (2.0f * (getResources().getDisplayMetrics().density)))
                                     .setDuration(60)
                                     .start();
                         } else if (specificPromoText.getText() == specificPromoTextArr[1]) {
                             regularDumeSelected();
                             regularDumeContainer.animate()
-                                    .translationYBy((float) (4.0f * (getResources().getDisplayMetrics().density)))
+                                    .translationYBy((float) (2.0f * (getResources().getDisplayMetrics().density)))
                                     .setDuration(60)
                                     .start();
                         } else {
                             instantDumeSelected();
                             instantDumeContainer.animate()
-                                    .translationYBy((float) (4.0f * (getResources().getDisplayMetrics().density)))
+                                    .translationYBy((float) (2.0f * (getResources().getDisplayMetrics().density)))
                                     .setDuration(60)
                                     .start();
                         }
