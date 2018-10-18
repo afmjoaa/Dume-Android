@@ -68,6 +68,7 @@ public class AccountSettings extends AppCompatActivity implements AccountSetting
     private TextView academicError;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
