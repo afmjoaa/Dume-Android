@@ -63,7 +63,15 @@ public class HomePagePresenter implements HomePageContract.Presenter {
             case R.id.search_mentor_btn:
                 //mView.gotoGrabingInfoPage();
                 mView.gotoGrabingLocationPage();
-
+                break;
+            case R.id.refer_mentor_imageView:
+                mView.referMentorImageViewClicked();
+                break;
+            case R.id.free_cashback_imageView:
+                mView.freeCashBackImageViewClicked();
+                break;
+            case R.id.start_mentoring_imageView:
+                mView.startMentoringImageViewClicked();
                 break;
 
         }

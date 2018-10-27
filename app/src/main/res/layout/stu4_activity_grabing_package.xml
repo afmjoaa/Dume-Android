@@ -69,8 +69,8 @@
                 android:textAlignment="center"
                 android:textColor="@color/textColorSecondary"
                 android:textSize="14sp"
-                app:fontFamily="@font/cairo_regular"
-                android:visibility="gone"/>
+                android:visibility="gone"
+                app:fontFamily="@font/cairo_regular" />
 
 
             <TextView
@@ -119,6 +119,17 @@
                         app:carbon_cornerRadius="30dp"
                         app:carbon_elevation="8dp" />
 
+                    <carbon.widget.ImageView
+                        android:id="@+id/dume_gang_percent_off_image"
+                        android:layout_width="34dp"
+                        android:layout_height="34dp"
+                        android:layout_centerHorizontal="true"
+                        android:translationX="24dp"
+                        android:translationY="4dp"
+                        app:carbon_cornerRadius="30dp"
+                        app:carbon_elevation="8dp"
+                        app:srcCompat="@drawable/ic_percentage_off_badge_layer_list" />
+
                     <TextView
                         android:id="@+id/dume_gang_text"
                         android:layout_width="wrap_content"
@@ -160,6 +171,17 @@
                         android:src="@drawable/dume_regular_grayscale_image"
                         app:carbon_cornerRadius="30dp"
                         app:carbon_elevation="0dp" />
+
+                    <carbon.widget.ImageView
+                        android:id="@+id/regular_dume_percent_off_image"
+                        android:layout_width="34dp"
+                        android:layout_height="34dp"
+                        android:layout_centerHorizontal="true"
+                        android:translationX="24dp"
+                        android:translationY="4dp"
+                        app:carbon_cornerRadius="30dp"
+                        app:carbon_elevation="0dp"
+                        app:srcCompat="@drawable/ic_percentage_off_badge_layer_list_inactive" />
 
                     <TextView
                         android:id="@+id/regular_dume_text"
@@ -205,6 +227,17 @@
                         android:src="@drawable/dume_instant_grayscale_image"
                         app:carbon_cornerRadius="30dp"
                         app:carbon_elevation="0dp" />
+
+                    <carbon.widget.ImageView
+                        android:id="@+id/instant_dume_percent_off_image"
+                        android:layout_width="34dp"
+                        android:layout_height="34dp"
+                        android:layout_centerHorizontal="true"
+                        android:translationX="24dp"
+                        android:translationY="4dp"
+                        app:carbon_cornerRadius="30dp"
+                        app:carbon_elevation="0dp"
+                        app:srcCompat="@drawable/ic_percentage_off_badge_layer_list_inactive" />
 
                     <TextView
                         android:id="@+id/instant_dume_text"
@@ -452,7 +485,7 @@
                 app:theme="@style/ThemeToolbar.default"
                 app:title=""
                 app:titleMargin="0dp"
-                app:titleTextAppearance="@style/MyTextApprncCol.grabLocaiton">
+                app:titleTextAppearance="@style/MyTextApprncCol.lightBg">
 
             </android.support.v7.widget.Toolbar>
 

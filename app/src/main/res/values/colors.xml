@@ -99,5 +99,7 @@
     <color name="cornflower_blue_dark">#303F9F</color>
     <color name="cornflower_blue_darkest">#2d3a93</color>
     <color name="chat_ripple_color">#7800796b</color>
+    <color name="percent_off_active_color">#369c3a</color>
+    <color name="disable_color">#616161</color>
 
 </resources>

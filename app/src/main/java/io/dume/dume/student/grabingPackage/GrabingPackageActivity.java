@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
@@ -76,6 +77,7 @@ import io.dume.dume.student.pojo.CusStuAppComMapActivity;
 import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
 import io.dume.dume.student.searchLoading.SearchLoadingActivity;
 import io.dume.dume.util.DatePickerFragment;
+import io.dume.dume.util.DumeUtils;
 import io.dume.dume.util.TimePickerFragment;
 import io.dume.dume.util.VisibleToggleClickListener;
 
@@ -130,6 +132,12 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
     private TextView hintIdThree;
     private TextView hintIdTwo;
     private TextView hintIdOne;
+    private carbon.widget.ImageView dumeGangPercentageOffImage;
+    private carbon.widget.ImageView instantDumePercentageOffImage;
+    private carbon.widget.ImageView regularDumePercentageOffImage;
+    private LayerDrawable dumeGangBadgeOffLayDraw;
+    private LayerDrawable regularDumeBadgeOffLayDraw;
+    private LayerDrawable instantDumeBadgeOffLayDraw;
 
 
     @Override
@@ -202,6 +210,10 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
         hintIdOne = findViewById(R.id.hint_id_1);
         hintIdTwo = findViewById(R.id.hint_id_2);
         hintIdThree = findViewById(R.id.hint_id_3);
+
+        dumeGangPercentageOffImage = findViewById(R.id.dume_gang_percent_off_image);
+        regularDumePercentageOffImage = findViewById(R.id.regular_dume_percent_off_image);
+        instantDumePercentageOffImage = findViewById(R.id.instant_dume_percent_off_image);
 
     }
 
@@ -366,17 +378,17 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
                     instantDumePriceText.setVisibility(View.VISIBLE);
                     if (specificPromoText.getText() == specificPromoTextArr[0]) {
                         dumeGangContainer.animate()
-                                .translationYBy((float) (-2.0f * (getResources().getDisplayMetrics().density)))
+                                .translationYBy((float) (-3.0f * (getResources().getDisplayMetrics().density)))
                                 .setDuration(60)
                                 .start();
                     } else if (specificPromoText.getText() == specificPromoTextArr[1]) {
                         regularDumeContainer.animate()
-                                .translationYBy((float) (-2.0f * (getResources().getDisplayMetrics().density)))
+                                .translationYBy((float) (-3.0f * (getResources().getDisplayMetrics().density)))
                                 .setDuration(60)
                                 .start();
                     } else {
                         instantDumeContainer.animate()
-                                .translationYBy((float) (-2.0f * (getResources().getDisplayMetrics().density)))
+                                .translationYBy((float) (-3.0f * (getResources().getDisplayMetrics().density)))
                                 .setDuration(60)
                                 .start();
                     }
@@ -384,17 +396,17 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
                     if (dragFirst) {
                         if (specificPromoText.getText() == specificPromoTextArr[0]) {
                             dumeGangContainer.animate()
-                                    .translationYBy((float) (2.0f * (getResources().getDisplayMetrics().density)))
+                                    .translationYBy((float) (3.0f * (getResources().getDisplayMetrics().density)))
                                     .setDuration(60)
                                     .start();
                         } else if (specificPromoText.getText() == specificPromoTextArr[1]) {
                             regularDumeContainer.animate()
-                                    .translationYBy((float) (2.0f * (getResources().getDisplayMetrics().density)))
+                                    .translationYBy((float) (3.0f * (getResources().getDisplayMetrics().density)))
                                     .setDuration(60)
                                     .start();
                         } else {
                             instantDumeContainer.animate()
-                                    .translationYBy((float) (2.0f * (getResources().getDisplayMetrics().density)))
+                                    .translationYBy((float) (3.0f * (getResources().getDisplayMetrics().density)))
                                     .setDuration(60)
                                     .start();
                         }
@@ -410,19 +422,19 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
                         if (specificPromoText.getText() == specificPromoTextArr[0]) {
                             dumeGangSelected();
                             dumeGangContainer.animate()
-                                    .translationYBy((float) (2.0f * (getResources().getDisplayMetrics().density)))
+                                    .translationYBy((float) (3.0f * (getResources().getDisplayMetrics().density)))
                                     .setDuration(60)
                                     .start();
                         } else if (specificPromoText.getText() == specificPromoTextArr[1]) {
                             regularDumeSelected();
                             regularDumeContainer.animate()
-                                    .translationYBy((float) (2.0f * (getResources().getDisplayMetrics().density)))
+                                    .translationYBy((float) (3.0f * (getResources().getDisplayMetrics().density)))
                                     .setDuration(60)
                                     .start();
                         } else {
                             instantDumeSelected();
                             instantDumeContainer.animate()
-                                    .translationYBy((float) (2.0f * (getResources().getDisplayMetrics().density)))
+                                    .translationYBy((float) (3.0f * (getResources().getDisplayMetrics().density)))
                                     .setDuration(60)
                                     .start();
                         }
@@ -441,20 +453,47 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
                             .scaleX((float) (1 + (0.20 * slideOffset)))
                             .scaleY((float) (1 + (0.20 * slideOffset)))
                             .setDuration(0).start();
+                    dumeGangPercentageOffImage.animate()
+                            .scaleX((float) (1 + (0.18 * slideOffset)))
+                            .scaleY((float) (1 + (0.18 * slideOffset)))
+                            .translationY((float) (2.3 * (getResources().getDisplayMetrics().density)))
+                            .translationX((float) (24 * (getResources().getDisplayMetrics().density) + (8 * slideOffset * (getResources().getDisplayMetrics().density))))
+                            .setDuration(0).start();
                 } else if (specificPromoText.getText() == specificPromoTextArr[1]) {
                     regularDumeImage.animate()
                             .scaleX((float) (1 + (0.20 * slideOffset)))
                             .scaleY((float) (1 + (0.20 * slideOffset)))
+                            .setDuration(0).start();
+                    regularDumePercentageOffImage.animate()
+                            .scaleX((float) (1 + (0.18 * slideOffset)))
+                            .scaleY((float) (1 + (0.18 * slideOffset)))
+                            .translationY((float) (2.3 * (getResources().getDisplayMetrics().density)))
+                            .translationX((float) (24 * (getResources().getDisplayMetrics().density) + (8 * slideOffset * (getResources().getDisplayMetrics().density))))
                             .setDuration(0).start();
                 } else {
                     instantDumeImage.animate()
                             .scaleX((float) (1 + (0.20 * slideOffset)))
                             .scaleY((float) (1 + (0.20 * slideOffset)))
                             .setDuration(0).start();
+                    instantDumePercentageOffImage.animate()
+                            .scaleX((float) (1 + (0.18 * slideOffset)))
+                            .scaleY((float) (1 + (0.18 * slideOffset)))
+                            .translationY((float) (2.3 * (getResources().getDisplayMetrics().density)))
+                            .translationX((float) (24 * (getResources().getDisplayMetrics().density) + (8 * slideOffset * (getResources().getDisplayMetrics().density))))
+                            .setDuration(0).start();
                 }
                 //packageSearchBtn.animate().alpha(slideOffset).scaleX(slideOffset).scaleY(slideOffset).setDuration(0).start();
             }
         });
+
+        dumeGangBadgeOffLayDraw = (LayerDrawable) dumeGangPercentageOffImage.getDrawable();
+        DumeUtils.setTextOverDrawable(this, dumeGangBadgeOffLayDraw, R.id.ic_badge, Color.WHITE, "-20%", 3);
+
+        regularDumeBadgeOffLayDraw = (LayerDrawable) regularDumePercentageOffImage.getDrawable();
+        DumeUtils.setTextOverDrawable(this, regularDumeBadgeOffLayDraw, R.id.ic_badge, 0xff575757, "-30%", 3);
+
+        instantDumeBadgeOffLayDraw = (LayerDrawable) instantDumePercentageOffImage.getDrawable();
+        DumeUtils.setTextOverDrawable(this, instantDumeBadgeOffLayDraw, R.id.ic_badge, 0xff575757, "-40%", 3);
     }
 
     @Override
@@ -491,6 +530,10 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
             regularDumePriceText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
             instantDumePriceText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
 
+            dumeGangImage.setImageResource(R.drawable.dume_gang_image);
+            regularDumeImage.setImageResource(R.drawable.dume_regular_grayscale_image);
+            instantDumeImage.setImageResource(R.drawable.dume_instant_grayscale_image);
+
             dumeGangImage.getLayoutParams().height = (int) (64 * (getResources().getDisplayMetrics().density));
             dumeGangImage.getLayoutParams().width = (int) (64 * (getResources().getDisplayMetrics().density));
             regularDumeImage.getLayoutParams().height = (int) (60 * (getResources().getDisplayMetrics().density));
@@ -498,9 +541,28 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
             instantDumeImage.getLayoutParams().height = (int) (60 * (getResources().getDisplayMetrics().density));
             instantDumeImage.getLayoutParams().width = (int) (60 * (getResources().getDisplayMetrics().density));
 
-            dumeGangImage.setImageResource(R.drawable.dume_gang_image);
-            regularDumeImage.setImageResource(R.drawable.dume_regular_grayscale_image);
-            instantDumeImage.setImageResource(R.drawable.dume_instant_grayscale_image);
+            dumeGangImage.setElevation((int) (8 * (getResources().getDisplayMetrics().density)));
+            regularDumeImage.setElevation((int) (0 * (getResources().getDisplayMetrics().density)));
+            instantDumeImage.setElevation((int) (0 * (getResources().getDisplayMetrics().density)));
+
+            dumeGangPercentageOffImage.setElevation((int) (8 * (getResources().getDisplayMetrics().density)));
+            regularDumePercentageOffImage.setElevation((int) (0 * (getResources().getDisplayMetrics().density)));
+            instantDumePercentageOffImage.setElevation((int) (0 * (getResources().getDisplayMetrics().density)));
+
+            dumeGangPercentageOffImage.setImageResource(R.drawable.ic_percentage_off_badge_layer_list);
+            regularDumePercentageOffImage.setImageResource(R.drawable.ic_percentage_off_badge_layer_list_inactive);
+            instantDumePercentageOffImage.setImageResource(R.drawable.ic_percentage_off_badge_layer_list_inactive);
+            dumeGangBadgeOffLayDraw = (LayerDrawable) dumeGangPercentageOffImage.getDrawable();
+            DumeUtils.setTextOverDrawable(this, dumeGangBadgeOffLayDraw, R.id.ic_badge, Color.WHITE, "-20%", 3);
+
+            regularDumeBadgeOffLayDraw = (LayerDrawable) regularDumePercentageOffImage.getDrawable();
+            DumeUtils.setTextOverDrawable(this, regularDumeBadgeOffLayDraw, R.id.ic_badge, 0xff575757, "-30%", 3);
+
+            instantDumeBadgeOffLayDraw = (LayerDrawable) instantDumePercentageOffImage.getDrawable();
+            DumeUtils.setTextOverDrawable(this, instantDumeBadgeOffLayDraw, R.id.ic_badge, 0xff575757, "-40%", 3);
+
+            packageSearchBtn.setText("Search Dume Gang");
+
         }
     }
 
@@ -543,6 +605,26 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
             regularDumeImage.getLayoutParams().width = (int) (64 * (getResources().getDisplayMetrics().density));
             instantDumeImage.getLayoutParams().height = (int) (60 * (getResources().getDisplayMetrics().density));
             instantDumeImage.getLayoutParams().width = (int) (60 * (getResources().getDisplayMetrics().density));
+
+            dumeGangImage.setElevation((int) (0 * (getResources().getDisplayMetrics().density)));
+            regularDumeImage.setElevation((int) (8 * (getResources().getDisplayMetrics().density)));
+            instantDumeImage.setElevation((int) (0 * (getResources().getDisplayMetrics().density)));
+
+            dumeGangPercentageOffImage.setElevation((int) (0 * (getResources().getDisplayMetrics().density)));
+            regularDumePercentageOffImage.setElevation((int) (8 * (getResources().getDisplayMetrics().density)));
+            instantDumePercentageOffImage.setElevation((int) (0 * (getResources().getDisplayMetrics().density)));
+            dumeGangPercentageOffImage.setImageResource(R.drawable.ic_percentage_off_badge_layer_list_inactive);
+            regularDumePercentageOffImage.setImageResource(R.drawable.ic_percentage_off_badge_layer_list);
+            instantDumePercentageOffImage.setImageResource(R.drawable.ic_percentage_off_badge_layer_list_inactive);
+            dumeGangBadgeOffLayDraw = (LayerDrawable) dumeGangPercentageOffImage.getDrawable();
+            DumeUtils.setTextOverDrawable(this, dumeGangBadgeOffLayDraw, R.id.ic_badge, 0xff575757, "-20%", 3);
+
+            regularDumeBadgeOffLayDraw = (LayerDrawable) regularDumePercentageOffImage.getDrawable();
+            DumeUtils.setTextOverDrawable(this, regularDumeBadgeOffLayDraw, R.id.ic_badge, Color.WHITE, "-30%", 3);
+
+            instantDumeBadgeOffLayDraw = (LayerDrawable) instantDumePercentageOffImage.getDrawable();
+            DumeUtils.setTextOverDrawable(this, instantDumeBadgeOffLayDraw, R.id.ic_badge, 0xff575757, "-40%", 3);
+            packageSearchBtn.setText("Search Regular Dume");
         }
     }
 
@@ -585,6 +667,27 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
             regularDumeImage.getLayoutParams().width = (int) (60 * (getResources().getDisplayMetrics().density));
             instantDumeImage.getLayoutParams().height = (int) (64 * (getResources().getDisplayMetrics().density));
             instantDumeImage.getLayoutParams().width = (int) (64 * (getResources().getDisplayMetrics().density));
+
+            dumeGangImage.setElevation((int) (0 * (getResources().getDisplayMetrics().density)));
+            regularDumeImage.setElevation((int) (0 * (getResources().getDisplayMetrics().density)));
+            instantDumeImage.setElevation((int) (8 * (getResources().getDisplayMetrics().density)));
+
+            dumeGangPercentageOffImage.setElevation((int) (0 * (getResources().getDisplayMetrics().density)));
+            regularDumePercentageOffImage.setElevation((int) (0 * (getResources().getDisplayMetrics().density)));
+            instantDumePercentageOffImage.setElevation((int) (8 * (getResources().getDisplayMetrics().density)));
+
+            dumeGangPercentageOffImage.setImageResource(R.drawable.ic_percentage_off_badge_layer_list_inactive);
+            regularDumePercentageOffImage.setImageResource(R.drawable.ic_percentage_off_badge_layer_list_inactive);
+            instantDumePercentageOffImage.setImageResource(R.drawable.ic_percentage_off_badge_layer_list);
+            dumeGangBadgeOffLayDraw = (LayerDrawable) dumeGangPercentageOffImage.getDrawable();
+            DumeUtils.setTextOverDrawable(this, dumeGangBadgeOffLayDraw, R.id.ic_badge, 0xff575757, "-20%", 3);
+
+            regularDumeBadgeOffLayDraw = (LayerDrawable) regularDumePercentageOffImage.getDrawable();
+            DumeUtils.setTextOverDrawable(this, regularDumeBadgeOffLayDraw, R.id.ic_badge, 0xff575757, "-30%", 3);
+
+            instantDumeBadgeOffLayDraw = (LayerDrawable) instantDumePercentageOffImage.getDrawable();
+            DumeUtils.setTextOverDrawable(this, instantDumeBadgeOffLayDraw, R.id.ic_badge, Color.WHITE, "-40%", 3);
+            packageSearchBtn.setText("Search Instant Dume");
         }
     }
 
@@ -621,7 +724,7 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
         mMap = googleMap;
         onMapReadyListener(mMap);
         onMapReadyGeneralConfig();
-        mMap.setPadding(0, 0, 0, (int) (400 * (getResources().getDisplayMetrics().density)));
+        mMap.setPadding((int) (10 * (getResources().getDisplayMetrics().density)), 0, 0, (int) (400 * (getResources().getDisplayMetrics().density)));
 
     }
 
@@ -707,10 +810,10 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
                                 showSnackbarShort(selectedDays);
                             List<String> myWeekOfDays = Arrays.asList(selectedDays.split(","));
                             for (int fuck = 0; fuck < myWeekOfDays.size(); fuck++) {
-                                if(fuck == 0){
+                                if (fuck == 0) {
                                     finalWeekOfDays = firstTwo(myWeekOfDays.get(fuck));
 
-                                }else {
+                                } else {
                                     finalWeekOfDays = finalWeekOfDays + "," + firstThree(myWeekOfDays.get(fuck));
                                 }
                             }

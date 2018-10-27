@@ -30,14 +30,21 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.Animation;
+import android.view.animation.DecelerateInterpolator;
+import android.view.animation.ScaleAnimation;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
@@ -47,6 +54,8 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.jaeger.library.StatusBarUtil;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import io.dume.dume.R;
@@ -60,6 +69,8 @@ import io.dume.dume.student.freeCashBack.FreeCashBackActivity;
 import io.dume.dume.student.grabingLocation.GrabingLocationActivity;
 import io.dume.dume.student.grabingInfo.GrabingInfoActivity;
 import io.dume.dume.student.heatMap.HeatMapActivity;
+import io.dume.dume.student.homePage.adapter.HomePageRecyclerAdapter;
+import io.dume.dume.student.homePage.adapter.HomePageRecyclerData;
 import io.dume.dume.student.mentorAddvertise.MentorAddvertiseActivity;
 import io.dume.dume.student.pojo.CusStuAppComMapActivity;
 import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
@@ -115,6 +126,10 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
     MyServiceConnection mConn;
     private LocationServiceHandler locationServiceHandler;
     private CoordinatorLayout coordinatorLayout;
+    private ImageView startMentoringImageView;
+    private ImageView freeCashbackImageView;
+    private ImageView referMentorImageView;
+    private RecyclerView hPageBSRecycler;
 
 
     @Override
@@ -234,6 +249,10 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
         primaryNavContainer = findViewById(R.id.primary_navigation_container);
         secondaryNavContainer = findViewById(R.id.secondary_noGps_navigation_container);
         coordinatorLayout = findViewById(R.id.parent_coor_layout);
+        startMentoringImageView = findViewById(R.id.start_mentoring_imageView);
+        referMentorImageView = findViewById(R.id.refer_mentor_imageView);
+        freeCashbackImageView = findViewById(R.id.free_cashback_imageView);
+        hPageBSRecycler = findViewById(R.id.homePage_bottomSheet_recycler);
     }
 
     @Override
@@ -348,7 +367,42 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
             secondaryNavContainer.setVisibility(View.VISIBLE);
         }
 
+        //initializing the recycler
+        List<HomePageRecyclerData> promoData = new ArrayList<>();
+        HomePageRecyclerAdapter hPageBSRcyclerAdapter = new HomePageRecyclerAdapter(this, promoData);
+        hPageBSRecycler.setAdapter(hPageBSRcyclerAdapter);
+        hPageBSRecycler.setLayoutManager(new LinearLayoutManager(this));
 
+
+    }
+
+
+    protected void animateImage(ImageView imageView) {
+        imageView.clearAnimation();
+        // Scale down animation
+        ScaleAnimation shrink = new ScaleAnimation(1f, 0.2f, 1f, 0.2f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        shrink.setDuration(150);     // animation duration in milliseconds
+        shrink.setInterpolator(new DecelerateInterpolator());
+        shrink.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                // Scale up animation
+                ScaleAnimation expand = new ScaleAnimation(0.2f, 1f, 0.2f, 1f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+                expand.setDuration(100);     // animation duration in milliseconds
+                expand.setInterpolator(new AccelerateInterpolator());
+                imageView.startAnimation(expand);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        imageView.startAnimation(shrink);
     }
 
 
@@ -501,10 +555,11 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
 
             @Override
             public void onSlide(@NonNull View bottomSheet, float slideOffset) {
-
                 if (slideOffset > 0.0f && slideOffset < 1.0f) {
                     fab.animate().scaleX(1 - slideOffset).scaleY(1 - slideOffset).setDuration(0).start();
-                    COMPASSBTN.animate().scaleX(1 - slideOffset).scaleY(1 - slideOffset).setDuration(0).start();
+                    if (COMPASSBTN != null) {
+                        COMPASSBTN.animate().scaleX(1 - slideOffset).scaleY(1 - slideOffset).setDuration(0).start();
+                    }
                     llBottomSheet.animate().scaleX(1 + (slideOffset * 0.058f)).setDuration(0).start();
                     viewMusk.animate().alpha(2 * slideOffset).setDuration(0).start();
 
@@ -513,7 +568,6 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
                         primaryNavContainer.animate().scaleX(1 - slideOffset).scaleY(1 - slideOffset).setDuration(0).start();
                     } else if (secondaryNavContainer.getVisibility() == View.VISIBLE) {
                         secondaryNavContainer.animate().scaleX(1 - slideOffset).scaleY(1 - slideOffset).setDuration(0).start();
-
                     }
                     defaultAppBerLayout.animate().scaleX(1 - slideOffset).scaleY(1 - slideOffset).setDuration(0).start();
                     secondaryAppBarLayout.animate().alpha(slideOffset).scaleX(slideOffset).scaleY(slideOffset).setDuration(0).start();
@@ -595,24 +649,41 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
         startActivity(notificationTabIntent);
     }
 
+    @Override
+    public void referMentorImageViewClicked() {
+        animateImage(referMentorImageView);
+    }
+
+    @Override
+    public void freeCashBackImageViewClicked() {
+        animateImage(freeCashbackImageView);
+    }
+
+    @Override
+    public void startMentoringImageViewClicked() {
+        animateImage(startMentoringImageView);
+    }
+
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         Log.d(TAG, "onMapReady: map is ready");
-        if (ISNIGHT) {
+        /*if (ISNIGHT) {
             setLightStatusBarIcon();
             MapStyleOptions style = MapStyleOptions.loadRawResourceStyle(
                     this, R.raw.map_style_night_no_landmarks);
             googleMap.setMapStyle(style);
-        } else {
-            setDarkStatusBarIcon();
-            MapStyleOptions style = MapStyleOptions.loadRawResourceStyle(
-                    this, R.raw.map_style_default_no_landmarks);
-            googleMap.setMapStyle(style);
-        }
+        } else {}*/
+        setDarkStatusBarIcon();
+        MapStyleOptions style = MapStyleOptions.loadRawResourceStyle(
+                this, R.raw.map_style_default_no_landmarks);
+        googleMap.setMapStyle(style);
+
         mMap = googleMap;
         onMapReadyListener(mMap);
         onMapReadyGeneralConfig();
+        mMap.setPadding((int) (10 * (getResources().getDisplayMetrics().density)), 0, 0, (int) (72 * (getResources().getDisplayMetrics().density)));
+
     }
 
     public void navigationTogglerConfig() {

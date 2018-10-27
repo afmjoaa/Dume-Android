@@ -8,6 +8,8 @@ import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
@@ -18,6 +20,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -48,6 +51,11 @@ import com.google.android.gms.tasks.Task;
 
 import carbon.widget.Button;
 import android.support.design.widget.FloatingActionButton;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
+
 import io.dume.dume.R;
 import io.dume.dume.customView.TouchableWrapper;
 
@@ -90,6 +98,7 @@ public class CusStuAppComMapActivity extends CustomStuAppCompatActivity implemen
     private LinearLayout searchBottomSheet;
     private carbon.widget.RelativeLayout inputSearchContainer;
     private FloatingActionButton fab;
+    private EditText inputSearch;
 
 
     public void setActivityContextMap(Context context, int i) {
@@ -104,7 +113,7 @@ public class CusStuAppComMapActivity extends CustomStuAppCompatActivity implemen
         findDefaultView();
         displayLocationSettingsRequest();
         setListenerForGpsToggle();
-//        result.addOnCompleteListener(this);
+//      result.addOnCompleteListener(this);
     }
 
     public void onMapReadyListener(GoogleMap mMap) {
@@ -227,6 +236,7 @@ public class CusStuAppComMapActivity extends CustomStuAppCompatActivity implemen
             locationDoneBtn = rootView.findViewById(R.id.location_done_btn);
             inputSearchContainer = rootView.findViewById(R.id.input_search_container);
             fab = rootView.findViewById(R.id.fab);
+            inputSearch = findViewById(R.id.input_search);
 
         }
     }
@@ -251,10 +261,10 @@ public class CusStuAppComMapActivity extends CustomStuAppCompatActivity implemen
             inputSearchContainer.requestFocus();
             searchBottomSheet.setVisibility(View.INVISIBLE);
             locationDoneBtn.setVisibility(View.VISIBLE);
-            if(touchedFirstTime){
-                fab.animate().translationYBy((float) (6.0f * (getResources().getDisplayMetrics().density))).setDuration(60).start();
+            /*if(touchedFirstTime){
+                fab.animate().translationYBy((float) (2.0f * (getResources().getDisplayMetrics().density))).start();
                 touchedFirstTime = false;
-            }
+            }*/
         }
 
     }
@@ -269,7 +279,6 @@ public class CusStuAppComMapActivity extends CustomStuAppCompatActivity implemen
                 ((Animatable) d).start();
             }
         }
-
     }
 
     //default map functions
@@ -367,17 +376,28 @@ public class CusStuAppComMapActivity extends CustomStuAppCompatActivity implemen
                 COMPASSBTN = MAP.findViewWithTag("GoogleMapCompass");
                 RelativeLayout.LayoutParams rlp = (RelativeLayout.LayoutParams) COMPASSBTN.getLayoutParams();
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                    rlp.addRule(RelativeLayout.ALIGN_PARENT_START);
-                    rlp.addRule(RelativeLayout.ALIGN_START);
+                    rlp.addRule(RelativeLayout.ALIGN_PARENT_START, 0);
+                    rlp.addRule(RelativeLayout.ALIGN_START, 0);
+                    rlp.addRule(RelativeLayout.ALIGN_PARENT_END);
+                    rlp.addRule(RelativeLayout.ALIGN_END);
                 }
+                rlp.addRule(RelativeLayout.ALIGN_PARENT_LEFT, 0);
+                rlp.addRule(RelativeLayout.ALIGN_LEFT, 0);
+                rlp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                rlp.addRule(RelativeLayout.ALIGN_RIGHT);
+
                 rlp.addRule(RelativeLayout.ALIGN_TOP, 0);
                 rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0);
                 rlp.addRule(RelativeLayout.ALIGN_BOTTOM);
                 rlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
                 rlp.topMargin = (int) (20 * (getResources().getDisplayMetrics().density));
-                rlp.bottomMargin = (int) (20 * (getResources().getDisplayMetrics().density));
+                rlp.bottomMargin = (int) (58 * (getResources().getDisplayMetrics().density));
                 rlp.leftMargin = (int) (16 * (getResources().getDisplayMetrics().density));
                 rlp.rightMargin = (int) (16 * (getResources().getDisplayMetrics().density));
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    COMPASSBTN.setElevation((int) (6 * (getResources().getDisplayMetrics().density)));
+                }
             }
         }
     }
@@ -451,5 +471,33 @@ public class CusStuAppComMapActivity extends CustomStuAppCompatActivity implemen
        myGpsLocationChangeListener.onMyGpsLocationChanged(location);
     }
 
+    public String getAddress(double lat, double lng) {
+        Geocoder geocoder = new Geocoder(context, Locale.getDefault());
+        try {
+            List<Address> addresses = geocoder.getFromLocation(lat, lng, 1);
+            if(addresses.size() > 0){
+                Address obj = addresses.get(0);
+                String mainAddress = obj.getAddressLine(0);
+                String add = obj.getAddressLine(0);
+                add = add + "\n" + obj.getCountryName();
+                add = add + "\n" + obj.getCountryCode();
+                add = add + "\n" + obj.getAdminArea();
+                add = add + "\n" + obj.getPostalCode();
+                add = add + "\n" + obj.getSubAdminArea();
+                add = add + "\n" + obj.getLocality();
+                add = add + "\n" + obj.getSubThoroughfare();
+                Log.e("IGA", "Address" + add);
+                return mainAddress;
+            }else{
+                Toast.makeText(context, "Address still not selected.", Toast.LENGTH_SHORT).show();
+                return "";
+            }
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            return null;
+        }
+    }
 
 }

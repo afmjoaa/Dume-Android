@@ -15,7 +15,7 @@ import java.util.List;
 import carbon.widget.ImageView;
 import io.dume.dume.R;
 
-public class InboxNotiAdapter extends RecyclerView.Adapter<InboxNotiAdapter.MyViewHolder> {
+public class InboxNotiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static final String TAG = "InboxNotiAdapter";
     private LayoutInflater inflater;
@@ -28,29 +28,47 @@ public class InboxNotiAdapter extends RecyclerView.Adapter<InboxNotiAdapter.MyVi
         this.context = context;
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        if (position == 0) {
+            return 100;
+        }
+        return super.getItemViewType(position);
+    }
+
     @NonNull
     @Override
-    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        if (viewType == 100) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.custom_inside_barrier, parent, false);
+            return new HeaderVH(view);
+        }
+
         View view = inflater.inflate(R.layout.custom_noti_row, parent, false);
-        InboxNotiAdapter.MyViewHolder holder = new InboxNotiAdapter.MyViewHolder(view);
+        MyViewHolder holder = new MyViewHolder(view);
         return holder;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        switch (position) {
-            case 1:
-                //testing offline
-                holder.onlineOrOffline.setForegroundProgressColor(R.color.status_viewed);
-                break;
-            case 2:
-                break;
-            case 9:
-                holder.onlineOrOffline.setForegroundProgressColor(R.color.status_viewed);
-                ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) holder.dividerTwo.getLayoutParams();
-                params.leftMargin = (int) (16*context.getResources().getDisplayMetrics().density);
-                params.rightMargin = (int) (16*context.getResources().getDisplayMetrics().density);
-                break;
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        if (holder.getItemViewType() == 100) {
+            HeaderVH headerVH = (HeaderVH) holder;
+        } else {
+            MyViewHolder myViewHolder = (MyViewHolder) holder;
+            switch (position) {
+                case 1:
+                    //testing offline
+                    myViewHolder.onlineOrOffline.setForegroundProgressColor(R.color.status_viewed);
+                    break;
+                case 2:
+                    break;
+                case 9:
+                    myViewHolder.onlineOrOffline.setForegroundProgressColor(R.color.status_viewed);
+                    ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) myViewHolder.dividerTwo.getLayoutParams();
+                    params.leftMargin = (int) (16 * context.getResources().getDisplayMetrics().density);
+                    params.rightMargin = (int) (16 * context.getResources().getDisplayMetrics().density);
+                    break;
+            }
         }
         //position == data.size()-1;
 
@@ -77,6 +95,13 @@ public class InboxNotiAdapter extends RecyclerView.Adapter<InboxNotiAdapter.MyVi
             onlineOrOffline = itemView.findViewById(R.id.selected_indicator);
             dividerTwo = itemView.findViewById(R.id.divider2);
 
+        }
+    }
+
+    class HeaderVH extends RecyclerView.ViewHolder {
+
+        public HeaderVH(View itemView) {
+            super(itemView);
         }
     }
 }

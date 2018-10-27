@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/hostRelativeLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <carbon.widget.ImageView
+        android:id="@+id/search_detail_icon"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_centerVertical="true"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="12dp"
+        android:clickable="false"
+        app:srcCompat="@drawable/ic_medium" />
+
+
+    <LinearLayout
+        android:id="@+id/vertical_textview_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="18dp"
+        android:layout_marginLeft="18dp"
+        android:layout_toEndOf="@id/search_detail_icon"
+        android:layout_toRightOf="@id/search_detail_icon"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/search_detail_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:singleLine="true"
+            android:text="BDT 10k"
+            android:textColor="@color/textColorPrimary"
+            android:textSize="14sp"
+            android:translationY="3dp"
+            app:fontFamily="@font/cairo_regular" />
+
+        <TextView
+            android:id="@+id/search_detail_sub"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:singleLine="true"
+            android:text="Cash"
+            android:textAllCaps="false"
+            android:textColor="@color/textColorPrimary"
+            android:textSize="12sp"
+            android:translationY="-2dp"
+            app:fontFamily="@font/cairo_regular" />
+
+    </LinearLayout>
+
+
+    <carbon.widget.TextView
+        android:id="@+id/search_interact_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:paddingLeft="10dp"
+        android:paddingTop="4dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="4dp"
+        android:singleLine="true"
+        android:text="Change"
+        android:textAllCaps="false"
+        android:textColor="@color/colorLink"
+        android:textSize="14sp"
+        app:carbon_rippleColor="#80ffffff"
+        app:carbon_rippleStyle="background"
+        app:fontFamily="@font/cairo_regular" />
+
+    <View
+        android:id="@+id/divider2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentBottom="true"
+        android:background="#41a7a7a7" />
+
+</RelativeLayout>

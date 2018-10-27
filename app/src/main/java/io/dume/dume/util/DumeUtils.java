@@ -23,6 +23,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
@@ -299,5 +300,15 @@ public class DumeUtils {
         return str.length() < 3 ? str : str.substring(0, 3);
     }
 
+    public static void setMargins (View v, int l, int t, int r, int b) {
+        if (v.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
+            ViewGroup.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) v.getLayoutParams();
+            p.setMargins((int) (l* (getApplicationContext().getResources().getDisplayMetrics().density)),
+                    (int)(t* (getApplicationContext().getResources().getDisplayMetrics().density)),
+                    (int)(r* (getApplicationContext().getResources().getDisplayMetrics().density)),
+                    (int)(b* (getApplicationContext().getResources().getDisplayMetrics().density)));
+            v.requestLayout();
+        }
+    }
 }
 

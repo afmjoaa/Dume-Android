@@ -137,5 +137,6 @@ dependencies {
     implementation "me.relex:circleindicator:1.2.2@aar"
     //google map utility library
     implementation 'com.google.maps.android:android-maps-utils:0.5+'
+    implementation 'com.github.Cutta:ContinuousScrollableImageView:1.0'
 
 }

@@ -87,7 +87,7 @@
                         app:theme="@style/ThemeToolbar.default"
                         app:title=""
                         app:titleMargin="0dp"
-                        app:titleTextAppearance="@style/MyTextApprncCol.grabLocaiton">
+                        app:titleTextAppearance="@style/MyTextApprncCol.lightBg">
 
                         <LinearLayout
                             android:layout_width="match_parent"

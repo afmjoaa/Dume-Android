@@ -52,6 +52,12 @@ public interface HomePageContract {
         void gotoMentorAddvertise();
 
         void gotoNotificationTab();
+
+        void referMentorImageViewClicked();
+
+        void freeCashBackImageViewClicked();
+
+        void startMentoringImageViewClicked();
     }
 
     interface Presenter {

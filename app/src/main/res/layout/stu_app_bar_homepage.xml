@@ -24,7 +24,7 @@
             app:layout_scrollFlags="snap"
             app:navigationIcon="@drawable/ic_arrow_back_black_24dp"
             app:popupTheme="@style/AppTheme.PopupOverlay"
-            app:theme="@style/CustomActionBar" />
+            app:theme="@style/ThemeToolbar.default" />
 
     </android.support.design.widget.AppBarLayout>
 
@@ -104,15 +104,22 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/homePage_bottomSheet_recycler"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="visible">
+
+                </android.support.v7.widget.RecyclerView>
+
                 <LinearLayout
-                    android:id="@+id/finding_mentor_block1"
+                    android:id="@+id/dume_bangladesh_block"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/bg_round_corner_rela_layout"
                     android:orientation="vertical"
                     android:paddingLeft="16dp"
                     android:paddingRight="16dp">
-
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -130,10 +137,21 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="14dp"
                         android:gravity="start"
-                        android:text="Choosing mentors have never been easy with Dume"
+                        android:text="@string/choosing_text"
                         android:textAlignment="viewStart"
                         android:textColor="@color/colorBlack"
                         android:textSize="18sp"
+                        app:fontFamily="@font/cairo_regular" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="12dp"
+                        android:gravity="start"
+                        android:text="@string/dume_product_intro"
+                        android:textAlignment="viewStart"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="14sp"
                         app:fontFamily="@font/cairo_regular" />
 
                     <TextView
@@ -146,13 +164,23 @@
                         android:textSize="14sp"
                         app:fontFamily="@font/cairo_regular" />
 
-                    <carbon.widget.ImageView
+
+                    <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="154dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp"
-                        android:src="@drawable/image_dume_bangladesh"
-                        app:carbon_cornerRadius="10dp"/>
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp">
+
+                        <com.cunoraz.continuouscrollable.ContinuousScrollableImageView
+                            android:id="@+id/dume_gang_image"
+                            android:layout_width="match_parent"
+                            android:layout_height="60dp"
+                            android:layout_margin="8dp"
+                            app:direction="right"
+                            app:duration="6000"
+                            app:imageSrc="@drawable/bs_product_scrolling_image"
+                            app:scaleType="centerInside" />
+
+                    </RelativeLayout>
 
                     <View
                         android:id="@+id/divider2"
@@ -174,6 +202,7 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/produck_block"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
@@ -182,35 +211,79 @@
                     android:paddingLeft="16dp"
                     android:paddingRight="16dp">
 
-                    <LinearLayout
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginTop="18dp"
+                        android:text="Products"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="12sp"
+                        app:fontFamily="@font/cairo_regular" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:gravity="start"
+                        android:text="@string/start_couching_text"
+                        android:textAlignment="viewStart"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="14sp"
+                        app:fontFamily="@font/cairo_regular" />
+
+                    <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="6dp"
-                        android:layout_marginTop="6dp"
-                        android:orientation="horizontal">
+                        android:background="@color/white">
 
-                        <carbon.widget.ImageView
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:layout_gravity="center"
+                        <com.cunoraz.continuouscrollable.ContinuousScrollableImageView
+                            android:id="@+id/cloud"
+                            android:layout_width="match_parent"
+                            android:layout_height="34dp"
+                            android:layout_centerHorizontal="true"
                             android:layout_margin="8dp"
-                            app:carbon_cornerRadius="20dp"
-                            app:carbon_elevation="4dp"
-                            app:srcCompat="@drawable/image_loading_search" />
+                            app:direction="left"
+                            app:duration="6000"
+                            app:imageSrc="@drawable/bs_cloud_image"
+                            app:scaleType="centerInside" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginLeft="12dp"
-                            android:layout_marginStart="12dp"
-                            android:text="Finding your mentor "
-                            android:textAlignment="center"
-                            android:textColor="@color/textColorPrimary"
-                            android:textSize="16sp"
-                            app:fontFamily="@font/cairo_regular" />
 
-                    </LinearLayout>
+                        <com.cunoraz.continuouscrollable.ContinuousScrollableImageView
+                            android:id="@+id/couching_person"
+                            android:layout_width="match_parent"
+                            android:layout_height="20dp"
+                            android:layout_below="@+id/cloud"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="40dp"
+                            app:direction="right"
+                            app:duration="6000"
+                            app:imageSrc="@drawable/bs_couching_student_image"
+                            app:scaleType="centerInside" />
+
+                        <ImageView
+                            android:layout_width="80dp"
+                            android:layout_height="60dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_below="@+id/cloud"
+                            android:contentDescription="@string/house"
+                            app:srcCompat="@drawable/bs_house_image" />
+
+                    </RelativeLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginTop="8dp"
+                        android:gravity="start"
+                        android:text="@string/take_couching_text"
+                        android:textAlignment="viewStart"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="14sp"
+                        app:fontFamily="@font/cairo_regular" />
 
                     <View
                         android:layout_width="match_parent"
@@ -221,15 +294,31 @@
                         style="@style/Base.Widget.AppCompat.Button.Borderless"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Cancel"
+                        android:text="Start your couching center"
                         android:textAllCaps="false"
-                        android:textColor="@color/cancle_red"
+                        android:textColor="@color/colorLink"
+                        android:textSize="16sp"
+                        app:fontFamily="@font/cairo_regular" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#3ca7a7a7" />
+
+                    <Button
+                        style="@style/Base.Widget.AppCompat.Button.Borderless"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Start taking couching today"
+                        android:textAllCaps="false"
+                        android:textColor="@color/colorLink"
                         android:textSize="16sp"
                         app:fontFamily="@font/cairo_regular" />
 
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/refer_mentor_block"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
@@ -238,35 +327,69 @@
                     android:paddingLeft="16dp"
                     android:paddingRight="16dp">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="6dp"
-                        android:layout_marginTop="6dp"
-                        android:orientation="horizontal">
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginTop="18dp"
+                        android:text="Refer Mentor"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="12sp"
+                        app:fontFamily="@font/cairo_regular" />
 
-                        <carbon.widget.ImageView
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:layout_gravity="center"
-                            android:layout_margin="8dp"
-                            app:carbon_cornerRadius="20dp"
-                            app:carbon_elevation="4dp"
-                            app:srcCompat="@drawable/image_loading_search" />
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
 
                         <TextView
-                            android:layout_width="wrap_content"
+                            android:id="@+id/refer_mentor_intro"
+                            android:layout_width="160dp"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginLeft="12dp"
-                            android:layout_marginStart="12dp"
-                            android:text="Finding your mentor "
-                            android:textAlignment="center"
-                            android:textColor="@color/textColorPrimary"
+                            android:layout_marginBottom="14dp"
+                            android:gravity="start"
+                            android:text="@string/refer_mentor_intro"
+                            android:textAlignment="viewStart"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="18sp"
+                            app:fontFamily="@font/cairo_regular" />
+
+                        <TextView
+                            android:layout_width="160dp"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/refer_mentor_intro"
+                            android:layout_marginBottom="14dp"
+                            android:gravity="start"
+                            android:text="Learn more"
+                            android:textAlignment="viewStart"
+                            android:textColor="@color/colorLink"
                             android:textSize="16sp"
                             app:fontFamily="@font/cairo_regular" />
 
-                    </LinearLayout>
+                        <ImageView
+                            android:id="@+id/refer_mentor_imageView"
+                            android:layout_width="140dp"
+                            android:layout_height="120dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:contentDescription="@string/refer_mentor"
+                            android:onClick="onHomePageViewClicked"
+                            app:srcCompat="@drawable/bs_refer_mentor_image" />
+
+                    </RelativeLayout>
+
+
+                    <TextView
+                        android:id="@+id/refer_mentor_share_text"
+                        android:layout_width="160dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="6dp"
+                        android:gravity="start"
+                        android:text="@string/shhare_invite_code_text"
+                        android:textAlignment="viewStart"
+                        android:textColor="@color/textColorPrimary"
+                        android:textSize="16sp"
+                        app:fontFamily="@font/cairo_regular" />
 
                     <View
                         android:layout_width="match_parent"
@@ -277,15 +400,22 @@
                         style="@style/Base.Widget.AppCompat.Button.Borderless"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Cancel"
+                        android:drawableEnd="@drawable/ic_share_icon"
+                        android:drawableRight="@drawable/ic_share_icon"
+                        android:gravity="start"
+                        android:paddingLeft="16dp"
+                        android:paddingRight="16dp"
+                        android:text="mohimenuljoaa"
+                        android:textAlignment="viewStart"
                         android:textAllCaps="false"
-                        android:textColor="@color/cancle_red"
+                        android:textColor="@color/black"
                         android:textSize="16sp"
                         app:fontFamily="@font/cairo_regular" />
 
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/free_cashback_block"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
@@ -294,35 +424,69 @@
                     android:paddingLeft="16dp"
                     android:paddingRight="16dp">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="6dp"
-                        android:layout_marginTop="6dp"
-                        android:orientation="horizontal">
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginTop="18dp"
+                        android:text="Free Cashback"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="12sp"
+                        app:fontFamily="@font/cairo_regular" />
 
-                        <carbon.widget.ImageView
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:layout_gravity="center"
-                            android:layout_margin="8dp"
-                            app:carbon_cornerRadius="20dp"
-                            app:carbon_elevation="4dp"
-                            app:srcCompat="@drawable/image_loading_search" />
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
 
                         <TextView
-                            android:layout_width="wrap_content"
+                            android:id="@+id/free_cashback_intro"
+                            android:layout_width="160dp"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginLeft="12dp"
-                            android:layout_marginStart="12dp"
-                            android:text="Finding your mentor "
-                            android:textAlignment="center"
-                            android:textColor="@color/textColorPrimary"
+                            android:layout_marginBottom="14dp"
+                            android:gravity="start"
+                            android:text="Invite your friends, get free cashback"
+                            android:textAlignment="viewStart"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="18sp"
+                            app:fontFamily="@font/cairo_regular" />
+
+                        <TextView
+                            android:layout_width="160dp"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/free_cashback_intro"
+                            android:layout_marginBottom="14dp"
+                            android:gravity="start"
+                            android:text="How invites work"
+                            android:textAlignment="viewStart"
+                            android:textColor="@color/colorLink"
                             android:textSize="16sp"
                             app:fontFamily="@font/cairo_regular" />
 
-                    </LinearLayout>
+                        <ImageView
+                            android:id="@+id/free_cashback_imageView"
+                            android:layout_width="140dp"
+                            android:layout_height="120dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:contentDescription="@string/refer_mentor"
+                            android:onClick="onHomePageViewClicked"
+                            app:srcCompat="@drawable/bs_free_cashback_image" />
+
+                    </RelativeLayout>
+
+
+                    <TextView
+                        android:id="@+id/free_cashback_share_text"
+                        android:layout_width="160dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="6dp"
+                        android:gravity="start"
+                        android:text="@string/shhare_invite_code_text"
+                        android:textAlignment="viewStart"
+                        android:textColor="@color/textColorPrimary"
+                        android:textSize="16sp"
+                        app:fontFamily="@font/cairo_regular" />
 
                     <View
                         android:layout_width="match_parent"
@@ -333,15 +497,22 @@
                         style="@style/Base.Widget.AppCompat.Button.Borderless"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Cancel"
+                        android:drawableEnd="@drawable/ic_share_icon"
+                        android:drawableRight="@drawable/ic_share_icon"
+                        android:gravity="start"
+                        android:paddingLeft="16dp"
+                        android:paddingRight="16dp"
+                        android:text="mohimenuljoaa"
+                        android:textAlignment="viewStart"
                         android:textAllCaps="false"
-                        android:textColor="@color/cancle_red"
+                        android:textColor="@color/black"
                         android:textSize="16sp"
                         app:fontFamily="@font/cairo_regular" />
 
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/start_mentoring_block"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
@@ -350,35 +521,46 @@
                     android:paddingLeft="16dp"
                     android:paddingRight="16dp">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="6dp"
-                        android:layout_marginTop="6dp"
-                        android:orientation="horizontal">
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginTop="18dp"
+                        android:text="Start Mentoring with Dume"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="12sp"
+                        app:fontFamily="@font/cairo_regular" />
 
-                        <carbon.widget.ImageView
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:layout_gravity="center"
-                            android:layout_margin="8dp"
-                            app:carbon_cornerRadius="20dp"
-                            app:carbon_elevation="4dp"
-                            app:srcCompat="@drawable/image_loading_search" />
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
 
                         <TextView
-                            android:layout_width="wrap_content"
+                            android:id="@+id/start_mentoring_intro"
+                            android:layout_width="160dp"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginLeft="12dp"
-                            android:layout_marginStart="12dp"
-                            android:text="Finding your mentor "
-                            android:textAlignment="center"
-                            android:textColor="@color/textColorPrimary"
-                            android:textSize="16sp"
+                            android:layout_marginBottom="14dp"
+                            android:gravity="start"
+                            android:text="Join thousands of mentors who also share their skill and earn money with Dume"
+                            android:textAlignment="viewStart"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="18sp"
                             app:fontFamily="@font/cairo_regular" />
 
-                    </LinearLayout>
+
+                        <ImageView
+                            android:id="@+id/start_mentoring_imageView"
+                            android:layout_width="140dp"
+                            android:layout_height="120dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:contentDescription="@string/refer_mentor"
+                            android:onClick="onHomePageViewClicked"
+                            app:srcCompat="@drawable/bs_start_mentoring_image" />
+
+                    </RelativeLayout>
+
 
                     <View
                         android:layout_width="match_parent"
@@ -389,181 +571,20 @@
                         style="@style/Base.Widget.AppCompat.Button.Borderless"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Cancel"
+                        android:drawableEnd="@drawable/ic_keyboard_arrow_right_black_24dp"
+                        android:drawableRight="@drawable/ic_keyboard_arrow_right_black_24dp"
+                        android:gravity="start"
+                        android:paddingLeft="16dp"
+                        android:paddingRight="16dp"
+                        android:text="Try sharing your skill"
+                        android:textAlignment="viewStart"
                         android:textAllCaps="false"
-                        android:textColor="@color/cancle_red"
+                        android:textColor="@color/colorLink"
                         android:textSize="16sp"
                         app:fontFamily="@font/cairo_regular" />
 
                 </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:background="@drawable/bg_round_corner_rela_layout"
-                    android:orientation="vertical"
-                    android:paddingLeft="16dp"
-                    android:paddingRight="16dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="6dp"
-                        android:layout_marginTop="6dp"
-                        android:orientation="horizontal">
-
-                        <carbon.widget.ImageView
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:layout_gravity="center"
-                            android:layout_margin="8dp"
-                            app:carbon_cornerRadius="20dp"
-                            app:carbon_elevation="4dp"
-                            app:srcCompat="@drawable/image_loading_search" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginLeft="12dp"
-                            android:layout_marginStart="12dp"
-                            android:text="Finding your mentor "
-                            android:textAlignment="center"
-                            android:textColor="@color/textColorPrimary"
-                            android:textSize="16sp"
-                            app:fontFamily="@font/cairo_regular" />
-
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="#3ca7a7a7" />
-
-                    <Button
-                        style="@style/Base.Widget.AppCompat.Button.Borderless"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Cancel"
-                        android:textAllCaps="false"
-                        android:textColor="@color/cancle_red"
-                        android:textSize="16sp"
-                        app:fontFamily="@font/cairo_regular" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:background="@drawable/bg_round_corner_rela_layout"
-                    android:orientation="vertical"
-                    android:paddingLeft="16dp"
-                    android:paddingRight="16dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="6dp"
-                        android:layout_marginTop="6dp"
-                        android:orientation="horizontal">
-
-                        <carbon.widget.ImageView
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:layout_gravity="center"
-                            android:layout_margin="8dp"
-                            app:carbon_cornerRadius="20dp"
-                            app:carbon_elevation="4dp"
-                            app:srcCompat="@drawable/image_loading_search" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginLeft="12dp"
-                            android:layout_marginStart="12dp"
-                            android:text="Finding your mentor "
-                            android:textAlignment="center"
-                            android:textColor="@color/textColorPrimary"
-                            android:textSize="16sp"
-                            app:fontFamily="@font/cairo_regular" />
-
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="#3ca7a7a7" />
-
-                    <Button
-                        style="@style/Base.Widget.AppCompat.Button.Borderless"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Cancel"
-                        android:textAllCaps="false"
-                        android:textColor="@color/cancle_red"
-                        android:textSize="16sp"
-                        app:fontFamily="@font/cairo_regular" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:background="@drawable/bg_round_corner_rela_layout"
-                    android:orientation="vertical"
-                    android:paddingLeft="16dp"
-                    android:paddingRight="16dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="6dp"
-                        android:layout_marginTop="6dp"
-                        android:orientation="horizontal">
-
-                        <carbon.widget.ImageView
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:layout_gravity="center"
-                            android:layout_margin="8dp"
-                            app:carbon_cornerRadius="20dp"
-                            app:carbon_elevation="4dp"
-                            app:srcCompat="@drawable/image_loading_search" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginLeft="12dp"
-                            android:layout_marginStart="12dp"
-                            android:text="Finding your mentor "
-                            android:textAlignment="center"
-                            android:textColor="@color/textColorPrimary"
-                            android:textSize="16sp"
-                            app:fontFamily="@font/cairo_regular" />
-
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="#3ca7a7a7" />
-
-                    <Button
-                        style="@style/Base.Widget.AppCompat.Button.Borderless"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Cancel"
-                        android:textAllCaps="false"
-                        android:textColor="@color/cancle_red"
-                        android:textSize="16sp"
-                        app:fontFamily="@font/cairo_regular" />
-
-                </LinearLayout>
 
             </carbon.widget.LinearLayout>
 
@@ -576,7 +597,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="82dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="16dp"

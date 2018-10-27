@@ -156,12 +156,27 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-                if (tabLayout.getSelectedTabPosition() == 5) {
-                    gotoGrabingPackage();
-                }
+                switch (tabLayout.getSelectedTabPosition()){
+                    case 0:
+                        Objects.requireNonNull(tabLayout.getTabAt(1)).select();
+                        break;
+                    case 1:
+                        Objects.requireNonNull(tabLayout.getTabAt(2)).select();
+                        break;
+                    case 2:
+                        Objects.requireNonNull(tabLayout.getTabAt(3)).select();
+                        break;
+                    case 3:
+                        Objects.requireNonNull(tabLayout.getTabAt(4)).select();
+                        break;
+                    case 4:
+                        Objects.requireNonNull(tabLayout.getTabAt(5)).select();
+                        break;
+                    case 5:
+                        gotoGrabingPackage();
+                        break;
 
+                }
             }
         });
 
@@ -429,7 +444,7 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
         mMap = googleMap;
         onMapReadyListener(mMap);
         onMapReadyGeneralConfig();
-        mMap.setPadding(0,  (int) (250 * (getResources().getDisplayMetrics().density)),0, 0);
+        mMap.setPadding((int) (10 * (getResources().getDisplayMetrics().density)),  (int) (250 * (getResources().getDisplayMetrics().density)),0, (int) (6 * (getResources().getDisplayMetrics().density)));
     }
 
     @Override

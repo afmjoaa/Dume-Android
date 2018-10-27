@@ -465,13 +465,55 @@ provided.Tap salary for details.  </string>
     <string name="done_icon">Done_icon</string>
     <string name="switch_learner">Switch Learner</string>
     <string name="for_me">For Me</string>
+    <string name="dume_products"><![CDATA[Dume Gang: This is our finding nearby boot camp package.\nRegular Dume : This is the regular monthly tuition we are generally familiar with.\nInstant Dume : This is our premier package here we instantly give you a capable mentor for a certain time to teach & guide you in a specific subject.]]></string>
+    <string name="dume_product_intro">You can choose between regular, instant or boot camp/couching center with ease.</string>
+    <string name="choosing_text">Choosing mentors have never been easy with Dume</string>
+    <string name="start_couching_text">Life is constantly bringing us challenges and opportunities. When we have the courage to step up to the challenges and seize the opportunities we move forward. As a coach, you can help others make this kind of progress.</string>
+    <string name="take_couching_text">People don\'t only use a coach when there is a problem with their technique; they understand that no matter how good their technique is, there is always room for improvement.</string>
+    <string name="house">house</string>
+    <string name="refer_mentor">refer_mentor</string>
+    <string name="refer_mentor_intro">Make up to $3000 for every friend you refer to mentor</string>
+    <string name="shhare_invite_code_text">Share your invite code</string>
+    <string name="LoadingText">Loading...</string>
 
     <string-array name="primaryPromoText">
         <item>Affortable nearby couching-centers specific to the topic</item>
         <item>Affortable nearby monthly mentors specific to the topic</item>
-        <item>Professional nearby weekly mentors specific to the topic</item>
+        <item>Professional weekly mentors specific to the topic</item>
     </string-array>
 
-    <string name="dume_products">You can choose between regular, instant or boot camp/couching center with ease.\n\nDume Gang: This is our finding nearby boot camp package.\nRegular Dume : This is the regular monthly tuition which we are generally familiar with.\nInstant Dume : This is our premier package here we instantly give you a capable mentor for a certain time to teach & guide you in aspecific subject.</string>
+    <string-array name="SearchDetailMain">
+        <item>Location : </item>
+        <item>For : </item>
+        <item>Category : </item>
+        <item>Medium : </item>
+        <item>Class : </item>
+        <item>Subject : </item>
+        <item>Payment : </item>
+        <item>Gender Preference : </item>
+        <item>Package Name : </item>
+        <item>Days/Week : </item>
+        <item>Preferred Days : </item>
+        <item>Start Time : </item>
+    </string-array>
+
+    <string-array name="SearchDetailSub">
+        <item>Back in time</item>
+        <item>Current location</item>
+        <item>Home</item>
+        <item>Work</item>
+        <item>Saved location</item>
+        <item>Set location on map</item>
+    </string-array>
+
+    <string-array name="SearchDetailChange">
+        <item>Back in time</item>
+        <item>Current location</item>
+        <item>Home</item>
+        <item>Work</item>
+        <item>Saved location</item>
+        <item>Set location on map</item>
+    </string-array>
+
 
 </resources>

@@ -68,7 +68,9 @@ public class TextDrawable extends Drawable {
         float textHeight = mTxtRect.bottom - mTxtRect.top;
         if(flag == 2){
             textY = centerY + (textHeight / 2f) + (4 * mDensity);
-        }else {
+        }else if(flag == 3){
+            textY = centerY + (textHeight / 2f);
+        } else {
             textY = centerY + (textHeight / 2f) - (6 * mDensity);
         }
         canvas.drawText(mCount, centerX, textY, mTextPaint);
@@ -92,7 +94,13 @@ public class TextDrawable extends Drawable {
         this.flag = flag;
         if (flag == 2) {
             mTextSize = context.getResources().getDimension(R.dimen.text_over_drawable_size_large);
+            mTextPaint.setTextSize(mTextSize);
             mTextPaint.setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/Cairo_Regular.ttf"));
+        }else if(flag == 3){
+            mTextSize = context.getResources().getDimension(R.dimen.text_over_drawable_size_small);
+            mTextPaint.setTextSize(mTextSize);
+            mTextPaint.setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/Cairo_Regular.ttf"));
+
         }
     }
 
