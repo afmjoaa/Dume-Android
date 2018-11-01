@@ -9,6 +9,7 @@ public interface RecordsCurrentContract {
 
         void findView();
 
+        void contactBtnClicked();
     }
 
     interface Presenter {

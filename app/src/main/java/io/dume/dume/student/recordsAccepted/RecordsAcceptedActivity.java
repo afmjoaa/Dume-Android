@@ -3,6 +3,7 @@ package io.dume.dume.student.recordsAccepted;
 import android.graphics.Color;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
+import android.support.design.widget.BottomSheetDialog;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -15,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -40,6 +42,9 @@ public class RecordsAcceptedActivity extends CustomStuAppCompatActivity implemen
     private static final int fromFlag = 22;
     private ViewPager pager;
     private SectionsPagerAdapter myPagerAdapter;
+    private Button acceptContactBtn;
+    private BottomSheetDialog mBottomSheetContactDialog;
+    private View contactSheetView;
 
 
     @Override
@@ -57,6 +62,7 @@ public class RecordsAcceptedActivity extends CustomStuAppCompatActivity implemen
     @Override
     public void findView() {
         pager = (ViewPager) findViewById(R.id.accepted_page_container);
+        acceptContactBtn = findViewById(R.id.accepted_contact_btn);
 
     }
 
@@ -70,6 +76,18 @@ public class RecordsAcceptedActivity extends CustomStuAppCompatActivity implemen
 
         myPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         pager.setAdapter(myPagerAdapter);
+    }
+
+    @Override
+    public void contactBtnClicked() {
+        mBottomSheetContactDialog = new BottomSheetDialog(this);
+        contactSheetView = this.getLayoutInflater().inflate(R.layout.custom_bottom_sheet_dialogue_call_msg, null);
+        mBottomSheetContactDialog.setContentView(contactSheetView);
+        mBottomSheetContactDialog.show();
+    }
+
+    public void onRecordsAcceptedViewClicked(View view) {
+        mPresenter.onRecordsAcceptedIntracted(view);
     }
 
     @Override

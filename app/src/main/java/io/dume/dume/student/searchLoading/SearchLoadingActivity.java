@@ -9,12 +9,12 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -23,7 +23,6 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -37,13 +36,12 @@ import com.varunest.loader.TheGlowingLoader;
 import java.util.ArrayList;
 import java.util.List;
 
+import carbon.widget.ImageView;
 import io.dume.dume.R;
 import io.dume.dume.student.pojo.CusStuAppComMapActivity;
 import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
 import io.dume.dume.student.searchResult.SearchResultActivity;
-import io.dume.dume.student.studentSettings.StudentSettingsActivity;
 
-import static com.facebook.FacebookSdk.getApplicationContext;
 import static io.dume.dume.util.DumeUtils.configureAppbarWithoutColloapsing;
 
 public class SearchLoadingActivity extends CusStuAppComMapActivity implements OnMapReadyCallback,
@@ -70,6 +68,9 @@ public class SearchLoadingActivity extends CusStuAppComMapActivity implements On
     private SearchDetailAdapter searchDetailRecyclerAdapter;
     private RecyclerView packageRecyclerView;
     private SearchDetailAdapter packageRecyclerAdapter;
+    private ImageView searchImageView;
+    private BottomSheetDialog mCancelBottomSheetDialog;
+    private View cancelsheetRootView;
 
 
     @Override
@@ -112,6 +113,7 @@ public class SearchLoadingActivity extends CusStuAppComMapActivity implements On
         secondaryToolbar = findViewById(R.id.secondary_toolbar);
         searchDetailRecycler = findViewById(R.id.search_details_recycler);
         packageRecyclerView = findViewById(R.id.package_detail_recycler);
+        searchImageView = findViewById(R.id.searching_imageView);
     }
 
     @Override
@@ -243,6 +245,14 @@ public class SearchLoadingActivity extends CusStuAppComMapActivity implements On
     @Override
     public void gotoSearchResult() {
         startActivity(new Intent(this, SearchResultActivity.class));
+    }
+
+    @Override
+    public void cancelBtnClicked() {
+        mCancelBottomSheetDialog = new BottomSheetDialog(this);
+        cancelsheetRootView = this.getLayoutInflater().inflate(R.layout.custom_bottom_sheet_dialogue_cancel, null);
+        mCancelBottomSheetDialog.setContentView(cancelsheetRootView);
+        mCancelBottomSheetDialog.show();
     }
 
     public void onSearchLoadingViewCLicked(View view) {

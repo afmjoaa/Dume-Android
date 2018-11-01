@@ -1,32 +1,32 @@
 package io.dume.dume.student.recordsPage;
 
+import android.app.ActivityOptions;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.util.Pair;
 import android.support.v4.view.ViewPager;
-import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +34,11 @@ import java.util.Objects;
 
 import io.dume.dume.R;
 import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
+import io.dume.dume.student.recordsAccepted.RecordsAcceptedActivity;
+import io.dume.dume.student.recordsCompleted.RecordsCompletedActivity;
+import io.dume.dume.student.recordsCurrent.RecordsCurrentActivity;
+import io.dume.dume.student.recordsPending.RecordsPendingActivity;
+import io.dume.dume.student.recordsRejected.RecordsRejectedActivity;
 import io.dume.dume.util.DumeUtils;
 
 import static io.dume.dume.util.DumeUtils.configureAppbarWithoutColloapsing;
@@ -72,7 +77,11 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
         // Set up the ViewPager with the sections adapter.
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
-
+        //making the custom tab here
+        int[] wh = DumeUtils.getScreenSize(this);
+        int tabMinWidth = ((wh[0] / 3) - (int) (24 * (getResources().getDisplayMetrics().density)));
+        LinearLayout.LayoutParams textParam = new LinearLayout.LayoutParams
+                (tabMinWidth, LinearLayout.LayoutParams.WRAP_CONTENT);
         // loop through all navigation tabs
         for (int i = 0; i < tabLayout.getTabCount(); i++) {
             // inflate the Parent LinearLayout Container for the tab
@@ -85,9 +94,10 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
             ImageView tab_icon = (ImageView) tab.findViewById(R.id.nav_icon);
             tab_label.setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/Cairo-Light.ttf"));
             /*tab_label.setTextColor(getResources().getColorStateList(R.color.tab_colorstate_light));
-            */
+             */
             tab_label.setText(navLabels[i]);
             tab_icon.setImageResource(navIcons[i]);
+            tab_label.setLayoutParams(textParam);
 
             // finally publish this custom view to navigation tab
             Objects.requireNonNull(tabLayout.getTabAt(i)).setCustomView(tab);
@@ -212,7 +222,16 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
         private RecyclerView recordRecyclerView;
         private RecordsPageActivity myThisActivity;
         private SwipeRefreshLayout swipeRefreshLayout;
+        private FragmentActivity activity;
+        private LinearLayout leftTransitionLayout;
+        private LinearLayout centerTransitionLayoutOne;
+        private LinearLayout centerTransitionLayoutTwo;
+        private LinearLayout rightTransitionLayout;
 
+        @Override
+        public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+            super.onActivityCreated(savedInstanceState);
+        }
 
         public PlaceholderFragment() {
         }
@@ -232,9 +251,10 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             myThisActivity = (RecordsPageActivity) getActivity();
+            activity = getActivity();
+
+            int fragmentPosition = getArguments().getInt(ARG_SECTION_NUMBER);
             View rootView = inflater.inflate(R.layout.stu8_fragment_records_page, container, false);
-//            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-//            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
             recordRecyclerView = rootView.findViewById(R.id.records_page_recycle_view);
             swipeRefreshLayout = rootView.findViewById(R.id.swipeToRefreshRecords);
 
@@ -253,10 +273,104 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
             });
 
             //setting the recycler view
-            List<RecordsRecyData> recordData = new ArrayList<>();
-            RecordsRecyAdapter recordsRecyAda = new RecordsRecyAdapter(myThisActivity, recordData);
-            recordRecyclerView.setAdapter(recordsRecyAda);
-            recordRecyclerView.setLayoutManager(new LinearLayoutManager(myThisActivity));
+            switch (fragmentPosition) {
+                case 1:
+                    List<RecordsRecyData> recordDataPending = new ArrayList<>();
+                    RecordsRecyAdapter recordsRecyAdapending = new RecordsRecyAdapter(myThisActivity, recordDataPending) {
+                        @Override
+                        void OnItemClicked(View v, int position) {
+                            /*leftTransitionLayout = v.findViewById(R.id.left_vertical_host_layout);
+                            centerTransitionLayoutOne = v.findViewById(R.id.center_vertical_host_layout);
+                            rightTransitionLayout = v.findViewById(R.id.right_vertical_host_layout);
+                            android.util.Pair[] pairsPending = new android.util.Pair[3];
+                            pairsPending[0] = new android.util.Pair<View, String>(leftTransitionLayout, "leftTransistion");
+                            pairsPending[1] = new android.util.Pair<View, String>(centerTransitionLayoutOne, "centerTransistionOne");
+                            pairsPending[2] = new android.util.Pair<View, String>(rightTransitionLayout, "rightTransition");
+                            ActivityOptions optionsPending = ActivityOptions.makeSceneTransitionAnimation(getActivity(), pairsPending);
+                            startActivity(new Intent(myThisActivity, RecordsPendingActivity.class).setAction("student"), optionsPending.toBundle());*/
+
+                            startActivity(new Intent(myThisActivity, RecordsPendingActivity.class).setAction("student"));
+                        }
+
+                        @Override
+                        void OnItemLongClicked(View v, int position) {
+                            Toast.makeText(myThisActivity, "Pending Records aren't deletable", Toast.LENGTH_SHORT).show();
+                        }
+                    };
+                    recordRecyclerView.setAdapter(recordsRecyAdapending);
+                    recordRecyclerView.setLayoutManager(new LinearLayoutManager(myThisActivity));
+                    break;
+                case 2:
+                    List<RecordsRecyData> recordDataAccepted = new ArrayList<>();
+                    RecordsRecyAdapter recordsRecyAdaAccepted = new RecordsRecyAdapter(myThisActivity, recordDataAccepted) {
+                        @Override
+                        void OnItemClicked(View v, int position) {
+                            startActivity(new Intent(myThisActivity, RecordsAcceptedActivity.class).setAction("student"));
+                        }
+
+                        @Override
+                        void OnItemLongClicked(View v, int position) {
+                            Toast.makeText(myThisActivity, "Accepted Records aren't deletable", Toast.LENGTH_SHORT).show();
+                        }
+                    };
+                    recordRecyclerView.setAdapter(recordsRecyAdaAccepted);
+                    recordRecyclerView.setLayoutManager(new LinearLayoutManager(myThisActivity));
+                    break;
+                case 3:
+                    List<RecordsRecyData> recordDataCurrent = new ArrayList<>();
+                    RecordsRecyAdapter recordsRecyAdaCurrent = new RecordsRecyAdapter(myThisActivity, recordDataCurrent) {
+                        @Override
+                        void OnItemClicked(View v, int position) {
+                            startActivity(new Intent(myThisActivity, RecordsCurrentActivity.class).setAction("student"));
+                        }
+
+                        @Override
+                        void OnItemLongClicked(View v, int position) {
+                            Toast.makeText(myThisActivity, "Current Records aren't deletable", Toast.LENGTH_SHORT).show();
+                        }
+                    };
+                    recordRecyclerView.setAdapter(recordsRecyAdaCurrent);
+                    recordRecyclerView.setLayoutManager(new LinearLayoutManager(myThisActivity));
+                    break;
+                case 4:
+                    List<RecordsRecyData> recordDataCompletded = new ArrayList<>();
+                    RecordsRecyAdapter recordsRecyAdaCompleted = new RecordsRecyAdapter(myThisActivity, recordDataCompletded) {
+                        @Override
+                        void OnItemClicked(View v, int position) {
+                            startActivity(new Intent(myThisActivity, RecordsCompletedActivity.class).setAction("student"));
+                        }
+
+                        @Override
+                        void OnItemLongClicked(View v, int position) {
+                            Toast.makeText(myThisActivity, "Completed Records aren't deletable", Toast.LENGTH_SHORT).show();
+                        }
+                    };
+                    recordRecyclerView.setAdapter(recordsRecyAdaCompleted);
+                    recordRecyclerView.setLayoutManager(new LinearLayoutManager(myThisActivity));
+                    break;
+
+                case 5:
+                    List<RecordsRecyData> recordDataRejected = new ArrayList<>();
+                    RecordsRecyAdapter recordsRecyAdaRejected = new RecordsRecyAdapter(myThisActivity, recordDataRejected) {
+                        @Override
+                        void OnItemClicked(View v, int position) {
+                            startActivity(new Intent(myThisActivity, RecordsRejectedActivity.class).setAction("student"));
+                        }
+
+                        @Override
+                        void OnItemLongClicked(View v, int position) {
+                            Toast.makeText(myThisActivity, "from Rejected longClick", Toast.LENGTH_SHORT).show();
+                        }
+                    };
+                    recordRecyclerView.setAdapter(recordsRecyAdaRejected);
+                    recordRecyclerView.setLayoutManager(new LinearLayoutManager(myThisActivity));
+                    break;
+
+                default:
+                    break;
+
+            }
+
             return rootView;
         }
     }
@@ -269,8 +383,6 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
 
         @Override
         public Fragment getItem(int position) {
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
             return PlaceholderFragment.newInstance(position + 1);
         }
 

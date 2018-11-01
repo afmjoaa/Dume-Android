@@ -80,11 +80,13 @@
                         android:orientation="horizontal">
 
                         <carbon.widget.ImageView
+                            android:id="@+id/searching_imageView"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
                             android:layout_gravity="center"
                             android:layout_margin="8dp"
                             app:carbon_cornerRadius="20dp"
+                            android:onClick="onSearchLoadingViewCLicked"
                             app:carbon_elevation="4dp"
                             app:srcCompat="@drawable/image_loading_search" />
 
@@ -143,8 +145,6 @@
                             android:layout_height="40dp"
                             android:layout_gravity="center"
                             android:layout_margin="8dp"
-                            app:carbon_cornerRadius="20dp"
-                            app:carbon_elevation="4dp"
                             app:srcCompat="@drawable/image_details_search" />
 
                         <TextView
@@ -211,8 +211,6 @@
                             android:layout_height="40dp"
                             android:layout_gravity="center"
                             android:layout_margin="8dp"
-                            app:carbon_cornerRadius="20dp"
-                            app:carbon_elevation="4dp"
                             app:srcCompat="@drawable/image_package_info" />
 
                         <TextView

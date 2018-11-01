@@ -340,7 +340,7 @@
 
             </RelativeLayout>
 
-            <io.dume.dume.customView.CustomTabLayout
+            <android.support.design.widget.TabLayout
                 android:id="@+id/tabs"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -373,7 +373,7 @@
                     android:icon="@drawable/ic_time"
                     android:text="Time" />
 
-            </io.dume.dume.customView.CustomTabLayout>
+            </android.support.design.widget.TabLayout>
 
             <carbon.widget.LinearLayout
                 android:id="@+id/example_bar_layout"

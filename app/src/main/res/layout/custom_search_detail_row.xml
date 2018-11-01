@@ -72,7 +72,7 @@
         android:textAllCaps="false"
         android:textColor="@color/colorLink"
         android:textSize="14sp"
-        app:carbon_rippleColor="#80ffffff"
+        app:carbon_rippleColor="#8c000000"
         app:carbon_rippleStyle="background"
         app:fontFamily="@font/cairo_regular" />
 

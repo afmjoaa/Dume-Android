@@ -4,7 +4,10 @@ import android.app.TimePickerDialog;
 import android.graphics.Color;
 import android.graphics.drawable.LayerDrawable;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
@@ -32,9 +35,16 @@ import android.widget.Toast;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.hadiidbouk.charts.BarData;
 import com.hadiidbouk.charts.ChartProgressBar;
+import com.prolificinteractive.materialcalendarview.CalendarDay;
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
+import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
+
+import org.threeten.bp.LocalDate;
+import org.threeten.bp.Month;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executors;
 
 import io.dume.dume.R;
 import io.dume.dume.student.common.QualificationAdapter;
@@ -44,6 +54,10 @@ import io.dume.dume.student.common.ReviewHighlightData;
 import io.dume.dume.student.pojo.CusStuAppComMapActivity;
 import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
 import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
+import io.dume.dume.student.recordsCurrent.calenderDecorator.EventDecorator;
+import io.dume.dume.student.recordsCurrent.calenderDecorator.HighlightWeekendsDecorator;
+import io.dume.dume.student.recordsCurrent.calenderDecorator.MySelectorDecorator;
+import io.dume.dume.student.recordsCurrent.calenderDecorator.OneDayDecorator;
 import io.dume.dume.util.DumeUtils;
 import io.dume.dume.util.TimePickerFragment;
 
@@ -54,6 +68,8 @@ public class RecordsCurrentActivity extends CustomStuAppCompatActivity implement
     private static final int fromFlag = 23;
     private ViewPager pager;
     private SectionsPagerAdapter myPagerAdapter;
+    private BottomSheetDialog mBottomSheetContactDialog;
+    private View contactSheetView;
 
 
     @Override
@@ -74,6 +90,14 @@ public class RecordsCurrentActivity extends CustomStuAppCompatActivity implement
     }
 
     @Override
+    public void contactBtnClicked() {
+        mBottomSheetContactDialog = new BottomSheetDialog(this);
+        contactSheetView = this.getLayoutInflater().inflate(R.layout.custom_bottom_sheet_dialogue_call_msg, null);
+        mBottomSheetContactDialog.setContentView(contactSheetView);
+        mBottomSheetContactDialog.show();
+    }
+
+    @Override
     public void initRecordsCurrent() {
 
     }
@@ -82,6 +106,10 @@ public class RecordsCurrentActivity extends CustomStuAppCompatActivity implement
     public void configRecordsCurrent() {
         myPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         pager.setAdapter(myPagerAdapter);
+    }
+
+    public void onRecordsCurrentViewClicked(View view) {
+        mPresenter.onRecordsCurrentIntracted(view);
     }
 
     @Override
@@ -129,6 +157,8 @@ public class RecordsCurrentActivity extends CustomStuAppCompatActivity implement
         private EditText reminderEditText;
         private TimePickerFragment timePickerReminder;
         private ImageView calenderCurDateImageView;
+        private MaterialCalendarView myCalenderView;
+        private OneDayDecorator oneDayDecorator;
 
 
         public PlaceholderFragment() {
@@ -154,11 +184,34 @@ public class RecordsCurrentActivity extends CustomStuAppCompatActivity implement
             ratingExperience = rootView.findViewById(R.id.main_rating_experience);
             //testing the layer drawable for  the calender current date
             calenderCurDateImageView = rootView.findViewById(R.id.current_date_imageview);
-
-
             locationMapHost = rootView.findViewById(R.id.location_layout_vertical);
             notificationEditText = rootView.findViewById(R.id.notification_edittext);
             reminderEditText = rootView.findViewById(R.id.reminder_edittext);
+
+            //fucking the code for calender decorator
+            oneDayDecorator = new OneDayDecorator();
+            myCalenderView = rootView.findViewById(R.id.calendarView);
+            myCalenderView.setOnDateChangedListener(new OnDateSelectedListener() {
+                @Override
+                public void onDateSelected(@NonNull MaterialCalendarView materialCalendarView, @NonNull CalendarDay date, boolean selected) {
+                    //If you change a decorate, you need to invalidate decorators
+                    oneDayDecorator.setDate(date.getDate());
+                    materialCalendarView.invalidateDecorators();
+                }
+            });
+            //setting the minimum and maximum date and day value
+            final LocalDate instance = LocalDate.now();
+            myCalenderView.setSelectedDate(instance);
+            final LocalDate min = LocalDate.of(instance.getYear(), Month.JANUARY, 1);
+            final LocalDate max = LocalDate.of(instance.getYear(), Month.DECEMBER, 31);
+            myCalenderView.state().edit().setMinimumDate(min).setMaximumDate(max).commit();
+            //adding the decorators
+            myCalenderView.addDecorators(
+                    new MySelectorDecorator(myThisActivity),
+                    new HighlightWeekendsDecorator(),
+                    oneDayDecorator
+            );
+            new ApiSimulator().executeOnExecutor(Executors.newSingleThreadExecutor());
 
             timePicker = new TimePickerFragment();
             timePicker.setTimePickerListener(new TimePickerDialog.OnTimeSetListener() {
@@ -185,7 +238,6 @@ public class RecordsCurrentActivity extends CustomStuAppCompatActivity implement
                     }
                 }
             });
-
             notificationEditText.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -220,7 +272,6 @@ public class RecordsCurrentActivity extends CustomStuAppCompatActivity implement
                     }
                 }
             });
-
             reminderEditText.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -283,23 +334,6 @@ public class RecordsCurrentActivity extends CustomStuAppCompatActivity implement
             ReviewAdapter reviewRecyAda = new ReviewAdapter(myThisActivity, reviewData);
             reviewRecyView.setAdapter(reviewRecyAda);
             reviewRecyView.setLayoutManager(new LinearLayoutManager(myThisActivity));
-            reviewRecyView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-                @Override
-                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                    super.onScrolled(recyclerView, dx, dy);
-                }
-
-                @Override
-                public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                    super.onScrollStateChanged(recyclerView, newState);
-                    if (!recyclerView.canScrollVertically(1) && scrollFirstTime) {
-                        Toast.makeText(myThisActivity, "Last", Toast.LENGTH_SHORT).show();
-                        scrollFirstTime = false;
-                    }
-                }
-            });
-
-
             return rootView;
         }
 
@@ -324,7 +358,41 @@ public class RecordsCurrentActivity extends CustomStuAppCompatActivity implement
             }
             return data;
         }
+
+        /**
+         * Simulate an API call to show how to add decorators
+         */
+        private class ApiSimulator extends AsyncTask<Void, Void, List<CalendarDay>> {
+
+            @Override
+            protected List<CalendarDay> doInBackground(@NonNull Void... voids) {
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                LocalDate temp = LocalDate.now().minusMonths(2);
+                final ArrayList<CalendarDay> dates = new ArrayList<>();
+                for (int i = 0; i < 30; i++) {
+                    final CalendarDay day = CalendarDay.from(temp);
+                    dates.add(day);
+                    temp = temp.plusDays(5);
+                }
+                return dates;
+            }
+
+            @Override
+            protected void onPostExecute(@NonNull List<CalendarDay> calendarDays) {
+                super.onPostExecute(calendarDays);
+                if (myThisActivity.isFinishing()) {
+                    return;
+                }
+                myCalenderView.addDecorator(new EventDecorator(0xFF009688, calendarDays, myThisActivity));
+            }
+        }
     }
+
+
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 

@@ -18,6 +18,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.text.SpannableStringBuilder;
+import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -42,14 +44,17 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.maps.android.ui.IconGenerator;
 
 import carbon.widget.Button;
+
 import android.support.design.widget.FloatingActionButton;
 
 import java.io.IOException;
@@ -59,10 +64,14 @@ import java.util.Locale;
 import io.dume.dume.R;
 import io.dume.dume.customView.TouchableWrapper;
 
+import static android.graphics.Typeface.ITALIC;
+import static android.graphics.Typeface.NORMAL;
+import static android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE;
+
 public class CusStuAppComMapActivity extends CustomStuAppCompatActivity implements
         OnCompleteListener<LocationSettingsResponse>, TouchableWrapper.UpdateMapAfterUserInterection,
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
-        com.google.android.gms.location.LocationListener{
+        com.google.android.gms.location.LocationListener {
     //onCompleteListener is for checking the gsm gps connectivity dialogue for auto action
     //TouchableWrapper is for touch action detection on the map
     //connectionCallback and onConnectionFailedListener is for onConnect moving camera to the last known location
@@ -257,7 +266,7 @@ public class CusStuAppComMapActivity extends CustomStuAppCompatActivity implemen
                 ((Animatable) d).start();
             }
         }
-        if(fromFlag == 2){
+        if (fromFlag == 2) {
             inputSearchContainer.requestFocus();
             searchBottomSheet.setVisibility(View.INVISIBLE);
             locationDoneBtn.setVisibility(View.VISIBLE);
@@ -314,7 +323,7 @@ public class CusStuAppComMapActivity extends CustomStuAppCompatActivity implemen
 
     protected void moveCamera(LatLng latLng, float zoom, String title, GoogleMap mMap) {
         Log.d(TAG, "moveCamera: moving the camera to: lat: " + latLng.latitude + ", lng: " + latLng.longitude);
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
 
         // dropping pin here which will be customized later on
         if (!title.equals("Device Location")) {
@@ -370,6 +379,8 @@ public class CusStuAppComMapActivity extends CustomStuAppCompatActivity implemen
             mMap.getUiSettings().setMyLocationButtonEnabled(false);
             mMap.getUiSettings().setCompassEnabled(true);
             mMap.getUiSettings().setIndoorLevelPickerEnabled(true);
+            //setting the toolbar for the marker click disable
+            mMap.getUiSettings().setMapToolbarEnabled(false);
 
             if (mMap.getUiSettings().isCompassEnabled()) {
                 //this works for me
@@ -468,14 +479,14 @@ public class CusStuAppComMapActivity extends CustomStuAppCompatActivity implemen
 
     @Override
     public void onLocationChanged(Location location) {
-       myGpsLocationChangeListener.onMyGpsLocationChanged(location);
+        myGpsLocationChangeListener.onMyGpsLocationChanged(location);
     }
 
     public String getAddress(double lat, double lng) {
         Geocoder geocoder = new Geocoder(context, Locale.getDefault());
         try {
             List<Address> addresses = geocoder.getFromLocation(lat, lng, 1);
-            if(addresses.size() > 0){
+            if (addresses.size() > 0) {
                 Address obj = addresses.get(0);
                 String mainAddress = obj.getAddressLine(0);
                 String add = obj.getAddressLine(0);
@@ -488,7 +499,7 @@ public class CusStuAppComMapActivity extends CustomStuAppCompatActivity implemen
                 add = add + "\n" + obj.getSubThoroughfare();
                 Log.e("IGA", "Address" + add);
                 return mainAddress;
-            }else{
+            } else {
                 Toast.makeText(context, "Address still not selected.", Toast.LENGTH_SHORT).show();
                 return "";
             }
@@ -498,6 +509,26 @@ public class CusStuAppComMapActivity extends CustomStuAppCompatActivity implemen
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
             return null;
         }
+    }
+
+    //for making custom info window
+    protected void addCustomInfoWindow(IconGenerator iconFactory, CharSequence text, LatLng position) {
+        if(mMap == null){
+            return;
+        }
+        MarkerOptions markerOptions = new MarkerOptions().
+                icon(BitmapDescriptorFactory.fromBitmap(iconFactory.makeIcon(text))).
+                position(position).
+                anchor(0,  1f);
+        mMap.addMarker(markerOptions);
+    }
+
+    protected CharSequence makeCharSequence(String distance, String time) {
+        String sequence = distance + " \n" + time;
+        SpannableStringBuilder ssb = new SpannableStringBuilder(sequence);
+        ssb.setSpan(new StyleSpan(ITALIC), 0, distance.length(), SPAN_EXCLUSIVE_EXCLUSIVE);
+        ssb.setSpan(new StyleSpan(NORMAL), distance.length(), sequence.length(), SPAN_EXCLUSIVE_EXCLUSIVE);
+        return ssb;
     }
 
 }

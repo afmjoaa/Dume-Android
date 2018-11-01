@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/fragment_history_menu_bottom"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#ffffff"
+    android:orientation="vertical"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp"
+    app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
+
+    <TextView
+        android:id="@+id/main_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="10dp"
+        android:text="Contact with Jacob Miller"
+        android:textAllCaps="false"
+        android:textColor="@color/colorBlack"
+        android:textSize="24sp"
+        app:fontFamily="@font/cairo_regular" />
+
+    <TextView
+        android:id="@+id/sub_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="10dp"
+        android:text="Choose how you wanna contact."
+        android:textColor="@color/textColorPrimary"
+        android:textSize="14sp"
+        app:fontFamily="@font/cairo_regular" />
+
+
+    <Button
+        android:id="@+id/call_btn"
+        style="@style/myButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_marginBottom="6dp"
+        android:layout_weight="1"
+        android:text="Offline Call"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:fontFamily="@font/cairo_regular" />
+
+    <Button
+        android:id="@+id/offline_msg_btn"
+        style="@style/myButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_marginBottom="6dp"
+        android:layout_weight="1"
+        android:text="Offline Messaging"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:fontFamily="@font/cairo_regular" />
+
+    <Button
+        android:id="@+id/online_msg_btn"
+        style="@style/myButtonStyleWhite"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_marginBottom="4dp"
+        android:layout_weight="1"
+        android:text="Online Messaging"
+        android:textAllCaps="false"
+        android:textColor="@color/colorBlack"
+        android:textSize="16sp"
+        app:fontFamily="@font/cairo_regular" />
+
+
+</LinearLayout>

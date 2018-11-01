@@ -16,7 +16,7 @@ import java.util.List;
 import carbon.widget.ImageView;
 import io.dume.dume.R;
 
-public class InboxChatAdapter extends RecyclerView.Adapter<InboxChatAdapter.MyViewHolder> {
+public abstract class InboxChatAdapter extends RecyclerView.Adapter<InboxChatAdapter.MyViewHolder> {
 
     private static final String TAG = "InboxChatAdapter";
     private LayoutInflater inflater;
@@ -54,12 +54,30 @@ public class InboxChatAdapter extends RecyclerView.Adapter<InboxChatAdapter.MyVi
             case 4:
                 break;
         }
+
+        holder.hostRelativeLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                OnItemClicked(v, holder.getAdapterPosition());
+            }
+        });
+
+        holder.hostRelativeLayout.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                OnItemLongClicked(v, holder.getAdapterPosition());
+                return true;
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
-        return 10;
+        return 3;
     }
+
+    abstract void OnItemClicked(View v, int position);
+    abstract void OnItemLongClicked(View v, int position);
 
     class MyViewHolder extends RecyclerView.ViewHolder {
 

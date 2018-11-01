@@ -79,7 +79,7 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
         mBottomSheetDialog = new BottomSheetDialog(this);
         sheetView = this.getLayoutInflater().inflate(R.layout.custom_bottom_sheet_dialogue_records, null);
         mBottomSheetDialog.setContentView(sheetView);
-        mBottomSheetDialog.show();
+        //mBottomSheetDialog.show();
 
         myPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         pager.setAdapter(myPagerAdapter);

@@ -5,6 +5,7 @@
     android:id="@+id/accepted_nested_scroll"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/recordsBgColor"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".student.recordsRejected.RecordsRejectedActivity$PlaceholderFragment"
     tools:showIn="@layout/stu10_activity_records_rejected">
@@ -14,7 +15,7 @@
         android:id="@+id/nested_host_linearlayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/tabViewPager"
+        android:background="@color/recordsBgColor"
         android:orientation="vertical">
 
 

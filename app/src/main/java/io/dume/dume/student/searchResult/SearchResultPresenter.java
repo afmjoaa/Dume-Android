@@ -30,9 +30,9 @@ public class SearchResultPresenter implements SearchResultContract.Presenter {
     @Override
     public void onSearchResultIntracted(View view) {
         switch (view.getId()) {
-            /*case R.id.package_search_btn:
-                mView.executeSearchActivity();
-                break;*/
+            case R.id.fab:
+                mView.centerTheMapCamera();
+                break;
 
         }
     }

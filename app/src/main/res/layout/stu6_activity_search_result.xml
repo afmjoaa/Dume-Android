@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/background_vector"
     android:fitsSystemWindows="true"
-    tools:context=".student.searchLoading.SearchLoadingActivity">
+    tools:context=".student.searchResult.SearchResultActivity">
 
     <io.dume.dume.customView.WindowInsetsFrameLayout
         android:id="@+id/map_container"
@@ -1113,6 +1113,21 @@
         </android.support.v4.widget.NestedScrollView>
     </LinearLayout>
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="162dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="16dp"
+        android:onClick="onSearchResultViewClicked"
+        app:backgroundTint="@color/colorWhite"
+        app:fabSize="mini"
+        app:srcCompat="@drawable/geo_icon" />
+
     <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
@@ -1206,5 +1221,6 @@
 
 
     </android.support.design.widget.CoordinatorLayout>
+
 
 </android.support.design.widget.CoordinatorLayout>

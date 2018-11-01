@@ -30,7 +30,7 @@
             app:titleTextAppearance="@style/MyTextApprncCol.lightBg" />
 
 
-        <io.dume.dume.customView.CustomTabLayout
+        <android.support.design.widget.TabLayout
             android:id="@+id/tabs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -75,7 +75,7 @@
                 android:icon="@drawable/ic_task_rejected"
                 android:text="Rejected" />
 
-        </io.dume.dume.customView.CustomTabLayout>
+        </android.support.design.widget.TabLayout>
 
 
     </android.support.design.widget.AppBarLayout>

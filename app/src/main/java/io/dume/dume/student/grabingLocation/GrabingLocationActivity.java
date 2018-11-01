@@ -413,7 +413,7 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
 
             // Submit the query to the autocomplete API and retrieve a PendingResult that will
             // contain the results when the query completes.
-            PendingResult<AutocompletePredictionBuffer> results =
+            final PendingResult<AutocompletePredictionBuffer> results =
                     Places.GeoDataApi
                             .getAutocompletePredictions(mGoogleApiClient, constraint.toString(),
                                     LAT_LNG_BOUNDS, null);
@@ -424,7 +424,7 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
                 AutocompletePredictionBuffer autocompletePredictions = results.await(60, TimeUnit.SECONDS);
                 final Status status = autocompletePredictions.getStatus();
                 if (!status.isSuccess()) {
-                    Toast.makeText(this, "Error contacting API: " + status.toString(),
+                    Toast.makeText(GrabingLocationActivity.this, "Error contacting API: " + status.toString(),
                             Toast.LENGTH_SHORT).show();
                     Log.e(TAG, "Error getting autocomplete prediction API call: " + status.toString());
                     autocompletePredictions.release();

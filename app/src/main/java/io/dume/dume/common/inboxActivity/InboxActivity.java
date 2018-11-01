@@ -1,5 +1,6 @@
 package io.dume.dume.common.inboxActivity;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
@@ -21,19 +22,24 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.ScaleAnimation;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.jackandphantom.circularprogressbar.CircleProgressbar;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 import io.dume.dume.R;
+import io.dume.dume.common.chatActivity.ChatActivity;
 import io.dume.dume.common.contactActivity.ContactActivity;
 import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
 import io.dume.dume.student.searchResultTabview.SearchResultTabData;
 import io.dume.dume.student.searchResultTabview.SearchResultTabRecyAda;
+import io.dume.dume.util.DumeUtils;
 
 import static io.dume.dume.util.DumeUtils.configureAppbarWithoutColloapsing;
 
@@ -68,7 +74,11 @@ public class InboxActivity extends CustomStuAppCompatActivity implements InboxAc
 
         // Set up the ViewPager with the sections adapter.
         mViewPager.setAdapter(mSectionsPagerAdapter);
-
+        //making the custom tab here
+        int[] wh = DumeUtils.getScreenSize(this);
+        int tabMinWidth = ((wh[0] / 3)-(int) (24 * (getResources().getDisplayMetrics().density)));
+        LinearLayout.LayoutParams textParam = new LinearLayout.LayoutParams
+                (tabMinWidth, LinearLayout.LayoutParams.WRAP_CONTENT);
         // loop through all navigation tabs
         for (int i = 0; i < tabLayout.getTabCount(); i++) {
             // inflate the Parent LinearLayout Container for the tab
@@ -79,6 +89,7 @@ public class InboxActivity extends CustomStuAppCompatActivity implements InboxAc
             String[] tab_label_name = getResources().getStringArray(R.array.inboxHeader);
             TextView tab_label = (TextView) tab.findViewById(R.id.nav_label);
             TextView tab_state = (TextView) tab.findViewById(R.id.active_state_dot);
+            tab.setLayoutParams(textParam);
             tab_label.setText(tab_label_name[i]);
             tab_state.setText("");//"" or "*"
 
@@ -222,6 +233,11 @@ public class InboxActivity extends CustomStuAppCompatActivity implements InboxAc
         private View rootView;
         private RecyclerView inboxRecycler;
         private RecyclerView inboxRecyclerRecent;
+        private CircleProgressbar selectedIndicatorCirPro;
+        private carbon.widget.ImageView chatUserDP;
+        private CircleProgressbar onlineIndicatorCirPro;
+        private CircleProgressbar offlineIndicatorCirPro;
+        private TextView chatUserName;
 
 
         public PlaceholderFragment() {
@@ -246,7 +262,31 @@ public class InboxActivity extends CustomStuAppCompatActivity implements InboxAc
                     rootView = inflater.inflate(R.layout.common1_fragment_default_inbox, container, false);
                     inboxRecycler = rootView.findViewById(R.id.inbox_recycler_view);
                     List<InboxChatData> chatDialogueData = new ArrayList<>();
-                    InboxChatAdapter recordsRecyAda = new InboxChatAdapter(myThisActivity, chatDialogueData);
+                    InboxChatAdapter recordsRecyAda = new InboxChatAdapter(myThisActivity, chatDialogueData) {
+                        @Override
+                        void OnItemClicked(View v, int position) {
+                            selectedIndicatorCirPro = v.findViewById(R.id.selected_indicator);
+                            chatUserDP = v.findViewById(R.id.chat_user_display_pic);
+                            onlineIndicatorCirPro = v.findViewById(R.id.selected_indicator);
+                            offlineIndicatorCirPro = v.findViewById(R.id.selected_indicator);
+                            chatUserName = v.findViewById(R.id.chat_user_name);
+
+                            android.util.Pair[] pairsPending = new android.util.Pair[5];
+                            pairsPending[0] = new android.util.Pair<View, String>(selectedIndicatorCirPro, "tn0ne");
+                            pairsPending[1] = new android.util.Pair<View, String>(chatUserDP, "tnTwo");
+                            pairsPending[2] = new android.util.Pair<View, String>(onlineIndicatorCirPro, "tnThree");
+                            pairsPending[3] = new android.util.Pair<View, String>(offlineIndicatorCirPro, "tnFour");
+                            pairsPending[4] = new android.util.Pair<View, String>(chatUserName, "tnFive");
+                            ActivityOptions optionsPending = ActivityOptions.makeSceneTransitionAnimation(getActivity(), pairsPending);
+                            startActivity(new Intent(myThisActivity, ChatActivity.class).setAction("testing"), optionsPending.toBundle());
+
+                        }
+
+                        @Override
+                        void OnItemLongClicked(View v, int position) {
+                            Toast.makeText(myThisActivity, "Inbox Chat long click", Toast.LENGTH_SHORT).show();
+                        }
+                    };
                     inboxRecycler.setAdapter(recordsRecyAda);
                     inboxRecycler.setLayoutManager(new LinearLayoutManager(myThisActivity));
                     break;

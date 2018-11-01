@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.view.View;
 
+import io.dume.dume.R;
+
 public class RecordsAcceptedPresenter implements RecordsAcceptedContract.Presenter {
 
     private RecordsAcceptedContract.View mView;
@@ -28,6 +30,14 @@ public class RecordsAcceptedPresenter implements RecordsAcceptedContract.Present
 
     @Override
     public void onRecordsAcceptedIntracted(View view) {
+        switch (view.getId()) {
+            case R.id.accepted_contact_btn:
+                mView.contactBtnClicked();
+                break;
+            /*case R.id.package_search_btn:
+                mView.executeSearchActivity();
+                break;*/
 
+        }
     }
 }

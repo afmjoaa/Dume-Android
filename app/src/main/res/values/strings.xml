@@ -97,7 +97,7 @@
     <string name="tab_class">Class</string>
     <string name="tab_subject">Subject</string>
     <string name="tab_payment">Payment</string>
-    <string name="tab_gender_preference">Gender Preference</string>
+    <string name="tab_gender_preference">Gender</string>
     <string name="tab_cross_ckeck">Cross Ckeck</string>
     <string name="demo_data">demo</string>
     <string name="title_activity_grabing_location">Grabing Location</string>

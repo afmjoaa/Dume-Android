@@ -154,7 +154,11 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(mSectionsPagerAdapter);
         BottomSheetUtils.setupViewPager(mViewPager);
-
+        //making the custom tab here
+        int[] wh = DumeUtils.getScreenSize(this);
+        int tabMinWidth = ((wh[0] / 3)-(int) (24 * (getResources().getDisplayMetrics().density)));
+        LinearLayout.LayoutParams textParam = new LinearLayout.LayoutParams
+                (tabMinWidth, LinearLayout.LayoutParams.WRAP_CONTENT);
         // loop through all navigation tabs
         for (int i = 0; i < tabLayout.getTabCount(); i++) {
             // inflate the Parent LinearLayout Container for the tab
@@ -167,6 +171,7 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
             ImageView tab_icon = (ImageView) tab.findViewById(R.id.nav_icon);
             tab_label.setText(navLabels[i]);
             tab_icon.setImageResource(navIcons[i]);
+            tab_label.setLayoutParams(textParam);
 
             // finally publish this custom view to navigation tab
             Objects.requireNonNull(tabLayout.getTabAt(i)).setCustomView(tab);

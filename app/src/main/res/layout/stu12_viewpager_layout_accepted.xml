@@ -14,7 +14,7 @@
         android:id="@+id/nested_host_linearlayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/tabViewPager"
+        android:background="@color/recordsBgColor"
         android:orientation="vertical">
 
 
@@ -191,7 +191,7 @@
                 android:background="#3ca7a7a7" />
 
             <Button
-                android:id="@+id/pendding_contact_btn"
+                android:id="@+id/accepted_contact_btn"
                 style="@style/myButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -202,18 +202,10 @@
                 android:layout_marginTop="2dp"
                 android:text="Contact"
                 android:textAllCaps="false"
+                android:onClick="onRecordsAcceptedViewClicked"
                 android:textColor="@color/white"
                 android:textSize="16sp"
                 app:fontFamily="@font/cairo_regular" />
-
-            <View
-                android:id="@+id/divider4"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_below="@+id/pendding_contact_btn"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:background="#3ca7a7a7" />
 
         </RelativeLayout>
 

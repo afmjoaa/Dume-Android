@@ -589,7 +589,6 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
     @Override
     public void gotoGrabingLocationPage() {
         startActivity(new Intent(this, GrabingLocationActivity.class));
-
     }
 
     @Override
@@ -713,7 +712,7 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
     }
 
     public void isNightConfig() {
-        if (ISNIGHT) {
+        /*if (ISNIGHT) {
             Drawable navDrawable = ResourcesCompat.getDrawable(getResources(), R.drawable.drawer_menu, null);
             navDrawable = DrawableCompat.wrap(Objects.requireNonNull(navDrawable));
             DrawableCompat.setTint(navDrawable, Color.WHITE);
@@ -722,7 +721,8 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
 
         } else {
             Objects.requireNonNull(getSupportActionBar()).setHomeAsUpIndicator(R.drawable.drawer_menu);
-        }
+        }*/
+        Objects.requireNonNull(getSupportActionBar()).setHomeAsUpIndicator(R.drawable.drawer_menu);
     }
 
     /*public void secondaryAppbarChangerListener() {

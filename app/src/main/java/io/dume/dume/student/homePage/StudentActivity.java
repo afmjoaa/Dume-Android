@@ -71,7 +71,7 @@ public class StudentActivity extends AppCompatActivity implements StudentContrac
 
     @Override
     public void goTORecordsActivity3() {
-        startActivity(new Intent(this, RecordsCurrentActivity.class));
+        startActivity(new Intent(this, SearchResultActivity.class));
 
     }
 

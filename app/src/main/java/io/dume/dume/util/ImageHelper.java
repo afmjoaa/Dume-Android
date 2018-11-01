@@ -1,5 +1,6 @@
 package io.dume.dume.util;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -18,6 +19,7 @@ public class ImageHelper {
         final int color = 0xff424242;
         final Paint paint = new Paint();
         final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
+        //final Rect rect = new Rect(0, 0, (int) (28 * (context.getResources().getDisplayMetrics().density)), (int) (28 * (context.getResources().getDisplayMetrics().density)));
         final RectF rectF = new RectF(rect);
         final float roundPx = pixels;
 

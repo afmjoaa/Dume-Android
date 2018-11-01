@@ -86,6 +86,8 @@
     <color name="tabViewPager">#ffffff</color>
     <color name="tabFirstItem">#ffffff</color>
     <color name="tabSecondItem">#f7f7f7</color>
+    
+    <color name="recordsBgColor">#f2f2f2</color>
 
     <color name="testing_colors">#9e9e9e</color>
     <color name="calender_bg">#288DBB8D</color>

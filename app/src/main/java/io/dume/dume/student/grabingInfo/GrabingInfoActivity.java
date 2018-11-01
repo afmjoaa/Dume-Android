@@ -1,20 +1,21 @@
 package io.dume.dume.student.grabingInfo;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
-import android.os.Build;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v4.view.animation.FastOutLinearInInterpolator;
 import android.support.v4.view.animation.LinearOutSlowInInterpolator;
 import android.support.v4.widget.NestedScrollView;
@@ -22,12 +23,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -35,7 +30,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.DecelerateInterpolator;
@@ -63,12 +57,11 @@ import java.util.List;
 import java.util.Objects;
 
 import io.dume.dume.R;
-import io.dume.dume.common.inboxActivity.InboxActivity;
 import io.dume.dume.student.grabingLocation.GrabingLocationActivity;
 import io.dume.dume.student.grabingPackage.GrabingPackageActivity;
 import io.dume.dume.student.pojo.CusStuAppComMapActivity;
-import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
 import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
+import io.dume.dume.util.DumeUtils;
 import io.dume.dume.util.VisibleToggleClickListener;
 
 public class GrabingInfoActivity extends CusStuAppComMapActivity implements GrabingInfoContract.View,
@@ -132,15 +125,24 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
 
         // Set up the ViewPager with the sections adapter.
         mViewPager.setAdapter(mSectionsPagerAdapter);
-        // loop through all navigation tabs
+
+        //making the custom tab here
+        int[] wh = DumeUtils.getScreenSize(this);
+        int tabMinWidth = ((wh[0] / 3)-(int) (24 * (getResources().getDisplayMetrics().density)));
+        LinearLayout.LayoutParams textParam = new LinearLayout.LayoutParams
+                (tabMinWidth, LinearLayout.LayoutParams.WRAP_CONTENT);
         for (int i = 0; i < tabLayout.getTabCount(); i++) {
             // inflate the Parent LinearLayout Container for the tab
             // from the layout nav_tab.xml file that we created 'R.layout.nav_tab
             LinearLayout tab = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.custom_tablayout_tab, null);
 
+
             // get child TextView and ImageView from this layout for the icon and label
             TextView tab_label = (TextView) tab.findViewById(R.id.nav_label);
             ImageView tab_icon = (ImageView) tab.findViewById(R.id.nav_icon);
+
+            tab_label.setLayoutParams(textParam);
+
             tab_label.setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/Cairo_Regular.ttf"));
             tab_label.setText(getResources().getString(navLabels[i]));
             tab_icon.setImageResource(navIcons[i]);
@@ -181,6 +183,7 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
         });
 
         setDarkStatusBarIcon();
+
     }
 
     @Override
@@ -191,7 +194,7 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
         hintIdThree = findViewById(R.id.hint_id_3);
         mViewPager = (ViewPager) findViewById(R.id.container);
         fab = (FloatingActionButton) findViewById(R.id.fab);
-        tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout = findViewById(R.id.tabs);
         mAppBarLayout = findViewById(R.id.appbar);
         forMeBtn = findViewById(R.id.for_me_btn);
         viewMusk = findViewById(R.id.view_musk);

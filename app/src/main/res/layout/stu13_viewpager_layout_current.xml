@@ -14,8 +14,235 @@
         android:id="@+id/nested_host_linearlayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/tabViewPager"
+        android:background="@color/recordsBgColor"
         android:orientation="vertical">
+
+        <!--basic info-->
+        <RelativeLayout
+            android:id="@+id/recordsHostLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white">
+
+            <LinearLayout
+                android:id="@+id/left_vertical_host_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:gravity="start"
+                android:orientation="vertical">
+
+                <carbon.widget.ImageView
+                    android:id="@+id/student_display_pic"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginBottom="1dp"
+                    android:src="@drawable/demo_testing_image"
+                    app:carbon_cornerRadius="6dp"
+                    app:carbon_elevation="4dp" />
+
+                <TextView
+                    android:id="@+id/student_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="dony"
+                    android:textColor="@color/textColorPrimary"
+                    android:textSize="16sp"
+                    app:fontFamily="@font/cairo_regular" />
+
+                <me.zhanghai.android.materialratingbar.MaterialRatingBar
+                    android:id="@+id/student_rating_bar"
+                    style="@style/Widget.MaterialRatingBar.RatingBar.Indicator.Small"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:rating="3.5"
+                    android:stepSize="0.01"
+                    app:mrb_fillBackgroundStars="true"
+                    app:mrb_progressBackgroundTint="@color/star_rating_background"
+                    app:mrb_progressTint="@color/star_rating_color" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/center_vertical_host_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="16dp"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                tools:ignore="RelativeOverlap">
+
+                <TextView
+                    android:id="@+id/subject_in_demand"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/math_amp_physics"
+                    android:textAllCaps="false"
+                    android:textColor="@color/textColorPrimary"
+                    android:textSize="14sp"
+                    app:fontFamily="@font/cairo_regular" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="Exchange"
+                    app:srcCompat="@drawable/ic_exchhange_icon" />
+
+                <TextView
+                    android:id="@+id/salary_in_demand"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="10k BDT"
+                    android:textAllCaps="false"
+                    android:textColor="@color/textColorPrimary"
+                    android:textSize="14sp"
+                    app:fontFamily="@font/cairo_regular" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/right_vertical_host_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="10dp"
+                android:gravity="end"
+                android:orientation="vertical">
+
+                <carbon.widget.ImageView
+                    android:id="@+id/mentor_display_pic"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginBottom="1dp"
+                    android:src="@drawable/demo_testing_image"
+                    app:carbon_cornerRadius="6dp"
+                    app:carbon_elevation="4dp" />
+
+                <TextView
+                    android:id="@+id/mentor_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Fatema"
+                    android:textColor="@color/textColorPrimary"
+                    android:textSize="16sp"
+                    app:fontFamily="@font/cairo_regular" />
+
+                <me.zhanghai.android.materialratingbar.MaterialRatingBar
+                    android:id="@+id/mentor_rating_bar"
+                    style="@style/Widget.MaterialRatingBar.RatingBar.Indicator.Small"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:rating="3.5"
+                    android:rotation="180"
+                    android:stepSize="0.01"
+                    app:mrb_fillBackgroundStars="true"
+                    app:mrb_progressBackgroundTint="@color/star_rating_background"
+                    app:mrb_progressTint="@color/star_rating_color" />
+
+            </LinearLayout>
+
+            <View
+                android:id="@+id/divider2"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@+id/left_vertical_host_layout"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginRight="16dp"
+                android:background="#41a7a7a7" />
+
+            <Button
+                android:id="@+id/current_cancel_btn"
+                style="@style/myButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/divider2"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="4dp"
+                android:onClick="onRecordsCurrentViewClicked"
+                android:text="Cancel Request"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                app:fontFamily="@font/cairo_regular" />
+
+            <View
+                android:id="@+id/divider3"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@+id/current_cancel_btn"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:background="#3ca7a7a7" />
+
+            <Button
+                android:id="@+id/current_contact_btn"
+                style="@style/myButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/divider3"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="4dp"
+                android:onClick="onRecordsCurrentViewClicked"
+                android:text="Contact"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                app:fontFamily="@font/cairo_regular" />
+
+
+        </RelativeLayout>
+
+        <!--salary layout-->
+        <LinearLayout
+            android:id="@+id/salary_host_linearlayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:orientation="vertical">
+
+            <carbon.widget.LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_round_corner_rela_layout"
+                android:baselineAligned="false"
+                android:orientation="vertical"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp">
+
+                <Button
+                    android:id="@+id/show_salary_btn"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="false"
+                    android:text="Salary : 10k BDT"
+                    android:textAllCaps="false"
+                    android:textColor="@color/highlight_red"
+                    android:textSize="16sp"
+                    app:fontFamily="@font/cairo_regular" />
+
+            </carbon.widget.LinearLayout>
+
+        </LinearLayout>
 
         <!--agreement terms layout-->
         <LinearLayout
@@ -58,10 +285,10 @@
                 android:layout_marginRight="5dp"
                 android:background="@drawable/bg_white_bottom_round"
                 android:orientation="vertical"
-                android:paddingBottom="8dp"
                 android:paddingLeft="16dp"
-                android:paddingRight="16dp"
                 android:paddingTop="8dp"
+                android:paddingRight="16dp"
+                android:paddingBottom="8dp"
                 android:translationY="-2dp">
 
                 <RelativeLayout
@@ -69,10 +296,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/bg_calender_header"
-                    android:paddingBottom="12dp"
                     android:paddingLeft="16dp"
+                    android:paddingTop="12dp"
                     android:paddingRight="16dp"
-                    android:paddingTop="12dp">
+                    android:paddingBottom="12dp">
 
                     <TextView
                         android:id="@+id/starting_date"
@@ -120,8 +347,8 @@
                         android:layout_below="@+id/starting_date"
                         android:layout_toEndOf="@+id/finishing_date"
                         android:layout_toRightOf="@+id/finishing_date"
-                        android:text="Mon, 12 May"
                         android:alpha="0.7"
+                        android:text="Mon, 12 May"
                         android:textAllCaps="false"
                         android:textColor="@color/colorWhite"
                         android:textSize="16sp"
@@ -145,11 +372,14 @@
                     android:id="@+id/calendarView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
                     android:layout_marginLeft="6dp"
                     android:layout_marginRight="6dp"
+                    android:layout_marginBottom="10dp"
                     android:background="@drawable/bg_calender_background"
                     app:mcv_selectionColor="#108174"
+                    app:mcv_headerTextAppearance="@style/CustomTextAppearanceHeader"
+                    app:mcv_dateTextAppearance="@style/CustomTextAppearanceDate"
+                    app:mcv_weekDayTextAppearance="@style/CustomTextAppearanceWeek"
                     app:mcv_showOtherDates="all" />
 
 
@@ -238,8 +468,8 @@
                         android:layout_toEndOf="@+id/reminder_imageview"
                         android:layout_toRightOf="@+id/reminder_imageview"
                         android:drawablePadding="6dp"
-                        android:paddingBottom="2dp"
                         android:paddingTop="2dp"
+                        android:paddingBottom="2dp"
                         android:singleLine="true"
                         android:text="Reminder     : "
                         android:textAllCaps="false"
@@ -288,230 +518,6 @@
 
         </LinearLayout>
 
-        <!--basic info-->
-        <RelativeLayout
-            android:id="@+id/recordsHostLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/white">
-
-            <LinearLayout
-                android:id="@+id/left_vertical_host_layout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_marginBottom="10dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="10dp"
-                android:gravity="start"
-                android:orientation="vertical">
-
-                <carbon.widget.ImageView
-                    android:id="@+id/student_display_pic"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_marginBottom="1dp"
-                    android:src="@drawable/demo_testing_image"
-                    app:carbon_cornerRadius="6dp"
-                    app:carbon_elevation="4dp" />
-
-                <TextView
-                    android:id="@+id/student_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="dony"
-                    android:textColor="@color/textColorPrimary"
-                    android:textSize="16sp"
-                    app:fontFamily="@font/cairo_regular" />
-
-                <me.zhanghai.android.materialratingbar.MaterialRatingBar
-                    android:id="@+id/student_rating_bar"
-                    style="@style/Widget.MaterialRatingBar.RatingBar.Indicator.Small"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:rating="3.5"
-                    android:stepSize="0.01"
-                    app:mrb_fillBackgroundStars="true"
-                    app:mrb_progressBackgroundTint="@color/star_rating_background"
-                    app:mrb_progressTint="@color/star_rating_color" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/center_vertical_host_layout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="16dp"
-                android:gravity="center_horizontal"
-                android:orientation="vertical"
-                tools:ignore="RelativeOverlap">
-
-                <TextView
-                    android:id="@+id/subject_in_demand"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/math_amp_physics"
-                    android:textAllCaps="false"
-                    android:textColor="@color/textColorPrimary"
-                    android:textSize="14sp"
-                    app:fontFamily="@font/cairo_regular" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:contentDescription="Exchange"
-                    app:srcCompat="@drawable/ic_exchhange_icon" />
-
-                <TextView
-                    android:id="@+id/salary_in_demand"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="10k BDT"
-                    android:textAllCaps="false"
-                    android:textColor="@color/textColorPrimary"
-                    android:textSize="14sp"
-                    app:fontFamily="@font/cairo_regular" />
-
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/right_vertical_host_layout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_marginBottom="10dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginTop="10dp"
-                android:gravity="end"
-                android:orientation="vertical">
-
-                <carbon.widget.ImageView
-                    android:id="@+id/mentor_display_pic"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_marginBottom="1dp"
-                    android:src="@drawable/demo_testing_image"
-                    app:carbon_cornerRadius="6dp"
-                    app:carbon_elevation="4dp" />
-
-                <TextView
-                    android:id="@+id/mentor_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Fatema"
-                    android:textColor="@color/textColorPrimary"
-                    android:textSize="16sp"
-                    app:fontFamily="@font/cairo_regular" />
-
-                <me.zhanghai.android.materialratingbar.MaterialRatingBar
-                    android:id="@+id/mentor_rating_bar"
-                    style="@style/Widget.MaterialRatingBar.RatingBar.Indicator.Small"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginStart="16dp"
-                    android:rating="3.5"
-                    android:rotation="180"
-                    android:stepSize="0.01"
-                    app:mrb_fillBackgroundStars="true"
-                    app:mrb_progressBackgroundTint="@color/star_rating_background"
-                    app:mrb_progressTint="@color/star_rating_color" />
-
-            </LinearLayout>
-
-            <View
-                android:id="@+id/divider2"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_below="@+id/left_vertical_host_layout"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginTop="4dp"
-                android:background="#41a7a7a7" />
-
-            <Button
-                android:id="@+id/current_cancel_btn"
-                style="@style/myButtonStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/divider2"
-                android:layout_marginBottom="4dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginTop="2dp"
-                android:text="Cancel in 10 Days"
-                android:textAllCaps="false"
-                android:textColor="@color/white"
-                android:textSize="16sp"
-                app:fontFamily="@font/cairo_regular" />
-
-            <View
-                android:id="@+id/divider3"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_below="@+id/current_cancel_btn"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:background="#3ca7a7a7" />
-
-            <Button
-                android:id="@+id/current_contact_btn"
-                style="@style/myButtonStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/divider2"
-                android:layout_marginBottom="4dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginTop="2dp"
-                android:text="Cancel in 10 Days"
-                android:textAllCaps="false"
-                android:textColor="@color/white"
-                android:textSize="16sp"
-                app:fontFamily="@font/cairo_regular" />
-
-        </RelativeLayout>
-
-        <!--salary layout-->
-        <LinearLayout
-            android:id="@+id/salary_host_linearlayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="10dp"
-            android:orientation="vertical">
-
-            <carbon.widget.LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_round_corner_rela_layout"
-                android:baselineAligned="false"
-                android:orientation="vertical"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp">
-
-                <Button
-                    android:id="@+id/show_salary_btn"
-                    style="@style/Widget.AppCompat.Button.Borderless"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:clickable="false"
-                    android:text="Salary : 10k BDT"
-                    android:textAllCaps="false"
-                    android:textColor="@color/highlight_red"
-                    android:textSize="16sp"
-                    app:fontFamily="@font/cairo_regular" />
-
-            </carbon.widget.LinearLayout>
-
-        </LinearLayout>
-
         <!--location layout-->
         <LinearLayout
             android:id="@+id/location_host_linearlayout"
@@ -553,10 +559,10 @@
                 android:layout_marginRight="5dp"
                 android:background="@drawable/bg_white_bottom_round"
                 android:orientation="vertical"
-                android:paddingBottom="10dp"
                 android:paddingLeft="16dp"
-                android:paddingRight="16dp"
                 android:paddingTop="12dp"
+                android:paddingRight="16dp"
+                android:paddingBottom="10dp"
                 android:translationY="-2dp">
 
                 <!--<fragment
@@ -614,10 +620,10 @@
                 android:layout_marginRight="5dp"
                 android:background="@drawable/bg_white_bottom_round"
                 android:orientation="vertical"
-                android:paddingBottom="8dp"
                 android:paddingLeft="16dp"
-                android:paddingRight="16dp"
                 android:paddingTop="8dp"
+                android:paddingRight="16dp"
+                android:paddingBottom="8dp"
                 android:translationY="-2dp">
 
                 <LinearLayout
@@ -626,8 +632,8 @@
                     android:layout_height="wrap_content"
                     android:baselineAligned="false"
                     android:orientation="horizontal"
-                    android:paddingBottom="8dp"
-                    android:paddingTop="8dp">
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp">
 
                     <RelativeLayout
                         android:layout_width="wrap_content"
@@ -661,18 +667,18 @@
                             android:id="@+id/txtStatus"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentBottom="true"
                             android:layout_below="@+id/main_rating_performance"
+                            android:layout_alignParentBottom="true"
                             android:layout_centerHorizontal="true"
                             android:background="@drawable/bg_rating_textview"
                             android:drawableEnd="@drawable/ic_person_small"
-                            android:drawablePadding="5dp"
                             android:drawableRight="@drawable/ic_person_small"
+                            android:drawablePadding="5dp"
                             android:gravity="center"
-                            android:paddingBottom="1dp"
                             android:paddingLeft="6dp"
-                            android:paddingRight="6dp"
                             android:paddingTop="1dp"
+                            android:paddingRight="6dp"
+                            android:paddingBottom="1dp"
                             android:singleLine="true"
                             android:text="1234"
                             android:textColor="@color/white"
@@ -719,16 +725,16 @@
                             android:id="@+id/txtStatus_accept_ratio"
                             android:layout_width="35dp"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentBottom="true"
                             android:layout_below="@+id/rating_main_accept_ratio"
+                            android:layout_alignParentBottom="true"
                             android:layout_centerHorizontal="true"
                             android:background="@drawable/bg_rating_textview"
                             android:drawablePadding="5dp"
                             android:gravity="center"
-                            android:paddingBottom="1dp"
                             android:paddingLeft="6dp"
-                            android:paddingRight="6dp"
                             android:paddingTop="1dp"
+                            android:paddingRight="6dp"
+                            android:paddingBottom="1dp"
                             android:singleLine="true"
                             android:text="80 %"
                             android:textColor="@color/white"
@@ -777,16 +783,16 @@
                             android:id="@+id/txtStatus_professionalism"
                             android:layout_width="35dp"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentBottom="true"
                             android:layout_below="@+id/rating_main_professionalism"
+                            android:layout_alignParentBottom="true"
                             android:layout_centerHorizontal="true"
                             android:background="@drawable/bg_rating_textview"
                             android:drawablePadding="5dp"
                             android:gravity="center"
-                            android:paddingBottom="1dp"
                             android:paddingLeft="6dp"
-                            android:paddingRight="6dp"
                             android:paddingTop="1dp"
+                            android:paddingRight="6dp"
+                            android:paddingBottom="1dp"
                             android:singleLine="true"
                             android:text="50 %"
                             android:textColor="@color/white"
@@ -828,18 +834,18 @@
                             android:id="@+id/txtStatus_experience"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentBottom="true"
                             android:layout_below="@+id/main_rating_experience"
+                            android:layout_alignParentBottom="true"
                             android:layout_centerHorizontal="true"
                             android:background="@drawable/bg_rating_textview"
                             android:drawableEnd="@drawable/ic_person_small"
-                            android:drawablePadding="5dp"
                             android:drawableRight="@drawable/ic_person_small"
+                            android:drawablePadding="5dp"
                             android:gravity="center"
-                            android:paddingBottom="1dp"
                             android:paddingLeft="6dp"
-                            android:paddingRight="6dp"
                             android:paddingTop="1dp"
+                            android:paddingRight="6dp"
+                            android:paddingBottom="1dp"
                             android:singleLine="true"
                             android:text="1234"
                             android:textColor="@color/white"
@@ -861,10 +867,10 @@
                         android:layout_alignParentTop="true"
                         android:layout_centerHorizontal="true"
                         android:background="@drawable/bg_rating_tittle"
-                        android:paddingBottom="2dp"
                         android:paddingLeft="20dp"
-                        android:paddingRight="20dp"
                         android:paddingTop="2dp"
+                        android:paddingRight="20dp"
+                        android:paddingBottom="2dp"
                         android:singleLine="true"
                         android:text="Skills"
                         android:textAlignment="center"
@@ -947,10 +953,10 @@
                 android:layout_marginRight="5dp"
                 android:background="@drawable/bg_white_bottom_round"
                 android:orientation="vertical"
-                android:paddingBottom="8dp"
                 android:paddingLeft="16dp"
-                android:paddingRight="16dp"
                 android:paddingTop="8dp"
+                android:paddingRight="16dp"
+                android:paddingBottom="8dp"
                 android:translationY="-2dp">
 
 
@@ -960,8 +966,8 @@
                     android:layout_height="wrap_content"
                     android:baselineAligned="false"
                     android:orientation="horizontal"
-                    android:paddingBottom="8dp"
-                    android:paddingTop="8dp">
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp">
 
                     <RelativeLayout
                         android:layout_width="wrap_content"
@@ -975,8 +981,8 @@
                             android:layout_height="46dp"
                             android:layout_alignParentTop="true"
                             android:layout_centerHorizontal="true"
-                            android:layout_marginBottom="2dp"
                             android:layout_marginTop="2dp"
+                            android:layout_marginBottom="2dp"
                             app:srcCompat="@drawable/ic_badge_joined" />
 
                         <TextView
@@ -1005,8 +1011,8 @@
                             android:layout_height="46dp"
                             android:layout_alignParentTop="true"
                             android:layout_centerHorizontal="true"
-                            android:layout_marginBottom="2dp"
                             android:layout_marginTop="2dp"
+                            android:layout_marginBottom="2dp"
                             app:srcCompat="@drawable/ic_badge_disable" />
 
                         <TextView
@@ -1035,8 +1041,8 @@
                             android:layout_height="46dp"
                             android:layout_alignParentTop="true"
                             android:layout_centerHorizontal="true"
-                            android:layout_marginBottom="2dp"
                             android:layout_marginTop="2dp"
+                            android:layout_marginBottom="2dp"
                             app:srcCompat="@drawable/ic_badge_disable" />
 
                         <TextView
@@ -1065,8 +1071,8 @@
                             android:layout_height="46dp"
                             android:layout_alignParentTop="true"
                             android:layout_centerHorizontal="true"
-                            android:layout_marginBottom="2dp"
                             android:layout_marginTop="2dp"
+                            android:layout_marginBottom="2dp"
                             app:srcCompat="@drawable/ic_badge_disable" />
 
                         <TextView
@@ -1130,10 +1136,10 @@
                 android:layout_marginRight="5dp"
                 android:background="@drawable/bg_white_bottom_round"
                 android:orientation="vertical"
-                android:paddingBottom="8dp"
                 android:paddingLeft="16dp"
-                android:paddingRight="16dp"
                 android:paddingTop="8dp"
+                android:paddingRight="16dp"
+                android:paddingBottom="8dp"
                 android:translationY="-2dp">
 
                 <TextView
@@ -1141,12 +1147,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="0dp"
+                    android:drawableStart="@drawable/ic_keyboard_arrow_right_black_24dp"
                     android:drawableLeft="@drawable/ic_keyboard_arrow_right_black_24dp"
                     android:drawablePadding="6dp"
-                    android:drawableStart="@drawable/ic_keyboard_arrow_right_black_24dp"
                     android:gravity="center_vertical"
-                    android:paddingBottom="2dp"
                     android:paddingTop="2dp"
+                    android:paddingBottom="2dp"
                     android:singleLine="true"
                     android:text="Current Status : EECE Student in MIST"
                     android:textAllCaps="false"
@@ -1160,12 +1166,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="0dp"
+                    android:drawableStart="@drawable/ic_keyboard_arrow_right_black_24dp"
                     android:drawableLeft="@drawable/ic_keyboard_arrow_right_black_24dp"
                     android:drawablePadding="6dp"
-                    android:drawableStart="@drawable/ic_keyboard_arrow_right_black_24dp"
                     android:gravity="center_vertical"
-                    android:paddingBottom="2dp"
                     android:paddingTop="2dp"
+                    android:paddingBottom="2dp"
                     android:singleLine="true"
                     android:text="Currently Mentoring : 3 Student"
                     android:textAllCaps="false"
@@ -1179,12 +1185,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="0dp"
+                    android:drawableStart="@drawable/ic_keyboard_arrow_right_black_24dp"
                     android:drawableLeft="@drawable/ic_keyboard_arrow_right_black_24dp"
                     android:drawablePadding="6dp"
-                    android:drawableStart="@drawable/ic_keyboard_arrow_right_black_24dp"
                     android:gravity="center_vertical"
-                    android:paddingBottom="2dp"
                     android:paddingTop="2dp"
+                    android:paddingBottom="2dp"
                     android:singleLine="true"
                     android:text="Marital Status : Single"
                     android:textAllCaps="false"
@@ -1198,11 +1204,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="0dp"
+                    android:drawableStart="@drawable/ic_keyboard_arrow_right_black_24dp"
                     android:drawableLeft="@drawable/ic_keyboard_arrow_right_black_24dp"
                     android:drawablePadding="6dp"
-                    android:drawableStart="@drawable/ic_keyboard_arrow_right_black_24dp"
-                    android:paddingBottom="5dp"
                     android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
                     android:singleLine="true"
                     android:text="Qualifications :"
                     android:textAllCaps="false"
@@ -1264,10 +1270,10 @@
                 android:layout_marginRight="5dp"
                 android:background="@drawable/bg_white_bottom_round"
                 android:orientation="vertical"
-                android:paddingBottom="8dp"
                 android:paddingLeft="16dp"
-                android:paddingRight="16dp"
                 android:paddingTop="8dp"
+                android:paddingRight="16dp"
+                android:paddingBottom="8dp"
                 android:translationY="-2dp">
 
                 <android.support.v7.widget.RecyclerView
