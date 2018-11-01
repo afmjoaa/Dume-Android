@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".teacher.crudskill.CrudSkillActivity">
+
+    <include layout="@layout/activity_header" />
+
+    <io.dume.dume.custom_view.HorizontalLoadView
+        android:id="@+id/crudLoad"
+        android:layout_width="15dp"
+        android:layout_height="10dp"
+        android:translationY="5dp"
+        android:visibility="gone"
+        app:layout_anchor="@id/crudScroll"
+        app:layout_anchorGravity="top" />
+
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/crudScroll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/categoryRV"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                />
+
+
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+
+
+</android.support.design.widget.CoordinatorLayout>

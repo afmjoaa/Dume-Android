@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".teacher.skill.SkillActivity">
+
+    <include layout="@layout/activity_header" />
+
+    <io.dume.dume.custom_view.HorizontalLoadView
+        android:id="@+id/skillLoad"
+        android:layout_width="15dp"
+        android:layout_height="10dp"
+        android:translationY="5dp"
+        app:layout_anchor="@id/skillRV"
+        android:visibility="gone"
+        app:layout_anchorGravity="top" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/skillRV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fabAdd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        android:clickable="true"
+        android:focusable="true"
+        android:src="@drawable/plus_icon"
+        app:backgroundTint="@color/colorBlack"
+        app:rippleColor="@color/colorDarkAzure" />
+</android.support.design.widget.CoordinatorLayout>

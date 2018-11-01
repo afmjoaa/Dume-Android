@@ -36,11 +36,6 @@ public class ExampleUnitTest {
 
     }
 
-    class MockPresenter extends TeacherPresenter {
-        public MockPresenter(TeacherContract.View view, ModelSource model) {
-            super(view, model);
-        }
-    }
 
 
 }

@@ -160,15 +160,11 @@
         <activity
             android:name=".student.searchResult.SearchResultActivity"
             android:label=""
-            android:theme="@style/AppTheme.NoActionBar.transparent"/>
-
-
+            android:theme="@style/AppTheme.NoActionBar.transparent" />
         <activity
             android:name=".student.searchLoading.SearchLoadingActivity"
             android:label=""
-            android:theme="@style/AppTheme.NoActionBar.transparent"/>
-
-
+            android:theme="@style/AppTheme.NoActionBar.transparent" />
         <activity
             android:name=".student.recordsPage.RecordsPageActivity"
             android:label="@string/title_activity_records_page"
@@ -193,6 +189,8 @@
             android:name=".student.recordsAccepted.RecordsAcceptedActivity"
             android:label="@string/title_activity_records_accepted"
             android:theme="@style/AppTheme.NoActionBar.transparent.accepted" />
+        <activity android:name=".teacher.skill.SkillActivity" />
+        <activity android:name=".teacher.crudskill.CrudSkillActivity"></activity>
     </application>
 
 </manifest>

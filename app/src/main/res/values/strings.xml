@@ -120,8 +120,15 @@
         <item>Five</item>
         <item>Six</item>
         <item>Seven</item>
+        <item>Eight</item>
+        <item>Nine</item>
+        <item>Ten</item>
     </string-array>
     <string-array name="EnglishMedium">
+        <item>Play</item>
+        <item>Nursery</item>
+        <item>KG-1</item>
+        <item>KG-2</item>
         <item>One</item>
         <item>Two</item>
         <item>Three</item>
@@ -129,7 +136,11 @@
         <item>Five</item>
         <item>Six</item>
         <item>Seven</item>
-        <item>O-level</item>
+        <item>Eight</item>
+        <item>Nine</item>
+        <item>Ten</item>
+        <item>A-Level</item>
+        <item>O-Level</item>
     </string-array>
 
     <string-array name="MenualPrimaryText">
@@ -332,6 +343,8 @@
     <string name="sync_now">Sync Now</string>
     <string name="math_amp_physics"><![CDATA[Math & Physics]]></string>
     <string name="up_arrow">up_arrow</string>
+    <string name="education">Education</string>
+    <string name="others">Others</string>
 
     <string-array name="AccountType">
         <item>Student</item>
@@ -392,5 +405,44 @@
         <item>CGPA - 4.00</item>
     </string-array>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string-array name="Education">
+        <item>School</item>
+        <item>College</item>
+        <item>Admission Test</item>
+        <item>University</item>
+    </string-array>
+    <string-array name="BanglaMediumSchool">
+        <item>One</item>
+        <item>Two</item>
+        <item>Three</item>
+        <item>Four</item>
+        <item>Five</item>
+        <item>Six</item>
+        <item>Seven</item>
+        <item>Eight</item>
+        <item>Nine</item>
+        <item>Ten</item>
+
+    </string-array>
+    <string-array name="EnglishMediumSchool">
+        <item>Play</item>
+        <item>Nursery</item>
+        <item>KG-1</item>
+        <item>KG-2</item>
+        <item>One</item>
+        <item>Two</item>
+        <item>Three</item>
+        <item>Four</item>
+        <item>Five</item>
+        <item>Six</item>
+        <item>Seven</item>
+        <item>Eight</item>
+        <item>Nine</item>
+        <item>Ten</item>
+        <item>A-Level</item>
+        <item>O-Level</item>
+    </string-array>
 
 </resources>
