@@ -12,7 +12,11 @@ public class LocalDb {
             innerSchoolBanglaMediumClassFour, innerSchoolBanglaMediumClassFive, innerSchoolBanglaMediumClassSix,
             innerSchoolBanglaMediumClassSeven, innerSchoolEnglishMediumClassOne, innerSchoolEnglishMediumClassTwo,
             innerSchoolEnglishMediumClassThree, innerSchoolEnglishMediumClassFour, innerSchoolEnglishMediumClassFive,
-            innerSchoolEnglishMediumClassSix, innerSchoolEnglishMediumClassSeven = null;
+            innerSchoolEnglishMediumClassSix, innerSchoolEnglishMediumClassSeven, innerSchoolEnglishMediumEdExcelOLevel,
+            innerSchoolEnglishMediumCambridgeOLevel, innerCollege, innerCollegeEnglishMedium, innerCollegeEnglishMediumEdexel,
+            innerCollegeEnglishMediumEdexelAs, innerCollegeEnglishMediumEdexelA2, innerCollegeEnglishMediumCambridge,
+            innerCollegeEnglishMediumCambridgeAs, innerCollegeEnglishMediumCambridgeA2, innerCollegeBanglaMedium,
+            innerCollegeBanglaMediumScience, innerCollegeBanglaMediumCommerce, innerCollegeEnglishVersion, innerCollegeEnglishVersionScience, innerCollegeEnglishVersionCommerce, innerCollegeEnglishVersionArt = null;
 
     public List<String> getCategories() {
         return categories;
@@ -103,13 +107,26 @@ public class LocalDb {
         innerSchoolBanglaMediumClassFive = new ArrayList<>(Arrays.asList("Bangla", "English", "Math", "Religion", "General Science", "Social Science"));
         innerSchoolBanglaMediumClassSix = new ArrayList<>(Arrays.asList("Bangla", "English", "Math", "Religion", "General Science", "Social Science", "Agriculture", "Domestic Science", "ICT"));
         innerSchoolBanglaMediumClassSeven = new ArrayList<>(Arrays.asList("Bangla", "English", "Math", "Religion", "General Science", "Social Science", "Agriculture", "Domestic Science", "ICT"));
-        innerSchoolEnglishMediumClassOne = new ArrayList<>(Arrays.asList("English", "Bangla", "Math", "Science", "Religion"));
-        innerSchoolEnglishMediumClassTwo = new ArrayList<>(Arrays.asList());
-        innerSchoolEnglishMediumClassThree = new ArrayList<>(Arrays.asList());
-        innerSchoolEnglishMediumClassFour = new ArrayList<>(Arrays.asList());
-        innerSchoolEnglishMediumClassFive = new ArrayList<>(Arrays.asList());
-        innerSchoolEnglishMediumClassSix = new ArrayList<>(Arrays.asList());
-        innerSchoolEnglishMediumClassSeven = new ArrayList<>(Arrays.asList());
+
+
+        innerSchoolEnglishMediumClassOne = new ArrayList<>(Arrays.asList("English", "Bangla", "Math", "Geography", "History", "Science", "Religion"));
+        innerSchoolEnglishMediumClassTwo = new ArrayList<>(Arrays.asList("English", "Bangla", "Math", "Geography", "History", "Science", "Religion"));
+        innerSchoolEnglishMediumClassThree = new ArrayList<>(Arrays.asList("English", "Bangla", "Math", "Geography", "History", "Science", "Religion"));
+        innerSchoolEnglishMediumClassFour = new ArrayList<>(Arrays.asList("English", "Bangla", "Math", "Geography", "History", "Science", "Religion"));
+        innerSchoolEnglishMediumClassFive = new ArrayList<>(Arrays.asList("English", "Bangla", "Math", "Geography", "History", "Science", "Religion"));
+        innerSchoolEnglishMediumClassSix = new ArrayList<>(Arrays.asList("English", "Bangla", "Math", "Geography", "History", "Science", "Religion"));
+        innerSchoolEnglishMediumClassSeven = new ArrayList<>(Arrays.asList("English", "Bangla", "Math", "Geography", "History", "Science", "Religion"));
+        innerSchoolEnglishMediumEdExcelOLevel = new ArrayList<>(Arrays.asList("Physics", "Chemistry", "Biology", "Math-B", "Pure Math", "English", "Bangla", "Accounting", "Economics", "Business"));
+        innerSchoolEnglishMediumCambridgeOLevel = new ArrayList<>(Arrays.asList("Physics", "Chemistry", "Biology", "Math-B", "Pure Math", "English", "Bangla", "Accounting", "Economics", "Business"));
+        innerCollege = new ArrayList<>(Arrays.asList("English Medium", "Bangla Medium", "English Version"));
+        innerCollegeEnglishMedium = new ArrayList<>(Arrays.asList("Edexcel", "Cambridge"));
+        innerCollegeEnglishMediumEdexel = new ArrayList<>(Arrays.asList("As", "A2"));
+        innerCollegeEnglishMediumEdexelA2 = new ArrayList<>(Arrays.asList("Physics", "Chemistry", "Biology", "Math", "Further Math", "Psychology", "Accounting", "Economics", "Business"));
+        innerCollegeEnglishMediumEdexelAs = new ArrayList<>(Arrays.asList("Physics", "Chemistry", "Biology", "Math", "Further Math", "Psychology", "Accounting", "Economics", "Business"));
+        innerCollegeEnglishMediumCambridge = new ArrayList<>(Arrays.asList("As", "A2"));
+        innerCollegeEnglishMediumCambridgeA2 = new ArrayList<>(Arrays.asList("Physics", "Chemistry", "Biology", "Math", "Further Math", "Psychology", "Accounting", "Economics", "Business"));
+        innerCollegeEnglishMediumCambridgeAs = new ArrayList<>(Arrays.asList("Physics", "Chemistry", "Biology", "Math", "Further Math", "Psychology", "Accounting", "Economics", "Business"));
+        innerCollegeBanglaMedium= new ArrayList<>(Arrays.asList("Science", "Commerce","Arts"));
     }
 
 
