@@ -1,6 +1,9 @@
 package io.dume.dume.student.searchResultTabview;
 
 import android.content.Intent;
+import android.graphics.Typeface;
+import android.graphics.drawable.Animatable;
+import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -35,6 +38,8 @@ import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
 import io.dume.dume.student.searchResult.SearchResultActivity;
 import io.dume.dume.util.DumeUtils;
 
+import static io.dume.dume.util.DumeUtils.configureAppbarWithoutColloapsing;
+
 public class SearchResultTabviewActivity extends CustomStuAppCompatActivity implements SearchResultTabviewContract.View {
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
@@ -58,17 +63,20 @@ public class SearchResultTabviewActivity extends CustomStuAppCompatActivity impl
         setActivityContext(this, fromFlag);
         mPresenter = new SearchResultTabviewPresenter(this, new SearchResultTabviewModel());
         mPresenter.searchResultTabviewEnqueue();
-        DumeUtils.configureAppbar(this, "Search Results");
+        configureAppbarWithoutColloapsing(this, "Search Results");
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        tabLayout = (TabLayout) findViewById(R.id.tabs);
+        //making the custom tab here
+        int[] wh = DumeUtils.getScreenSize(this);
+        int tabMinWidth = ((wh[0] / 3)-(int) (24 * (getResources().getDisplayMetrics().density)));
+        LinearLayout.LayoutParams textParam = new LinearLayout.LayoutParams
+                (tabMinWidth, LinearLayout.LayoutParams.WRAP_CONTENT);
         // loop through all navigation tabs
         for (int i = 0; i < tabLayout.getTabCount(); i++) {
             // inflate the Parent LinearLayout Container for the tab
@@ -77,10 +85,13 @@ public class SearchResultTabviewActivity extends CustomStuAppCompatActivity impl
             String navLabels[] = getResources().getStringArray(R.array.SearchResultTabViewTabtext);
 
             // get child TextView and ImageView from this layout for the icon and label
+            LinearLayout horizontalContainer = tab.findViewById(R.id.horizontal_container);
             TextView tab_label = (TextView) tab.findViewById(R.id.nav_label);
             ImageView tab_icon = (ImageView) tab.findViewById(R.id.nav_icon);
+            tab_label.setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/Cairo-Light.ttf"));
             tab_label.setText(navLabels[i]);
             tab_icon.setImageResource(navIcons[i]);
+            horizontalContainer.setLayoutParams(textParam);
 
             // finally publish this custom view to navigation tab
             Objects.requireNonNull(tabLayout.getTabAt(i)).setCustomView(tab);
@@ -94,6 +105,8 @@ public class SearchResultTabviewActivity extends CustomStuAppCompatActivity impl
 
     @Override
     public void findView() {
+        tabLayout = (TabLayout) findViewById(R.id.tabs);
+        mViewPager = (ViewPager) findViewById(R.id.container);
 
     }
 
@@ -104,6 +117,71 @@ public class SearchResultTabviewActivity extends CustomStuAppCompatActivity impl
 
     @Override
     public void configSearchResultTabview() {
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                View tabView = tab.getCustomView();
+                // get inflated children Views the icon and the label by their id
+                if (tabView != null) {
+                    TextView tab_label = (TextView) tabView.findViewById(R.id.nav_label);
+                    ImageView tab_icon = (ImageView) tabView.findViewById(R.id.nav_icon);
+                    Drawable drawableIcon = tab_icon.getDrawable();
+
+                    if (drawableIcon instanceof Animatable) {
+                        ((Animatable) drawableIcon).start();
+                    }
+                }
+                int tabPosition = tab.getPosition();
+                switch (tabPosition) {
+                    case 0:
+                        break;
+                    case 1:
+                    case 2:
+                    case 3:
+                    case 4:
+                        break;
+                    default:
+                        break;
+                }
+
+
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+                View tabView = tab.getCustomView();
+                // get inflated children Views the icon and the label by their id
+                if (tabView != null) {
+                    TextView tab_label = (TextView) tabView.findViewById(R.id.nav_label);
+                }
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+                View tabView = tab.getCustomView();
+                // get inflated children Views the icon and the label by their id
+                if (tabView != null) {
+                    ImageView tab_icon = (ImageView) tabView.findViewById(R.id.nav_icon);
+                    Drawable drawableIcon = tab_icon.getDrawable();
+
+                    if (drawableIcon instanceof Animatable) {
+                        ((Animatable) drawableIcon).start();
+                    }
+                }
+                int tabPosition = tab.getPosition();
+                switch (tabPosition) {
+                    case 0:
+                        break;
+                    case 1:
+                    case 2:
+                    case 3:
+                    case 4:
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
 
     }
 

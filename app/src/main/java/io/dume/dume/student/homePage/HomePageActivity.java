@@ -5,11 +5,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
@@ -17,21 +19,32 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.NestedScrollView;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewTreeObserver;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.Animation;
+import android.view.animation.DecelerateInterpolator;
+import android.view.animation.ScaleAnimation;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
@@ -41,19 +54,31 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.jaeger.library.StatusBarUtil;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import io.dume.dume.R;
 import io.dume.dume.auth.auth.AppbarStateChangeListener;
+import io.dume.dume.common.aboutUs.AboutUsActivity;
+import io.dume.dume.common.inboxActivity.InboxActivity;
+import io.dume.dume.common.privacyPolicy.PrivacyPolicyActivity;
 import io.dume.dume.service.LocationServiceHandler;
 import io.dume.dume.service.MyLocationService;
+import io.dume.dume.student.freeCashBack.FreeCashBackActivity;
 import io.dume.dume.student.grabingLocation.GrabingLocationActivity;
 import io.dume.dume.student.grabingInfo.GrabingInfoActivity;
 import io.dume.dume.student.heatMap.HeatMapActivity;
+import io.dume.dume.student.homePage.adapter.HomePageRecyclerAdapter;
+import io.dume.dume.student.homePage.adapter.HomePageRecyclerData;
+import io.dume.dume.student.mentorAddvertise.MentorAddvertiseActivity;
 import io.dume.dume.student.pojo.CusStuAppComMapActivity;
 import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
 import io.dume.dume.student.profilePage.ProfilePageActivity;
 import io.dume.dume.student.recordsPage.RecordsPageActivity;
+import io.dume.dume.student.studentHelp.StudentHelpActivity;
+import io.dume.dume.student.studentPayment.StudentPaymentActivity;
+import io.dume.dume.student.studentSettings.StudentSettingsActivity;
 import io.dume.dume.util.DumeUtils;
 
 public class HomePageActivity extends CusStuAppComMapActivity implements HomePageContract.View,
@@ -71,7 +96,6 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
     private Drawable more;
     private NestedScrollView nestedScrollViewContent;
     private FloatingActionButton fab;
-    private FloatingActionButton bottomSheetFab;
     private Toolbar toolbar;
     private DrawerLayout drawer;
     private int mNotificationsCount = 0;
@@ -85,7 +109,6 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
     private carbon.widget.RelativeLayout searchMentorBtn;
     private AppBarLayout defaultAppBerLayout;
     private AppBarLayout secondaryAppBarLayout;
-    private RelativeLayout relativeLayoutHack;
     private LinearLayout profileDataLayout;
     private GoogleMap mMap;
     private View map;
@@ -102,6 +125,11 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
     boolean mLocationServiceIsBound;
     MyServiceConnection mConn;
     private LocationServiceHandler locationServiceHandler;
+    private CoordinatorLayout coordinatorLayout;
+    private ImageView startMentoringImageView;
+    private ImageView freeCashbackImageView;
+    private ImageView referMentorImageView;
+    private RecyclerView hPageBSRecycler;
 
 
     @Override
@@ -188,7 +216,6 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
         switchAcountBtn = findViewById(R.id.switch_account_btn);
         nestedScrollViewContent = findViewById(R.id.s_R_Layout);
         fab = findViewById(R.id.fab);
-        bottomSheetFab = findViewById(R.id.bottom_sheet_fab);
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         menu = navigationView.getMenu();
         drawer = findViewById(R.id.drawer_layout);
@@ -210,18 +237,22 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
         studentProfile = menu.findItem(R.id.student);
         mentorProfile = menu.findItem(R.id.mentor);
         bootCampProfile = menu.findItem(R.id.boot_camp);
-        llBottomSheet = findViewById(R.id.bottom_sheet);
+        llBottomSheet = findViewById(R.id.homeBottomSheet);
         viewMusk = findViewById(R.id.view_musk);
         searchMentorBtn = findViewById(R.id.search_mentor_btn);
         defaultAppBerLayout = findViewById(R.id.my_appbarLayout);
         secondaryToolbar = findViewById(R.id.Secondary_toolbar);
         secondaryAppBarLayout = findViewById(R.id.secondary_Appbar);
         secondaryCollapsableToolbar = findViewById(R.id.secondary_collapsing_toolbar);
-        relativeLayoutHack = findViewById(R.id.relativeLayout_hack);
         profileDataLayout = findViewById(R.id.profile_data);
         map = findViewById(R.id.map);
         primaryNavContainer = findViewById(R.id.primary_navigation_container);
         secondaryNavContainer = findViewById(R.id.secondary_noGps_navigation_container);
+        coordinatorLayout = findViewById(R.id.parent_coor_layout);
+        startMentoringImageView = findViewById(R.id.start_mentoring_imageView);
+        referMentorImageView = findViewById(R.id.refer_mentor_imageView);
+        freeCashbackImageView = findViewById(R.id.free_cashback_imageView);
+        hPageBSRecycler = findViewById(R.id.homePage_bottomSheet_recycler);
     }
 
     @Override
@@ -233,7 +264,29 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
         setSupportActionBar(toolbar);
         // init the bottom sheet behavior
         bottomSheetBehavior = BottomSheetBehavior.from(llBottomSheet);
-        secondaryAppbarChangerListener();
+        ViewTreeObserver vto = llBottomSheet.getViewTreeObserver();
+        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+
+                llBottomSheet.getLayoutParams().height = (llBottomSheet.getHeight() - secondaryAppBarLayout.getHeight() - (int) (2 * (getResources().getDisplayMetrics().density)));
+                llBottomSheet.requestLayout();
+                bottomSheetBehavior.onLayoutChild(coordinatorLayout, llBottomSheet, ViewCompat.LAYOUT_DIRECTION_LTR);
+                ViewTreeObserver obs = llBottomSheet.getViewTreeObserver();
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    obs.removeOnGlobalLayoutListener(this);
+                } else {
+                    obs.removeGlobalOnLayoutListener(this);
+                }
+            }
+
+        });
+
+        //secondary appbar font fix
+        secondaryCollapsableToolbar.setCollapsedTitleTypeface(Typeface.createFromAsset(activity.getAssets(), "fonts/Cairo-Light.ttf"));
+        secondaryCollapsableToolbar.setExpandedTitleTypeface(Typeface.createFromAsset(activity.getAssets(), "fonts/Cairo-Light.ttf"));
+        secondaryCollapsableToolbar.setTitle("Messages");
     }
 
 
@@ -288,13 +341,9 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
     @Override
     public void configHomePage() {
         fab.setAlpha(0.90f);
-        bottomSheetFab.setAlpha(0.90f);
         drawer.setScrimColor(getResources().getColor(R.color.black_overlay));
 
         // Toolbar :: Transparent
-        /*toolbar.bringToFront();
-        toolbar.setBackgroundColor(getResources().getColor(android.R.color.transparent));
-        toolbar.getBackground().setAlpha(0);*/
         defaultAppBerLayout.bringToFront();
         defaultAppBerLayout.setBackgroundColor(getResources().getColor(android.R.color.transparent));
         //getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(android.R.color.transparent)));
@@ -318,7 +367,42 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
             secondaryNavContainer.setVisibility(View.VISIBLE);
         }
 
+        //initializing the recycler
+        List<HomePageRecyclerData> promoData = new ArrayList<>();
+        HomePageRecyclerAdapter hPageBSRcyclerAdapter = new HomePageRecyclerAdapter(this, promoData);
+        hPageBSRecycler.setAdapter(hPageBSRcyclerAdapter);
+        hPageBSRecycler.setLayoutManager(new LinearLayoutManager(this));
 
+
+    }
+
+
+    protected void animateImage(ImageView imageView) {
+        imageView.clearAnimation();
+        // Scale down animation
+        ScaleAnimation shrink = new ScaleAnimation(1f, 0.2f, 1f, 0.2f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        shrink.setDuration(150);     // animation duration in milliseconds
+        shrink.setInterpolator(new DecelerateInterpolator());
+        shrink.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                // Scale up animation
+                ScaleAnimation expand = new ScaleAnimation(0.2f, 1f, 0.2f, 1f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+                expand.setDuration(100);     // animation duration in milliseconds
+                expand.setInterpolator(new AccelerateInterpolator());
+                imageView.startAnimation(expand);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        imageView.startAnimation(shrink);
     }
 
 
@@ -428,52 +512,6 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onBottomSheetClicked() {
-        if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED) {
-            if (firstTime) {
-                fab.animate().translationYBy((float) (-60.0f * (getResources().getDisplayMetrics().density))).setDuration(100).start();
-                COMPASSBTN.animate().translationYBy((float) (-54.0f * (getResources().getDisplayMetrics().density))).setDuration(100).start();
-                firstTime = false;
-            }
-            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-            setLightStatusBarIcon();
-            viewMusk.setVisibility(View.VISIBLE);
-            secondaryAppBarLayout.setVisibility(View.VISIBLE);
-            defaultAppBerLayout.setVisibility(View.GONE);
-
-        }
-    }
-
-    @Override
-    public void onShowBottomSheet() {
-        if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_HIDDEN) {
-            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-            fab.animate().translationYBy((float) (-60.0f * (getResources().getDisplayMetrics().density))).setDuration(100).start();
-            COMPASSBTN.animate().translationYBy((float) (-54.0f * (getResources().getDisplayMetrics().density))).setDuration(100).start();
-
-            if (bottomSheetFab.getVisibility() == View.VISIBLE) {
-                bottomSheetFab.setVisibility(View.GONE);
-            }
-        } else if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED) {
-            if (firstTime) {
-                fab.animate().translationYBy((float) (-60.0f * (getResources().getDisplayMetrics().density))).setDuration(100).start();
-                COMPASSBTN.animate().translationYBy((float) (-54.0f * (getResources().getDisplayMetrics().density))).setDuration(100).start();
-                firstTime = false;
-            }
-            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-            setLightStatusBarIcon();
-            viewMusk.setVisibility(View.VISIBLE);
-            secondaryAppBarLayout.setVisibility(View.VISIBLE);
-            defaultAppBerLayout.setVisibility(View.GONE);
-
-            if (bottomSheetFab.getVisibility() == View.VISIBLE) {
-                bottomSheetFab.setVisibility(View.GONE);
-            }
-
-        }
-    }
-
     public void bottomSheetCallbackConfig() {
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
         firstTime = true;
@@ -486,7 +524,6 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
                 if (BottomSheetBehavior.STATE_HIDDEN == newState) {
                     fab.animate().translationYBy((float) (60.0f * (getResources().getDisplayMetrics().density))).setDuration(60).start();
                     COMPASSBTN.animate().translationYBy((float) (54.0f * (getResources().getDisplayMetrics().density))).setDuration(60).start();
-                    bottomSheetFab.setVisibility(View.VISIBLE);
                 } else if (BottomSheetBehavior.STATE_COLLAPSED == newState) {
                     if (ISNIGHT) setLightStatusBarIcon();
                     else setDarkStatusBarIcon();
@@ -494,29 +531,21 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
                     viewMusk.setVisibility(View.GONE);
                     secondaryAppBarLayout.setVisibility(View.GONE);
                     defaultAppBerLayout.setVisibility(View.VISIBLE);
-                    relativeLayoutHack.setVisibility(View.GONE);
                     llBottomSheet.animate().scaleY(1).setDuration(0).start();
-                    relativeLayoutHack.animate().alpha(0).setDuration(0).start();
-                    secondaryAppBarLayout.setExpanded(true);
 
                 } else if (BottomSheetBehavior.STATE_EXPANDED == newState) {
                     setLightStatusBarIcon();
                     nestedScrollViewContent.setVisibility(View.GONE);
                     viewMusk.setVisibility(View.VISIBLE);
                     secondaryAppBarLayout.setVisibility(View.VISIBLE);
-                    relativeLayoutHack.setVisibility(View.VISIBLE);
                     defaultAppBerLayout.setVisibility(View.GONE);
-                    secondaryAppBarLayout.setExpanded(false);
-                    relativeLayoutHack.animate().alpha(1).setDuration(0).start();
 
 
                 } else if (BottomSheetBehavior.STATE_DRAGGING == newState) {
                     viewMusk.setVisibility(View.VISIBLE);
                     secondaryAppBarLayout.setVisibility(View.VISIBLE);
-                    relativeLayoutHack.setVisibility(View.VISIBLE);
                     defaultAppBerLayout.setVisibility(View.GONE);
 //                    secondaryAppBarLayout.setExpanded(false);
-//                    relativeLayoutHack.animate().alpha(1).setDuration(0).start();
 
                 } else if (BottomSheetBehavior.STATE_SETTLING == newState) {
                     defaultAppBerLayout.setVisibility(View.VISIBLE);
@@ -526,20 +555,19 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
 
             @Override
             public void onSlide(@NonNull View bottomSheet, float slideOffset) {
-
                 if (slideOffset > 0.0f && slideOffset < 1.0f) {
                     fab.animate().scaleX(1 - slideOffset).scaleY(1 - slideOffset).setDuration(0).start();
-                    COMPASSBTN.animate().scaleX(1 - slideOffset).scaleY(1 - slideOffset).setDuration(0).start();
+                    if (COMPASSBTN != null) {
+                        COMPASSBTN.animate().scaleX(1 - slideOffset).scaleY(1 - slideOffset).setDuration(0).start();
+                    }
                     llBottomSheet.animate().scaleX(1 + (slideOffset * 0.058f)).setDuration(0).start();
                     viewMusk.animate().alpha(2 * slideOffset).setDuration(0).start();
 
-                    relativeLayoutHack.animate().scaleX(slideOffset).scaleY(slideOffset).setDuration(0).start();
 
                     if (primaryNavContainer.getVisibility() == View.VISIBLE) {
                         primaryNavContainer.animate().scaleX(1 - slideOffset).scaleY(1 - slideOffset).setDuration(0).start();
                     } else if (secondaryNavContainer.getVisibility() == View.VISIBLE) {
                         secondaryNavContainer.animate().scaleX(1 - slideOffset).scaleY(1 - slideOffset).setDuration(0).start();
-
                     }
                     defaultAppBerLayout.animate().scaleX(1 - slideOffset).scaleY(1 - slideOffset).setDuration(0).start();
                     secondaryAppBarLayout.animate().alpha(slideOffset).scaleX(slideOffset).scaleY(slideOffset).setDuration(0).start();
@@ -561,7 +589,6 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
     @Override
     public void gotoGrabingLocationPage() {
         startActivity(new Intent(this, GrabingLocationActivity.class));
-
     }
 
     @Override
@@ -574,24 +601,88 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
         startActivity(new Intent(this, RecordsPageActivity.class));
     }
 
+    @Override
+    public void gotoSettingActivity() {
+        startActivity(new Intent(this, StudentSettingsActivity.class));
+    }
+
+    @Override
+    public void gotoHelpActivity() {
+        startActivity(new Intent(this, StudentHelpActivity.class));
+    }
+
+    @Override
+    public void gotoPaymentActivity() {
+        startActivity(new Intent(this, StudentPaymentActivity.class));
+    }
+
+    @Override
+    public void gotoInboxActivity() {
+        startActivity(new Intent(this, InboxActivity.class));
+    }
+
+    @Override
+    public void gotoFreeCashBackActivity() {
+        startActivity(new Intent(this, FreeCashBackActivity.class));
+    }
+
+    @Override
+    public void gotoAboutUsActivity() {
+        startActivity(new Intent(this, AboutUsActivity.class));
+    }
+
+    @Override
+    public void gotoPrivacyPolicyActivity() {
+        startActivity(new Intent(this, PrivacyPolicyActivity.class));
+    }
+
+    @Override
+    public void gotoMentorAddvertise() {
+        startActivity(new Intent(this, MentorAddvertiseActivity.class));
+    }
+
+    @Override
+    public void gotoNotificationTab() {
+        Intent notificationTabIntent = new Intent(this, InboxActivity.class);
+        notificationTabIntent.putExtra("notiTab", 1);
+        startActivity(notificationTabIntent);
+    }
+
+    @Override
+    public void referMentorImageViewClicked() {
+        animateImage(referMentorImageView);
+    }
+
+    @Override
+    public void freeCashBackImageViewClicked() {
+        animateImage(freeCashbackImageView);
+    }
+
+    @Override
+    public void startMentoringImageViewClicked() {
+        animateImage(startMentoringImageView);
+    }
+
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         Log.d(TAG, "onMapReady: map is ready");
-        if (ISNIGHT) {
+        /*if (ISNIGHT) {
             setLightStatusBarIcon();
             MapStyleOptions style = MapStyleOptions.loadRawResourceStyle(
                     this, R.raw.map_style_night_no_landmarks);
             googleMap.setMapStyle(style);
-        } else {
-            setDarkStatusBarIcon();
-            MapStyleOptions style = MapStyleOptions.loadRawResourceStyle(
-                    this, R.raw.map_style_default_no_landmarks);
-            googleMap.setMapStyle(style);
-        }
+        } else {}*/
+        setDarkStatusBarIcon();
+        MapStyleOptions style = MapStyleOptions.loadRawResourceStyle(
+                this, R.raw.map_style_default_no_landmarks);
+        googleMap.setMapStyle(style);
+
         mMap = googleMap;
         onMapReadyListener(mMap);
         onMapReadyGeneralConfig();
+        mMap.setPadding((int) (10 * (getResources().getDisplayMetrics().density)), 0, 0, (int) (72 * (getResources().getDisplayMetrics().density)));
+
     }
 
     public void navigationTogglerConfig() {
@@ -621,7 +712,7 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
     }
 
     public void isNightConfig() {
-        if (ISNIGHT) {
+        /*if (ISNIGHT) {
             Drawable navDrawable = ResourcesCompat.getDrawable(getResources(), R.drawable.drawer_menu, null);
             navDrawable = DrawableCompat.wrap(Objects.requireNonNull(navDrawable));
             DrawableCompat.setTint(navDrawable, Color.WHITE);
@@ -630,26 +721,23 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
 
         } else {
             Objects.requireNonNull(getSupportActionBar()).setHomeAsUpIndicator(R.drawable.drawer_menu);
-        }
+        }*/
+        Objects.requireNonNull(getSupportActionBar()).setHomeAsUpIndicator(R.drawable.drawer_menu);
     }
 
-    public void secondaryAppbarChangerListener() {
+    /*public void secondaryAppbarChangerListener() {
         secondaryAppBarLayout.addOnOffsetChangedListener(new AppbarStateChangeListener() {
             @Override
             public void onStateChanged(AppBarLayout appBarLayout, State state) {
                 if (state.toString().equals("EXPANDED") &&
                         bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
-//                    llBottomSheet.animate().scaleY(1).setDuration(80).start();
-                    relativeLayoutHack.animate().alpha(0).setDuration(0).start();
 
                 } else if (state.toString().equals("COLLAPSED") &&
                         bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
-//                    llBottomSheet.animate().scaleY(1 + (1 * 0.05f)).setDuration(80).start();
-                    relativeLayoutHack.animate().alpha(1).setDuration(0).start();
                 }
             }
         });
-    }
+    }*/
 
     public void subMenu() {
         home.setVisible(false);
@@ -695,7 +783,6 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
 
     @Override
     public void onNetworkPause() {
-        bottomSheetFab.setVisibility(View.INVISIBLE);
         if (bottomSheetBehavior.getState() != BottomSheetBehavior.STATE_HIDDEN && !firstTime) {
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
         }
@@ -703,7 +790,6 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
 
     @Override
     public void onNetworkResume() {
-        bottomSheetFab.setVisibility(View.VISIBLE);
     }
 
     @Override

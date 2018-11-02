@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.view.View;
 
+import io.dume.dume.R;
+
 public class HeatMapPresenter implements HeatMapContract.Presenter {
 
     private HeatMapContract.View mView;
@@ -20,11 +22,23 @@ public class HeatMapPresenter implements HeatMapContract.Presenter {
 
     @Override
     public void heatMapEnqueue() {
+        mView.findView();
+        mView.initHeatMap();
+        mView.configHeatMap();
 
     }
 
     @Override
     public void onHeatMapViewIntracted(View view) {
+        switch (view.getId()) {
+            case R.id.view_musk:
+                mView.viewMuskClicked();
+                break;
+            case R.id.fab:
+                mView.onCenterCurrentLocation();
+                break;
 
+
+        }
     }
 }

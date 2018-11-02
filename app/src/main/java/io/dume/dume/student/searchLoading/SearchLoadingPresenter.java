@@ -31,6 +31,9 @@ public class SearchLoadingPresenter implements SearchLoadingContract.Presenter {
     public void onSearchLoadingIntracted(View view) {
         switch (view.getId()) {
             case R.id.loading_cancel_btn:
+                mView.cancelBtnClicked();
+                break;
+            case R.id.searching_imageView:
                 mView.gotoSearchResult();
                 break;
             /*case R.id.package_search_btn:

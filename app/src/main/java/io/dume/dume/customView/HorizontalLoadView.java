@@ -1,4 +1,4 @@
-package io.dume.dume.custom_view;
+package io.dume.dume.customView;
 
 import android.animation.ValueAnimator;
 import android.app.Activity;

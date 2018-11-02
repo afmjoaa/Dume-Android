@@ -9,6 +9,9 @@ public interface HeatMapContract {
 
         void findView();
 
+        void viewMuskClicked();
+
+        void onCenterCurrentLocation();
     }
 
     interface Presenter {

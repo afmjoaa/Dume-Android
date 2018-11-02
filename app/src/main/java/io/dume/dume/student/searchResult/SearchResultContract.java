@@ -9,6 +9,7 @@ public interface SearchResultContract {
 
         void findView();
 
+        void centerTheMapCamera();
     }
 
     interface Presenter {

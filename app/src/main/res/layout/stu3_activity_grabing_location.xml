@@ -27,38 +27,21 @@
             android:background="@drawable/background_vector"
             android:fitsSystemWindows="true" />
 
-        <LinearLayout
-            android:id="@+id/locationMarker"
+        <ImageView
+            android:id="@+id/imageMarker"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginBottom="30dp"
+            android:translationX="5dp"
+            android:translationY="-12dp"
+            android:contentDescription="@string/marker_icon"
             android:gravity="center"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/locationMarkertext"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_round_corner_rela_layout"
-                android:gravity="center"
-                android:minWidth="250dp"
-                android:paddingLeft="2dp"
-                android:paddingRight="2dp"
-                android:text=" Set your Location "
-                android:textColor="@android:color/black" />
-
-            <ImageView
-                android:id="@+id/imageMarker"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:contentDescription="@string/marker_icon"
-                app:srcCompat="@drawable/ic_current_location_marker_start" />
-        </LinearLayout>
+            app:srcCompat="@drawable/ic_current_location_marker_start" />
 
     </io.dume.dume.customView.WindowInsetsFrameLayout>
 
-    <io.dume.dume.custom_view.HorizontalLoadView
+    <io.dume.dume.customView.HorizontalLoadView
         android:id="@+id/loadView"
         android:layout_width="20dp"
         android:layout_height="10dp"
@@ -75,9 +58,10 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:background="@drawable/bottom_sheet_bg"
-        app:behavior_peekHeight="75dp"
+        app:behavior_peekHeight="70dp"
         app:elevation="8dp"
-        app:layout_behavior="@string/bottom_sheet_behavior">
+        app:layout_behavior="@string/bottom_sheet_behavior"
+        tools:ignore="MissingPrefix">
 
         <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
@@ -86,8 +70,6 @@
             <carbon.widget.LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
                 android:orientation="vertical">
 
                 <android.support.v7.widget.RecyclerView
@@ -110,9 +92,6 @@
 
 
     </LinearLayout>
-
-    <!-- android:onClick="onGrabingLocationViewClicked"-->
-
 
     <include
         layout="@layout/stu3_grabing_location_app_bar"

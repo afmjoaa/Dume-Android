@@ -40,9 +40,10 @@ public class SearchResultTabRecyAda extends RecyclerView.Adapter<SearchResultTab
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         if(position % 2 == 0){
             holder.hostRelativeLayout.setBackgroundColor(context.getResources().getColor(R.color.tabFirstItem));
+            //holder.hostRelativeLayout.setBackgroundResource(R.drawable.bg_tab_first_color);
         }else {
             holder.hostRelativeLayout.setBackgroundColor(context.getResources().getColor(R.color.tabSecondItem));
-
+            //holder.hostRelativeLayout.setBackgroundResource(R.drawable.bg_tab_second_color);
         }
     }
 

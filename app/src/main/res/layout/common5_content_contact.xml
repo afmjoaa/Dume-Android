@@ -5,8 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".student.studentHelp.StudentHelpActivity"
-    tools:showIn="@layout/stunav_activity3_student_help">
+    tools:context=".common.contactActivity.ContactActivity"
+    tools:showIn="@layout/common5_activity_contact">
 
     <TextView
         android:layout_width="wrap_content"

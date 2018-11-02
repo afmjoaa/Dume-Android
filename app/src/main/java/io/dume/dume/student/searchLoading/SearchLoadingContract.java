@@ -10,6 +10,8 @@ public interface SearchLoadingContract {
         void findView();
 
         void gotoSearchResult();
+
+        void cancelBtnClicked();
     }
 
     interface Presenter {

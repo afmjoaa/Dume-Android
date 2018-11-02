@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".student.studentSettings.StudentSettingsActivity"
+    tools:showIn="@layout/stunav_activity4_settings">
+
+    <LinearLayout
+        android:id="@+id/vertical_host_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/basic_info_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onStuSettingViewClicked"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="10dp">
+
+            <carbon.widget.ImageView
+                android:id="@+id/user_display_pic"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:src="@drawable/dume_gang_image"
+                app:carbon_elevation="4dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"
+                app:carbon_cornerRadius="35dp" />
+
+            <TextView
+                android:id="@+id/user_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="12dp"
+                android:layout_toEndOf="@+id/user_display_pic"
+                android:layout_toRightOf="@+id/user_display_pic"
+                android:text="A.F.M. Mohimenul Joaa"
+                android:textAllCaps="false"
+                android:textColor="@color/textColorPrimary"
+                android:textSize="14sp"
+                app:fontFamily="@font/cairo_regular" />
+
+            <TextView
+                android:id="@+id/user_phone_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/user_name"
+                android:layout_marginLeft="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_toEndOf="@+id/user_display_pic"
+                android:layout_toRightOf="@+id/user_display_pic"
+                android:text="+880 1536-100076"
+                android:textAllCaps="false"
+                android:textColor="@color/textColorPrimary"
+                android:textSize="14sp"
+                android:translationY="-1dp"
+                app:fontFamily="@font/cairo_regular" />
+
+            <TextView
+                android:id="@+id/user_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/user_phone_num"
+                android:layout_marginLeft="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_toEndOf="@+id/user_display_pic"
+                android:layout_toRightOf="@+id/user_display_pic"
+                android:text="afmjoaa@gmail.com"
+                android:textAllCaps="false"
+                android:textColor="@color/textColorPrimary"
+                android:textSize="14sp"
+                android:translationY="-3dp"
+                app:fontFamily="@font/cairo_regular" />
+            <View
+                android:id="@+id/divider2"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:layout_below="@+id/user_display_pic"
+                android:background="#41a7a7a7" />
+
+        </RelativeLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/Testing_fuck_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+</android.support.v4.widget.NestedScrollView>

@@ -3,7 +3,6 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="coordinatorLayoutStyle">@style/Widget.Design.CoordinatorLayout</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
@@ -63,6 +62,13 @@
         <item name="android:fontFamily" tools:targetApi="jelly_bean">@font/cairo_regular</item>
     </style>
 
+    <style name="MyCustomInfoWindowTextApp" parent="Base.TextAppearance.AppCompat.Small">
+        <item name="android:textColor">#000000</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:fontFamily" tools:targetApi="jelly_bean">@font/roboto_light</item>
+    </style>
+
 
     <style name="CollapsingToolbarExpanded" parent="Base.TextAppearance.AppCompat.Large">
         <item name="android:textColor">@color/colorWhite</item>
@@ -91,6 +97,14 @@
         <item name="android:fontFamily" tools:targetApi="jelly_bean">@font/cairo_regular</item>
     </style>
 
+    <style name="MyTextApprncColOne" parent="MyTextApprncCol">
+        <item name="android:textColor">@color/textColorPrimary</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:fontFamily">@font/cairo_light</item>
+    </style>
+
+
     <style name="MyTextApprncCol.textGone" parent="MyTextApprncCol">
         <item name="android:textSize">0sp</item>
     </style>
@@ -111,20 +125,14 @@
     <style name="MyTextApprncExp.lightBg" parent="MyTextApprncExp">
         <item name="android:textColor">@color/textColorPrimary</item>
         <item name="android:textSize">25sp</item>
-        <item name="android:fontFamily" tools:targetApi="jelly_bean">@font/cairo_regular</item>
+        <item name="android:fontFamily">@font/cairo_regular</item>
     </style>
 
     <style name="MyTextApprncCol.lightBg" parent="MyTextApprncCol">
         <item name="android:textColor">@color/textColorPrimary</item>
         <item name="android:textStyle">normal</item>
         <item name="android:textSize">20sp</item>
-        <item name="android:fontFamily" tools:targetApi="jelly_bean">@font/cairo_regular</item>
-    </style>
-
-    <style name="MyTextApprncCol.grabLocaiton" parent="MyTextApprncCol">
-        <item name="android:textColor">#575757</item>
-        <item name="android:textStyle">normal</item>
-        <item name="android:textSize">20sp</item>
+        <item name="android:fontFamily">@font/cairo_regular</item>
     </style>
 
 
@@ -135,9 +143,13 @@
         <item name="colorPrimaryDark">#00ffffff</item>
         <item name="android:windowActionBarOverlay">true</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
-        <item name="coordinatorLayoutStyle">@style/Widget.Design.CoordinatorLayout</item>
     </style>
     <!--<item name="android:activatedBackgroundIndicator">@drawable/drawer_item_textcolor</item>-->
+
+    <style name="AppTheme.NoActionBar.default" parent="AppTheme.NoActionBar">
+        <item name="colorPrimary">@color/white</item>
+        <item name="colorPrimaryDark">@color/white</item>
+    </style>
 
 
     <style name="Widget.BottomNavigationView" parent="Widget.Design.BottomNavigationView">
@@ -148,10 +160,6 @@
         <item name="android:fontFamily" tools:targetApi="jelly_bean">@font/cairo_regular</item>
     </style>
 
-    <style name="CustomActionBar" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
-        <item name="android:windowActionBarOverlay">true</item>
-        <item name="windowActionBarOverlay">true</item>
-    </style>
     <!--testing here -->
 
     <style name="profilePageTheme" parent="AppTheme.NoActionBar">
@@ -203,16 +211,33 @@
         <item name="colorPrimaryDark">#cac8c8</item>
         <item name="android:windowActionBarOverlay">true</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
-        <item name="coordinatorLayoutStyle">@style/Widget.Design.CoordinatorLayout</item>
     </style>
 
-   <!-- <style name="OverflowMenuStyle" parent="Widget.AppCompat.PopupMenu.Overflow">
+    <!-- <style name="OverflowMenuStyle" parent="Widget.AppCompat.PopupMenu.Overflow">
         <item name="android:dropDownHorizontalOffset">-16dp</item>
         <item name="android:dropDownVerticalOffset">16dp</item>
     </style>-->
 
+    <style name="AppTheme.NoActionBar.transparent.black" parent="AppTheme.NoActionBar.transparent">
+        <item name="colorPrimary">@color/carbon_black</item>
+        <item name="colorPrimaryDark">@color/carbon_black</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar.transparent.testing" parent="AppTheme.NoActionBar.transparent">
+        <item name="colorPrimary">@color/inbox_active_color</item>
+        <item name="colorPrimaryDark">@color/inbox_active_color_dark</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
+    </style>
+
     <style name="AppTheme.NoActionBar.transparent.default" parent="AppTheme.NoActionBar.transparent">
         <item name="colorPrimary">@color/white</item>
+        <item name="colorPrimaryDark">@color/white</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar.transparent.defaultTwo" parent="AppTheme.NoActionBar.transparent">
+        <item name="colorPrimary">@color/toolbar_defaultTwo</item>
+        <item name="colorPrimaryDark">@color/status_defaultTwo</item>
     </style>
 
     <style name="AppTheme.NoActionBar.transparent.pending" parent="AppTheme.NoActionBar.transparent">
@@ -247,6 +272,7 @@
 
     <style name="AccountToolbarStyle" parent="ThemeOverlay.AppCompat.ActionBar">
         <item name="colorControlNormal">@color/colorWhite</item>
+        <!--<item name="android:textColorSecondary">@color/white</item>-->
     </style>
 
     <style name="mySpinnerItemStyle" parent="@android:style/Widget.Holo.DropDownItem.Spinner">
@@ -260,6 +286,34 @@
 
     <style name="myButtonStyleWhite" parent="Base.Widget.AppCompat.Button">
         <item name="android:background">@drawable/my_btn_background_white</item>
+    </style>
+
+    <style name="myButtonStyleAccent" parent="Base.Widget.AppCompat.Button">
+        <item name="android:background">@drawable/my_btn_background_accent</item>
+    </style>
+
+    <style name="myButtonStyleDisable" parent="Base.Widget.AppCompat.Button">
+        <item name="android:background">@drawable/my_btn_background_disable</item>
+    </style>
+
+    <style name="BrandedSwitch.control" parent="Theme.AppCompat.Light">
+        <!-- active thumb & track color (30% transparency) -->
+        <item name="colorControlActivated">#4db6ac</item>
+        <item name="colorSwitchThumbNormal">#eeeeee</item>
+    </style>
+
+    <!-- In res/values/styles.xml -->
+    <style name="CustomTextAppearanceDate" parent="TextAppearance.MaterialCalendarWidget.Date">
+        <item name="android:textColor">@drawable/my_calender_text_color</item>
+        <item name="android:fontFamily">@font/cairo_regular</item>
+    </style>
+
+    <style name="CustomTextAppearanceWeek" parent="TextAppearance.MaterialCalendarWidget.WeekDay">
+        <item name="android:fontFamily">@font/cairo_regular</item>
+    </style>
+
+    <style name="CustomTextAppearanceHeader" parent="TextAppearance.MaterialCalendarWidget.Header">
+        <item name="android:fontFamily">@font/cairo_regular</item>
     </style>
 
 

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/hostRelativeLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?android:attr/selectableItemBackground">
+
+    <carbon.widget.ImageView
+        android:id="@+id/settings_icon"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="14dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="14dp"
+        android:tint="@color/textColorPrimary"
+        app:carbon_tint="@color/textColorPrimary"
+        app:srcCompat="@drawable/ic_star_border_black_24dp" />
+
+
+    <TextView
+        android:id="@+id/settings_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="26dp"
+        android:layout_marginStart="26dp"
+        android:layout_marginTop="3dp"
+        android:layout_toEndOf="@id/settings_icon"
+        android:layout_toRightOf="@id/settings_icon"
+        android:singleLine="true"
+        android:text="A.F.M. Mohimenul Joaa"
+        android:textAppearance="?android:attr/textAppearanceListItem"
+        android:textColor="@color/textColorPrimary"
+        app:fontFamily="@font/cairo_regular" />
+
+
+    <View
+        android:id="@+id/divider2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:background="#41a7a7a7" />
+
+</RelativeLayout>

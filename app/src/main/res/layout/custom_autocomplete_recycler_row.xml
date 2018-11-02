@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/recycler_container_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="true"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:foreground="?android:attr/selectableItemBackground"
     android:orientation="vertical">
 
     <LinearLayout
@@ -17,10 +23,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
+            android:layout_marginEnd="30dp"
             android:layout_marginRight="30dp"
             android:contentDescription="@string/autocomplete_image"
-            app:srcCompat="@drawable/ic_autocomplete_places"
-            android:layout_marginEnd="30dp" />
+            app:srcCompat="@drawable/ic_autocomplete_places" />
 
         <LinearLayout
             android:id="@+id/vertical_textview_container"
@@ -33,8 +39,8 @@
                 android:id="@+id/text_one"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="3dp"
                 android:layout_gravity="center_vertical"
+                android:layout_marginTop="3dp"
                 android:textAppearance="?android:attr/textAppearanceListItem"
                 app:fontFamily="@font/cairo_regular" />
 
@@ -42,10 +48,10 @@
                 android:id="@+id/text_two"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
                 android:layout_gravity="center_vertical"
+                android:layout_marginTop="2dp"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                app:fontFamily="@font/cairo_regular"/>
+                app:fontFamily="@font/cairo_regular" />
         </LinearLayout>
 
     </LinearLayout>

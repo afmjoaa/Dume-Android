@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/background_vector"
     android:fitsSystemWindows="true"
-    tools:context=".student.searchLoading.SearchLoadingActivity">
+    tools:context=".student.searchResult.SearchResultActivity">
 
     <io.dume.dume.customView.WindowInsetsFrameLayout
         android:id="@+id/map_container"
@@ -1113,6 +1113,21 @@
         </android.support.v4.widget.NestedScrollView>
     </LinearLayout>
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="162dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="16dp"
+        android:onClick="onSearchResultViewClicked"
+        app:backgroundTint="@color/colorWhite"
+        app:fabSize="mini"
+        app:srcCompat="@drawable/geo_icon" />
+
     <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
@@ -1140,7 +1155,7 @@
                 app:theme="@style/ThemeToolbar.default"
                 app:title=""
                 app:titleMargin="0dp"
-                app:titleTextAppearance="@style/MyTextApprncCol.grabLocaiton">
+                app:titleTextAppearance="@style/MyTextApprncCol.lightBg">
 
             </android.support.v7.widget.Toolbar>
 
@@ -1193,7 +1208,19 @@
             </android.support.design.widget.CollapsingToolbarLayout>
         </android.support.design.widget.AppBarLayout>
 
+        <io.dume.dume.customView.HorizontalLoadView
+            android:id="@+id/loadView"
+            android:layout_width="20dp"
+            android:layout_height="10dp"
+            android:elevation="20dp"
+            android:translationY="5dp"
+            app:layout_anchor="@id/secondary_Appbar"
+            app:layout_anchorGravity="bottom"
+            app:rect_color="@color/carbon_black"
+            android:visibility="gone"/>
+
 
     </android.support.design.widget.CoordinatorLayout>
+
 
 </android.support.design.widget.CoordinatorLayout>

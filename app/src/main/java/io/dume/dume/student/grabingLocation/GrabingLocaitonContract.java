@@ -13,8 +13,6 @@ public interface GrabingLocaitonContract {
 
         void onCenterCurrentLocation();
 
-        void onShowBottomSheet();
-
         void onDiscardSearchClicked();
 
         void onLocationDoneBtnClicked();

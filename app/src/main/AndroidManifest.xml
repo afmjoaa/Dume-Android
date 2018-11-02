@@ -109,12 +109,13 @@
         <activity
             android:name=".student.profilePage.ProfilePageActivity"
             android:label="@string/title_activity_profile_page"
-            android:theme="@style/profilePageTheme" />
+            android:theme="@style/profilePageTheme"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity android:name=".student.pojo.CustomStuAppCompatActivity" />
         <activity
             android:name=".student.grabingInfo.GrabingInfoActivity"
             android:label="@string/title_activity_grabing_info"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar.transparent.defaultTwo" />
         <activity
             android:name=".student.grabingLocation.GrabingLocationActivity"
             android:label="@string/title_activity_grabing_location"
@@ -144,19 +145,20 @@
             android:theme="@style/AppTheme.NoActionBar.transparent" />
         <activity
             android:name=".student.studentSettings.StudentSettingsActivity"
-            android:label="@string/title_activity_student_settings" />
+            android:label="@string/title_activity_student_settings"
+            android:theme="@style/AppTheme.NoActionBar.transparent.black" />
         <activity
             android:name=".student.studentPayment.StudentPaymentActivity"
             android:label="@string/title_activity_student_payment"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme.NoActionBar.transparent.black" />
         <activity
             android:name=".student.studentHelp.StudentHelpActivity"
             android:label="@string/title_activity_student_help"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme.NoActionBar.transparent.black" />
         <activity
             android:name=".student.searchResultTabview.SearchResultTabviewActivity"
             android:label="@string/title_activity_search_result_tabview"
-            android:theme="@style/AppTheme.NoActionBar.transparent.default" />
+            android:theme="@style/AppTheme.NoActionBar.transparent.defaultTwo" />
         <activity
             android:name=".student.searchResult.SearchResultActivity"
             android:label=""
@@ -168,7 +170,7 @@
         <activity
             android:name=".student.recordsPage.RecordsPageActivity"
             android:label="@string/title_activity_records_page"
-            android:theme="@style/AppTheme.NoActionBar.transparent.default" />
+            android:theme="@style/AppTheme.NoActionBar.transparent.defaultTwo" />
         <activity
             android:name=".student.recordsPending.RecordsPendingActivity"
             android:label="@string/title_activity_records_pendding"
@@ -189,8 +191,42 @@
             android:name=".student.recordsAccepted.RecordsAcceptedActivity"
             android:label="@string/title_activity_records_accepted"
             android:theme="@style/AppTheme.NoActionBar.transparent.accepted" />
+<<<<<<< HEAD
         <activity android:name=".teacher.skill.SkillActivity" />
         <activity android:name=".teacher.crudskill.CrudSkillActivity"></activity>
+=======
+        <activity
+            android:name=".student.freeCashBack.FreeCashBackActivity"
+            android:label="@string/title_activity_free_cash_back"
+            android:theme="@style/AppTheme.NoActionBar.transparent.black" />
+        <activity
+            android:name=".common.aboutUs.AboutUsActivity"
+            android:label="@string/title_activity_about_us"
+            android:theme="@style/AppTheme.NoActionBar.transparent.black" />
+        <activity
+            android:name=".common.privacyPolicy.PrivacyPolicyActivity"
+            android:label="@string/title_activity_privacy_policy"
+            android:theme="@style/AppTheme.NoActionBar.transparent.black" />
+        <activity
+            android:name=".student.mentorAddvertise.MentorAddvertiseActivity"
+            android:label="@string/title_activity_mentor_addvertise"
+            android:theme="@style/AppTheme.NoActionBar.transparent.black" />
+        <activity
+            android:name=".common.inboxActivity.InboxActivity"
+            android:label="@string/title_activity_inbox"
+            android:theme="@style/AppTheme.NoActionBar.transparent.default" />
+        <activity
+            android:name=".common.chatActivity.ChatActivity"
+            android:theme="@style/AppTheme.NoActionBar.transparent.default" />
+        <activity
+            android:name=".common.contactActivity.ContactActivity"
+            android:label="@string/title_activity_contact"
+            android:theme="@style/AppTheme.NoActionBar.transparent.testing" />
+        <activity
+            android:name=".afterSplashTrp.AfterSplashActivity"
+            android:label="@string/title_activity_after_splash"
+            android:theme="@style/AppTheme" />
+>>>>>>> master
     </application>
 
 </manifest>

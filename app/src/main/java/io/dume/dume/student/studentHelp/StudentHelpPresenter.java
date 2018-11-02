@@ -20,7 +20,9 @@ public class StudentHelpPresenter implements StudentHelpContract.Presenter {
 
     @Override
     public void studentHelpEnqueue() {
-
+        mView.findView();
+        mView.initStudentHelp();
+        mView.configStudentHelp();
     }
 
     @Override

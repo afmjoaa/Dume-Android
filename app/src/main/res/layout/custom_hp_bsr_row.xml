@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/dume_bangladesh_block"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="10dp"
+    android:background="@drawable/bg_round_corner_rela_layout"
+    android:orientation="vertical"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp">
+
+    <TextView
+        android:id="@+id/main_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="18dp"
+        android:text="Dume Promo"
+        android:textAlignment="center"
+        android:textColor="@color/colorBlack"
+        android:textSize="12sp"
+        app:fontFamily="@font/cairo_regular" />
+
+    <TextView
+        android:id="@+id/main_about_intro"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="14dp"
+        android:gravity="start"
+        android:text="Use promo 50DUME and get 50% off on next regular Dume requests!"
+        android:textAlignment="viewStart"
+        android:textColor="@color/colorBlack"
+        android:textSize="18sp"
+        app:fontFamily="@font/cairo_regular" />
+
+    <TextView
+        android:id="@+id/main_about_body"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:gravity="start"
+        android:text="That's right! 50% off on your next regular Dume requests! Enter promo 50DUME. Max discount Tk 500/request. Valid till Oct 21, 2018. "
+        android:textAlignment="viewStart"
+        android:textColor="@color/colorBlack"
+        android:textSize="14sp"
+        app:fontFamily="@font/cairo_regular" />
+
+    <TextView
+        android:id="@+id/main_about_sub_body"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:text="Start improving, Bangladesh! #LearnWithRegularDume"
+        android:textAlignment="viewStart"
+        android:textColor="@color/colorBlack"
+        android:textSize="14sp"
+        app:fontFamily="@font/cairo_regular" />
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp">
+
+        <ImageView
+            android:id="@+id/main_about_image"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_margin="8dp"
+            android:src="@drawable/bs_product_scrolling_image"
+            tools:ignore="ContentDescription" />
+
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/divider2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#3ca7a7a7" />
+
+    <Button
+        android:id="@+id/main_about_btn"
+        style="@style/Base.Widget.AppCompat.Button.Borderless"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableEnd="@drawable/ic_keyboard_arrow_right_black_24dp"
+        android:drawableRight="@drawable/ic_keyboard_arrow_right_black_24dp"
+        android:gravity="start"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:text="Click to apply"
+        android:textAlignment="viewStart"
+        android:textAllCaps="false"
+        android:textColor="@color/colorLink"
+        android:textSize="16sp"
+        app:fontFamily="@font/cairo_regular" />
+
+</LinearLayout>
+

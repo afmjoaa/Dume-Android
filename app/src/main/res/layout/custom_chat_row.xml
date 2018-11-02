@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/hostRelativeLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?android:attr/selectableItemBackground">
+
+
+    <com.jackandphantom.circularprogressbar.CircleProgressbar
+        android:id="@+id/selected_indicator"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="12dp"
+        android:transitionName="tn0ne"
+        app:cpb_backgroundProgressColor="#4b686969"
+        app:cpb_backgroundProgressWidth="4"
+        app:cpb_clockwise="true"
+        app:cpb_foregroundProgressColor="@color/inbox_active_color"
+        app:cpb_foregroundProgressWidth="6"
+        app:cpb_progress="100"
+        app:cpb_roundedCorner="true" />
+
+    <carbon.widget.ImageView
+        android:id="@+id/chat_user_display_pic"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="12dp"
+        android:clickable="false"
+        android:src="@drawable/demo_testing_image"
+        android:transitionName="tnTwo"
+        app:carbon_cornerRadius="25dp" />
+
+    <com.jackandphantom.circularprogressbar.CircleProgressbar
+        android:id="@+id/online_Indicator"
+        android:layout_width="12dp"
+        android:layout_height="12dp"
+        android:layout_marginStart="53dp"
+        android:layout_marginLeft="53dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="12dp"
+        android:background="@drawable/bg_white_round"
+        android:transitionName="tnThree"
+        app:cpb_backgroundProgressColor="@color/white"
+        app:cpb_backgroundProgressWidth="12"
+        app:cpb_clockwise="true"
+        app:cpb_foregroundProgressColor="@color/inbox_active_color"
+        app:cpb_foregroundProgressWidth="8"
+        app:cpb_progress="100"
+        app:cpb_roundedCorner="true" />
+
+    <com.jackandphantom.circularprogressbar.CircleProgressbar
+        android:id="@+id/offline_Indicator"
+        android:layout_width="12dp"
+        android:layout_height="12dp"
+        android:layout_marginStart="53dp"
+        android:layout_marginLeft="53dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="12dp"
+        android:background="@drawable/bg_white_round"
+        android:transitionName="tnFour"
+        android:visibility="gone"
+        app:cpb_backgroundProgressColor="@color/white"
+        app:cpb_backgroundProgressWidth="12"
+        app:cpb_clockwise="true"
+        app:cpb_foregroundProgressColor="@color/inbox_inactive_color"
+        app:cpb_foregroundProgressWidth="8"
+        app:cpb_progress="100"
+        app:cpb_roundedCorner="true" />
+
+    <LinearLayout
+        android:id="@+id/time_and_unread_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/delivery_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|end"
+            android:layout_marginTop="6dp"
+            android:ellipsize="end"
+            android:maxWidth="60dp"
+            android:maxLines="1"
+            android:text="12:00 PM"
+            android:textColor="@color/inbox_active_color"
+            android:textSize="12sp"
+            app:fontFamily="@font/cairo_regular" />
+
+        <TextView
+            android:id="@+id/unread_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|end"
+            android:layout_marginTop="4dp"
+            android:background="@drawable/bg_unread_messages"
+            android:ellipsize="end"
+            android:maxWidth="60dp"
+            android:maxLines="1"
+            android:padding="2dp"
+            android:text="110"
+            android:textColor="@color/white"
+            android:textSize="10sp"
+            app:fontFamily="@font/cairo_regular"
+            tools:ignore="SmallSp" />
+
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/vertical_textview_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="26dp"
+        android:layout_marginLeft="26dp"
+        android:layout_toEndOf="@id/chat_user_display_pic"
+        android:layout_toRightOf="@id/chat_user_display_pic"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/name_and_active_options"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:visibility="visible">
+
+            <TextView
+                android:id="@+id/chat_user_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginTop="3dp"
+                android:layout_marginEnd="6dp"
+                android:layout_marginRight="6dp"
+                android:ellipsize="end"
+                android:maxWidth="160dp"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:text="A.F.M. Mohimenul Joaa"
+                android:textAppearance="?android:attr/textAppearanceListItem"
+                android:transitionName="tnFive"
+                app:fontFamily="@font/cairo_regular" />
+
+            <carbon.widget.ImageView
+                android:id="@+id/active_option_image"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_gravity="center_vertical"
+                app:srcCompat="@drawable/ic_mute_icon" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/msg_delivery_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:visibility="visible">
+
+            <carbon.widget.ImageView
+                android:id="@+id/group_user_dp"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginEnd="6dp"
+                android:layout_marginRight="6dp"
+                app:carbon_cornerRadius="8dp"
+                app:srcCompat="@drawable/demo_testing_image" />
+
+            <TextView
+                android:id="@+id/last_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxWidth="160dp"
+                android:maxLines="1"
+                android:text="Happiness is not something readymadeeerwfedsfsdf."
+                android:textAllCaps="false"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/textColorSecondary"
+                android:textSize="12sp"
+                app:fontFamily="@font/cairo_regular" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/divider2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="88dp"
+        android:layout_marginLeft="88dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:background="#41a7a7a7" />
+
+</RelativeLayout>
