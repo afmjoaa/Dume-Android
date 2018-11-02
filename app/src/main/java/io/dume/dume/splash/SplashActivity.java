@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
+import io.dume.dume.afterSplashTrp.AfterSplashActivity;
 import io.dume.dume.auth.AuthModel;
 import io.dume.dume.auth.auth.AuthActivity;
 import io.dume.dume.student.homePage.StudentActivity;
@@ -25,7 +26,7 @@ public class SplashActivity extends AppCompatActivity implements SplashContract.
 
     @Override
     public void gotoLoginActivity() {
-        startActivity(new Intent(this, AuthActivity.class));
+        startActivity(new Intent(this, AfterSplashActivity.class));
         finish();
     }
 

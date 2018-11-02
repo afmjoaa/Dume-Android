@@ -404,7 +404,7 @@
         <item>CGPA - 4.00</item>
     </string-array>
 
-<<<<<<< HEAD
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string-array name="Education">
@@ -444,7 +444,7 @@
         <item>A-Level</item>
         <item>O-Level</item>
     </string-array>
-=======
+
     <string name="mapTag">mapTag</string>
     <string name="arrow">arrow</string>
     <string name="current_date">current_date</string>
@@ -569,6 +569,6 @@ provided.Tap salary for details.  </string>
         <item>Set location on map</item>
     </string-array>
 
->>>>>>> master
+
 
 </resources>
