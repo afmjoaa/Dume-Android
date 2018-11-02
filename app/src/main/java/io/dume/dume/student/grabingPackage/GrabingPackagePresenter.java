@@ -33,6 +33,15 @@ public class GrabingPackagePresenter implements GrabingPackageContract.Presenter
             case R.id.package_search_btn:
                 mView.executeSearchActivity();
                 break;
+           /* case R.id.dume_gang_container:
+                mView.dumeGangSelected();
+                break;
+            case R.id.regular_dume_container:
+                mView.regularDumeSelected();
+                break;
+            case R.id.instant_dume_container:
+                mView.instantDumeSelected();
+                break;*/
 
         }
     }

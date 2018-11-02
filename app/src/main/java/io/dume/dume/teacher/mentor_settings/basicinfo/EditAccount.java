@@ -25,7 +25,7 @@ import com.transitionseverywhere.TransitionManager;
 import java.util.Arrays;
 
 import io.dume.dume.R;
-import io.dume.dume.custom_view.HorizontalLoadView;
+import io.dume.dume.customView.HorizontalLoadView;
 import io.dume.dume.util.DumeUtils;
 
 public class EditAccount extends AppCompatActivity implements EditContract.View, View.OnClickListener {

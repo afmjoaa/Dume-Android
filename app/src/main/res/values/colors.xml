@@ -65,8 +65,8 @@
     <color name="status_pending">#41F56161</color>
     <color name="toolbar_pending">#ffebee</color>
 
-    <color name="status_rejected">#41607d8b</color>
-    <color name="toolbar_rejected">#eceff1</color>
+    <color name="status_rejected">#b0bec5</color>
+    <color name="toolbar_rejected">#cfd8dc</color>
 
     <color name="status_accepted">#41ffeb3b</color>
     <color name="toolbar_accepted">#fffde7</color>
@@ -76,10 +76,32 @@
 
     <color name="status_completed">#412196f3</color>
     <color name="toolbar_completed">#e3f2fd</color>
+
+    <color name="status_inbox">#b3b4b4</color>
+    <color name="toolbar_inbox">#E5E6E6</color>
+
+    <color name="status_defaultTwo">#E5E6E6</color>
+    <color name="toolbar_defaultTwo">#ffffff</color>
     
-    <color name="tabViewPager">#eceff1</color>
+    <color name="tabViewPager">#ffffff</color>
     <color name="tabFirstItem">#ffffff</color>
-    <color name="tabSecondItem">#edeff1</color>
-    <color name="testing_color">#eceff1</color>
+    <color name="tabSecondItem">#f7f7f7</color>
+    
+    <color name="recordsBgColor">#f2f2f2</color>
+
+    <color name="testing_colors">#9e9e9e</color>
+    <color name="calender_bg">#288DBB8D</color>
+
+    <color name="inbox_active_color_dark">#007f57</color>
+    <color name="inbox_active_color">#04AA77</color>
+    <color name="inbox_inactive_color">#e6858c91</color>
+    <color name="status_viewed">#e0e0e0</color>
+
+    <color name="cornflower_blue">#6274e2</color>
+    <color name="cornflower_blue_dark">#303F9F</color>
+    <color name="cornflower_blue_darkest">#2d3a93</color>
+    <color name="chat_ripple_color">#7800796b</color>
+    <color name="percent_off_active_color">#369c3a</color>
+    <color name="disable_color">#616161</color>
 
 </resources>

@@ -25,10 +25,6 @@ public interface HomePageContract {
 
         void updateRecordsBadge(int penCount, int acptCount, int curCount);
 
-        void onShowBottomSheet();
-
-        void onBottomSheetClicked();
-
         void gotoProfilePage();
 
         void gotoGrabingInfoPage();
@@ -38,6 +34,30 @@ public interface HomePageContract {
         void gotoHeatMapActivity();
 
         void gotoRecordsPage();
+
+        void gotoSettingActivity();
+
+        void gotoHelpActivity();
+
+        void gotoPaymentActivity();
+
+        void gotoInboxActivity();
+
+        void gotoFreeCashBackActivity();
+
+        void gotoAboutUsActivity();
+
+        void gotoPrivacyPolicyActivity();
+
+        void gotoMentorAddvertise();
+
+        void gotoNotificationTab();
+
+        void referMentorImageViewClicked();
+
+        void freeCashBackImageViewClicked();
+
+        void startMentoringImageViewClicked();
     }
 
     interface Presenter {

@@ -29,7 +29,7 @@
     </io.dume.dume.customView.WindowInsetsFrameLayout>
 
 
-    <io.dume.dume.custom_view.HorizontalLoadView
+    <io.dume.dume.customView.HorizontalLoadView
         android:id="@+id/loadView"
         android:layout_width="20dp"
         android:layout_height="10dp"
@@ -49,12 +49,13 @@
         android:layout_height="match_parent"
         tools:context=".student.heatMap.HeatMapActivity">
 
-        <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        <FrameLayout
             android:id="@+id/view_musk"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/black_overlay"
             android:fitsSystemWindows="true"
+            android:onClick="onHeatMapViewClicked"
             android:orientation="vertical"
             android:visibility="gone" />
 
@@ -86,7 +87,7 @@
                         app:theme="@style/ThemeToolbar.default"
                         app:title=""
                         app:titleMargin="0dp"
-                        app:titleTextAppearance="@style/MyTextApprncCol.grabLocaiton">
+                        app:titleTextAppearance="@style/MyTextApprncCol.lightBg">
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -115,7 +116,8 @@
                                 android:textAllCaps="false"
                                 android:textColor="@color/textColorPrimary"
                                 android:textSize="18sp"
-                                android:textStyle="normal" />
+                                android:textStyle="normal"
+                                app:fontFamily="@font/cairo_regular" />
                         </LinearLayout>
 
                     </android.support.v7.widget.Toolbar>
@@ -132,8 +134,6 @@
                     android:layout_marginRight="5dp"
                     android:background="@drawable/bg_white_bottom_round"
                     android:paddingBottom="5dp"
-                    android:paddingLeft="11dp"
-                    android:paddingRight="11dp"
                     android:visibility="gone">
 
                 </android.support.v7.widget.RecyclerView>

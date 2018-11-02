@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/custom_marker_view"
+    android:layout_width="28dp"
+    android:layout_height="40dp"
+    android:background="@drawable/ic_marker_view">
+
+    <carbon.widget.ImageView
+        android:id="@+id/profile_image"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_gravity="center_horizontal"
+        android:contentDescription="@null"
+        app:carbon_cornerRadius="14dp" />
+</FrameLayout>

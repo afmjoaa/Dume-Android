@@ -23,7 +23,7 @@
             android:visibility="visible">
 
 
-            <carbon.widget.LinearLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
@@ -32,10 +32,10 @@
                 android:background="@drawable/bg_green_top_round"
                 android:orientation="horizontal"
                 android:paddingBottom="2dp"
-                android:paddingTop="2dp"
-                app:carbon_elevation="0dp">
+                android:paddingTop="2dp">
 
-                <carbon.widget.TextView
+                <TextView
+                    android:id="@+id/promotion_text"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="15dp"
@@ -44,10 +44,10 @@
                     android:text="45% off Instant Dume"
                     android:textColor="@color/carbon_white"
                     android:textSize="13sp"
-                    app:carbon_elevation="0dp"
-                    app:carbon_fontFamily="@font/cairo_regular" />
+                    app:fontFamily="@font/cairo_regular" />
 
-                <carbon.widget.TextView
+                <TextView
+                    android:id="@+id/promotion_validity_text"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="15dp"
@@ -57,11 +57,10 @@
                     android:textColor="#d8c1ebf0"
                     android:textSize="13sp"
                     android:textStyle="bold"
-                    app:carbon_elevation="0dp"
-                    app:carbon_fontFamily="@font/cairo_regular" />
+                    app:fontFamily="@font/cairo_regular" />
 
 
-            </carbon.widget.LinearLayout>
+            </LinearLayout>
 
             <carbon.widget.RelativeLayout
                 android:id="@+id/search_mentor_btn"
@@ -87,7 +86,7 @@
                     app:carbon_backgroundTint="@color/icon_color"
                     app:srcCompat="@drawable/search_icon" />
 
-                <carbon.widget.TextView
+                <TextView
                     android:id="@+id/input_search"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -103,7 +102,7 @@
                     android:text="Search Mentors"
                     android:textColor="@color/stu_text_color"
                     android:textSize="18sp"
-                    app:carbon_fontFamily="@font/cairo_regular" />
+                    app:fontFamily="@font/cairo_regular"/>
 
             </carbon.widget.RelativeLayout>
 
@@ -115,7 +114,8 @@
                 android:background="@drawable/bg_white_bottom_round"
                 app:carbon_elevation="0dp">
 
-                <ListView
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recent_search_recycler"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
@@ -161,7 +161,7 @@
                     app:carbon_backgroundTint="@color/icon_color"
                     app:srcCompat="@drawable/search_icon" />
 
-                <carbon.widget.TextView
+                <TextView
                     android:id="@+id/input_search_nogps"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -176,11 +176,11 @@
                     android:text="Search Mentors"
                     android:textColor="@color/stu_text_color"
                     android:textSize="18sp"
-                    app:carbon_fontFamily="@font/cairo_regular" />
+                    app:fontFamily="@font/cairo_regular" />
 
             </carbon.widget.RelativeLayout>
 
-            <carbon.widget.TextView
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
@@ -188,8 +188,7 @@
                 android:text="@string/N0_Gps_Text"
                 android:textColor="@color/carbon_white"
                 android:textSize="14sp"
-                android:lineSpacingExtra="6dp"
-                app:carbon_fontFamily="@font/cairo_regular" />
+                android:lineSpacingExtra="6dp" />
 
             <carbon.widget.RelativeLayout
                 android:id="@+id/toggle_gps_dialogue_btn"
@@ -214,7 +213,7 @@
                     app:carbon_backgroundTint="@color/icon_color"
                     app:srcCompat="@drawable/ic_gps" />
 
-                <carbon.widget.TextView
+                <TextView
                     android:id="@+id/toggle_gps_dialogue_text"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -229,7 +228,7 @@
                     android:text="@string/Turn_on_location"
                     android:textColor="@color/stu_text_color"
                     android:textSize="18sp"
-                    app:carbon_fontFamily="@font/cairo_regular" />
+                    app:fontFamily="@font/cairo_regular" />
 
 
             </carbon.widget.RelativeLayout>

@@ -16,9 +16,9 @@ import carbon.widget.RecyclerView;
 import io.dume.dume.R;
 import me.zhanghai.android.materialratingbar.MaterialRatingBar;
 
-public class RecordsRecyAdapter extends RecyclerView.Adapter<RecordsRecyAdapter.MyViewHolder> {
+public abstract class RecordsRecyAdapter extends RecyclerView.Adapter<RecordsRecyAdapter.MyViewHolder> {
 
-    private static final String TAG = "RecordsRecyAdapter";
+    private static final String TAG = "InboxChatAdapter";
     private LayoutInflater inflater;
     private Context context;
     private List<RecordsRecyData> data;
@@ -42,17 +42,37 @@ public class RecordsRecyAdapter extends RecyclerView.Adapter<RecordsRecyAdapter.
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         if(position % 2 == 0){
             holder.relativeHostLayout.setBackgroundColor(context.getResources().getColor(R.color.tabFirstItem));
+            //holder.relativeHostLayout.setBackgroundResource(R.drawable.bg_tab_first_color);
         }else {
             holder.relativeHostLayout.setBackgroundColor(context.getResources().getColor(R.color.tabSecondItem));
+            //holder.relativeHostLayout.setBackgroundResource(R.drawable.bg_tab_first_color);
         }
+
+        holder.relativeHostLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                OnItemClicked(v, holder.getAdapterPosition());
+            }
+        });
+
+        holder.relativeHostLayout.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                OnItemLongClicked(v, holder.getAdapterPosition());
+                return true;
+            }
+        });
 
     }
 
     @Override
     public int getItemCount() {
         //testing purpose
-        return 10;
+        return 2;
     }
+
+    abstract void OnItemClicked(View v, int position);
+    abstract void OnItemLongClicked(View v, int position);
 
     class MyViewHolder extends RecyclerView.ViewHolder {
 

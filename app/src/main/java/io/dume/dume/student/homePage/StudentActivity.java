@@ -4,14 +4,19 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.telecom.GatewayInfo;
 import android.view.View;
 
 import com.google.firebase.auth.FirebaseAuth;
 
 import io.dume.dume.R;
+import io.dume.dume.afterSplashTrp.AfterSplashActivity;
 import io.dume.dume.auth.auth.AuthActivity;
+import io.dume.dume.common.chatActivity.ChatActivity;
+import io.dume.dume.student.grabingInfo.GrabingInfoActivity;
 import io.dume.dume.student.grabingPackage.GrabingPackageActivity;
 import io.dume.dume.student.recordsAccepted.RecordsAcceptedActivity;
+import io.dume.dume.student.recordsCompleted.RecordsCompletedActivity;
 import io.dume.dume.student.recordsCurrent.RecordsCurrentActivity;
 import io.dume.dume.student.recordsPending.RecordsPendingActivity;
 import io.dume.dume.student.recordsRejected.RecordsRejectedActivity;
@@ -55,18 +60,18 @@ public class StudentActivity extends AppCompatActivity implements StudentContrac
 
     @Override
     public void goTORecordsActivity() {
-        startActivity(new Intent(this, RecordsPendingActivity.class));
+        startActivity(new Intent(this, ChatActivity.class));
     }
 
     @Override
     public void goTORecordsActivity2() {
-        startActivity(new Intent(this, RecordsAcceptedActivity.class));
+        startActivity(new Intent(this, GrabingInfoActivity.class));
 
     }
 
     @Override
     public void goTORecordsActivity3() {
-        startActivity(new Intent(this, RecordsRejectedActivity.class));
+        startActivity(new Intent(this, SearchResultActivity.class));
 
     }
 

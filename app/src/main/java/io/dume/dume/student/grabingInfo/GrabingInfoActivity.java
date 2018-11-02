@@ -2,34 +2,55 @@ package io.dume.dume.student.grabingInfo;
 
 import android.content.Intent;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
+import android.location.Location;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
-import android.os.Bundle;
+import android.support.v4.view.animation.FastOutLinearInInterpolator;
+import android.support.v4.view.animation.LinearOutSlowInInterpolator;
+import android.support.v4.widget.NestedScrollView;
+import android.support.v7.app.ActionBar;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.Animation;
+import android.view.animation.DecelerateInterpolator;
+import android.view.animation.ScaleAnimation;
+import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.MapStyleOptions;
+import com.transitionseverywhere.Fade;
+import com.transitionseverywhere.Slide;
+import com.transitionseverywhere.Transition;
+import com.transitionseverywhere.TransitionManager;
+import com.transitionseverywhere.TransitionSet;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,9 +59,13 @@ import java.util.Objects;
 import io.dume.dume.R;
 import io.dume.dume.student.grabingLocation.GrabingLocationActivity;
 import io.dume.dume.student.grabingPackage.GrabingPackageActivity;
-import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
+import io.dume.dume.student.pojo.CusStuAppComMapActivity;
+import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
+import io.dume.dume.util.DumeUtils;
+import io.dume.dume.util.VisibleToggleClickListener;
 
-public class GrabingInfoActivity extends CustomStuAppCompatActivity implements GrabingInfoContract.View {
+public class GrabingInfoActivity extends CusStuAppComMapActivity implements GrabingInfoContract.View,
+        MyGpsLocationChangeListener, OnMapReadyCallback {
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private View decor;
@@ -62,45 +87,63 @@ public class GrabingInfoActivity extends CustomStuAppCompatActivity implements G
             R.string.tab_gender_preference,
             R.string.tab_cross_ckeck
     };
-    private String[] givenInfo = {"Ex.Others", "Ex.O level", "Ex.Physics", "Ex.3k - 6k", "Ex.Both", "Ex.→←"};
+    private String[] givenInfo = {"Ex.Others", "Ex.O level", "Ex.Physics", "Ex.3k - 6k", "Ex.Both", "→←"};
     private TabLayout tabLayout;
     private TextView hintIdOne;
     private TextView hintIdTwo;
     private TextView hintIdThree;
     private static final String TAG = "GrabingInfoActivity";
     private static final int fromFlag = 3;
+    private GrabingInfoContract.Presenter mPresenter;
+    private Toolbar toolbar;
+    private FloatingActionButton fab;
+    private ActionBar supportActionBar;
+    private AppBarLayout mAppBarLayout;
+    private GoogleMap mMap;
+    private SupportMapFragment mapFragment;
+    private Button forMeBtn;
+    private FrameLayout viewMusk;
+    private LinearLayout contractLayout;
+    private AppBarLayout myAppBarLayout;
+    private LinearLayout tabHintLayout;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.stu2_activity_grabing_info);
-        setActivityContext(this, fromFlag);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        hintIdOne = findViewById(R.id.hint_id_1);
-        hintIdTwo = findViewById(R.id.hint_id_2);
-        hintIdThree = findViewById(R.id.hint_id_3);
+        setActivityContextMap(this, fromFlag);
+        mPresenter = new GrabingInfoPresenter(this, new GrabingInfoModel());
+        mPresenter.grabingInfoPageEnqueue();
+        mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        getLocationPermission(mapFragment);
 
-        setSupportActionBar(toolbar);
+
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        tabLayout = (TabLayout) findViewById(R.id.tabs);
-
-        // loop through all navigation tabs
+        //making the custom tab here
+        int[] wh = DumeUtils.getScreenSize(this);
+        int tabMinWidth = ((wh[0] / 3)-(int) (24 * (getResources().getDisplayMetrics().density)));
+        LinearLayout.LayoutParams textParam = new LinearLayout.LayoutParams
+                (tabMinWidth, LinearLayout.LayoutParams.WRAP_CONTENT);
         for (int i = 0; i < tabLayout.getTabCount(); i++) {
             // inflate the Parent LinearLayout Container for the tab
             // from the layout nav_tab.xml file that we created 'R.layout.nav_tab
             LinearLayout tab = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.custom_tablayout_tab, null);
 
+
             // get child TextView and ImageView from this layout for the icon and label
             TextView tab_label = (TextView) tab.findViewById(R.id.nav_label);
             ImageView tab_icon = (ImageView) tab.findViewById(R.id.nav_icon);
+
+            tab_label.setLayoutParams(textParam);
+
+            tab_label.setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/Cairo_Regular.ttf"));
             tab_label.setText(getResources().getString(navLabels[i]));
             tab_icon.setImageResource(navIcons[i]);
 
@@ -112,19 +155,71 @@ public class GrabingInfoActivity extends CustomStuAppCompatActivity implements G
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-                if (tabLayout.getSelectedTabPosition() == 5) {
-                    gotoGrabingPackage();
-                }
+                switch (tabLayout.getSelectedTabPosition()){
+                    case 0:
+                        Objects.requireNonNull(tabLayout.getTabAt(1)).select();
+                        break;
+                    case 1:
+                        Objects.requireNonNull(tabLayout.getTabAt(2)).select();
+                        break;
+                    case 2:
+                        Objects.requireNonNull(tabLayout.getTabAt(3)).select();
+                        break;
+                    case 3:
+                        Objects.requireNonNull(tabLayout.getTabAt(4)).select();
+                        break;
+                    case 4:
+                        Objects.requireNonNull(tabLayout.getTabAt(5)).select();
+                        break;
+                    case 5:
+                        gotoGrabingPackage();
+                        break;
 
+                }
             }
         });
-//        statrting my fucking code
+
+        setDarkStatusBarIcon();
+
+    }
+
+    @Override
+    public void findView() {
+        toolbar = findViewById(R.id.toolbar);
+        hintIdOne = findViewById(R.id.hint_id_1);
+        hintIdTwo = findViewById(R.id.hint_id_2);
+        hintIdThree = findViewById(R.id.hint_id_3);
+        mViewPager = (ViewPager) findViewById(R.id.container);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+        tabLayout = findViewById(R.id.tabs);
+        mAppBarLayout = findViewById(R.id.appbar);
+        forMeBtn = findViewById(R.id.for_me_btn);
+        viewMusk = findViewById(R.id.view_musk);
+        contractLayout = findViewById(R.id.contract_layout);
+        myAppBarLayout = findViewById(R.id.appbar);
+        tabHintLayout = findViewById(R.id.tab_hint_layout);
+
+    }
+
+    @Override
+    public void viewMuskClicked() {
+        forMeBtn.performClick();
+    }
+
+    @Override
+    public void initGrabingInfoPage() {
+        setSupportActionBar(toolbar);
+        supportActionBar = getSupportActionBar();
+        if (supportActionBar != null) {
+            supportActionBar.setDisplayHomeAsUpEnabled(true);
+            supportActionBar.setDisplayShowHomeEnabled(true);
+        }
+
+        Drawable drawable = ContextCompat.getDrawable(getApplicationContext(),R.drawable.ic_more_vert_black_24dp);
+        toolbar.setOverflowIcon(drawable);
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -140,6 +235,7 @@ public class GrabingInfoActivity extends CustomStuAppCompatActivity implements G
                     }
                 }
                 int tabPosition = tab.getPosition();
+                animateFab(tabPosition);
                 switch (tabPosition) {
                     case 0:
                         hintIdOne.setText(givenInfo[tabPosition]);
@@ -188,6 +284,7 @@ public class GrabingInfoActivity extends CustomStuAppCompatActivity implements G
                     }
                 }
                 int tabPosition = tab.getPosition();
+                animateFab(tabPosition);
                 switch (tabPosition) {
                     case 0:
                         hintIdOne.setText(givenInfo[tabPosition]);
@@ -213,14 +310,71 @@ public class GrabingInfoActivity extends CustomStuAppCompatActivity implements G
             }
         });
 
-        decor = getWindow().getDecorView();
-//        settingStatusBarTransparent(this);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            decor.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-        }
-        AppBarLayout mAppBarLayout = findViewById(R.id.appbar);
-        mAppBarLayout.getBackground().setAlpha(120);
-        toolbar.getBackground().setAlpha(0);
+    }
+
+    @Override
+    public void configGrabingInfoPage() {
+        forMeBtn.setOnClickListener(new VisibleToggleClickListener() {
+
+            @Override
+            protected void changeVisibility(boolean visible) {
+                TransitionSet set = new TransitionSet()
+                        .addTransition(new Fade())
+                        .addTransition(new Slide(Gravity.START))
+                        .setInterpolator(visible ? new LinearOutSlowInInterpolator() : new FastOutLinearInInterpolator())
+                        .addListener(new Transition.TransitionListener() {
+                            @Override
+                            public void onTransitionStart(@NonNull Transition transition) {
+
+                            }
+
+                            @Override
+                            public void onTransitionEnd(@NonNull Transition transition) {
+                                if(!visible){
+                                    contractLayout.setVisibility(View.GONE);
+                                    viewMusk.setVisibility(View.GONE);
+                                }
+                            }
+
+                            @Override
+                            public void onTransitionCancel(@NonNull Transition transition) {
+
+                            }
+
+                            @Override
+                            public void onTransitionPause(@NonNull Transition transition) {
+
+                            }
+
+                            @Override
+                            public void onTransitionResume(@NonNull Transition transition) {
+
+                            }
+                        });
+                TransitionSet set1 = new TransitionSet()
+                        .addTransition(new Fade())
+                        .setInterpolator(visible ? new LinearOutSlowInInterpolator() : new FastOutLinearInInterpolator());
+                TransitionManager.beginDelayedTransition(myAppBarLayout, set);
+                TransitionManager.beginDelayedTransition(viewMusk, set1);
+                if (visible) {
+                    tabHintLayout.setVisibility(View.GONE);
+                    tabLayout.setVisibility(View.GONE);
+                    contractLayout.setVisibility(View.VISIBLE);
+                    forMeBtn.setCompoundDrawablesWithIntrinsicBounds( 0, 0, R.drawable.ic_keyboard_arrow_up_black_24dp, 0);
+                    viewMusk.setVisibility(View.VISIBLE);
+                    forMeBtn.setText(R.string.switch_learner);
+                } else {
+                    tabHintLayout.setVisibility(View.VISIBLE);
+                    tabLayout.setVisibility(View.VISIBLE);
+                    contractLayout.setVisibility(View.GONE);
+                    viewMusk.setVisibility(View.INVISIBLE);
+                    forMeBtn.setCompoundDrawablesWithIntrinsicBounds( R.drawable.alias_profile_icon, 0, R.drawable.ic_keyboard_arrow_down_black_24dp, 0);
+                    forMeBtn.setText(R.string.for_me);
+
+                }
+            }
+
+        });
     }
 
     //unused function here
@@ -256,6 +410,55 @@ public class GrabingInfoActivity extends CustomStuAppCompatActivity implements G
         return super.onOptionsItemSelected(item);
     }
 
+    protected void animateFab(int position) {
+        fab.clearAnimation();
+        // Scale down animation
+        ScaleAnimation shrink = new ScaleAnimation(1f, 0.2f, 1f, 0.2f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        shrink.setDuration(150);     // animation duration in milliseconds
+        shrink.setInterpolator(new DecelerateInterpolator());
+        shrink.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                // Scale up animation
+                ScaleAnimation expand = new ScaleAnimation(0.2f, 1f, 0.2f, 1f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+                expand.setDuration(100);     // animation duration in milliseconds
+                expand.setInterpolator(new AccelerateInterpolator());
+                fab.startAnimation(expand);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        fab.startAnimation(shrink);
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        MapStyleOptions style = MapStyleOptions.loadRawResourceStyle(
+                this, R.raw.map_style_default_no_landmarks);
+        googleMap.setMapStyle(style);
+
+        mMap = googleMap;
+        onMapReadyListener(mMap);
+        onMapReadyGeneralConfig();
+        mMap.setPadding((int) (10 * (getResources().getDisplayMetrics().density)),  (int) (250 * (getResources().getDisplayMetrics().density)),0, (int) (6 * (getResources().getDisplayMetrics().density)));
+    }
+
+    @Override
+    public void onMyGpsLocationChanged(Location location) {
+
+    }
+
+    public void onGrabingInfoViewClicked(View view) {
+        mPresenter.onGrabingInfoViewIntracted(view);
+    }
+
 
     public static class PlaceholderFragment extends Fragment {
 
@@ -265,6 +468,16 @@ public class GrabingInfoActivity extends CustomStuAppCompatActivity implements G
         private GrabingInfoActivity myMainActivity;
         private RecyclerView mRecyclerView;
         private static final String TAG = "PlaceholderFragment";
+        private View rootView;
+        private TextView textView;
+        private LinearLayout radioButtonLayout;
+        private RadioGroup fragRadioGroupOne;
+        private RadioGroup fragRadioGroupTwo;
+        private RadioGroup fragRadioGroupThree;
+        private RadioGroup fragRadioGroupFour;
+        private RadioGroup fragRadioGroupFive;
+        private String[] currentFragData5;
+        private NestedScrollView fragmentBg;
 
         public PlaceholderFragment() {
 
@@ -285,111 +498,374 @@ public class GrabingInfoActivity extends CustomStuAppCompatActivity implements G
             super.setUserVisibleHint(isVisibleToUser);
             if (isVisibleToUser) {
                 // load data here
-                if (getArguments().getInt(ARG_SECTION_NUMBER) == 6) {
-                    if (getActivity() != null) {
-                        recyclerAdapter = new RecyclerAdapter(getActivity(), getFinalData()) {
-                            @Override
-                            protected void OnButtonClicked(View v, int position) {
-                                //toolbar button clicked
-                                if (position == 0) {
-
-                                } else {
-                                    assert myMainActivity != null;
-                                    TabLayout.Tab tab = myMainActivity.tabLayout.getTabAt(position - 1);
-                                    if (tab != null) {
-                                        tab.select();
-                                    }
+                int fragmentPosition = getArguments().getInt(ARG_SECTION_NUMBER);
+                switch (fragmentPosition) {
+                    case 1:
+                        if (fragRadioGroupOne != null) {
+                            fragRadioGroupOne.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                                @Override
+                                public void onCheckedChanged(RadioGroup group, int checkedId) {
+                                    // checkedId is the RadioButton selected
+                                    RadioButton rb = (RadioButton) group.findViewById(checkedId);
+                                    String currentSelectedBtnText = rb.getText().toString();
+                                    myMainActivity.givenInfo[fragmentPosition - 1] = currentSelectedBtnText;
+                                    myMainActivity.hintIdOne.setText(currentSelectedBtnText);
                                 }
+                            });
+                        }
+                        break;
+                    case 2:
+                        if (fragRadioGroupTwo != null) {
+                            fragRadioGroupTwo.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                                @Override
+                                public void onCheckedChanged(RadioGroup group, int checkedId) {
+                                    // checkedId is the RadioButton selected
+                                    RadioButton rb = (RadioButton) group.findViewById(checkedId);
+                                    String currentSelectedBtnText = rb.getText().toString();
+                                    myMainActivity.givenInfo[fragmentPosition - 1] = currentSelectedBtnText;
+                                    myMainActivity.hintIdTwo.setText(currentSelectedBtnText);
+                                }
+                            });
+                        }
+                        break;
 
-                            }
-                        };
-                        mRecyclerView.setAdapter(recyclerAdapter);
-                        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-                    }
+                    case 3:
+                        if (fragRadioGroupThree != null) {
+                            fragRadioGroupThree.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                                @Override
+                                public void onCheckedChanged(RadioGroup group, int checkedId) {
+                                    // checkedId is the RadioButton selected
+                                    RadioButton rb = (RadioButton) group.findViewById(checkedId);
+                                    String currentSelectedBtnText = rb.getText().toString();
+                                    myMainActivity.givenInfo[fragmentPosition - 1] = currentSelectedBtnText;
+                                    myMainActivity.hintIdTwo.setText(currentSelectedBtnText);
+                                }
+                            });
+                        }
+                        break;
 
+                    case 4:
+                        if (fragRadioGroupFour != null) {
+                            fragRadioGroupFour.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                                @Override
+                                public void onCheckedChanged(RadioGroup group, int checkedId) {
+                                    // checkedId is the RadioButton selected
+                                    RadioButton rb = (RadioButton) group.findViewById(checkedId);
+                                    String currentSelectedBtnText = rb.getText().toString();
+                                    myMainActivity.givenInfo[fragmentPosition - 1] = currentSelectedBtnText;
+                                    myMainActivity.hintIdTwo.setText(currentSelectedBtnText);
+                                }
+                            });
+                        }
+                        break;
+
+                    case 5:
+                        if (fragRadioGroupFive != null) {
+                            fragRadioGroupFive.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                                @Override
+                                public void onCheckedChanged(RadioGroup group, int checkedId) {
+                                    // checkedId is the RadioButton selected
+                                    RadioButton rb = (RadioButton) group.findViewById(checkedId);
+                                    String currentSelectedBtnText = rb.getText().toString();
+                                    myMainActivity.givenInfo[fragmentPosition - 1] = currentSelectedBtnText;
+                                    myMainActivity.hintIdTwo.setText(currentSelectedBtnText);
+                                }
+                            });
+                        }
+                        break;
+
+                    case 6:
+                        if (getActivity() != null) {
+                            recyclerAdapter = new RecyclerAdapter(getActivity(), getFinalData()) {
+                                @Override
+                                protected void OnButtonClicked(View v, int position) {
+                                    //toolbar button clicked
+                                    if (position == 0) {
+
+                                    } else {
+                                        assert myMainActivity != null;
+                                        TabLayout.Tab tab = myMainActivity.tabLayout.getTabAt(position - 1);
+                                        if (tab != null) {
+                                            tab.select();
+                                        }
+                                    }
+
+                                }
+                            };
+                            mRecyclerView.setAdapter(recyclerAdapter);
+                            mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+                        }
+                        break;
                 }
             } else {
+                // fragment is no longer visible
                 if (getArguments().getInt(ARG_SECTION_NUMBER) == 6) {
                     onDestroyView();
+
                 }
-                // fragment is no longer visible
             }
         }
 
         @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
             myMainActivity = (GrabingInfoActivity) getActivity();
-            String[] headers = {"Select yuor medium", "Select your class",
+            String[] headers = {"Select your medium", "Select your class",
                     "Select the subject your want mentor", "Choose selary in offer", "Select gender preference", "Verify the given info"};
-            View rootView = inflater.inflate(R.layout.stu2_fragment_grabing_info, container, false);
-            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-            LinearLayout radioButtonLayout = rootView.findViewById(R.id.radio_button_linear_layout);
-            LinearLayout textViewLayout = rootView.findViewById(R.id.textView_linear_layout);
-            View rootViewRadioButtonLayoutContent;
-
             int fragmentPosition = getArguments().getInt(ARG_SECTION_NUMBER);
+            //garbage code goes here
 
             //  background color alpha changing here
-            LinearLayout fragmentBg = rootView.findViewById(R.id.fragment_bg);
-            fragmentBg.getBackground().setAlpha(90);
-            // Setting the header text view
-            textView.setText(headers[fragmentPosition - 1]);
+            /*LinearLayout fragmentBg = rootView.findViewById(R.id.fragment_bg);
+            fragmentBg.getBackground().setAlpha(90);*/
 
-//            checking which fragment it is !!
+
+            //checking which fragment it is !!
             switch (fragmentPosition) {
                 case 1:
-                case 2:
-                case 3:
-                case 4:
-                case 5:
-                    textViewLayout.setVisibility(View.GONE);
-                    radioButtonLayout.setVisibility(View.VISIBLE);
+                    rootView = inflater.inflate(R.layout.stu2_fragment_grabing_info, container, false);
+                    textView = (TextView) rootView.findViewById(R.id.section_label);
+                    // Setting the header text view
+                    textView.setText(headers[fragmentPosition - 1]);
+                    //setting the background color
+                    fragmentBg = rootView.findViewById(R.id.fragment_bg);
+                    fragmentBg.getBackground().setAlpha(90);
+                    /*radioButtonLayout = rootView.findViewById(R.id.radio_button_linear_layout);
                     rootViewRadioButtonLayoutContent = inflater.inflate(R.layout.custom_grading_info_radio_group, container, false);
-                    radioButtonLayout.addView(rootViewRadioButtonLayoutContent, 0);
-                    RadioButton[] radioButtonsArr = {
-                            rootViewRadioButtonLayoutContent.findViewById(R.id.radio_btn_one),
-                            rootViewRadioButtonLayoutContent.findViewById(R.id.radio_btn_two),
-                            rootViewRadioButtonLayoutContent.findViewById(R.id.radio_btn_three),
-                            rootViewRadioButtonLayoutContent.findViewById(R.id.radio_btn_four),
-                            rootViewRadioButtonLayoutContent.findViewById(R.id.radio_btn_five),
-                            rootViewRadioButtonLayoutContent.findViewById(R.id.radio_btn_six),
-                            rootViewRadioButtonLayoutContent.findViewById(R.id.radio_btn_seven),
-                            rootViewRadioButtonLayoutContent.findViewById(R.id.radio_btn_eight),
-                            rootViewRadioButtonLayoutContent.findViewById(R.id.radio_btn_nine),
-                            rootViewRadioButtonLayoutContent.findViewById(R.id.radio_btn_ten),
-                            rootViewRadioButtonLayoutContent.findViewById(R.id.radio_btn_eleven),
-                            rootViewRadioButtonLayoutContent.findViewById(R.id.radio_btn_twelve),
-                            rootViewRadioButtonLayoutContent.findViewById(R.id.radio_btn_thirteen),
-                            rootViewRadioButtonLayoutContent.findViewById(R.id.radio_btn_fourteen),
-                            rootViewRadioButtonLayoutContent.findViewById(R.id.radio_btn_fifteen),
-
+                    radioButtonLayout.addView(rootViewRadioButtonLayoutContent, 0);*/
+                    RadioButton[] radioButtonsArr1 = {
+                            rootView.findViewById(R.id.radio_btn_one),
+                            rootView.findViewById(R.id.radio_btn_two),
+                            rootView.findViewById(R.id.radio_btn_three),
+                            rootView.findViewById(R.id.radio_btn_four),
+                            rootView.findViewById(R.id.radio_btn_five),
+                            rootView.findViewById(R.id.radio_btn_six),
+                            rootView.findViewById(R.id.radio_btn_seven),
+                            rootView.findViewById(R.id.radio_btn_eight),
+                            rootView.findViewById(R.id.radio_btn_nine),
+                            rootView.findViewById(R.id.radio_btn_ten),
+                            rootView.findViewById(R.id.radio_btn_eleven),
+                            rootView.findViewById(R.id.radio_btn_twelve),
+                            rootView.findViewById(R.id.radio_btn_thirteen),
+                            rootView.findViewById(R.id.radio_btn_fourteen),
+                            rootView.findViewById(R.id.radio_btn_fifteen),
                     };
-                    String currentFragData[] = getData();
-                    for (int i = 0; i < radioButtonsArr.length; i++) {
-                        if (i < currentFragData.length) {
-                            radioButtonsArr[i].setText(currentFragData[i]);
+
+                    currentFragData5 = getData();
+                    for (int i = 0; i < radioButtonsArr1.length; i++) {
+                        if (i < currentFragData5.length) {
+                            radioButtonsArr1[i].setText(currentFragData5[i]);
                         } else {
-                            radioButtonsArr[i].setVisibility(View.GONE);
+                            radioButtonsArr1[i].setVisibility(View.GONE);
                         }
                     }
 
-                    RadioGroup fragRadioGroup = (RadioGroup) rootViewRadioButtonLayoutContent.findViewById(R.id.frag_radio_group);
-                    fragRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                    fragRadioGroupOne = (RadioGroup) rootView.findViewById(R.id.frag_radio_group);
+                    fragRadioGroupOne.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                         @Override
                         public void onCheckedChanged(RadioGroup group, int checkedId) {
                             // checkedId is the RadioButton selected
                             RadioButton rb = (RadioButton) group.findViewById(checkedId);
                             String currentSelectedBtnText = rb.getText().toString();
                             myMainActivity.givenInfo[fragmentPosition - 1] = currentSelectedBtnText;
+                            myMainActivity.hintIdOne.setText(currentSelectedBtnText);
+
+                        }
+                    });
+                    break;
+                case 2:
+                    rootView = inflater.inflate(R.layout.stu2_fragment_grabing_info_one, container, false);
+                    textView = (TextView) rootView.findViewById(R.id.section_label);
+                    // Setting the header text view
+                    textView.setText(headers[fragmentPosition - 1]);
+                    //setting the background color
+                    fragmentBg = rootView.findViewById(R.id.fragment_bg);
+                    fragmentBg.getBackground().setAlpha(90);
+                    RadioButton[] radioButtonsArr2 = {
+                            rootView.findViewById(R.id.radio_btn_one),
+                            rootView.findViewById(R.id.radio_btn_two),
+                            rootView.findViewById(R.id.radio_btn_three),
+                            rootView.findViewById(R.id.radio_btn_four),
+                            rootView.findViewById(R.id.radio_btn_five),
+                            rootView.findViewById(R.id.radio_btn_six),
+                            rootView.findViewById(R.id.radio_btn_seven),
+                            rootView.findViewById(R.id.radio_btn_eight),
+                            rootView.findViewById(R.id.radio_btn_nine),
+                            rootView.findViewById(R.id.radio_btn_ten),
+                            rootView.findViewById(R.id.radio_btn_eleven),
+                            rootView.findViewById(R.id.radio_btn_twelve),
+                            rootView.findViewById(R.id.radio_btn_thirteen),
+                            rootView.findViewById(R.id.radio_btn_fourteen),
+                            rootView.findViewById(R.id.radio_btn_fifteen),
+                    };
+
+                    currentFragData5 = getData();
+                    for (int i = 0; i < radioButtonsArr2.length; i++) {
+                        if (i < currentFragData5.length) {
+                            radioButtonsArr2[i].setText(currentFragData5[i]);
+                        } else {
+                            radioButtonsArr2[i].setVisibility(View.GONE);
+                        }
+                    }
+
+                    fragRadioGroupTwo = (RadioGroup) rootView.findViewById(R.id.frag_radio_group);
+                    fragRadioGroupTwo.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                        @Override
+                        public void onCheckedChanged(RadioGroup group, int checkedId) {
+                            // checkedId is the RadioButton selected
+                            RadioButton rb = (RadioButton) group.findViewById(checkedId);
+                            String currentSelectedBtnText = rb.getText().toString();
+                            myMainActivity.givenInfo[fragmentPosition - 1] = currentSelectedBtnText;
+                            myMainActivity.hintIdTwo.setText(currentSelectedBtnText);
+                        }
+                    });
+                    break;
+                case 3:
+                    rootView = inflater.inflate(R.layout.stu2_fragment_grabing_info_two, container, false);
+                    textView = (TextView) rootView.findViewById(R.id.section_label);
+                    // Setting the header text view
+                    textView.setText(headers[fragmentPosition - 1]);
+                    //setting the background color
+                    fragmentBg = rootView.findViewById(R.id.fragment_bg);
+                    fragmentBg.getBackground().setAlpha(90);
+                    RadioButton[] radioButtonsArr3 = {
+                            rootView.findViewById(R.id.radio_btn_one),
+                            rootView.findViewById(R.id.radio_btn_two),
+                            rootView.findViewById(R.id.radio_btn_three),
+                            rootView.findViewById(R.id.radio_btn_four),
+                            rootView.findViewById(R.id.radio_btn_five),
+                            rootView.findViewById(R.id.radio_btn_six),
+                            rootView.findViewById(R.id.radio_btn_seven),
+                            rootView.findViewById(R.id.radio_btn_eight),
+                            rootView.findViewById(R.id.radio_btn_nine),
+                            rootView.findViewById(R.id.radio_btn_ten),
+                            rootView.findViewById(R.id.radio_btn_eleven),
+                            rootView.findViewById(R.id.radio_btn_twelve),
+                            rootView.findViewById(R.id.radio_btn_thirteen),
+                            rootView.findViewById(R.id.radio_btn_fourteen),
+                            rootView.findViewById(R.id.radio_btn_fifteen),
+                    };
+
+                    currentFragData5 = getData();
+                    for (int i = 0; i < radioButtonsArr3.length; i++) {
+                        if (i < currentFragData5.length) {
+                            radioButtonsArr3[i].setText(currentFragData5[i]);
+                        } else {
+                            radioButtonsArr3[i].setVisibility(View.GONE);
+                        }
+                    }
+
+                    fragRadioGroupThree = (RadioGroup) rootView.findViewById(R.id.frag_radio_group);
+                    fragRadioGroupThree.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                        @Override
+                        public void onCheckedChanged(RadioGroup group, int checkedId) {
+                            // checkedId is the RadioButton selected
+                            RadioButton rb = (RadioButton) group.findViewById(checkedId);
+                            String currentSelectedBtnText = rb.getText().toString();
+                            myMainActivity.givenInfo[fragmentPosition - 1] = currentSelectedBtnText;
+                            myMainActivity.hintIdTwo.setText(currentSelectedBtnText);
+                        }
+                    });
+                    break;
+                case 4:
+                    rootView = inflater.inflate(R.layout.stu2_fragment_grabing_info_three, container, false);
+                    textView = (TextView) rootView.findViewById(R.id.section_label);
+                    // Setting the header text view
+                    textView.setText(headers[fragmentPosition - 1]);
+                    //setting the background color
+                    fragmentBg = rootView.findViewById(R.id.fragment_bg);
+                    fragmentBg.getBackground().setAlpha(90);
+                    RadioButton[] radioButtonsArr4 = {
+                            rootView.findViewById(R.id.radio_btn_one),
+                            rootView.findViewById(R.id.radio_btn_two),
+                            rootView.findViewById(R.id.radio_btn_three),
+                            rootView.findViewById(R.id.radio_btn_four),
+                            rootView.findViewById(R.id.radio_btn_five),
+                            rootView.findViewById(R.id.radio_btn_six),
+                            rootView.findViewById(R.id.radio_btn_seven),
+                            rootView.findViewById(R.id.radio_btn_eight),
+                            rootView.findViewById(R.id.radio_btn_nine),
+                            rootView.findViewById(R.id.radio_btn_ten),
+                            rootView.findViewById(R.id.radio_btn_eleven),
+                            rootView.findViewById(R.id.radio_btn_twelve),
+                            rootView.findViewById(R.id.radio_btn_thirteen),
+                            rootView.findViewById(R.id.radio_btn_fourteen),
+                            rootView.findViewById(R.id.radio_btn_fifteen),
+                    };
+
+                    currentFragData5 = getData();
+                    for (int i = 0; i < radioButtonsArr4.length; i++) {
+                        if (i < currentFragData5.length) {
+                            radioButtonsArr4[i].setText(currentFragData5[i]);
+                        } else {
+                            radioButtonsArr4[i].setVisibility(View.GONE);
+                        }
+                    }
+
+                    fragRadioGroupFour = (RadioGroup) rootView.findViewById(R.id.frag_radio_group);
+                    fragRadioGroupFour.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                        @Override
+                        public void onCheckedChanged(RadioGroup group, int checkedId) {
+                            // checkedId is the RadioButton selected
+                            RadioButton rb = (RadioButton) group.findViewById(checkedId);
+                            String currentSelectedBtnText = rb.getText().toString();
+                            myMainActivity.givenInfo[fragmentPosition - 1] = currentSelectedBtnText;
+                            myMainActivity.hintIdTwo.setText(currentSelectedBtnText);
+                        }
+                    });
+                    break;
+                case 5:
+                    rootView = inflater.inflate(R.layout.stu2_fragment_grabing_info_four, container, false);
+                    textView = (TextView) rootView.findViewById(R.id.section_label);
+                    // Setting the header text view
+                    textView.setText(headers[fragmentPosition - 1]);
+                    //setting the background color
+                    fragmentBg = rootView.findViewById(R.id.fragment_bg);
+                    fragmentBg.getBackground().setAlpha(90);
+                    RadioButton[] radioButtonsArr5 = {
+                            rootView.findViewById(R.id.radio_btn_one),
+                            rootView.findViewById(R.id.radio_btn_two),
+                            rootView.findViewById(R.id.radio_btn_three),
+                            rootView.findViewById(R.id.radio_btn_four),
+                            rootView.findViewById(R.id.radio_btn_five),
+                            rootView.findViewById(R.id.radio_btn_six),
+                            rootView.findViewById(R.id.radio_btn_seven),
+                            rootView.findViewById(R.id.radio_btn_eight),
+                            rootView.findViewById(R.id.radio_btn_nine),
+                            rootView.findViewById(R.id.radio_btn_ten),
+                            rootView.findViewById(R.id.radio_btn_eleven),
+                            rootView.findViewById(R.id.radio_btn_twelve),
+                            rootView.findViewById(R.id.radio_btn_thirteen),
+                            rootView.findViewById(R.id.radio_btn_fourteen),
+                            rootView.findViewById(R.id.radio_btn_fifteen),
+                    };
+                    currentFragData5 = getData();
+                    for (int i = 0; i < radioButtonsArr5.length; i++) {
+                        if (i < currentFragData5.length) {
+                            radioButtonsArr5[i].setText(currentFragData5[i]);
+                        } else {
+                            radioButtonsArr5[i].setVisibility(View.GONE);
+                        }
+                    }
+
+                    fragRadioGroupFive = (RadioGroup) rootView.findViewById(R.id.frag_radio_group);
+                    fragRadioGroupFive.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                        @Override
+                        public void onCheckedChanged(RadioGroup group, int checkedId) {
+                            // checkedId is the RadioButton selected
+                            RadioButton rb = (RadioButton) group.findViewById(checkedId);
+                            String currentSelectedBtnText = rb.getText().toString();
+                            myMainActivity.givenInfo[fragmentPosition - 1] = currentSelectedBtnText;
+                            myMainActivity.hintIdTwo.setText(currentSelectedBtnText);
                         }
                     });
                     break;
                 case 6:
-                    radioButtonLayout.setVisibility(View.GONE);
-                    textViewLayout.setVisibility(View.VISIBLE);
-                    mRecyclerView = textViewLayout.findViewById(R.id.recycler_view_list);
+                    //setting the background color
+                    rootView = inflater.inflate(R.layout.stu2_fragment_grabing_info_five, container, false);
+                    LinearLayout thisFragmentBg = rootView.findViewById(R.id.fragment_bg);
+                    thisFragmentBg.getBackground().setAlpha(90);
+                    mRecyclerView = rootView.findViewById(R.id.recycler_view_list);
                     recyclerAdapter = new RecyclerAdapter(getActivity(), getFinalData()) {
                         @Override
                         protected void OnButtonClicked(View v, int position) {
@@ -448,9 +924,6 @@ public class GrabingInfoActivity extends CustomStuAppCompatActivity implements G
                     if (!(myMainActivity.givenInfo[i - 1].startsWith("Ex"))) {
                         finalInfo[i] += " " + myMainActivity.givenInfo[i - 1];
                     }
-                    if (i == 5) {
-                        Log.d("tagtagtag", " " + myMainActivity.givenInfo[i] + myMainActivity.givenInfo[i - 1]);
-                    }
                 }
             }
             for (String title : finalInfo) {
@@ -500,18 +973,4 @@ public class GrabingInfoActivity extends CustomStuAppCompatActivity implements G
     }
 
 
-    @Override
-    public void configGrabingInfoPage() {
-
-    }
-
-    @Override
-    public void initGrabingInfoPage() {
-
-    }
-
-    @Override
-    public void findView() {
-
-    }
 }

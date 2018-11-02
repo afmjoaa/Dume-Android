@@ -3,11 +3,8 @@ package io.dume.dume.customView;
 import android.content.Context;
 import android.support.design.widget.TabLayout;
 import android.util.AttributeSet;
-
 import java.lang.reflect.Field;
-
 import io.dume.dume.util.DumeUtils;
-
 
 public class CustomTabLayout extends TabLayout {
 

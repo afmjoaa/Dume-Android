@@ -6,6 +6,7 @@ import android.content.Context;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
+import android.support.annotation.StringRes;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
@@ -22,10 +23,15 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Objects;
+import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -102,6 +108,25 @@ public class DumeUtils {
         icon.setDrawableByLayerId(id, badge);
     }
 
+    public static void setTextOverDrawable(Context context, LayerDrawable icon, int id, int textColor, String data, int flag) {
+
+        TextDrawable badge;
+
+        // Reuse drawable if possible
+        Drawable reuse = icon.findDrawableByLayerId(id);
+        if (reuse != null && reuse instanceof TextDrawable) {
+            badge = (TextDrawable) reuse;
+        } else {
+            badge = new TextDrawable(context);
+        }
+        badge.setFlag(flag);
+        badge.setCircleTextColor(textColor);
+
+        badge.setString(data);
+        icon.mutate();
+        icon.setDrawableByLayerId(id, badge);
+    }
+
     public static void setBadgeChar(Context context, LayerDrawable icon, int color, int textColor, char character, float x, float y) {
 
         BadgeDrawable badge;
@@ -135,6 +160,68 @@ public class DumeUtils {
         collapsingToolbarLayout.setExpandedTitleTypeface(Typeface.createFromAsset(activity.getAssets(), "fonts/Cairo-Light.ttf"));
         collapsingToolbarLayout.setTitle(title);
 
+        Drawable drawable = ContextCompat.getDrawable(getApplicationContext(),R.drawable.ic_more_vert_black_24dp);
+        toolbar.setOverflowIcon(drawable);
+    }
+
+    public static void configureAppbar(Context context, String title, boolean isWhite) {
+        AppCompatActivity activity = (AppCompatActivity) context;
+        Toolbar toolbar = activity.findViewById(R.id.accountToolbar);
+        activity.setSupportActionBar(toolbar);
+        ActionBar supportActionBar = activity.getSupportActionBar();
+
+        if (supportActionBar != null) {
+            supportActionBar.setDisplayHomeAsUpEnabled(true);
+            supportActionBar.setDisplayShowHomeEnabled(true);
+        }
+        CollapsingToolbarLayout collapsingToolbarLayout = activity.findViewById(R.id.accountCollapsing);
+        collapsingToolbarLayout.setCollapsedTitleTypeface(Typeface.createFromAsset(activity.getAssets(), "fonts/Cairo-Light.ttf"));
+        collapsingToolbarLayout.setExpandedTitleTypeface(Typeface.createFromAsset(activity.getAssets(), "fonts/Cairo-Light.ttf"));
+        collapsingToolbarLayout.setTitle(title);
+
+        if(isWhite){
+            Drawable drawable = ContextCompat.getDrawable(getApplicationContext(),R.drawable.ic_more_vert_white_24dp);
+            toolbar.setOverflowIcon(drawable);
+        }else {
+            Drawable drawable = ContextCompat.getDrawable(getApplicationContext(),R.drawable.ic_more_vert_black_24dp);
+            toolbar.setOverflowIcon(drawable);
+        }
+    }
+
+    //testing code for messages goes here
+    public static void showToast(Context context, @StringRes int text, boolean isLong) {
+        showToast(context, context.getString(text), isLong);
+    }
+
+    public static void showToast(Context context, String text, boolean isLong) {
+        Toast.makeText(context, text, isLong ? Toast.LENGTH_LONG : Toast.LENGTH_SHORT).show();
+    }
+
+    public static String getDurationString(int seconds) {
+        Date date = new Date(seconds * 1000);
+        SimpleDateFormat formatter = new SimpleDateFormat(seconds >= 3600 ? "HH:mm:ss" : "mm:ss");
+        formatter.setTimeZone(TimeZone.getTimeZone("GMT"));
+        return formatter.format(date);
+    }
+
+    public static void configAppbarTittle(Context context, String title){
+        AppCompatActivity activity = (AppCompatActivity) context;
+        CollapsingToolbarLayout collapsingToolbarLayout = activity.findViewById(R.id.accountCollapsing);
+        collapsingToolbarLayout.setTitle(title);
+    }
+
+    public static void configureAppbarWithoutColloapsing(Context context, String title) {
+        AppCompatActivity activity = (AppCompatActivity) context;
+        Toolbar toolbar = activity.findViewById(R.id.accountToolbar);
+        activity.setSupportActionBar(toolbar);
+        ActionBar supportActionBar = activity.getSupportActionBar();
+
+        if (supportActionBar != null) {
+            supportActionBar.setDisplayHomeAsUpEnabled(true);
+            supportActionBar.setDisplayShowHomeEnabled(true);
+        }
+        toolbar.setTitleTextAppearance(context,R.style.MyTextApprncColOne);
+        toolbar.setTitle(title);
         Drawable drawable = ContextCompat.getDrawable(getApplicationContext(),R.drawable.ic_more_vert_black_24dp);
         toolbar.setOverflowIcon(drawable);
     }
@@ -203,6 +290,25 @@ public class DumeUtils {
     public static void hideKeyboardFrom(Context context, View view) {
         InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
         Objects.requireNonNull(imm).hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+    public static String firstTwo(String str) {
+        return str.length() < 2 ? str : str.substring(0, 2);
+    }
+
+    public static String firstThree(String str) {
+        return str.length() < 3 ? str : str.substring(0, 3);
+    }
+
+    public static void setMargins (View v, int l, int t, int r, int b) {
+        if (v.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
+            ViewGroup.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) v.getLayoutParams();
+            p.setMargins((int) (l* (getApplicationContext().getResources().getDisplayMetrics().density)),
+                    (int)(t* (getApplicationContext().getResources().getDisplayMetrics().density)),
+                    (int)(r* (getApplicationContext().getResources().getDisplayMetrics().density)),
+                    (int)(b* (getApplicationContext().getResources().getDisplayMetrics().density)));
+            v.requestLayout();
+        }
     }
 }
 

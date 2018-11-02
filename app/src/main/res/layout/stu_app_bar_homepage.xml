@@ -13,29 +13,30 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:elevation="0dp"
-        app:elevation="0dp"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:theme="@style/AppTheme.AppBarOverlay"
+        app:elevation="0dp">
 
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:layout_margin="0dp"
-                app:layout_scrollFlags="snap"
-                app:navigationIcon="@drawable/ic_arrow_back_black_24dp"
-                app:popupTheme="@style/AppTheme.PopupOverlay"
-                app:theme="@style/CustomActionBar" />
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_margin="0dp"
+            app:layout_scrollFlags="snap"
+            app:navigationIcon="@drawable/ic_arrow_back_black_24dp"
+            app:popupTheme="@style/AppTheme.PopupOverlay"
+            app:theme="@style/ThemeToolbar.default" />
 
     </android.support.design.widget.AppBarLayout>
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/secondary_Appbar"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/appbarLayoutHeight"
+        android:layout_height="@dimen/appbarLayoutHeightLow"
         android:alpha="0.0"
+        android:background="@color/colorBlack"
         android:fitsSystemWindows="true"
         android:theme="@style/Base.ThemeOverlay.AppCompat.Dark"
-        android:visibility="gone">
+        android:visibility="invisible">
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/secondary_collapsing_toolbar"
@@ -51,7 +52,7 @@
             app:expandedTitleMarginStart="@dimen/expTittleMarginStart"
             app:expandedTitleMarginTop="@dimen/expTittleMarginTop"
             app:expandedTitleTextAppearance="@style/MyTextApprncExp.darkBg"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:layout_scrollFlags="snap|enterAlways"
             app:scrimVisibleHeightTrigger="@dimen/scrimVisibleHeightTrigger"
             app:title="Messages"
             app:titleEnabled="true">
@@ -66,7 +67,6 @@
                 app:layout_collapseMode="pin"
                 app:navigationIcon="@drawable/ic_arrow_back_white_24dp"
                 app:popupTheme="@style/Base.ThemeOverlay.AppCompat.Dark"
-                app:title="Messages"
                 app:titleMarginBottom="@dimen/titleMarginBottom"
                 app:titleMarginStart="@dimen/titleMarginStart"
                 app:titleMarginTop="@dimen/titleMarginTop">
@@ -77,122 +77,519 @@
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 
-    <carbon.widget.RelativeLayout
-        android:id="@+id/relativeLayout_hack"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_marginTop="75dp"
-        android:alpha="0"
-        android:padding="0dp"
-        android:visibility="visible"
-        app:carbon_elevation="0dp">
-
-        <carbon.widget.RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_marginLeft="25dp"
-            android:layout_marginRight="25dp"
-            android:background="#cfd8dc"
-            android:padding="0dp"
-            app:carbon_cornerRadius="5dp"
-            app:carbon_elevation="0dp" />
-
-        <carbon.widget.RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:layout_marginTop="15dp"
-            android:background="#eceff1"
-            android:padding="0dp"
-            app:carbon_cornerRadius="6dp"
-            app:carbon_elevation="0dp" />
-
-    </carbon.widget.RelativeLayout>
-
     <include
         layout="@layout/stu_content_homepage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="60dp" />
 
-    <android.support.design.widget.CoordinatorLayout
+    <!--testing starts here -->
+    <LinearLayout
+        android:id="@+id/homeBottomSheet"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
+        android:layout_height="match_parent"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        app:behavior_peekHeight="70dp"
+        app:elevation="8dp"
+        app:layout_behavior="@string/bottom_sheet_behavior">
+        <!--75dp-->
         <android.support.v4.widget.NestedScrollView
-            android:id="@+id/bottom_sheet"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="110dp"
-            android:background="@drawable/bottom_sheet_bg"
-            android:elevation="5dp"
-            android:onClick="onHomePageViewClicked"
-            android:orientation="vertical"
-            app:behavior_hideable="true"
-            app:behavior_peekHeight="56dp"
-            app:layout_behavior="@string/bottom_sheet_behavior">
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-            <android.support.v4.widget.NestedScrollView
+            <carbon.widget.LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+                android:orientation="vertical">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/homePage_bottomSheet_recycler"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="visible">
+
+                </android.support.v7.widget.RecyclerView>
 
                 <LinearLayout
+                    android:id="@+id/dume_bangladesh_block"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_round_corner_rela_layout"
+                    android:orientation="vertical"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp">
 
-                    <android.support.v7.widget.AppCompatTextView
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginTop="18dp"
+                        android:text="Dume Bangladesh"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="12sp"
+                        app:fontFamily="@font/cairo_regular" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="14dp"
+                        android:gravity="start"
+                        android:text="@string/choosing_text"
+                        android:textAlignment="viewStart"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="18sp"
+                        app:fontFamily="@font/cairo_regular" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="12dp"
+                        android:gravity="start"
+                        android:text="@string/dume_product_intro"
+                        android:textAlignment="viewStart"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="14sp"
+                        app:fontFamily="@font/cairo_regular" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:text="@string/dume_products"
+                        android:textAlignment="viewStart"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="14sp"
+                        app:fontFamily="@font/cairo_regular" />
+
+
+                    <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="16dp"
-                        android:text="@string/testing_lorum"
-                        android:textSize="15sp" />
+                        android:layout_marginTop="8dp">
+
+                        <com.cunoraz.continuouscrollable.ContinuousScrollableImageView
+                            android:id="@+id/dume_gang_image"
+                            android:layout_width="match_parent"
+                            android:layout_height="60dp"
+                            android:layout_margin="8dp"
+                            app:direction="right"
+                            app:duration="6000"
+                            app:imageSrc="@drawable/bs_product_scrolling_image"
+                            app:scaleType="centerInside" />
+
+                    </RelativeLayout>
+
+                    <View
+                        android:id="@+id/divider2"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#3ca7a7a7" />
+
+                    <Button
+                        android:id="@+id/loading_cancel_btn"
+                        style="@style/Base.Widget.AppCompat.Button.Borderless"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Learn more"
+                        android:textAllCaps="false"
+                        android:textColor="@color/colorLink"
+                        android:textSize="16sp"
+                        app:fontFamily="@font/cairo_regular" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/produck_block"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/bg_round_corner_rela_layout"
+                    android:orientation="vertical"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp">
 
                     <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="80dp"
-                        android:background="@color/colorAccent"
-                        android:gravity="center"
-                        android:text="bottom_sheet_peek"
-                        android:textColor="@android:color/white" />
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginTop="18dp"
+                        android:text="Products"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="12sp"
+                        app:fontFamily="@font/cairo_regular" />
 
                     <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:gravity="start"
+                        android:text="@string/start_couching_text"
+                        android:textAlignment="viewStart"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="14sp"
+                        app:fontFamily="@font/cairo_regular" />
+
+                    <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:text="bottom_sheet_content"
-                        android:textColor="@android:color/white" />
+                        android:layout_height="wrap_content"
+                        android:background="@color/white">
+
+                        <com.cunoraz.continuouscrollable.ContinuousScrollableImageView
+                            android:id="@+id/cloud"
+                            android:layout_width="match_parent"
+                            android:layout_height="34dp"
+                            android:layout_centerHorizontal="true"
+                            android:layout_margin="8dp"
+                            app:direction="left"
+                            app:duration="6000"
+                            app:imageSrc="@drawable/bs_cloud_image"
+                            app:scaleType="centerInside" />
+
+
+                        <com.cunoraz.continuouscrollable.ContinuousScrollableImageView
+                            android:id="@+id/couching_person"
+                            android:layout_width="match_parent"
+                            android:layout_height="20dp"
+                            android:layout_below="@+id/cloud"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="40dp"
+                            app:direction="right"
+                            app:duration="6000"
+                            app:imageSrc="@drawable/bs_couching_student_image"
+                            app:scaleType="centerInside" />
+
+                        <ImageView
+                            android:layout_width="80dp"
+                            android:layout_height="60dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_below="@+id/cloud"
+                            android:contentDescription="@string/house"
+                            app:srcCompat="@drawable/bs_house_image" />
+
+                    </RelativeLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginTop="8dp"
+                        android:gravity="start"
+                        android:text="@string/take_couching_text"
+                        android:textAlignment="viewStart"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="14sp"
+                        app:fontFamily="@font/cairo_regular" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#3ca7a7a7" />
+
+                    <Button
+                        style="@style/Base.Widget.AppCompat.Button.Borderless"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Start your couching center"
+                        android:textAllCaps="false"
+                        android:textColor="@color/colorLink"
+                        android:textSize="16sp"
+                        app:fontFamily="@font/cairo_regular" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#3ca7a7a7" />
+
+                    <Button
+                        style="@style/Base.Widget.AppCompat.Button.Borderless"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Start taking couching today"
+                        android:textAllCaps="false"
+                        android:textColor="@color/colorLink"
+                        android:textSize="16sp"
+                        app:fontFamily="@font/cairo_regular" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/refer_mentor_block"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/bg_round_corner_rela_layout"
+                    android:orientation="vertical"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginTop="18dp"
+                        android:text="Refer Mentor"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="12sp"
+                        app:fontFamily="@font/cairo_regular" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/refer_mentor_intro"
+                            android:layout_width="160dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="14dp"
+                            android:gravity="start"
+                            android:text="@string/refer_mentor_intro"
+                            android:textAlignment="viewStart"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="18sp"
+                            app:fontFamily="@font/cairo_regular" />
+
+                        <TextView
+                            android:layout_width="160dp"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/refer_mentor_intro"
+                            android:layout_marginBottom="14dp"
+                            android:gravity="start"
+                            android:text="Learn more"
+                            android:textAlignment="viewStart"
+                            android:textColor="@color/colorLink"
+                            android:textSize="16sp"
+                            app:fontFamily="@font/cairo_regular" />
+
+                        <ImageView
+                            android:id="@+id/refer_mentor_imageView"
+                            android:layout_width="140dp"
+                            android:layout_height="120dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:contentDescription="@string/refer_mentor"
+                            android:onClick="onHomePageViewClicked"
+                            app:srcCompat="@drawable/bs_refer_mentor_image" />
+
+                    </RelativeLayout>
+
+
+                    <TextView
+                        android:id="@+id/refer_mentor_share_text"
+                        android:layout_width="160dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="6dp"
+                        android:gravity="start"
+                        android:text="@string/shhare_invite_code_text"
+                        android:textAlignment="viewStart"
+                        android:textColor="@color/textColorPrimary"
+                        android:textSize="16sp"
+                        app:fontFamily="@font/cairo_regular" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#3ca7a7a7" />
+
+                    <Button
+                        style="@style/Base.Widget.AppCompat.Button.Borderless"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableEnd="@drawable/ic_share_icon"
+                        android:drawableRight="@drawable/ic_share_icon"
+                        android:gravity="start"
+                        android:paddingLeft="16dp"
+                        android:paddingRight="16dp"
+                        android:text="mohimenuljoaa"
+                        android:textAlignment="viewStart"
+                        android:textAllCaps="false"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        app:fontFamily="@font/cairo_regular" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/free_cashback_block"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/bg_round_corner_rela_layout"
+                    android:orientation="vertical"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginTop="18dp"
+                        android:text="Free Cashback"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="12sp"
+                        app:fontFamily="@font/cairo_regular" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/free_cashback_intro"
+                            android:layout_width="160dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="14dp"
+                            android:gravity="start"
+                            android:text="Invite your friends, get free cashback"
+                            android:textAlignment="viewStart"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="18sp"
+                            app:fontFamily="@font/cairo_regular" />
+
+                        <TextView
+                            android:layout_width="160dp"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/free_cashback_intro"
+                            android:layout_marginBottom="14dp"
+                            android:gravity="start"
+                            android:text="How invites work"
+                            android:textAlignment="viewStart"
+                            android:textColor="@color/colorLink"
+                            android:textSize="16sp"
+                            app:fontFamily="@font/cairo_regular" />
+
+                        <ImageView
+                            android:id="@+id/free_cashback_imageView"
+                            android:layout_width="140dp"
+                            android:layout_height="120dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:contentDescription="@string/refer_mentor"
+                            android:onClick="onHomePageViewClicked"
+                            app:srcCompat="@drawable/bs_free_cashback_image" />
+
+                    </RelativeLayout>
+
+
+                    <TextView
+                        android:id="@+id/free_cashback_share_text"
+                        android:layout_width="160dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="6dp"
+                        android:gravity="start"
+                        android:text="@string/shhare_invite_code_text"
+                        android:textAlignment="viewStart"
+                        android:textColor="@color/textColorPrimary"
+                        android:textSize="16sp"
+                        app:fontFamily="@font/cairo_regular" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#3ca7a7a7" />
+
+                    <Button
+                        style="@style/Base.Widget.AppCompat.Button.Borderless"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableEnd="@drawable/ic_share_icon"
+                        android:drawableRight="@drawable/ic_share_icon"
+                        android:gravity="start"
+                        android:paddingLeft="16dp"
+                        android:paddingRight="16dp"
+                        android:text="mohimenuljoaa"
+                        android:textAlignment="viewStart"
+                        android:textAllCaps="false"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        app:fontFamily="@font/cairo_regular" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/start_mentoring_block"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/bg_round_corner_rela_layout"
+                    android:orientation="vertical"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginTop="18dp"
+                        android:text="Start Mentoring with Dume"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="12sp"
+                        app:fontFamily="@font/cairo_regular" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/start_mentoring_intro"
+                            android:layout_width="160dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="14dp"
+                            android:gravity="start"
+                            android:text="Join thousands of mentors who also share their skill and earn money with Dume"
+                            android:textAlignment="viewStart"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="18sp"
+                            app:fontFamily="@font/cairo_regular" />
+
+
+                        <ImageView
+                            android:id="@+id/start_mentoring_imageView"
+                            android:layout_width="140dp"
+                            android:layout_height="120dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:contentDescription="@string/refer_mentor"
+                            android:onClick="onHomePageViewClicked"
+                            app:srcCompat="@drawable/bs_start_mentoring_image" />
+
+                    </RelativeLayout>
+
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#3ca7a7a7" />
+
+                    <Button
+                        style="@style/Base.Widget.AppCompat.Button.Borderless"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableEnd="@drawable/ic_keyboard_arrow_right_black_24dp"
+                        android:drawableRight="@drawable/ic_keyboard_arrow_right_black_24dp"
+                        android:gravity="start"
+                        android:paddingLeft="16dp"
+                        android:paddingRight="16dp"
+                        android:text="Try sharing your skill"
+                        android:textAlignment="viewStart"
+                        android:textAllCaps="false"
+                        android:textColor="@color/colorLink"
+                        android:textSize="16sp"
+                        app:fontFamily="@font/cairo_regular" />
+
                 </LinearLayout>
 
 
-            </android.support.v4.widget.NestedScrollView>
+            </carbon.widget.LinearLayout>
 
         </android.support.v4.widget.NestedScrollView>
-
-    </android.support.design.widget.CoordinatorLayout>
-
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/bottom_sheet_fab"
-        style="?android:attr/borderlessButtonStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/fab_margin"
-        android:layout_marginLeft="@dimen/fab_margin"
-        android:layout_marginRight="@dimen/fab_margin"
-        android:layout_marginTop="@dimen/fab_margin"
-        android:onClick="onFabClicked"
-        android:stateListAnimator="@drawable/appbar_no_elevation"
-        app:backgroundTint="@color/colorWhite"
-        app:elevation="1dp"
-        app:fabSize="mini"
-        app:layout_anchor="@+id/bottom_sheet"
-        app:layout_anchorGravity="top|center"
-        app:srcCompat="@drawable/less_icon" />
+    </LinearLayout>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
@@ -200,7 +597,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="82dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="16dp"

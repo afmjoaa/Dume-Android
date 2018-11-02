@@ -3,6 +3,7 @@ package io.dume.dume.student.grabingLocation;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
@@ -12,12 +13,16 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.text.style.CharacterStyle;
+import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -28,11 +33,14 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.common.data.DataBufferUtils;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.AutocompletePrediction;
 import com.google.android.gms.location.places.AutocompletePredictionBuffer;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.PlaceBuffer;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -51,7 +59,7 @@ import carbon.widget.Button;
 import carbon.widget.ImageView;
 import carbon.widget.RelativeLayout;
 import io.dume.dume.R;
-import io.dume.dume.custom_view.HorizontalLoadView;
+import io.dume.dume.customView.HorizontalLoadView;
 import io.dume.dume.student.grabingInfo.GrabingInfoActivity;
 import io.dume.dume.student.pojo.CusStuAppComMapActivity;
 import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
@@ -62,17 +70,18 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 import static io.dume.dume.util.DumeUtils.hideKeyboard;
+import static io.dume.dume.util.DumeUtils.setMargins;
 import static io.dume.dume.util.DumeUtils.showKeyboard;
 
 public class GrabingLocationActivity extends CusStuAppComMapActivity implements OnMapReadyCallback,
         GrabingLocaitonContract.View, MyGpsLocationChangeListener {
 
     private GrabingLocaitonContract.Presenter mPresenter;
+    private static final CharacterStyle STYLE_NORMAL = new StyleSpan(Typeface.NORMAL);
     private GoogleMap mMap;
     private static final String TAG = "GrabingLocationActivity";
     private static final int fromFlag = 2;
     private Context mContext;
-    private TextView mLocationMarkerText;
     private LatLng mCenterLatLong;
     private SupportMapFragment mapFragment;
     private FloatingActionButton fab;
@@ -83,12 +92,12 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
     private FloatingActionButton bottomSheetFab;
     private boolean firstTime = true;
     private HorizontalLoadView loadView;
-    private AppBarLayout myAppbarlayout;
+    private android.support.design.widget.AppBarLayout myAppbarlayout;
     private CoordinatorLayout coordinatorLayout;
     private RecyclerView autoCompleteRecyView;
     private RecyclerView menualCompleteRecyView;
     private static final LatLngBounds LAT_LNG_BOUNDS = new LatLngBounds(new LatLng(-40, -168), new LatLng(71, 136));
-    private EditText inputSearch;
+    protected EditText inputSearch;
     private CompositeDisposable compositeDisposable;
     private PlaceAutoRecyAda recyclerAutoAdapter;
     private PlaceMenualRecyAda recyclerMenualAdapter;
@@ -116,7 +125,34 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
 
         //auto one
         initAdapterData = new ArrayList<AutocompletePrediction>();
-        recyclerAutoAdapter = new PlaceAutoRecyAda(this, initAdapterData);
+        recyclerAutoAdapter = new PlaceAutoRecyAda(this, initAdapterData, mGoogleApiClient) {
+            @Override
+            void OnItemClicked(View v, AutocompletePrediction clickedPrediction) {
+                inputSearch.setText(clickedPrediction.getPrimaryText(STYLE_NORMAL));
+                Places.GeoDataApi.getPlaceById(mGoogleApiClient, clickedPrediction.getPlaceId())
+                        .setResultCallback(new ResultCallback<PlaceBuffer>() {
+                            //TODO not complete
+                            @Override
+                            public void onResult(PlaceBuffer places) {
+                                if (places.getStatus().isSuccess()) {
+                                    final Place myPlace = places.get(0);
+                                    LatLng queriedLocation = myPlace.getLatLng();
+                                    Log.e(TAG, " " + queriedLocation.latitude);
+                                    Log.e(TAG, " " + queriedLocation.longitude);
+                                    moveCamera(new LatLng(queriedLocation.latitude, queriedLocation.longitude), DEFAULT_ZOOM
+                                            , "typed location", mMap);
+                                }
+                                places.release();
+                            }
+                        });
+                hideKeyboard(GrabingLocationActivity.this);
+                inputSearch.clearFocus();
+                inputSearchContainer.requestFocus();
+                llBottomSheet.setVisibility(View.INVISIBLE);
+                locationDoneBtn.setVisibility(View.VISIBLE);
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+            }
+        };
         autoCompleteRecyView.setAdapter(recyclerAutoAdapter);
         autoCompleteRecyView.setLayoutManager(new LinearLayoutManager(this));
         //menual one
@@ -137,11 +173,10 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
     public void findView() {
         fab = findViewById(R.id.fab);
         map = findViewById(R.id.map);
-        mLocationMarkerText = (TextView) findViewById(R.id.locationMarkertext);
+        //mLocationMarkerText = (TextView) findViewById(R.id.locationMarkertext);
         loadView = findViewById(R.id.loadView);
-        toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.accountToolbar);
         llBottomSheet = findViewById(R.id.searchBottomSheet);
-        bottomSheetFab = findViewById(R.id.bottom_sheet_fab);
         myAppbarlayout = findViewById(R.id.my_appbarLayout_cardView);
         coordinatorLayout = (CoordinatorLayout) findViewById(R.id.my_main_container);
         autoCompleteRecyView = findViewById(R.id.recycler_view_autoPlaces);
@@ -151,15 +186,22 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
         locationDoneBtn = findViewById(R.id.location_done_btn);
         inputSearchContainer = findViewById(R.id.input_search_container);
 
-
     }
 
     @Override
     public void initGrabingLocationPage() {
         fab.setAlpha(0.90f);
-
         //initializing actionbar/toolbar
         setSupportActionBar(toolbar);
+        ActionBar supportActionBar = getSupportActionBar();
+
+        if (supportActionBar != null) {
+            supportActionBar.setDisplayHomeAsUpEnabled(true);
+            supportActionBar.setDisplayShowHomeEnabled(true);
+        }
+        Drawable drawable = ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_more_vert_black_24dp);
+        toolbar.setOverflowIcon(drawable);
+
         bottomSheetBehavior = BottomSheetBehavior.from(llBottomSheet);
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         llBottomSheet.animate().scaleX(1 + (1 * 0.058f)).setDuration(0).start();
@@ -215,6 +257,7 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
                 if (hasFocus) {
                     llBottomSheet.setVisibility(View.VISIBLE);
                     locationDoneBtn.setVisibility(View.INVISIBLE);
+                    //setMargins(fab,16, 16, 16, 10);
                     bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                     Log.e(TAG, "onFocusChange: has focus");
 
@@ -234,13 +277,13 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
                 if (BottomSheetBehavior.STATE_COLLAPSED == newState) {
-                    if(fab.getVisibility() == View.INVISIBLE){
+                    if (fab.getVisibility() == View.INVISIBLE) {
                         fab.setVisibility(View.VISIBLE);
                     }
-                    if(!touchedFirstTime){
-                        fab.animate().translationYBy((float) (-6.0f * (getResources().getDisplayMetrics().density))).setDuration(60).start();
+                    /*if(!touchedFirstTime){
+                        fab.animate().translationYBy((float) (-2.0f * (getResources().getDisplayMetrics().density))).start();
                         touchedFirstTime = true;
-                    }
+                    }*/
                     hideKeyboard(GrabingLocationActivity.this);
                     inputSearch.clearFocus();
                     inputSearchContainer.requestFocus();
@@ -257,6 +300,9 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
             public void onSlide(@NonNull View bottomSheet, float slideOffset) {
                 llBottomSheet.animate().scaleX(1 + (slideOffset * 0.058f)).setDuration(0).start();
                 fab.animate().scaleX(1 - slideOffset).scaleY(1 - slideOffset).setDuration(0).start();
+                if (COMPASSBTN != null) {
+                    COMPASSBTN.animate().scaleX(1 - slideOffset).scaleY(1 - slideOffset).setDuration(0).start();
+                }
 
             }
         });
@@ -285,11 +331,15 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
         mMap = googleMap;
         onMapReadyListener(mMap);
         onMapReadyGeneralConfig();
+        mMap.setPadding((int) (10 * (getResources().getDisplayMetrics().density)), 0, 0, (int) (72 * (getResources().getDisplayMetrics().density)));
+
 
         mMap.setOnCameraMoveStartedListener(new GoogleMap.OnCameraMoveStartedListener() {
             @Override
             public void onCameraMoveStarted(int i) {
-
+                locationDoneBtn.setEnabled(false);
+                locationDoneBtn.setBackgroundColor(getResources().getColor(R.color.disable_color));
+                inputSearch.setText(R.string.LoadingText);
             }
         });
 
@@ -303,7 +353,11 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
 
                 mCenterLatLong = mMap.getCameraPosition().target;
                 //mZoom = mGoogleMap.getCameraPosition().zoom;
-                mLocationMarkerText.setText("Lat : " + mCenterLatLong.latitude + "," + "Long : " + mCenterLatLong.longitude);
+                //mLocationMarkerText.setText("Lat : " + mCenterLatLong.latitude + "," + "Long : " + mCenterLatLong.longitude);
+                String mainAddress = getAddress(mCenterLatLong.latitude, mCenterLatLong.longitude);
+                inputSearch.setText(mainAddress);
+                locationDoneBtn.setEnabled(true);
+                locationDoneBtn.setBackgroundColor(getResources().getColor(R.color.colorBlack));
 
             }
         });
@@ -322,21 +376,16 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
     }
 
     @Override
-    public void onShowBottomSheet() {
-
-    }
-
-    @Override
     public void onDiscardSearchClicked() {
         inputSearch.getText().clear();
         discardImage.setVisibility(View.INVISIBLE);
     }
 
+    //not interested right now
     @Override
     public void onLocationDoneBtnClicked() {
         startActivity(new Intent(this, GrabingInfoActivity.class));
     }
-
 
     public void onGrabingLocationViewClicked(View view) {
         mPresenter.onGrabingLocationViewIntracted(view);
@@ -354,16 +403,8 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
 
     @Override
     public void onMyGpsLocationChanged(Location location) {
-        /*// New location has now been determined
-        String msg = "Updated Location: " +
-                Double.toString(location.getLatitude()) + "," +
-                Double.toString(location.getLongitude());
-        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
-        // You can now create a LatLng Object for use with maps
-        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-        moveCamera(latLng, DEFAULT_ZOOM, "Device Location", mMap);*/
-    }
 
+    }
 
     @SuppressLint("CheckResult")
     private void getAutocomplete(CharSequence constraint) {
@@ -372,7 +413,7 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
 
             // Submit the query to the autocomplete API and retrieve a PendingResult that will
             // contain the results when the query completes.
-            PendingResult<AutocompletePredictionBuffer> results =
+            final PendingResult<AutocompletePredictionBuffer> results =
                     Places.GeoDataApi
                             .getAutocompletePredictions(mGoogleApiClient, constraint.toString(),
                                     LAT_LNG_BOUNDS, null);
@@ -383,7 +424,7 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
                 AutocompletePredictionBuffer autocompletePredictions = results.await(60, TimeUnit.SECONDS);
                 final Status status = autocompletePredictions.getStatus();
                 if (!status.isSuccess()) {
-                    Toast.makeText(this, "Error contacting API: " + status.toString(),
+                    Toast.makeText(GrabingLocationActivity.this, "Error contacting API: " + status.toString(),
                             Toast.LENGTH_SHORT).show();
                     Log.e(TAG, "Error getting autocomplete prediction API call: " + status.toString());
                     autocompletePredictions.release();

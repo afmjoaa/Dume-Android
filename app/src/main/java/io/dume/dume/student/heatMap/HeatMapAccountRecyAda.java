@@ -42,16 +42,22 @@ public abstract class HeatMapAccountRecyAda extends RecyclerView.Adapter<HeatMap
         AccountRecyData current = data.get(position);
         holder.accouTypeText.setText(current.accouName);
         holder.accouIcon.setImageResource(current.iconId);
-        if(position == (data.size() -1)){
+        if (position == (data.size() - 1)) {
             holder.divider.setVisibility(View.INVISIBLE);
         }
-        if(position == 0){
+        if (current.selectedOne == position) {
             holder.doneIcon.setVisibility(View.VISIBLE);
+        }else {
+            holder.doneIcon.setVisibility(View.INVISIBLE);
         }
         holder.accouContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, "Item clicked at "+ position, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(context, "Item clicked at " + position, Toast.LENGTH_SHORT).show();
+                for (int i = 0; i < data.size(); i++) {
+                    data.get(i).selectedOne = position;
+                }
+                notifyDataSetChanged();
                 OnAccouItemClicked(v, position);
             }
         });

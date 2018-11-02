@@ -1,17 +1,24 @@
 package io.dume.dume.student.searchResult;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.location.Location;
 import android.os.Build;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.CoordinatorLayout;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.animation.FastOutLinearInInterpolator;
@@ -20,6 +27,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -32,13 +40,18 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.maps.android.ui.IconGenerator;
 import com.hadiidbouk.charts.BarData;
 import com.hadiidbouk.charts.ChartProgressBar;
 import com.jackandphantom.circularprogressbar.CircleProgressbar;
@@ -50,9 +63,11 @@ import com.transitionseverywhere.TransitionSet;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import carbon.widget.ImageView;
 import io.dume.dume.R;
+import io.dume.dume.customView.HorizontalLoadView;
 import io.dume.dume.student.common.QualificationAdapter;
 import io.dume.dume.student.common.QualificationData;
 import io.dume.dume.student.common.ReviewAdapter;
@@ -64,8 +79,10 @@ import io.dume.dume.util.DumeUtils;
 import io.dume.dume.util.OnSwipeTouchListener;
 import io.dume.dume.util.VisibleToggleClickListener;
 
+import static io.dume.dume.util.ImageHelper.getRoundedCornerBitmap;
+
 public class SearchResultActivity extends CusStuAppComMapActivity implements OnMapReadyCallback,
-        SearchResultContract.View, MyGpsLocationChangeListener {
+        SearchResultContract.View, MyGpsLocationChangeListener, GoogleMap.OnMarkerClickListener, GoogleMap.OnInfoWindowClickListener {
 
     private GoogleMap mMap;
     private SearchResultContract.Presenter mPresenter;
@@ -115,6 +132,14 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
     private LinearLayout basicInfoInsider;
     private LinearLayout.LayoutParams basicInfoInsiderLayoutParams;
     private OnSwipeTouchListener onSwipeTouchListener;
+    private HorizontalLoadView loadView;
+    private View mCustomMarkerView;
+    private ImageView mMarkerImageView;
+    private LatLng mDummyLatLng;
+    double latitude = Double.parseDouble("22.68759");
+    double longitude = Double.parseDouble("90.64403");
+    private IconGenerator iconFactory;
+    private FloatingActionButton fab;
 
 
     @Override
@@ -195,6 +220,13 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
         basicInfoInsiderLayoutParams = (LinearLayout.LayoutParams) basicInfoInsider.getLayoutParams();
         swipeLeft = findViewById(R.id.swipe_left);
         swipeRight = findViewById(R.id.swipe_right);
+        loadView = findViewById(R.id.loadView);
+        mCustomMarkerView = ((LayoutInflater) Objects.requireNonNull(getSystemService(LAYOUT_INFLATER_SERVICE))).inflate(R.layout.custom_marker_view, null);
+        mMarkerImageView = mCustomMarkerView.findViewById(R.id.profile_image);
+        fab = findViewById(R.id.fab);
+        mDummyLatLng = new LatLng(latitude, longitude);
+        //iconFactory instance
+        iconFactory = new IconGenerator(this);
 
     }
 
@@ -212,7 +244,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
             @Override
             public void onGlobalLayout() {
 
-                llBottomSheet.getLayoutParams().height = (llBottomSheet.getHeight() - secondaryAppbarLayout.getHeight() - (int) (6 * (getResources().getDisplayMetrics().density)));
+                llBottomSheet.getLayoutParams().height = (llBottomSheet.getHeight() - secondaryAppbarLayout.getHeight() - (int) (8 * (getResources().getDisplayMetrics().density)));
                 llBottomSheet.requestLayout();
                 bottomSheetBehavior.onLayoutChild(coordinatorLayout, llBottomSheet, ViewCompat.LAYOUT_DIRECTION_LTR);
                 ViewTreeObserver obs = llBottomSheet.getViewTreeObserver();
@@ -245,6 +277,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                     setDarkStatusBarIcon();
                     viewMusk.setVisibility(View.GONE);
                     secondaryAppbarLayout.setVisibility(View.INVISIBLE);
+                    loadView.setVisibility(View.GONE);
                     defaultAppbarLayout.setVisibility(View.VISIBLE);
                     changingOrientationContainer.setOrientation(LinearLayout.HORIZONTAL);
                     changingOrientationParams.height = LinearLayout.LayoutParams.WRAP_CONTENT;
@@ -268,6 +301,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                     setLightStatusBarIcon();
                     viewMusk.setVisibility(View.VISIBLE);
                     secondaryAppbarLayout.setVisibility(View.VISIBLE);
+                    loadView.setVisibility(View.VISIBLE);
                     defaultAppbarLayout.setVisibility(View.INVISIBLE);
 
                     circleProgressbarARatio.setProgressWithAnimation(80, ANIMATIONDURATION);
@@ -318,6 +352,11 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                         .scaleX((float) (1 + (0.22 * slideOffset)))
                         .scaleY((float) (1 + (0.22 * slideOffset)))
                         .setDuration(0).start();
+                fab.animate().scaleX(1 - slideOffset).scaleY(1 - slideOffset).setDuration(0).start();
+                if (COMPASSBTN != null) {
+                    COMPASSBTN.animate().scaleX(1 - slideOffset).scaleY(1 - slideOffset).setDuration(0).start();
+                }
+
             }
         });
 
@@ -581,7 +620,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
 
 
     @Override
-    public boolean dispatchTouchEvent(MotionEvent ev){
+    public boolean dispatchTouchEvent(MotionEvent ev) {
         onSwipeTouchListener.getGestureDetector().onTouchEvent(ev);
         return super.dispatchTouchEvent(ev);
     }
@@ -592,12 +631,31 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                 this, R.raw.map_style_default_json);
         googleMap.setMapStyle(style);
         mMap = googleMap;
+        //config the map here
+        onMapReadyListener(mMap);
+        onMapReadyGeneralConfig();
+        //config finish here
         mMap.setPadding((int) (6 * (getResources().getDisplayMetrics().density)), 0, 0, (int) (150 * (getResources().getDisplayMetrics().density)));
-
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
+        mMap.setOnMarkerClickListener(this);
+        mMap.setOnInfoWindowClickListener(this);
+        /*LatLng sydney = new LatLng(-34, 151);
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));*/
+
+        //testing my custom marker code here
+        //addCustomMarkerFromDrawable();
+        addCustomMarkerFromURL();
+        mMap.animateCamera(CameraUpdateFactory.newLatLng(mDummyLatLng));
+
+    }
+
+    @Override
+    public void centerTheMapCamera() {
+        if (mMap == null) {
+            return;
+        }
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mDummyLatLng, 10f));
+
     }
 
     @Override
@@ -655,4 +713,63 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
         return data;
     }
 
+    //testing custom marker code here
+    private Bitmap getMarkerBitmapFromView(View view, Bitmap bitmap) {
+
+        mMarkerImageView.setImageBitmap(getRoundedCornerBitmap(bitmap,(int) (28 * (getResources().getDisplayMetrics().density))));
+        view.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+        view.layout(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
+        view.buildDrawingCache();
+        Bitmap returnedBitmap = Bitmap.createBitmap(view.getMeasuredWidth(), view.getMeasuredHeight(),
+                Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(returnedBitmap);
+        canvas.drawColor(Color.WHITE, PorterDuff.Mode.SRC_IN);
+        Drawable drawable = view.getBackground();
+        if (drawable != null)
+            drawable.draw(canvas);
+        view.draw(canvas);
+        return returnedBitmap;
+
+    }
+
+    private void addCustomMarkerFromURL() {
+        if (mMap == null) {
+            return;
+        }
+        // adding a marker with image from URL using glide image loading library
+        Glide.with(getApplicationContext())
+                .asBitmap()
+                .load("http://i.imgur.com/ROz4Jgh.png")
+                .into(new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(@NonNull Bitmap resource, @Nullable com.bumptech.glide.request.transition.Transition<? super Bitmap> transition) {
+                        mMap.addMarker(new MarkerOptions().position(mDummyLatLng)
+                                .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(mCustomMarkerView, resource))));
+                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mDummyLatLng, 10f));
+                    }
+                });
+
+        iconFactory.setStyle(IconGenerator.STYLE_DEFAULT);
+        iconFactory.setTextAppearance(this, R.style.MyCustomInfoWindowTextApp);
+        iconFactory.setBackground(getDrawable(R.drawable.custom_info_window_vector));
+        iconFactory.setContentPadding((int) (27 * (getResources().getDisplayMetrics().density)), (int) (2 * (getResources().getDisplayMetrics().density)),0, (int) (6 * (getResources().getDisplayMetrics().density)));
+        addCustomInfoWindow(iconFactory, makeCharSequence("3 km","12 min"), mDummyLatLng);
+    }
+
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        Toast.makeText(this, "marker clicked", Toast.LENGTH_SHORT).show();
+        return false;
+        //true means no default behaviour
+    }
+
+    @Override
+    public void onInfoWindowClick(Marker marker) {
+        Toast.makeText(this, "info window clicked", Toast.LENGTH_SHORT).show();
+    }
+
+    public void onSearchResultViewClicked(View view) {
+        mPresenter.onSearchResultIntracted(view);
+    }
 }
