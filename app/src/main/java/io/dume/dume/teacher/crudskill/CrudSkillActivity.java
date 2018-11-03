@@ -1,5 +1,6 @@
 package io.dume.dume.teacher.crudskill;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -12,8 +13,9 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.dume.dume.R;
-import io.dume.dume.custom_view.HorizontalLoadView;
+import io.dume.dume.customView.HorizontalLoadView;
 import io.dume.dume.teacher.adapters.CategoryAdapter;
+import io.dume.dume.teacher.skill.SkillActivity;
 import io.dume.dume.util.DumeUtils;
 
 public class CrudSkillActivity extends AppCompatActivity implements CrudContract.View {
@@ -69,6 +71,14 @@ public class CrudSkillActivity extends AppCompatActivity implements CrudContract
     @Override
     public void setUpRecyclerView(List<String> categoryList, List<Integer> drawableList) {
         categoryGrid.setLayoutManager(new GridLayoutManager(this, 3));
-        categoryGrid.setAdapter(new CategoryAdapter(categoryList, drawableList));
+        categoryGrid.setAdapter(new CategoryAdapter(categoryList, drawableList) {
+            @Override
+            protected void onCategoryItemClick(View view, int position) {
+                flush("" + position);
+                if (position == 5) {
+                    startActivity(new Intent(getApplicationContext(), SkillActivity.class));
+                }
+            }
+        });
     }
 }
