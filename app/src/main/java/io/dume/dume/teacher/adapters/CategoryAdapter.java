@@ -12,14 +12,15 @@ import java.util.List;
 
 import io.dume.dume.R;
 
-public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CategoryVH> {
+public abstract class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CategoryVH> {
     private List<String> categories;
     private List<Integer> categoryImage;
+
 
     private CategoryAdapter() {
     }
 
-    public CategoryAdapter(List<String> categories, List<Integer> categoryImage) {
+     public CategoryAdapter(List<String> categories, List<Integer> categoryImage) {
         this.categories = categories;
         this.categoryImage = categoryImage;
     }
@@ -34,6 +35,9 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
     @Override
     public void onBindViewHolder(@NonNull CategoryVH holder, int position) {
+        holder.itemView.setOnClickListener(view -> {
+            onCategoryItemClick(holder.itemView, position);
+        });
         holder.icon.setImageResource(categoryImage.get(position));
         holder.title.setText(categories.get(position));
     }
@@ -54,4 +58,8 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
         }
     }
+
+
+    protected abstract void onCategoryItemClick(View view, int position);
+
 }

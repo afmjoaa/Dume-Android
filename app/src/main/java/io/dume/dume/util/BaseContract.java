@@ -1,5 +1,7 @@
 package io.dume.dume.util;
 
+import java.util.List;
+
 public interface BaseContract {
 
     interface View {
@@ -10,6 +12,8 @@ public interface BaseContract {
         void hideLoading();
 
         void flush(String message);
+
+
     }
 
     interface Presenter {
