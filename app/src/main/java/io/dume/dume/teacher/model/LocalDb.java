@@ -16,7 +16,11 @@ public class LocalDb {
             innerSchoolEnglishMediumCambridgeOLevel, innerCollege, innerCollegeEnglishMedium, innerCollegeEnglishMediumEdexel,
             innerCollegeEnglishMediumEdexelAs, innerCollegeEnglishMediumEdexelA2, innerCollegeEnglishMediumCambridge,
             innerCollegeEnglishMediumCambridgeAs, innerCollegeEnglishMediumCambridgeA2, innerCollegeBanglaMedium,
-            innerCollegeBanglaMediumScience, innerCollegeBanglaMediumCommerce, innerCollegeEnglishVersion, innerCollegeEnglishVersionScience, innerCollegeEnglishVersionCommerce, innerCollegeEnglishVersionArt = null;
+            innerCollegeBanglaMediumScience, innerCollegeBanglaMediumCommerce, innerCollegeBanglaMediumArts,
+            innerCollegeEnglishVersion, innerCollegeEnglishVersionScience, innerCollegeEnglishVersionCommerce,
+            innerCollegeEnglishVersionArts, innerSchoolBanglaMediumClassEight, innerSchoolBanglaMediumClassSSC,
+            innerSchoolBanglaMediumClassSSCScience, innerSchoolBanglaMediumClassSSCCommerce, innerSchoolBanglaMediumClassSSCArts,
+            innerProgramming,innerSoftWare, innerLanguage, innerDance, innerMusic, innerCooking,innerMusicInstrumental,innerMusicGuitar =null;
 
     public List<String> getCategories() {
         return categories;
@@ -107,8 +111,11 @@ public class LocalDb {
         innerSchoolBanglaMediumClassFive = new ArrayList<>(Arrays.asList("Bangla", "English", "Math", "Religion", "General Science", "Social Science"));
         innerSchoolBanglaMediumClassSix = new ArrayList<>(Arrays.asList("Bangla", "English", "Math", "Religion", "General Science", "Social Science", "Agriculture", "Domestic Science", "ICT"));
         innerSchoolBanglaMediumClassSeven = new ArrayList<>(Arrays.asList("Bangla", "English", "Math", "Religion", "General Science", "Social Science", "Agriculture", "Domestic Science", "ICT"));
-
-
+        innerSchoolBanglaMediumClassEight = new ArrayList<>(Arrays.asList("English", "Bangla", "Math", "Science", "ICL"));
+        innerSchoolBanglaMediumClassSSC = new ArrayList<>(Arrays.asList("Science", "Commerce", "Arts"));
+        innerSchoolBanglaMediumClassSSCScience = new ArrayList<>(Arrays.asList("English", "Bangla", "Physics", "Chemistry", "Biology", "Math", "Higher Math", "Statistics", "ICT", "Bangladesh and Global Studies", "Religion"));
+        innerSchoolBanglaMediumClassSSCCommerce = new ArrayList<>(Arrays.asList("English", "Bangla", "ICT", "Economics", "Accounting", "Finance & Banking", "Business Entrepreneurship", "Science", "Religion"));
+        innerSchoolBanglaMediumClassSSCArts = new ArrayList<>(Arrays.asList("English", "Bangla", "ICT", "Religion", "Geography and Environment", "History of Bangladesh and World Civilization", "Art and Crafts", "Science"));
         innerSchoolEnglishMediumClassOne = new ArrayList<>(Arrays.asList("English", "Bangla", "Math", "Geography", "History", "Science", "Religion"));
         innerSchoolEnglishMediumClassTwo = new ArrayList<>(Arrays.asList("English", "Bangla", "Math", "Geography", "History", "Science", "Religion"));
         innerSchoolEnglishMediumClassThree = new ArrayList<>(Arrays.asList("English", "Bangla", "Math", "Geography", "History", "Science", "Religion"));
@@ -126,7 +133,29 @@ public class LocalDb {
         innerCollegeEnglishMediumCambridge = new ArrayList<>(Arrays.asList("As", "A2"));
         innerCollegeEnglishMediumCambridgeA2 = new ArrayList<>(Arrays.asList("Physics", "Chemistry", "Biology", "Math", "Further Math", "Psychology", "Accounting", "Economics", "Business"));
         innerCollegeEnglishMediumCambridgeAs = new ArrayList<>(Arrays.asList("Physics", "Chemistry", "Biology", "Math", "Further Math", "Psychology", "Accounting", "Economics", "Business"));
-        innerCollegeBanglaMedium= new ArrayList<>(Arrays.asList("Science", "Commerce","Arts"));
+        innerCollegeBanglaMedium = new ArrayList<>(Arrays.asList("Science", "Commerce", "Arts"));
+        innerCollegeBanglaMediumScience = new ArrayList<>(Arrays.asList("English", "Physics", "Chemistry", "Biology", "Math", "Higher Math", "Statistics", "ICT"));
+        innerCollegeBanglaMediumCommerce = new ArrayList<>(Arrays.asList("English", "Bangla", "Accounting", "Business Organization and Management", "ICT", "Finance, Banking & Insurance", "Production Management & Marketing", "Statistics", "Economics", "Geography"));
+        innerCollegeBanglaMediumArts = new ArrayList<>(Arrays.asList("English", "Bangla", "ICT", "Parent Policy", "Economics", "Psychology", "Logic", "Social Science", "Agriculture", "Geography"));
+        innerCollegeEnglishVersion = new ArrayList<>(Arrays.asList("Science", "Commerce", "Arts"));
+        innerCollegeEnglishVersionScience = new ArrayList<>(Arrays.asList("English", "Physics", "Chemistry", "Biology", "Math", "Higher Math", "Statistics", "ICT"));
+        innerCollegeEnglishVersionCommerce = new ArrayList<>(Arrays.asList("English", "Bangla", "Accounting", "Business Organization and Management", "ICT", "Finance, Banking & Insurance", "Production Management & Marketing", "Statistics", "Economics", "Geography"));
+        innerCollegeEnglishVersionArts = new ArrayList<>(Arrays.asList("English", "Bangla", "ICT", "Parent Policy", "Economics", "Psychology", "Logic", "Social Science", "Agriculture", "Geography"));
+
+        innerProgramming = new ArrayList<>(Arrays.asList("C","Java","C++","C#", "JavaScript","Python"));
+
+        innerSoftWare = new ArrayList<>(Arrays.asList("Word","Excel","Powerpoint", "Adobe Illustrator","Adobe PhotoShop","Matlab","Solid work","AutoCad","Adobe After Effect"));
+
+        innerLanguage = new ArrayList<>(Arrays.asList("English", "Bangla", "French", "Spanish", "Japanese", "Korean", "German", "Hindi", "Chinese"));
+
+        innerCooking = new ArrayList<>(Arrays.asList("Bangla Cuisine", "Chinese Cuisine", "Baking", "Fast-Foods"));
+
+        innerDance = new ArrayList<>(Arrays.asList("Classical", "Modern Dance","Bollywood", "Contemporary"));
+
+        innerMusic = new ArrayList<>(Arrays.asList("Singing cource", "Instrumental"));
+
+       innerMusicInstrumental = new ArrayList<>(Arrays.asList("Guitar", "Tabla","Violin","Keyboard", "Piano", "Drums"));
+       innerMusicGuitar = new ArrayList<>(Arrays.asList("Electric", "Acoustic","Spanish", "hawaiian"));
     }
 
 
