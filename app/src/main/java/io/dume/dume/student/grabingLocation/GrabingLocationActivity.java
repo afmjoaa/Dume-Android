@@ -150,8 +150,7 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
                 inputSearchContainer.requestFocus();
                 llBottomSheet.setVisibility(View.INVISIBLE);
                 locationDoneBtn.setVisibility(View.VISIBLE);
-                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-            }
+             }
         };
         autoCompleteRecyView.setAdapter(recyclerAutoAdapter);
         autoCompleteRecyView.setLayoutManager(new LinearLayoutManager(this));

@@ -144,5 +144,7 @@ dependencies {
     implementation 'com.github.Cutta:ContinuousScrollableImageView:1.0'
     //google map direction api alternative
     implementation 'com.github.jd-alexander:library:1.1.0'
+    implementation 'com.github.demoNo:ParallaxViewPager:v1.0.0'
+    implementation 'org.jetbrains:annotations:15.0'
 
 }

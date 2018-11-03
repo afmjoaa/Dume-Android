@@ -40,7 +40,7 @@ public abstract class InboxChatAdapter extends RecyclerView.Adapter<InboxChatAda
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
-        switch (position){
+        switch (position) {
             case 1:
                 //testing offline
                 holder.onlineIndicator.setVisibility(View.GONE);
@@ -48,8 +48,8 @@ public abstract class InboxChatAdapter extends RecyclerView.Adapter<InboxChatAda
                 break;
             case 2:
                 //testing selected item
-                holder.chatUserDP.setHeight((int) (44*context.getResources().getDisplayMetrics().density));
-                holder.chatUserDP.setWidth((int) (44*context.getResources().getDisplayMetrics().density));
+                //holder.chatUserDP.setHeight((int) (44*context.getResources().getDisplayMetrics().density));
+                //holder.chatUserDP.setWidth((int) (44*context.getResources().getDisplayMetrics().density));
                 break;
             case 4:
                 break;
@@ -77,7 +77,24 @@ public abstract class InboxChatAdapter extends RecyclerView.Adapter<InboxChatAda
     }
 
     abstract void OnItemClicked(View v, int position);
+
     abstract void OnItemLongClicked(View v, int position);
+
+    public void updateInboxChatData(List<InboxChatData> newData) {
+        data.clear();
+        data.addAll(newData);
+        this.notifyDataSetChanged();
+    }
+
+    public void unSelectAllItem() {
+        for (int i = 0; i < 3; i++) {
+            /*Wrapper wrapper = items.get(i);
+            if (wrapper.isSelected) {
+                wrapper.isSelected = false;
+                notifyItemChanged(i);
+            }*/
+        }
+    }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
 

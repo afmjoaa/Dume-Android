@@ -30,23 +30,23 @@ public class AfterSplashPagerAdapter extends FragmentStatePagerAdapter {
         switch (position) {
             case ID_DEFAULT:
                 title = context.getString(R.string.sample_title_holder);
-                description = context.getString(R.string.sample_subtitle_holder);
+                description = context.getString(R.string.intro1);
                 break;
             case ID_STYLED:
                 title = context.getString(R.string.sample_title_holder);
-                description = context.getString(R.string.sample_subtitle_holder);
+                description = context.getString(R.string.intro2);
                 break;
             case ID_CUSTOM_LAYOUT:
                 title = context.getString(R.string.sample_title_holder);
-                description = context.getString(R.string.sample_subtitle_holder);
+                description = context.getString(R.string.intro3);
                 break;
             case ID_CUSTOM_VIEW_HOLDER:
                 title = context.getString(R.string.sample_title_holder);
-                description = context.getString(R.string.sample_subtitle_holder);
+                description = context.getString(R.string.intro4);
                 break;
             case ID_CUSTOM_CONTENT:
                 title = context.getString(R.string.sample_title_holder);
-                description = context.getString(R.string.sample_subtitle_holder);
+                description = context.getString(R.string.intro5);
                 break;
         }
         return DemoCardFragment.newInstance(position, title, description);

@@ -26,6 +26,7 @@ import android.support.v4.view.animation.LinearOutSlowInInterpolator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -42,6 +43,11 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
+import com.directions.route.AbstractRouting;
+import com.directions.route.Route;
+import com.directions.route.RouteException;
+import com.directions.route.Routing;
+import com.directions.route.RoutingListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -51,6 +57,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.maps.android.ui.IconGenerator;
 import com.hadiidbouk.charts.BarData;
 import com.hadiidbouk.charts.ChartProgressBar;
@@ -82,7 +90,8 @@ import io.dume.dume.util.VisibleToggleClickListener;
 import static io.dume.dume.util.ImageHelper.getRoundedCornerBitmap;
 
 public class SearchResultActivity extends CusStuAppComMapActivity implements OnMapReadyCallback,
-        SearchResultContract.View, MyGpsLocationChangeListener, GoogleMap.OnMarkerClickListener, GoogleMap.OnInfoWindowClickListener {
+        SearchResultContract.View, MyGpsLocationChangeListener, GoogleMap.OnMarkerClickListener, GoogleMap.OnInfoWindowClickListener,
+        RoutingListener {
 
     private GoogleMap mMap;
     private SearchResultContract.Presenter mPresenter;
@@ -136,10 +145,16 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
     private View mCustomMarkerView;
     private ImageView mMarkerImageView;
     private LatLng mDummyLatLng;
-    double latitude = Double.parseDouble("22.68759");
-    double longitude = Double.parseDouble("90.64403");
+    double latitude = Double.parseDouble("23.788632");
+    double longitude = Double.parseDouble("90.419437");
+
+    double latitude1 = Double.parseDouble("23.847440");
+    double longitude1 = Double.parseDouble("90.415854");
     private IconGenerator iconFactory;
     private FloatingActionButton fab;
+    private LatLng mDummyLatLngOne;
+    private List<Polyline> polylines;
+    private static final int[] COLORS = new int[]{R.color.black, R.color.badge_red, R.color.badge_green, R.color.blue, R.color.badge_yellow};
 
 
     @Override
@@ -178,6 +193,8 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                 }
             }
         });
+
+        polylines = new ArrayList<>();
 
     }
 
@@ -225,6 +242,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
         mMarkerImageView = mCustomMarkerView.findViewById(R.id.profile_image);
         fab = findViewById(R.id.fab);
         mDummyLatLng = new LatLng(latitude, longitude);
+        mDummyLatLngOne = new LatLng(latitude1, longitude1);
         //iconFactory instance
         iconFactory = new IconGenerator(this);
 
@@ -644,9 +662,30 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
 
         //testing my custom marker code here
         //addCustomMarkerFromDrawable();
-        addCustomMarkerFromURL();
+        addCustomMarkerFromURL("http://i.imgur.com/ROz4Jgh.png", mDummyLatLng);
+        addCustomMarkerFromURL("http://i.imgur.com/Qn9UesZ.png", mDummyLatLngOne);
         mMap.animateCamera(CameraUpdateFactory.newLatLng(mDummyLatLng));
 
+        getRouteBetweenMarker(mDummyLatLng, mDummyLatLngOne);
+
+    }
+
+    private void getRouteBetweenMarker(LatLng One, LatLng Two) {
+        Routing routing = new Routing.Builder()
+                .travelMode(AbstractRouting.TravelMode.DRIVING)
+                .withListener(this)
+                .alternativeRoutes(true)
+                .waypoints(One, Two)
+                .key(getResources().getString(R.string.google_direction_key))
+                .build();
+        routing.execute();
+    }
+
+    private void erasePolylines() {
+        for (Polyline line : polylines) {
+            line.remove();
+        }
+        polylines.clear();
     }
 
     @Override
@@ -716,7 +755,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
     //testing custom marker code here
     private Bitmap getMarkerBitmapFromView(View view, Bitmap bitmap) {
 
-        mMarkerImageView.setImageBitmap(getRoundedCornerBitmap(bitmap,(int) (28 * (getResources().getDisplayMetrics().density))));
+        mMarkerImageView.setImageBitmap(getRoundedCornerBitmap(bitmap, (int) (28 * (getResources().getDisplayMetrics().density))));
         view.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
         view.layout(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
         view.buildDrawingCache();
@@ -732,28 +771,29 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
 
     }
 
-    private void addCustomMarkerFromURL() {
+    private void addCustomMarkerFromURL(String url, LatLng lattitudeLongitude) {
         if (mMap == null) {
             return;
         }
         // adding a marker with image from URL using glide image loading library
+        //"http://i.imgur.com/ROz4Jgh.png"
         Glide.with(getApplicationContext())
                 .asBitmap()
-                .load("http://i.imgur.com/ROz4Jgh.png")
+                .load(url)
                 .into(new SimpleTarget<Bitmap>() {
                     @Override
                     public void onResourceReady(@NonNull Bitmap resource, @Nullable com.bumptech.glide.request.transition.Transition<? super Bitmap> transition) {
-                        mMap.addMarker(new MarkerOptions().position(mDummyLatLng)
+                        mMap.addMarker(new MarkerOptions().position(lattitudeLongitude)
                                 .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(mCustomMarkerView, resource))));
-                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mDummyLatLng, 10f));
+                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(lattitudeLongitude, 15f));
                     }
                 });
 
         iconFactory.setStyle(IconGenerator.STYLE_DEFAULT);
         iconFactory.setTextAppearance(this, R.style.MyCustomInfoWindowTextApp);
         iconFactory.setBackground(getDrawable(R.drawable.custom_info_window_vector));
-        iconFactory.setContentPadding((int) (27 * (getResources().getDisplayMetrics().density)), (int) (2 * (getResources().getDisplayMetrics().density)),0, (int) (6 * (getResources().getDisplayMetrics().density)));
-        addCustomInfoWindow(iconFactory, makeCharSequence("3 km","12 min"), mDummyLatLng);
+        iconFactory.setContentPadding((int) (27 * (getResources().getDisplayMetrics().density)), (int) (2 * (getResources().getDisplayMetrics().density)), 0, (int) (6 * (getResources().getDisplayMetrics().density)));
+        addCustomInfoWindow(iconFactory, makeCharSequence("3 km", "12 min"), lattitudeLongitude);
     }
 
 
@@ -771,5 +811,51 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
 
     public void onSearchResultViewClicked(View view) {
         mPresenter.onSearchResultIntracted(view);
+    }
+
+    @Override
+    public void onRoutingFailure(RouteException e) {
+        if (e != null) {
+            Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            Log.e("fuck", "onRoutingFailure: " + e.getMessage());
+        } else {
+            Toast.makeText(this, "Something went wrong, Try again", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onRoutingStart() {
+
+    }
+
+    @Override
+    public void onRoutingSuccess(ArrayList<Route> route, int shortestRouteIndex) {
+        if (polylines.size() > 0) {
+            for (Polyline poly : polylines) {
+                poly.remove();
+            }
+        }
+
+        polylines = new ArrayList<>();
+        //add route(s) to the map.
+        for (int i = 0; i < route.size(); i++) {
+
+            //In case of more than 5 alternative routes
+            int colorIndex = i % COLORS.length;
+
+            PolylineOptions polyOptions = new PolylineOptions();
+            polyOptions.color(getResources().getColor(COLORS[colorIndex]));
+            polyOptions.width(10 + i * 3);
+            polyOptions.addAll(route.get(i).getPoints());
+            Polyline polyline = mMap.addPolyline(polyOptions);
+            polylines.add(polyline);
+
+            Toast.makeText(getApplicationContext(), "Route " + (i + 1) + ": distance - " + route.get(i).getDistanceValue() + ": duration - " + route.get(i).getDurationValue(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onRoutingCancelled() {
+
     }
 }

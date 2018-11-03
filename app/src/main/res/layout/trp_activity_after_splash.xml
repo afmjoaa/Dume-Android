@@ -1,14 +1,20 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:fitsSystemWindows="true">
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/bg_dark_blue_top_gradient"
-        android:fitsSystemWindows="true"/>
+        android:fitsSystemWindows="true" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -18,37 +24,51 @@
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_margin="@dimen/activity_margin"
             android:layout_weight="1"
             android:gravity="center"
             android:text="Dume"
             android:textColor="@color/white"
-            android:textSize="28sp"/>
+            android:textSize="28sp" />
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="3">
+            android:layout_weight="3"
+            android:orientation="vertical">
 
             <android.support.v4.view.ViewPager
                 android:id="@+id/pager"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:clipToPadding="false"
                 android:overScrollMode="never"
-                android:paddingBottom="20dp"
                 android:paddingLeft="@dimen/card_padding"
-                android:paddingRight="@dimen/card_padding"/>
+                android:paddingRight="@dimen/card_padding"
+                android:paddingBottom="20dp">
 
-            <me.relex.circleindicator.CircleIndicator
-                android:id="@+id/indicator"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_alignParentBottom="true"/>
 
-        </RelativeLayout>
+            </android.support.v4.view.ViewPager>
 
+
+        </LinearLayout>
+
+        <me.relex.circleindicator.CircleIndicator
+            android:id="@+id/indicator"
+            android:layout_width="match_parent"
+            android:layout_height="40dp" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:background="@drawable/round_button"
+            android:text="Start"
+            android:textColor="@color/white" />
     </LinearLayout>
 
 </android.support.design.widget.CoordinatorLayout>
