@@ -52,6 +52,13 @@
     <string name="profile">Profile</string>
     <string name="title_activity_maps">Map</string>
     <string name="refresh">Refresh</string>
+    <string name="intro1">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fugiat,</string>
+    nam.
+    <string name="intro2">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloremque impedit ipsum nostrum odit officia rerum?</string>
+    <string name="intro3">Lorem ipsum dolor sit amet, consectetur adipisicing elit. At, sit!</string>
+    <string name="intro4">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</string>
+    <string name="intro5">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur.</string>
+    <string name="intro6">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cum cupiditate eos possimus saepe!</string>
     <string-array name="fromYear">
         <item>1996</item>
         <item>1997</item>
@@ -475,6 +482,10 @@ provided.Tap salary for details.  </string>
     <string name="refer_mentor_intro">Make up to $3000 for every friend you refer to mentor</string>
     <string name="shhare_invite_code_text">Share your invite code</string>
     <string name="LoadingText">Loading...</string>
+    <string name="viewed_updates">Viewed Updates</string>
+    <string name="recent_updates">Recent Updates</string>
+    <string name="delete">Delete</string>
+    <string name="mute">Mute</string>
 
     <string-array name="primaryPromoText">
         <item>Affortable nearby couching-centers specific to the topic</item>

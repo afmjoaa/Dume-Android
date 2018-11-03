@@ -13,6 +13,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -41,6 +42,7 @@ import io.dume.dume.student.searchResultTabview.SearchResultTabData;
 import io.dume.dume.student.searchResultTabview.SearchResultTabRecyAda;
 import io.dume.dume.util.DumeUtils;
 
+import static io.dume.dume.util.DumeUtils.configToolbarTittle;
 import static io.dume.dume.util.DumeUtils.configureAppbarWithoutColloapsing;
 
 public class InboxActivity extends CustomStuAppCompatActivity implements InboxActivityContact.View {
@@ -58,6 +60,8 @@ public class InboxActivity extends CustomStuAppCompatActivity implements InboxAc
     private TabLayout tabLayout;
     private int currentTabPosition = 0;
     private Intent contactFromIntent;
+    private Toolbar myToolbar;
+    private static InboxChatAdapter recordsRecyAda;
 
 
     @Override
@@ -76,7 +80,7 @@ public class InboxActivity extends CustomStuAppCompatActivity implements InboxAc
         mViewPager.setAdapter(mSectionsPagerAdapter);
         //making the custom tab here
         int[] wh = DumeUtils.getScreenSize(this);
-        int tabMinWidth = ((wh[0] / 3)-(int) (24 * (getResources().getDisplayMetrics().density)));
+        int tabMinWidth = ((wh[0] / 3) - (int) (24 * (getResources().getDisplayMetrics().density)));
         LinearLayout.LayoutParams textParam = new LinearLayout.LayoutParams
                 (tabMinWidth, LinearLayout.LayoutParams.WRAP_CONTENT);
         // loop through all navigation tabs
@@ -101,7 +105,6 @@ public class InboxActivity extends CustomStuAppCompatActivity implements InboxAc
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -147,11 +150,24 @@ public class InboxActivity extends CustomStuAppCompatActivity implements InboxAc
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
+        switch (id){
+            case R.id.action_delete:
+                break;
+
+            case R.id.action_settings:
+                break;
+
+            case R.id.action_mute:
+                break;
+
+            case R.id.action_starred:
+                break;
+        }
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        /*if (id == R.id.action_settings) {
             return true;
-        }
+        }*/
 
         return super.onOptionsItemSelected(item);
     }
@@ -162,6 +178,7 @@ public class InboxActivity extends CustomStuAppCompatActivity implements InboxAc
         fab = (FloatingActionButton) findViewById(R.id.fab);
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         mViewPager = (ViewPager) findViewById(R.id.container);
+        myToolbar = findViewById(R.id.accountToolbar);
 
     }
 
@@ -192,6 +209,15 @@ public class InboxActivity extends CustomStuAppCompatActivity implements InboxAc
     @Override
     public void configInbox() {
         contactFromIntent = new Intent(InboxActivity.this, ContactActivity.class);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (myToolbar.getTitle().equals("Inbox")) {
+            super.onBackPressed();
+        } else {
+            recordsRecyAda.unSelectAllItem();
+        }
     }
 
     protected void animateFab(int position) {
@@ -238,6 +264,7 @@ public class InboxActivity extends CustomStuAppCompatActivity implements InboxAc
         private CircleProgressbar onlineIndicatorCirPro;
         private CircleProgressbar offlineIndicatorCirPro;
         private TextView chatUserName;
+        private carbon.widget.ImageView chatUserDP1;
 
 
         public PlaceholderFragment() {
@@ -262,7 +289,7 @@ public class InboxActivity extends CustomStuAppCompatActivity implements InboxAc
                     rootView = inflater.inflate(R.layout.common1_fragment_default_inbox, container, false);
                     inboxRecycler = rootView.findViewById(R.id.inbox_recycler_view);
                     List<InboxChatData> chatDialogueData = new ArrayList<>();
-                    InboxChatAdapter recordsRecyAda = new InboxChatAdapter(myThisActivity, chatDialogueData) {
+                    recordsRecyAda = new InboxChatAdapter(myThisActivity, chatDialogueData) {
                         @Override
                         void OnItemClicked(View v, int position) {
                             selectedIndicatorCirPro = v.findViewById(R.id.selected_indicator);
@@ -285,6 +312,10 @@ public class InboxActivity extends CustomStuAppCompatActivity implements InboxAc
                         @Override
                         void OnItemLongClicked(View v, int position) {
                             Toast.makeText(myThisActivity, "Inbox Chat long click", Toast.LENGTH_SHORT).show();
+                            chatUserDP1 = v.findViewById(R.id.chat_user_display_pic);
+                            chatUserDP1.setHeight((int) (44 * myThisActivity.getResources().getDisplayMetrics().density));
+                            chatUserDP1.setWidth((int) (44 * myThisActivity.getResources().getDisplayMetrics().density));
+                            configToolbarTittle(myThisActivity,"1");
                         }
                     };
                     inboxRecycler.setAdapter(recordsRecyAda);

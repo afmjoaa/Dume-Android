@@ -24,4 +24,5 @@ public interface InboxActivityContact {
 
         void inboxHawwa();
     }
+
 }

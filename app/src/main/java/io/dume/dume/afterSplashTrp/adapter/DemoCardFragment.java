@@ -56,7 +56,7 @@ public class DemoCardFragment extends Fragment
 
         tvTitle.setText(title);
         tvDescription.setText(description);
-        button.setOnClickListener(this);
+
 
         return v;
     }

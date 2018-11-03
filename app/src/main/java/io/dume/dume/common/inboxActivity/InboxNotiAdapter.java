@@ -31,15 +31,20 @@ public class InboxNotiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     @Override
     public int getItemViewType(int position) {
         if (position == 0) {
-            return 100;
-        }
+            return 9998;
+        } else if (position == 4) {
+            return 9999;
+        }//data.get(position).typeView
         return super.getItemViewType(position);
     }
 
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        if (viewType == 100) {
+        if (viewType == 9998) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.custom_inside_barrier, parent, false);
+            return new HeaderVH(view);
+        } else if (viewType == 9999) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.custom_inside_barrier, parent, false);
             return new HeaderVH(view);
         }
@@ -51,9 +56,14 @@ public class InboxNotiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        if (holder.getItemViewType() == 100) {
+        if (holder.getItemViewType() == 9998) {
             HeaderVH headerVH = (HeaderVH) holder;
-        } else {
+            headerVH.headerText.setText(R.string.recent_updates);
+        }else if(holder.getItemViewType() == 9999){
+            HeaderVH headerVH = (HeaderVH) holder;
+            headerVH.headerText.setText(R.string.viewed_updates);
+        }
+        else {
             MyViewHolder myViewHolder = (MyViewHolder) holder;
             switch (position) {
                 case 1:
@@ -100,8 +110,11 @@ public class InboxNotiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     class HeaderVH extends RecyclerView.ViewHolder {
 
+        private final TextView headerText;
+
         public HeaderVH(View itemView) {
             super(itemView);
+            headerText = itemView.findViewById(R.id.recent_updates);
         }
     }
 }
