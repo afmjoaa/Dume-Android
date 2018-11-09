@@ -588,7 +588,7 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
 
     @Override
     public void gotoGrabingLocationPage() {
-        startActivity(new Intent(this, GrabingLocationActivity.class));
+        startActivity(new Intent(this, GrabingLocationActivity.class).setAction("fromHomePage"));
     }
 
     @Override

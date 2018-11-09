@@ -1,7 +1,7 @@
 package io.dume.dume.student.heatMap;
 
 public class AccountRecyData {
-    String accouName;
-    int iconId;
-    int selectedOne;
+    public String accouName;
+    public int iconId;
+    public int selectedOne;
 }

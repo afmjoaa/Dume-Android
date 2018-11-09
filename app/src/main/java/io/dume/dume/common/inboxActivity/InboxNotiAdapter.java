@@ -41,11 +41,8 @@ public class InboxNotiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        if (viewType == 9998) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.custom_inside_barrier, parent, false);
-            return new HeaderVH(view);
-        } else if (viewType == 9999) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.custom_inside_barrier, parent, false);
+        if (viewType == 9998 || viewType == 9999) {
+            View view = inflater.inflate(R.layout.custom_inside_barrier, parent, false);
             return new HeaderVH(view);
         }
 

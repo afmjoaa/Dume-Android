@@ -33,8 +33,7 @@
 
     <style name="LoginTheme" parent="MyStyle">
         <item name="android:windowTranslucentStatus" tools:targetApi="kitkat">true</item>
-        <item name="android:statusBarColor" tools:targetApi="lollipop">@android:color/transparent
-        </item>
+        <item name="android:statusBarColor" tools:targetApi="lollipop">@android:color/transparent</item>
         <item name="android:fontFamily" tools:targetApi="jelly_bean">@font/cairo_regular</item>
         <item name="colorPrimaryDark">@android:color/transparent</item>
         <item name="android:navigationBarColor" tools:targetApi="lollipop">#000000</item>
@@ -53,6 +52,7 @@
         <item name="android:navigationBarColor" tools:targetApi="lollipop">#8c000000</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
         <item name="colorControlHighlight">@color/colorAccent</item>
+        <item name="android:fontFamily">@font/cairo_regular</item>
     </style>
 
     <style name="MyTextApprncExp" parent="Base.TextAppearance.AppCompat.Large">
@@ -143,6 +143,7 @@
         <item name="colorPrimaryDark">#00ffffff</item>
         <item name="android:windowActionBarOverlay">true</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
+        <item name="android:fontFamily">@font/cairo_regular</item>
     </style>
     <!--<item name="android:activatedBackgroundIndicator">@drawable/drawer_item_textcolor</item>-->
 
@@ -179,6 +180,7 @@
         <item name="colorPrimary">@color/black_overlay</item>
         <item name="windowActionBarOverlay">true</item>
         <item name="windowActionBar">false</item>
+        <item name="android:fontFamily">@font/cairo_regular</item>
     </style>
 
     <style name="ThemeToolbar.default" parent="ThemeToolbar">
@@ -211,12 +213,8 @@
         <item name="colorPrimaryDark">#cac8c8</item>
         <item name="android:windowActionBarOverlay">true</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
+        <item name="android:fontFamily">@font/cairo_regular</item>
     </style>
-
-    <!-- <style name="OverflowMenuStyle" parent="Widget.AppCompat.PopupMenu.Overflow">
-        <item name="android:dropDownHorizontalOffset">-16dp</item>
-        <item name="android:dropDownVerticalOffset">16dp</item>
-    </style>-->
 
     <style name="AppTheme.NoActionBar.transparent.black" parent="AppTheme.NoActionBar.transparent">
         <item name="colorPrimary">@color/carbon_black</item>
@@ -313,6 +311,11 @@
     </style>
 
     <style name="CustomTextAppearanceHeader" parent="TextAppearance.MaterialCalendarWidget.Header">
+        <item name="android:fontFamily">@font/cairo_regular</item>
+    </style>
+
+    <style name="RadioDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:textColorAlertDialogListItem">@color/textColorPrimary</item>
         <item name="android:fontFamily">@font/cairo_regular</item>
     </style>
 

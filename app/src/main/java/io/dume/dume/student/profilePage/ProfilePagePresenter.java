@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
+import io.dume.dume.R;
+
 public class ProfilePagePresenter implements ProfilePageContract.Presenter {
 
     private ProfilePageContract.View mView;
@@ -26,38 +28,24 @@ public class ProfilePagePresenter implements ProfilePageContract.Presenter {
     public void profilePageEnqueue() {
         mView.findView();
         mView.initProfilePage();
-        settingStatusBarTransparent();
         mView.configProfilePage();
     }
 
     @Override
     public void onProfileViewIntracted(View view) {
+        switch (view.getId()) {
+            case R.id.input_gerder:
+                mView.onGenderClicked();
+                break;
+            case R.id.input_current_address:
+                mView.onCurrentAddressClicked();
+                break;
+            case R.id.input_previous_result:
+                mView.onPreviousResultClicked();
+                break;
 
-    }
 
-    private void settingStatusBarTransparent() {
-
-        if (Build.VERSION.SDK_INT >= 19 && Build.VERSION.SDK_INT < 21) {
-            setWindowFlag(activity, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, true);
-        }
-        if (Build.VERSION.SDK_INT >= 19) {
-            activity.getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-        }
-        //make fully Android Transparent Status bar
-        if (Build.VERSION.SDK_INT >= 21) {
-            setWindowFlag(activity, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, false);
-            activity.getWindow().setStatusBarColor(Color.TRANSPARENT);
         }
     }
 
-    private static void setWindowFlag(Activity activity, final int bits, boolean on) {
-        Window win = activity.getWindow();
-        WindowManager.LayoutParams winParams = win.getAttributes();
-        if (on) {
-            winParams.flags |= bits;
-        } else {
-            winParams.flags &= ~bits;
-        }
-        win.setAttributes(winParams);
-    }
 }

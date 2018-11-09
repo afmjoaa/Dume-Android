@@ -9,7 +9,7 @@ import android.view.View;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.dume.dume.R;
-import io.dume.dume.custom_view.HorizontalLoadView;
+import io.dume.dume.customView.HorizontalLoadView;
 import io.dume.dume.teacher.crudskill.CrudSkillActivity;
 import io.dume.dume.util.DumeUtils;
 

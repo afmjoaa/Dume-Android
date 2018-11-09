@@ -41,6 +41,7 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -500,80 +501,6 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                 // load data here
                 int fragmentPosition = getArguments().getInt(ARG_SECTION_NUMBER);
                 switch (fragmentPosition) {
-                    case 1:
-                        if (fragRadioGroupOne != null) {
-                            fragRadioGroupOne.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-                                @Override
-                                public void onCheckedChanged(RadioGroup group, int checkedId) {
-                                    // checkedId is the RadioButton selected
-                                    RadioButton rb = (RadioButton) group.findViewById(checkedId);
-                                    String currentSelectedBtnText = rb.getText().toString();
-                                    myMainActivity.givenInfo[fragmentPosition - 1] = currentSelectedBtnText;
-                                    myMainActivity.hintIdOne.setText(currentSelectedBtnText);
-                                }
-                            });
-                        }
-                        break;
-                    case 2:
-                        if (fragRadioGroupTwo != null) {
-                            fragRadioGroupTwo.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-                                @Override
-                                public void onCheckedChanged(RadioGroup group, int checkedId) {
-                                    // checkedId is the RadioButton selected
-                                    RadioButton rb = (RadioButton) group.findViewById(checkedId);
-                                    String currentSelectedBtnText = rb.getText().toString();
-                                    myMainActivity.givenInfo[fragmentPosition - 1] = currentSelectedBtnText;
-                                    myMainActivity.hintIdTwo.setText(currentSelectedBtnText);
-                                }
-                            });
-                        }
-                        break;
-
-                    case 3:
-                        if (fragRadioGroupThree != null) {
-                            fragRadioGroupThree.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-                                @Override
-                                public void onCheckedChanged(RadioGroup group, int checkedId) {
-                                    // checkedId is the RadioButton selected
-                                    RadioButton rb = (RadioButton) group.findViewById(checkedId);
-                                    String currentSelectedBtnText = rb.getText().toString();
-                                    myMainActivity.givenInfo[fragmentPosition - 1] = currentSelectedBtnText;
-                                    myMainActivity.hintIdTwo.setText(currentSelectedBtnText);
-                                }
-                            });
-                        }
-                        break;
-
-                    case 4:
-                        if (fragRadioGroupFour != null) {
-                            fragRadioGroupFour.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-                                @Override
-                                public void onCheckedChanged(RadioGroup group, int checkedId) {
-                                    // checkedId is the RadioButton selected
-                                    RadioButton rb = (RadioButton) group.findViewById(checkedId);
-                                    String currentSelectedBtnText = rb.getText().toString();
-                                    myMainActivity.givenInfo[fragmentPosition - 1] = currentSelectedBtnText;
-                                    myMainActivity.hintIdTwo.setText(currentSelectedBtnText);
-                                }
-                            });
-                        }
-                        break;
-
-                    case 5:
-                        if (fragRadioGroupFive != null) {
-                            fragRadioGroupFive.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-                                @Override
-                                public void onCheckedChanged(RadioGroup group, int checkedId) {
-                                    // checkedId is the RadioButton selected
-                                    RadioButton rb = (RadioButton) group.findViewById(checkedId);
-                                    String currentSelectedBtnText = rb.getText().toString();
-                                    myMainActivity.givenInfo[fragmentPosition - 1] = currentSelectedBtnText;
-                                    myMainActivity.hintIdTwo.setText(currentSelectedBtnText);
-                                }
-                            });
-                        }
-                        break;
-
                     case 6:
                         if (getActivity() != null) {
                             recyclerAdapter = new RecyclerAdapter(getActivity(), getFinalData()) {
@@ -667,9 +594,12 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                             // checkedId is the RadioButton selected
                             RadioButton rb = (RadioButton) group.findViewById(checkedId);
                             String currentSelectedBtnText = rb.getText().toString();
-                            myMainActivity.givenInfo[fragmentPosition - 1] = currentSelectedBtnText;
-                            myMainActivity.hintIdOne.setText(currentSelectedBtnText);
 
+                            String currentSelectedBtnTextFA = myMainActivity.givenInfo[fragmentPosition - 1];
+                            if(!currentSelectedBtnText.equals(currentSelectedBtnTextFA)){
+                                myMainActivity.givenInfo[fragmentPosition - 1] = currentSelectedBtnText;
+                                myMainActivity.hintIdOne.setText(currentSelectedBtnText);
+                            }
                         }
                     });
                     break;
@@ -715,8 +645,11 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                             // checkedId is the RadioButton selected
                             RadioButton rb = (RadioButton) group.findViewById(checkedId);
                             String currentSelectedBtnText = rb.getText().toString();
-                            myMainActivity.givenInfo[fragmentPosition - 1] = currentSelectedBtnText;
-                            myMainActivity.hintIdTwo.setText(currentSelectedBtnText);
+                            String currentSelectedBtnTextFA = myMainActivity.givenInfo[fragmentPosition - 1];
+                            if(!currentSelectedBtnText.equals(currentSelectedBtnTextFA)){
+                                myMainActivity.givenInfo[fragmentPosition - 1] = currentSelectedBtnText;
+                                myMainActivity.hintIdTwo.setText(rb.getText());
+                            }
                         }
                     });
                     break;
@@ -762,8 +695,11 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                             // checkedId is the RadioButton selected
                             RadioButton rb = (RadioButton) group.findViewById(checkedId);
                             String currentSelectedBtnText = rb.getText().toString();
-                            myMainActivity.givenInfo[fragmentPosition - 1] = currentSelectedBtnText;
-                            myMainActivity.hintIdTwo.setText(currentSelectedBtnText);
+                            String currentSelectedBtnTextFA = myMainActivity.givenInfo[fragmentPosition - 1];
+                            if(!currentSelectedBtnText.equals(currentSelectedBtnTextFA)){
+                                myMainActivity.givenInfo[fragmentPosition - 1] = currentSelectedBtnText;
+                                myMainActivity.hintIdTwo.setText(rb.getText());
+                            }
                         }
                     });
                     break;
@@ -809,8 +745,11 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                             // checkedId is the RadioButton selected
                             RadioButton rb = (RadioButton) group.findViewById(checkedId);
                             String currentSelectedBtnText = rb.getText().toString();
-                            myMainActivity.givenInfo[fragmentPosition - 1] = currentSelectedBtnText;
-                            myMainActivity.hintIdTwo.setText(currentSelectedBtnText);
+                            String currentSelectedBtnTextFA = myMainActivity.givenInfo[fragmentPosition - 1];
+                            if(!currentSelectedBtnText.equals(currentSelectedBtnTextFA)){
+                                myMainActivity.givenInfo[fragmentPosition - 1] = currentSelectedBtnText;
+                                myMainActivity.hintIdTwo.setText(rb.getText());
+                            }
                         }
                     });
                     break;
@@ -855,8 +794,11 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                             // checkedId is the RadioButton selected
                             RadioButton rb = (RadioButton) group.findViewById(checkedId);
                             String currentSelectedBtnText = rb.getText().toString();
-                            myMainActivity.givenInfo[fragmentPosition - 1] = currentSelectedBtnText;
-                            myMainActivity.hintIdTwo.setText(currentSelectedBtnText);
+                            String currentSelectedBtnTextFA = myMainActivity.givenInfo[fragmentPosition - 1];
+                            if(!currentSelectedBtnText.equals(currentSelectedBtnTextFA)){
+                                myMainActivity.givenInfo[fragmentPosition - 1] = currentSelectedBtnText;
+                                myMainActivity.hintIdTwo.setText(rb.getText());
+                            }
                         }
                     });
                     break;

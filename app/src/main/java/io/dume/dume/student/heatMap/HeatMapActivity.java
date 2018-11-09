@@ -101,6 +101,7 @@ public class HeatMapActivity extends CusStuAppComMapActivity implements OnMapRea
     private HeatmapTileProvider mProvider;
     private TileOverlay mOverlay;
     private HashMap<String, DataSet> mLists = new HashMap<String, DataSet>();
+    private HeatMapAccountRecyAda heatMapAccountRecyAda;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,13 +117,15 @@ public class HeatMapActivity extends CusStuAppComMapActivity implements OnMapRea
         getLocationPermission(mapFragment);
 
         //setting the adapter with the recycler view
-        HeatMapAccountRecyAda heatMapAccountRecyAda = new HeatMapAccountRecyAda(this, getFinalData()) {
+        //chooseAccouTypeBtn.setCompoundDrawablesWithIntrinsicBounds( imageIcons[position], 0, R.drawable.ic_keyboard_arrow_down_black_24dp, 0);
+        heatMapAccountRecyAda = new HeatMapAccountRecyAda(this, getFinalData(0)) {
             @Override
             protected void OnAccouItemClicked(View v, int position) {
                 thisPosition = position;
                 //chooseAccouTypeBtn.setCompoundDrawablesWithIntrinsicBounds( imageIcons[position], 0, R.drawable.ic_keyboard_arrow_down_black_24dp, 0);
                 chooseAccouTypeBtn.setText(accountTypeArr[position]);
                 chooseAccouTypeBtn.performClick();
+                heatMapAccountRecyAda.update(getFinalData(position));
             }
         };
         myAccountRecycler.setAdapter(heatMapAccountRecyAda);
@@ -309,14 +312,14 @@ public class HeatMapActivity extends CusStuAppComMapActivity implements OnMapRea
         chooseAccouTypeBtn.performClick();
     }
 
-    public List<AccountRecyData> getFinalData() {
+    public List<AccountRecyData> getFinalData(int selectedItem) {
         List<AccountRecyData> data = new ArrayList<>();
 
         for (int i = 0; i < accountTypeArr.length && i < imageIcons.length; i++) {
             AccountRecyData current = new AccountRecyData();
             current.accouName = accountTypeArr[i];
             current.iconId = imageIcons[i];
-            current.selectedOne = 0;
+            current.selectedOne = selectedItem;
             data.add(current);
         }
         return data;

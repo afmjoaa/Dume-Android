@@ -54,16 +54,22 @@ public abstract class HeatMapAccountRecyAda extends RecyclerView.Adapter<HeatMap
             @Override
             public void onClick(View v) {
                 //Toast.makeText(context, "Item clicked at " + position, Toast.LENGTH_SHORT).show();
-                for (int i = 0; i < data.size(); i++) {
+                /*for (int i = 0; i < data.size(); i++) {
                     data.get(i).selectedOne = position;
                 }
-                notifyDataSetChanged();
-                OnAccouItemClicked(v, position);
+                notifyDataSetChanged();*/
+                OnAccouItemClicked(v, holder.getAdapterPosition());
             }
         });
     }
 
     protected abstract void OnAccouItemClicked(View v, int position);
+
+    public void update(List<AccountRecyData> newData){
+        data.clear();
+        data.addAll(newData);
+        this.notifyDataSetChanged();
+    }
 
     @Override
     public int getItemCount() {

@@ -103,5 +103,7 @@
     <color name="chat_ripple_color">#7800796b</color>
     <color name="percent_off_active_color">#369c3a</color>
     <color name="disable_color">#616161</color>
+    <color name="colorRippleDefault">#423497FD</color>
+
 
 </resources>
