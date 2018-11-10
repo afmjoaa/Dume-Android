@@ -487,7 +487,7 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
                             .translationX((float) (24 * (getResources().getDisplayMetrics().density) + (8 * slideOffset * (getResources().getDisplayMetrics().density))))
                             .setDuration(0).start();
                 }
-                //packageSearchBtn.animate().alpha(slideOffset).scaleX(slideOffset).scaleY(slideOffset).setDuration(0).start();
+                //packageSearchBtn.animate().alpha(slideOffset).scaleX(slideOffset).scaleY(slideOffset).setDuration(0).enqueue();
             }
         });
 

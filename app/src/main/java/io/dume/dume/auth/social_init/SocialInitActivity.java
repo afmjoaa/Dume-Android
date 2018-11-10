@@ -158,7 +158,7 @@ public class SocialInitActivity extends AppCompatActivity {
                 });
     }
 
-    //################################## My part start here###########################
+    //################################## My part enqueue here###########################
     private void init() {
         dataStore = DataStore.getInstance();
         // google initialization part

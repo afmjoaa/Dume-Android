@@ -291,7 +291,7 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
                         fab.setVisibility(View.VISIBLE);
                     }
                     /*if(!touchedFirstTime){
-                        fab.animate().translationYBy((float) (-2.0f * (getResources().getDisplayMetrics().density))).start();
+                        fab.animate().translationYBy((float) (-2.0f * (getResources().getDisplayMetrics().density))).enqueue();
                         touchedFirstTime = true;
                     }*/
                     hideKeyboard(GrabingLocationActivity.this);

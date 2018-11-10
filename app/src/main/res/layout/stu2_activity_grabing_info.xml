@@ -52,6 +52,7 @@
             app:titleTextAppearance="@style/MyTextApprncCol.lightBg">
 
             <LinearLayout
+                android:id="@+id/formeWrapper"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"

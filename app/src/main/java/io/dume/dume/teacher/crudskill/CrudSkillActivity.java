@@ -14,8 +14,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.dume.dume.R;
 import io.dume.dume.customView.HorizontalLoadView;
+import io.dume.dume.student.grabingInfo.GrabingInfoActivity;
 import io.dume.dume.teacher.adapters.CategoryAdapter;
-import io.dume.dume.teacher.skill.SkillActivity;
 import io.dume.dume.util.DumeUtils;
 
 public class CrudSkillActivity extends AppCompatActivity implements CrudContract.View {
@@ -76,7 +76,7 @@ public class CrudSkillActivity extends AppCompatActivity implements CrudContract
             protected void onCategoryItemClick(View view, int position) {
                 flush("" + position);
                 if (position == 5) {
-                    startActivity(new Intent(getApplicationContext(), SkillActivity.class));
+                    startActivity(new Intent(getApplicationContext(), GrabingInfoActivity.class).setAction(DumeUtils.TEACHER).putExtra(DumeUtils.SELECTED_ID, position));
                 }
             }
         });

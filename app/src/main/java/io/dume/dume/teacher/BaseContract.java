@@ -1,10 +1,10 @@
-package io.dume.dume.util;
-
-import java.util.List;
+package io.dume.dume.teacher;
 
 public interface BaseContract {
 
-    interface View {
+    interface View<T extends Presenter> {
+        void setPresenter(T presenter);
+
         void init();
 
         void showLoading();
@@ -12,18 +12,13 @@ public interface BaseContract {
         void hideLoading();
 
         void flush(String message);
-
-
     }
 
     interface Presenter {
+        void onViewInteracted(android.view.View view);
+
         void enqueue();
 
-        void onViewInteracted(android.view.View view);
+        void stop();
     }
-
-    interface Model {
-
-    }
-
 }

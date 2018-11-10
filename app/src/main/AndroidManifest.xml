@@ -192,8 +192,10 @@
             android:label="@string/title_activity_records_accepted"
             android:theme="@style/AppTheme.NoActionBar.transparent.accepted" />
 
+
         <activity android:name=".teacher.skill.SkillActivity" />
         <activity android:name=".teacher.crudskill.CrudSkillActivity" />
+
 
         <activity
             android:name=".student.freeCashBack.FreeCashBackActivity"
@@ -226,8 +228,10 @@
             android:name=".afterSplashTrp.AfterSplashActivity"
             android:label="@string/title_activity_after_splash"
             android:theme="@style/AppTheme" />
-
         <activity android:name=".common.appInfoActivity.AppInfoActivity" />
+        <activity android:name=".teacher.addskill.AddSkillActivity" />
+
+
 
     </application>
 
