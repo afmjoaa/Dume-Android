@@ -674,7 +674,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
         Routing routing = new Routing.Builder()
                 .travelMode(AbstractRouting.TravelMode.DRIVING)
                 .withListener(this)
-                .alternativeRoutes(true)
+                .alternativeRoutes(false)
                 .waypoints(One, Two)
                 .key(getResources().getString(R.string.google_direction_key))
                 .build();

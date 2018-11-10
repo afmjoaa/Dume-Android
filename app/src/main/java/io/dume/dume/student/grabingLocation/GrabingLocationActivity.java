@@ -51,6 +51,7 @@ import com.google.android.gms.maps.model.MapStyleOptions;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
@@ -105,6 +106,7 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
     private ImageView discardImage;
     private Button locationDoneBtn;
     private RelativeLayout inputSearchContainer;
+    private String retrivedAction;
 
 
     @Override
@@ -159,7 +161,16 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
         menualCompleteRecyView.setAdapter(recyclerMenualAdapter);
         menualCompleteRecyView.setLayoutManager(new LinearLayoutManager(this));
 
+        retrivedAction = getIntent().getAction();
+        if(Objects.requireNonNull(retrivedAction).equals("fromPPA")){
+            fromProfilePage();
+        }
 
+
+    }
+
+    private void fromProfilePage() {
+        Toast.makeText(mContext, "from Profile Page", Toast.LENGTH_SHORT).show();
     }
 
     @Override

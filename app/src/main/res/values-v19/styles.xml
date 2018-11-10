@@ -9,6 +9,7 @@
         <item name="android:windowActionBarOverlay">true</item>
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
+        <item name="android:fontFamily">@font/cairo_regular</item>
     </style>
 
     <style name="AppTheme.NoActionBar.transparent" parent="Theme.AppCompat.Light.NoActionBar">
@@ -19,6 +20,7 @@
         <item name="android:windowActionBarOverlay">true</item>
         <item name="android:windowTranslucentStatus">false</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
+        <item name="android:fontFamily">@font/cairo_regular</item>
     </style>
     <!--<item name="android:windowTranslucentNavigation">true</item>-->
 

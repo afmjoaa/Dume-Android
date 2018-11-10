@@ -9,6 +9,11 @@ public interface ProfilePageContract {
 
         void findView();
 
+        void onGenderClicked();
+
+        void onCurrentAddressClicked();
+
+        void onPreviousResultClicked();
     }
 
     interface Presenter {

@@ -1,7 +1,9 @@
 package io.dume.dume.student.studentHelp;
 
 import android.annotation.TargetApi;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -15,6 +17,7 @@ import android.preference.RingtonePreference;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -22,16 +25,21 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import io.dume.dume.R;
+import io.dume.dume.common.appInfoActivity.AppInfoActivity;
+import io.dume.dume.common.privacyPolicy.PrivacyPolicyActivity;
 import io.dume.dume.student.common.SettingData;
 import io.dume.dume.student.common.SettingsAdapter;
 import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
 import io.dume.dume.student.studentSettings.StudentSettingsActivity;
+import io.dume.dume.util.AlertMsgDialogue;
 
 import static io.dume.dume.util.DumeUtils.configAppbarTittle;
 import static io.dume.dume.util.DumeUtils.configureAppbar;
@@ -59,40 +67,60 @@ public class StudentHelpActivity extends CustomStuAppCompatActivity implements S
         SettingsAdapter helpAdapter = new SettingsAdapter(this, getFinalData()) {
             @Override
             protected void OnButtonClicked(View v, int position) {
-                helpContent.setVisibility(View.GONE);
                 switch (position) {
                     case 0:
-                        Toast.makeText(StudentHelpActivity.this, "0", Toast.LENGTH_SHORT).show();
-                        getFragmentManager().beginTransaction().replace(R.id.content, new NotificationPreferenceFragment()).commit();
+                        Toast.makeText(StudentHelpActivity.this, "Coming soon", Toast.LENGTH_SHORT).show();
                         break;
                     case 1:
+                        helpContent.setVisibility(View.GONE);
+                        configAppbarTittle(StudentHelpActivity.this, helpNameArr[position]);
+                        appBarLayout.setExpanded(false);
                         getFragmentManager().beginTransaction().replace(R.id.content, new NotificationPreferenceFragment()).commit();
                         break;
                     case 2:
+                        helpContent.setVisibility(View.GONE);
+                        configAppbarTittle(StudentHelpActivity.this, helpNameArr[position]);
+                        appBarLayout.setExpanded(false);
                         getFragmentManager().beginTransaction().replace(R.id.content, new DataSyncPreferenceFragment()).commit();
                         break;
                     case 3:
+                        helpContent.setVisibility(View.GONE);
+                        configAppbarTittle(StudentHelpActivity.this, helpNameArr[position]);
+                        appBarLayout.setExpanded(false);
                         Toast.makeText(StudentHelpActivity.this, "3", Toast.LENGTH_SHORT).show();
                         break;
                     case 4:
-                        Toast.makeText(StudentHelpActivity.this, "4", Toast.LENGTH_SHORT).show();
+                        updateAppCalled();
                         break;
                     case 5:
-                        Toast.makeText(StudentHelpActivity.this, "5", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(StudentHelpActivity.this, PrivacyPolicyActivity.class).setAction("fromHelp"));
                         break;
                     case 6:
-                        Toast.makeText(StudentHelpActivity.this, "6", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(StudentHelpActivity.this, AppInfoActivity.class).setAction("fromHelp"));
                         break;
                 }
-                configAppbarTittle(StudentHelpActivity.this, helpNameArr[position]);
-                appBarLayout.setExpanded(false);
+
             }
         };
         helpRecyclerView.setAdapter(helpAdapter);
         helpRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
 
+    }
 
+    private void updateAppCalled() {
+
+        Bundle Uargs = new Bundle();
+        Uargs.putString("msg", "Sorry! No update available.");
+        AlertMsgDialogue updateAlertDialogue = new AlertMsgDialogue();
+        updateAlertDialogue.setItemChoiceListener(new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                //Toast.makeText(StudentHelpActivity.this, "Ok", Toast.LENGTH_SHORT).show();
+            }
+        });
+        updateAlertDialogue.setArguments(Uargs);
+        updateAlertDialogue.show(getSupportFragmentManager(), "updateAlertDialogue");
     }
 
     @Override

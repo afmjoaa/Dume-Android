@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/parent_coor_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/splash_screen"
+    android:fitsSystemWindows="true"
+    tools:context=".common.appInfoActivity.AppInfoActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/App_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/App_version"
+            android:gravity="center"
+            android:text="Dume"
+            android:textColor="@color/white"
+            android:textSize="28sp"
+            app:fontFamily="@font/cairo_light" />
+
+        <TextView
+            android:id="@+id/App_version"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/App_icon"
+            android:gravity="center"
+            android:text="Version 0.0.01"
+            android:textColor="#64ffffff"
+            android:textSize="18sp"
+            android:translationY="-2dp"
+            app:fontFamily="@font/cairo_extralight" />
+
+        <carbon.widget.ImageView
+            android:id="@+id/App_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            app:carbon_elevation="10dp"
+            app:srcCompat="@drawable/only_splash_icon" />
+
+        <Button
+            style="@style/Base.Widget.AppCompat.Button.Borderless"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/Aditional_info"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:text="Licenses"
+            android:textAllCaps="true"
+            android:textColor="@color/colorLink"
+            android:textSize="18sp"
+            app:fontFamily="@font/cairo_regular" />
+
+        <TextView
+            android:id="@+id/Aditional_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="6dp"
+            android:gravity="center"
+            android:text="@string/copy_right_info"
+            android:textColor="#64ffffff"
+            android:textSize="14sp"
+            app:fontFamily="@font/roboto_light" />
+
+    </RelativeLayout>
+
+
+</android.support.design.widget.CoordinatorLayout>

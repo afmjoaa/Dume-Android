@@ -13,7 +13,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.dume.dume.R;
-
 import io.dume.dume.customView.HorizontalLoadView;
 import io.dume.dume.teacher.adapters.CategoryAdapter;
 import io.dume.dume.teacher.skill.SkillActivity;

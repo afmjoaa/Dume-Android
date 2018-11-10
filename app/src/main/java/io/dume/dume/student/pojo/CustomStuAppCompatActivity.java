@@ -3,6 +3,7 @@ package io.dume.dume.student.pojo;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.drawable.Animatable;
@@ -26,10 +27,12 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.Calendar;
 
 import io.dume.dume.R;
+import io.dume.dume.auth.auth.AuthActivity;
 import io.dume.dume.broadcastReceiver.MyConnectivityHandler;
 import io.dume.dume.broadcastReceiver.NetworkChangeReceiver;
 import io.dume.dume.student.homePage.HomePageContract;
@@ -292,5 +295,18 @@ public class CustomStuAppCompatActivity extends AppCompatActivity implements MyC
         HOUR = getCurrentHour();
         ISNIGHT = HOUR < 5 || HOUR > 19;
     }
-    //testing starts here
+
+    //fullscreen code
+    public void makeFullScreen() {
+        View decorView = activity.getWindow().getDecorView();
+        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
+        decorView.setSystemUiVisibility(uiOptions);
+    }
+    //sign_out function
+    public void onSignOut() {
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            FirebaseAuth.getInstance().signOut();
+            startActivity(new Intent(this, AuthActivity.class));
+        }
+    }
 }

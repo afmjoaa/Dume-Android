@@ -1,6 +1,8 @@
 package io.dume.dume.student.studentSettings;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -9,26 +11,36 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.v7.app.ActionBar;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
+import android.support.v7.preference.PreferenceFragmentCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import io.dume.dume.R;
 import io.dume.dume.student.common.SettingData;
 import io.dume.dume.student.common.SettingsAdapter;
+import io.dume.dume.student.heatMap.AccountRecyData;
+import io.dume.dume.student.heatMap.HeatMapAccountRecyAda;
 import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
 import io.dume.dume.student.profilePage.ProfilePageActivity;
+import io.dume.dume.util.AlertMsgDialogue;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +50,7 @@ import static io.dume.dume.util.DumeUtils.configureAppbar;
 
 public class StudentSettingsActivity extends CustomStuAppCompatActivity
         implements StudentSettingsContract.View {
+    private static final String TAG = "StudentSettingsActivity";
     private StudentSettingsContract.Presenter mPresenter;
     private static final int fromFlag = 11;
     private RecyclerView settingsRecycleView;
@@ -49,6 +62,7 @@ public class StudentSettingsActivity extends CustomStuAppCompatActivity
     private AppBarLayout appBarLayout;
     private RelativeLayout basicInfoLayout;
     private RelativeLayout basicInfoLayout1;
+    private FloatingActionButton fab;
 
 
     @Override
@@ -63,40 +77,82 @@ public class StudentSettingsActivity extends CustomStuAppCompatActivity
 
         //setting the recycler view
         settingsAdapter = new SettingsAdapter(this, getFinalData()) {
+            @SuppressLint("RestrictedApi")
             @Override
             protected void OnButtonClicked(View v, int position) {
-                settingsContent.setVisibility(View.GONE);
                 switch (position) {
                     case 0:
+                        settingsContent.setVisibility(View.GONE);
+                        configAppbarTittle(StudentSettingsActivity.this, settingNameArr[position]);
+                        appBarLayout.setExpanded(false);
                         Toast.makeText(StudentSettingsActivity.this, "0", Toast.LENGTH_SHORT).show();
                         getFragmentManager().beginTransaction().replace(R.id.content, new NotificationPreferenceFragment()).commit();
                         break;
                     case 1:
-                        getFragmentManager().beginTransaction().replace(R.id.content, new NotificationPreferenceFragment()).commit();
+                        settingsContent.setVisibility(View.GONE);
+                        configAppbarTittle(StudentSettingsActivity.this, settingNameArr[position]);
+                        appBarLayout.setExpanded(false);
+                        Toast.makeText(StudentSettingsActivity.this, "0", Toast.LENGTH_SHORT).show();
+                        getFragmentManager().beginTransaction().replace(R.id.content, new DataSyncPreferenceFragment()).commit();
+
+
+                        /*settingsContent.setVisibility(View.GONE);
+                        fab.setVisibility(View.VISIBLE);
+                        configAppbarTittle(StudentSettingsActivity.this, settingNameArr[position]);
+                        appBarLayout.setExpanded(false);
+                        getSupportFragmentManager().beginTransaction().replace(R.id.content, new SavedPlacesFragment()).commit();
+                        */
                         break;
                     case 2:
-                        getFragmentManager().beginTransaction().replace(R.id.content, new DataSyncPreferenceFragment()).commit();
+                        settingsContent.setVisibility(View.GONE);
+                        configAppbarTittle(StudentSettingsActivity.this, settingNameArr[position]);
+                        appBarLayout.setExpanded(false);
+                        Toast.makeText(StudentSettingsActivity.this, "0", Toast.LENGTH_SHORT).show();
+                        getFragmentManager().beginTransaction().replace(R.id.content, new GeneralPreferenceFragment()).commit();
+
+
+                        /*settingsContent.setVisibility(View.GONE);
+                        configAppbarTittle(StudentSettingsActivity.this, settingNameArr[position]);
+                        appBarLayout.setExpanded(false);
+                        getSupportFragmentManager().beginTransaction().replace(R.id.content, new AccountFragment()).commit();
+                        */
                         break;
                     case 3:
-                        Toast.makeText(StudentSettingsActivity.this, "3", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(StudentSettingsActivity.this, "Chat settings are coming soon", Toast.LENGTH_SHORT).show();
                         break;
                     case 4:
-                        Toast.makeText(StudentSettingsActivity.this, "4", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(StudentSettingsActivity.this, "Coming soon", Toast.LENGTH_SHORT).show();
                         break;
                     case 5:
-                        Toast.makeText(StudentSettingsActivity.this, "5", Toast.LENGTH_SHORT).show();
+                        inviteAFriendCalled();
                         break;
                     case 6:
-                        Toast.makeText(StudentSettingsActivity.this, "6", Toast.LENGTH_SHORT).show();
+                        onSignOut();
                         break;
                 }
-                configAppbarTittle(StudentSettingsActivity.this, settingNameArr[position]);
-                appBarLayout.setExpanded(false);
+
             }
         };
         settingsRecycleView.setAdapter(settingsAdapter);
         settingsRecycleView.setLayoutManager(new LinearLayoutManager(this));
 
+    }
+
+    private void inviteAFriendCalled(){
+        try {
+            Intent i = new Intent(Intent.ACTION_SEND);
+            i.setType("text/plain");
+            i.putExtra(Intent.EXTRA_TITLE, "Dume");
+            String strShareMessage = "Check out Dume, It's simple just share your skill and earn money.Get it for free from\n\n";
+            strShareMessage = strShareMessage + "https://play.google.com/store/apps/details?id=" + getPackageName();
+            i.putExtra(Intent.EXTRA_TEXT, strShareMessage);
+            /*i.setType("image/png");
+            Uri screenshotUri = Uri.parse("android.resource://io.dume.dume/drawable/avatar.png");
+            i.putExtra(Intent.EXTRA_STREAM, screenshotUri);*/
+            startActivity(Intent.createChooser(i, "Share via"));
+        } catch(Exception e) {
+            Log.e(TAG, "inviteAFriendCalled: "+ e.toString());
+        }
     }
 
 
@@ -107,11 +163,7 @@ public class StudentSettingsActivity extends CustomStuAppCompatActivity
         settingsContent = findViewById(R.id.settings_content);
         appBarLayout = findViewById(R.id.app_bar);
         basicInfoLayout1 = findViewById(R.id.basic_info_layout);
-    }
-
-    @Override
-    public void gotoProfilePage() {
-        startActivity(new Intent(this, ProfilePageActivity.class));
+        fab = findViewById(R.id.fab);
     }
 
     @Override
@@ -191,7 +243,7 @@ public class StudentSettingsActivity extends CustomStuAppCompatActivity
                 R.drawable.ic_star_border_black_24dp,
                 R.drawable.ic_person_outline_black_24dp,
                 R.drawable.ic_settings_chat,
-                R.drawable.ic_settings_notifications,
+                R.drawable.ic_settings_broadcasts,
                 R.drawable.ic_settings_invite_a_friend,
                 R.drawable.ic_settings_sign_out
         };
@@ -207,6 +259,11 @@ public class StudentSettingsActivity extends CustomStuAppCompatActivity
 
     public void onStuSettingViewClicked(View view) {
         mPresenter.onStudentSettingsIntracted(view);
+    }
+
+    @Override
+    public void gotoProfilePage() {
+        startActivity(new Intent(this, ProfilePageActivity.class));
     }
 
     /**
@@ -228,6 +285,7 @@ public class StudentSettingsActivity extends CustomStuAppCompatActivity
             bindPreferenceSummaryToValue(findPreference("example_text"));
             bindPreferenceSummaryToValue(findPreference("example_list"));
         }
+
 
         @Override
         public boolean onOptionsItemSelected(MenuItem item) {
@@ -299,4 +357,129 @@ public class StudentSettingsActivity extends CustomStuAppCompatActivity
             return super.onOptionsItemSelected(item);
         }
     }
+
+
+    //Account Fragment here
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    public static class AccountFragment extends Fragment {
+        private StudentSettingsActivity myMainActivity;
+        private RecyclerView accountChangerRecycler;
+        private int[] imageIcons = {
+                R.drawable.ic_default_student_profile,
+                R.drawable.ic_default_mentor_profile,
+                R.drawable.ic_default_bootcamp_profile
+        };
+        private String[] accountTypeArr;
+        private HeatMapAccountRecyAda heatMapAccountRecyAda;
+
+        @Override
+        public void onCreate(@Nullable Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            setHasOptionsMenu(true);
+        }
+
+        @Override
+        public void setUserVisibleHint(boolean isVisibleToUser) {
+            super.setUserVisibleHint(isVisibleToUser);
+        }
+
+        @Nullable
+        @Override
+        public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+            myMainActivity = (StudentSettingsActivity) getActivity();
+            View rootView = inflater.inflate(R.layout.stu_setting_account_fragment, container, false);
+            accountChangerRecycler = rootView.findViewById(R.id.account_changer_recycler);
+            accountTypeArr = myMainActivity.getResources().getStringArray(R.array.AccountType);
+
+            //testing code goes here
+            //setting the adapter with the recycler view
+            heatMapAccountRecyAda = new HeatMapAccountRecyAda(myMainActivity, getFinalData(0)) {
+                @Override
+                protected void OnAccouItemClicked(View v, int position) {
+
+                    Bundle Uargs = new Bundle();
+                    Uargs.putString("msg", "Switching to " + accountTypeArr[position]);
+                    AlertMsgDialogue accountChangerAlertDialogue = new AlertMsgDialogue();
+                    accountChangerAlertDialogue.setItemChoiceListener(new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            Toast.makeText(myMainActivity, "Switching ...", Toast.LENGTH_SHORT).show();
+                            heatMapAccountRecyAda.update(getFinalData(position));
+                        }
+                    });
+                    accountChangerAlertDialogue.setArguments(Uargs);
+                    accountChangerAlertDialogue.show(myMainActivity.getSupportFragmentManager(), "accountChangerAlertDialogue");
+
+                }
+            };
+            accountChangerRecycler.setAdapter(heatMapAccountRecyAda);
+            accountChangerRecycler.setLayoutManager(new LinearLayoutManager(myMainActivity));
+            return rootView;
+
+        }
+
+        public List<AccountRecyData> getFinalData(int selectedItem) {
+            List<AccountRecyData> data = new ArrayList<>();
+            for (int i = 0; i < accountTypeArr.length && i < imageIcons.length; i++) {
+                AccountRecyData current = new AccountRecyData();
+                current.accouName = accountTypeArr[i];
+                current.iconId = imageIcons[i];
+                current.selectedOne = selectedItem;
+                data.add(current);
+            }
+            return data;
+        }
+
+        @Override
+        public boolean onOptionsItemSelected(MenuItem item) {
+            int id = item.getItemId();
+            if (id == android.R.id.home) {
+                startActivity(new Intent(getActivity(), StudentSettingsActivity.class));
+                return true;
+            }
+            return super.onOptionsItemSelected(item);
+        }
+
+    }
+
+    //Saved places fragment here
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    public static class SavedPlacesFragment extends Fragment{
+
+        private StudentSettingsActivity myMainActivity;
+        private RecyclerView savedPlacesRecycler;
+        private SavedPlacesAdapter savedPlacesAdapter;
+
+        @Override
+        public void onCreate(@Nullable Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            setHasOptionsMenu(true);
+        }
+
+        @Nullable
+        @Override
+        public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+            myMainActivity = (StudentSettingsActivity) getActivity();
+            View rootView = inflater.inflate(R.layout.stu_setting_saved_places_fragment, container, false);
+            savedPlacesRecycler = rootView.findViewById(R.id.saved_place_recycler);
+            //testing code goes here
+            List<SavedPlacesAdaData> recordDataCurrent = new ArrayList<>();
+            savedPlacesAdapter = new SavedPlacesAdapter(myMainActivity, recordDataCurrent);
+            savedPlacesRecycler.setAdapter(savedPlacesAdapter);
+            savedPlacesRecycler.setLayoutManager(new LinearLayoutManager(myMainActivity));
+            return rootView;
+        }
+
+        @Override
+        public boolean onOptionsItemSelected(MenuItem item) {
+            int id = item.getItemId();
+            if (id == android.R.id.home) {
+                myMainActivity.fab.setVisibility(View.GONE);
+                startActivity(new Intent(getActivity(), StudentSettingsActivity.class));
+                return true;
+            }
+            return super.onOptionsItemSelected(item);
+        }
+    }
+
 }
