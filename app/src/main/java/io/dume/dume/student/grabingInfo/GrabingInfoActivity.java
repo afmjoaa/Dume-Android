@@ -41,6 +41,7 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -105,7 +106,7 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
     private FrameLayout viewMusk;
     private LinearLayout contractLayout;
     private AppBarLayout myAppBarLayout;
-    private LinearLayout tabHintLayout;
+    private LinearLayout tabHintLayout, forMeWrapper;
 
 
     @Override
@@ -117,7 +118,7 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
         mPresenter.grabingInfoPageEnqueue();
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         getLocationPermission(mapFragment);
-
+        getAction();
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
@@ -128,7 +129,7 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
 
         //making the custom tab here
         int[] wh = DumeUtils.getScreenSize(this);
-        int tabMinWidth = ((wh[0] / 3)-(int) (24 * (getResources().getDisplayMetrics().density)));
+        int tabMinWidth = ((wh[0] / 3) - (int) (24 * (getResources().getDisplayMetrics().density)));
         LinearLayout.LayoutParams textParam = new LinearLayout.LayoutParams
                 (tabMinWidth, LinearLayout.LayoutParams.WRAP_CONTENT);
         for (int i = 0; i < tabLayout.getTabCount(); i++) {
@@ -158,7 +159,7 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                switch (tabLayout.getSelectedTabPosition()){
+                switch (tabLayout.getSelectedTabPosition()) {
                     case 0:
                         Objects.requireNonNull(tabLayout.getTabAt(1)).select();
                         break;
@@ -199,8 +200,9 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
         forMeBtn = findViewById(R.id.for_me_btn);
         viewMusk = findViewById(R.id.view_musk);
         contractLayout = findViewById(R.id.contract_layout);
-        myAppBarLayout = findViewById(R.id.appbar);
+
         tabHintLayout = findViewById(R.id.tab_hint_layout);
+        forMeWrapper = findViewById(R.id.formeWrapper);
 
     }
 
@@ -218,7 +220,7 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
             supportActionBar.setDisplayShowHomeEnabled(true);
         }
 
-        Drawable drawable = ContextCompat.getDrawable(getApplicationContext(),R.drawable.ic_more_vert_black_24dp);
+        Drawable drawable = ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_more_vert_black_24dp);
         toolbar.setOverflowIcon(drawable);
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -330,7 +332,7 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
 
                             @Override
                             public void onTransitionEnd(@NonNull Transition transition) {
-                                if(!visible){
+                                if (!visible) {
                                     contractLayout.setVisibility(View.GONE);
                                     viewMusk.setVisibility(View.GONE);
                                 }
@@ -360,7 +362,7 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                     tabHintLayout.setVisibility(View.GONE);
                     tabLayout.setVisibility(View.GONE);
                     contractLayout.setVisibility(View.VISIBLE);
-                    forMeBtn.setCompoundDrawablesWithIntrinsicBounds( 0, 0, R.drawable.ic_keyboard_arrow_up_black_24dp, 0);
+                    forMeBtn.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_keyboard_arrow_up_black_24dp, 0);
                     viewMusk.setVisibility(View.VISIBLE);
                     forMeBtn.setText(R.string.switch_learner);
                 } else {
@@ -368,7 +370,7 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                     tabLayout.setVisibility(View.VISIBLE);
                     contractLayout.setVisibility(View.GONE);
                     viewMusk.setVisibility(View.INVISIBLE);
-                    forMeBtn.setCompoundDrawablesWithIntrinsicBounds( R.drawable.alias_profile_icon, 0, R.drawable.ic_keyboard_arrow_down_black_24dp, 0);
+                    forMeBtn.setCompoundDrawablesWithIntrinsicBounds(R.drawable.alias_profile_icon, 0, R.drawable.ic_keyboard_arrow_down_black_24dp, 0);
                     forMeBtn.setText(R.string.for_me);
 
                 }
@@ -447,7 +449,7 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
         mMap = googleMap;
         onMapReadyListener(mMap);
         onMapReadyGeneralConfig();
-        mMap.setPadding((int) (10 * (getResources().getDisplayMetrics().density)),  (int) (250 * (getResources().getDisplayMetrics().density)),0, (int) (6 * (getResources().getDisplayMetrics().density)));
+        mMap.setPadding((int) (10 * (getResources().getDisplayMetrics().density)), (int) (250 * (getResources().getDisplayMetrics().density)), 0, (int) (6 * (getResources().getDisplayMetrics().density)));
     }
 
     @Override
@@ -972,5 +974,14 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
         }
     }
 
+    public void getAction() {
+        Toast.makeText(this, getIntent().getAction() + "", Toast.LENGTH_SHORT).show();
+        if (getIntent().getAction() == DumeUtils.TEACHER) {
+            forMeWrapper.setVisibility(View.GONE);
+            mAppBarLayout.setExpanded(true);
+            toolbar.setTitle("Select Skill");
+        } else {
 
+        }
+    }
 }

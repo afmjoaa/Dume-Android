@@ -271,7 +271,7 @@ public class CusStuAppComMapActivity extends CustomStuAppCompatActivity implemen
             searchBottomSheet.setVisibility(View.INVISIBLE);
             locationDoneBtn.setVisibility(View.VISIBLE);
             /*if(touchedFirstTime){
-                fab.animate().translationYBy((float) (2.0f * (getResources().getDisplayMetrics().density))).start();
+                fab.animate().translationYBy((float) (2.0f * (getResources().getDisplayMetrics().density))).enqueue();
                 touchedFirstTime = false;
             }*/
         }

@@ -1,19 +1,17 @@
 package io.dume.dume.teacher.skill;
 
-import android.content.Intent;
-
-import io.dume.dume.util.BaseContract;
+import io.dume.dume.util.MyBaseContract;
 
 public interface SkillContract {
-    interface View extends BaseContract.View {
+    interface View extends MyBaseContract.View {
         void goToCrudActivity(String action);
     }
 
-    interface Model extends BaseContract.Model {
+    interface Model extends MyBaseContract.Model {
 
     }
 
-    interface Presenter extends BaseContract.Presenter {
+    interface Presenter extends MyBaseContract.Presenter {
 
     }
 }

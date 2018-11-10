@@ -2,22 +2,17 @@ package io.dume.dume.util;
 
 import android.app.Activity;
 import android.content.Context;
-
+import android.graphics.Point;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
+import android.location.LocationManager;
 import android.support.annotation.StringRes;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-
-import android.graphics.Point;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.LayerDrawable;
-import android.location.LocationManager;
-
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -40,6 +35,9 @@ import io.dume.dume.R;
 import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class DumeUtils {
+    public static final String TEACHER = "teacher";
+    public static final String STUDENT = "student"; public static final String SELECTED_ID = "s_id";
+
     public static int GALLARY_IMAGE = 1;
     public static int CAMERA_IMAGE = 2;
     private static final int WIDTH_INDEX = 0;
@@ -160,7 +158,7 @@ public class DumeUtils {
         collapsingToolbarLayout.setExpandedTitleTypeface(Typeface.createFromAsset(activity.getAssets(), "fonts/Cairo-Light.ttf"));
         collapsingToolbarLayout.setTitle(title);
 
-        Drawable drawable = ContextCompat.getDrawable(getApplicationContext(),R.drawable.ic_more_vert_black_24dp);
+        Drawable drawable = ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_more_vert_black_24dp);
         toolbar.setOverflowIcon(drawable);
     }
 
@@ -179,11 +177,11 @@ public class DumeUtils {
         collapsingToolbarLayout.setExpandedTitleTypeface(Typeface.createFromAsset(activity.getAssets(), "fonts/Cairo-Light.ttf"));
         collapsingToolbarLayout.setTitle(title);
 
-        if(isWhite){
-            Drawable drawable = ContextCompat.getDrawable(getApplicationContext(),R.drawable.ic_more_vert_white_24dp);
+        if (isWhite) {
+            Drawable drawable = ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_more_vert_white_24dp);
             toolbar.setOverflowIcon(drawable);
-        }else {
-            Drawable drawable = ContextCompat.getDrawable(getApplicationContext(),R.drawable.ic_more_vert_black_24dp);
+        } else {
+            Drawable drawable = ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_more_vert_black_24dp);
             toolbar.setOverflowIcon(drawable);
         }
     }
@@ -204,13 +202,13 @@ public class DumeUtils {
         return formatter.format(date);
     }
 
-    public static void configAppbarTittle(Context context, String title){
+    public static void configAppbarTittle(Context context, String title) {
         AppCompatActivity activity = (AppCompatActivity) context;
         CollapsingToolbarLayout collapsingToolbarLayout = activity.findViewById(R.id.accountCollapsing);
         collapsingToolbarLayout.setTitle(title);
     }
 
-    public static void configToolbarTittle(Context context, String title){
+    public static void configToolbarTittle(Context context, String title) {
         AppCompatActivity activity = (AppCompatActivity) context;
         Toolbar toolbar = activity.findViewById(R.id.accountToolbar);
         toolbar.setTitle(title);
@@ -226,9 +224,9 @@ public class DumeUtils {
             supportActionBar.setDisplayHomeAsUpEnabled(true);
             supportActionBar.setDisplayShowHomeEnabled(true);
         }
-        toolbar.setTitleTextAppearance(context,R.style.MyTextApprncColOne);
+        toolbar.setTitleTextAppearance(context, R.style.MyTextApprncColOne);
         toolbar.setTitle(title);
-        Drawable drawable = ContextCompat.getDrawable(getApplicationContext(),R.drawable.ic_more_vert_black_24dp);
+        Drawable drawable = ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_more_vert_black_24dp);
         toolbar.setOverflowIcon(drawable);
     }
 
@@ -277,12 +275,12 @@ public class DumeUtils {
         Objects.requireNonNull(imm).hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
-    public static void toggleKeyboard(Activity activity){
-        InputMethodManager imm = (InputMethodManager)   activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+    public static void toggleKeyboard(Activity activity) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
         Objects.requireNonNull(imm).toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
     }
 
-    public static void showKeyboard(Activity activity){
+    public static void showKeyboard(Activity activity) {
         InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
         //Find the currently focused view, so we can grab the correct window token from it.
         View view = activity.getCurrentFocus();
@@ -306,15 +304,17 @@ public class DumeUtils {
         return str.length() < 3 ? str : str.substring(0, 3);
     }
 
-    public static void setMargins (View v, int l, int t, int r, int b) {
+    public static void setMargins(View v, int l, int t, int r, int b) {
         if (v.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
             ViewGroup.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) v.getLayoutParams();
-            p.setMargins((int) (l* (getApplicationContext().getResources().getDisplayMetrics().density)),
-                    (int)(t* (getApplicationContext().getResources().getDisplayMetrics().density)),
-                    (int)(r* (getApplicationContext().getResources().getDisplayMetrics().density)),
-                    (int)(b* (getApplicationContext().getResources().getDisplayMetrics().density)));
+            p.setMargins((int) (l * (getApplicationContext().getResources().getDisplayMetrics().density)),
+                    (int) (t * (getApplicationContext().getResources().getDisplayMetrics().density)),
+                    (int) (r * (getApplicationContext().getResources().getDisplayMetrics().density)),
+                    (int) (b * (getApplicationContext().getResources().getDisplayMetrics().density)));
             v.requestLayout();
         }
     }
+
+
 }
 

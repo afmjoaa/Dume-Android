@@ -4,13 +4,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
 import android.view.View;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.dume.dume.R;
 import io.dume.dume.customView.HorizontalLoadView;
-
 import io.dume.dume.teacher.crudskill.CrudSkillActivity;
 import io.dume.dume.util.DumeUtils;
 
@@ -59,6 +59,7 @@ public class SkillActivity extends AppCompatActivity implements SkillContract.Vi
 
     }
 
+
     @Override
     public void onClick(View view) {
         presenter.onViewInteracted(view);
@@ -69,4 +70,6 @@ public class SkillActivity extends AppCompatActivity implements SkillContract.Vi
         Intent intent = new Intent(this, CrudSkillActivity.class).setAction(action);
         startActivity(intent);
     }
+
+
 }

@@ -24,6 +24,154 @@ public class LocalDb {
             innerMusicGuitar,innerUniversity,innerUniversityEngineering,innerUniversityMedical,innerUniversityOthers,
             innerAdmissionTest,innerOthers =null;
 
+    public List<String> getInnerSchoolEnglishMediumEdExcelOLevel() {
+        return innerSchoolEnglishMediumEdExcelOLevel;
+    }
+
+    public List<String> getInnerSchoolEnglishMediumCambridgeOLevel() {
+        return innerSchoolEnglishMediumCambridgeOLevel;
+    }
+
+    public List<String> getInnerCollege() {
+        return innerCollege;
+    }
+
+    public List<String> getInnerCollegeEnglishMedium() {
+        return innerCollegeEnglishMedium;
+    }
+
+    public List<String> getInnerCollegeEnglishMediumEdexel() {
+        return innerCollegeEnglishMediumEdexel;
+    }
+
+    public List<String> getInnerCollegeEnglishMediumEdexelAs() {
+        return innerCollegeEnglishMediumEdexelAs;
+    }
+
+    public List<String> getInnerCollegeEnglishMediumEdexelA2() {
+        return innerCollegeEnglishMediumEdexelA2;
+    }
+
+    public List<String> getInnerCollegeEnglishMediumCambridge() {
+        return innerCollegeEnglishMediumCambridge;
+    }
+
+    public List<String> getInnerCollegeEnglishMediumCambridgeAs() {
+        return innerCollegeEnglishMediumCambridgeAs;
+    }
+
+    public List<String> getInnerCollegeEnglishMediumCambridgeA2() {
+        return innerCollegeEnglishMediumCambridgeA2;
+    }
+
+    public List<String> getInnerCollegeBanglaMedium() {
+        return innerCollegeBanglaMedium;
+    }
+
+    public List<String> getInnerCollegeBanglaMediumScience() {
+        return innerCollegeBanglaMediumScience;
+    }
+
+    public List<String> getInnerCollegeBanglaMediumCommerce() {
+        return innerCollegeBanglaMediumCommerce;
+    }
+
+    public List<String> getInnerCollegeBanglaMediumArts() {
+        return innerCollegeBanglaMediumArts;
+    }
+
+    public List<String> getInnerCollegeEnglishVersion() {
+        return innerCollegeEnglishVersion;
+    }
+
+    public List<String> getInnerCollegeEnglishVersionScience() {
+        return innerCollegeEnglishVersionScience;
+    }
+
+    public List<String> getInnerCollegeEnglishVersionCommerce() {
+        return innerCollegeEnglishVersionCommerce;
+    }
+
+    public List<String> getInnerCollegeEnglishVersionArts() {
+        return innerCollegeEnglishVersionArts;
+    }
+
+    public List<String> getInnerSchoolBanglaMediumClassEight() {
+        return innerSchoolBanglaMediumClassEight;
+    }
+
+    public List<String> getInnerSchoolBanglaMediumClassSSC() {
+        return innerSchoolBanglaMediumClassSSC;
+    }
+
+    public List<String> getInnerSchoolBanglaMediumClassSSCScience() {
+        return innerSchoolBanglaMediumClassSSCScience;
+    }
+
+    public List<String> getInnerSchoolBanglaMediumClassSSCCommerce() {
+        return innerSchoolBanglaMediumClassSSCCommerce;
+    }
+
+    public List<String> getInnerSchoolBanglaMediumClassSSCArts() {
+        return innerSchoolBanglaMediumClassSSCArts;
+    }
+
+    public List<String> getInnerProgramming() {
+        return innerProgramming;
+    }
+
+    public List<String> getInnerSoftWare() {
+        return innerSoftWare;
+    }
+
+    public List<String> getInnerLanguage() {
+        return innerLanguage;
+    }
+
+    public List<String> getInnerDance() {
+        return innerDance;
+    }
+
+    public List<String> getInnerMusic() {
+        return innerMusic;
+    }
+
+    public List<String> getInnerCooking() {
+        return innerCooking;
+    }
+
+    public List<String> getInnerMusicInstrumental() {
+        return innerMusicInstrumental;
+    }
+
+    public List<String> getInnerMusicGuitar() {
+        return innerMusicGuitar;
+    }
+
+    public List<String> getInnerUniversity() {
+        return innerUniversity;
+    }
+
+    public List<String> getInnerUniversityEngineering() {
+        return innerUniversityEngineering;
+    }
+
+    public List<String> getInnerUniversityMedical() {
+        return innerUniversityMedical;
+    }
+
+    public List<String> getInnerUniversityOthers() {
+        return innerUniversityOthers;
+    }
+
+    public List<String> getInnerAdmissionTest() {
+        return innerAdmissionTest;
+    }
+
+    public List<String> getInnerOthers() {
+        return innerOthers;
+    }
+
     public List<String> getCategories() {
         return categories;
     }
