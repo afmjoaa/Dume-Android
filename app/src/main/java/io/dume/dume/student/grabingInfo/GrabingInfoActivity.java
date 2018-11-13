@@ -41,7 +41,6 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -62,6 +61,7 @@ import io.dume.dume.student.grabingLocation.GrabingLocationActivity;
 import io.dume.dume.student.grabingPackage.GrabingPackageActivity;
 import io.dume.dume.student.pojo.CusStuAppComMapActivity;
 import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
+import io.dume.dume.teacher.model.LocalDb;
 import io.dume.dume.util.DumeUtils;
 import io.dume.dume.util.VisibleToggleClickListener;
 
@@ -107,6 +107,7 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
     private LinearLayout contractLayout;
     private AppBarLayout myAppBarLayout;
     private LinearLayout tabHintLayout, forMeWrapper;
+    private int selected_category_position;
 
 
     @Override
@@ -127,6 +128,7 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
         // Set up the ViewPager with the sections adapter.
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
+
         //making the custom tab here
         int[] wh = DumeUtils.getScreenSize(this);
         int tabMinWidth = ((wh[0] / 3) - (int) (24 * (getResources().getDisplayMetrics().density)));
@@ -139,17 +141,21 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
 
 
             // get child TextView and ImageView from this layout for the icon and label
-            TextView tab_label = (TextView) tab.findViewById(R.id.nav_label);
-            ImageView tab_icon = (ImageView) tab.findViewById(R.id.nav_icon);
+            TextView tab_label = tab.findViewById(R.id.nav_label);
+            ImageView tab_icon = tab.findViewById(R.id.nav_icon);
 
             tab_label.setLayoutParams(textParam);
 
             tab_label.setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/Cairo_Regular.ttf"));
-            tab_label.setText(getResources().getString(navLabels[i]));
-            tab_icon.setImageResource(navIcons[i]);
+            if (i < 6) {
+                tab_label.setText(getResources().getString(navLabels[i]));
+                tab_icon.setImageResource(navIcons[i]);
+                Objects.requireNonNull(tabLayout.getTabAt(i)).setCustomView(tab);
+            }
+
 
             // finally publish this custom view to navigation tab
-            Objects.requireNonNull(tabLayout.getTabAt(i)).setCustomView(tab);
+
         }
         // finishes here ................
 
@@ -187,14 +193,25 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
 
     }
 
+
+    private void createTabDynamically() {
+        LocalDb db = new LocalDb();
+        for (int i = 0; i < 4; i++) {
+            int ii = i;
+
+            tabLayout.addTab(tabLayout.newTab().setText("Tab " + ++ii).setIcon(R.drawable.education));
+        }
+
+    }
+
     @Override
     public void findView() {
         toolbar = findViewById(R.id.toolbar);
         hintIdOne = findViewById(R.id.hint_id_1);
         hintIdTwo = findViewById(R.id.hint_id_2);
         hintIdThree = findViewById(R.id.hint_id_3);
-        mViewPager = (ViewPager) findViewById(R.id.container);
-        fab = (FloatingActionButton) findViewById(R.id.fab);
+        mViewPager = findViewById(R.id.container);
+        fab = findViewById(R.id.fab);
         tabLayout = findViewById(R.id.tabs);
         mAppBarLayout = findViewById(R.id.appbar);
         forMeBtn = findViewById(R.id.for_me_btn);
@@ -228,8 +245,8 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                 View tabView = tab.getCustomView();
                 // get inflated children Views the icon and the label by their id
                 if (tabView != null) {
-                    TextView tab_label = (TextView) tabView.findViewById(R.id.nav_label);
-                    ImageView tab_icon = (ImageView) tabView.findViewById(R.id.nav_icon);
+                    TextView tab_label = tabView.findViewById(R.id.nav_label);
+                    ImageView tab_icon = tabView.findViewById(R.id.nav_icon);
                     Drawable drawableIcon = tab_icon.getDrawable();
 
                     if (drawableIcon instanceof Animatable) {
@@ -269,7 +286,7 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                 View tabView = tab.getCustomView();
                 // get inflated children Views the icon and the label by their id
                 if (tabView != null) {
-                    TextView tab_label = (TextView) tabView.findViewById(R.id.nav_label);
+                    TextView tab_label = tabView.findViewById(R.id.nav_label);
                 }
             }
 
@@ -278,7 +295,7 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                 View tabView = tab.getCustomView();
                 // get inflated children Views the icon and the label by their id
                 if (tabView != null) {
-                    ImageView tab_icon = (ImageView) tabView.findViewById(R.id.nav_icon);
+                    ImageView tab_icon = tabView.findViewById(R.id.nav_icon);
                     Drawable drawableIcon = tab_icon.getDrawable();
 
                     if (drawableIcon instanceof Animatable) {
@@ -539,7 +556,7 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
 
             myMainActivity = (GrabingInfoActivity) getActivity();
             String[] headers = {"Select your medium", "Select your class",
-                    "Select the subject your want mentor", "Choose selary in offer", "Select gender preference", "Verify the given info"};
+                    "Select the subject your want mentor", "Choose selary in offer", "Select gender preference", "Verify the given info", "Hardcore"};
             int fragmentPosition = getArguments().getInt(ARG_SECTION_NUMBER);
             //garbage code goes here
 
@@ -552,7 +569,7 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
             switch (fragmentPosition) {
                 case 1:
                     rootView = inflater.inflate(R.layout.stu2_fragment_grabing_info, container, false);
-                    textView = (TextView) rootView.findViewById(R.id.section_label);
+                    textView = rootView.findViewById(R.id.section_label);
                     // Setting the header text view
                     textView.setText(headers[fragmentPosition - 1]);
                     //setting the background color
@@ -588,25 +605,22 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                         }
                     }
 
-                    fragRadioGroupOne = (RadioGroup) rootView.findViewById(R.id.frag_radio_group);
-                    fragRadioGroupOne.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-                        @Override
-                        public void onCheckedChanged(RadioGroup group, int checkedId) {
-                            // checkedId is the RadioButton selected
-                            RadioButton rb = (RadioButton) group.findViewById(checkedId);
-                            String currentSelectedBtnText = rb.getText().toString();
+                    fragRadioGroupOne = rootView.findViewById(R.id.frag_radio_group);
+                    fragRadioGroupOne.setOnCheckedChangeListener((group, checkedId) -> {
+                        // checkedId is the RadioButton selected
+                        RadioButton rb = group.findViewById(checkedId);
+                        String currentSelectedBtnText = rb.getText().toString();
 
-                            String currentSelectedBtnTextFA = myMainActivity.givenInfo[fragmentPosition - 1];
-                            if(!currentSelectedBtnText.equals(currentSelectedBtnTextFA)){
-                                myMainActivity.givenInfo[fragmentPosition - 1] = currentSelectedBtnText;
-                                myMainActivity.hintIdOne.setText(currentSelectedBtnText);
-                            }
+                        String currentSelectedBtnTextFA = myMainActivity.givenInfo[fragmentPosition - 1];
+                        if (!currentSelectedBtnText.equals(currentSelectedBtnTextFA)) {
+                            myMainActivity.givenInfo[fragmentPosition - 1] = currentSelectedBtnText;
+                            myMainActivity.hintIdOne.setText(currentSelectedBtnText);
                         }
                     });
                     break;
                 case 2:
                     rootView = inflater.inflate(R.layout.stu2_fragment_grabing_info_one, container, false);
-                    textView = (TextView) rootView.findViewById(R.id.section_label);
+                    textView = rootView.findViewById(R.id.section_label);
                     // Setting the header text view
                     textView.setText(headers[fragmentPosition - 1]);
                     //setting the background color
@@ -639,15 +653,15 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                         }
                     }
 
-                    fragRadioGroupTwo = (RadioGroup) rootView.findViewById(R.id.frag_radio_group);
+                    fragRadioGroupTwo = rootView.findViewById(R.id.frag_radio_group);
                     fragRadioGroupTwo.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                         @Override
                         public void onCheckedChanged(RadioGroup group, int checkedId) {
                             // checkedId is the RadioButton selected
-                            RadioButton rb = (RadioButton) group.findViewById(checkedId);
+                            RadioButton rb = group.findViewById(checkedId);
                             String currentSelectedBtnText = rb.getText().toString();
                             String currentSelectedBtnTextFA = myMainActivity.givenInfo[fragmentPosition - 1];
-                            if(!currentSelectedBtnText.equals(currentSelectedBtnTextFA)){
+                            if (!currentSelectedBtnText.equals(currentSelectedBtnTextFA)) {
                                 myMainActivity.givenInfo[fragmentPosition - 1] = currentSelectedBtnText;
                                 myMainActivity.hintIdTwo.setText(rb.getText());
                             }
@@ -656,7 +670,7 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                     break;
                 case 3:
                     rootView = inflater.inflate(R.layout.stu2_fragment_grabing_info_two, container, false);
-                    textView = (TextView) rootView.findViewById(R.id.section_label);
+                    textView = rootView.findViewById(R.id.section_label);
                     // Setting the header text view
                     textView.setText(headers[fragmentPosition - 1]);
                     //setting the background color
@@ -689,15 +703,15 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                         }
                     }
 
-                    fragRadioGroupThree = (RadioGroup) rootView.findViewById(R.id.frag_radio_group);
+                    fragRadioGroupThree = rootView.findViewById(R.id.frag_radio_group);
                     fragRadioGroupThree.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                         @Override
                         public void onCheckedChanged(RadioGroup group, int checkedId) {
                             // checkedId is the RadioButton selected
-                            RadioButton rb = (RadioButton) group.findViewById(checkedId);
+                            RadioButton rb = group.findViewById(checkedId);
                             String currentSelectedBtnText = rb.getText().toString();
                             String currentSelectedBtnTextFA = myMainActivity.givenInfo[fragmentPosition - 1];
-                            if(!currentSelectedBtnText.equals(currentSelectedBtnTextFA)){
+                            if (!currentSelectedBtnText.equals(currentSelectedBtnTextFA)) {
                                 myMainActivity.givenInfo[fragmentPosition - 1] = currentSelectedBtnText;
                                 myMainActivity.hintIdTwo.setText(rb.getText());
                             }
@@ -706,7 +720,7 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                     break;
                 case 4:
                     rootView = inflater.inflate(R.layout.stu2_fragment_grabing_info_three, container, false);
-                    textView = (TextView) rootView.findViewById(R.id.section_label);
+                    textView = rootView.findViewById(R.id.section_label);
                     // Setting the header text view
                     textView.setText(headers[fragmentPosition - 1]);
                     //setting the background color
@@ -739,15 +753,15 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                         }
                     }
 
-                    fragRadioGroupFour = (RadioGroup) rootView.findViewById(R.id.frag_radio_group);
+                    fragRadioGroupFour = rootView.findViewById(R.id.frag_radio_group);
                     fragRadioGroupFour.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                         @Override
                         public void onCheckedChanged(RadioGroup group, int checkedId) {
                             // checkedId is the RadioButton selected
-                            RadioButton rb = (RadioButton) group.findViewById(checkedId);
+                            RadioButton rb = group.findViewById(checkedId);
                             String currentSelectedBtnText = rb.getText().toString();
                             String currentSelectedBtnTextFA = myMainActivity.givenInfo[fragmentPosition - 1];
-                            if(!currentSelectedBtnText.equals(currentSelectedBtnTextFA)){
+                            if (!currentSelectedBtnText.equals(currentSelectedBtnTextFA)) {
                                 myMainActivity.givenInfo[fragmentPosition - 1] = currentSelectedBtnText;
                                 myMainActivity.hintIdTwo.setText(rb.getText());
                             }
@@ -756,7 +770,7 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                     break;
                 case 5:
                     rootView = inflater.inflate(R.layout.stu2_fragment_grabing_info_four, container, false);
-                    textView = (TextView) rootView.findViewById(R.id.section_label);
+                    textView = rootView.findViewById(R.id.section_label);
                     // Setting the header text view
                     textView.setText(headers[fragmentPosition - 1]);
                     //setting the background color
@@ -788,18 +802,15 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                         }
                     }
 
-                    fragRadioGroupFive = (RadioGroup) rootView.findViewById(R.id.frag_radio_group);
-                    fragRadioGroupFive.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-                        @Override
-                        public void onCheckedChanged(RadioGroup group, int checkedId) {
-                            // checkedId is the RadioButton selected
-                            RadioButton rb = (RadioButton) group.findViewById(checkedId);
-                            String currentSelectedBtnText = rb.getText().toString();
-                            String currentSelectedBtnTextFA = myMainActivity.givenInfo[fragmentPosition - 1];
-                            if(!currentSelectedBtnText.equals(currentSelectedBtnTextFA)){
-                                myMainActivity.givenInfo[fragmentPosition - 1] = currentSelectedBtnText;
-                                myMainActivity.hintIdTwo.setText(rb.getText());
-                            }
+                    fragRadioGroupFive = rootView.findViewById(R.id.frag_radio_group);
+                    fragRadioGroupFive.setOnCheckedChangeListener((group, checkedId) -> {
+                        // checkedId is the RadioButton selected
+                        RadioButton rb = group.findViewById(checkedId);
+                        String currentSelectedBtnText = rb.getText().toString();
+                        String currentSelectedBtnTextFA = myMainActivity.givenInfo[fragmentPosition - 1];
+                        if (!currentSelectedBtnText.equals(currentSelectedBtnTextFA)) {
+                            myMainActivity.givenInfo[fragmentPosition - 1] = currentSelectedBtnText;
+                            myMainActivity.hintIdTwo.setText(rb.getText());
                         }
                     });
                     break;
@@ -828,6 +839,18 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                     mRecyclerView.addItemDecoration(new VerticalSpaceItemDecoration(VERTICAL_ITEM_SPACE));
                     mRecyclerView.setAdapter(recyclerAdapter);
                     mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+                    break;
+                case 7: case 8: case 9: case 10:
+                    rootView = inflater.inflate(R.layout.stu2_fragment_grabing_info, container, false);
+                    textView = rootView.findViewById(R.id.section_label);
+                    // Setting the header text view
+                    textView.setText("The Test");
+                    //setting the background color
+                    fragmentBg = rootView.findViewById(R.id.fragment_bg);
+                    fragmentBg.setBackground(null);
+                    /*radioButtonLayout = rootView.findViewById(R.id.radio_button_linear_layout);
+                    rootViewRadioButtonLayoutContent = inflater.inflate(R.layout.custom_grading_info_radio_group, container, false);
+                    radioButtonLayout.addView(rootViewRadioButtonLayoutContent, 0);*/
                     break;
             }
 
@@ -911,18 +934,15 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
 
         @Override
         public int getCount() {
-            return 6;
+            return tabLayout.getTabCount();
         }
     }
 
     public void getAction() {
-        Toast.makeText(this, getIntent().getAction() + "", Toast.LENGTH_SHORT).show();
-        if (getIntent().getAction() == DumeUtils.TEACHER) {
-            forMeWrapper.setVisibility(View.GONE);
-            mAppBarLayout.setExpanded(true);
-            toolbar.setTitle("Select Skill");
-        } else {
-
-        }
+        if (getIntent().getAction() != DumeUtils.TEACHER) return;
+        selected_category_position = getIntent().getIntExtra(DumeUtils.SELECTED_ID, 0);
+        forMeWrapper.setVisibility(View.GONE);
+        toolbar.setTitle("Select Skill");
+        createTabDynamically();
     }
 }
