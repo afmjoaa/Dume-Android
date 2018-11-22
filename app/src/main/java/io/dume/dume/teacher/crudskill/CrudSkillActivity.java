@@ -74,10 +74,8 @@ public class CrudSkillActivity extends AppCompatActivity implements CrudContract
         categoryGrid.setAdapter(new CategoryAdapter(categoryList, drawableList) {
             @Override
             protected void onCategoryItemClick(View view, int position) {
-                flush("" + position);
-                if (position == 5) {
-                    startActivity(new Intent(getApplicationContext(), GrabingInfoActivity.class).setAction(DumeUtils.TEACHER).putExtra(DumeUtils.SELECTED_ID, position));
-                }
+                startActivity(new Intent(getApplicationContext(), GrabingInfoActivity.class).setAction(DumeUtils.TEACHER).putExtra(DumeUtils.SELECTED_ID, position));
+
             }
         });
     }
