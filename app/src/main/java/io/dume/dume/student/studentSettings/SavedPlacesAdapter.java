@@ -2,8 +2,11 @@ package io.dume.dume.student.studentSettings;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v7.view.ContextThemeWrapper;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -19,6 +22,7 @@ public class SavedPlacesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private LayoutInflater inflater;
     private Context context;
     private List<SavedPlacesAdaData> data;
+
 
     public SavedPlacesAdapter(Context context , List<SavedPlacesAdaData> data){
         inflater = LayoutInflater.from(context);
@@ -71,7 +75,17 @@ public class SavedPlacesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             myViewHolder.moreVertImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Toast.makeText(context, "fucked it.....", Toast.LENGTH_SHORT).show();
+
+                    PopupMenu popup = new PopupMenu(context, view);
+                    popup.inflate(R.menu.menu_saved_places);
+                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem menuItem) {
+                            Toast.makeText(context, "fucked it.....", Toast.LENGTH_SHORT).show();
+                            return false;
+                        }
+                    });
+                    popup.show();
                 }
             });
         }

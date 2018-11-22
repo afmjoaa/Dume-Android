@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.view.View;
 
+import io.dume.dume.R;
+
 public class MentorAddvertisePresenter implements MentorAddvertiseContact.Presenter {
     private MentorAddvertiseContact.View mView;
     private MentorAddvertiseContact.Model mModel;
@@ -26,6 +28,10 @@ public class MentorAddvertisePresenter implements MentorAddvertiseContact.Presen
 
     @Override
     public void onMentorAddvertiseViewIntracted(View view) {
-
+        switch (view.getId()) {
+            case R.id.start_mentoring_imageView:
+                mView.onAnimationImage();
+                break;
+        }
     }
 }

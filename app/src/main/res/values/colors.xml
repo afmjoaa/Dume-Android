@@ -38,6 +38,7 @@
     <color name="icon_color">#4C5264</color>
     <color name="progressBarColor">#00796B</color>
     <color name="black_overlay">#66000000</color>
+    <color name="light_black_overlay">#3c000000</color>
     <color name="dark_black_overlay">#be000000</color>
     <color name="loader_color_one">#29b6f6</color>
     <color name="tab_overlay">#50000000</color>
@@ -60,6 +61,7 @@
 
     <color name="star_rating_color">#60C3FF</color>
     <color name="star_rating_background">#D4DCE2</color>
+    <color name="star_rating_background_2nd">#c3d1da</color>
     <color name="review_like_color">#2699FB</color>
 
     <color name="status_pending">#41F56161</color>
@@ -104,6 +106,11 @@
     <color name="percent_off_active_color">#369c3a</color>
     <color name="disable_color">#616161</color>
     <color name="colorRippleDefault">#423497FD</color>
+
+    <color name="light_red">#ff564d</color>
+    <color name="dark_light_red">#ff443a</color>
+
+    <color name="linkColorDark">#01579b</color>
 
 
 </resources>

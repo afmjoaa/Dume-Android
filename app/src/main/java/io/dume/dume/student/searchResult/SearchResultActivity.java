@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.location.Location;
@@ -16,6 +17,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -155,6 +157,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
     private LatLng mDummyLatLngOne;
     private List<Polyline> polylines;
     private static final int[] COLORS = new int[]{R.color.black, R.color.badge_red, R.color.badge_green, R.color.blue, R.color.badge_yellow};
+    private CollapsingToolbarLayout secondaryCollapsingToolbarLayout;
 
 
     @Override
@@ -204,6 +207,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
         coordinatorLayout = findViewById(R.id.my_main_container);
         llBottomSheet = findViewById(R.id.searchBottomSheet);
         secondaryAppbarLayout = findViewById(R.id.secondary_Appbar);
+        secondaryCollapsingToolbarLayout = findViewById(R.id.secondary_collapsing_toolbar);
         defaultAppbarLayout = findViewById(R.id.my_appbarLayout);
         secondaryToolbar = findViewById(R.id.secondary_toolbar);
         viewMusk = findViewById(R.id.view_musk);
@@ -253,6 +257,10 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
         setSupportActionBar(toolbar);
         Drawable drawable = ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_more_vert_black_24dp);
         toolbar.setOverflowIcon(drawable);
+        //setting typeface for the secondary appbar layout
+        secondaryCollapsingToolbarLayout.setCollapsedTitleTypeface(Typeface.createFromAsset(activity.getAssets(), "fonts/Cairo-Light.ttf"));
+        secondaryCollapsingToolbarLayout.setExpandedTitleTypeface(Typeface.createFromAsset(activity.getAssets(), "fonts/Cairo-Light.ttf"));
+        secondaryCollapsingToolbarLayout.setTitle("Details");
         settingStatusBarTransparent();
         setDarkStatusBarIcon();
 

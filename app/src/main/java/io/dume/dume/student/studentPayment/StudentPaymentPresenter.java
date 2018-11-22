@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.view.View;
 
+import io.dume.dume.R;
+
 public class StudentPaymentPresenter implements StudentPaymentContract.Presenter {
 
     private StudentPaymentContract.View mView;
@@ -20,11 +22,18 @@ public class StudentPaymentPresenter implements StudentPaymentContract.Presenter
 
     @Override
     public void studentPaymentEnqueue() {
-
+        mView.findView();
+        mView.initStudentPayment();
+        mView.configStudentPayment();
     }
 
     @Override
     public void onStudentPaymentIntracted(View view) {
+        switch (view.getId()) {
+            case R.id.add_promotion_layout:
+                mView.onAddPromoCodeApplied();
+                break;
 
+        }
     }
 }

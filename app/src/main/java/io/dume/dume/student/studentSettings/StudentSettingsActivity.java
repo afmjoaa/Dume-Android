@@ -90,32 +90,16 @@ public class StudentSettingsActivity extends CustomStuAppCompatActivity
                         break;
                     case 1:
                         settingsContent.setVisibility(View.GONE);
-                        configAppbarTittle(StudentSettingsActivity.this, settingNameArr[position]);
-                        appBarLayout.setExpanded(false);
-                        Toast.makeText(StudentSettingsActivity.this, "0", Toast.LENGTH_SHORT).show();
-                        getFragmentManager().beginTransaction().replace(R.id.content, new DataSyncPreferenceFragment()).commit();
-
-
-                        /*settingsContent.setVisibility(View.GONE);
                         fab.setVisibility(View.VISIBLE);
                         configAppbarTittle(StudentSettingsActivity.this, settingNameArr[position]);
                         appBarLayout.setExpanded(false);
                         getSupportFragmentManager().beginTransaction().replace(R.id.content, new SavedPlacesFragment()).commit();
-                        */
                         break;
                     case 2:
                         settingsContent.setVisibility(View.GONE);
                         configAppbarTittle(StudentSettingsActivity.this, settingNameArr[position]);
                         appBarLayout.setExpanded(false);
-                        Toast.makeText(StudentSettingsActivity.this, "0", Toast.LENGTH_SHORT).show();
-                        getFragmentManager().beginTransaction().replace(R.id.content, new GeneralPreferenceFragment()).commit();
-
-
-                        /*settingsContent.setVisibility(View.GONE);
-                        configAppbarTittle(StudentSettingsActivity.this, settingNameArr[position]);
-                        appBarLayout.setExpanded(false);
                         getSupportFragmentManager().beginTransaction().replace(R.id.content, new AccountFragment()).commit();
-                        */
                         break;
                     case 3:
                         Toast.makeText(StudentSettingsActivity.this, "Chat settings are coming soon", Toast.LENGTH_SHORT).show();

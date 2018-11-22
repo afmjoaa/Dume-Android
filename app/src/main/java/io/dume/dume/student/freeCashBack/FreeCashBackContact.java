@@ -10,6 +10,7 @@ public interface FreeCashBackContact {
 
         void configFreeCashBack();
 
+        void onAnimationImage();
     }
 
     interface Presenter {

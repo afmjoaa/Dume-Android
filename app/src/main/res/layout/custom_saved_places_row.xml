@@ -77,6 +77,8 @@
         android:padding="8dp"
         app:carbon_rippleColor="@color/colorDarkAzure"
         app:carbon_rippleStyle="background"
+        app:carbon_rippleRadius="18dp"
+        app:carbon_cornerRadius="18dp"
         app:srcCompat="@drawable/ic_more_vert_black_24dp" />
 
 

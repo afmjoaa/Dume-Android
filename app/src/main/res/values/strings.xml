@@ -545,6 +545,8 @@ provided.Tap salary for details.  </string>
     <string name="favorites">Favorites</string>
     <string name="saved_places">Other Saved Places</string>
     <string name="recent_used_places">Recently Used Places</string>
+    <string name="edit">Edit</string>
+    <string name="remove">Remove</string>
 
     <string-array name="primaryPromoText">
         <item>Affortable nearby couching-centers specific to the topic</item>
@@ -611,6 +613,28 @@ provided.Tap salary for details.  </string>
         <item>C+</item>
         <item>C</item>
         <item>D</item>
+    </string-array>
+
+    <string-array name="review_hint_text_dependent">
+        <item>Share how Azgor can improve</item>
+        <item>Share what needs improvement</item>
+        <item>Say something about Azgor</item>
+        <item>Share your suggestions</item>
+        <item>Share your experience</item>
+    </string-array>
+
+    <string-array name="rating_demo_data">
+        <item>Expertise</item>
+        <item>Experience</item>
+        <item>Communication</item>
+        <item>Behaviour</item>
+        <item>Math</item>
+    </string-array>
+
+    <string-array name="payment_methods">
+        <item>Cash</item>
+        <item>Bkash</item>
+        <item>NexusPay</item>
     </string-array>
 
 

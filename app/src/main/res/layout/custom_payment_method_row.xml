@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/recycler_container_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:orientation="vertical"
+    android:paddingStart="16dp"
+    android:paddingLeft="16dp"
+    android:paddingEnd="16dp"
+    android:paddingRight="16dp">
+
+    <ImageView
+        android:id="@+id/auto_image_icon"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:contentDescription="@string/autocomplete_image"
+        app:srcCompat="@drawable/ic_autocomplete_places" />
+
+    <LinearLayout
+        android:id="@+id/vertical_textview_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toStartOf="@+id/more_vertical_icon"
+        android:layout_toLeftOf="@+id/more_vertical_icon"
+        android:layout_toEndOf="@id/auto_image_icon"
+        android:layout_toRightOf="@id/auto_image_icon"
+        android:orientation="vertical"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp">
+
+
+        <TextView
+            android:id="@+id/text_one"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginTop="3dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:text="Cash"
+            android:textAppearance="?android:attr/textAppearanceListItem"
+            app:fontFamily="@font/cairo_regular" />
+
+        <TextView
+            android:id="@+id/text_two"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginTop="2dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:text="Default"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:visibility="gone"
+            app:fontFamily="@font/cairo_regular" />
+
+    </LinearLayout>
+
+    <carbon.widget.ImageView
+        android:id="@+id/more_vertical_icon"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
+        android:clickable="true"
+        android:contentDescription="@string/autocomplete_image"
+        android:focusable="true"
+        android:padding="8dp"
+        app:carbon_cornerRadius="18dp"
+        app:carbon_rippleColor="@color/colorDarkAzure"
+        app:carbon_rippleRadius="18dp"
+        app:carbon_rippleStyle="background"
+        app:srcCompat="@drawable/ic_more_vert_black_24dp" />
+
+
+    <View
+        android:id="@+id/divider2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/vertical_textview_container"
+        android:background="#41a7a7a7" />
+
+</RelativeLayout>

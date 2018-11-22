@@ -8,10 +8,93 @@
     tools:context=".student.freeCashBack.FreeCashBackActivity"
     tools:showIn="@layout/stu14_activity_free_cash_back">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/free_cashback_block"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
-        android:text="@string/large_text" />
+        android:background="@drawable/bg_round_corner_rela_layout"
+        android:orientation="vertical"
+        android:paddingLeft="16dp"
+        android:paddingTop="10dp"
+        android:paddingRight="16dp"
+        android:paddingBottom="10dp">
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp">
+
+            <TextView
+                android:id="@+id/free_cashback_intro"
+                android:layout_width="160dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="14dp"
+                android:gravity="start"
+                android:text="Invite your friends, get free cashback"
+                android:textAlignment="viewStart"
+                android:textColor="@color/colorBlack"
+                android:textSize="18sp"
+                app:fontFamily="@font/cairo_regular" />
+
+            <TextView
+                android:layout_width="160dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/free_cashback_intro"
+                android:layout_marginBottom="14dp"
+                android:gravity="start"
+                android:text="How invites work"
+                android:textAlignment="viewStart"
+                android:textColor="@color/colorLink"
+                android:textSize="16sp"
+                app:fontFamily="@font/cairo_regular" />
+
+            <ImageView
+                android:id="@+id/free_cashback_imageView"
+                android:layout_width="140dp"
+                android:layout_height="120dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:contentDescription="@string/refer_mentor"
+                android:onClick="onFreeCashBackViewClicked"
+                app:srcCompat="@drawable/bs_free_cashback_image" />
+
+        </RelativeLayout>
+
+
+        <TextView
+            android:id="@+id/free_cashback_share_text"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:gravity="start"
+            android:text="@string/shhare_invite_code_text"
+            android:textAlignment="viewStart"
+            android:textColor="@color/textColorPrimary"
+            android:textSize="16sp"
+            app:fontFamily="@font/cairo_regular" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#3ca7a7a7" />
+
+        <Button
+            style="@style/Base.Widget.AppCompat.Button.Borderless"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableEnd="@drawable/ic_share_icon"
+            android:drawableRight="@drawable/ic_share_icon"
+            android:gravity="start"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:text="mohimenuljoaa"
+            android:textAlignment="viewStart"
+            android:textAllCaps="false"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:fontFamily="@font/cairo_regular" />
+
+    </LinearLayout>
 
 </android.support.v4.widget.NestedScrollView>
