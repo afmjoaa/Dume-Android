@@ -8,10 +8,70 @@
     tools:context=".student.mentorAddvertise.MentorAddvertiseActivity"
     tools:showIn="@layout/stu15_activity_mentor_addvertise">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/start_mentoring_block"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
-        android:text="@string/large_text" />
+        android:background="@drawable/bg_round_corner_rela_layout"
+        android:orientation="vertical"
+        android:paddingLeft="16dp"
+        android:paddingTop="10dp"
+        android:paddingRight="16dp"
+        android:paddingBottom="10dp">
+
+        <RelativeLayout
+            android:layout_marginTop="18dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/start_mentoring_intro"
+                android:layout_width="160dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="14dp"
+                android:gravity="start"
+                android:text="Join thousands of mentors who also share their skill and earn money with Dume"
+                android:textAlignment="viewStart"
+                android:textColor="@color/colorBlack"
+                android:textSize="18sp"
+                app:fontFamily="@font/cairo_regular" />
+
+
+            <ImageView
+                android:id="@+id/start_mentoring_imageView"
+                android:layout_width="140dp"
+                android:layout_height="120dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:contentDescription="@string/refer_mentor"
+                android:onClick="onMentorAdvertiseViewClicked"
+                app:srcCompat="@drawable/bs_start_mentoring_image" />
+
+        </RelativeLayout>
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#3ca7a7a7" />
+
+        <Button
+            style="@style/Base.Widget.AppCompat.Button.Borderless"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableEnd="@drawable/ic_keyboard_arrow_right_black_24dp"
+            android:drawableRight="@drawable/ic_keyboard_arrow_right_black_24dp"
+            android:gravity="start"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:text="Try sharing your skill"
+            android:textAlignment="viewStart"
+            android:textAllCaps="false"
+            android:textColor="@color/colorLink"
+            android:textSize="16sp"
+            app:fontFamily="@font/cairo_regular" />
+
+    </LinearLayout>
+
 
 </android.support.v4.widget.NestedScrollView>

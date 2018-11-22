@@ -73,6 +73,10 @@ public class HomePagePresenter implements HomePageContract.Presenter {
             case R.id.start_mentoring_imageView:
                 mView.startMentoringImageViewClicked();
                 break;
+                //temporary code goes here
+            case R.id.promotion_validity_text:
+                mView.testingCustomDialogue();
+                break;
 
         }
 
@@ -112,7 +116,6 @@ public class HomePagePresenter implements HomePageContract.Presenter {
             case R.id.heat_map:
                 mView.gotoHeatMapActivity();
                 break;
-
             case R.id.settings:
                 mView.gotoSettingActivity();
                 break;

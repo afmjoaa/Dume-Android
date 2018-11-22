@@ -1199,7 +1199,6 @@
                     app:layout_collapseMode="pin"
                     app:navigationIcon="@drawable/ic_arrow_back_white_24dp"
                     app:popupTheme="@style/Base.ThemeOverlay.AppCompat.Dark"
-                    app:title="Details"
                     app:titleMarginBottom="@dimen/titleMarginBottom"
                     app:titleMarginStart="@dimen/titleMarginStart"
                     app:titleMarginTop="@dimen/titleMarginTop">

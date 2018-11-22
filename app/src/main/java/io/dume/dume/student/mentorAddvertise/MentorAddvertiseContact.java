@@ -10,6 +10,7 @@ public interface MentorAddvertiseContact {
 
         void configMentorAddvertise();
 
+        void onAnimationImage();
     }
 
     interface Presenter {

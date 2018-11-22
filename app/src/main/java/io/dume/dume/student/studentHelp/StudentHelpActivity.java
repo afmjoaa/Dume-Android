@@ -14,17 +14,26 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
+import android.widget.AutoCompleteTextView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,6 +47,8 @@ import io.dume.dume.common.privacyPolicy.PrivacyPolicyActivity;
 import io.dume.dume.student.common.SettingData;
 import io.dume.dume.student.common.SettingsAdapter;
 import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
+import io.dume.dume.student.studentSettings.SavedPlacesAdaData;
+import io.dume.dume.student.studentSettings.SavedPlacesAdapter;
 import io.dume.dume.student.studentSettings.StudentSettingsActivity;
 import io.dume.dume.util.AlertMsgDialogue;
 
@@ -81,13 +92,13 @@ public class StudentHelpActivity extends CustomStuAppCompatActivity implements S
                         helpContent.setVisibility(View.GONE);
                         configAppbarTittle(StudentHelpActivity.this, helpNameArr[position]);
                         appBarLayout.setExpanded(false);
-                        getFragmentManager().beginTransaction().replace(R.id.content, new DataSyncPreferenceFragment()).commit();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.content, new FAQFragment()).commit();
                         break;
                     case 3:
                         helpContent.setVisibility(View.GONE);
                         configAppbarTittle(StudentHelpActivity.this, helpNameArr[position]);
                         appBarLayout.setExpanded(false);
-                        Toast.makeText(StudentHelpActivity.this, "3", Toast.LENGTH_SHORT).show();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.content, new ContactUsFragment()).commit();
                         break;
                     case 4:
                         updateAppCalled();
@@ -189,32 +200,6 @@ public class StudentHelpActivity extends CustomStuAppCompatActivity implements S
         }
     }
 
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public static class DataSyncPreferenceFragment extends PreferenceFragment {
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.xml.pref_data_sync);
-            setHasOptionsMenu(true);
-
-            // Bind the summaries of EditText/List/Dialog/Ringtone preferences
-            // to their values. When their values change, their summaries are
-            // updated to reflect the new value, per the Android Design
-            // guidelines.
-            bindPreferenceSummaryToValue(findPreference("sync_frequency"));
-        }
-
-        @Override
-        public boolean onOptionsItemSelected(MenuItem item) {
-            int id = item.getItemId();
-            if (id == android.R.id.home) {
-                startActivity(new Intent(getActivity(), StudentHelpActivity.class));
-                return true;
-            }
-            return super.onOptionsItemSelected(item);
-        }
-    }
-
     private static void bindPreferenceSummaryToValue(Preference preference) {
         // Set the listener to watch for value changes.
         preference.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
@@ -275,4 +260,90 @@ public class StudentHelpActivity extends CustomStuAppCompatActivity implements S
         }
     };
 
+
+    //testing the contact up
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    public static class ContactUsFragment extends Fragment {
+
+        private StudentHelpActivity myMainActivity;
+        private AutoCompleteTextView queryTextView;
+
+        @Override
+        public void onCreate(@Nullable Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            setHasOptionsMenu(true);
+        }
+
+        @Nullable
+        @Override
+        public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+            myMainActivity = (StudentHelpActivity) getActivity();
+            View rootView = inflater.inflate(R.layout.custom_contact_up_fragment, container, false);
+            queryTextView = rootView.findViewById(R.id.feedback_textview);
+
+            queryTextView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                public void onFocusChange(View v, boolean hasFocus) {
+                    if (hasFocus) {
+                        queryTextView.setHint("Please describe your problem");
+                    } else {
+                        queryTextView.setHint("Please describe your problem");
+                    }
+                }
+            });
+            return rootView;
+        }
+
+        @Override
+        public boolean onOptionsItemSelected(MenuItem item) {
+            int id = item.getItemId();
+            if (id == android.R.id.home) {
+                startActivity(new Intent(getActivity(), StudentHelpActivity.class));
+                return true;
+            }
+            return super.onOptionsItemSelected(item);
+        }
+    }
+
+    //testing the faq here
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    public static class FAQFragment extends Fragment {
+
+        private StudentHelpActivity myMainActivity;
+        private WebView webView;
+
+        @Override
+        public void onCreate(@Nullable Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            setHasOptionsMenu(true);
+        }
+
+        @Nullable
+        @Override
+        public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+            myMainActivity = (StudentHelpActivity) getActivity();
+            View rootView = inflater.inflate(R.layout.custom_faq_fragment, container, false);
+            webView = rootView.findViewById(R.id.activity_main_webview);
+            webView.setWebViewClient(new WebViewClient());
+            webView.loadUrl("https://www.google.com/");
+            WebSettings webSettings = webView.getSettings();
+            webSettings.setJavaScriptEnabled(true);
+            return rootView;
+        }
+
+        @Override
+        public boolean onOptionsItemSelected(MenuItem item) {
+            int id = item.getItemId();
+            if (id == android.R.id.home) {
+                if (webView.canGoBack()) {
+                    webView.goBack();
+                }else {
+                    startActivity(new Intent(getActivity(), StudentHelpActivity.class));
+                }
+                return true;
+            }
+            return super.onOptionsItemSelected(item);
+        }
+
+
+    }
 }

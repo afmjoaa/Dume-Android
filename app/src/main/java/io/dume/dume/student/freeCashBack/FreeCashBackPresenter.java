@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.view.View;
 
-public class FreeCashBackPresenter implements FreeCashBackContact.Presenter{
+import io.dume.dume.R;
+
+public class FreeCashBackPresenter implements FreeCashBackContact.Presenter {
 
     private FreeCashBackContact.View mView;
     private FreeCashBackContact.Model mModel;
@@ -27,6 +29,11 @@ public class FreeCashBackPresenter implements FreeCashBackContact.Presenter{
 
     @Override
     public void onFreeCashBackViewIntracted(View view) {
+        switch (view.getId()) {
+            case R.id.free_cashback_imageView:
+                mView.onAnimationImage();
+                break;
+        }
 
     }
 }

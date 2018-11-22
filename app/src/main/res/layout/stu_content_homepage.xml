@@ -55,6 +55,7 @@
                     android:layout_weight="1"
                     android:text="5 days"
                     android:textColor="#d8c1ebf0"
+                    android:onClick="onHomePageViewClicked"
                     android:textSize="13sp"
                     android:textStyle="bold"
                     app:fontFamily="@font/cairo_regular" />

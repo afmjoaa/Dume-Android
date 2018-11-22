@@ -319,6 +319,25 @@
         <item name="android:fontFamily">@font/cairo_regular</item>
     </style>
 
+    <style name="ProgressBarStyleUp">
+        <item name="colorAccent">@color/loader_color_one</item>
+    </style>
+
+    <style name="ProgressBarStyleDown">
+        <item name="colorAccent">@color/light_red</item>
+    </style>
+
+    <!--<style name="CustomPopupTheme" parent="ThemeOverlay.AppCompat.Dark">
+        &lt;!&ndash; if using android.widget.PopupMenu &ndash;&gt;
+        <item name="android:popupMenuStyle">@style/PopupMenu</item>
+        &lt;!&ndash; if using android.support.v7.widget.PopupMenu &ndash;&gt;
+        <item name="popupMenuStyle">@style/PopupMenu</item>
+    </style>
+
+    <style name="PopupMenu" parent="ThemeOverlay.AppCompat.Dark">
+        <item name="android:popupBackground">@color/colorBlack</item>
+    </style>-->
+
 
     <!--<style name="ScrollItem">
         <item name="android:layout_width">match_parent</item>

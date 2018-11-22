@@ -9,6 +9,7 @@ public interface StudentPaymentContract {
 
         void findView();
 
+        void onAddPromoCodeApplied();
     }
 
     interface Presenter {

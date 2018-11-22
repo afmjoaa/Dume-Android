@@ -58,6 +58,8 @@ public interface HomePageContract {
         void freeCashBackImageViewClicked();
 
         void startMentoringImageViewClicked();
+
+        void testingCustomDialogue();
     }
 
     interface Presenter {
