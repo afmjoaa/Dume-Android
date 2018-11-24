@@ -1,6 +1,7 @@
 package io.dume.dume.student.grabingInfo;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
@@ -17,6 +18,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -43,9 +45,12 @@ import com.transitionseverywhere.TransitionManager;
 import com.transitionseverywhere.TransitionSet;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import io.dume.dume.R;
+import io.dume.dume.inter_face.OnTabModificationListener;
 import io.dume.dume.student.grabingLocation.GrabingLocationActivity;
 import io.dume.dume.student.grabingPackage.GrabingPackageActivity;
 import io.dume.dume.student.pojo.CusStuAppComMapActivity;
@@ -56,7 +61,7 @@ import io.dume.dume.util.OnViewClick;
 import io.dume.dume.util.VisibleToggleClickListener;
 
 public class GrabingInfoActivity extends CusStuAppComMapActivity implements GrabingInfoContract.View,
-        MyGpsLocationChangeListener, OnMapReadyCallback, OnViewClick {
+        MyGpsLocationChangeListener, OnMapReadyCallback, OnViewClick, OnTabModificationListener {
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private View decor;
@@ -64,9 +69,16 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
     private int[] navIcons = {
             R.drawable.ic_payment,
             R.drawable.ic_gender_preference,
-            R.drawable.ic_cross_check
+            R.drawable.ic_cross_check,
+            R.drawable.ic_action_down,
+            R.drawable.ic_medium,
+            R.drawable.ic_subject,
+            R.drawable.ic_class,
+            R.drawable.ic_action_update
 
     };
+    int lastPostion = 0;
+
     private int[] navLabels = {
             R.string.tab_payment,
             R.string.tab_gender_preference,
@@ -112,6 +124,7 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), 1, getIntent().getIntExtra(DumeUtils.SELECTED_ID, 0), this);
+
         mViewPager.setAdapter(mSectionsPagerAdapter);
         tabLayout.setupWithViewPager(mViewPager);
         mViewPager.setOffscreenPageLimit(10);
@@ -430,7 +443,7 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
 
     @Override
     public void onRadioButtonClick(RadioButton view, int fragmentId, String levelName) {
-
+        boolean finished = false;
         //'  flush("Level  " + fragmentId);
         if (queryList.size() > fragmentId + 1) {
             int length = queryList.size();
@@ -440,16 +453,37 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
             }
         }
         queryList.add(fragmentId + 1, view.getText().toString());
-        flush(queryList.toString());
+        //  flush(queryList.toString());
         db = new LocalDb();
-        if (fragmentId == 0) {
+        ArrayList<String> arr = new ArrayList<>(Arrays.asList("Salary", "Gender", "Cross Check"));
+        if (arr.contains(levelName)) {
+            switch (levelName) {
+                case "Salary":
+                    if (!(fragmentId < tabLayout.getTabCount() - 1)) {
+                        mSectionsPagerAdapter.newTab(db.crossCheck);
+                        mViewPager.setCurrentItem(fragmentId + 1);
+                    } else mViewPager.setCurrentItem(fragmentId + 1);
+                    break;
+                case "Gender":
+                    if (!(fragmentId < tabLayout.getTabCount() - 1)) {
+                        mSectionsPagerAdapter.newTab(db.payment);
+                        mViewPager.setCurrentItem(fragmentId + 1);
+                    } else mViewPager.setCurrentItem(fragmentId + 1);
+                    break;
+                case "Cross Check":
+
+                    break;
+            }
+        } else if (fragmentId == 0) {
             mSectionsPagerAdapter.removeTabs(fragmentId + 1);
             List<String> levelTwo = db.getLevelTwo(view.getText().toString(), levelName);
-            if (levelTwo == null) {
-                flush("End of the Nest");
+            if (levelTwo != null) {
+                mSectionsPagerAdapter.newTab(levelTwo);
+            } else {
+                generateNextTabs(fragmentId);
                 return;
             }
-            mSectionsPagerAdapter.newTab(levelTwo);
+
 
         } else if (fragmentId == 1) {
             mSectionsPagerAdapter.removeTabs(fragmentId + 1);
@@ -457,15 +491,67 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
             if (levelThree != null) {
                 mSectionsPagerAdapter.newTab(levelThree);
             } else {
-                flush("End of the Nest");
+                generateNextTabs(fragmentId);
                 return;
             }
 
+        } else if (fragmentId == 2) {
+            mSectionsPagerAdapter.removeTabs(fragmentId + 1);
+            List<String> levelFour = db.getLevelFour(view.getText().toString(), queryList.get(fragmentId), queryList.get(fragmentId - 1));
+            if (levelFour != null) {
+                mSectionsPagerAdapter.newTab(levelFour);
+            } else {
+                generateNextTabs(fragmentId);
+                return;
+            }
+        } else if (fragmentId == 3) {
+            generateNextTabs(fragmentId);
+            return;
         }
+
+
         mViewPager.setCurrentItem(tabLayout.getTabCount() - 1);
+    }
+
+
+    public void generateNextTabs(int fragment) {
+        flush("End of the Nest");
+        if (!(fragment < tabLayout.getTabCount() - 1)) {
+            mSectionsPagerAdapter.newTab(db.getGenderPreferencesList());
+            mViewPager.setCurrentItem(fragment + 1);
+        } else mViewPager.setCurrentItem(fragment + 1);
+
+
     }
 
     public void flush(String msg) {
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onNewTabCreated(String tabName) {
+
+        int[] wh = DumeUtils.getScreenSize(this);
+        int tabMinWidth = ((wh[0] / 3) - (int) (24 * (getResources().getDisplayMetrics().density)));
+        LinearLayout.LayoutParams textParam = new LinearLayout.LayoutParams
+                (tabMinWidth, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+        for (int i = 0; i < tabLayout.getTabCount(); i++) {
+
+            Log.e(TAG, "enam what this to be called");
+            LinearLayout tab = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.custom_tablayout_tab, null);
+            TextView tab_label = (TextView) tab.findViewById(R.id.nav_label);
+            ImageView tab_icon = (ImageView) tab.findViewById(R.id.nav_icon);
+            tab_label.setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/Cairo-Light.ttf"));
+            tab_label.setText(tabLayout.getTabAt(i).getText());
+            tab_icon.setImageResource(navIcons[i]);
+            tab_label.setLayoutParams(textParam);
+            Objects.requireNonNull(tabLayout.getTabAt(i)).setCustomView(tab);
+        }
+    }
+
+    @Override
+    public void onTabDeleted() {
+
     }
 }

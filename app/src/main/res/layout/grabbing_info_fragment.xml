@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_height="match_parent"
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:orientation="horizontal">
+    android:layout_height="match_parent">
 
     <RadioGroup
         android:id="@+id/radioGrp"
@@ -16,15 +14,11 @@
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:orientation="vertical"
         android:padding="5dp"
         android:text="TextView"
-        android:textSize="20sp"
-        android:orientation="vertical"/>
+        android:textSize="20sp" />
 
-    <TextView
-        android:id="@+id/hawwa"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="o"/>
 
-</LinearLayout>
+
+</android.support.v4.widget.NestedScrollView>

@@ -1,20 +1,19 @@
 package io.dume.dume.student.grabingInfo;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewCompat;
+import android.support.v7.widget.AppCompatRadioButton;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +21,7 @@ import java.util.List;
 import io.dume.dume.R;
 import io.dume.dume.util.OnViewClick;
 
-public class DataHolderFragment extends Fragment {
+public class DataHolderFragment extends Fragment implements RadioGroup.OnCheckedChangeListener {
 
 
     private static final String TAG = "Bal";
@@ -33,8 +32,9 @@ public class DataHolderFragment extends Fragment {
     private RadioGroup group;
     private int id;
     private int generatedId;
-    private TextView hawwa;
-    private LinearLayout root;
+
+    private View root;
+    private Context mContext;
 
 
     public DataHolderFragment() {
@@ -63,11 +63,16 @@ public class DataHolderFragment extends Fragment {
                     String selected_title = getArguments().getString("" + sectionNumber) == null ? "" : getArguments().getString("" + sectionNumber);
                     Log.w(TAG, "setUserVisibleHint : section  " + sectionNumber + "  |  title   " + selected_title);
                     for (int i = 0; i < group.getChildCount(); i++) {
-                        RadioButton rd = (RadioButton) group.getChildAt(i);
+                        AppCompatRadioButton rd = (AppCompatRadioButton) group.getChildAt(i);
+                        // rd.setChecked(true);
                         assert selected_title != null;
+                        rd.setTextColor(mContext.getResources().getColor(R.color.textColorPrimary));
                         if (selected_title.equals(rd.getText().toString())) {
-                            rd.setTextColor(getResources().getColor(R.color.colorAccent));
-
+                            rd.setTextColor(mContext.getResources().getColor(R.color.colorAccent));
+                            // rd.setButtonDrawable(getResources().getDrawable(R.drawable.radio_btn_background));
+                            group.setOnCheckedChangeListener(null);
+                            rd.setChecked(true);
+                            group.setOnCheckedChangeListener(this);
                         }
 
                     }
@@ -86,14 +91,14 @@ public class DataHolderFragment extends Fragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        root = (LinearLayout) inflater.inflate(R.layout.grabbing_info_fragment, container, false);
+        root = inflater.inflate(R.layout.grabbing_info_fragment, container, false);
         group = root.findViewById(R.id.radioGrp);
-        hawwa = root.findViewById(R.id.hawwa);
+
         if (getArguments() != null) sectionNumber = getArguments().getInt("SECTION_NUMBER");
         list = getArguments().getStringArrayList("list");
         if (list != null) {
             for (String title : list) {
-                RadioButton rd = new RadioButton(container.getContext());
+                AppCompatRadioButton rd = new AppCompatRadioButton(container.getContext());
                 generatedId = ViewCompat.generateViewId();
                 rd.setId(generatedId);
                 idList.add(generatedId);
@@ -105,12 +110,7 @@ public class DataHolderFragment extends Fragment {
             }
 
         }
-        group.setOnCheckedChangeListener((radioGroup, i) -> {
-            RadioButton checked = radioGroup.findViewById(i);
-            getArguments().putString("" + sectionNumber, checked.getText().toString());
-            listener.onRadioButtonClick(radioGroup.findViewById(i), sectionNumber, list.toString());
-
-        });
+        group.setOnCheckedChangeListener(this);
 
         return root;
 
@@ -122,6 +122,7 @@ public class DataHolderFragment extends Fragment {
         super.onAttach(context);
         try {
             listener = (OnViewClick) context;
+            mContext = context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
                     + " must implement OnRadioGroupSelectedListener");
@@ -130,8 +131,19 @@ public class DataHolderFragment extends Fragment {
 
     @Override
     public void onDestroy() {
-
         super.onDestroy();
+    }
+
+    @Override
+    public void onCheckedChanged(RadioGroup radioGroup, int i) {
+        AppCompatRadioButton
+                checked = radioGroup.findViewById(i);
+        //  checked.setButtonDrawable(radioGroup.getContext().getResources().getDrawable(R.drawable.radio_btn_background));
+        if (getArguments() != null) {
+            getArguments().putString("" + sectionNumber, checked.getText().toString());
+        }
+        listener.onRadioButtonClick(radioGroup.findViewById(i), sectionNumber, list.toString());
+
     }
 
     public class VerticalSpaceItemDecoration extends RecyclerView.ItemDecoration {

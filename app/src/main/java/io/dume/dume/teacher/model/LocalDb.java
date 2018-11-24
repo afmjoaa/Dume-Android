@@ -15,8 +15,8 @@ public class LocalDb {
             innerSchoolBanglaMediumClassSeven, innerSchoolEnglishMediumClassOne, innerSchoolEnglishMediumClassTwo,
             innerSchoolEnglishMediumClassThree, innerSchoolEnglishMediumClassFour, innerSchoolEnglishMediumClassFive,
             innerSchoolEnglishMediumClassSix, innerSchoolEnglishMediumClassSeven, innerSchoolEnglishMediumEdExcelOLevel,
-            innerSchoolEnglishMediumCambridgeOLevel, innerCollege, innerCollegeEnglishMedium, innerCollegeEnglishMediumEdexel,
-            innerCollegeEnglishMediumEdexelAs, innerCollegeEnglishMediumEdexelA2, innerCollegeEnglishMediumCambridge,
+            innerSchoolEnglishMediumCambridgeOLevel, innerCollege, innerCollegeEnglishMedium,
+            innerCollegeEnglishMediumEdexelAs, innerCollegeEnglishMediumEdexelA2,
             innerCollegeEnglishMediumCambridgeAs, innerCollegeEnglishMediumCambridgeA2, innerCollegeBanglaMedium,
             innerCollegeBanglaMediumScience, innerCollegeBanglaMediumCommerce, innerCollegeBanglaMediumArts,
             innerCollegeEnglishVersion, innerCollegeEnglishVersionScience, innerCollegeEnglishVersionCommerce,
@@ -32,6 +32,18 @@ public class LocalDb {
     private final Map<String, List<String>> collegeMap;
     private final Map<String, List<String>> universityMap;
     private final Map<String, List<String>> instrumentalMap;
+    private final Map<String, List<String>> schoolBanglaMediumMap;
+    private final Map<String, List<String>> schoolEnglishMediumMap;
+    private final Map<String, List<String>> collegeBanglaMediumMap;
+    private final Map<String, List<String>> collegeEnglishMediumMap;
+    private final Map<String, List<String>> collegeEnglishVersionMap;
+    private final List<String> uniTestSub;
+    private final Map<String, List<String>> universityEngineerMap;
+    private final Map<String, List<String>> universityMedicalMap;
+    private final Map<String, List<String>> universityHonsMap;
+    private final List<String> genderPreferencesList;
+    public final List<String> crossCheck;
+    public final List<String> payment;
 
 
     public List<String> getInnerSchoolEnglishMediumEdExcelOLevel() {
@@ -50,9 +62,6 @@ public class LocalDb {
         return innerCollegeEnglishMedium;
     }
 
-    public List<String> getInnerCollegeEnglishMediumEdexel() {
-        return innerCollegeEnglishMediumEdexel;
-    }
 
     public List<String> getInnerCollegeEnglishMediumEdexelAs() {
         return innerCollegeEnglishMediumEdexelAs;
@@ -62,9 +71,6 @@ public class LocalDb {
         return innerCollegeEnglishMediumEdexelA2;
     }
 
-    public List<String> getInnerCollegeEnglishMediumCambridge() {
-        return innerCollegeEnglishMediumCambridge;
-    }
 
     public List<String> getInnerCollegeEnglishMediumCambridgeAs() {
         return innerCollegeEnglishMediumCambridgeAs;
@@ -259,6 +265,10 @@ public class LocalDb {
     }
 
 
+    public List<String> getGenderPreferencesList() {
+        return genderPreferencesList;
+    }
+
     public LocalDb() {
         categories = new ArrayList<String>(Arrays.asList("Education", "Software", "Programming", "Language", "Dance", "Art", "Cooking", "Music", "Sewing")) {
             @Override
@@ -281,13 +291,13 @@ public class LocalDb {
             }
         };
         innerSchoolBanglaMedium = new ArrayList<String>(Arrays.asList("Class One", "Class Two", "Class Three",
-                "Class Four", "Class Five", "Class Six", "Class Seven", "JSC", "SSC")) {
+                "Class Four", "Class Five", "Class Six", "Class Seven", "JSC", "Science SSC", "Commerce SSC", "Arts SSC")) {
             @Override
             public String toString() {
                 return "Class";
             }
         };
-        innerSchoolEnglishMedium = new ArrayList<String>(Arrays.asList("Class One", "Class Two", "Class Three", "Class Four", "Class Five", "Class Six", "Class Seven", "O Level")) {
+        innerSchoolEnglishMedium = new ArrayList<String>(Arrays.asList("Class One", "Class Two", "Class Three", "Class Four", "Class Five", "Class Six", "Class Seven", "O Level Edexcel", "O Level Cambridge")) {
             @Override
             public String toString() {
                 return "Class";
@@ -426,13 +436,13 @@ public class LocalDb {
                 return "Medium";
             }
         };
-        innerCollegeEnglishMedium = new ArrayList<String>(Arrays.asList("Edexcel", "Cambridge")) {
+        innerCollegeEnglishMedium = new ArrayList<String>(Arrays.asList("Edexcel As", "Edexcel A2", "Cambridge As", "Cambridge A2")) {
             @Override
             public String toString() {
                 return "Placeholder";
             }
         };
-        innerCollegeEnglishMediumEdexel = new ArrayList<String>(Arrays.asList("As", "A2"));
+
         innerCollegeEnglishMediumEdexelA2 = new ArrayList<String>(Arrays.asList("Physics", "Chemistry", "Biology", "Math", "Further Math", "Psychology", "Accounting", "Economics", "Business")) {
             @Override
             public String toString() {
@@ -445,7 +455,6 @@ public class LocalDb {
                 return "Placeholder";
             }
         };
-        innerCollegeEnglishMediumCambridge = new ArrayList<String>(Arrays.asList("As", "A2"));
         innerCollegeEnglishMediumCambridgeA2 = new ArrayList<String>(Arrays.asList("Physics", "Chemistry", "Biology", "Math", "Further Math", "Psychology", "Accounting", "Economics", "Business")) {
             @Override
             public String toString() {
@@ -464,13 +473,43 @@ public class LocalDb {
                 return "Division";
             }
         };
-        innerCollegeBanglaMediumScience = new ArrayList<>(Arrays.asList("English", "Physics", "Chemistry", "Biology", "Math", "Higher Math", "Statistics", "ICT"));
-        innerCollegeBanglaMediumCommerce = new ArrayList<>(Arrays.asList("English", "Bangla", "Accounting", "Business Organization and Management", "ICT", "Finance, Banking & Insurance", "Production Management & Marketing", "Statistics", "Economics", "Geography"));
-        innerCollegeBanglaMediumArts = new ArrayList<>(Arrays.asList("English", "Bangla", "ICT", "Parent Policy", "Economics", "Psychology", "Logic", "Social Science", "Agriculture", "Geography"));
-        innerCollegeEnglishVersion = new ArrayList<>(Arrays.asList("Science", "Commerce", "Arts"));
-        innerCollegeEnglishVersionScience = new ArrayList<>(Arrays.asList("English", "Physics", "Chemistry", "Biology", "Math", "Higher Math", "Statistics", "ICT"));
-        innerCollegeEnglishVersionCommerce = new ArrayList<>(Arrays.asList("English", "Bangla", "Accounting", "Business Organization and Management", "ICT", "Finance, Banking & Insurance", "Production Management & Marketing", "Statistics", "Economics", "Geography"));
-        innerCollegeEnglishVersionArts = new ArrayList<>(Arrays.asList("English", "Bangla", "ICT", "Parent Policy", "Economics", "Psychology", "Logic", "Social Science", "Agriculture", "Geography"));
+        innerCollegeBanglaMediumScience = new ArrayList<String>(Arrays.asList("English", "Physics", "Chemistry", "Biology", "Math", "Higher Math", "Statistics", "ICT")) {
+            @Override
+            public String toString() {
+                return "Subjects";
+            }
+        };
+        innerCollegeBanglaMediumCommerce = new ArrayList<String>(Arrays.asList("English", "Bangla", "Accounting", "Business Organization and Management", "ICT", "Finance, Banking & Insurance", "Production Management & Marketing", "Statistics", "Economics", "Geography")) {
+            @Override
+            public String toString() {
+                return "Subjects";
+            }
+        };
+        innerCollegeBanglaMediumArts = new ArrayList<String>(Arrays.asList("English", "Bangla", "ICT", "Parent Policy", "Economics", "Psychology", "Logic", "Social Science", "Agriculture", "Geography")) {
+            @Override
+            public String toString() {
+                return "Subjects";
+            }
+        };
+        innerCollegeEnglishVersion = new ArrayList<String>(Arrays.asList("Science", "Commerce", "Arts"));
+        innerCollegeEnglishVersionScience = new ArrayList<String>(Arrays.asList("English", "Physics", "Chemistry", "Biology", "Math", "Higher Math", "Statistics", "ICT")) {
+            @Override
+            public String toString() {
+                return "Subjects";
+            }
+        };
+        innerCollegeEnglishVersionCommerce = new ArrayList<String>(Arrays.asList("English", "Bangla", "Accounting", "Business Organization and Management", "ICT", "Finance, Banking & Insurance", "Production Management & Marketing", "Statistics", "Economics", "Geography")) {
+            @Override
+            public String toString() {
+                return "Subjects";
+            }
+        };
+        innerCollegeEnglishVersionArts = new ArrayList<String>(Arrays.asList("English", "Bangla", "ICT", "Parent Policy", "Economics", "Psychology", "Logic", "Social Science", "Agriculture", "Geography")) {
+            @Override
+            public String toString() {
+                return "Subjects";
+            }
+        };
 
         innerProgramming = new ArrayList<String>(Arrays.asList("C", "Java", "C++", "C#", "JavaScript", "Python")) {
             @Override
@@ -565,6 +604,37 @@ public class LocalDb {
                 return "Placeholder";
             }
         };
+
+        uniTestSub = new ArrayList<String>(Arrays.asList("Foo 1", "Foo 2", "Foo 2", "Foo 2", "Foo 2", "Foo 2",
+                "Foo 2", "Foo 2", "Foo 2", "Foo 2", "Foo 2", "Foo 2", "Foo 2", "Foo 2", "Foo 2")) {
+            @Override
+            public String toString() {
+                return "Subjects";
+            }
+        };
+
+
+        //Extra Data For Cross Check
+
+        genderPreferencesList = new ArrayList<String>(Arrays.asList("Male", "Female", "Any")) {
+            @Override
+            public String toString() {
+                return "Gender";
+            }
+        };
+        payment = new ArrayList<String>(Arrays.asList("1k", "2k", "3k")) {
+            @Override
+            public String toString() {
+                return "Salary";
+            }
+        };
+        crossCheck = new ArrayList<String>(Arrays.asList("1k", "2k", "3k")) {
+            @Override
+            public String toString() {
+                return "Cross Check";
+            }
+        };
+
         levelOneMap = new HashMap<>(categories.size());
         levelOneMap.put(categories.get(0), innerEducation);
         levelOneMap.put(categories.get(1), innerSoftWare);
@@ -598,6 +668,71 @@ public class LocalDb {
         instrumentalMap.put(innerMusicInstrumental.get(0), innerMusicGuitar);
 
 
+        schoolBanglaMediumMap = new HashMap<>();
+        schoolBanglaMediumMap.put(innerSchoolBanglaMedium.get(0), innerSchoolBanglaMediumClassOne);
+        schoolBanglaMediumMap.put(innerSchoolBanglaMedium.get(1), innerSchoolBanglaMediumClassTwo);
+        schoolBanglaMediumMap.put(innerSchoolBanglaMedium.get(2), innerSchoolBanglaMediumClassThree);
+        schoolBanglaMediumMap.put(innerSchoolBanglaMedium.get(3), innerSchoolBanglaMediumClassFour);
+        schoolBanglaMediumMap.put(innerSchoolBanglaMedium.get(4), innerSchoolBanglaMediumClassFive);
+        schoolBanglaMediumMap.put(innerSchoolBanglaMedium.get(5), innerSchoolBanglaMediumClassSix);
+        schoolBanglaMediumMap.put(innerSchoolBanglaMedium.get(6), innerSchoolBanglaMediumClassSeven);
+        schoolBanglaMediumMap.put(innerSchoolBanglaMedium.get(7), innerSchoolBanglaMediumClassEight);
+        schoolBanglaMediumMap.put(innerSchoolBanglaMedium.get(8), innerSchoolBanglaMediumClassSSCScience);
+        schoolBanglaMediumMap.put(innerSchoolBanglaMedium.get(9), innerSchoolBanglaMediumClassSSCCommerce);
+        schoolBanglaMediumMap.put(innerSchoolBanglaMedium.get(10), innerSchoolBanglaMediumClassSSCArts);
+        schoolEnglishMediumMap = new HashMap<>();
+        schoolEnglishMediumMap.put(innerSchoolEnglishMedium.get(0), innerSchoolEnglishMediumClassOne);
+        schoolEnglishMediumMap.put(innerSchoolEnglishMedium.get(1), innerSchoolEnglishMediumClassTwo);
+        schoolEnglishMediumMap.put(innerSchoolEnglishMedium.get(2), innerSchoolEnglishMediumClassThree);
+        schoolEnglishMediumMap.put(innerSchoolEnglishMedium.get(3), innerSchoolEnglishMediumClassFour);
+        schoolEnglishMediumMap.put(innerSchoolEnglishMedium.get(4), innerSchoolEnglishMediumClassFive);
+        schoolEnglishMediumMap.put(innerSchoolEnglishMedium.get(5), innerSchoolEnglishMediumClassSix);
+        schoolEnglishMediumMap.put(innerSchoolEnglishMedium.get(6), innerSchoolEnglishMediumClassSeven);
+        schoolEnglishMediumMap.put(innerSchoolEnglishMedium.get(7), innerSchoolEnglishMediumEdExcelOLevel);
+        schoolEnglishMediumMap.put(innerSchoolEnglishMedium.get(8), innerSchoolEnglishMediumCambridgeOLevel);
+
+        collegeBanglaMediumMap = new HashMap<>();
+        collegeBanglaMediumMap.put(innerCollegeBanglaMedium.get(0), innerCollegeBanglaMediumScience);
+        collegeBanglaMediumMap.put(innerCollegeBanglaMedium.get(1), innerCollegeBanglaMediumCommerce);
+        collegeBanglaMediumMap.put(innerCollegeBanglaMedium.get(2), innerCollegeBanglaMediumArts);
+
+        collegeEnglishMediumMap = new HashMap<>();
+        collegeEnglishMediumMap.put(innerCollegeEnglishMedium.get(0), innerCollegeEnglishMediumEdexelAs);
+        collegeEnglishMediumMap.put(innerCollegeEnglishMedium.get(1), innerCollegeEnglishMediumEdexelA2);
+        collegeEnglishMediumMap.put(innerCollegeEnglishMedium.get(2), innerCollegeEnglishMediumCambridgeAs);
+        collegeEnglishMediumMap.put(innerCollegeEnglishMedium.get(3), innerCollegeEnglishMediumCambridgeA2);
+
+        collegeEnglishVersionMap = new HashMap<>();
+        collegeEnglishVersionMap.put(innerCollegeEnglishVersion.get(0), innerCollegeEnglishVersionScience);
+        collegeEnglishVersionMap.put(innerCollegeEnglishVersion.get(1), innerCollegeEnglishVersionCommerce);
+        collegeEnglishVersionMap.put(innerCollegeEnglishVersion.get(2), innerCollegeEnglishVersionArts);
+
+        universityEngineerMap = new HashMap<>();
+        universityEngineerMap.put(innerUniversityEngineering.get(0), uniTestSub);
+        universityEngineerMap.put(innerUniversityEngineering.get(0), uniTestSub);
+        universityEngineerMap.put(innerUniversityEngineering.get(0), uniTestSub);
+        universityEngineerMap.put(innerUniversityEngineering.get(0), uniTestSub);
+        universityEngineerMap.put(innerUniversityEngineering.get(0), uniTestSub);
+        universityEngineerMap.put(innerUniversityEngineering.get(0), uniTestSub);
+        universityEngineerMap.put(innerUniversityEngineering.get(0), uniTestSub);
+
+
+        universityMedicalMap = new HashMap<>();
+        universityMedicalMap.put(innerUniversityMedical.get(0), uniTestSub);
+        universityMedicalMap.put(innerUniversityMedical.get(1), uniTestSub);
+        universityMedicalMap.put(innerUniversityMedical.get(2), uniTestSub);
+        universityMedicalMap.put(innerUniversityMedical.get(3), uniTestSub);
+        universityMedicalMap.put(innerUniversityMedical.get(4), uniTestSub);
+        universityMedicalMap.put(innerUniversityMedical.get(5), uniTestSub);
+        universityMedicalMap.put(innerUniversityMedical.get(6), uniTestSub);
+        universityMedicalMap.put(innerUniversityMedical.get(7), uniTestSub);
+        universityMedicalMap.put(innerUniversityMedical.get(8), uniTestSub);
+        universityMedicalMap.put(innerUniversityMedical.get(9), uniTestSub);
+        universityMedicalMap.put(innerUniversityMedical.get(10), uniTestSub);
+
+        universityHonsMap = new HashMap<>();
+
+
     }
 
 
@@ -623,6 +758,74 @@ public class LocalDb {
                 break;
             case "Language":
                 list = null;
+                break;
+            case "Dance":
+                list = null;
+                break;
+            case "Art":
+                list = null;
+                break;
+            case "Cooking":
+                list = null;
+                break;
+            case "Music":
+                list = musicMap.get(selected);
+                break;
+            case "Sewing":
+                list = null;
+                break;
+            default:
+
+        }
+        return list;
+    }
+
+    public List<String> getLevelFour(String selected, String root, String grandRoot) {
+
+        List<String> list = null;
+        switch (grandRoot) {
+            case "School":
+                switch (root) {
+                    case "English Medium":
+                        list = schoolEnglishMediumMap.get(selected);
+                        break;
+                    case "Bangla Medium":
+                        list = schoolBanglaMediumMap.get(selected);
+                        break;
+                }
+                break;
+            case "College":
+
+                switch (root) {
+                    case "English Medium":
+                        list = collegeEnglishMediumMap.get(selected);
+                        break;
+                    case "Bangla Medium":
+                        list = collegeBanglaMediumMap.get(selected);
+                        break;
+                    case "English Version":
+                        list = collegeEnglishVersionMap.get(selected);
+                        break;
+                }
+
+
+                break;
+            case "University":
+                switch (root) {
+                    case "Engineering":
+                        list = universityEngineerMap.get(selected);
+                        break;
+                    case "Medical":
+                        list = universityMedicalMap.get(selected);
+                        break;
+                    case "Hons":
+                        list = null;
+                        break;
+                }
+
+                break;
+            case "Instrumental":
+                list = instrumentalMap.get(selected);
                 break;
             case "Dance":
                 list = null;
