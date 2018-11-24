@@ -274,7 +274,7 @@
             android:layout_below="@+id/toolbar"
             app:tabGravity="fill"
             app:tabIndicatorFullWidth="true"
-            app:tabIndicatorHeight="3dp"
+            app:tabIndicatorHeight="2dp"
             app:tabMode="scrollable"
             app:tabTextAppearance="@style/tabColorStateList">
 

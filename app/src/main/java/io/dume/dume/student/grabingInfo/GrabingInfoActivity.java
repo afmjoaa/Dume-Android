@@ -124,6 +124,7 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), 1, getIntent().getIntExtra(DumeUtils.SELECTED_ID, 0), this);
+        mSectionsPagerAdapter.newTab(new LocalDb().getLevelOne(getIntent().getIntExtra(DumeUtils.SELECTED_ID, 0)));
 
         mViewPager.setAdapter(mSectionsPagerAdapter);
         tabLayout.setupWithViewPager(mViewPager);
@@ -134,8 +135,10 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
             @Override
             public void onClick(View view) {
 
+
             }
         });
+
         setDarkStatusBarIcon();
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -442,6 +445,14 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        if (fab != null) {
+            onNewTabCreated("Enam");
+        }
+    }
+
+    @Override
     public void onRadioButtonClick(RadioButton view, int fragmentId, String levelName) {
         boolean finished = false;
         //'  flush("Level  " + fragmentId);
@@ -530,15 +541,14 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
 
     @Override
     public void onNewTabCreated(String tabName) {
-
+        tabLayout.invalidate();
         int[] wh = DumeUtils.getScreenSize(this);
         int tabMinWidth = ((wh[0] / 3) - (int) (24 * (getResources().getDisplayMetrics().density)));
         LinearLayout.LayoutParams textParam = new LinearLayout.LayoutParams
                 (tabMinWidth, LinearLayout.LayoutParams.WRAP_CONTENT);
-
+        textParam.setMargins(0, 0, 0, 3 * (int) (getResources().getDisplayMetrics().density));
+        Log.e(TAG, "enam what this to be called " + tabLayout.getTabCount());
         for (int i = 0; i < tabLayout.getTabCount(); i++) {
-
-            Log.e(TAG, "enam what this to be called");
             LinearLayout tab = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.custom_tablayout_tab, null);
             TextView tab_label = (TextView) tab.findViewById(R.id.nav_label);
             ImageView tab_icon = (ImageView) tab.findViewById(R.id.nav_icon);

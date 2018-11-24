@@ -5,7 +5,8 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:gravity="center_horizontal"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:layout_marginBottom="5dp">
 
     <ImageView
         android:id="@+id/nav_icon"
@@ -27,6 +28,7 @@
         android:textAlignment="center"
         android:textSize="15sp"
         app:fontFamily="@font/cairo_regular"
-        tools:text="Home" />
+        tools:text="Home"
+        />
 
 </LinearLayout>

@@ -1,7 +1,6 @@
 package io.dume.dume.student.grabingInfo;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -14,6 +13,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RadioGroup;
+import android.widget.TextView;
+
+import com.appyvet.materialrangebar.IRangeBarFormatter;
+import com.appyvet.materialrangebar.RangeBar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -91,11 +94,41 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        if (getArguments() != null) sectionNumber = getArguments().getInt("SECTION_NUMBER");
+        list = getArguments().getStringArrayList("list");
+
+
+        if (list != null && list.toString().equals("Salary")) {
+            View view = inflater.inflate(R.layout.fragment_salary, container, false);
+            RangeBar rangeBar = view.findViewById(R.id.rangeSlider);
+            TextView min, max;
+            min = view.findViewById(R.id.minSal);
+            max = view.findViewById(R.id.maxSal);
+            rangeBar.setFormatter(new IRangeBarFormatter() {
+                @Override
+                public String format(String value) {
+                    return value + "k";
+                }
+            });
+
+            rangeBar.setOnRangeBarChangeListener(new RangeBar.OnRangeBarChangeListener() {
+                @Override
+                public void onRangeChangeListener(RangeBar rangeBar, int leftPinIndex, int rightPinIndex, String leftPinValue, String rightPinValue) {
+                    min.setText("Min Salary : " + leftPinValue);
+                    max.setText("Max Salary : " + rightPinValue);
+                }
+            });
+            return view;
+        }
+        if (list != null && list.toString().equals("Cross Check")) {
+            return inflater.inflate(R.layout.fragment_cross_check, container, false);
+        }
+
+
         root = inflater.inflate(R.layout.grabbing_info_fragment, container, false);
         group = root.findViewById(R.id.radioGrp);
 
-        if (getArguments() != null) sectionNumber = getArguments().getInt("SECTION_NUMBER");
-        list = getArguments().getStringArrayList("list");
+
         if (list != null) {
             for (String title : list) {
                 AppCompatRadioButton rd = new AppCompatRadioButton(container.getContext());

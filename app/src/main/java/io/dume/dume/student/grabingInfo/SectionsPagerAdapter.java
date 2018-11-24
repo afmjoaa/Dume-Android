@@ -33,11 +33,12 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
         this.count = count;
         fragmentList = new ArrayList<>();
         titleList = new ArrayList<>();
-        newTab(new LocalDb().getLevelOne(selectedPosition));
-        listener.onNewTabCreated(new LocalDb().getLevelOne(selectedPosition).toString());
+
+
     }
 
     public void newTab(List<String> list) {
+
         fragmentList.add(DataHolderFragment.newInstance(fragmentList.size(), list));
         titleList.add(list.toString());
         notifyDataSetChanged();
