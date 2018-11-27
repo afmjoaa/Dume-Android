@@ -41,7 +41,8 @@ import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class DumeUtils {
     public static final String TEACHER = "teacher";
-    public static final String STUDENT = "student"; public static final String SELECTED_ID = "s_id";
+    public static final String STUDENT = "student";
+    public static final String SELECTED_ID = "s_id";
 
     public static int GALLARY_IMAGE = 1;
     public static int CAMERA_IMAGE = 2;

@@ -64,21 +64,17 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
         MyGpsLocationChangeListener, OnMapReadyCallback, OnViewClick, OnTabModificationListener {
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
-    private View decor;
     private ViewPager mViewPager;
     private int[] navIcons = {
             R.drawable.ic_payment,
             R.drawable.ic_gender_preference,
             R.drawable.ic_cross_check,
-            R.drawable.ic_action_down,
+            R.drawable.ic_seven_days,
             R.drawable.ic_medium,
             R.drawable.ic_subject,
             R.drawable.ic_class,
-            R.drawable.ic_action_update
-
+            R.drawable.ic_preffered_day
     };
-    int lastPostion = 0;
-
     private int[] navLabels = {
             R.string.tab_payment,
             R.string.tab_gender_preference,
@@ -106,8 +102,17 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
     private int selected_category_position;
     private int dynamicTab;
     private LocalDb db;
+    private String retrivedAction;
+
 
     private List<String> queryList;
+    private int[] wh;
+    private int tabMinWidthThree;
+    private int tabMinWidthTwo;
+    private int tabMinWidthOne;
+    private LinearLayout.LayoutParams textParamThree;
+    private LinearLayout.LayoutParams textParamTwo;
+    private LinearLayout.LayoutParams textParamOne;
 
 
     @Override
@@ -116,11 +121,14 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
         setContentView(R.layout.stu2_activity_grabing_info);
         setActivityContextMap(this, fromFlag);
         mPresenter = new GrabingInfoPresenter(this, new GrabingInfoModel());
-        queryList = new ArrayList<>();
         mPresenter.grabingInfoPageEnqueue();
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         getLocationPermission(mapFragment);
-        getAction();
+        queryList = new ArrayList<>();
+        retrivedAction = getIntent().getAction();
+        if(retrivedAction != null){
+            getAction();
+        }
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), 1, getIntent().getIntExtra(DumeUtils.SELECTED_ID, 0), this);
@@ -128,7 +136,7 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
 
         mViewPager.setAdapter(mSectionsPagerAdapter);
         tabLayout.setupWithViewPager(mViewPager);
-        mViewPager.setOffscreenPageLimit(10);
+        //mViewPager.setOffscreenPageLimit(10);
         Log.w(TAG, "onCreate: " + tabLayout.getTabCount());
         //    mSectionsPagerAdapter.notifyDataSetChanged();
         fab.setOnClickListener(new View.OnClickListener() {
@@ -140,24 +148,6 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
         });
 
         setDarkStatusBarIcon();
-
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                int position = tab.getPosition();
-
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });
     }
 
 
@@ -180,6 +170,16 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
         contractLayout = findViewById(R.id.contract_layout);
         tabHintLayout = findViewById(R.id.tab_hint_layout);
         forMeWrapper = findViewById(R.id.formeWrapper);
+
+        //testing code
+        wh = DumeUtils.getScreenSize(this);
+        tabMinWidthThree = ((wh[0] / 3) - (int) (24 * (getResources().getDisplayMetrics().density)));
+        tabMinWidthTwo = ((wh[0] / 2) - (int) (24 * (getResources().getDisplayMetrics().density)));
+        tabMinWidthOne = ((wh[0]) - (int) (24 * (getResources().getDisplayMetrics().density)));
+        textParamThree = new LinearLayout.LayoutParams(tabMinWidthThree, LinearLayout.LayoutParams.WRAP_CONTENT);
+        textParamTwo = new LinearLayout.LayoutParams(tabMinWidthTwo, LinearLayout.LayoutParams.WRAP_CONTENT);
+        textParamOne = new LinearLayout.LayoutParams(tabMinWidthOne, LinearLayout.LayoutParams.WRAP_CONTENT);
+
 
     }
 
@@ -333,7 +333,7 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                 TransitionSet set1 = new TransitionSet()
                         .addTransition(new Fade())
                         .setInterpolator(visible ? new LinearOutSlowInInterpolator() : new FastOutLinearInInterpolator());
-                TransitionManager.beginDelayedTransition(myAppBarLayout, set);
+                //TransitionManager.beginDelayedTransition(myAppBarLayout, set);
                 TransitionManager.beginDelayedTransition(viewMusk, set1);
                 if (visible) {
                     tabHintLayout.setVisibility(View.GONE);
@@ -436,11 +436,25 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
 
 
     public void getAction() {
-        selected_category_position = getIntent().getIntExtra(DumeUtils.SELECTED_ID, 0);
-        forMeWrapper.setVisibility(View.GONE);
-        toolbar.setTitle("Select Skill");
-        createTabDynamically();
-        queryList.add(new LocalDb().getCategories().get(selected_category_position));
+        switch (Objects.requireNonNull(retrivedAction)) {
+            case DumeUtils.STUDENT:
+                selected_category_position = getIntent().getIntExtra(DumeUtils.SELECTED_ID, 0);
+                createTabDynamically();
+                queryList.add(new LocalDb().getCategories().get(selected_category_position));
+                break;
+            case DumeUtils.TEACHER:
+                selected_category_position = getIntent().getIntExtra(DumeUtils.SELECTED_ID, 0);
+                forMeWrapper.setVisibility(View.GONE);
+                toolbar.setTitle("Select Skill");
+                createTabDynamically();
+                queryList.add(new LocalDb().getCategories().get(selected_category_position));
+                break;
+            default:
+                selected_category_position = getIntent().getIntExtra(DumeUtils.SELECTED_ID, 0);
+                createTabDynamically();
+                queryList.add(new LocalDb().getCategories().get(selected_category_position));
+                break;
+        }
 
     }
 
@@ -458,7 +472,6 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
         //'  flush("Level  " + fragmentId);
         if (queryList.size() > fragmentId + 1) {
             int length = queryList.size();
-
             for (int i = fragmentId + 1; i < length; i++) {
                 queryList.remove(queryList.size() - 1);
             }
@@ -482,7 +495,6 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                     } else mViewPager.setCurrentItem(fragmentId + 1);
                     break;
                 case "Cross Check":
-
                     break;
             }
         } else if (fragmentId == 0) {
@@ -494,7 +506,6 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                 generateNextTabs(fragmentId);
                 return;
             }
-
 
         } else if (fragmentId == 1) {
             mSectionsPagerAdapter.removeTabs(fragmentId + 1);
@@ -542,22 +553,69 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
     @Override
     public void onNewTabCreated(String tabName) {
         tabLayout.invalidate();
-        int[] wh = DumeUtils.getScreenSize(this);
-        int tabMinWidth = ((wh[0] / 3) - (int) (24 * (getResources().getDisplayMetrics().density)));
-        LinearLayout.LayoutParams textParam = new LinearLayout.LayoutParams
-                (tabMinWidth, LinearLayout.LayoutParams.WRAP_CONTENT);
-        textParam.setMargins(0, 0, 0, 3 * (int) (getResources().getDisplayMetrics().density));
-        Log.e(TAG, "enam what this to be called " + tabLayout.getTabCount());
-        for (int i = 0; i < tabLayout.getTabCount(); i++) {
+        Log.e(TAG, "enam want this to be called " + tabLayout.getTabCount());
+        int whatToDO = tabLayout.getTabCount()-1;
+        if(whatToDO == 0){
+            hintIdOne.setVisibility(View.VISIBLE);
+            hintIdTwo.setVisibility(View.GONE);
+            hintIdThree.setVisibility(View.GONE);
+            for (int i = 0; i < tabLayout.getTabCount(); i++) {
+                LinearLayout tab = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.custom_tablayout_tab, null);
+                TextView tab_label = (TextView) tab.findViewById(R.id.nav_label);
+                ImageView tab_icon = (ImageView) tab.findViewById(R.id.nav_icon);
+                tab_label.setTranslationY((int) (2 * (getResources().getDisplayMetrics().density)));
+                //tab_icon.setTranslationY((int) (-1 * (getResources().getDisplayMetrics().density)));
+                tab_label.setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/Cairo-Light.ttf"));
+                tab_label.setText(Objects.requireNonNull(tabLayout.getTabAt(i)).getText());
+                tab_icon.setImageResource(navIcons[i]);
+                tab_label.setLayoutParams(textParamOne);
+                Objects.requireNonNull(tabLayout.getTabAt(i)).setCustomView(tab);
+            }
+        }else if(whatToDO == 1){
+            hintIdOne.setVisibility(View.VISIBLE);
+            hintIdTwo.setVisibility(View.VISIBLE);
+            hintIdThree.setVisibility(View.GONE);
+            for (int i = 0; i < tabLayout.getTabCount(); i++) {
+                LinearLayout tab = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.custom_tablayout_tab, null);
+                TextView tab_label = (TextView) tab.findViewById(R.id.nav_label);
+                ImageView tab_icon = (ImageView) tab.findViewById(R.id.nav_icon);
+                tab_label.setTranslationY((int) (2 * (getResources().getDisplayMetrics().density)));
+                //tab_icon.setTranslationY((int) (-1 * (getResources().getDisplayMetrics().density)));
+                tab_label.setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/Cairo-Light.ttf"));
+                tab_label.setText(Objects.requireNonNull(tabLayout.getTabAt(i)).getText());
+                tab_icon.setImageResource(navIcons[i]);
+                tab_label.setLayoutParams(textParamTwo);
+                Objects.requireNonNull(tabLayout.getTabAt(i)).setCustomView(tab);
+            }
+        }else{
+            hintIdOne.setVisibility(View.VISIBLE);
+            hintIdTwo.setVisibility(View.VISIBLE);
+            hintIdThree.setVisibility(View.VISIBLE);
+            for (int i = 0; i < tabLayout.getTabCount(); i++) {
+                LinearLayout tab = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.custom_tablayout_tab, null);
+                TextView tab_label = (TextView) tab.findViewById(R.id.nav_label);
+                ImageView tab_icon = (ImageView) tab.findViewById(R.id.nav_icon);
+                tab_label.setTranslationY((int) (2 * (getResources().getDisplayMetrics().density)));
+                //tab_icon.setTranslationY((int) (-1 * (getResources().getDisplayMetrics().density)));
+                tab_label.setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/Cairo-Light.ttf"));
+                tab_label.setText(Objects.requireNonNull(tabLayout.getTabAt(i)).getText());
+                tab_icon.setImageResource(navIcons[i]);
+                tab_label.setLayoutParams(textParamThree);
+                Objects.requireNonNull(tabLayout.getTabAt(i)).setCustomView(tab);
+            }
+        }
+        /*for (int i = 0; i < tabLayout.getTabCount(); i++) {
             LinearLayout tab = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.custom_tablayout_tab, null);
             TextView tab_label = (TextView) tab.findViewById(R.id.nav_label);
             ImageView tab_icon = (ImageView) tab.findViewById(R.id.nav_icon);
+            tab_label.setTranslationY((int) (1 * (getResources().getDisplayMetrics().density)));
+            //tab_icon.setTranslationY((int) (-1 * (getResources().getDisplayMetrics().density)));
             tab_label.setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/Cairo-Light.ttf"));
-            tab_label.setText(tabLayout.getTabAt(i).getText());
+            tab_label.setText(Objects.requireNonNull(tabLayout.getTabAt(i)).getText());
             tab_icon.setImageResource(navIcons[i]);
             tab_label.setLayoutParams(textParam);
             Objects.requireNonNull(tabLayout.getTabAt(i)).setCustomView(tab);
-        }
+        }*/
     }
 
     @Override

@@ -64,12 +64,15 @@ import io.dume.dume.customView.HorizontalLoadView;
 import io.dume.dume.student.grabingInfo.GrabingInfoActivity;
 import io.dume.dume.student.pojo.CusStuAppComMapActivity;
 import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
+import io.dume.dume.teacher.crudskill.CrudSkillActivity;
+import io.dume.dume.util.DumeUtils;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
+import static io.dume.dume.util.DumeUtils.STUDENT;
 import static io.dume.dume.util.DumeUtils.hideKeyboard;
 import static io.dume.dume.util.DumeUtils.setMargins;
 import static io.dume.dume.util.DumeUtils.showKeyboard;
@@ -290,10 +293,6 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
                     if (fab.getVisibility() == View.INVISIBLE) {
                         fab.setVisibility(View.VISIBLE);
                     }
-                    /*if(!touchedFirstTime){
-                        fab.animate().translationYBy((float) (-2.0f * (getResources().getDisplayMetrics().density))).enqueue();
-                        touchedFirstTime = true;
-                    }*/
                     hideKeyboard(GrabingLocationActivity.this);
                     inputSearch.clearFocus();
                     inputSearchContainer.requestFocus();
@@ -394,7 +393,8 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
     //not interested right now
     @Override
     public void onLocationDoneBtnClicked() {
-        startActivity(new Intent(this, GrabingInfoActivity.class));
+        //startActivity(new Intent(this, GrabingInfoActivity.class).setAction(DumeUtils.STUDENT));
+        startActivity(new Intent(this, CrudSkillActivity.class).setAction(DumeUtils.STUDENT));
     }
 
     public void onGrabingLocationViewClicked(View view) {

@@ -270,14 +270,14 @@
         <android.support.design.widget.TabLayout
             android:id="@+id/tabs"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="72dp"
             android:layout_below="@+id/toolbar"
-            app:tabGravity="fill"
+            app:tabGravity="center"
             app:tabIndicatorFullWidth="true"
             app:tabIndicatorHeight="2dp"
             app:tabMode="scrollable"
+            app:tabMaxWidth="1000dp"
             app:tabTextAppearance="@style/tabColorStateList">
-
 
         </android.support.design.widget.TabLayout>
 

@@ -35,7 +35,6 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
     private RadioGroup group;
     private int id;
     private int generatedId;
-
     private View root;
     private Context mContext;
 
@@ -187,9 +186,7 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
             this.verticalSpaceHeight = verticalSpaceHeight;
         }
 
-        public void getItemOffsets(Rect outRect, View view, RecyclerView parent,
-                                   RecyclerView.State state) {
-
+        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
             if (parent.getChildAdapterPosition(view) != parent.getAdapter().getItemCount() - 1) {
                 outRect.bottom = verticalSpaceHeight;
             }

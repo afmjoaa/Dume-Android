@@ -22,6 +22,7 @@ import io.dume.dume.student.recordsPending.RecordsPendingActivity;
 import io.dume.dume.student.recordsRejected.RecordsRejectedActivity;
 import io.dume.dume.student.searchLoading.SearchLoadingActivity;
 import io.dume.dume.student.searchResult.SearchResultActivity;
+import io.dume.dume.util.DumeUtils;
 
 public class StudentActivity extends AppCompatActivity implements StudentContract.View {
     StudentContract.Presenter presenter;
@@ -60,7 +61,7 @@ public class StudentActivity extends AppCompatActivity implements StudentContrac
 
     @Override
     public void goTORecordsActivity() {
-        startActivity(new Intent(this, ChatActivity.class));
+        startActivity(new Intent(this, GrabingInfoActivity.class).setAction(DumeUtils.STUDENT));
     }
 
     @Override

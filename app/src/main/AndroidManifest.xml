@@ -194,9 +194,11 @@
 
 
         <activity android:name=".teacher.skill.SkillActivity" />
-        <activity android:name=".teacher.crudskill.CrudSkillActivity" />
 
-
+        <activity
+            android:name=".teacher.crudskill.CrudSkillActivity"
+            android:label="Select category"
+            android:theme="@style/AppTheme.NoActionBar.transparent" />
         <activity
             android:name=".student.freeCashBack.FreeCashBackActivity"
             android:label="@string/title_activity_free_cash_back"
@@ -230,7 +232,6 @@
             android:theme="@style/AppTheme" />
         <activity android:name=".common.appInfoActivity.AppInfoActivity" />
         <activity android:name=".teacher.addskill.AddSkillActivity" />
-
 
 
     </application>

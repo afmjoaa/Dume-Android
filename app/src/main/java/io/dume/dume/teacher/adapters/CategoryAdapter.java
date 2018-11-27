@@ -29,7 +29,6 @@ public abstract class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapt
     @Override
     public CategoryVH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View catItem = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_crud_skill_category_item, parent, false);
-
         return new CategoryVH(catItem);
     }
 

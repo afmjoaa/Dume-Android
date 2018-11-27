@@ -33,8 +33,6 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
         this.count = count;
         fragmentList = new ArrayList<>();
         titleList = new ArrayList<>();
-
-
     }
 
     public void newTab(List<String> list) {

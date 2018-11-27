@@ -1,12 +1,21 @@
 package io.dume.dume.teacher.crudskill;
 
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
+
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.MapStyleOptions;
 
 import java.util.List;
 
@@ -15,34 +24,56 @@ import butterknife.ButterKnife;
 import io.dume.dume.R;
 import io.dume.dume.customView.HorizontalLoadView;
 import io.dume.dume.student.grabingInfo.GrabingInfoActivity;
+import io.dume.dume.student.pojo.CusStuAppComMapActivity;
+import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
 import io.dume.dume.teacher.adapters.CategoryAdapter;
 import io.dume.dume.util.DumeUtils;
+import io.dume.dume.util.GridSpacingItemDecoration;
 
-public class CrudSkillActivity extends AppCompatActivity implements CrudContract.View {
+import static io.dume.dume.util.DumeUtils.configureAppbar;
+
+public class CrudSkillActivity extends CusStuAppComMapActivity implements CrudContract.View,
+        MyGpsLocationChangeListener, OnMapReadyCallback {
     @BindView(R.id.crudLoad)
     HorizontalLoadView loadView;
     private CrudContract.Presenter presenter;
     @BindView(R.id.categoryRV)
     RecyclerView categoryGrid;
-
+    private String fromWhere;
+    private static final String TAG = "CrudSkillActivity";
+    private int spacing;
+    private static int fromFlag = 0;
+    private SupportMapFragment mapFragment;
+    private GoogleMap mMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_crud_skill);
+        setActivityContextMap(this, fromFlag);
         ButterKnife.bind(this);
         presenter = new CrudPresent(new CrudModel(), this);
         presenter.enqueue();
+        mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        getLocationPermission(mapFragment);
     }
 
     @Override
     public void init() {
-        if (getIntent().getAction().equals("add")) {
-            DumeUtils.configureAppbar(this, "Add New Skill");
-        } else if (getIntent().getAction().equals("edit")) {
-            DumeUtils.configureAppbar(this, "Edit Skill");
+        fromWhere = getIntent().getAction();
+        if (fromWhere.equals("add")) {
+            configureAppbar(this, "Add New Skill");
+        } else if (fromWhere.equals("edit")) {
+            configureAppbar(this, "Edit Skill");
+        }else if(fromWhere.equals(DumeUtils.STUDENT)){
+            flush("fucked it from student");
         }
-
+        //getting the width
+        int[] wh = DumeUtils.getScreenSize(this);
+        spacing = (int) ((wh[0]-((330 * (getResources().getDisplayMetrics().density)) + 2)) / 4);
+        Log.e(TAG, "init: " + spacing);
+        //initializing the title
+        configureAppbar(this,"Select category");
 
     }
 
@@ -71,12 +102,51 @@ public class CrudSkillActivity extends AppCompatActivity implements CrudContract
     @Override
     public void setUpRecyclerView(List<String> categoryList, List<Integer> drawableList) {
         categoryGrid.setLayoutManager(new GridLayoutManager(this, 3));
+        categoryGrid.addItemDecoration(new GridSpacingItemDecoration(3, spacing, true));
         categoryGrid.setAdapter(new CategoryAdapter(categoryList, drawableList) {
             @Override
             protected void onCategoryItemClick(View view, int position) {
-                startActivity(new Intent(getApplicationContext(), GrabingInfoActivity.class).setAction(DumeUtils.TEACHER).putExtra(DumeUtils.SELECTED_ID, position));
-
+                if(fromWhere.equals(DumeUtils.STUDENT)){
+                    startActivity(new Intent(getApplicationContext(), GrabingInfoActivity.class).setAction(DumeUtils.STUDENT).putExtra(DumeUtils.SELECTED_ID, position));
+                }else{
+                    startActivity(new Intent(getApplicationContext(), GrabingInfoActivity.class).setAction(DumeUtils.TEACHER).putExtra(DumeUtils.SELECTED_ID, position));
+                }
             }
         });
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        MapStyleOptions style = MapStyleOptions.loadRawResourceStyle(
+                this, R.raw.map_style_default_no_landmarks);
+        googleMap.setMapStyle(style);
+        mMap = googleMap;
+        onMapReadyListener(mMap);
+        onMapReadyGeneralConfig();
+        mMap.setPadding((int) (10 * (getResources().getDisplayMetrics().density)), (int) (250 * (getResources().getDisplayMetrics().density)), 0, (int) (6 * (getResources().getDisplayMetrics().density)));
+
+    }
+
+    @Override
+    public void onMyGpsLocationChanged(Location location) {
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        getMenuInflater().inflate(R.menu.menu_grabing_info, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+        if (id == R.id.action_help) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }
