@@ -6,12 +6,14 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewCompat;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.AppCompatRadioButton;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
@@ -37,6 +39,7 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
     private int generatedId;
     private View root;
     private Context mContext;
+    private NestedScrollView hostingNestedScrollLayout;
 
 
     public DataHolderFragment() {
@@ -123,11 +126,10 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
             return inflater.inflate(R.layout.fragment_cross_check, container, false);
         }
 
-
         root = inflater.inflate(R.layout.grabbing_info_fragment, container, false);
         group = root.findViewById(R.id.radioGrp);
-
-
+        hostingNestedScrollLayout = root.findViewById(R.id.hosting_nestedScroll_layout);
+        hostingNestedScrollLayout.getBackground().setAlpha(90);
         if (list != null) {
             for (String title : list) {
                 AppCompatRadioButton rd = new AppCompatRadioButton(container.getContext());
@@ -135,17 +137,15 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
                 rd.setId(generatedId);
                 idList.add(generatedId);
                 rd.setText(title);
+                rd.setTextColor(mContext.getResources().getColor(R.color.textColorPrimary));
                 group.addView(rd);
             }
             if (savedInstanceState != null) {
                 Log.w(TAG, savedInstanceState.toString());
             }
-
         }
         group.setOnCheckedChangeListener(this);
-
         return root;
-
     }
 
 

@@ -7,7 +7,10 @@ import io.dume.dume.util.MyBaseContract;
 public interface CrudContract {
     interface View extends MyBaseContract.View {
         void setUpRecyclerView(List<String> categoryList, List<Integer> drawableList);
+
+        void findView();
     }
+
 
     interface Model extends MyBaseContract.Model {
 

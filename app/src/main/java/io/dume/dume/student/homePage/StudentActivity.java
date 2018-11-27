@@ -22,6 +22,7 @@ import io.dume.dume.student.recordsPending.RecordsPendingActivity;
 import io.dume.dume.student.recordsRejected.RecordsRejectedActivity;
 import io.dume.dume.student.searchLoading.SearchLoadingActivity;
 import io.dume.dume.student.searchResult.SearchResultActivity;
+import io.dume.dume.teacher.crudskill.CrudSkillActivity;
 import io.dume.dume.util.DumeUtils;
 
 public class StudentActivity extends AppCompatActivity implements StudentContract.View {
@@ -72,7 +73,7 @@ public class StudentActivity extends AppCompatActivity implements StudentContrac
 
     @Override
     public void goTORecordsActivity3() {
-        startActivity(new Intent(this, AfterSplashActivity.class));
+        startActivity(new Intent(this, CrudSkillActivity.class).setAction(DumeUtils.STUDENT));
 
     }
 

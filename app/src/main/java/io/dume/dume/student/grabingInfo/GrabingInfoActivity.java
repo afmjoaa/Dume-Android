@@ -530,8 +530,6 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
             generateNextTabs(fragmentId);
             return;
         }
-
-
         mViewPager.setCurrentItem(tabLayout.getTabCount() - 1);
     }
 
@@ -542,8 +540,6 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
             mSectionsPagerAdapter.newTab(db.getGenderPreferencesList());
             mViewPager.setCurrentItem(fragment + 1);
         } else mViewPager.setCurrentItem(fragment + 1);
-
-
     }
 
     public void flush(String msg) {
@@ -604,18 +600,6 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                 Objects.requireNonNull(tabLayout.getTabAt(i)).setCustomView(tab);
             }
         }
-        /*for (int i = 0; i < tabLayout.getTabCount(); i++) {
-            LinearLayout tab = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.custom_tablayout_tab, null);
-            TextView tab_label = (TextView) tab.findViewById(R.id.nav_label);
-            ImageView tab_icon = (ImageView) tab.findViewById(R.id.nav_icon);
-            tab_label.setTranslationY((int) (1 * (getResources().getDisplayMetrics().density)));
-            //tab_icon.setTranslationY((int) (-1 * (getResources().getDisplayMetrics().density)));
-            tab_label.setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/Cairo-Light.ttf"));
-            tab_label.setText(Objects.requireNonNull(tabLayout.getTabAt(i)).getText());
-            tab_icon.setImageResource(navIcons[i]);
-            tab_label.setLayoutParams(textParam);
-            Objects.requireNonNull(tabLayout.getTabAt(i)).setCustomView(tab);
-        }*/
     }
 
     @Override

@@ -3,18 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="110dp"
     android:layout_height="wrap_content"
-    android:layout_margin="3dp"
-    android:background="#f5f2e9"
+    android:background="@drawable/bg_white_round_corner"
     android:orientation="vertical"
     android:padding="8dp"
-    app:carbon_elevation="2dp">
-
+    app:carbon_elevation="3dp">
+    <!--#f5f2e9
+-->
     <ImageView
         android:id="@+id/ctIV"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:src="@drawable/icon_launcher"
-        android:layout_gravity="center"/>
+        android:layout_gravity="center"
+        android:padding="8dp"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/icon_launcher" />
 
     <TextView
         android:id="@+id/ctTitle"
@@ -23,6 +25,5 @@
         android:layout_gravity="center"
         android:padding="1dp"
         android:text="@string/app_name" />
-
 
 </carbon.widget.LinearLayout>

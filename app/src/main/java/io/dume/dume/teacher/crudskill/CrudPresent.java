@@ -18,6 +18,7 @@ public class CrudPresent implements CrudContract.Presenter {
 
     @Override
     public void enqueue() {
+        view.findView();
         view.init();
         List<Integer> iconList = new ArrayList<>();
         iconList.add(R.drawable.education);

@@ -3,6 +3,8 @@ package io.dume.dume.teacher.crudskill;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -21,6 +23,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import carbon.widget.LinearLayout;
 import io.dume.dume.R;
 import io.dume.dume.customView.HorizontalLoadView;
 import io.dume.dume.student.grabingInfo.GrabingInfoActivity;
@@ -45,6 +48,9 @@ public class CrudSkillActivity extends CusStuAppComMapActivity implements CrudCo
     private static int fromFlag = 0;
     private SupportMapFragment mapFragment;
     private GoogleMap mMap;
+    private NestedScrollView mainScrollingContainer;
+    private AppBarLayout appBarLayout;
+    private LinearLayout hackElevation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,22 +65,44 @@ public class CrudSkillActivity extends CusStuAppComMapActivity implements CrudCo
     }
 
     @Override
+    public void findView() {
+        mainScrollingContainer = findViewById(R.id.crudScroll);
+        appBarLayout = findViewById(R.id.settingsAppbar);
+        hackElevation = findViewById(R.id.hack_elevation);
+    }
+
+    @Override
     public void init() {
         fromWhere = getIntent().getAction();
-        if (fromWhere.equals("add")) {
-            configureAppbar(this, "Add New Skill");
-        } else if (fromWhere.equals("edit")) {
-            configureAppbar(this, "Edit Skill");
-        }else if(fromWhere.equals(DumeUtils.STUDENT)){
-            flush("fucked it from student");
+        if(fromWhere!= null){
+            if (fromWhere.equals("add")) {
+                configureAppbar(this, "Add New Skill");
+            } else if (fromWhere.equals("edit")) {
+                configureAppbar(this, "Edit Skill");
+            }else if(fromWhere.equals(DumeUtils.STUDENT)){
+                flush("fucked it from student");
+            }
         }
         //getting the width
         int[] wh = DumeUtils.getScreenSize(this);
-        spacing = (int) ((wh[0]-((330 * (getResources().getDisplayMetrics().density)) + 2)) / 4);
+        spacing = (int) ((wh[0]-((330) * (getResources().getDisplayMetrics().density))) / 4);
         Log.e(TAG, "init: " + spacing);
         //initializing the title
         configureAppbar(this,"Select category");
-
+        mainScrollingContainer.getBackground().setAlpha(90);
+        //testing code here for elevation
+        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                if (Math.abs(verticalOffset)-appBarLayout.getTotalScrollRange() == 0) {
+                    //  Collapsed
+                    hackElevation.setVisibility(View.GONE);
+                }else {
+                    //Expanded
+                    hackElevation.setVisibility(View.VISIBLE);
+                }
+            }
+        });
     }
 
     @Override
@@ -114,6 +142,7 @@ public class CrudSkillActivity extends CusStuAppComMapActivity implements CrudCo
             }
         });
     }
+
 
     @Override
     public void onMapReady(GoogleMap googleMap) {

@@ -6,20 +6,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".student.grabingInfo.GrabingInfoActivity$DataHolderFragment">
+    tools:context=".student.grabingInfo.GrabingInfoActivity">
 
-
-    <LinearLayout
+   <!-- <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="5dp"
         android:orientation="vertical"
-        tools:ignore="UselessLeaf" />
-
+        tools:ignore="UselessLeaf" />-->
 
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/fragment_bg"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="6dp"
         android:background="@drawable/drop_shadow_top">
 
         <LinearLayout
@@ -47,7 +46,9 @@
                 android:layout_marginStart="30dp"
                 android:layout_marginTop="10dp"
                 android:orientation="vertical"
-                app:fontFamily="@font/cairo_regular">
+                app:fontFamily="@font/cairo_regular"
+                android:textColor="@color/textColorPrimary"
+                android:textSize="16sp" >
 
                 <RadioButton
                     android:id="@+id/radio_btn_one"
