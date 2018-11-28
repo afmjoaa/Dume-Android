@@ -33,6 +33,8 @@ public class GrabingInfoPresenter implements GrabingInfoContract.Presenter {
             case R.id.view_musk:
                 mView.viewMuskClicked();
                 break;
+            case R.id.fab:
+                mView.fabClicked(view);
 
         }
     }

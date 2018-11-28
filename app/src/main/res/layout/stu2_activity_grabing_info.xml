@@ -351,6 +351,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
         android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@drawable/ic_arrow_forward_white_24dp" />
+        android:onClick="onGrabingInfoViewClicked"
+        app:srcCompat="@drawable/ic_arrow_forward_white_24dp"
+        android:visibility="gone"/>
 
 </android.support.design.widget.CoordinatorLayout>

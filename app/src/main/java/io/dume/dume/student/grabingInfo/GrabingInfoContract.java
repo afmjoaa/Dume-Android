@@ -10,6 +10,8 @@ public interface GrabingInfoContract {
         void findView();
 
         void viewMuskClicked();
+
+        void fabClicked(android.view.View view);
     }
 
     interface Presenter {

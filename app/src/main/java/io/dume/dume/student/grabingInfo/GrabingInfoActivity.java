@@ -11,10 +11,12 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.animation.FastOutLinearInInterpolator;
 import android.support.v4.view.animation.LinearOutSlowInInterpolator;
 import android.support.v7.app.ActionBar;
+import android.support.v7.widget.AppCompatRadioButton;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
@@ -81,7 +83,7 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
             R.string.tab_cross_ckeck
     };
     private String[] givenInfo = {"Ex.Others", "Ex.O level", "Ex.Physics", "Ex.3k - 6k", "Ex.Both", "→←"};
-    private TabLayout tabLayout;
+    protected TabLayout tabLayout;
     private TextView hintIdOne;
     private TextView hintIdTwo;
     private TextView hintIdThree;
@@ -137,19 +139,15 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
         mViewPager.setAdapter(mSectionsPagerAdapter);
         tabLayout.setupWithViewPager(mViewPager);
         //mViewPager.setOffscreenPageLimit(10);
-        Log.w(TAG, "onCreate: " + tabLayout.getTabCount());
-        //    mSectionsPagerAdapter.notifyDataSetChanged();
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-
-            }
-        });
-
+        //mSectionsPagerAdapter.notifyDataSetChanged();
         setDarkStatusBarIcon();
+        onNewTabCreated("Enam");
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
 
     private void createTabDynamically() {
 
@@ -184,11 +182,6 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
     }
 
     @Override
-    public void viewMuskClicked() {
-        forMeBtn.performClick();
-    }
-
-    @Override
     public void initGrabingInfoPage() {
         setSupportActionBar(toolbar);
         supportActionBar = getSupportActionBar();
@@ -214,7 +207,9 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                     }
                 }
                 int tabPosition = tab.getPosition();
-                animateFab(tabPosition);
+                if(fab.getVisibility()== View.VISIBLE){
+                    animateFab(tabPosition);
+                }
                 switch (tabPosition) {
                     case 0:
                         hintIdOne.setText(givenInfo[tabPosition]);
@@ -263,7 +258,9 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                     }
                 }
                 int tabPosition = tab.getPosition();
-                animateFab(tabPosition);
+                if(fab.getVisibility()== View.VISIBLE){
+                    animateFab(tabPosition);
+                }
                 switch (tabPosition) {
                     case 0:
                         hintIdOne.setText(givenInfo[tabPosition]);
@@ -294,7 +291,6 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
     @Override
     public void configGrabingInfoPage() {
         forMeBtn.setOnClickListener(new VisibleToggleClickListener() {
-
             @Override
             protected void changeVisibility(boolean visible) {
                 TransitionSet set = new TransitionSet()
@@ -356,10 +352,28 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
         });
     }
 
-    //unused function here
-    private void gotoGrabingLocation() {
-        Log.d(TAG, "gotoGrabingLocation: fucking function called");
-        startActivity(new Intent(this, GrabingLocationActivity.class));
+    @Override
+    public void viewMuskClicked() {
+        forMeBtn.performClick();
+    }
+
+    @Override
+    public void fabClicked(View view) {
+        if(tabLayout.getSelectedTabPosition() == (tabLayout.getTabCount()-1)){
+            //cross_check block here
+            if(tabLayout.getTabAt(tabLayout.getSelectedTabPosition()).getText().equals("Salary")) {
+                flush((String) tabLayout.getTabAt(tabLayout.getSelectedTabPosition()).getText());
+                AppCompatRadioButton rd = new AppCompatRadioButton(this);
+                rd.setText("10K-20K");
+                onRadioButtonClick(rd,tabLayout.getSelectedTabPosition(),"Salary");
+            }else if(tabLayout.getTabAt(tabLayout.getSelectedTabPosition()).getText().equals("Cross Check")){
+                flush((String) tabLayout.getTabAt(tabLayout.getSelectedTabPosition()).getText());
+                gotoGrabingPackage();
+            }
+        }else{
+            //other general block "just go to the next one"
+            Objects.requireNonNull(tabLayout.getTabAt(tabLayout.getSelectedTabPosition()+1)).select();
+        }
     }
 
     private void gotoGrabingPackage() {
@@ -459,14 +473,6 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        if (fab != null) {
-            onNewTabCreated("Enam");
-        }
-    }
-
-    @Override
     public void onRadioButtonClick(RadioButton view, int fragmentId, String levelName) {
         boolean finished = false;
         //'  flush("Level  " + fragmentId);
@@ -479,23 +485,23 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
         queryList.add(fragmentId + 1, view.getText().toString());
         //  flush(queryList.toString());
         db = new LocalDb();
-        ArrayList<String> arr = new ArrayList<>(Arrays.asList("Salary", "Gender", "Cross Check"));
+        ArrayList<String> arr = new ArrayList<>(Arrays.asList("Salary", "Gender"));
         if (arr.contains(levelName)) {
             switch (levelName) {
-                case "Salary":
-                    if (!(fragmentId < tabLayout.getTabCount() - 1)) {
-                        mSectionsPagerAdapter.newTab(db.crossCheck);
-                        mViewPager.setCurrentItem(fragmentId + 1);
-                    } else mViewPager.setCurrentItem(fragmentId + 1);
-                    break;
                 case "Gender":
+                    fab.setVisibility(View.VISIBLE);
                     if (!(fragmentId < tabLayout.getTabCount() - 1)) {
                         mSectionsPagerAdapter.newTab(db.payment);
                         mViewPager.setCurrentItem(fragmentId + 1);
                     } else mViewPager.setCurrentItem(fragmentId + 1);
                     break;
-                case "Cross Check":
-                    break;
+                case "Salary":
+                    fab.setVisibility(View.VISIBLE);
+                    if (!(fragmentId < tabLayout.getTabCount() - 1)) {
+                        mSectionsPagerAdapter.newTab(db.crossCheck);
+                        mViewPager.setCurrentItem(fragmentId + 1);
+                    } else mViewPager.setCurrentItem(fragmentId + 1);
+                break;
             }
         } else if (fragmentId == 0) {
             mSectionsPagerAdapter.removeTabs(fragmentId + 1);

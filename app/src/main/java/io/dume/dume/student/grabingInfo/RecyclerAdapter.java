@@ -34,13 +34,13 @@ public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapt
 
     @Override
     public int getItemCount() {
-        return data.size();
+        return 5;
     }
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
-        RecycleData current = data.get(position);
+        /*RecycleData current = data.get(position);
         holder.finalButtons.setText(current.options);
         holder.finalButtons.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -48,7 +48,7 @@ public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapt
 //                Toast.makeText(context, "Item clicked at "+ position, Toast.LENGTH_SHORT).show();
                 OnButtonClicked(v, position);
             }
-        });
+        });*/
     }
 
     protected abstract void OnButtonClicked(View v ,int position);

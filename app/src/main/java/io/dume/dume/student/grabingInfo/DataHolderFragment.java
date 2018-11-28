@@ -4,10 +4,12 @@ import android.content.Context;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.AppCompatRadioButton;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -40,6 +42,8 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
     private View root;
     private Context mContext;
     private NestedScrollView hostingNestedScrollLayout;
+    private RecyclerView mRecyclerView;
+    private GrabingInfoActivity myMainActivity;
 
 
     public DataHolderFragment() {
@@ -96,12 +100,15 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        myMainActivity = (GrabingInfoActivity) getActivity();
         if (getArguments() != null) sectionNumber = getArguments().getInt("SECTION_NUMBER");
         list = getArguments().getStringArrayList("list");
 
 
         if (list != null && list.toString().equals("Salary")) {
             View view = inflater.inflate(R.layout.fragment_salary, container, false);
+            hostingNestedScrollLayout = view.findViewById(R.id.hosting_nestedScroll_layout);
+            hostingNestedScrollLayout.getBackground().setAlpha(90);
             RangeBar rangeBar = view.findViewById(R.id.rangeSlider);
             TextView min, max;
             min = view.findViewById(R.id.minSal);
@@ -123,7 +130,33 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
             return view;
         }
         if (list != null && list.toString().equals("Cross Check")) {
-            return inflater.inflate(R.layout.fragment_cross_check, container, false);
+            View viewLast = inflater.inflate(R.layout.fragment_cross_check, container, false);
+            hostingNestedScrollLayout = viewLast.findViewById(R.id.hosting_nestedScroll_layout);
+            hostingNestedScrollLayout.getBackground().setAlpha(90);
+
+            mRecyclerView = viewLast.findViewById(R.id.recycler_view_list);
+            List<RecycleData> data = new ArrayList<>();
+            RecyclerAdapter recyclerAdapter = new RecyclerAdapter(getActivity(), data) {
+                @Override
+                protected void OnButtonClicked(View v, int position) {
+                    //toolbar button clicked
+                    if (position == 0) {
+
+                    } else {
+                        assert myMainActivity != null;
+                        TabLayout.Tab tab = myMainActivity.tabLayout.getTabAt(position - 1);
+                        if (tab != null) {
+                            tab.select();
+                        }
+                    }
+
+                }
+            };
+            //TODO this is not done
+            mRecyclerView.addItemDecoration(new VerticalSpaceItemDecoration(30));
+            mRecyclerView.setAdapter(recyclerAdapter);
+            mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+            return viewLast;
         }
 
         root = inflater.inflate(R.layout.grabbing_info_fragment, container, false);
@@ -179,13 +212,10 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
     }
 
     public class VerticalSpaceItemDecoration extends RecyclerView.ItemDecoration {
-
         private final int verticalSpaceHeight;
-
         VerticalSpaceItemDecoration(int verticalSpaceHeight) {
             this.verticalSpaceHeight = verticalSpaceHeight;
         }
-
         public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
             if (parent.getChildAdapterPosition(view) != parent.getAdapter().getItemCount() - 1) {
                 outRect.bottom = verticalSpaceHeight;
