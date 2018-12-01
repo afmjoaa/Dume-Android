@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/parent_coor_layout"
     android:layout_width="match_parent"
     android:layout_height="@dimen/nav_header_height"
     android:background="@drawable/drawer_header_photo"
@@ -13,19 +14,19 @@
         android:layout_height="match_parent"
         android:gravity="bottom"
         android:orientation="vertical"
-        android:paddingBottom="0dp"
         android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_vertical_margin">
+        android:paddingBottom="0dp">
 
         <LinearLayout
+            android:id="@+id/profile_data"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="0dp"
-            android:padding="0dp"
             android:onClick="onHomePageViewClicked"
-            android:id="@+id/profile_data"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="0dp">
 
 
             <ImageView
@@ -68,9 +69,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="17dp"
-            android:padding="0dp"
             android:onClick="onHomePageViewClicked"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="0dp">
 
             <TextView
                 android:id="@+id/do_more"
@@ -84,14 +85,13 @@
                 android:id="@+id/make_money_mentoring"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingBottom="4dp"
                 android:paddingTop="1dp"
+                android:paddingBottom="4dp"
                 android:text="Make money mentoring"
                 android:textColor="#434343"
                 android:textSize="14sp" />
 
         </LinearLayout>
-
 
 
         <View
@@ -110,20 +110,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_marginBottom="55dp"
         android:layout_marginEnd="5dp"
         android:layout_marginRight="5dp"
-        android:drawableEnd="@drawable/more_icon"
-        android:drawableLeft="@drawable/student_account_icon"
-        android:drawablePadding="0dp"
-        android:drawableRight="@drawable/more_icon"
+        android:layout_marginBottom="55dp"
         android:drawableStart="@drawable/student_account_icon"
+        android:drawableLeft="@drawable/student_account_icon"
+        android:drawableEnd="@drawable/more_icon"
+        android:drawableRight="@drawable/more_icon"
+        android:drawablePadding="0dp"
         android:gravity="start|center_vertical"
         android:onClick="onNavigationHeaderClick"
-        android:paddingEnd="10dp"
-        android:paddingLeft="15dp"
-        android:paddingRight="10dp"
         android:paddingStart="15dp"
+        android:paddingLeft="15dp"
+        android:paddingEnd="10dp"
+        android:paddingRight="10dp"
         android:stateListAnimator="@null" />
 
 </android.support.design.widget.CoordinatorLayout>

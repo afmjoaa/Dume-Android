@@ -104,7 +104,7 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
     private static final int fromFlag = 3;
     private GrabingInfoContract.Presenter mPresenter;
     private Toolbar toolbar;
-    private FloatingActionButton fab;
+    public FloatingActionButton fab;
     private ActionBar supportActionBar;
     private AppBarLayout mAppBarLayout;
     private GoogleMap mMap;
@@ -130,6 +130,7 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
     private static final int REQUEST_CODE_PICK_CONTACTS = 1;
     private Uri uriContact;
     private String contactID;     // contacts unique ID
+    private ArrayList<String> endOfNest;
 
 
     @Override
@@ -156,7 +157,7 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
         //mSectionsPagerAdapter.notifyDataSetChanged();
         setDarkStatusBarIcon();
         onNewTabCreated("Enam");
-        AccessContact();
+        //AccessContact();
     }
 
     @Override
@@ -184,6 +185,8 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
         tabHintLayout = findViewById(R.id.tab_hint_layout);
         forMeWrapper = findViewById(R.id.formeWrapper);
         selectFromContact = findViewById(R.id.select_other_contact);
+        endOfNest = new ArrayList<>(Arrays.asList("Subject", "Field", "Software", "Language", "Flavour", "Type", "Course"));
+
 
         //testing code
         wh = DumeUtils.getScreenSize(this);
@@ -376,14 +379,17 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
     @Override
     public void fabClicked(View view) {
         if(tabLayout.getSelectedTabPosition() == (tabLayout.getTabCount()-1)){
-            //cross_check block here
-            if(tabLayout.getTabAt(tabLayout.getSelectedTabPosition()).getText().equals("Salary")) {
-                //flush((String) tabLayout.getTabAt(tabLayout.getSelectedTabPosition()).getText());
+            String levelName = (String) tabLayout.getTabAt(tabLayout.getSelectedTabPosition()).getText();
+            if (endOfNest.contains(levelName)) {
                 AppCompatRadioButton rd = new AppCompatRadioButton(this);
-                rd.setText("10K-20K");
-                onRadioButtonClick(rd,tabLayout.getSelectedTabPosition(),"Salary");
-            }else if(tabLayout.getTabAt(tabLayout.getSelectedTabPosition()).getText().equals("Cross Check")){
-                //flush((String) tabLayout.getTabAt(tabLayout.getSelectedTabPosition()).getText());
+                rd.setText("endOfNest");
+                onRadioButtonClick(rd,tabLayout.getSelectedTabPosition(),levelName);
+            } else if(levelName.equals("Salary")) {
+                AppCompatRadioButton rd = new AppCompatRadioButton(this);
+                rd.setText("fromSalary");
+                onRadioButtonClick(rd,tabLayout.getSelectedTabPosition(),levelName);
+            }else if(levelName.equals("Cross Check")){
+                //cross_check block here
                 gotoGrabingPackage();
             }
         }else{
@@ -501,22 +507,29 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
         //  flush(queryList.toString());
         db = new LocalDb();
         ArrayList<String> arr = new ArrayList<>(Arrays.asList("Salary", "Gender"));
-        if (arr.contains(levelName)) {
+        if (arr.contains(levelName) || (endOfNest.contains(levelName) && view.getText().toString().equals("endOfNest"))) {
+            fab.setVisibility(View.VISIBLE);
             switch (levelName) {
                 case "Gender":
-                    fab.setVisibility(View.VISIBLE);
                     if (!(fragmentId < tabLayout.getTabCount() - 1)) {
                         mSectionsPagerAdapter.newTab(db.payment);
                         mViewPager.setCurrentItem(fragmentId + 1);
                     } else mViewPager.setCurrentItem(fragmentId + 1);
                     break;
                 case "Salary":
-                    fab.setVisibility(View.VISIBLE);
                     if (!(fragmentId < tabLayout.getTabCount() - 1)) {
                         mSectionsPagerAdapter.newTab(db.crossCheck);
                         mViewPager.setCurrentItem(fragmentId + 1);
                     } else mViewPager.setCurrentItem(fragmentId + 1);
                 break;
+             /* case "Subject":
+                case "Field":
+                case "Flavour":
+                case "Type":
+                case "Course":
+                case "Software":
+                case "Language":*/
+
             }
         } else if (fragmentId == 0) {
             mSectionsPagerAdapter.removeTabs(fragmentId + 1);
@@ -556,7 +569,7 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
 
 
     public void generateNextTabs(int fragment) {
-        flush("End of the Nest");
+        //flush("End of the Nest");
         if (!(fragment < tabLayout.getTabCount() - 1)) {
             mSectionsPagerAdapter.newTab(db.getGenderPreferencesList());
             mViewPager.setCurrentItem(fragment + 1);
@@ -631,14 +644,6 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                     allNumbers.add(contactNumber);
                 }
             }
-
-            /*if (cursorPhone.moveToFirst()) {
-                contactNumber = cursorPhone.getString(cursorPhone.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-                if(contactNumber != null){
-                    Log.d(TAG, "Contact Phone Number: " + contactNumber);
-                    allNumbers.add(contactNumber);
-                }
-            }*/
             cursorPhone.close();
         }
     }
@@ -665,7 +670,6 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
     @Override
     public void onNewTabCreated(String tabName) {
         tabLayout.invalidate();
-        Log.e(TAG, "enam want this to be called " + tabLayout.getTabCount());
         int whatToDO = tabLayout.getTabCount()-1;
         if(whatToDO == 0){
             hintIdOne.setVisibility(View.VISIBLE);

@@ -9,7 +9,7 @@ import java.util.Map;
 public class LocalDb {
 
 
-    private final List<String> categories, innerEducation, innerSchool, innerSchoolBanglaMedium, innerSchoolEnglishMedium,
+    private final List<String> categories, innerLevel, innerSchool, innerSchoolBanglaMedium, innerSchoolEnglishMedium,
             innerSchoolBanglaMediumClassOne, innerSchoolBanglaMediumClassTwo, innerSchoolBanglaMediumClassThree,
             innerSchoolBanglaMediumClassFour, innerSchoolBanglaMediumClassFive, innerSchoolBanglaMediumClassSix,
             innerSchoolBanglaMediumClassSeven, innerSchoolEnglishMediumClassOne, innerSchoolEnglishMediumClassTwo,
@@ -192,8 +192,8 @@ public class LocalDb {
         return categories;
     }
 
-    public List<String> getInnerEducation() {
-        return innerEducation;
+    public List<String> getInnerLevel() {
+        return innerLevel;
     }
 
     public List<String> getInnerSchool() {
@@ -278,10 +278,10 @@ public class LocalDb {
 
         };
 
-        innerEducation = new ArrayList<String>(Arrays.asList("School", "College", "University", "Alien")) {
+        innerLevel = new ArrayList<String>(Arrays.asList("School", "College", "University", "Arabic", "Babysitting")) {
             @Override
             public String toString() {
-                return "Education";
+                return "Level";
             }
         };
         innerSchool = new ArrayList<String>(Arrays.asList("Bangla Medium", "English Medium")) {
@@ -306,128 +306,128 @@ public class LocalDb {
         innerSchoolBanglaMediumClassOne = new ArrayList<String>(Arrays.asList("Bangla", "English", "Math")) {
             @Override
             public String toString() {
-                return "Class";
+                return "Subject";
             }
         };
         innerSchoolBanglaMediumClassTwo = new ArrayList<String>(Arrays.asList("Bangla", "English", "Math")) {
             @Override
             public String toString() {
-                return "Class";
+                return "Subject";
             }
         };
         innerSchoolBanglaMediumClassThree = new ArrayList<String>(Arrays.asList("Bangla", "English", "Math", "Religion", "General Science", "Social Science")) {
             @Override
             public String toString() {
-                return "Class";
+                return "Subject";
             }
         };
         innerSchoolBanglaMediumClassFour = new ArrayList<String>(Arrays.asList("Bangla", "English", "Math", "Religion", "General Science", "Social Science")) {
             @Override
             public String toString() {
-                return "Class";
+                return "Subject";
             }
         };
         innerSchoolBanglaMediumClassFive = new ArrayList<String>(Arrays.asList("Bangla", "English", "Math", "Religion", "General Science", "Social Science")) {
             @Override
             public String toString() {
-                return "Class";
+                return "Subject";
             }
         };
         innerSchoolBanglaMediumClassSix = new ArrayList<String>(Arrays.asList("Bangla", "English", "Math", "Religion", "General Science", "Social Science", "Agriculture", "Domestic Science", "ICT")) {
             @Override
             public String toString() {
-                return "Class";
+                return "Subject";
             }
         };
         innerSchoolBanglaMediumClassSeven = new ArrayList<String>(Arrays.asList("Bangla", "English", "Math", "Religion", "General Science", "Social Science", "Agriculture", "Domestic Science", "ICT")) {
             @Override
             public String toString() {
-                return "Class";
+                return "Subject";
             }
         };
-        innerSchoolBanglaMediumClassEight = new ArrayList<String>(Arrays.asList("English", "Bangla", "Math", "Science", "ICL")) {
+        innerSchoolBanglaMediumClassEight = new ArrayList<String>(Arrays.asList("English", "Bangla", "Math", "Science", "ICT")) {
             @Override
             public String toString() {
-                return "Class";
+                return "Subject";
             }
         };
         innerSchoolBanglaMediumClassSSC = new ArrayList<String>(Arrays.asList("Science", "Commerce", "Arts")) {
             @Override
             public String toString() {
-                return "Class";
+                return "Field";
             }
         };
         innerSchoolBanglaMediumClassSSCScience = new ArrayList<String>(Arrays.asList("English", "Bangla", "Physics", "Chemistry", "Biology", "Math", "Higher Math", "Statistics", "ICT", "Bangladesh and Global Studies", "Religion")) {
             @Override
             public String toString() {
-                return "Placeholder";
+                return "Subject";
             }
         };
         innerSchoolBanglaMediumClassSSCCommerce = new ArrayList<String>(Arrays.asList("English", "Bangla", "ICT", "Economics", "Accounting", "Finance & Banking", "Business Entrepreneurship", "Science", "Religion")) {
             @Override
             public String toString() {
-                return "Placeholder";
+                return "Subject";
             }
         };
         innerSchoolBanglaMediumClassSSCArts = new ArrayList<String>(Arrays.asList("English", "Bangla", "ICT", "Religion", "Geography and Environment", "History of Bangladesh and World Civilization", "Art and Crafts", "Science")) {
             @Override
             public String toString() {
-                return "Placeholder";
+                return "Subject";
             }
         };
         innerSchoolEnglishMediumClassOne = new ArrayList<String>(Arrays.asList("English", "Bangla", "Math", "Geography", "History", "Science", "Religion")) {
             @Override
             public String toString() {
-                return "Class";
+                return "Subject";
             }
         };
         innerSchoolEnglishMediumClassTwo = new ArrayList<String>(Arrays.asList("English", "Bangla", "Math", "Geography", "History", "Science", "Religion")) {
             @Override
             public String toString() {
-                return "Class";
+                return "Subject";
             }
         };
         innerSchoolEnglishMediumClassThree = new ArrayList<String>(Arrays.asList("English", "Bangla", "Math", "Geography", "History", "Science", "Religion")) {
             @Override
             public String toString() {
-                return "Class";
+                return "Subject";
             }
         };
         innerSchoolEnglishMediumClassFour = new ArrayList<String>(Arrays.asList("English", "Bangla", "Math", "Geography", "History", "Science", "Religion")) {
             @Override
             public String toString() {
-                return "Class";
+                return "Subject";
             }
         };
         innerSchoolEnglishMediumClassFive = new ArrayList<String>(Arrays.asList("English", "Bangla", "Math", "Geography", "History", "Science", "Religion")) {
             @Override
             public String toString() {
-                return "Class";
+                return "Subject";
             }
         };
         innerSchoolEnglishMediumClassSix = new ArrayList<String>(Arrays.asList("English", "Bangla", "Math", "Geography", "History", "Science", "Religion")) {
             @Override
             public String toString() {
-                return "Class";
+                return "Subject";
             }
         };
         innerSchoolEnglishMediumClassSeven = new ArrayList<String>(Arrays.asList("English", "Bangla", "Math", "Geography", "History", "Science", "Religion")) {
             @Override
             public String toString() {
-                return "Class";
+                return "Subject";
             }
         };
 
         innerSchoolEnglishMediumEdExcelOLevel = new ArrayList<String>(Arrays.asList("Physics", "Chemistry", "Biology", "Math-B", "Pure Math", "English", "Bangla", "Accounting", "Economics", "Business")) {
             @Override
             public String toString() {
-                return "Class";
+                return "Subject";
             }
         };
         innerSchoolEnglishMediumCambridgeOLevel = new ArrayList<String>(Arrays.asList("Physics", "Chemistry", "Biology", "Math-B", "Pure Math", "English", "Bangla", "Accounting", "Economics", "Business")) {
             @Override
             public String toString() {
-                return "Class";
+                return "Subject";
             }
         };
         innerCollege = new ArrayList<String>(Arrays.asList("English Medium", "Bangla Medium", "English Version")) {
@@ -439,32 +439,32 @@ public class LocalDb {
         innerCollegeEnglishMedium = new ArrayList<String>(Arrays.asList("Edexcel As", "Edexcel A2", "Cambridge As", "Cambridge A2")) {
             @Override
             public String toString() {
-                return "Placeholder";
+                return "Division";
             }
         };
 
         innerCollegeEnglishMediumEdexelA2 = new ArrayList<String>(Arrays.asList("Physics", "Chemistry", "Biology", "Math", "Further Math", "Psychology", "Accounting", "Economics", "Business")) {
             @Override
             public String toString() {
-                return "Placeholder";
+                return "Subject";
             }
         };
         innerCollegeEnglishMediumEdexelAs = new ArrayList<String>(Arrays.asList("Physics", "Chemistry", "Biology", "Math", "Further Math", "Psychology", "Accounting", "Economics", "Business")) {
             @Override
             public String toString() {
-                return "Placeholder";
+                return "Subject";
             }
         };
         innerCollegeEnglishMediumCambridgeA2 = new ArrayList<String>(Arrays.asList("Physics", "Chemistry", "Biology", "Math", "Further Math", "Psychology", "Accounting", "Economics", "Business")) {
             @Override
             public String toString() {
-                return "Placeholder";
+                return "Subject";
             }
         };
         innerCollegeEnglishMediumCambridgeAs = new ArrayList<String>(Arrays.asList("Physics", "Chemistry", "Biology", "Math", "Further Math", "Psychology", "Accounting", "Economics", "Business")) {
             @Override
             public String toString() {
-                return "Placeholder";
+                return "Subject";
             }
         };
         innerCollegeBanglaMedium = new ArrayList<String>(Arrays.asList("Science", "Commerce", "Arts")) {
@@ -476,45 +476,45 @@ public class LocalDb {
         innerCollegeBanglaMediumScience = new ArrayList<String>(Arrays.asList("English", "Physics", "Chemistry", "Biology", "Math", "Higher Math", "Statistics", "ICT")) {
             @Override
             public String toString() {
-                return "Subjects";
+                return "Subject";
             }
         };
         innerCollegeBanglaMediumCommerce = new ArrayList<String>(Arrays.asList("English", "Bangla", "Accounting", "Business Organization and Management", "ICT", "Finance, Banking & Insurance", "Production Management & Marketing", "Statistics", "Economics", "Geography")) {
             @Override
             public String toString() {
-                return "Subjects";
+                return "Subject";
             }
         };
         innerCollegeBanglaMediumArts = new ArrayList<String>(Arrays.asList("English", "Bangla", "ICT", "Parent Policy", "Economics", "Psychology", "Logic", "Social Science", "Agriculture", "Geography")) {
             @Override
             public String toString() {
-                return "Subjects";
+                return "Subject";
             }
         };
         innerCollegeEnglishVersion = new ArrayList<String>(Arrays.asList("Science", "Commerce", "Arts"));
         innerCollegeEnglishVersionScience = new ArrayList<String>(Arrays.asList("English", "Physics", "Chemistry", "Biology", "Math", "Higher Math", "Statistics", "ICT")) {
             @Override
             public String toString() {
-                return "Subjects";
+                return "Subject";
             }
         };
         innerCollegeEnglishVersionCommerce = new ArrayList<String>(Arrays.asList("English", "Bangla", "Accounting", "Business Organization and Management", "ICT", "Finance, Banking & Insurance", "Production Management & Marketing", "Statistics", "Economics", "Geography")) {
             @Override
             public String toString() {
-                return "Subjects";
+                return "Subject";
             }
         };
         innerCollegeEnglishVersionArts = new ArrayList<String>(Arrays.asList("English", "Bangla", "ICT", "Parent Policy", "Economics", "Psychology", "Logic", "Social Science", "Agriculture", "Geography")) {
             @Override
             public String toString() {
-                return "Subjects";
+                return "Subject";
             }
         };
 
         innerProgramming = new ArrayList<String>(Arrays.asList("C", "Java", "C++", "C#", "JavaScript", "Python")) {
             @Override
             public String toString() {
-                return "Programming";
+                return "Language";
             }
         };
 
@@ -535,14 +535,14 @@ public class LocalDb {
         innerCooking = new ArrayList<String>(Arrays.asList("Bangla Cuisine", "Chinese Cuisine", "Baking", "Fast-Foods")) {
             @Override
             public String toString() {
-                return "Cooking";
+                return "Field";
             }
         };
 
         innerDance = new ArrayList<String>(Arrays.asList("Classical", "Modern Dance", "Bollywood", "Contemporary")) {
             @Override
             public String toString() {
-                return "Dance";
+                return "Field";
             }
         };
 
@@ -556,13 +556,13 @@ public class LocalDb {
         innerMusicInstrumental = new ArrayList<String>(Arrays.asList("Guitar", "Tabla", "Violin", "Keyboard", "Piano", "Drums")) {
             @Override
             public String toString() {
-                return "Instrumental";
+                return "Item";
             }
         };
         innerMusicGuitar = new ArrayList<String>(Arrays.asList("Electric", "Acoustic", "Spanish", "hawaiian")) {
             @Override
             public String toString() {
-                return "Guiter";
+                return "Flavour";
             }
         };
 
@@ -570,38 +570,38 @@ public class LocalDb {
         innerUniversity = new ArrayList<String>(Arrays.asList("Engineering", "Medical", "Hons")) {
             @Override
             public String toString() {
-                return "Group";
+                return "Degree";
             }
         };
         innerUniversityEngineering = new ArrayList<String>(Arrays.asList("BME", "EEE", "AE", "CSE", "CE", "ME", "Architecture")) {
             @Override
             public String toString() {
-                return "Placeholder";
+                return "Branch";
             }
         };
         innerUniversityMedical = new ArrayList<String>(Arrays.asList("Anatomy", "Biochemistry", "Physiology", "Community Medicine", "Forensic", "Microbiology", "Pathology", "Pharmacology", "Gynecology", "Surgery", "Psychiatry")) {
             @Override
             public String toString() {
-                return "Placeholder";
+                return "Branch";
             }
         };
         innerUniversityOthers = new ArrayList<String>(Arrays.asList("Biotechnology", "Pharmacy", "Psychology", "BBA", "Economics", "Environmental Science", "Law(LLB)")) {
             @Override
             public String toString() {
-                return "Placeholder";
+                return "Branch";
             }
         };
         //Admission Test
         innerAdmissionTest = new ArrayList<String>(Arrays.asList("Engineering", "Medical", "IBA", "Private University")) {
             @Override
             public String toString() {
-                return "Placeholder";
+                return "Type";
             }
         };
         innerOthers = new ArrayList<String>(Arrays.asList("BCS", "IELTS", "SAT", "GRE", "GMAT")) {
             @Override
             public String toString() {
-                return "Placeholder";
+                return "Course";
             }
         };
 
@@ -609,7 +609,7 @@ public class LocalDb {
                 "Foo 2", "Foo 2", "Foo 2", "Foo 2", "Foo 2", "Foo 2", "Foo 2", "Foo 2", "Foo 2")) {
             @Override
             public String toString() {
-                return "Subjects";
+                return "Subject";
             }
         };
 
@@ -636,7 +636,7 @@ public class LocalDb {
         };
 
         levelOneMap = new HashMap<>(categories.size());
-        levelOneMap.put(categories.get(0), innerEducation);
+        levelOneMap.put(categories.get(0), innerLevel);
         levelOneMap.put(categories.get(1), innerSoftWare);
         levelOneMap.put(categories.get(2), innerProgramming);
         levelOneMap.put(categories.get(3), innerLanguage);
@@ -646,9 +646,9 @@ public class LocalDb {
         levelOneMap.put(categories.get(7), innerMusic);
         levelOneMap.put(categories.get(8), innerDance);
         educaitonMap = new HashMap<>();
-        educaitonMap.put(innerEducation.get(0), innerSchool);
-        educaitonMap.put(innerEducation.get(1), innerCollege);
-        educaitonMap.put(innerEducation.get(2), innerUniversity);
+        educaitonMap.put(innerLevel.get(0), innerSchool);
+        educaitonMap.put(innerLevel.get(1), innerCollege);
+        educaitonMap.put(innerLevel.get(2), innerUniversity);
         musicMap = new HashMap<>();
         musicMap.put(innerMusic.get(0), null);
         musicMap.put(innerMusic.get(1), innerMusicInstrumental);
@@ -747,7 +747,7 @@ public class LocalDb {
 
         List<String> list = null;
         switch (root) {
-            case "Education":
+            case "Level":
                 list = educaitonMap.get(selected);
                 break;
             case "Software":

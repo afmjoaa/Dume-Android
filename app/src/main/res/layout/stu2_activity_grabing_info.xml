@@ -354,6 +354,6 @@
         android:layout_margin="@dimen/fab_margin"
         android:onClick="onGrabingInfoViewClicked"
         app:srcCompat="@drawable/ic_arrow_forward_white_24dp"
-        android:visibility="gone"/>
+        android:visibility="invisible"/>
 
 </android.support.design.widget.CoordinatorLayout>

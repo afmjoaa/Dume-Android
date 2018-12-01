@@ -1,6 +1,7 @@
 package io.dume.dume.teacher.homepage;
 
 import android.graphics.Color;
+import android.view.View;
 
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
@@ -10,6 +11,7 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.dume.dume.R;
 import io.dume.dume.teacher.pojo.Feedback;
 import io.dume.dume.teacher.pojo.Inbox;
 
@@ -89,6 +91,18 @@ public class TeacherPresenter implements TeacherContract.Presenter {
     public void onButtonClicked() {
 
 
+    }
+
+    @Override
+    public void onViewInteracted(View component) {
+        switch (component.getId()) {
+            case R.id.switch_account_btn:
+                view.flush("Fucked ");
+                view.onSwitchAccount();
+
+                break;
+
+        }
     }
 
 

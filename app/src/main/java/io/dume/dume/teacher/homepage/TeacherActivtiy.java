@@ -2,13 +2,15 @@ package io.dume.dume.teacher.homepage;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Animatable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
@@ -35,6 +37,7 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.dume.dume.R;
+import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
 import io.dume.dume.teacher.adapters.FeedBackAdapter;
 import io.dume.dume.teacher.adapters.InboxAdapter;
 import io.dume.dume.teacher.mentor_settings.AccountSettings;
@@ -43,7 +46,7 @@ import io.dume.dume.teacher.pojo.Inbox;
 import io.dume.dume.teacher.skill.SkillActivity;
 
 
-public class TeacherActivtiy extends AppCompatActivity implements TeacherContract.View, NavigationView.OnNavigationItemSelectedListener {
+public class TeacherActivtiy extends CustomStuAppCompatActivity implements TeacherContract.View, NavigationView.OnNavigationItemSelectedListener {
     private TeacherContract.Presenter presenter;
     private TextView textView;
     private Toolbar toolbar;
@@ -62,12 +65,23 @@ public class TeacherActivtiy extends AppCompatActivity implements TeacherContrac
     RecyclerView inboxRv;
     @BindView(R.id.teacherChartStatistics)
     LineChart lineChart;
+    private Menu menu;
+    private MenuItem home, records, payments, messages, notifications, heat_map, free_cashback, settings, forum, help, selectAccount, infoItem, studentProfile, mentorProfile, bootCampProfile;
+    private Drawable less;
+    private Drawable more;
+    private Drawable leftDrawable;
+    private Button switchAcountBtn;
+    private MenuItem skills;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setActivityContext(this, 0461);
         presenter = new TeacherPresenter(this, new TeacherModel());
+        settingStatusBarTransparent();
+        setDarkStatusBarIcon();
     }
 
 
@@ -104,6 +118,29 @@ public class TeacherActivtiy extends AppCompatActivity implements TeacherContrac
         navigationView = findViewById(R.id.navigationView);
         mToolTipsManager = new ToolTipsManager();
         initAdvance();
+        menu = navigationView.getMenu();
+
+        home = menu.findItem(R.id.home_id);
+        records = menu.findItem(R.id.records);
+        payments = menu.findItem(R.id.payments);
+        messages = menu.findItem(R.id.messages);
+        notifications = menu.findItem(R.id.notifications);
+        free_cashback = menu.findItem(R.id.free_cashback);
+        heat_map = menu.findItem(R.id.heat_map);
+        settings = menu.findItem(R.id.settings);
+        forum = menu.findItem(R.id.forum);
+        help = menu.findItem(R.id.help);
+        infoItem = menu.findItem(R.id.information_item);
+        selectAccount = menu.findItem(R.id.select_account);
+        skills = menu.findItem(R.id.skills);
+
+        studentProfile = menu.findItem(R.id.student);
+        mentorProfile = menu.findItem(R.id.mentor);
+        bootCampProfile = menu.findItem(R.id.boot_camp);
+        less = this.getResources().getDrawable(R.drawable.less_icon);
+        more = this.getResources().getDrawable(R.drawable.more_icon);
+        switchAcountBtn = findViewById(R.id.switch_account_btn);
+        leftDrawable = switchAcountBtn.getCompoundDrawables()[0];
     }
 
     @Override
@@ -117,8 +154,7 @@ public class TeacherActivtiy extends AppCompatActivity implements TeacherContrac
         feedBackRV.setAdapter(new FeedBackAdapter(list) {
             @Override
             public void onItemClick(int position, View view) {
-                mToolTipsManager.dismissAll();
-                mToolTipsManager.show(new ToolTip(new ToolTip.Builder(context, view, rvWrapper, "I am tooltip", ToolTip.POSITION_BELOW)));
+
             }
         });
 
@@ -131,6 +167,27 @@ public class TeacherActivtiy extends AppCompatActivity implements TeacherContrac
     }
 
     private void initAdvance() {
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
+            /** Called when a drawer has settled in a completely closed state. */
+            public void onDrawerClosed(View view) {
+                super.onDrawerClosed(view);
+                setDarkStatusBarIcon();
+                switchAcountBtn.setCompoundDrawablesWithIntrinsicBounds(leftDrawable, null, more, null);
+                mainMenu();
+            }
+
+            /** Called when a drawer has settled in a completely open state. */
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                setLightStatusBarIcon();
+
+            }
+        };
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+
+
         navigationView.setNavigationItemSelectedListener(this);
     }
 
@@ -168,4 +225,59 @@ public class TeacherActivtiy extends AppCompatActivity implements TeacherContrac
         }
         return false;
     }
+
+    public void onHomePageViewClicked(View view) {
+        presenter.onViewInteracted(view);
+    }
+
+    public void onNavigationHeaderClick(View view) {
+        presenter.onViewInteracted(view);
+    }
+    public void subMenu() {
+        home.setVisible(false);
+        records.setVisible(false);
+        payments.setVisible(false);
+        messages.setVisible(false);
+        notifications.setVisible(false);
+        heat_map.setVisible(false);
+        free_cashback.setVisible(false);
+        forum.setVisible(false);
+        help.setVisible(false);
+        settings.setVisible(false);
+        infoItem.setVisible(false);
+        selectAccount.setVisible(true);
+        skills.setVisible(false);
+
+    }
+
+    public void mainMenu() {
+        home.setVisible(true);
+        records.setVisible(true);
+        payments.setVisible(true);
+        messages.setVisible(true);
+        notifications.setVisible(true);
+        heat_map.setVisible(true);
+        free_cashback.setVisible(true);
+        forum.setVisible(true);
+        help.setVisible(true);
+        settings.setVisible(true);
+        skills.setVisible(true);
+        infoItem.setVisible(true);
+        selectAccount.setVisible(false);
+    }
+
+    public void onSwitchAccount() {
+        if (home.isVisible()) {
+            switchAcountBtn.setCompoundDrawablesWithIntrinsicBounds(leftDrawable, null, less, null);
+            subMenu();
+        } else {
+            switchAcountBtn.setCompoundDrawablesWithIntrinsicBounds(leftDrawable, null, more, null);
+            mainMenu();
+        }
+
+        if (leftDrawable instanceof Animatable) {
+            ((Animatable) leftDrawable).start();
+        }
+    }
+
 }
