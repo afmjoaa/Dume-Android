@@ -236,6 +236,7 @@
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
                 android:paddingTop="10dp"
+                android:onClick="onSelectFromOtherContact"
                 app:carbon_rippleColor="#50000000"
                 app:carbon_rippleStyle="background">
 
@@ -353,6 +354,6 @@
         android:layout_margin="@dimen/fab_margin"
         android:onClick="onGrabingInfoViewClicked"
         app:srcCompat="@drawable/ic_arrow_forward_white_24dp"
-        android:visibility="gone"/>
+        android:visibility="invisible"/>
 
 </android.support.design.widget.CoordinatorLayout>

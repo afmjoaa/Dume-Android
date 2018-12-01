@@ -1,16 +1,13 @@
 package io.dume.dume.student.homePage;
 
-import android.animation.ObjectAnimator;
 import android.app.Dialog;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Animatable;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.location.Location;
@@ -31,12 +28,9 @@ import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.animation.FastOutLinearInInterpolator;
-import android.support.v4.view.animation.LinearOutSlowInInterpolator;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.NestedScrollView;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -46,17 +40,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.Animation;
-import android.view.animation.DecelerateInterpolator;
-import android.view.animation.ScaleAnimation;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -65,10 +53,8 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.MapStyleOptions;
-import com.jaeger.library.StatusBarUtil;
 import com.transitionseverywhere.Fade;
 import com.transitionseverywhere.Slide;
-import com.transitionseverywhere.Transition;
 import com.transitionseverywhere.TransitionManager;
 import com.transitionseverywhere.TransitionSet;
 
@@ -77,15 +63,14 @@ import java.util.List;
 import java.util.Objects;
 
 import io.dume.dume.R;
-import io.dume.dume.auth.auth.AppbarStateChangeListener;
 import io.dume.dume.common.aboutUs.AboutUsActivity;
 import io.dume.dume.common.inboxActivity.InboxActivity;
 import io.dume.dume.common.privacyPolicy.PrivacyPolicyActivity;
 import io.dume.dume.service.LocationServiceHandler;
 import io.dume.dume.service.MyLocationService;
 import io.dume.dume.student.freeCashBack.FreeCashBackActivity;
-import io.dume.dume.student.grabingLocation.GrabingLocationActivity;
 import io.dume.dume.student.grabingInfo.GrabingInfoActivity;
+import io.dume.dume.student.grabingLocation.GrabingLocationActivity;
 import io.dume.dume.student.heatMap.HeatMapActivity;
 import io.dume.dume.student.homePage.adapter.HomePageRatingAdapter;
 import io.dume.dume.student.homePage.adapter.HomePageRatingData;
@@ -99,10 +84,8 @@ import io.dume.dume.student.recordsPage.RecordsPageActivity;
 import io.dume.dume.student.studentHelp.StudentHelpActivity;
 import io.dume.dume.student.studentPayment.StudentPaymentActivity;
 import io.dume.dume.student.studentSettings.StudentSettingsActivity;
+import io.dume.dume.teacher.homepage.TeacherActivtiy;
 import io.dume.dume.util.DumeUtils;
-import io.dume.dume.util.ProgressAnimation;
-import io.dume.dume.util.RatingAnimation;
-import io.dume.dume.util.VisibleToggleClickListener;
 import me.zhanghai.android.materialratingbar.MaterialRatingBar;
 
 import static io.dume.dume.util.DumeUtils.animateImage;
@@ -923,6 +906,16 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
                 dialog.dismiss();
             }
         });
+    }
+
+    @Override
+    public void gotoMentorProfile() {
+        startActivity(new Intent(this, TeacherActivtiy.class));
+    }
+
+    @Override
+    public void gotoStudentProfile() {
+        //startActivity(new Intent(this, HomePageActivity.class));
     }
 
     /*for animation of the rating bar

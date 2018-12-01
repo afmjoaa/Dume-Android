@@ -1,5 +1,7 @@
 package io.dume.dume.teacher.homepage;
 
+import android.view.View;
+
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 
@@ -13,6 +15,8 @@ public interface TeacherContract {
 
     interface View {
         void init();
+
+        void onSwitchAccount();
 
         void flush(String msg);
 
@@ -28,6 +32,7 @@ public interface TeacherContract {
     interface Presenter {
         void onButtonClicked();
 
+        void onViewInteracted(android.view.View view);
 
         void init();
     }

@@ -2,6 +2,7 @@ package io.dume.dume.student.homePage;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.telecom.GatewayInfo;
@@ -27,6 +28,7 @@ import io.dume.dume.util.DumeUtils;
 
 public class StudentActivity extends AppCompatActivity implements StudentContract.View {
     StudentContract.Presenter presenter;
+    private static final int REQUEST_CODE_PICK_CONTACTS = 1;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -68,7 +70,7 @@ public class StudentActivity extends AppCompatActivity implements StudentContrac
     @Override
     public void goTORecordsActivity2() {
         startActivity(new Intent(this, SearchResultActivity.class));
-
+        //startActivityForResult(new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI), REQUEST_CODE_PICK_CONTACTS);
     }
 
     @Override

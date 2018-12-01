@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".teacher.homepage.TeacherActivtiy"
+    android:fitsSystemWindows="true"
     tools:openDrawer="start">
 
     <include layout="@layout/activity_main_content" />
@@ -15,10 +16,16 @@
         android:layout_width="300dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
+        android:background="@color/white"
         android:clickable="true"
         android:focusable="true"
-        app:headerLayout="@layout/stu_nav_header_homepage"
+        android:fitsSystemWindows="true"
+        app:itemBackground="@drawable/drawer_item_background"
+        app:itemIconTint="@drawable/drawer_item_icontint"
+        app:itemTextColor="@drawable/drawer_item_textcolor"
         app:menu="@menu/activity_homepage_drawer">
+
+        <include layout="@layout/stu_nav_header_homepage" />
 
 
     </android.support.design.widget.NavigationView>

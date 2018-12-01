@@ -853,7 +853,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
 
             PolylineOptions polyOptions = new PolylineOptions();
             polyOptions.color(getResources().getColor(COLORS[colorIndex]));
-            polyOptions.width(10 + i * 3);
+            polyOptions.width(7 + i * 3);
             polyOptions.addAll(route.get(i).getPoints());
             Polyline polyline = mMap.addPolyline(polyOptions);
             polylines.add(polyline);

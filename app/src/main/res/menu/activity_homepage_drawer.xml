@@ -3,7 +3,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
-
+    <item
+        android:enabled="false"
+        android:title=" ">
+        <menu>
+            <item
+                android:enabled="false"
+                android:title=" " />
+        </menu>
+    </item>
+    <item
+        android:enabled="false"
+        android:title=" " />
+    <item
+        android:enabled="false"
+        android:title=" " />
     <group
         android:checkableBehavior="single"
         android:visible="true">

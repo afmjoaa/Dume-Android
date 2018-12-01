@@ -32,9 +32,10 @@
                 android:textColor="@color/textColorPrimary"
                 android:textSize="20sp" />
 
-            <RadioGroup
-                android:id="@+id/radioGrp"
-                android:layout_width="wrap_content"
+
+            <LinearLayout
+                android:id="@+id/hosting_checklists"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="30dp"
                 android:layout_marginLeft="30dp"
@@ -42,11 +43,7 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_marginBottom="8dp"
-                android:orientation="vertical"
-                android:padding="5dp"
-                android:text="TextView"
-                android:textColor="@color/textColorPrimary"/>
-
+                android:orientation="vertical" />
 
         </LinearLayout>
 

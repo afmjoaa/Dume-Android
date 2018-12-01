@@ -12,21 +12,29 @@ import android.support.v7.widget.AppCompatRadioButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.appyvet.materialrangebar.IRangeBarFormatter;
 import com.appyvet.materialrangebar.RangeBar;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import io.dume.dume.R;
+import io.dume.dume.teacher.model.LocalDb;
 import io.dume.dume.util.OnViewClick;
+
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class DataHolderFragment extends Fragment implements RadioGroup.OnCheckedChangeListener {
 
@@ -40,10 +48,12 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
     private int id;
     private int generatedId;
     private View root;
+    private View rootLast;
     private Context mContext;
     private NestedScrollView hostingNestedScrollLayout;
     private RecyclerView mRecyclerView;
     private GrabingInfoActivity myMainActivity;
+    private final int VERTICAL_ITEM_SPACE = -15;
 
 
     public DataHolderFragment() {
@@ -90,10 +100,6 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
         } else {
 
         }
-      /*  if (idList != null || isVisibleToUser) {
-            assert idList != null;
-            group.check(idList.get(2));
-        }*/
 
     }
 
@@ -103,10 +109,11 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
         myMainActivity = (GrabingInfoActivity) getActivity();
         if (getArguments() != null) sectionNumber = getArguments().getInt("SECTION_NUMBER");
         list = getArguments().getStringArrayList("list");
-
+        TextView titleTV;
 
         if (list != null && list.toString().equals("Salary")) {
             View view = inflater.inflate(R.layout.fragment_salary, container, false);
+
             hostingNestedScrollLayout = view.findViewById(R.id.hosting_nestedScroll_layout);
             hostingNestedScrollLayout.getBackground().setAlpha(90);
             RangeBar rangeBar = view.findViewById(R.id.rangeSlider);
@@ -128,8 +135,7 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
                 }
             });
             return view;
-        }
-        if (list != null && list.toString().equals("Cross Check")) {
+        } else if (list != null && list.toString().equals("Cross Check")) {
             View viewLast = inflater.inflate(R.layout.fragment_cross_check, container, false);
             hostingNestedScrollLayout = viewLast.findViewById(R.id.hosting_nestedScroll_layout);
             hostingNestedScrollLayout.getBackground().setAlpha(90);
@@ -153,10 +159,41 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
                 }
             };
             //TODO this is not done
-            mRecyclerView.addItemDecoration(new VerticalSpaceItemDecoration(30));
+            mRecyclerView.addItemDecoration(new VerticalSpaceItemDecoration(VERTICAL_ITEM_SPACE));
             mRecyclerView.setAdapter(recyclerAdapter);
             mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
             return viewLast;
+        } else if (list != null && (list.toString().equals("Subject") || list.toString().equals("Field")
+                || list.toString().equals("Software") || list.toString().equals("Language") ||
+                list.toString().equals("Flavour") || list.toString().equals("Type") ||
+                list.toString().equals("Course"))) {
+            //end of the nest so send different view here
+            Toast.makeText(mContext, "fucked the end of nest", Toast.LENGTH_SHORT).show();
+            myMainActivity.fab.show();
+
+            rootLast = inflater.inflate(R.layout.grabbing_info_end_fragment, container, false);
+            LinearLayout hostingChecklistLayout = rootLast.findViewById(R.id.hosting_checklists);
+            hostingNestedScrollLayout = rootLast.findViewById(R.id.hosting_nestedScroll_layout);
+            hostingNestedScrollLayout.getBackground().setAlpha(90);
+            if (list != null) {
+                for (String title : list) {
+                    CheckBox cb = new CheckBox(container.getContext());
+                    generatedId = ViewCompat.generateViewId();
+                    cb.setId(generatedId);
+                    idList.add(generatedId);
+                    cb.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+                    cb.setText(title);
+                    cb.setTextColor(mContext.getResources().getColor(R.color.textColorPrimary));
+                    hostingChecklistLayout.addView(cb);
+                }
+                if (savedInstanceState != null) {
+                    Log.w(TAG, savedInstanceState.toString());
+                }
+            }
+            //TODO not finished
+            //group.setOnCheckedChangeListener(this);
+            return rootLast;
+
         }
 
         root = inflater.inflate(R.layout.grabbing_info_fragment, container, false);
@@ -169,6 +206,7 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
                 generatedId = ViewCompat.generateViewId();
                 rd.setId(generatedId);
                 idList.add(generatedId);
+                rd.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
                 rd.setText(title);
                 rd.setTextColor(mContext.getResources().getColor(R.color.textColorPrimary));
                 group.addView(rd);
@@ -213,9 +251,11 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
 
     public class VerticalSpaceItemDecoration extends RecyclerView.ItemDecoration {
         private final int verticalSpaceHeight;
+
         VerticalSpaceItemDecoration(int verticalSpaceHeight) {
             this.verticalSpaceHeight = verticalSpaceHeight;
         }
+
         public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
             if (parent.getChildAdapterPosition(view) != parent.getAdapter().getItemCount() - 1) {
                 outRect.bottom = verticalSpaceHeight;
