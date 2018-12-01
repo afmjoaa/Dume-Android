@@ -201,11 +201,7 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
             Log.d(TAG, "onServiceConnected()");
             MyLocationService.LocalBinder binder = (MyLocationService.LocalBinder) service;
             HomePageActivity.this.mLocationService = (MyLocationService) binder.getService();
-           /* if (mLocationService == null) {
-                Log.e(TAG, "onServiceConnected: you haven't fucked that");
-            } else {
-                Log.e(TAG, "onServiceConnected: urecaaaaaaaaaaaaaaaaaaaa");
-            }*/
+
             if (mLocationService != null) {
                 mLocationService.setLocationServiceHandler(locationServiceHandler);
             }
