@@ -26,6 +26,9 @@ public interface TeacherContract {
 
         void showChart(LineData data);
 
+
+        void onSheetChanges(boolean halfCrossed);
+
     }
 
 

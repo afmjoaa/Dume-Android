@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<carbon.widget.LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="100dp"
+    android:layout_height="80dp"
+
+   android:background="@drawable/bg_white_round_corner"
+    android:orientation="vertical"
+    app:carbon_elevation="2dp">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:orientation="vertical">
+
+
+        <TextView
+            android:id="@+id/reportTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="This Week"
+            android:textAllCaps="false"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/reportValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="$760.00"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:textStyle="bold"
+        />
+    </LinearLayout>
+
+</carbon.widget.LinearLayout>
