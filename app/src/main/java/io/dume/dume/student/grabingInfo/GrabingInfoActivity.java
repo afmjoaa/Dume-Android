@@ -1,11 +1,20 @@
 package io.dume.dume.student.grabingInfo;
 
+import android.Manifest;
+import android.content.ContentUris;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -16,6 +25,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.view.animation.FastOutLinearInInterpolator;
 import android.support.v4.view.animation.LinearOutSlowInInterpolator;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatRadioButton;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -46,11 +56,14 @@ import com.transitionseverywhere.Transition;
 import com.transitionseverywhere.TransitionManager;
 import com.transitionseverywhere.TransitionSet;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+import carbon.widget.RelativeLayout;
 import io.dume.dume.R;
 import io.dume.dume.inter_face.OnTabModificationListener;
 import io.dume.dume.student.grabingLocation.GrabingLocationActivity;
@@ -105,8 +118,6 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
     private int dynamicTab;
     private LocalDb db;
     private String retrivedAction;
-
-
     private List<String> queryList;
     private int[] wh;
     private int tabMinWidthThree;
@@ -115,6 +126,10 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
     private LinearLayout.LayoutParams textParamThree;
     private LinearLayout.LayoutParams textParamTwo;
     private LinearLayout.LayoutParams textParamOne;
+    private RelativeLayout selectFromContact;
+    private static final int REQUEST_CODE_PICK_CONTACTS = 1;
+    private Uri uriContact;
+    private String contactID;     // contacts unique ID
 
 
     @Override
@@ -135,13 +150,13 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), 1, getIntent().getIntExtra(DumeUtils.SELECTED_ID, 0), this);
         mSectionsPagerAdapter.newTab(new LocalDb().getLevelOne(getIntent().getIntExtra(DumeUtils.SELECTED_ID, 0)));
-
         mViewPager.setAdapter(mSectionsPagerAdapter);
         tabLayout.setupWithViewPager(mViewPager);
         //mViewPager.setOffscreenPageLimit(10);
         //mSectionsPagerAdapter.notifyDataSetChanged();
         setDarkStatusBarIcon();
         onNewTabCreated("Enam");
+        AccessContact();
     }
 
     @Override
@@ -168,6 +183,7 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
         contractLayout = findViewById(R.id.contract_layout);
         tabHintLayout = findViewById(R.id.tab_hint_layout);
         forMeWrapper = findViewById(R.id.formeWrapper);
+        selectFromContact = findViewById(R.id.select_other_contact);
 
         //testing code
         wh = DumeUtils.getScreenSize(this);
@@ -189,7 +205,6 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
             supportActionBar.setDisplayHomeAsUpEnabled(true);
             supportActionBar.setDisplayShowHomeEnabled(true);
         }
-
         Drawable drawable = ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_more_vert_black_24dp);
         toolbar.setOverflowIcon(drawable);
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -300,9 +315,10 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                         .addListener(new Transition.TransitionListener() {
                             @Override
                             public void onTransitionStart(@NonNull Transition transition) {
-
+                                if (!visible) {
+                                    contractLayout.setVisibility(View.GONE);
+                                }
                             }
-
                             @Override
                             public void onTransitionEnd(@NonNull Transition transition) {
                                 if (!visible) {
@@ -329,23 +345,23 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                 TransitionSet set1 = new TransitionSet()
                         .addTransition(new Fade())
                         .setInterpolator(visible ? new LinearOutSlowInInterpolator() : new FastOutLinearInInterpolator());
-                //TransitionManager.beginDelayedTransition(myAppBarLayout, set);
+                TransitionManager.beginDelayedTransition(tabHintLayout, set);
+                TransitionManager.beginDelayedTransition(contractLayout, set);
                 TransitionManager.beginDelayedTransition(viewMusk, set1);
                 if (visible) {
                     tabHintLayout.setVisibility(View.GONE);
                     tabLayout.setVisibility(View.GONE);
                     contractLayout.setVisibility(View.VISIBLE);
-                    forMeBtn.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_keyboard_arrow_up_black_24dp, 0);
                     viewMusk.setVisibility(View.VISIBLE);
+                    forMeBtn.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_keyboard_arrow_up_black_24dp, 0);
                     forMeBtn.setText(R.string.switch_learner);
                 } else {
-                    tabHintLayout.setVisibility(View.VISIBLE);
-                    tabLayout.setVisibility(View.VISIBLE);
                     contractLayout.setVisibility(View.GONE);
                     viewMusk.setVisibility(View.INVISIBLE);
+                    tabHintLayout.setVisibility(View.VISIBLE);
+                    tabLayout.setVisibility(View.VISIBLE);
                     forMeBtn.setCompoundDrawablesWithIntrinsicBounds(R.drawable.alias_profile_icon, 0, R.drawable.ic_keyboard_arrow_down_black_24dp, 0);
                     forMeBtn.setText(R.string.for_me);
-
                 }
             }
 
@@ -362,12 +378,12 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
         if(tabLayout.getSelectedTabPosition() == (tabLayout.getTabCount()-1)){
             //cross_check block here
             if(tabLayout.getTabAt(tabLayout.getSelectedTabPosition()).getText().equals("Salary")) {
-                flush((String) tabLayout.getTabAt(tabLayout.getSelectedTabPosition()).getText());
+                //flush((String) tabLayout.getTabAt(tabLayout.getSelectedTabPosition()).getText());
                 AppCompatRadioButton rd = new AppCompatRadioButton(this);
                 rd.setText("10K-20K");
                 onRadioButtonClick(rd,tabLayout.getSelectedTabPosition(),"Salary");
             }else if(tabLayout.getTabAt(tabLayout.getSelectedTabPosition()).getText().equals("Cross Check")){
-                flush((String) tabLayout.getTabAt(tabLayout.getSelectedTabPosition()).getText());
+                //flush((String) tabLayout.getTabAt(tabLayout.getSelectedTabPosition()).getText());
                 gotoGrabingPackage();
             }
         }else{
@@ -376,6 +392,7 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
         }
     }
 
+
     private void gotoGrabingPackage() {
         startActivity(new Intent(this, GrabingPackageActivity.class));
     }
@@ -383,7 +400,6 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
         getMenuInflater().inflate(R.menu.menu_grabing_info, menu);
         return true;
     }
@@ -409,7 +425,6 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
             @Override
             public void onAnimationStart(Animation animation) {
             }
-
             @Override
             public void onAnimationEnd(Animation animation) {
                 // Scale up animation
@@ -548,6 +563,101 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
         } else mViewPager.setCurrentItem(fragment + 1);
     }
 
+    //testing the contact retrival
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_PICK_CONTACTS && resultCode == RESULT_OK) {
+            Log.d(TAG, "Response: " + data.toString());
+            uriContact = data.getData();
+
+            retrieveContactName();
+            retrieveContactNumber();
+            retrieveContactPhoto();
+        }
+    }
+
+    private void retrieveContactPhoto() {
+        Bitmap photo = null;
+        try {
+            InputStream inputStream = ContactsContract.Contacts.openContactPhotoInputStream(getContentResolver(),
+                    ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, new Long(contactID)));
+
+            if (inputStream != null) {
+                photo = BitmapFactory.decodeStream(inputStream);
+//                ImageView imageView = (ImageView) findViewById(R.id.img_contact);
+//                imageView.setImageBitmap(photo);
+                flush("image not null here");
+                inputStream.close();
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void retrieveContactNumber() {
+        String contactNumber = null;
+        // getting contacts ID
+        Cursor cursorID = getContentResolver().query(uriContact,
+                new String[]{ContactsContract.Contacts._ID},
+                null, null, null);
+
+        if (cursorID.moveToFirst()) {
+            contactID = cursorID.getString(cursorID.getColumnIndex(ContactsContract.Contacts._ID));
+        }
+        cursorID.close();
+        Log.d(TAG, "Contact ID: " + contactID);
+        ArrayList<String> allNumbers = new ArrayList<>();
+
+        for(int i = 0; i <= 20 ; i++){
+            contactNumber = null;
+            // Using the contact ID now we will get contact phone number
+            Cursor cursorPhone = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                    new String[]{ContactsContract.CommonDataKinds.Phone.NUMBER},
+
+                    ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ? AND " +
+                            ContactsContract.CommonDataKinds.Phone.TYPE + " = " +
+                            i,
+
+                    new String[]{contactID},
+                    null);
+
+            //cursorPhone.moveToFirst();
+            while (cursorPhone.moveToNext()) {
+                contactNumber = cursorPhone.getString(cursorPhone.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                if(contactNumber != null){
+                    Log.d(TAG, "Contact Phone Number: " + contactNumber);
+                    allNumbers.add(contactNumber);
+                }
+            }
+
+            /*if (cursorPhone.moveToFirst()) {
+                contactNumber = cursorPhone.getString(cursorPhone.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                if(contactNumber != null){
+                    Log.d(TAG, "Contact Phone Number: " + contactNumber);
+                    allNumbers.add(contactNumber);
+                }
+            }*/
+            cursorPhone.close();
+        }
+    }
+
+    private void retrieveContactName() {
+        String contactName = null;
+        // querying contact data store
+        Cursor cursor = getContentResolver().query(uriContact, null, null, null, null);
+        if (cursor.moveToFirst()) {
+
+            // DISPLAY_NAME = The display name for the contact.
+            // HAS_PHONE_NUMBER =   An indicator of whether this contact has at least one phone number.
+            contactName = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+        }
+        cursor.close();
+        Log.d(TAG, "Contact Name: " + contactName);
+
+    }
+
     public void flush(String msg) {
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
@@ -611,5 +721,63 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
     @Override
     public void onTabDeleted() {
 
+    }
+
+    @Override
+    public void selectFromContactClicked() {
+    }
+
+    public void onSelectFromOtherContact(View view) {
+        startActivityForResult(new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI), REQUEST_CODE_PICK_CONTACTS);
+    }
+
+
+    final private int REQUEST_MULTIPLE_PERMISSIONS = 124;
+    private boolean addPermission(List<String> permissionsList, String permission) {
+        if (checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) {
+            permissionsList.add(permission);
+
+            if (!shouldShowRequestPermissionRationale(permission))
+                return false;
+        }
+        return true;
+    }
+
+    private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
+        new AlertDialog.Builder(GrabingInfoActivity.this)
+                .setMessage(message)
+                .setPositiveButton("OK", okListener)
+                .setNegativeButton("Cancel", null)
+                .create()
+                .show();
+    }
+
+    private void AccessContact()
+    {
+        List<String> permissionsNeeded = new ArrayList<String>();
+        final List<String> permissionsList = new ArrayList<String>();
+        if (!addPermission(permissionsList, Manifest.permission.READ_CONTACTS))
+            permissionsNeeded.add("Read Contacts");
+        if (!addPermission(permissionsList, Manifest.permission.WRITE_CONTACTS))
+            permissionsNeeded.add("Write Contacts");
+        if (permissionsList.size() > 0) {
+            if (permissionsNeeded.size() > 0) {
+                String message = "You need to grant access to " + permissionsNeeded.get(0);
+                for (int i = 1; i < permissionsNeeded.size(); i++)
+                    message = message + ", " + permissionsNeeded.get(i);
+                showMessageOKCancel(message,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                requestPermissions(permissionsList.toArray(new String[permissionsList.size()]),
+                                        REQUEST_MULTIPLE_PERMISSIONS);
+                            }
+                        });
+                return;
+            }
+            requestPermissions(permissionsList.toArray(new String[permissionsList.size()]),
+                    REQUEST_MULTIPLE_PERMISSIONS);
+            return;
+        }
     }
 }

@@ -60,6 +60,10 @@ public interface HomePageContract {
         void startMentoringImageViewClicked();
 
         void testingCustomDialogue();
+
+        void gotoMentorProfile();
+
+        void gotoStudentProfile();
     }
 
     interface Presenter {

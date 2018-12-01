@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import io.dume.dume.R;
+import io.dume.dume.teacher.homepage.TeacherActivtiy;
 
 public class HomePagePresenter implements HomePageContract.Presenter {
 
@@ -90,9 +91,10 @@ public class HomePagePresenter implements HomePageContract.Presenter {
         switch (id) {
             case R.id.student:
                 //Toast.makeText(context, "texting toast", Toast.LENGTH_SHORT).show();
+                mView.gotoStudentProfile();
                 break;
             case R.id.mentor:
-
+                mView.gotoMentorProfile();
                 break;
             case R.id.boot_camp:
 

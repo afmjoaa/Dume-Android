@@ -12,6 +12,7 @@ import android.support.v7.widget.AppCompatRadioButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,6 +45,7 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
     private NestedScrollView hostingNestedScrollLayout;
     private RecyclerView mRecyclerView;
     private GrabingInfoActivity myMainActivity;
+    private final int VERTICAL_ITEM_SPACE = -15;
 
 
     public DataHolderFragment() {
@@ -90,10 +92,6 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
         } else {
 
         }
-      /*  if (idList != null || isVisibleToUser) {
-            assert idList != null;
-            group.check(idList.get(2));
-        }*/
 
     }
 
@@ -153,7 +151,7 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
                 }
             };
             //TODO this is not done
-            mRecyclerView.addItemDecoration(new VerticalSpaceItemDecoration(30));
+            mRecyclerView.addItemDecoration(new VerticalSpaceItemDecoration(VERTICAL_ITEM_SPACE));
             mRecyclerView.setAdapter(recyclerAdapter);
             mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
             return viewLast;
@@ -169,6 +167,7 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
                 generatedId = ViewCompat.generateViewId();
                 rd.setId(generatedId);
                 idList.add(generatedId);
+                rd.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
                 rd.setText(title);
                 rd.setTextColor(mContext.getResources().getColor(R.color.textColorPrimary));
                 group.addView(rd);
