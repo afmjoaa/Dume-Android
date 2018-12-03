@@ -17,8 +17,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,23 +27,21 @@ import com.appyvet.materialrangebar.IRangeBarFormatter;
 import com.appyvet.materialrangebar.RangeBar;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import io.dume.dume.R;
-import io.dume.dume.teacher.model.LocalDb;
 import io.dume.dume.util.OnViewClick;
 
-import static com.facebook.FacebookSdk.getApplicationContext;
+public class DataHolderFragment extends Fragment implements RadioGroup.OnCheckedChangeListener,
+        CompoundButton.OnCheckedChangeListener {
 
-public class DataHolderFragment extends Fragment implements RadioGroup.OnCheckedChangeListener {
 
-
-    private static final String TAG = "Bal";
+    private static final String TAG = "GrabingInfoActivity";
     private OnViewClick listener;
     private int sectionNumber = 0;
     private ArrayList<String> list;
-    private List<Integer> idList;
+    public ArrayList<Integer> idList;
     private RadioGroup group;
     private int id;
     private int generatedId;
@@ -53,11 +51,17 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
     private NestedScrollView hostingNestedScrollLayout;
     private RecyclerView mRecyclerView;
     private GrabingInfoActivity myMainActivity;
-    private final int VERTICAL_ITEM_SPACE = -15;
+    private final int VERTICAL_ITEM_SPACE = -2;
+    private final ArrayList<String> grabbedData;
+    private RecyclerAdapter recyclerAdapter;
+    private LinearLayout hostingChecklistLayout;
+    private TextView sectionLevel;
+    boolean firstTime = true;
 
 
     public DataHolderFragment() {
         idList = new ArrayList<>();
+        grabbedData = new ArrayList<>();
     }
 
 
@@ -75,7 +79,6 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
-
             if (group != null) {
                 if (getArguments() != null) {
                     sectionNumber = getArguments().getInt("SECTION_NUMBER");
@@ -93,12 +96,40 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
                             rd.setChecked(true);
                             group.setOnCheckedChangeListener(this);
                         }
+                    }
+                }
+            } else if (list != null && list.toString().equals("Cross Check")) {
+                recyclerAdapter.update(getFinalData());
+            } else if (list != null && (list.toString().equals("Subject") || list.toString().equals("Field")
+                    || list.toString().equals("Software") || list.toString().equals("Language") ||
+                    list.toString().equals("Flavour") || list.toString().equals("Type") ||
+                    list.toString().equals("Course") || list.toString().equals(" Language "))) {
+                if (hostingChecklistLayout != null) {
+                    if (getArguments() != null) {
+                        sectionNumber = getArguments().getInt("SECTION_NUMBER");
+                        ArrayList<String> retrivedData = getArguments().getStringArrayList("" + sectionNumber) == null ? new ArrayList<>() : getArguments().getStringArrayList("" + sectionNumber);
+                        ArrayList<Integer> myidList = getArguments().getIntegerArrayList("id" + sectionNumber) == null ? new ArrayList<>() : getArguments().getIntegerArrayList("id" + sectionNumber);
+                        /*if(retrivedData.size() == idList.size()){
+                            Log.e(TAG, "done something fuck you");
+                        }*/
+                        if (!(myidList.size() == 0 || retrivedData.size() == 0)) {
+                            for (int i = 0; i < myidList.size(); i++) {
+                                CheckBox cb = hostingChecklistLayout.findViewById(idList.get(i));
+                                if (retrivedData.get(i).equals(cb.getText().toString())) {
+                                    cb.setTextColor(mContext.getResources().getColor(R.color.colorAccent));
+                                    cb.setOnCheckedChangeListener(null);
+                                    cb.setChecked(true);
+                                    cb.setOnCheckedChangeListener(this);
 
+                                }
+
+                            }
+                        }
                     }
                 }
             }
         } else {
-
+            //not visible here
         }
 
     }
@@ -110,10 +141,10 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
         if (getArguments() != null) sectionNumber = getArguments().getInt("SECTION_NUMBER");
         list = getArguments().getStringArrayList("list");
         TextView titleTV;
+        idList = new ArrayList<>();
 
         if (list != null && list.toString().equals("Salary")) {
             View view = inflater.inflate(R.layout.fragment_salary, container, false);
-
             hostingNestedScrollLayout = view.findViewById(R.id.hosting_nestedScroll_layout);
             hostingNestedScrollLayout.getBackground().setAlpha(90);
             RangeBar rangeBar = view.findViewById(R.id.rangeSlider);
@@ -132,8 +163,30 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
                 public void onRangeChangeListener(RangeBar rangeBar, int leftPinIndex, int rightPinIndex, String leftPinValue, String rightPinValue) {
                     min.setText("Min Salary : " + leftPinValue);
                     max.setText("Max Salary : " + rightPinValue);
+                    String salaryValue = leftPinValue + "k - " + rightPinValue + "k";
+                    AppCompatRadioButton rd = new AppCompatRadioButton(mContext);
+                    rd.setText(salaryValue);
+                    listener.onRadioButtonClick(rd, sectionNumber, "justForData");
                 }
             });
+            if(sectionNumber == 0){
+                if(myMainActivity.hintIdOne.getText().equals("One")){
+                    myMainActivity.hintIdOne.setText("Ex.4k-10k");
+                }
+            }else if(sectionNumber == 1){
+                if(firstTime){
+                    myMainActivity.hintIdOne.setText(myMainActivity.queryList.get(sectionNumber));
+                    myMainActivity.hintIdTwo.setText("Ex.4k-10k");
+                    firstTime= false;
+                }
+            }else{
+                if(firstTime){
+                    myMainActivity.hintIdOne.setText(myMainActivity.queryList.get(sectionNumber-1));
+                    myMainActivity.hintIdTwo.setText(myMainActivity.queryList.get(sectionNumber));
+                    myMainActivity.hintIdThree.setText("Ex.4k-10k");
+                    firstTime= false;
+                }
+            }
             return view;
         } else if (list != null && list.toString().equals("Cross Check")) {
             View viewLast = inflater.inflate(R.layout.fragment_cross_check, container, false);
@@ -141,16 +194,18 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
             hostingNestedScrollLayout.getBackground().setAlpha(90);
 
             mRecyclerView = viewLast.findViewById(R.id.recycler_view_list);
-            List<RecycleData> data = new ArrayList<>();
-            RecyclerAdapter recyclerAdapter = new RecyclerAdapter(getActivity(), data) {
+            //toolbar button clicked
+            recyclerAdapter = new RecyclerAdapter(getActivity(), getFinalData()) {
                 @Override
                 protected void OnButtonClicked(View v, int position) {
                     //toolbar button clicked
                     if (position == 0) {
 
+                    } else if (position == 1) {
+
                     } else {
                         assert myMainActivity != null;
-                        TabLayout.Tab tab = myMainActivity.tabLayout.getTabAt(position - 1);
+                        TabLayout.Tab tab = myMainActivity.tabLayout.getTabAt(position - 2);
                         if (tab != null) {
                             tab.select();
                         }
@@ -158,21 +213,31 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
 
                 }
             };
-            //TODO this is not done
-            mRecyclerView.addItemDecoration(new VerticalSpaceItemDecoration(VERTICAL_ITEM_SPACE));
+            mRecyclerView.addItemDecoration(new VerticalSpaceItemDecoration(VERTICAL_ITEM_SPACE * (int) (mContext.getResources().getDisplayMetrics().density)));
             mRecyclerView.setAdapter(recyclerAdapter);
             mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+            if(sectionNumber >= 2){
+                if(firstTime){
+                    myMainActivity.hintIdOne.setText(myMainActivity.queryList.get(sectionNumber-1));
+                    myMainActivity.hintIdTwo.setText(myMainActivity.queryList.get(sectionNumber));
+                    myMainActivity.hintIdThree.setText(String.format("Ex.%s", list.get(0)));
+                    firstTime= false;
+                    //Log.e(TAG, String.format("Ex.%s", list.get(0)) );
+                }
+            }
+            myMainActivity.hintIdThree.setText("→←");
             return viewLast;
         } else if (list != null && (list.toString().equals("Subject") || list.toString().equals("Field")
                 || list.toString().equals("Software") || list.toString().equals("Language") ||
                 list.toString().equals("Flavour") || list.toString().equals("Type") ||
-                list.toString().equals("Course"))) {
+                list.toString().equals("Course") || list.toString().equals(" Language "))) {
             //end of the nest so send different view here
-            Toast.makeText(mContext, "fucked the end of nest", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(mContext, "fucked the end of nest", Toast.LENGTH_SHORT).show();
             myMainActivity.fab.show();
-
             rootLast = inflater.inflate(R.layout.grabbing_info_end_fragment, container, false);
-            LinearLayout hostingChecklistLayout = rootLast.findViewById(R.id.hosting_checklists);
+            hostingChecklistLayout = rootLast.findViewById(R.id.hosting_checklists);
+            sectionLevel = rootLast.findViewById(R.id.section_label);
+            sectionLevel.setText(String.format("Select %s", list.toString()));
             hostingNestedScrollLayout = rootLast.findViewById(R.id.hosting_nestedScroll_layout);
             hostingNestedScrollLayout.getBackground().setAlpha(90);
             if (list != null) {
@@ -184,28 +249,62 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
                     cb.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
                     cb.setText(title);
                     cb.setTextColor(mContext.getResources().getColor(R.color.textColorPrimary));
+                    cb.setPadding((int) (5 * mContext.getResources().getDisplayMetrics().density),
+                            (int) (5 * mContext.getResources().getDisplayMetrics().density),
+                            (int) (5 * mContext.getResources().getDisplayMetrics().density),
+                            (int) (5 * mContext.getResources().getDisplayMetrics().density));
                     hostingChecklistLayout.addView(cb);
+                    cb.setOnCheckedChangeListener(this);
                 }
                 if (savedInstanceState != null) {
                     Log.w(TAG, savedInstanceState.toString());
                 }
+                if (getArguments() != null) {
+                    getArguments().putIntegerArrayList("id" + sectionNumber, idList);
+                }
+                for (int i = 0; i < list.size(); i++) {
+                    grabbedData.add("null");
+                }
             }
             //TODO not finished
-            //group.setOnCheckedChangeListener(this);
+            //Log.e(TAG, grabbedData.toString());
+            //Log.e(TAG, idList.toString());
+            if(sectionNumber == 0){
+                if(myMainActivity.hintIdOne.getText().equals("One")){
+                    myMainActivity.hintIdOne.setText(String.format("Ex.%s", list.get(0)));
+                }
+            }else if(sectionNumber == 1){
+                if(firstTime){
+                    myMainActivity.hintIdOne.setText(myMainActivity.queryList.get(sectionNumber));
+                    myMainActivity.hintIdTwo.setText(String.format("Ex.%s", list.get(0)));
+                    firstTime= false;
+                }
+            }else{
+                if(firstTime){
+                    myMainActivity.hintIdOne.setText(myMainActivity.queryList.get(sectionNumber-1));
+                    myMainActivity.hintIdTwo.setText(myMainActivity.queryList.get(sectionNumber));
+                    myMainActivity.hintIdThree.setText(String.format("Ex.%s", list.get(0)));
+                    firstTime= false;
+                    //Log.e(TAG, String.format("Ex.%s", list.get(0)) );
+                }
+            }
             return rootLast;
-
         }
 
         root = inflater.inflate(R.layout.grabbing_info_fragment, container, false);
         group = root.findViewById(R.id.radioGrp);
+        sectionLevel = root.findViewById(R.id.section_label);
+        if (list.toString().equals("Gender")) {
+            sectionLevel.setText("Select gender preference");
+        }else{
+            sectionLevel.setText(String.format("Select %s", list.toString()));
+        }
         hostingNestedScrollLayout = root.findViewById(R.id.hosting_nestedScroll_layout);
         hostingNestedScrollLayout.getBackground().setAlpha(90);
         if (list != null) {
             for (String title : list) {
                 AppCompatRadioButton rd = new AppCompatRadioButton(container.getContext());
                 generatedId = ViewCompat.generateViewId();
-                rd.setId(generatedId);
-                idList.add(generatedId);
                 rd.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
                 rd.setText(title);
                 rd.setTextColor(mContext.getResources().getColor(R.color.textColorPrimary));
@@ -216,6 +315,25 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
             }
         }
         group.setOnCheckedChangeListener(this);
+        if(sectionNumber == 0){
+            if(myMainActivity.hintIdOne.getText().equals("One")){
+                myMainActivity.hintIdOne.setText(String.format("Ex.%s", list.get(0)));
+            }
+        }else if(sectionNumber == 1){
+            if(firstTime){
+                myMainActivity.hintIdOne.setText(myMainActivity.queryList.get(sectionNumber));
+                myMainActivity.hintIdTwo.setText(String.format("Ex.%s", list.get(0)));
+                firstTime= false;
+            }
+        }else{
+            if(firstTime){
+                myMainActivity.hintIdOne.setText(myMainActivity.queryList.get(sectionNumber-1));
+                myMainActivity.hintIdTwo.setText(myMainActivity.queryList.get(sectionNumber));
+                myMainActivity.hintIdThree.setText(String.format("Ex.%s", list.get(0)));
+                firstTime= false;
+                //Log.e(TAG, String.format("Ex.%s", list.get(0)) );
+            }
+        }
         return root;
     }
 
@@ -249,6 +367,46 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
 
     }
 
+    @Override
+    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+        int id = compoundButton.getId();
+        String lastOutput = null;
+        if (b) {
+            grabbedData.set(list.indexOf(compoundButton.getText().toString()), compoundButton.getText().toString());
+        } else {
+            grabbedData.set(list.indexOf(compoundButton.getText().toString()), "xxx");
+        }
+        lastOutput = grabbedDataToString(grabbedData);
+        Log.e(TAG, grabbedData.toString() + "   : " + lastOutput);
+        AppCompatRadioButton rd = new AppCompatRadioButton(mContext);
+        rd.setText(lastOutput);
+
+        if (getArguments() != null) {
+            getArguments().putStringArrayList("" + sectionNumber, grabbedData);
+        }
+
+        listener.onRadioButtonClick(rd, sectionNumber, "justForData");
+    }
+
+    public String grabbedDataToString(ArrayList<String> grabbedData) {
+        StringBuilder modifiedMulResult = null;
+        for (int number = 0; number < grabbedData.size(); number++) {
+            if (!(grabbedData.get(number).equals("xxx") || grabbedData.get(number).equals("null"))) {
+                if (modifiedMulResult == null) {
+                    modifiedMulResult = new StringBuilder(grabbedData.get(number));
+                } else {
+                    //TODO here something for debug
+                    modifiedMulResult.append(", ").append(grabbedData.get(number));
+                }
+            }
+        }
+        if(modifiedMulResult == null){
+            return "null";
+        }else{
+            return Objects.requireNonNull(modifiedMulResult).toString();
+        }
+    }
+
     public class VerticalSpaceItemDecoration extends RecyclerView.ItemDecoration {
         private final int verticalSpaceHeight;
 
@@ -261,5 +419,29 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
                 outRect.bottom = verticalSpaceHeight;
             }
         }
+    }
+
+    public List<RecycleData> getFinalData() {
+        List<RecycleData> data = new ArrayList<>();
+
+        List<String> queryList = myMainActivity.queryList;
+        List<String> queryListName = myMainActivity.queryListName;
+
+        String[] finalInfo = new String[(queryList.size() + 1)];
+        for (int i = 0; i < queryListName.size() + 1; i++) {
+            if (i == 0) {
+                // set the person name for whom it is set
+                finalInfo[i] = "For : Joaa";
+            } else {
+                finalInfo[i] = queryListName.get(i - 1) + " : " + queryList.get(i - 1);
+            }
+        }
+
+        for (String title : finalInfo) {
+            RecycleData current = new RecycleData();
+            current.options = title;
+            data.add(current);
+        }
+        return data;
     }
 }

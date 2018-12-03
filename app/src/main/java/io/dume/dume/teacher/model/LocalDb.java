@@ -7,8 +7,6 @@ import java.util.List;
 import java.util.Map;
 
 public class LocalDb {
-
-
     private final List<String> categories, innerLevel, innerSchool, innerSchoolBanglaMedium, innerSchoolEnglishMedium,
             innerSchoolBanglaMediumClassOne, innerSchoolBanglaMediumClassTwo, innerSchoolBanglaMediumClassThree,
             innerSchoolBanglaMediumClassFour, innerSchoolBanglaMediumClassFive, innerSchoolBanglaMediumClassSix,
@@ -514,7 +512,7 @@ public class LocalDb {
         innerProgramming = new ArrayList<String>(Arrays.asList("C", "Java", "C++", "C#", "JavaScript", "Python")) {
             @Override
             public String toString() {
-                return "Language";
+                return " Language ";
             }
         };
 
@@ -601,7 +599,7 @@ public class LocalDb {
         innerOthers = new ArrayList<String>(Arrays.asList("BCS", "IELTS", "SAT", "GRE", "GMAT")) {
             @Override
             public String toString() {
-                return "Course";
+                return "Item";
             }
         };
 
@@ -612,7 +610,6 @@ public class LocalDb {
                 return "Subject";
             }
         };
-
 
         //Extra Data For Cross Check
 

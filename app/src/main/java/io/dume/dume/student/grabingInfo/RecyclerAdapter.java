@@ -34,13 +34,13 @@ public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapt
 
     @Override
     public int getItemCount() {
-        return 5;
+        return data.size();
     }
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
-        /*RecycleData current = data.get(position);
+        RecycleData current = data.get(position);
         holder.finalButtons.setText(current.options);
         holder.finalButtons.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -48,10 +48,16 @@ public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapt
 //                Toast.makeText(context, "Item clicked at "+ position, Toast.LENGTH_SHORT).show();
                 OnButtonClicked(v, position);
             }
-        });*/
+        });
     }
 
     protected abstract void OnButtonClicked(View v ,int position);
+
+    public void update(List<RecycleData> newData){
+        data.clear();
+        data.addAll(newData);
+        this.notifyDataSetChanged();
+    }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
 

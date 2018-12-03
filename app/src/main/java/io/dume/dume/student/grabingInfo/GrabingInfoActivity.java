@@ -39,10 +39,12 @@ import android.view.animation.Animation;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.ScaleAnimation;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -81,14 +83,22 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
     private int[] navIcons = {
-            R.drawable.ic_payment,
-            R.drawable.ic_gender_preference,
-            R.drawable.ic_cross_check,
-            R.drawable.ic_seven_days,
+            R.drawable.xxx_level_vector,
             R.drawable.ic_medium,
-            R.drawable.ic_subject,
             R.drawable.ic_class,
-            R.drawable.ic_preffered_day
+            R.drawable.ic_subject,
+            R.drawable.xxx_field_vector,
+            R.drawable.xxx_division_branch_vector,
+            R.drawable.xxx_language_vector,
+            R.drawable.xxx_programing_lang_vector,
+            R.drawable.xxx_software_vector,
+            R.drawable.xxx_music_vector,
+            R.drawable.xxx_item_vector,
+            R.drawable.xxx_flavour_type_vector,
+            R.drawable.xxx_degree_vector,
+            R.drawable.ic_cross_check,
+            R.drawable.ic_gender_preference,
+            R.drawable.ic_payment
     };
     private int[] navLabels = {
             R.string.tab_payment,
@@ -97,9 +107,9 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
     };
     private String[] givenInfo = {"Ex.Others", "Ex.O level", "Ex.Physics", "Ex.3k - 6k", "Ex.Both", "→←"};
     protected TabLayout tabLayout;
-    private TextView hintIdOne;
-    private TextView hintIdTwo;
-    private TextView hintIdThree;
+    protected TextView hintIdOne;
+    protected TextView hintIdTwo;
+    protected TextView hintIdThree;
     private static final String TAG = "GrabingInfoActivity";
     private static final int fromFlag = 3;
     private GrabingInfoContract.Presenter mPresenter;
@@ -118,7 +128,8 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
     private int dynamicTab;
     private LocalDb db;
     private String retrivedAction;
-    private List<String> queryList;
+    protected List<String> queryList;
+    protected List<String> queryListName;
     private int[] wh;
     private int tabMinWidthThree;
     private int tabMinWidthTwo;
@@ -131,6 +142,7 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
     private Uri uriContact;
     private String contactID;     // contacts unique ID
     private ArrayList<String> endOfNest;
+    private String tempThreeHint;
 
 
     @Override
@@ -143,8 +155,9 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         getLocationPermission(mapFragment);
         queryList = new ArrayList<>();
+        queryListName = new ArrayList<>();
         retrivedAction = getIntent().getAction();
-        if(retrivedAction != null){
+        if (retrivedAction != null) {
             getAction();
         }
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
@@ -153,7 +166,7 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
         mSectionsPagerAdapter.newTab(new LocalDb().getLevelOne(getIntent().getIntExtra(DumeUtils.SELECTED_ID, 0)));
         mViewPager.setAdapter(mSectionsPagerAdapter);
         tabLayout.setupWithViewPager(mViewPager);
-        //mViewPager.setOffscreenPageLimit(10);
+        mViewPager.setOffscreenPageLimit(15);
         //mSectionsPagerAdapter.notifyDataSetChanged();
         setDarkStatusBarIcon();
         onNewTabCreated("Enam");
@@ -185,7 +198,7 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
         tabHintLayout = findViewById(R.id.tab_hint_layout);
         forMeWrapper = findViewById(R.id.formeWrapper);
         selectFromContact = findViewById(R.id.select_other_contact);
-        endOfNest = new ArrayList<>(Arrays.asList("Subject", "Field", "Software", "Language", "Flavour", "Type", "Course"));
+        endOfNest = new ArrayList<>(Arrays.asList("Subject", "Field", "Software", "Language", "Flavour", "Type", "Course", " Language "));
 
 
         //testing code
@@ -225,10 +238,83 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                     }
                 }
                 int tabPosition = tab.getPosition();
-                if(fab.getVisibility()== View.VISIBLE){
+                if (fab.getVisibility() == View.VISIBLE) {
                     animateFab(tabPosition);
                 }
-                switch (tabPosition) {
+                //setting the hint layout text
+                if (tabLayout.getTabAt(tabLayout.getTabCount() - 1).getText().equals("Cross Check")) {
+                    if (tabPosition == tabLayout.getTabCount() - 1) {
+                        //cross_check block last one
+                        if (queryList.size() > tabPosition) {
+                            hintIdOne.setText(queryList.get(tabPosition - 1));
+                            hintIdTwo.setText(queryList.get(tabPosition));
+                            hintIdThree.setText("→←");
+                        }
+
+                    } else if (tabPosition == tabLayout.getTabCount() - 2) {
+                        //salary block
+                        if (queryList.size() > tabPosition + 1) {
+                            Toast.makeText(GrabingInfoActivity.this, "salary block", Toast.LENGTH_SHORT).show();
+                            hintIdOne.setText(queryList.get(tabPosition));
+                            hintIdTwo.setText(queryList.get(tabPosition + 1));
+                            hintIdThree.setText("→←");
+                        }
+                    } else if (tabPosition == 0) {
+                        //first block
+                        if (queryList.size() > tabPosition + 3) {
+                            hintIdOne.setText(queryList.get(tabPosition + 1));
+                            hintIdTwo.setText(queryList.get(tabPosition + 2));
+                            hintIdThree.setText(queryList.get(tabPosition + 3));
+                        }
+                    } else {
+                        if (queryList.size() > tabPosition + 1 + 1) {
+                            hintIdOne.setText(queryList.get(tabPosition + 1 - 1));
+                            hintIdTwo.setText(queryList.get(tabPosition + 1));
+                            hintIdThree.setText(queryList.get(tabPosition + 1 + 1));
+                        }
+                    }
+                } else {
+                    if (tabLayout.getTabCount() > 3) {
+                        if (tabPosition == tabLayout.getTabCount() - 1) {
+                            if (queryList.size() > tabPosition) {
+                                if (hintIdThree.getText().toString().startsWith("Ex.")) {
+                                    tempThreeHint = hintIdThree.getText().toString();
+                                }
+                                hintIdOne.setText(queryList.get(tabPosition - 1));
+                                hintIdTwo.setText(queryList.get(tabPosition));
+                                //hintIdThree.setText("Temporary");
+                                if (tempThreeHint != null) {
+                                    hintIdThree.setText(tempThreeHint);
+                                }
+                            }
+                        } else if (tabPosition == tabLayout.getTabCount() - 2) {
+                            if (queryList.size() > tabPosition + 1) {
+                                if (hintIdThree.getText().toString().startsWith("Ex.")) {
+                                    tempThreeHint = hintIdThree.getText().toString();
+                                }
+                                hintIdOne.setText(queryList.get(tabPosition));
+                                hintIdTwo.setText(queryList.get(tabPosition + 1));
+                                //hintIdThree.setText("Temporary");
+                                if (tempThreeHint != null) {
+                                    hintIdThree.setText(tempThreeHint);
+                                }
+                            }
+                        } else if (tabPosition == 0) {
+                            if (queryList.size() > tabPosition + 3) {
+                                hintIdOne.setText(queryList.get(tabPosition + 1));
+                                hintIdTwo.setText(queryList.get(tabPosition + 2));
+                                hintIdThree.setText(queryList.get(tabPosition + 3));
+                            }
+                        } else {
+                            if (queryList.size() > tabPosition + 1 + 1) {
+                                hintIdOne.setText(queryList.get(tabPosition + 1 - 1));
+                                hintIdTwo.setText(queryList.get(tabPosition + 1));
+                                hintIdThree.setText(queryList.get(tabPosition + 1 + 1));
+                            }
+                        }
+                    }
+                }
+                /*switch (tabPosition) {
                     case 0:
                         hintIdOne.setText(givenInfo[tabPosition]);
                         hintIdTwo.setText(givenInfo[tabPosition + 1]);
@@ -249,9 +335,7 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                         break;
                     default:
                         break;
-                }
-
-
+                }*/
             }
 
             @Override
@@ -276,34 +360,85 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                     }
                 }
                 int tabPosition = tab.getPosition();
-                if(fab.getVisibility()== View.VISIBLE){
+                if (fab.getVisibility() == View.VISIBLE) {
                     animateFab(tabPosition);
                 }
-                switch (tabPosition) {
-                    case 0:
-                        hintIdOne.setText(givenInfo[tabPosition]);
-                        hintIdTwo.setText(givenInfo[tabPosition + 1]);
-                        hintIdThree.setText(givenInfo[tabPosition + 2]);
-                        break;
-                    case 1:
-                    case 2:
-                    case 3:
-                    case 4:
-                        hintIdOne.setText(givenInfo[tabPosition - 1]);
-                        hintIdTwo.setText(givenInfo[tabPosition]);
-                        hintIdThree.setText(givenInfo[tabPosition + 1]);
-                        break;
-                    case 5:
-                        hintIdOne.setText(givenInfo[tabPosition - 2]);
-                        hintIdTwo.setText(givenInfo[tabPosition - 1]);
-                        hintIdThree.setText(givenInfo[tabPosition]);
-                        break;
-                    default:
-                        break;
+
+                //setting the hint layout text
+                if (tabLayout.getTabAt(tabLayout.getTabCount() - 1).getText().equals("Cross Check")) {
+                    if (tabPosition == tabLayout.getTabCount() - 1) {
+                        //cross_check block last one
+                        if (queryList.size() > tabPosition) {
+                            hintIdOne.setText(queryList.get(tabPosition - 1));
+                            hintIdTwo.setText(queryList.get(tabPosition));
+                            hintIdThree.setText("→←");
+                        }
+
+                    } else if (tabPosition == tabLayout.getTabCount() - 2) {
+                        //salary block
+                        if (queryList.size() > tabPosition + 1) {
+                            Toast.makeText(GrabingInfoActivity.this, "salary block", Toast.LENGTH_SHORT).show();
+                            hintIdOne.setText(queryList.get(tabPosition));
+                            hintIdTwo.setText(queryList.get(tabPosition + 1));
+                            hintIdThree.setText("→←");
+                        }
+                    } else if (tabPosition == 0) {
+                        //first block
+                        if (queryList.size() > tabPosition + 3) {
+                            hintIdOne.setText(queryList.get(tabPosition + 1));
+                            hintIdTwo.setText(queryList.get(tabPosition + 2));
+                            hintIdThree.setText(queryList.get(tabPosition + 3));
+                        }
+                    } else {
+                        if (queryList.size() > tabPosition + 1 + 1) {
+                            hintIdOne.setText(queryList.get(tabPosition + 1 - 1));
+                            hintIdTwo.setText(queryList.get(tabPosition + 1));
+                            hintIdThree.setText(queryList.get(tabPosition + 1 + 1));
+                        }
+                    }
+                } else {
+                    if (tabLayout.getTabCount() > 3) {
+                        if (tabPosition == tabLayout.getTabCount() - 1) {
+                            if (queryList.size() > tabPosition) {
+                                if (hintIdThree.getText().toString().startsWith("Ex.")) {
+                                    tempThreeHint = hintIdThree.getText().toString();
+                                }
+                                hintIdOne.setText(queryList.get(tabPosition - 1));
+                                hintIdTwo.setText(queryList.get(tabPosition));
+                                //hintIdThree.setText("Temporary");
+                                if (tempThreeHint != null) {
+                                    hintIdThree.setText(tempThreeHint);
+                                }
+                            }
+                        } else if (tabPosition == tabLayout.getTabCount() - 2) {
+                            if (queryList.size() > tabPosition + 1) {
+                                if (hintIdThree.getText().toString().startsWith("Ex.")) {
+                                    tempThreeHint = hintIdThree.getText().toString();
+                                }
+                                hintIdOne.setText(queryList.get(tabPosition));
+                                hintIdTwo.setText(queryList.get(tabPosition + 1));
+                                //hintIdThree.setText("Temporary");
+                                if (tempThreeHint != null) {
+                                    hintIdThree.setText(tempThreeHint);
+                                }
+                            }
+                        } else if (tabPosition == 0) {
+                            if (queryList.size() > tabPosition + 3) {
+                                hintIdOne.setText(queryList.get(tabPosition + 1));
+                                hintIdTwo.setText(queryList.get(tabPosition + 2));
+                                hintIdThree.setText(queryList.get(tabPosition + 3));
+                            }
+                        } else {
+                            if (queryList.size() > tabPosition + 1 + 1) {
+                                hintIdOne.setText(queryList.get(tabPosition + 1 - 1));
+                                hintIdTwo.setText(queryList.get(tabPosition + 1));
+                                hintIdThree.setText(queryList.get(tabPosition + 1 + 1));
+                            }
+                        }
+                    }
                 }
             }
         });
-
     }
 
     @Override
@@ -322,6 +457,7 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                                     contractLayout.setVisibility(View.GONE);
                                 }
                             }
+
                             @Override
                             public void onTransitionEnd(@NonNull Transition transition) {
                                 if (!visible) {
@@ -378,23 +514,24 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
 
     @Override
     public void fabClicked(View view) {
-        if(tabLayout.getSelectedTabPosition() == (tabLayout.getTabCount()-1)){
+        if (tabLayout.getSelectedTabPosition() == (tabLayout.getTabCount() - 1)) {
             String levelName = (String) tabLayout.getTabAt(tabLayout.getSelectedTabPosition()).getText();
             if (endOfNest.contains(levelName)) {
+                //flush("this should work : " + tabLayout.getSelectedTabPosition());
                 AppCompatRadioButton rd = new AppCompatRadioButton(this);
-                rd.setText("endOfNest");
-                onRadioButtonClick(rd,tabLayout.getSelectedTabPosition(),levelName);
-            } else if(levelName.equals("Salary")) {
+                rd.setText("null");
+                onRadioButtonClick(rd, tabLayout.getSelectedTabPosition(), levelName);
+            } else if (levelName.equals("Salary")) {
                 AppCompatRadioButton rd = new AppCompatRadioButton(this);
-                rd.setText("fromSalary");
-                onRadioButtonClick(rd,tabLayout.getSelectedTabPosition(),levelName);
-            }else if(levelName.equals("Cross Check")){
+                rd.setText("null");
+                onRadioButtonClick(rd, tabLayout.getSelectedTabPosition(), levelName);
+            } else if (levelName.equals("Cross Check")) {
                 //cross_check block here
                 gotoGrabingPackage();
             }
-        }else{
+        } else {
             //other general block "just go to the next one"
-            Objects.requireNonNull(tabLayout.getTabAt(tabLayout.getSelectedTabPosition()+1)).select();
+            Objects.requireNonNull(tabLayout.getTabAt(tabLayout.getSelectedTabPosition() + 1)).select();
         }
     }
 
@@ -431,6 +568,7 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
             @Override
             public void onAnimationStart(Animation animation) {
             }
+
             @Override
             public void onAnimationEnd(Animation animation) {
                 // Scale up animation
@@ -476,6 +614,7 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                 selected_category_position = getIntent().getIntExtra(DumeUtils.SELECTED_ID, 0);
                 createTabDynamically();
                 queryList.add(new LocalDb().getCategories().get(selected_category_position));
+                queryListName.add("Category");
                 break;
             case DumeUtils.TEACHER:
                 selected_category_position = getIntent().getIntExtra(DumeUtils.SELECTED_ID, 0);
@@ -483,31 +622,71 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                 toolbar.setTitle("Select Skill");
                 createTabDynamically();
                 queryList.add(new LocalDb().getCategories().get(selected_category_position));
+                queryListName.add("Category");
                 break;
             default:
                 selected_category_position = getIntent().getIntExtra(DumeUtils.SELECTED_ID, 0);
                 createTabDynamically();
                 queryList.add(new LocalDb().getCategories().get(selected_category_position));
+                queryListName.add("Category");
                 break;
         }
 
     }
 
     @Override
-    public void onRadioButtonClick(RadioButton view, int fragmentId, String levelName) {
-        boolean finished = false;
-        //'  flush("Level  " + fragmentId);
-        if (queryList.size() > fragmentId + 1) {
-            int length = queryList.size();
-            for (int i = fragmentId + 1; i < length; i++) {
-                queryList.remove(queryList.size() - 1);
+    public void onRadioButtonClick(CompoundButton view, int fragmentId, String levelName) {
+        if (!view.getText().equals("null")) {
+            //for query list
+            if (!levelName.equals("justForData")) {
+                if (!levelName.equals("Gender")) {
+                    if (queryList.size() > fragmentId + 1) {
+                        int length = queryList.size();
+                        for (int i = fragmentId + 1; i < length; i++) {
+                            queryList.remove(queryList.size() - 1);
+                        }
+                    }
+                }
+            }
+            if (queryList.size() <= fragmentId + 1) {
+                queryList.add(view.getText().toString());
+            } else {
+                queryList.set(fragmentId + 1, view.getText().toString());
+            }
+            //setting the hint layout text
+            if (fragmentId == 0) {
+                hintIdOne.setText(queryList.get(fragmentId + 1));
+            } else if (fragmentId == 1) {
+                hintIdTwo.setText(queryList.get(fragmentId + 1));
+            } else if (fragmentId == (tabLayout.getTabCount() - 1)) {
+                hintIdThree.setText(queryList.get(fragmentId + 1));
+            } else if (fragmentId == (tabLayout.getTabCount() - 2)){
+                hintIdTwo.setText(queryList.get(fragmentId + 1));
             }
         }
-        queryList.add(fragmentId + 1, view.getText().toString());
-        //  flush(queryList.toString());
+
+        if (!levelName.equals("justForData")) {
+            //for query list name
+            if (!levelName.equals("Gender")) {
+                if (queryListName.size() > fragmentId + 1) {
+                    int length = queryListName.size();
+                    for (int i = fragmentId + 1; i < length; i++) {
+                        queryListName.remove(queryListName.size() - 1);
+                    }
+                }
+            }
+            if (queryListName.size() <= fragmentId + 1) {
+                queryListName.add(fragmentId + 1, levelName);
+            } else {
+                queryListName.set(fragmentId + 1, levelName);
+            }
+        }
+        Log.e(TAG, queryList.toString());
+        Log.e(TAG, queryListName.toString());
+
         db = new LocalDb();
-        ArrayList<String> arr = new ArrayList<>(Arrays.asList("Salary", "Gender"));
-        if (arr.contains(levelName) || (endOfNest.contains(levelName) && view.getText().toString().equals("endOfNest"))) {
+        ArrayList<String> arr = new ArrayList<>(Arrays.asList("Salary", "Gender", "justForData"));
+        if (arr.contains(levelName)) {
             fab.setVisibility(View.VISIBLE);
             switch (levelName) {
                 case "Gender":
@@ -515,13 +694,13 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                         mSectionsPagerAdapter.newTab(db.payment);
                         mViewPager.setCurrentItem(fragmentId + 1);
                     } else mViewPager.setCurrentItem(fragmentId + 1);
-                    break;
+                    return;
                 case "Salary":
                     if (!(fragmentId < tabLayout.getTabCount() - 1)) {
                         mSectionsPagerAdapter.newTab(db.crossCheck);
                         mViewPager.setCurrentItem(fragmentId + 1);
                     } else mViewPager.setCurrentItem(fragmentId + 1);
-                break;
+                    return;
              /* case "Subject":
                 case "Field":
                 case "Flavour":
@@ -529,7 +708,8 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                 case "Course":
                 case "Software":
                 case "Language":*/
-
+                case "justForData":
+                    return;
             }
         } else if (fragmentId == 0) {
             mSectionsPagerAdapter.removeTabs(fragmentId + 1);
@@ -569,7 +749,6 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
 
 
     public void generateNextTabs(int fragment) {
-        //flush("End of the Nest");
         if (!(fragment < tabLayout.getTabCount() - 1)) {
             mSectionsPagerAdapter.newTab(db.getGenderPreferencesList());
             mViewPager.setCurrentItem(fragment + 1);
@@ -623,7 +802,7 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
         Log.d(TAG, "Contact ID: " + contactID);
         ArrayList<String> allNumbers = new ArrayList<>();
 
-        for(int i = 0; i <= 20 ; i++){
+        for (int i = 0; i <= 20; i++) {
             contactNumber = null;
             // Using the contact ID now we will get contact phone number
             Cursor cursorPhone = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
@@ -639,7 +818,7 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
             //cursorPhone.moveToFirst();
             while (cursorPhone.moveToNext()) {
                 contactNumber = cursorPhone.getString(cursorPhone.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-                if(contactNumber != null){
+                if (contactNumber != null) {
                     Log.d(TAG, "Contact Phone Number: " + contactNumber);
                     allNumbers.add(contactNumber);
                 }
@@ -670,8 +849,8 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
     @Override
     public void onNewTabCreated(String tabName) {
         tabLayout.invalidate();
-        int whatToDO = tabLayout.getTabCount()-1;
-        if(whatToDO == 0){
+        int whatToDO = tabLayout.getTabCount() - 1;
+        if (whatToDO == 0) {
             hintIdOne.setVisibility(View.VISIBLE);
             hintIdTwo.setVisibility(View.GONE);
             hintIdThree.setVisibility(View.GONE);
@@ -683,11 +862,11 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                 //tab_icon.setTranslationY((int) (-1 * (getResources().getDisplayMetrics().density)));
                 tab_label.setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/Cairo-Light.ttf"));
                 tab_label.setText(Objects.requireNonNull(tabLayout.getTabAt(i)).getText());
-                tab_icon.setImageResource(navIcons[i]);
+                tab_icon.setImageResource(navIcons[giveIconOnTabName((String) tabLayout.getTabAt(i).getText())]);
                 tab_label.setLayoutParams(textParamOne);
                 Objects.requireNonNull(tabLayout.getTabAt(i)).setCustomView(tab);
             }
-        }else if(whatToDO == 1){
+        } else if (whatToDO == 1) {
             hintIdOne.setVisibility(View.VISIBLE);
             hintIdTwo.setVisibility(View.VISIBLE);
             hintIdThree.setVisibility(View.GONE);
@@ -699,11 +878,11 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                 //tab_icon.setTranslationY((int) (-1 * (getResources().getDisplayMetrics().density)));
                 tab_label.setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/Cairo-Light.ttf"));
                 tab_label.setText(Objects.requireNonNull(tabLayout.getTabAt(i)).getText());
-                tab_icon.setImageResource(navIcons[i]);
+                tab_icon.setImageResource(navIcons[giveIconOnTabName((String) tabLayout.getTabAt(i).getText())]);
                 tab_label.setLayoutParams(textParamTwo);
                 Objects.requireNonNull(tabLayout.getTabAt(i)).setCustomView(tab);
             }
-        }else{
+        } else {
             hintIdOne.setVisibility(View.VISIBLE);
             hintIdTwo.setVisibility(View.VISIBLE);
             hintIdThree.setVisibility(View.VISIBLE);
@@ -715,10 +894,54 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                 //tab_icon.setTranslationY((int) (-1 * (getResources().getDisplayMetrics().density)));
                 tab_label.setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/Cairo-Light.ttf"));
                 tab_label.setText(Objects.requireNonNull(tabLayout.getTabAt(i)).getText());
-                tab_icon.setImageResource(navIcons[i]);
+                tab_icon.setImageResource(navIcons[giveIconOnTabName((String) tabLayout.getTabAt(i).getText())]);
                 tab_label.setLayoutParams(textParamThree);
                 Objects.requireNonNull(tabLayout.getTabAt(i)).setCustomView(tab);
             }
+        }
+    }
+
+
+    private int giveIconOnTabName(String TabName) {
+        switch (TabName) {
+            case "Level":
+                return 0;
+            case "Medium":
+                return 1;
+            case "Class":
+                return 2;
+            case "Subject":
+                return 3;
+            case "Field":
+                return 4;
+            case "Division":
+                return 5;
+            case "Language":
+                return 6;
+            case " Language ":
+                return 7;
+            case "Software":
+                return 8;
+            case "Music":
+                return 9;
+            case "Item":
+                return 10;
+            case "Flavour":
+                return 11;
+            case "Degree":
+                return 12;
+            case "Branch":
+                return 5;
+            case "Type":
+                return 11;
+            case "Gender":
+                return 14;
+            case "Salary":
+                return 15;
+            case "Cross Check":
+                return 13;
+            default:
+                return 5;
         }
     }
 
@@ -737,6 +960,7 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
 
 
     final private int REQUEST_MULTIPLE_PERMISSIONS = 124;
+
     private boolean addPermission(List<String> permissionsList, String permission) {
         if (checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) {
             permissionsList.add(permission);
@@ -756,8 +980,7 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                 .show();
     }
 
-    private void AccessContact()
-    {
+    private void AccessContact() {
         List<String> permissionsNeeded = new ArrayList<String>();
         final List<String> permissionsList = new ArrayList<String>();
         if (!addPermission(permissionsList, Manifest.permission.READ_CONTACTS))
