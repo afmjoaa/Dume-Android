@@ -310,7 +310,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
         int[] wh = DumeUtils.getScreenSize(this);
-        spacing = (int) ((wh[0] - ((300) * (getResources().getDisplayMetrics().density))) / 4);
+        spacing = (int) ((wh[0] - ((300) * (getResources().getDisplayMetrics().density))) / 3);
         navigationView.setNavigationItemSelectedListener(this);
         reportRv.addItemDecoration(new GridSpacingItemDecoration(3, spacing, true));
         reportRv.setLayoutManager(new GridLayoutManager(this, 3));
@@ -419,7 +419,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         mMap = googleMap;
         onMapReadyListener(mMap);
         onMapReadyGeneralConfig();
-        mMap.setPadding((int) (10 * (getResources().getDisplayMetrics().density)), 0, 0, (int) (72 * (getResources().getDisplayMetrics().density)));
+        mMap.setPadding((int) (20 * (getResources().getDisplayMetrics().density)), 0, 0, (int) (72 * (getResources().getDisplayMetrics().density)));
 
     }
 
