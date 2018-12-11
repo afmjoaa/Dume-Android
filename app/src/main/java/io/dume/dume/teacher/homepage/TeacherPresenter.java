@@ -33,7 +33,7 @@ public class TeacherPresenter implements TeacherContract.Presenter {
         model.getFeedBack(new TeacherContract.Model.Listener<ArrayList<Feedback>>() {
             @Override
             public void onSuccess(ArrayList<Feedback> list) {
-                view.showFeedbackRV(list);
+
             }
 
             @Override
@@ -44,7 +44,7 @@ public class TeacherPresenter implements TeacherContract.Presenter {
         model.getInbox(new TeacherContract.Model.Listener<ArrayList<Inbox>>() {
             @Override
             public void onSuccess(ArrayList<Inbox> list) {
-                view.showInboxRV(list);
+
             }
 
             @Override
@@ -75,7 +75,7 @@ public class TeacherPresenter implements TeacherContract.Presenter {
                     dataSets.add(lineDataSet);
                 }
                 LineData lineData = new LineData(dataSets);
-                view.showChart(lineData);
+
             }
 
             @Override
@@ -97,7 +97,7 @@ public class TeacherPresenter implements TeacherContract.Presenter {
     public void onViewInteracted(View component) {
         switch (component.getId()) {
             case R.id.switch_account_btn:
-                view.flush("Fucked ");
+
                 view.onSwitchAccount();
 
                 break;

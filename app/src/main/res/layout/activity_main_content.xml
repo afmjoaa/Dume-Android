@@ -51,361 +51,120 @@
 
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_marginTop="80dp">
 
-        <android.support.v4.widget.NestedScrollView
+
+        <LinearLayout
+            android:id="@+id/quickContainer"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="50dp"
-            android:paddingBottom="75dp"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+            android:layout_height="350dp"
+            android:layout_margin="16dp"
+            android:gravity="center"
+            android:orientation="vertical">
 
-            <FrameLayout
-                android:id="@+id/teacherActivitySV"
+            <carbon.widget.LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:background="@color/white"
+                android:gravity="center"
+                app:carbon_cornerRadius="10dp"
+                app:carbon_elevation="2dp"
+                app:layout_anchor="@id/quickContainer"
+                app:layout_anchorGravity="center">
 
-                <LinearLayout
+                <com.hanks.htextview.scale.ScaleTextView
+                    android:id="@+id/fragmentTitle"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical">
-                    <TextView
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:textColor="@color/colorLink"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+            </carbon.widget.LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <carbon.widget.LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    app:carbon_cornerRadius="10dp">
+
+                    <q.rorbin.verticaltablayout.VerticalTabLayout
+                        android:id="@+id/tablayout"
+                        android:layout_width="60dp"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        app:indicator_color="#ddfcfa"
+                        app:indicator_gravity="fill"
+                        app:tab_height="50dp"
+                        app:tab_mode="scrollable"
+
+                        />
+                </carbon.widget.LinearLayout>
+
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <fr.castorflex.android.verticalviewpager.VerticalViewPager
+                        android:id="@+id/mViewPager"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <carbon.widget.LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Earning Report"
-                        android:textSize="18sp"
-                        android:layout_margin="5dp"/>
-
-                    <android.support.v7.widget.RecyclerView
-                        android:id="@+id/reportRV"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="15dp">
-
-                    </android.support.v7.widget.RecyclerView>
-
-                    <!--rating layout -->
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
                         android:layout_margin="5dp"
-                        android:text="Performance"
-                        android:textSize="18sp" />
-
-                    <LinearLayout
-                        android:id="@+id/rating_host_linearlayout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:orientation="vertical">
-
-                        <carbon.widget.LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-
-                            android:baselineAligned="false"
-                            android:orientation="vertical"
-                            android:paddingLeft="16dp"
-                            android:paddingRight="16dp"
-                            app:carbon_elevation="8dp">
-
-                            <Button
-                                android:id="@+id/show_additional_rating_btn"
-                                style="@style/Widget.AppCompat.Button.Borderless"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:drawableBottom="@drawable/ic_down_arrow_small"
-                                android:drawablePadding="2dp"
-                                android:text="Feature Rating"
-                                android:textAllCaps="false"
-                                android:textColor="@color/textColorPrimary"
-                                android:textSize="16sp"
-                                android:visibility="gone"
-                                app:fontFamily="@font/cairo_regular" />
-
-                        </carbon.widget.LinearLayout>
+                        android:background="@color/white"
+                        android:gravity="bottom">
 
                         <LinearLayout
-                            android:id="@+id/rating_layout_vertical"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_width="50dp"
+                            android:layout_height="40dp"
+                            android:background="#340143"
+                            android:gravity="center">
 
-                            android:orientation="vertical"
-                            android:translationY="-2dp">
-
-                            <LinearLayout
-                                android:id="@+id/rating_layout"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:baselineAligned="false"
-                                android:orientation="horizontal">
-
-
-                                    <RelativeLayout
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_margin="20dp"
-                                        android:layout_weight="1"
-                                        android:background="@drawable/bg_white_bottom_round">
-
-                                        <TextView
-                                            android:id="@+id/rating_title_performance"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_alignParentTop="true"
-                                            android:layout_centerHorizontal="true"
-                                            android:singleLine="true"
-                                            android:text="Performance"
-                                            android:textAlignment="center"
-                                            android:textSize="12sp"
-                                            app:fontFamily="@font/cairo_regular" />
-
-                                        <carbon.widget.ImageView
-                                            android:id="@+id/main_rating_performance"
-                                            android:layout_width="56dp"
-                                            android:layout_height="56dp"
-                                            android:layout_below="@+id/rating_title_performance"
-                                            android:layout_centerHorizontal="true"
-                                            android:layout_marginTop="2dp"
-                                            app:carbon_cornerRadius="28dp"
-                                            app:srcCompat="@drawable/rating_performance_layer_list" />
-
-
-                                        <TextView
-                                            android:id="@+id/txtStatus"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_below="@+id/main_rating_performance"
-                                            android:layout_alignParentBottom="true"
-                                            android:layout_centerHorizontal="true"
-                                            android:background="@drawable/bg_rating_textview"
-                                            android:drawableEnd="@drawable/ic_person_small"
-                                            android:drawableRight="@drawable/ic_person_small"
-                                            android:drawablePadding="5dp"
-                                            android:gravity="center"
-                                            android:paddingLeft="6dp"
-                                            android:paddingTop="1dp"
-                                            android:paddingRight="6dp"
-                                            android:paddingBottom="1dp"
-                                            android:singleLine="true"
-                                            android:text="1234"
-                                            android:textColor="@color/white"
-                                            android:textSize="8sp"
-                                            android:translationY="-9dp" />
-
-                                    </RelativeLayout>
-
-                                    <RelativeLayout
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_margin="20dp"
-                                        android:layout_weight="1"
-                                        android:background="@drawable/bg_white_bottom_round">
-
-                                        <TextView
-                                            android:id="@+id/rating_title_accept_ratio"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_alignParentTop="true"
-                                            android:layout_centerHorizontal="true"
-                                            android:singleLine="true"
-                                            android:text="A-Ratio"
-                                            android:textAlignment="center"
-                                            android:textSize="12sp"
-                                            app:fontFamily="@font/cairo_regular" />
-
-                                        <com.jackandphantom.circularprogressbar.CircleProgressbar
-                                            android:id="@+id/rating_main_accept_ratio"
-                                            android:layout_width="52dp"
-                                            android:layout_height="52dp"
-                                            android:layout_below="@+id/rating_title_accept_ratio"
-                                            android:layout_centerHorizontal="true"
-                                            android:layout_marginTop="3dp"
-                                            android:background="@drawable/rating_accept_ratio_layer_list"
-                                            android:rotation="180"
-                                            app:cpb_backgroundProgressColor="#4b686969"
-                                            app:cpb_backgroundProgressWidth="4"
-                                            app:cpb_clockwise="true"
-                                            app:cpb_foregroundProgressColor="#00796B"
-                                            app:cpb_foregroundProgressWidth="6"
-                                            app:cpb_progress="80"
-                                            app:cpb_roundedCorner="true" />
-
-                                        <TextView
-                                            android:id="@+id/txtStatus_accept_ratio"
-                                            android:layout_width="35dp"
-                                            android:layout_height="wrap_content"
-                                            android:layout_below="@+id/rating_main_accept_ratio"
-                                            android:layout_alignParentBottom="true"
-                                            android:layout_centerHorizontal="true"
-                                            android:background="@drawable/bg_rating_textview"
-                                            android:drawablePadding="5dp"
-                                            android:gravity="center"
-                                            android:paddingLeft="6dp"
-                                            android:paddingTop="1dp"
-                                            android:paddingRight="6dp"
-                                            android:paddingBottom="1dp"
-                                            android:singleLine="true"
-                                            android:text="80 %"
-                                            android:textColor="@color/white"
-                                            android:textSize="8sp"
-                                            android:translationY="-6dp" />
-
-
-                                    </RelativeLayout>
-
-                                    <RelativeLayout
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_margin="20dp"
-                                        android:layout_weight="1"
-                                        android:background="@drawable/bg_white_bottom_round">
-
-                                        <TextView
-                                            android:id="@+id/rating_title_experience"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_alignParentTop="true"
-                                            android:layout_centerHorizontal="true"
-                                            android:drawablePadding="5dp"
-                                            android:singleLine="true"
-                                            android:text="Experience "
-                                            android:textAlignment="center"
-                                            android:textSize="12sp"
-                                            app:fontFamily="@font/cairo_regular" />
-
-                                        <carbon.widget.ImageView
-                                            android:id="@+id/main_rating_experience"
-                                            android:layout_width="56dp"
-                                            android:layout_height="56dp"
-                                            android:layout_below="@+id/rating_title_experience"
-                                            android:layout_centerHorizontal="true"
-                                            android:layout_marginTop="2dp"
-                                            app:carbon_cornerRadius="28dp"
-                                            app:srcCompat="@drawable/rating_experience_layer_list" />
-
-
-                                        <TextView
-                                            android:id="@+id/txtStatus_experience"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_below="@+id/main_rating_experience"
-                                            android:layout_alignParentBottom="true"
-                                            android:layout_centerHorizontal="true"
-                                            android:background="@drawable/bg_rating_textview"
-                                            android:drawableEnd="@drawable/ic_person_small"
-                                            android:drawableRight="@drawable/ic_person_small"
-                                            android:drawablePadding="5dp"
-                                            android:gravity="center"
-                                            android:paddingLeft="6dp"
-                                            android:paddingTop="1dp"
-                                            android:paddingRight="6dp"
-                                            android:paddingBottom="1dp"
-                                            android:singleLine="true"
-                                            android:text="1234"
-                                            android:textColor="@color/white"
-                                            android:textSize="8sp"
-                                            android:translationY="-9dp" />
-                                    </RelativeLayout>
-
-
-
-                            </LinearLayout>
-
-                            <RelativeLayout
-                                android:id="@+id/rating_other_skills"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
-
-                                <TextView
-                                    android:id="@+id/rating_skills"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_alignParentTop="true"
-                                    android:layout_centerHorizontal="true"
-                                    android:background="@drawable/bg_rating_tittle"
-                                    android:paddingLeft="20dp"
-                                    android:paddingTop="2dp"
-                                    android:paddingRight="20dp"
-                                    android:paddingBottom="2dp"
-                                    android:singleLine="true"
-                                    android:text="Skills"
-                                    android:textAlignment="center"
-                                    android:textColor="@color/colorBlack"
-                                    android:textSize="12sp"
-                                    android:visibility="gone"
-                                    app:fontFamily="@font/cairo_regular" />
-
-                                <com.hadiidbouk.charts.ChartProgressBar
-                                    android:id="@+id/myChartProgressBar"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_centerInParent="true"
-                                    android:gravity="center"
-                                    app:hdBarCanBeClick="true"
-                                    app:hdBarHeight="160dp"
-                                    app:hdBarRadius="10dp"
-                                    app:hdBarTitleColor="@color/textColorPrimary"
-                                    app:hdBarTitleMarginTop="9dp"
-                                    app:hdBarTitleSelectedColor="@color/colorBlack"
-                                    app:hdBarTitleTxtSize="12sp"
-                                    app:hdBarWidth="7dp"
-                                    app:hdEmptyColor="@color/empty"
-                                    app:hdMaxValue="10"
-                                    app:hdPinBackgroundColor="@color/pin_background"
-                                    app:hdPinDrawable="@drawable/ic_pin"
-                                    app:hdPinMarginBottom="20dp"
-                                    app:hdPinMarginEnd="11dp"
-                                    app:hdPinPaddingBottom="5dp"
-                                    app:hdPinTextColor="@color/pin_text"
-                                    app:hdPinTxtSize="12sp"
-                                    app:hdProgressClickColor="@color/progress_click"
-                                    app:hdProgressColor="@color/progress"
-                                    app:hdProgressDisableColor="@color/progress_disable" />
-
-                            </RelativeLayout>
-
-
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="center"
+                                app:srcCompat="@drawable/ic_tips" />
                         </LinearLayout>
 
-                    </LinearLayout>
-
-                    <android.support.v7.widget.RecyclerView
-                        android:id="@+id/feedbackRV"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="15dp">
-
-                    </android.support.v7.widget.RecyclerView>
-
-                    <android.support.v7.widget.RecyclerView
-                        android:id="@+id/inboxRV"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="15dp" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-
-                        android:orientation="vertical">
-
-                        <TextView
+                        <com.hanks.htextview.scale.ScaleTextView
+                            android:id="@+id/tipsTV"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_margin="5dp"
-                            android:text="Statistics"
-                            android:textSize="18sp" />
+                            android:layout_gravity="center"
+                            android:ellipsize="marquee"
+                            android:gravity="center"
+                            android:marqueeRepeatLimit="marquee_forever"
+                            android:paddingEnd="5dp"
+                            android:paddingLeft="5dp"
+                            android:paddingRight="5dp"
+                            android:paddingStart="5dp"
+                            android:text="@string/lorem_para"
+                            android:textSize="12sp" />
+                    </carbon.widget.LinearLayout>
 
-                        <com.github.mikephil.charting.charts.LineChart
-                            android:id="@+id/teacherChartStatistics"
-                            android:layout_width="match_parent"
-                            android:layout_height="200dp" />
-                    </LinearLayout>
-                </LinearLayout>
-            </FrameLayout>
-        </android.support.v4.widget.NestedScrollView>
+                </FrameLayout>
+            </LinearLayout>
+
+
+        </LinearLayout>
+
     </android.support.design.widget.CoordinatorLayout>
 
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"

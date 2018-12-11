@@ -8,6 +8,8 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:colorBackground">@color/colorNarvik</item>
         <item name="colorControlHighlight">@color/colorDarkAzure</item>
+        <item name="coordinatorLayoutStyle">@style/Widget.Support.CoordinatorLayout</item>
+        <item name="carbon_linearLayoutStyle">@style/carbon_LinearLayout</item>
         <item name="android:fontFamily" tools:targetApi="jelly_bean">@font/cairo_regular</item>
 
     </style>
@@ -33,7 +35,8 @@
 
     <style name="LoginTheme" parent="MyStyle">
         <item name="android:windowTranslucentStatus" tools:targetApi="kitkat">true</item>
-        <item name="android:statusBarColor" tools:targetApi="lollipop">@android:color/transparent</item>
+        <item name="android:statusBarColor" tools:targetApi="lollipop">@android:color/transparent
+        </item>
         <item name="android:fontFamily" tools:targetApi="jelly_bean">@font/cairo_regular</item>
         <item name="colorPrimaryDark">@android:color/transparent</item>
         <item name="android:navigationBarColor" tools:targetApi="lollipop">#000000</item>

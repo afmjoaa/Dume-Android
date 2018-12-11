@@ -2,6 +2,7 @@ package io.dume.dume.teacher.homepage;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
@@ -13,18 +14,16 @@ import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.OrientationHelper;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -36,40 +35,37 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.facebook.CustomTabMainActivity;
-import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.components.Legend;
-import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.data.LineData;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.MapStyleOptions;
-import com.tomergoldst.tooltips.ToolTip;
+import com.hanks.htextview.scale.ScaleTextView;
 import com.tomergoldst.tooltips.ToolTipsManager;
-import com.transitionseverywhere.TransitionManager;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import fr.castorflex.android.verticalviewpager.VerticalViewPager;
 import io.dume.dume.R;
 import io.dume.dume.student.pojo.CusStuAppComMapActivity;
-import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
 import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
-import io.dume.dume.teacher.adapters.FeedBackAdapter;
-import io.dume.dume.teacher.adapters.InboxAdapter;
-import io.dume.dume.teacher.adapters.ReportAdapter;
+import io.dume.dume.teacher.homepage.fragments.AcademicFragment;
+import io.dume.dume.teacher.homepage.fragments.InboxFragment;
+import io.dume.dume.teacher.homepage.fragments.PayFragment;
+import io.dume.dume.teacher.homepage.fragments.PerformanceFragment;
+import io.dume.dume.teacher.homepage.fragments.SkillFragment;
+import io.dume.dume.teacher.homepage.fragments.StatisticsFragment;
 import io.dume.dume.teacher.mentor_settings.AccountSettings;
-import io.dume.dume.teacher.pojo.Feedback;
-import io.dume.dume.teacher.pojo.Inbox;
+import io.dume.dume.teacher.pojo.TabModel;
 import io.dume.dume.teacher.skill.SkillActivity;
-import io.dume.dume.util.DumeUtils;
-import io.dume.dume.util.GridSpacingItemDecoration;
+import q.rorbin.verticaltablayout.VerticalTabLayout;
+import q.rorbin.verticaltablayout.adapter.TabAdapter;
+import q.rorbin.verticaltablayout.widget.ITabView;
+import q.rorbin.verticaltablayout.widget.TabView;
 
 
-public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherContract.View, NavigationView.OnNavigationItemSelectedListener,OnMapReadyCallback,MyGpsLocationChangeListener {
+public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherContract.View, NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback, MyGpsLocationChangeListener {
     private TeacherContract.Presenter presenter;
     private TextView textView;
     private Toolbar toolbar;
@@ -79,15 +75,9 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
     private static final String TAG = "TeacherActivtiy";
     private NavigationView navigationView;
     ToolTipsManager mToolTipsManager;
-    @BindView(R.id.feedbackRV)
-    public RecyclerView feedBackRV;
     private Context context;
-    @BindView(R.id.teacherActivitySV)
-    public FrameLayout rvWrapper;
-    @BindView(R.id.inboxRV)
-    RecyclerView inboxRv;
-    @BindView(R.id.teacherChartStatistics)
-    LineChart lineChart;
+
+
     private Menu menu;
     private MenuItem home, records, payments, messages, notifications, heat_map, free_cashback, settings, forum, help, selectAccount, infoItem, studentProfile, mentorProfile, bootCampProfile;
     private Drawable less;
@@ -106,18 +96,25 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
     private FrameLayout viewMusk;
     private AppBarLayout mainAppbar;
     private CoordinatorLayout coordinatorLayout;
-    @BindView(R.id.reportRV)
-    public RecyclerView reportRv;
+
     private int spacing;
     private SupportMapFragment mapFragment;
     private GoogleMap mMap;
-
+    @BindView(R.id.tablayout)
+    VerticalTabLayout tabLayout;
+    @BindView(R.id.mViewPager)
+    VerticalViewPager viewPager;
+    @BindView(R.id.fragmentTitle)
+    ScaleTextView fragmentTitle;
+    @BindView(R.id.tipsTV)
+    ScaleTextView scaleTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setActivityContextMap(this,1604);
+        ButterKnife.bind(this);
+        setActivityContextMap(this, 1604);
         presenter = new TeacherPresenter(this, new TeacherModel());
         settingStatusBarTransparent();
         setDarkStatusBarIcon();
@@ -125,25 +122,6 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         getLocationPermission(mapFragment);
     }
 
-
-    @Override
-    public void showChart(LineData data) {
-        lineChart.setData(data);
-        XAxis xAxis = lineChart.getXAxis();
-        xAxis.setEnabled(false);
-        xAxis.setDrawGridLines(false);
-        YAxis axisLeft = lineChart.getAxisLeft();
-        axisLeft.setDrawGridLines(false);
-        YAxis axisRight = lineChart.getAxisRight();
-        axisRight.setDrawGridLines(false);
-        axisRight.setDrawLabels(false);
-        Legend legend = lineChart.getLegend();
-        legend.setPosition(Legend.LegendPosition.ABOVE_CHART_RIGHT);
-        lineChart.setTouchEnabled(false);
-        lineChart.enableScroll();
-        lineChart.invalidate();
-
-    }
 
     @Override
     public void onSheetChanges(boolean halfCrossed) {
@@ -271,25 +249,10 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 
-    @Override
-    public void showFeedbackRV(ArrayList<Feedback> list) {
-       // feedBackRV.setLayoutManager(new GridLayoutManager(this, 3));
-     /*feedBackRV.setAdapter(new FeedBackAdapter(list) {
-            @Override
-            public void onItemClick(int position, View view) {
-
-            }
-        });*/
-
-    }
-
-    @Override
-    public void showInboxRV(ArrayList<Inbox> list) {
-        inboxRv.setLayoutManager(new LinearLayoutManager(this, OrientationHelper.VERTICAL, false));
-        inboxRv.setAdapter(new InboxAdapter(list));
-    }
 
     private void initAdvance() {
+
+
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
             /** Called when a drawer has settled in a completely closed state. */
@@ -309,12 +272,99 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         };
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
-        int[] wh = DumeUtils.getScreenSize(this);
-        spacing = (int) ((wh[0] - ((300) * (getResources().getDisplayMetrics().density))) / 3);
-        navigationView.setNavigationItemSelectedListener(this);
-        reportRv.addItemDecoration(new GridSpacingItemDecoration(3, spacing, true));
-        reportRv.setLayoutManager(new GridLayoutManager(this, 3));
-        reportRv.setAdapter(new ReportAdapter());
+
+
+        ButterKnife.bind(this);
+        ArrayList<TabModel> tabModelArrayList = new ArrayList<>();
+        tabModelArrayList.add(new TabModel(R.drawable.performance, R.drawable.performance_selected, 0, "Performance"));
+        tabModelArrayList.add(new TabModel(R.drawable.inbox, R.drawable.inbox, 0, "Inbox"));
+        tabModelArrayList.add(new TabModel(R.drawable.pay, R.drawable.pay, 0, "Pay"));
+        tabModelArrayList.add(new TabModel(R.drawable.ic_cross_check, R.drawable.ic_cross_check, 3, "Statistics"));
+        tabModelArrayList.add(new TabModel(R.drawable.skills, R.drawable.skills, 0, "Manage Skills"));
+        tabModelArrayList.add(new TabModel(R.drawable.education, R.drawable.education, 0, "Academic"));
+        tabLayout.setTabAdapter(new TabAdapter() {
+
+            @Override
+            public int getCount() {
+                return tabModelArrayList.size();
+            }
+
+            @Override
+            public ITabView.TabBadge getBadge(int position) {
+
+
+                if (tabModelArrayList.get(position).getBadge() > 0) {
+
+                    return new ITabView.TabBadge.Builder().setBadgeNumber(2).setBadgeText(tabModelArrayList.get(position).getBadge() + "").build();
+                }
+                return null;
+
+            }
+
+            @Override
+            public ITabView.TabIcon getIcon(int position) {
+                int normalIcon = tabModelArrayList.get(position).getNormalIcon();
+                int selected = tabModelArrayList.get(position).getSelectedIcon();
+
+                return new ITabView.TabIcon.Builder().setIcon(selected, normalIcon).build();
+
+
+            }
+
+            @Override
+            public ITabView.TabTitle getTitle(int position) {
+                return null;
+            }
+
+            @Override
+            public int getBackground(int position) {
+                return 0;
+            }
+        });
+        tabLayout.addOnTabSelectedListener(new VerticalTabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabView tab, int position) {
+                viewPager.setCurrentItem(position);
+                fragmentTitle.animateText(tabModelArrayList.get(position).getTabName());
+                scaleTextView.animateText(tabModelArrayList.get(position).getTabName());
+
+
+            }
+
+            @Override
+            public void onTabReselected(TabView tab, int position) {
+                tips("Every person is a new door to a different world.");
+            }
+        });
+        viewPager.setAdapter(new pager(getSupportFragmentManager()));
+        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int i, float v, int i1) {
+
+            }
+
+            @Override
+            public void onPageSelected(int i) {
+                tabLayout.setTabSelected(i);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int i) {
+
+            }
+        });
+        fragmentTitle.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Cairo_Regular.ttf"));
+        fragmentTitle.animateText(tabModelArrayList.get(tabLayout.getSelectedTabPosition()).getTabName());
+
+
+    }
+
+    public void tips(CharSequence sequence) {
+        scaleTextView.animateText(sequence);
+        scaleTextView.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Cairo_Regular.ttf"));
+        scaleTextView.setAnimationListener(hTextView -> {
+            scaleTextView.setSelected(true);
+        });
     }
 
     public void toggle(android.view.View view) {
@@ -409,13 +459,9 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        Log.d(TAG, "onMapReady: map is ready");
-
         setDarkStatusBarIcon();
-        MapStyleOptions style = MapStyleOptions.loadRawResourceStyle(
-                this, R.raw.map_style_default_no_landmarks);
+        MapStyleOptions style = MapStyleOptions.loadRawResourceStyle(this, R.raw.map_style_default_no_landmarks);
         googleMap.setMapStyle(style);
-
         mMap = googleMap;
         onMapReadyListener(mMap);
         onMapReadyGeneralConfig();
@@ -426,5 +472,36 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
     @Override
     public void onMyGpsLocationChanged(Location location) {
 
+    }
+
+    class pager extends FragmentPagerAdapter {
+
+        public pager(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int i) {
+            Fragment fragment = null;
+            if (i == 0) {
+                fragment = new PerformanceFragment();
+            } else if (i == 1) {
+                fragment = new InboxFragment();
+            } else if (i == 2) {
+                fragment = new PayFragment();
+            } else if (i == 3) {
+                fragment = new StatisticsFragment();
+            } else if (i == 4) {
+                fragment = new SkillFragment();
+            } else if (i == 5) {
+                fragment = new AcademicFragment();
+            }
+            return fragment;
+        }
+
+        @Override
+        public int getCount() {
+            return 6;
+        }
     }
 }

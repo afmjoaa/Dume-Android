@@ -11,7 +11,7 @@
     <!-- if any object needs to read local storage -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.READ_CONTACTS"/>
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
          Google Maps Android API v2, but you must specify either coarse or fine
@@ -191,10 +191,7 @@
             android:name=".student.recordsAccepted.RecordsAcceptedActivity"
             android:label="@string/title_activity_records_accepted"
             android:theme="@style/AppTheme.NoActionBar.transparent.accepted" />
-
-
         <activity android:name=".teacher.skill.SkillActivity" />
-
         <activity
             android:name=".teacher.crudskill.CrudSkillActivity"
             android:label="Select category"
@@ -232,8 +229,7 @@
             android:theme="@style/AppTheme" />
         <activity android:name=".common.appInfoActivity.AppInfoActivity" />
         <activity android:name=".teacher.addskill.AddSkillActivity" />
-
-
+        <activity android:name=".teacher.homepage.TeacherActivityMock"></activity>
     </application>
 
 </manifest>

@@ -20,11 +20,11 @@ public interface TeacherContract {
 
         void flush(String msg);
 
-        void showFeedbackRV(ArrayList<Feedback> list);
+        /*void showInbox(ArrayList<Feedback> list);
 
         void showInboxRV(ArrayList<Inbox> list);
 
-        void showChart(LineData data);
+        void showChart(LineData data);*/
 
 
         void onSheetChanges(boolean halfCrossed);
