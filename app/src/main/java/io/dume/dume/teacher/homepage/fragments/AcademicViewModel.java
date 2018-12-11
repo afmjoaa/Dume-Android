@@ -1,0 +1,7 @@
+package io.dume.dume.teacher.homepage.fragments;
+
+import android.arch.lifecycle.ViewModel;
+
+public class AcademicViewModel extends ViewModel {
+    // TODO: Implement the ViewModel
+}

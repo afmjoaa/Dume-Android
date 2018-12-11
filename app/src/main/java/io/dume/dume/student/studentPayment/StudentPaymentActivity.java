@@ -75,7 +75,7 @@ public class StudentPaymentActivity extends CustomStuAppCompatActivity implement
     public void onAddPromoCodeApplied() {
         mainLayoutContent.setVisibility(View.GONE);
         configAppbarTittle(StudentPaymentActivity.this, "Add Promo Code");
-        getSupportFragmentManager().beginTransaction().replace(R.id.content, new ContactUsFragment()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.content, new ApplyPromoCodeFragment()).commit();
     }
 
     @Override
@@ -111,9 +111,9 @@ public class StudentPaymentActivity extends CustomStuAppCompatActivity implement
         mPresenter.onStudentPaymentIntracted(view);
     }
 
-    //testing the contact up
+    //testing the apply promo code fragment up
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public static class ContactUsFragment extends Fragment {
+    public static class ApplyPromoCodeFragment extends Fragment {
 
         private StudentPaymentActivity myMainActivity;
         private AutoCompleteTextView queryTextView;
@@ -140,6 +140,38 @@ public class StudentPaymentActivity extends CustomStuAppCompatActivity implement
                     }
                 }
             });
+            return rootView;
+        }
+
+        @Override
+        public boolean onOptionsItemSelected(MenuItem item) {
+            int id = item.getItemId();
+            if (id == android.R.id.home) {
+                startActivity(new Intent(getActivity(), StudentPaymentActivity.class));
+                return true;
+            }
+            return super.onOptionsItemSelected(item);
+        }
+    }
+
+    //testing the apply promo code fragment up
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    public static class ViewPromotionsFragment extends Fragment {
+
+        private StudentPaymentActivity myMainActivity;
+        private AutoCompleteTextView queryTextView;
+
+        @Override
+        public void onCreate(@Nullable Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            setHasOptionsMenu(true);
+        }
+
+        @Nullable
+        @Override
+        public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+            myMainActivity = (StudentPaymentActivity) getActivity();
+            View rootView = inflater.inflate(R.layout.custom_contact_up_fragment, container, false);
             return rootView;
         }
 

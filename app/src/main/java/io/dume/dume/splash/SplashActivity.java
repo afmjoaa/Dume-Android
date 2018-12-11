@@ -9,6 +9,7 @@ import io.dume.dume.afterSplashTrp.AfterSplashActivity;
 import io.dume.dume.auth.AuthModel;
 import io.dume.dume.auth.auth.AuthActivity;
 import io.dume.dume.student.homePage.StudentActivity;
+import io.dume.dume.teacher.homepage.TeacherActivityMock;
 import io.dume.dume.teacher.homepage.TeacherActivtiy;
 
 public class SplashActivity extends AppCompatActivity implements SplashContract.View {
@@ -32,7 +33,8 @@ public class SplashActivity extends AppCompatActivity implements SplashContract.
 
     @Override
     public void gotoTeacherActivity() {
-        startActivity(new Intent(this, TeacherActivtiy.class));
+        //  startActivity(new Intent(this, TeacherActivityMock.class));
+       startActivity(new Intent(this, TeacherActivtiy.class));
         finish();
     }
 

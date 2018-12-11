@@ -3,6 +3,7 @@ package io.dume.dume.teacher.adapters;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,6 +40,7 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.InboxVH> {
 
     @Override
     public int getItemCount() {
+        Log.w("BAL", "getItemCount: "+list.size() );
         return list.size();
     }
 

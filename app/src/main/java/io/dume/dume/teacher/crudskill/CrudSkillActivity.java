@@ -91,16 +91,13 @@ public class CrudSkillActivity extends CusStuAppComMapActivity implements CrudCo
         configureAppbar(this,"Select category");
         mainScrollingContainer.getBackground().setAlpha(90);
         //testing code here for elevation
-        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-            @Override
-            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                if (Math.abs(verticalOffset)-appBarLayout.getTotalScrollRange() == 0) {
-                    //  Collapsed
-                    hackElevation.setVisibility(View.GONE);
-                }else {
-                    //Expanded
-                    hackElevation.setVisibility(View.VISIBLE);
-                }
+        appBarLayout.addOnOffsetChangedListener((appBarLayout, verticalOffset) -> {
+            if (Math.abs(verticalOffset)-appBarLayout.getTotalScrollRange() == 0) {
+                //  Collapsed
+                hackElevation.setVisibility(View.GONE);
+            }else {
+                //Expanded
+                hackElevation.setVisibility(View.VISIBLE);
             }
         });
     }
