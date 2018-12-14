@@ -10,6 +10,14 @@ public interface StudentPaymentContract {
         void findView();
 
         void onAddPromoCodeApplied();
+
+        void onViewPromotionsClicked();
+
+        void onTransactionHistoryClicked();
+
+        void onObligtionClaimClicked();
+
+        void onAddPaymentMethod();
     }
 
     interface Presenter {

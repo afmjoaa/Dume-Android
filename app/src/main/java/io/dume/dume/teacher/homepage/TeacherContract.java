@@ -26,9 +26,13 @@ public interface TeacherContract {
 
         void showChart(LineData data);*/
 
+        void configView();
 
-        void onSheetChanges(boolean halfCrossed);
+        void referMentorImageViewClicked();
 
+        void freeCashBackImageViewClicked();
+
+        void enhanceVIewImageClicked();
     }
 
 

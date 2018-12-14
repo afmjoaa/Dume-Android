@@ -111,6 +111,7 @@
     <color name="dark_light_red">#ff443a</color>
 
     <color name="linkColorDark">#01579b</color>
-
+    <color name="dividerColor">#f5f5f5</color>
+    <color name="payment_green">#66bb6a</color>
 
 </resources>

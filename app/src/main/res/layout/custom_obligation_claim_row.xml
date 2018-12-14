@@ -1,0 +1,429 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/hostRelativeLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_white_round_corner"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:paddingTop="15dp">
+
+    <!--basic info-->
+    <RelativeLayout
+        android:id="@+id/recordsHostLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:paddingStart="4dp"
+        android:paddingLeft="4dp"
+        android:paddingEnd="4dp"
+        android:paddingRight="4dp">
+
+        <LinearLayout
+            android:id="@+id/left_vertical_host_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:gravity="start"
+            android:orientation="vertical">
+
+            <carbon.widget.ImageView
+                android:id="@+id/student_display_pic"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginBottom="1dp"
+                android:src="@drawable/demo_testing_image"
+                app:carbon_cornerRadius="6dp"
+                app:carbon_elevation="4dp" />
+
+            <TextView
+                android:id="@+id/student_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="dony"
+                android:textColor="@color/textColorPrimary"
+                android:textSize="16sp"
+                app:fontFamily="@font/cairo_regular" />
+
+            <me.zhanghai.android.materialratingbar.MaterialRatingBar
+                android:id="@+id/student_rating_bar"
+                style="@style/Widget.MaterialRatingBar.RatingBar.Indicator.Small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:rating="3.5"
+                android:stepSize="0.01"
+                app:mrb_fillBackgroundStars="true"
+                app:mrb_progressBackgroundTint="@color/star_rating_background"
+                app:mrb_progressTint="@color/star_rating_color" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/center_vertical_host_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="16dp"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            tools:ignore="RelativeOverlap">
+
+            <TextView
+                android:id="@+id/subject_in_demand"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/math_amp_physics"
+                android:textAllCaps="false"
+                android:textColor="@color/textColorPrimary"
+                android:textSize="14sp"
+                app:fontFamily="@font/cairo_regular" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="Exchange"
+                app:srcCompat="@drawable/ic_exchhange_icon" />
+
+            <TextView
+                android:id="@+id/salary_in_demand"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="10k BDT"
+                android:textAllCaps="false"
+                android:textColor="@color/textColorPrimary"
+                android:textSize="14sp"
+                app:fontFamily="@font/cairo_regular" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/right_vertical_host_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="10dp"
+            android:gravity="end"
+            android:orientation="vertical">
+
+            <carbon.widget.ImageView
+                android:id="@+id/mentor_display_pic"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginBottom="1dp"
+                android:src="@drawable/demo_testing_image"
+                app:carbon_cornerRadius="6dp"
+                app:carbon_elevation="4dp" />
+
+            <TextView
+                android:id="@+id/mentor_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Fatema"
+                android:textColor="@color/textColorPrimary"
+                android:textSize="16sp"
+                app:fontFamily="@font/cairo_regular" />
+
+            <me.zhanghai.android.materialratingbar.MaterialRatingBar
+                android:id="@+id/mentor_rating_bar"
+                style="@style/Widget.MaterialRatingBar.RatingBar.Indicator.Small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:rating="3.5"
+                android:rotation="180"
+                android:stepSize="0.01"
+                app:mrb_fillBackgroundStars="true"
+                app:mrb_progressBackgroundTint="@color/star_rating_background"
+                app:mrb_progressTint="@color/star_rating_color" />
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/left_vertical_host_layout"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginRight="16dp"
+            android:background="#41a7a7a7" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/salary_due_block"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/recordsHostLayout"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="8dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Unpaid Salary" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:gravity="center_horizontal"
+            android:text="----->" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:text="10k BDt" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/obligation_due_block"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/salary_due_block"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="8dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Unpaid Obligations" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:gravity="center_horizontal"
+            android:text="----->" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:text="1k BDT" />
+
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/divider_one"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/obligation_due_block"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginRight="16dp"
+        android:background="#41a7a7a7" />
+
+    <RelativeLayout
+        android:id="@+id/sum_due_block"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/divider_one"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/bg_round_corner_payment_green"
+        android:paddingLeft="6dp"
+        android:paddingTop="5dp"
+        android:paddingRight="6dp"
+        android:paddingBottom="3dp">
+
+        <carbon.widget.ImageView
+            android:id="@+id/sum_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:translationY="-2dp"
+            app:srcCompat="@drawable/ic_sum_round_icon" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:layout_marginLeft="6dp"
+            android:layout_toEndOf="@+id/sum_image"
+            android:layout_toRightOf="@+id/sum_image"
+            android:text="Total Due"
+            android:textColor="@color/black"
+            app:fontFamily="@font/cairo_regular" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:gravity="center_horizontal"
+            android:text="----->"
+            android:textColor="@color/black"
+            app:fontFamily="@font/cairo_regular" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:text="11k BDT"
+            android:textColor="@color/black"
+            app:fontFamily="@font/cairo_regular" />
+
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/divider_two"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/sum_due_block"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:background="#41a7a7a7" />
+
+
+    <RelativeLayout
+        android:id="@+id/product_name_block"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/divider_two"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="8dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Product" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:gravity="center_horizontal"
+            android:text="----->" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:text="Dume Gang" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/starting_date_block"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/product_name_block"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="8dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Starting date" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:gravity="center_horizontal"
+            android:text="----->" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:text="Wed, Nov 13, 18" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/finishing_date_block"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/starting_date_block"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="8dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Finishing date" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:gravity="center_horizontal"
+            android:text="----->" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:text="Thu, Dec 13, 18" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/duration_block"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/finishing_date_block"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="12dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Duration" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:gravity="center_horizontal"
+            android:text="----->" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:text="One month" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/hack_for_divider"
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:layout_below="@id/duration_block"
+        android:background="@drawable/bg_round_corner_divider" />
+
+</RelativeLayout>
