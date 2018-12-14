@@ -10,6 +10,7 @@
     app:carbon_rippleColor="@color/colorAccent">
 
     <ImageView
+        android:id="@+id/skillDots"
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:layout_gravity="end"
@@ -18,85 +19,125 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
+        android:orientation="vertical">
 
         <LinearLayout
-            android:layout_width="120dp"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
-            <ImageView
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_gravity="center"
-                app:srcCompat="@drawable/education" />
+
+            <LinearLayout
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/categoryAvaterIV"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_gravity="center"
+                    app:srcCompat="@drawable/education" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/likeTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:drawableLeft="@drawable/ic_like"
+                        android:drawableStart="@drawable/ic_like"
+                        android:gravity="center"
+                        android:text="40%" />
+
+                    <TextView
+                        android:id="@+id/dislikeTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:drawableLeft="@drawable/ic_dislike"
+                        android:drawableStart="@drawable/ic_dislike"
+                        android:gravity="center"
+                        android:text="60%" />
+                </LinearLayout>
+
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/skillTitleTV"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Math | English"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+
+                <info.hoang8f.android.segmented.SegmentedGroup xmlns:segmentedgroup="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/segmentGroup"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:drawableLeft="@drawable/ic_like"
-                    android:drawableStart="@drawable/ic_like"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:text="40%" />
+
+                    android:orientation="horizontal"
+                    segmentedgroup:sc_border_width="1dp"
+                    segmentedgroup:sc_corner_radius="15dp"
+                    segmentedgroup:sc_tint_color="@color/colorAccent">
+
+                    <RadioButton
+                        android:id="@+id/buttonActive"
+                        style="@style/RadioButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="true"
+                        android:text="Active" />
+
+                    <RadioButton
+                        android:id="@+id/buttonInActive"
+                        style="@style/RadioButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Inactive" />
+                </info.hoang8f.android.segmented.SegmentedGroup>
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:id="@+id/skillAddDateTV"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:drawableLeft="@drawable/ic_dislike"
-                    android:drawableStart="@drawable/ic_dislike"
-                    android:text="60%" />
+                    android:gravity="end"
+                    android:text="12/10/2016" />
+
             </LinearLayout>
+
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Math | English"
-                android:textSize="18sp"
-                android:textColor="@color/black"/>
-            <info.hoang8f.android.segmented.SegmentedGroup
-                xmlns:segmentedgroup="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/segmented2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-                android:orientation="horizontal"
-                segmentedgroup:sc_border_width="1dp"
-                segmentedgroup:sc_corner_radius="15dp">
-
-                <RadioButton
-                    android:id="@+id/button21"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Active"
-                    style="@style/RadioButton"
-                    android:checked="true"/>
-
-                <RadioButton
-                    android:id="@+id/button22"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Inactive"
-                    style="@style/RadioButton" />
-            </info.hoang8f.android.segmented.SegmentedGroup>
+            <ImageView
+                android:id="@+id/skillToggleButtonIV"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:foregroundGravity="center"
+                app:srcCompat="@drawable/ic_keyboard_arrow_down_black_24dp" />
         </LinearLayout>
 
-
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/skillDetailsRV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
     </LinearLayout>
+
 
 </carbon.widget.FrameLayout>
