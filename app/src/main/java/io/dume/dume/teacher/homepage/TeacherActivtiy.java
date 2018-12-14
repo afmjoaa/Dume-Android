@@ -2,10 +2,11 @@ package io.dume.dume.teacher.homepage;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
@@ -24,50 +25,34 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.OrientationHelper;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.facebook.CustomTabMainActivity;
-import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.components.Legend;
-import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.data.LineData;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.MapStyleOptions;
-import com.tomergoldst.tooltips.ToolTip;
 import com.tomergoldst.tooltips.ToolTipsManager;
-import com.transitionseverywhere.TransitionManager;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import fr.castorflex.android.verticalviewpager.VerticalViewPager;
 import io.dume.dume.R;
 import io.dume.dume.student.pojo.CusStuAppComMapActivity;
-import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
 import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
-import io.dume.dume.teacher.adapters.FeedBackAdapter;
-import io.dume.dume.teacher.adapters.InboxAdapter;
-import io.dume.dume.teacher.adapters.ReportAdapter;
 import io.dume.dume.teacher.homepage.fragments.AcademicFragment;
 import io.dume.dume.teacher.homepage.fragments.InboxFragment;
 import io.dume.dume.teacher.homepage.fragments.PayFragment;
@@ -75,19 +60,19 @@ import io.dume.dume.teacher.homepage.fragments.PerformanceFragment;
 import io.dume.dume.teacher.homepage.fragments.SkillFragment;
 import io.dume.dume.teacher.homepage.fragments.StatisticsFragment;
 import io.dume.dume.teacher.mentor_settings.AccountSettings;
-import io.dume.dume.teacher.pojo.Feedback;
-import io.dume.dume.teacher.pojo.Inbox;
 import io.dume.dume.teacher.pojo.TabModel;
 import io.dume.dume.teacher.skill.SkillActivity;
 import io.dume.dume.util.DumeUtils;
-import io.dume.dume.util.GridSpacingItemDecoration;
 import q.rorbin.verticaltablayout.VerticalTabLayout;
 import q.rorbin.verticaltablayout.adapter.TabAdapter;
 import q.rorbin.verticaltablayout.widget.ITabView;
 import q.rorbin.verticaltablayout.widget.TabView;
 
+import static io.dume.dume.util.DumeUtils.animateImage;
 
-public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherContract.View, NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback, MyGpsLocationChangeListener {
+
+public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherContract.View,
+        NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback, MyGpsLocationChangeListener {
     private TeacherContract.Presenter presenter;
     private TextView textView;
     private Toolbar toolbar;
@@ -98,7 +83,10 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
     private NavigationView navigationView;
     ToolTipsManager mToolTipsManager;
     private Context context;
-
+    private int mNotificationsCount = 0;
+    private char mProfileChar = '!';
+    private int mChatCount = 0;
+    private int mRecPendingCount = 0, mRecAcceptedCount = 0, mRecCurrentCount = 0;
 
     private Menu menu;
     private MenuItem home, records, payments, messages, notifications, heat_map, free_cashback, settings, forum, help, selectAccount, infoItem, studentProfile, mentorProfile, bootCampProfile;
@@ -128,6 +116,10 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
     VerticalViewPager viewPager;
     @BindView(R.id.fragmentTitle)
     TextView fragmentTitle;
+    private CoordinatorLayout mainInterface;
+    private ImageView referMentorImageView;
+    private ImageView enhanceSkillImageView;
+    private ImageView freeCashBackImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,13 +134,6 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         getLocationPermission(mapFragment);
     }
 
-
-    @Override
-    public void onSheetChanges(boolean halfCrossed) {
-
-
-    }
-
     @Override
     public void init() {
         context = this;
@@ -159,10 +144,9 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         actionBar = getSupportActionBar();
         assert actionBar != null;
         actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeAsUpIndicator(R.drawable.drawer_menu);
+        Objects.requireNonNull(getSupportActionBar()).setHomeButtonEnabled(true);
         navigationView = findViewById(R.id.navigationView);
         mToolTipsManager = new ToolTipsManager();
-        initAdvance();
         menu = navigationView.getMenu();
 
         home = menu.findItem(R.id.home_id);
@@ -193,10 +177,45 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         secondaryAppBarLayout = findViewById(R.id.secondary_Appbar);
         secondaryCollapsableToolbar = findViewById(R.id.secondary_collapsing_toolbar);
         viewMusk = findViewById(R.id.view_musk);
-        mainAppbar = findViewById(R.id.mainAppBar);
+        mainAppbar = findViewById(R.id.my_appbarLayout);
+        mainInterface = findViewById(R.id.main_interface);
+        referMentorImageView = findViewById(R.id.refer_mentor_imageView);
+        enhanceSkillImageView = findViewById(R.id.enhance_skill_imageview);
+        freeCashBackImageView = findViewById(R.id.free_cashback_imageView);
+
+    }
+
+    @Override
+    public void configView() {
+        // Toolbar :: Transparent
+        mainAppbar.bringToFront();
+        mainAppbar.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+        //secondary appbar font fix
+        secondaryCollapsableToolbar.setCollapsedTitleTypeface(Typeface.createFromAsset(activity.getAssets(), "fonts/Cairo-Light.ttf"));
+        secondaryCollapsableToolbar.setExpandedTitleTypeface(Typeface.createFromAsset(activity.getAssets(), "fonts/Cairo-Light.ttf"));
+        secondaryCollapsableToolbar.setTitle("Messages");
+        //config the bottom sheet
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
         bottomSheetCallbackConfig();
+        //
+        initAdvance();
+        Objects.requireNonNull(getSupportActionBar()).setHomeAsUpIndicator(R.drawable.drawer_menu);
+        navigationView.setNavigationItemSelectedListener(this);
+    }
 
+    @Override
+    public void referMentorImageViewClicked() {
+        animateImage(referMentorImageView);
+    }
+
+    @Override
+    public void freeCashBackImageViewClicked() {
+        animateImage(freeCashBackImageView);
+    }
+
+    @Override
+    public void enhanceVIewImageClicked() {
+        animateImage(enhanceSkillImageView);
     }
 
 
@@ -206,7 +225,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
             @Override
             public void onGlobalLayout() {
 
-                bottomSheet.getLayoutParams().height = (bottomSheet.getHeight() - secondaryAppBarLayout.getHeight() - (int) (2 * (getResources().getDisplayMetrics().density)));
+                bottomSheet.getLayoutParams().height = (bottomSheet.getHeight() - secondaryAppBarLayout.getHeight() + (int) (0 * (getResources().getDisplayMetrics().density)));
                 bottomSheet.requestLayout();
                 bottomSheetBehavior.onLayoutChild(coordinatorLayout, bottomSheet, ViewCompat.LAYOUT_DIRECTION_LTR);
                 ViewTreeObserver obs = bottomSheet.getViewTreeObserver();
@@ -227,6 +246,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
 
                 if (BottomSheetBehavior.STATE_COLLAPSED == newState) {
+                    setDarkStatusBarIcon();
                     viewMusk.setVisibility(View.GONE);
                     secondaryAppBarLayout.setVisibility(View.GONE);
                     mainAppbar.setVisibility(View.VISIBLE);
@@ -256,7 +276,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
                 if (slideOffset > 0.0f && slideOffset < 1.0f) {
                     bottomSheet.animate().scaleX(1 + (slideOffset * 0.058f)).setDuration(0).start();
                     viewMusk.animate().alpha(2 * slideOffset).setDuration(0).start();
-                    //mainAppbar.animate().scaleX(1 - slideOffset).scaleY(1 - slideOffset).setDuration(0).start();
+                    mainInterface.animate().scaleX(1 - slideOffset).scaleY(1 - slideOffset).setDuration(0).start();
                     secondaryAppBarLayout.animate().alpha(slideOffset).scaleX(slideOffset).scaleY(slideOffset).setDuration(0).start();
                 }
             }
@@ -272,7 +292,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
 
     private void initAdvance() {
 
-
+        drawerLayout.setScrimColor(getResources().getColor(R.color.black_overlay));
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
             /** Called when a drawer has settled in a completely closed state. */
@@ -287,7 +307,6 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
                 setLightStatusBarIcon();
-
             }
         };
         drawerLayout.addDrawerListener(toggle);
@@ -339,10 +358,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
             public ITabView.TabIcon getIcon(int position) {
                 int normalIcon = tabModelArrayList.get(position).getNormalIcon();
                 int selected = tabModelArrayList.get(position).getSelectedIcon();
-
                 return new ITabView.TabIcon.Builder().setIcon(selected, normalIcon).build();
-
-
             }
 
             @Override
@@ -395,20 +411,50 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                drawerLayout.openDrawer(GravityCompat.START);
-                return true;
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.stu_homepage, menu);
+        MenuItem alProfile = menu.findItem(R.id.al_display_pic);
+        LayerDrawable alProfileIcon = (LayerDrawable) alProfile.getIcon();
+        DumeUtils.setBadgeChar(this, alProfileIcon, 0xfff56161, Color.BLACK, mProfileChar, 3.0f, 3.0f);
 
-        }
-        return super.onOptionsItemSelected(item);
+        MenuItem alNoti = menu.findItem(R.id.al_notifications);
+        LayerDrawable alNotiIcon = (LayerDrawable) alNoti.getIcon();
+        DumeUtils.setBadgeCount(this, alNotiIcon, R.id.ic_badge, 0xfface0ac, Color.BLACK, mNotificationsCount, 3.0f, 3.0f);
+
+        MenuItem alChat = menu.findItem(R.id.al_messages);
+        LayerDrawable alChatIcon = (LayerDrawable) alChat.getIcon();
+        DumeUtils.setBadgeCount(this, alChatIcon, R.id.ic_badge, 0xfface0ac, Color.BLACK, mChatCount, 3.0f, 3.0f);
+
+        MenuItem alRecords = menu.findItem(R.id.al_records);
+        LayerDrawable alRecordsIcon = (LayerDrawable) alRecords.getIcon();
+        DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badgeTwo, 0xfff56161, Color.BLACK, mRecCurrentCount, 3.0f, 3.0f);
+        DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badgeOne, 0xfff4f094, Color.BLACK, mRecAcceptedCount, 8.0f, -3.4f);
+        DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badge, 0xfface0ac, Color.BLACK, mRecPendingCount, 12.0f, 3.0f);
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        //  getMenuInflater().inflate(R.menu.actionbar_menu, menu);
-        return super.onCreateOptionsMenu(menu);
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.al_display_pic:
+                //mView.updateProfileBadge(mProfileChar);
+                break;
+            case R.id.al_records:
+                updateRecordsBadge(++mRecPendingCount, ++mRecAcceptedCount, ++mRecCurrentCount);
+                break;
+            case R.id.al_messages:
+                updateChatBadge(++mChatCount);
+                break;
+            case R.id.al_notifications:
+                updateNotificationsBadge(++mNotificationsCount);
+                break;
+
+        }
+        Drawable drawableGeneral = item.getIcon();
+        if (drawableGeneral instanceof Animatable) {
+            ((Animatable) drawableGeneral).start();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -421,7 +467,8 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
                 startActivity(new Intent(this, SkillActivity.class));
                 break;
         }
-        return false;
+        drawerLayout.closeDrawer(GravityCompat.START);
+        return true;
     }
 
     public void onHomePageViewClicked(View view) {
@@ -495,6 +542,37 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
     public void onMyGpsLocationChanged(Location location) {
 
     }
+
+    /*
+      Updates the count of notifications in the ActionBar starts here.
+    */
+    public void updateProfileBadge(char character) {
+        mProfileChar = character;
+        // force the ActionBar to relayout its MenuItems.
+        // onCreateOptionsMenu(Menu) will be called again.
+        invalidateOptionsMenu();
+    }
+
+    public void updateNotificationsBadge(int count) {
+        mNotificationsCount = count;
+        invalidateOptionsMenu();
+    }
+
+    public void updateChatBadge(int count) {
+        mChatCount = count;
+        invalidateOptionsMenu();
+    }
+
+    public void updateRecordsBadge(int penCount, int acptCount, int curCount) {
+        mRecPendingCount = penCount;
+        mRecAcceptedCount = acptCount;
+        mRecCurrentCount = curCount;
+        invalidateOptionsMenu();
+    }
+
+    /*
+      Updates the count of notifications in the ActionBar finishes here.
+    */
 
     class pager extends FragmentPagerAdapter {
 

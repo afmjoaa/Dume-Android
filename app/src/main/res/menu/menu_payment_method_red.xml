@@ -1,16 +1,22 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="io.dume.dume.student.studentSettings.StudentSettingsActivity">
+    tools:context="io.dume.dume.student.studentPayment.StudentPaymentActivity">
+    <item
+        android:id="@+id/action_made_default"
+        android:orderInCategory="100"
+        android:title="@string/set_default"
+        app:showAsAction="never" />
+
     <item
         android:id="@+id/action_edit"
-        android:orderInCategory="100"
+        android:orderInCategory="101"
         android:title="@string/edit"
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/Action_remove"
-        android:orderInCategory="100"
+        android:id="@+id/action_remove"
+        android:orderInCategory="102"
         android:title="@string/remove"
         app:showAsAction="never" />
 </menu>

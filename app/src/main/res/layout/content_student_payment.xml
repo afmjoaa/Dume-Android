@@ -58,6 +58,7 @@
                 android:layout_height="wrap_content"
                 android:clickable="true"
                 android:focusable="true"
+                android:onClick="onPaymentViewClicked"
                 android:foreground="?android:attr/selectableItemBackground"
                 android:orientation="vertical"
                 android:paddingStart="16dp"
@@ -135,6 +136,7 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:foreground="?android:attr/selectableItemBackground"
+                android:onClick="onPaymentViewClicked"
                 android:orientation="vertical"
                 android:paddingStart="16dp"
                 android:paddingLeft="16dp"
@@ -201,7 +203,7 @@
                         android:ellipsize="end"
                         android:maxLines="1"
                         android:singleLine="true"
-                        android:text="10k BDT"
+                        android:text="BDT 10k"
                         android:textAppearance="?android:attr/textAppearanceListItem"
                         android:textSize="13sp"
                         app:fontFamily="@font/cairo_regular" />
@@ -238,6 +240,7 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:foreground="?android:attr/selectableItemBackground"
+                android:onClick="onPaymentViewClicked"
                 android:orientation="vertical"
                 android:paddingStart="16dp"
                 android:paddingLeft="16dp"
@@ -327,8 +330,8 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:foreground="?android:attr/selectableItemBackground"
-                android:orientation="vertical"
                 android:onClick="onPaymentViewClicked"
+                android:orientation="vertical"
                 android:paddingStart="16dp"
                 android:paddingLeft="16dp"
                 android:paddingEnd="18dp"
@@ -404,6 +407,7 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:foreground="?android:attr/selectableItemBackground"
+                android:onClick="onPaymentViewClicked"
                 android:orientation="vertical"
                 android:paddingStart="16dp"
                 android:paddingLeft="16dp"
@@ -443,9 +447,10 @@
                         android:maxWidth="150dp"
                         android:maxLines="1"
                         android:singleLine="true"
-                        android:text="Total earning"
+                        android:text="Dume count"
                         android:textAppearance="?android:attr/textAppearanceListItem"
                         app:fontFamily="@font/cairo_regular" />
+                    <!--Total earned-->
 
                     <TextView
                         android:id="@+id/text_two"
@@ -457,9 +462,10 @@
                         android:maxWidth="150dp"
                         android:maxLines="1"
                         android:singleLine="true"
-                        android:text="Total paid"
+                        android:text="Total spend"
                         android:textAppearance="?android:attr/textAppearanceSmall"
                         app:fontFamily="@font/cairo_regular" />
+                    <!--Total obligation paid-->
                 </LinearLayout>
 
                 <!--value holder -->
@@ -483,7 +489,7 @@
                         android:ellipsize="end"
                         android:maxLines="1"
                         android:singleLine="true"
-                        android:text="40k BDT"
+                        android:text="10"
                         android:textAppearance="?android:attr/textAppearanceListItem"
                         android:textSize="13sp"
                         app:fontFamily="@font/cairo_regular" />
@@ -497,13 +503,134 @@
                         android:ellipsize="end"
                         android:maxLines="1"
                         android:singleLine="true"
-                        android:text="10k BDT"
+                        android:text="BDT 10k"
                         android:textAppearance="?android:attr/textAppearanceSmall"
                         android:textSize="12sp"
                         app:fontFamily="@font/cairo_regular" />
                 </LinearLayout>
 
             </RelativeLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/secondary_hide_able_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="18dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="10dp"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/main_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pay for Dumes with cash"
+                android:textAllCaps="false"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                app:fontFamily="@font/cairo_regular" />
+
+            <RelativeLayout
+                android:id="@+id/id_block"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/bg_round_corner_payment_green"
+                android:paddingLeft="6dp"
+                android:paddingTop="5dp"
+                android:paddingRight="8dp"
+                android:paddingBottom="3dp"
+                android:paddingEnd="8dp"
+                android:paddingStart="6dp"
+                android:visibility="gone">
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:layout_marginLeft="6dp"
+                    android:text="Bkash ID :"
+                    android:textColor="@color/black"
+                    app:fontFamily="@font/cairo_regular" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:gravity="center_horizontal"
+                    android:text="----->"
+                    android:textColor="@color/black"
+                    app:fontFamily="@font/cairo_regular" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:text="01536100076"
+                    android:textColor="@color/black"
+                    app:fontFamily="@font/cairo_regular" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/ref_block"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_round_corner_payment_green"
+                android:paddingLeft="6dp"
+                android:paddingTop="5dp"
+                android:paddingRight="8dp"
+                android:paddingBottom="3dp"
+                android:paddingStart="6dp"
+                android:paddingEnd="8dp"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:layout_marginLeft="6dp"
+                    android:text="Ref :"
+                    android:textColor="@color/black"
+                    app:fontFamily="@font/cairo_regular" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:gravity="center_horizontal"
+                    android:text="----->"
+                    android:textColor="@color/black"
+                    app:fontFamily="@font/cairo_regular" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:text="joaa"
+                    android:textColor="@color/black"
+                    app:fontFamily="@font/cairo_regular" />
+
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/sub_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/cash_payment_detail"
+                android:textAllCaps="false"
+                android:textColor="@color/textColorPrimary"
+                android:textSize="16sp"
+                android:layout_marginTop="10dp"
+                app:fontFamily="@font/cairo_regular" />
 
         </LinearLayout>
 

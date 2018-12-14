@@ -547,6 +547,8 @@ provided.Tap salary for details.  </string>
     <string name="recent_used_places">Recently Used Places</string>
     <string name="edit">Edit</string>
     <string name="remove">Remove</string>
+    <string name="cash_payment_detail">The amount is shown in the agreement which is to be paid to your respective mentor at the end of the agreement period, its will also be shown at the completed records and payment obligation.</string>
+    <string name="set_default">Set default</string>
 
     <string-array name="primaryPromoText">
         <item>Affortable nearby couching-centers specific to the topic</item>
@@ -634,7 +636,7 @@ provided.Tap salary for details.  </string>
     <string-array name="payment_methods">
         <item>Cash</item>
         <item>Bkash</item>
-        <item>NexusPay</item>
+        <item>NexusPay/Rocket</item>
     </string-array>
 
     <string-array name="connecting_colors">
@@ -642,5 +644,10 @@ provided.Tap salary for details.  </string>
         <item>#F00000</item>
         <item>#0000FF</item>
         <item>#00F000</item>
+    </string-array>
+
+    <string-array name="add_payment_methods">
+        <item>Bkash</item>
+        <item>NexusPay/Rocket</item>
     </string-array>
 </resources>

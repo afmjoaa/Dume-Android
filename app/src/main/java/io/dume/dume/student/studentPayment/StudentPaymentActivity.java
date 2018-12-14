@@ -1,6 +1,8 @@
 package io.dume.dume.student.studentPayment;
 
 import android.annotation.TargetApi;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -20,6 +22,8 @@ import android.view.ViewGroup;
 import android.widget.AutoCompleteTextView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Switch;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,8 +33,15 @@ import io.dume.dume.student.grabingLocation.MenualRecyclerData;
 import io.dume.dume.student.grabingLocation.PlaceMenualRecyAda;
 import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
 import io.dume.dume.student.studentHelp.StudentHelpActivity;
+import io.dume.dume.student.studentPayment.adapterAndData.ObligationAndClaimAdapter;
+import io.dume.dume.student.studentPayment.adapterAndData.ObligationAndClaimData;
 import io.dume.dume.student.studentPayment.adapterAndData.PaymentAdapter;
 import io.dume.dume.student.studentPayment.adapterAndData.PaymentData;
+import io.dume.dume.student.studentPayment.adapterAndData.PromotionAdapter;
+import io.dume.dume.student.studentPayment.adapterAndData.PromotionData;
+import io.dume.dume.student.studentPayment.adapterAndData.TransactionData;
+import io.dume.dume.student.studentPayment.adapterAndData.TransactionHistoryAdapter;
+import io.dume.dume.util.RadioBtnDialogue;
 
 import static io.dume.dume.util.DumeUtils.configAppbarTittle;
 import static io.dume.dume.util.DumeUtils.configureAppbar;
@@ -45,6 +56,11 @@ public class StudentPaymentActivity extends CustomStuAppCompatActivity implement
     private String[] paymentName;
     private RelativeLayout addPromoRelativeLayout;
     private LinearLayout mainLayoutContent;
+    private RelativeLayout promotionsView;
+    private LinearLayout secondaryHideAbleLayout;
+    private RelativeLayout idBlock;
+    private RelativeLayout refBlock;
+    private String[] paymentMethodArr;
 
 
     @Override
@@ -56,10 +72,49 @@ public class StudentPaymentActivity extends CustomStuAppCompatActivity implement
         mPresenter.studentPaymentEnqueue();
         configureAppbar(this, "Payment");
         //payment method recycler
-        paymentAdapter = new PaymentAdapter(this, getFinalData());
+        paymentAdapter = new PaymentAdapter(this, getFinalData()) {
+            @Override
+            protected void OnButtonClicked(View v, String methodName) {
+                switch (methodName) {
+                    case "Cash":
+                        onCashClicked();
+                        break;
+                    case "Bkash":
+                        onBkashClicked();
+                        break;
+                    case "NexusPay/Rocket":
+                        onNexusPayClicked();
+                        break;
+                }
+            }
+        };
         paymentRecycleView.setAdapter(paymentAdapter);
         paymentRecycleView.setLayoutManager(new LinearLayoutManager(this));
 
+    }
+
+    private void onCashClicked() {
+        mainLayoutContent.setVisibility(View.GONE);
+        secondaryHideAbleLayout.setVisibility(View.VISIBLE);
+        idBlock.setVisibility(View.GONE);
+        refBlock.setVisibility(View.GONE);
+        configAppbarTittle(StudentPaymentActivity.this, paymentName[0]);
+    }
+
+    private void onBkashClicked() {
+        mainLayoutContent.setVisibility(View.GONE);
+        secondaryHideAbleLayout.setVisibility(View.VISIBLE);
+        idBlock.setVisibility(View.VISIBLE);
+        refBlock.setVisibility(View.VISIBLE);
+        configAppbarTittle(StudentPaymentActivity.this, paymentName[1]);
+    }
+
+    private void onNexusPayClicked() {
+        mainLayoutContent.setVisibility(View.GONE);
+        secondaryHideAbleLayout.setVisibility(View.VISIBLE);
+        idBlock.setVisibility(View.VISIBLE);
+        refBlock.setVisibility(View.VISIBLE);
+        configAppbarTittle(StudentPaymentActivity.this, paymentName[2]);
     }
 
     @Override
@@ -68,14 +123,12 @@ public class StudentPaymentActivity extends CustomStuAppCompatActivity implement
         paymentName = getResources().getStringArray(R.array.payment_methods);
         addPromoRelativeLayout = findViewById(R.id.add_promotion_layout);
         mainLayoutContent = findViewById(R.id.hide_able_host);
+        promotionsView = findViewById(R.id.promotion_relative_layout);
+        secondaryHideAbleLayout = findViewById(R.id.secondary_hide_able_layout);
+        idBlock = findViewById(R.id.id_block);
+        refBlock = findViewById(R.id.ref_block);
+        paymentMethodArr = this.getResources().getStringArray(R.array.add_payment_methods);
 
-    }
-
-    @Override
-    public void onAddPromoCodeApplied() {
-        mainLayoutContent.setVisibility(View.GONE);
-        configAppbarTittle(StudentPaymentActivity.this, "Add Promo Code");
-        getSupportFragmentManager().beginTransaction().replace(R.id.content, new ApplyPromoCodeFragment()).commit();
     }
 
     @Override
@@ -88,6 +141,67 @@ public class StudentPaymentActivity extends CustomStuAppCompatActivity implement
 
     }
 
+    @Override
+    public void onAddPromoCodeApplied() {
+        mainLayoutContent.setVisibility(View.GONE);
+        configAppbarTittle(StudentPaymentActivity.this, "Add Promo Code");
+        getSupportFragmentManager().beginTransaction().replace(R.id.content, new ApplyPromoCodeFragment()).commit();
+    }
+
+    @Override
+    public void onViewPromotionsClicked() {
+        mainLayoutContent.setVisibility(View.GONE);
+        configAppbarTittle(StudentPaymentActivity.this, "Promotions");
+        getSupportFragmentManager().beginTransaction().replace(R.id.content, new ViewPromotionsFragment()).commit();
+    }
+
+    @Override
+    public void onTransactionHistoryClicked() {
+        mainLayoutContent.setVisibility(View.GONE);
+        configAppbarTittle(StudentPaymentActivity.this, "Your History");
+        getSupportFragmentManager().beginTransaction().replace(R.id.content, new ViewTransactionHistoryFragment()).commit();
+    }
+
+    @Override
+    public void onObligtionClaimClicked() {
+        mainLayoutContent.setVisibility(View.GONE);
+        configAppbarTittle(StudentPaymentActivity.this, "Obligations");
+        getSupportFragmentManager().beginTransaction().replace(R.id.content, new ViewObligationFragment()).commit();
+    }
+
+    @Override
+    public void onAddPaymentMethod() {
+        Bundle pRargs = new Bundle();
+        pRargs.putString("title", "Select payment method");
+        pRargs.putStringArray("radioOptions", paymentMethodArr);
+        RadioBtnDialogue addPaymentDialogue = new RadioBtnDialogue();
+        addPaymentDialogue.setItemChoiceListener(new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+               // selectGenderTextView.setText(genderSelcetionArr[i]);
+                Toast.makeText(StudentPaymentActivity.this, "fucked that", Toast.LENGTH_SHORT).show();
+            }
+        });
+        addPaymentDialogue.setArguments(pRargs);
+        addPaymentDialogue.show(getSupportFragmentManager(), "payment_method_dialogue");
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            if(mainLayoutContent.getVisibility() == View.VISIBLE){
+                super.onBackPressed();
+            }else{
+                configAppbarTittle(StudentPaymentActivity.this, "Payment");
+                mainLayoutContent.setVisibility(View.VISIBLE);
+                secondaryHideAbleLayout.setVisibility(View.GONE);
+            }
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     public List<PaymentData> getFinalData() {
         List<PaymentData> data = new ArrayList<>();
         int[] imageIcons = {
@@ -95,7 +209,7 @@ public class StudentPaymentActivity extends CustomStuAppCompatActivity implement
                 R.drawable.ic_bkash_icon,
                 R.drawable.ic_nexus_pay_icon
         };
-        int[] paymentDefaultValue = {1,0,0};
+        int[] paymentDefaultValue = {1, 0, 0};
 
         for (int i = 0; i < paymentName.length; i++) {
             PaymentData current = new PaymentData();
@@ -154,12 +268,12 @@ public class StudentPaymentActivity extends CustomStuAppCompatActivity implement
         }
     }
 
-    //testing the apply promo code fragment up
+    //testing the view promo code fragments
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class ViewPromotionsFragment extends Fragment {
 
         private StudentPaymentActivity myMainActivity;
-        private AutoCompleteTextView queryTextView;
+        private RecyclerView pCustomRecyclerView;
 
         @Override
         public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -171,7 +285,94 @@ public class StudentPaymentActivity extends CustomStuAppCompatActivity implement
         @Override
         public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
             myMainActivity = (StudentPaymentActivity) getActivity();
-            View rootView = inflater.inflate(R.layout.custom_contact_up_fragment, container, false);
+            View rootView = inflater.inflate(R.layout.p_custom_recycler_row, container, false);
+            pCustomRecyclerView = rootView.findViewById(R.id.p_recycler_view);
+
+            //menual one
+            List<PromotionData> promotionData = new ArrayList<>();
+            PromotionAdapter promotionAdapter = new PromotionAdapter(myMainActivity, promotionData);
+            pCustomRecyclerView.setAdapter(promotionAdapter);
+            pCustomRecyclerView.setLayoutManager(new LinearLayoutManager(myMainActivity));
+            return rootView;
+        }
+
+        @Override
+        public boolean onOptionsItemSelected(MenuItem item) {
+            int id = item.getItemId();
+            if (id == android.R.id.home) {
+                startActivity(new Intent(getActivity(), StudentPaymentActivity.class));
+                return true;
+            }
+            return super.onOptionsItemSelected(item);
+        }
+    }
+
+
+    //testing the view transaction history fragment
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    public static class ViewTransactionHistoryFragment extends Fragment {
+
+        private StudentPaymentActivity myMainActivity;
+        private RecyclerView pCustomRecyclerView;
+
+        @Override
+        public void onCreate(@Nullable Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            setHasOptionsMenu(true);
+        }
+
+        @Nullable
+        @Override
+        public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+            myMainActivity = (StudentPaymentActivity) getActivity();
+            View rootView = inflater.inflate(R.layout.p_custom_recycler_row, container, false);
+            pCustomRecyclerView = rootView.findViewById(R.id.p_recycler_view);
+
+            //menual one
+            List<TransactionData> transactionData = new ArrayList<>();
+            TransactionHistoryAdapter transactionHistoryAdapter = new TransactionHistoryAdapter(myMainActivity, transactionData);
+            pCustomRecyclerView.setAdapter(transactionHistoryAdapter);
+            pCustomRecyclerView.setLayoutManager(new LinearLayoutManager(myMainActivity));
+            return rootView;
+        }
+
+        @Override
+        public boolean onOptionsItemSelected(MenuItem item) {
+            int id = item.getItemId();
+            if (id == android.R.id.home) {
+                startActivity(new Intent(getActivity(), StudentPaymentActivity.class));
+                return true;
+            }
+            return super.onOptionsItemSelected(item);
+        }
+    }
+
+
+    //testing the Obligation fragment
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    public static class ViewObligationFragment extends Fragment {
+
+        private StudentPaymentActivity myMainActivity;
+        private RecyclerView pCustomRecyclerView;
+
+        @Override
+        public void onCreate(@Nullable Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            setHasOptionsMenu(true);
+        }
+
+        @Nullable
+        @Override
+        public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+            myMainActivity = (StudentPaymentActivity) getActivity();
+            View rootView = inflater.inflate(R.layout.p_custom_recycler_row, container, false);
+            pCustomRecyclerView = rootView.findViewById(R.id.p_recycler_view);
+
+            //menual one
+            List<ObligationAndClaimData> transactionData = new ArrayList<>();
+            ObligationAndClaimAdapter obligationAndClaimAdapter = new ObligationAndClaimAdapter(myMainActivity, transactionData);
+            pCustomRecyclerView.setAdapter(obligationAndClaimAdapter);
+            pCustomRecyclerView.setLayoutManager(new LinearLayoutManager(myMainActivity));
             return rootView;
         }
 

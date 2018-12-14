@@ -39,7 +39,7 @@ public class RadioBtnDialogue extends DialogFragment {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(getActivity()), R.style.RadioDialogTheme);
         builder.setTitle(title).setSingleChoiceItems(radioOptions, 0, myListener)
-                .setPositiveButton("Set", new DialogInterface.OnClickListener() {
+                .setPositiveButton("Select", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         Toast.makeText(getActivity(), "Set", Toast.LENGTH_SHORT).show();

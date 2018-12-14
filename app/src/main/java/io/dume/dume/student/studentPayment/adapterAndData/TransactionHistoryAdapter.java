@@ -11,14 +11,14 @@ import java.util.List;
 
 import io.dume.dume.R;
 
-public class PromotionAdapter extends RecyclerView.Adapter<PromotionAdapter.MyViewHolder> {
+public class TransactionHistoryAdapter extends RecyclerView.Adapter<TransactionHistoryAdapter.MyViewHolder> {
 
-    private static final String TAG = "PromotionAdapter";
+    private static final String TAG = "TransactionHistoryAdapt";
     private LayoutInflater inflater;
     private Context context;
-    private List<PromotionData> data;
+    private List<TransactionData> data;
 
-    public PromotionAdapter(Context context, List<PromotionData> data) {
+    public TransactionHistoryAdapter(Context context, List<TransactionData> data) {
         inflater = LayoutInflater.from(context);
         this.data = data;
         this.context = context;
@@ -27,8 +27,8 @@ public class PromotionAdapter extends RecyclerView.Adapter<PromotionAdapter.MyVi
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = inflater.inflate(R.layout.custom_promotion_row, viewGroup, false);
-        PromotionAdapter.MyViewHolder holder = new PromotionAdapter.MyViewHolder(view);
+        View view = inflater.inflate(R.layout.custom_transaction_history_row, viewGroup, false);
+        TransactionHistoryAdapter.MyViewHolder holder = new TransactionHistoryAdapter.MyViewHolder(view);
         return holder;
     }
 
@@ -43,10 +43,10 @@ public class PromotionAdapter extends RecyclerView.Adapter<PromotionAdapter.MyVi
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
-
         public MyViewHolder(View itemView) {
             super(itemView);
         }
     }
-
 }
+
+

@@ -33,6 +33,18 @@ public class StudentPaymentPresenter implements StudentPaymentContract.Presenter
             case R.id.add_promotion_layout:
                 mView.onAddPromoCodeApplied();
                 break;
+            case R.id.promotion_relative_layout:
+                mView.onViewPromotionsClicked();
+                break;
+            case R.id.recycler_container_layout:
+                mView.onTransactionHistoryClicked();
+                break;
+            case R.id.obligation_or_claim_layout:
+                mView.onObligtionClaimClicked();
+                break;
+            case R.id.add_payment_layout:
+                mView.onAddPaymentMethod();
+                break;
 
         }
     }
