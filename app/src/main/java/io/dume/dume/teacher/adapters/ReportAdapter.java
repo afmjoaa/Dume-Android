@@ -15,7 +15,6 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ReportVH> 
     @Override
     public ReportVH onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         final View inflate = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.activity_main_report_view_item, viewGroup, false);
-
         return new ReportVH(inflate);
     }
 

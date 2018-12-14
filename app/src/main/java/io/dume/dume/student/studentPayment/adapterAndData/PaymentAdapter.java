@@ -2,20 +2,23 @@ package io.dume.dume.student.studentPayment.adapterAndData;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
 import io.dume.dume.R;
 
-public class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter.MyViewHolder> {
+public abstract class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter.MyViewHolder> {
 
     private static final String TAG = "PaymentAdapter";
     private LayoutInflater inflater;
@@ -23,7 +26,7 @@ public class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter.MyViewHo
     private List<PaymentData> data;
     private RelativeLayout.LayoutParams params;
 
-    public PaymentAdapter(Context context , List<PaymentData> data){
+    public PaymentAdapter(Context context, List<PaymentData> data) {
         inflater = LayoutInflater.from(context);
         this.data = data;
         this.context = context;
@@ -42,19 +45,52 @@ public class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter.MyViewHo
         PaymentData current = data.get(position);
         params = (RelativeLayout.LayoutParams) myViewHolder.textContainer.getLayoutParams();
         myViewHolder.mainText.setText(current.primaryText);
-        if(current.secondaryValue== 1){
+        myViewHolder.mainIcon.setImageResource(current.imageSrc);
+
+        if (current.secondaryValue == 1) {
             myViewHolder.subText.setVisibility(View.VISIBLE);
             params.setMargins(0, (int) (10 * (context.getResources().getDisplayMetrics().density)), 0, (int) (10 * (context.getResources().getDisplayMetrics().density)));
             myViewHolder.textContainer.setLayoutParams(params);
-        }else {
+        } else {
             myViewHolder.subText.setVisibility(View.GONE);
-            //button margin fix
             params.setMargins(0, (int) (15 * (context.getResources().getDisplayMetrics().density)), 0, (int) (15 * (context.getResources().getDisplayMetrics().density)));
             myViewHolder.textContainer.setLayoutParams(params);
         }
-        myViewHolder.mainIcon.setImageResource(current.imageSrc);
-       //fixing the padding here
+        //fixing the padding here
+        myViewHolder.hostingLayout.setOnClickListener(view -> OnButtonClicked(view, current.primaryText));
+        myViewHolder.moreVertIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(myViewHolder.getAdapterPosition() == 0){
+                    PopupMenu popup = new PopupMenu(context, view);
+                    popup.inflate(R.menu.menu_payment_method_cash_only);
+                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem menuItem) {
+                            int itemId = menuItem.getItemId();
+                            Toast.makeText(context, "fucked it.....", Toast.LENGTH_SHORT).show();
+                            return false;
+                        }
+                    });
+                    popup.show();
+                }else{
+                    PopupMenu popup = new PopupMenu(context, view);
+                    popup.inflate(R.menu.menu_payment_method_red);
+                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem menuItem) {
+                            int itemId = menuItem.getItemId();
+                            Toast.makeText(context, "fucked it.....", Toast.LENGTH_SHORT).show();
+                            return false;
+                        }
+                    });
+                    popup.show();
+                }
+            }
+        });
     }
+
+    protected abstract void OnButtonClicked(View v, String methodName);
 
     @Override
     public int getItemCount() {

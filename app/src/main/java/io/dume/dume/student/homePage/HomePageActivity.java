@@ -487,7 +487,6 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
         if (drawableGeneral instanceof Animatable) {
             ((Animatable) drawableGeneral).start();
         }
-
         return super.onOptionsItemSelected(item);
     }
 

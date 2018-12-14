@@ -5,9 +5,11 @@
     android:id="@+id/drawerLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".teacher.homepage.TeacherActivtiy"
+    android:background="@drawable/background_vector"
     android:fitsSystemWindows="true"
+    tools:context=".teacher.homepage.TeacherActivtiy"
     tools:openDrawer="start">
+
     <io.dume.dume.customView.WindowInsetsFrameLayout
         android:id="@+id/map_container"
         android:layout_width="match_parent"
@@ -24,16 +26,26 @@
             android:fitsSystemWindows="true" />
 
     </io.dume.dume.customView.WindowInsetsFrameLayout>
-    <include layout="@layout/activity_main_content" />
+
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/view_musk"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorBlack"
+        android:fitsSystemWindows="true"
+        android:orientation="vertical"
+        android:visibility="gone" />
+
+    <include layout="@layout/activity_main_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
     <android.support.design.widget.NavigationView
         android:id="@+id/navigationView"
         android:layout_width="300dp"
         android:layout_height="match_parent"
-        android:layout_gravity="start"
         android:background="@color/white"
-        android:clickable="true"
-        android:focusable="true"
+        android:layout_gravity="start"
         android:fitsSystemWindows="true"
         app:itemBackground="@drawable/drawer_item_background"
         app:itemIconTint="@drawable/drawer_item_icontint"
@@ -41,7 +53,6 @@
         app:menu="@menu/activity_homepage_drawer">
 
         <include layout="@layout/stu_nav_header_homepage" />
-
 
     </android.support.design.widget.NavigationView>
 

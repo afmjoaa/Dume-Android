@@ -47,7 +47,9 @@
             android:value="@string/google_maps_key" />
         <!-- google map api metadata finishes here -->
 
-        <activity android:name=".teacher.homepage.TeacherActivtiy" />
+        <activity
+            android:name=".teacher.homepage.TeacherActivtiy"
+            android:label="" />
         <activity
             android:name=".splash.SplashActivity"
             android:theme="@style/SplashTheme">

@@ -35,9 +35,7 @@
         android:background="@color/colorBlack"
         android:fitsSystemWindows="true"
         android:orientation="vertical"
-        android:visibility="gone">
-
-    </FrameLayout>
+        android:visibility="gone" />
 
 
     <include

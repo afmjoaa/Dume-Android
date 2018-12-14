@@ -30,6 +30,7 @@ public class TeacherPresenter implements TeacherContract.Presenter {
     @Override
     public void init() {
         view.init();
+        view.configView();
         model.getFeedBack(new TeacherContract.Model.Listener<ArrayList<Feedback>>() {
             @Override
             public void onSuccess(ArrayList<Feedback> list) {
@@ -97,9 +98,17 @@ public class TeacherPresenter implements TeacherContract.Presenter {
     public void onViewInteracted(View component) {
         switch (component.getId()) {
             case R.id.switch_account_btn:
-
                 view.onSwitchAccount();
+                break;
 
+            case R.id.refer_mentor_imageView:
+                view.referMentorImageViewClicked();
+                break;
+            case R.id.free_cashback_imageView:
+                view.freeCashBackImageViewClicked();
+                break;
+            case R.id.enhance_skill_imageview:
+                view.enhanceVIewImageClicked();
                 break;
 
         }
