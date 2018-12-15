@@ -72,13 +72,40 @@
 
     </android.support.design.widget.AppBarLayout>
 
-
     <android.support.v4.view.ViewPager
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/tabViewPager"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+    <LinearLayout
+        android:id="@+id/no_data_block"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:visibility="gone"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <carbon.widget.ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/no_data_wallpaper"
+            android:translationY="-46dp"
+            app:carbon_elevation="3dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sorry, no item to show right now ..."
+            android:textSize="16sp"
+            android:textAlignment="center"
+            android:translationY="-38dp"
+            android:textAllCaps="false"
+            android:textColor="@color/textColorSecondary"/>
+
+    </LinearLayout>
 
 
 </android.support.design.widget.CoordinatorLayout>

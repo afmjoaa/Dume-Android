@@ -49,7 +49,7 @@ public class SearchResultTabRecyAda extends RecyclerView.Adapter<SearchResultTab
 
     @Override
     public int getItemCount() {
-        return 10;
+        return data.size();
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {

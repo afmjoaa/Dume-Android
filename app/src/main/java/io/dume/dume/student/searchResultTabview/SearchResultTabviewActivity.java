@@ -54,6 +54,7 @@ public class SearchResultTabviewActivity extends CustomStuAppCompatActivity impl
             R.drawable.ic_tic_accept_ratio
     };
     private TabLayout tabLayout;
+    private LinearLayout noDataBlock;
 
 
     @Override
@@ -107,7 +108,7 @@ public class SearchResultTabviewActivity extends CustomStuAppCompatActivity impl
     public void findView() {
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         mViewPager = (ViewPager) findViewById(R.id.container);
-
+        noDataBlock = findViewById(R.id.no_data_block);
     }
 
     @Override
@@ -256,6 +257,11 @@ public class SearchResultTabviewActivity extends CustomStuAppCompatActivity impl
 
             //setting the recycler view
             List<SearchResultTabData> recordData = new ArrayList<>();
+            if(recordData.size()== 0){
+                myThisActivity.noDataBlock.setVisibility(View.VISIBLE);
+            }else{
+                myThisActivity.noDataBlock.setVisibility(View.GONE);
+            }
             SearchResultTabRecyAda recordsRecyAda = new SearchResultTabRecyAda(myThisActivity, recordData);
             searchResultTabRecyclerView.setAdapter(recordsRecyAda);
             searchResultTabRecyclerView.setLayoutManager(new LinearLayoutManager(myThisActivity));
