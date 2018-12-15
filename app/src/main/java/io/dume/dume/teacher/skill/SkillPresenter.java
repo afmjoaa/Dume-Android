@@ -16,6 +16,7 @@ public class SkillPresenter implements SkillContract.Presenter {
     @Override
     public void enqueue() {
         view.init();
+        view.loadSkillRV(null);
     }
 
     @Override

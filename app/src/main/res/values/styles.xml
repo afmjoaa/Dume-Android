@@ -329,6 +329,15 @@
     <style name="ProgressBarStyleDown">
         <item name="colorAccent">@color/light_red</item>
     </style>
+    <style name="TabRadioButton">
+        <item name="android:textColor">@drawable/button_text_color</item>
+        <item name="android:minHeight">25dp</item>
+        <item name="android:minWidth">50dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:button">@null</item>
+        <item name="android:paddingLeft">5dp</item>
+        <item name="android:paddingRight">5dp</item>
+    </style>
 
     <!--<style name="CustomPopupTheme" parent="ThemeOverlay.AppCompat.Dark">
         &lt;!&ndash; if using android.widget.PopupMenu &ndash;&gt;

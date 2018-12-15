@@ -4,20 +4,25 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.view.LayoutInflater;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.dume.dume.R;
 import io.dume.dume.customView.HorizontalLoadView;
+import io.dume.dume.teacher.adapters.SkillAdapter;
 import io.dume.dume.teacher.crudskill.CrudSkillActivity;
 import io.dume.dume.util.DumeUtils;
 
 public class SkillActivity extends AppCompatActivity implements SkillContract.View, View.OnClickListener {
     @BindView(R.id.skillLoad)
     HorizontalLoadView loadView;
-
+    @BindView(R.id.skillRV)
+    RecyclerView skillRV;
     private SkillContract.Presenter presenter;
     private FloatingActionButton fabAdd;
 
@@ -36,6 +41,7 @@ public class SkillActivity extends AppCompatActivity implements SkillContract.Vi
         DumeUtils.configureAppbar(this, "Skill Management");
         fabAdd = findViewById(R.id.fabAdd);
         fabAdd.setOnClickListener(this);
+
     }
 
     @Override
@@ -69,6 +75,12 @@ public class SkillActivity extends AppCompatActivity implements SkillContract.Vi
     public void goToCrudActivity(String action) {
         Intent intent = new Intent(this, CrudSkillActivity.class).setAction(action);
         startActivity(intent);
+    }
+
+    @Override
+    public void loadSkillRV(ArrayList list) {
+        skillRV.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        skillRV.setAdapter(new SkillAdapter(SkillAdapter.ACTIVITY));
     }
 
 
