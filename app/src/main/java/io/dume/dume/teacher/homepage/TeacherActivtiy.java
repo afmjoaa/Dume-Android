@@ -411,8 +411,8 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         scaleTextView.animateText(sequence);
         scaleTextView.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Cairo_Regular.ttf"));
         scaleTextView.setAnimationListener(hTextView -> {
-            scaleTextView.setSelected(true);
-        });
+
+        });  scaleTextView.setSelected(true);
     }
 
     public void toggle(android.view.View view) {

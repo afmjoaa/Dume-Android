@@ -21,6 +21,8 @@ import io.dume.dume.R;
 import io.dume.dume.teacher.adapters.PayAdapter;
 import io.dume.dume.teacher.homepage.TeacherContract;
 import io.dume.dume.teacher.pojo.Pay;
+import io.dume.dume.util.DumeUtils;
+import io.dume.dume.util.GridSpacingItemDecoration;
 
 public class PayFragment extends Fragment {
     @BindView(R.id.payRV)
@@ -39,7 +41,11 @@ public class PayFragment extends Fragment {
         if (mViewModel == null) {
             mViewModel = new PayViewModel();
         }
+        int[] wh = DumeUtils.getScreenSize(container.getContext());
+        int spacing = (int) ((wh[0] - ((336) * (getResources().getDisplayMetrics().density))) / 3);
         payRv.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        //testing code
+        payRv.addItemDecoration(new GridSpacingItemDecoration(2, spacing, true));
         mViewModel.getPayDetails(new TeacherContract.Model.Listener<ArrayList<Pay>>() {
             @Override
             public void onSuccess(ArrayList<Pay> list) {
@@ -51,7 +57,6 @@ public class PayFragment extends Fragment {
                 Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
             }
         });
-
         return root;
     }
 
