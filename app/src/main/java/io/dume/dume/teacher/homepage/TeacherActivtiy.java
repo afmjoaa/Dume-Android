@@ -35,6 +35,8 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,6 +53,7 @@ import java.util.Objects;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import fr.castorflex.android.verticalviewpager.VerticalViewPager;
+import info.hoang8f.android.segmented.SegmentedGroup;
 import io.dume.dume.R;
 import io.dume.dume.student.pojo.CusStuAppComMapActivity;
 import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
@@ -73,7 +76,8 @@ import static io.dume.dume.util.DumeUtils.animateImage;
 
 
 public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherContract.View,
-        NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback, MyGpsLocationChangeListener {
+        NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback, MyGpsLocationChangeListener,
+        RadioGroup.OnCheckedChangeListener {
     private TeacherContract.Presenter presenter;
     private TextView textView;
     private Toolbar toolbar;
@@ -123,6 +127,10 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
     private ImageView referMentorImageView;
     private ImageView enhanceSkillImageView;
     private ImageView freeCashBackImageView;
+    private SegmentedGroup radioSegmentGroup;
+    private RadioButton buttonActive;
+    private RadioButton buttonInActive;
+    private TextView userName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -185,7 +193,10 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         referMentorImageView = findViewById(R.id.refer_mentor_imageView);
         enhanceSkillImageView = findViewById(R.id.enhance_skill_imageview);
         freeCashBackImageView = findViewById(R.id.free_cashback_imageView);
-
+        radioSegmentGroup = findViewById(R.id.segmentGroup);
+        buttonActive = findViewById(R.id.buttonActive);
+        buttonInActive = findViewById(R.id.buttonInActive);
+        userName = findViewById(R.id.user_name);
     }
 
     @Override
@@ -204,6 +215,8 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         initAdvance();
         Objects.requireNonNull(getSupportActionBar()).setHomeAsUpIndicator(R.drawable.drawer_menu);
         navigationView.setNavigationItemSelectedListener(this);
+        //listener for the active inactive radio btn
+        radioSegmentGroup.setOnCheckedChangeListener(this);
     }
 
     @Override
@@ -319,11 +332,11 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         ButterKnife.bind(this);
         ArrayList<TabModel> tabModelArrayList = new ArrayList<>();
         tabModelArrayList.add(new TabModel(R.drawable.performance, R.drawable.performance_selected, 0, "Performance"));
-        tabModelArrayList.add(new TabModel(R.drawable.inbox, R.drawable.inbox, 0, "Inbox"));
-        tabModelArrayList.add(new TabModel(R.drawable.pay, R.drawable.pay, 0, "Pay"));
-        tabModelArrayList.add(new TabModel(R.drawable.ic_cross_check, R.drawable.ic_cross_check, 3, "Statistics"));
-        tabModelArrayList.add(new TabModel(R.drawable.skills, R.drawable.skills, 0, "Manage Skills"));
-        tabModelArrayList.add(new TabModel(R.drawable.education, R.drawable.education, 0, "Academic"));
+        tabModelArrayList.add(new TabModel(R.drawable.inbox, R.drawable.inbox_selected, 0, "Inbox"));
+        tabModelArrayList.add(new TabModel(R.drawable.pay, R.drawable.pay_selceted, 0, "Pay"));
+        tabModelArrayList.add(new TabModel(R.drawable.ic_statistics, R.drawable.ic_statistics_selected, 3, "Statistics"));
+        tabModelArrayList.add(new TabModel(R.drawable.skills, R.drawable.skills_selected, 0, "Manage Skills"));
+        tabModelArrayList.add(new TabModel(R.drawable.academics_icon, R.drawable.academics_icon_selected, 0, "Academic"));
         tabLayout.setTabAdapter(new TabAdapter() {
 
             @Override
@@ -333,14 +346,10 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
 
             @Override
             public ITabView.TabBadge getBadge(int position) {
-
-
                 if (tabModelArrayList.get(position).getBadge() > 0) {
-
                     return new ITabView.TabBadge.Builder().setBadgeNumber(2).setBadgeText(tabModelArrayList.get(position).getBadge() + "").build();
                 }
                 return null;
-
             }
 
             @Override
@@ -569,6 +578,26 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         mRecAcceptedCount = acptCount;
         mRecCurrentCount = curCount;
         invalidateOptionsMenu();
+    }
+
+    @Override
+    public void onCheckedChanged(RadioGroup radioGroup, int checkedId) {
+        switch (checkedId) {
+            case R.id.buttonActive:
+                Toast.makeText(this, "You are active on Dume network now", Toast.LENGTH_SHORT).show();
+                userName.setText("Demo User(Active)");
+                buttonActive.setCompoundDrawablesWithIntrinsicBounds(R.drawable.state_active_active, 0, 0, 0);
+                buttonInActive.setCompoundDrawablesWithIntrinsicBounds(R.drawable.state_inactive_inactive, 0, 0, 0);
+                break;
+            case R.id.buttonInActive:
+                Toast.makeText(this, "You are inactive on Dume network now", Toast.LENGTH_SHORT).show();
+                userName.setText("Demo User(Inactive)");
+                buttonActive.setCompoundDrawablesWithIntrinsicBounds(R.drawable.state_active_inactive, 0, 0, 0);
+                buttonInActive.setCompoundDrawablesWithIntrinsicBounds(R.drawable.state_inactive_active, 0, 0, 0);
+                break;
+            default:
+                // Nothing to do
+        }
     }
 
     /*

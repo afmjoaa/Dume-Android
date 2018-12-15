@@ -62,6 +62,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import info.hoang8f.android.segmented.SegmentedGroup;
 import io.dume.dume.R;
 import io.dume.dume.common.aboutUs.AboutUsActivity;
 import io.dume.dume.common.inboxActivity.InboxActivity;
@@ -140,6 +141,7 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
     private ImageView referMentorImageView;
     private RecyclerView hPageBSRecycler;
     private String[] feedbackStrings;
+    private SegmentedGroup radioSegmentGroup;
 
 
     @Override
@@ -260,6 +262,7 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
         freeCashbackImageView = findViewById(R.id.free_cashback_imageView);
         hPageBSRecycler = findViewById(R.id.homePage_bottomSheet_recycler);
         feedbackStrings = getResources().getStringArray(R.array.review_hint_text_dependent);
+        radioSegmentGroup = findViewById(R.id.segmentGroup);
     }
 
     @Override
@@ -347,6 +350,8 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
 
     @Override
     public void configHomePage() {
+        //hiding the segment group
+        radioSegmentGroup.setVisibility(View.GONE);
         fab.setAlpha(0.90f);
         drawer.setScrimColor(getResources().getColor(R.color.black_overlay));
 

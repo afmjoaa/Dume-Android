@@ -89,7 +89,6 @@
                         android:id="@+id/segmentGroup"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-
                         android:orientation="horizontal"
                         segmentedgroup:sc_border_width="1dp"
                         segmentedgroup:sc_corner_radius="15dp"

@@ -23,11 +23,8 @@
             android:id="@+id/profile_data"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="0dp"
             android:onClick="onHomePageViewClicked"
-            android:orientation="vertical"
-            android:padding="0dp">
-
+            android:orientation="vertical">
 
             <ImageView
                 android:id="@+id/user_dp"
@@ -40,10 +37,10 @@
 
             <TextView
                 android:id="@+id/user_name"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingTop="@dimen/nav_header_vertical_spacing"
-                android:text="Demo User"
+                android:paddingTop="10dp"
+                android:text="Demo User(Active)"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 android:textColor="#EBF6FE"
                 android:textSize="17sp" />
@@ -68,7 +65,7 @@
             android:id="@+id/mentor_add_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="17dp"
+            android:layout_marginTop="15dp"
             android:onClick="onHomePageViewClicked"
             android:orientation="vertical"
             android:padding="0dp">
@@ -103,28 +100,71 @@
 
     </LinearLayout>
 
-    <Button
-
-        android:id="@+id/switch_account_btn"
-        style="?android:attr/borderlessButtonStyle"
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_marginEnd="5dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginBottom="55dp"
-        android:drawableStart="@drawable/student_account_icon"
-        android:drawableLeft="@drawable/student_account_icon"
-        android:drawableEnd="@drawable/more_icon"
-        android:drawableRight="@drawable/more_icon"
-        android:drawablePadding="0dp"
-        android:gravity="start|center_vertical"
-        android:onClick="onNavigationHeaderClick"
-        android:paddingStart="15dp"
-        android:paddingLeft="15dp"
-        android:paddingEnd="10dp"
-        android:paddingRight="10dp"
-        android:stateListAnimator="@null" />
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="68dp">
+
+        <info.hoang8f.android.segmented.SegmentedGroup xmlns:segmentedgroup="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/segmentGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="6dp"
+            android:orientation="horizontal"
+            segmentedgroup:sc_border_width="1dp"
+            segmentedgroup:sc_corner_radius="6dp"
+            segmentedgroup:sc_tint_color="@color/nav_header_active">
+
+            <RadioButton
+                android:id="@+id/buttonActive"
+                style="@style/RadioButton"
+                android:layout_width="38dp"
+                android:layout_height="30dp"
+                android:checked="true"
+                android:drawableStart="@drawable/state_active_active"
+                android:drawableLeft="@drawable/state_active_active"
+                android:paddingStart="8dp"
+                android:paddingLeft="8dp"
+                android:paddingEnd="0dp"
+                android:paddingRight="0dp" />
+
+            <RadioButton
+                android:id="@+id/buttonInActive"
+                style="@style/RadioButton"
+                android:layout_width="38dp"
+                android:layout_height="30dp"
+                android:drawableStart="@drawable/state_inactive_inactive"
+                android:drawableLeft="@drawable/state_inactive_inactive"
+                android:paddingStart="7dp"
+                android:paddingLeft="7dp"
+                android:paddingEnd="0dp"
+                android:paddingRight="0dp" />
+
+        </info.hoang8f.android.segmented.SegmentedGroup>
+
+        <Button
+            android:id="@+id/switch_account_btn"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="76dp"
+            android:layout_height="34dp"
+            android:layout_below="@+id/segmentGroup"
+            android:background="@drawable/round_btn_joaa"
+            android:drawableStart="@drawable/student_account_icon"
+            android:drawableLeft="@drawable/student_account_icon"
+            android:drawableEnd="@drawable/more_icon"
+            android:drawableRight="@drawable/more_icon"
+            android:gravity="start|center_vertical"
+            android:onClick="onNavigationHeaderClick"
+            android:paddingStart="10dp"
+            android:paddingLeft="10dp"
+            android:paddingEnd="10dp"
+            android:paddingRight="10dp" />
+    </RelativeLayout>
+
 
 </android.support.design.widget.CoordinatorLayout>
 
