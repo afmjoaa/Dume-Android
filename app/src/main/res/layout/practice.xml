@@ -4,33 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <carbon.widget.LinearLayout
-        android:layout_width="match_parent"
+    <android.support.v7.widget.SwitchCompat
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:layout_margin="5dp"
-        android:background="@color/white"
-        android:gravity="bottom">
 
-        <LinearLayout
-            android:layout_width="50dp"
-            android:layout_height="40dp"
-            android:background="#340143"
-            android:gravity="center">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                app:srcCompat="@drawable/ic_tips" />
-        </LinearLayout>
-
-        <com.hanks.htextview.scale.ScaleTextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="this is init sentence"
-
-            android:textSize="16sp" />
-    </carbon.widget.LinearLayout>
+        />
 
 </FrameLayout>

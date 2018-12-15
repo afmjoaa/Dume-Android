@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +15,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.dume.dume.R;
 import io.dume.dume.teacher.adapters.SkillAdapter;
+import io.dume.dume.util.DumeUtils;
+import io.dume.dume.util.GridSpacingItemDecoration;
 
 public class SkillFragment extends Fragment {
 
@@ -31,7 +33,12 @@ public class SkillFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.skill_fragment, container, false);
         ButterKnife.bind(this, root);
-        skillRV.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+
+        assert container != null;
+        int[] wh = DumeUtils.getScreenSize(container.getContext());
+        int spacing = (int) ((wh[0] - ((336) * (getResources().getDisplayMetrics().density))) / 3);
+        skillRV.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        skillRV.addItemDecoration(new GridSpacingItemDecoration(2, spacing, true));
         skillRV.setAdapter(new SkillAdapter(SkillAdapter.FRAGMENT));
         return root;
     }
