@@ -39,6 +39,7 @@ public class AuthModel implements AuthContract.Model, SplashContract.Model, Phon
     private DataStore datastore = null;
     private final FirebaseFirestore firestore;
     private ListenerRegistration listenerRegistration;
+    private ListenerRegistration listenerRegistration1;
 
 
     public AuthModel(Activity activity, Context context) {
@@ -110,10 +111,11 @@ public class AuthModel implements AuthContract.Model, SplashContract.Model, Phon
         Log.w(TAG, "isExistingUser: ");
         listener.onStart();
         // final boolean[] isexists = {false};
-        firestore.collection("mini_users").whereEqualTo("phone_number", phoneNumber).addSnapshotListener(new EventListener<QuerySnapshot>() {
+        listenerRegistration1 = firestore.collection("mini_users").whereEqualTo("phone_number", phoneNumber).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 List<DocumentSnapshot> documents = null;
+                detachListener();
                 if (queryDocumentSnapshots != null) {
                     documents = queryDocumentSnapshots.getDocuments();
                     if (documents.size() >= 1) {
@@ -215,9 +217,11 @@ public class AuthModel implements AuthContract.Model, SplashContract.Model, Phon
                 account_major = o == null ? "" : o.toString();
                 assert account_major != null;
                 if (account_major.equals("teacher")) {
+                    detachListener();
                     listener.onTeacherFound();
                 } else {
                     listener.onStudentFound();
+                    detachListener();
                 }
             } else {
                 listener.onFail("Does not found any user");
@@ -231,7 +235,10 @@ public class AuthModel implements AuthContract.Model, SplashContract.Model, Phon
     public void detachListener() {
         if (listenerRegistration != null) {
             listenerRegistration.remove();
+        } if (listenerRegistration1 != null) {
+            listenerRegistration1.remove();
         }
+
     }
 
 

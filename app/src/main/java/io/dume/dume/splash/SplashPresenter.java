@@ -46,6 +46,7 @@ public class SplashPresenter implements SplashContract.Presenter {
                     model.detachListener();
                     view.gotoTeacherActivity();
                     Log.w(TAG, "onTeacherFound: ");
+
                 }
 
                 @Override
@@ -60,6 +61,7 @@ public class SplashPresenter implements SplashContract.Presenter {
 
                 }
             });
+
         } else {
             view.gotoLoginActivity();
             Log.w(TAG, "enqueue: login");
