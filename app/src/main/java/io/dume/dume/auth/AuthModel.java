@@ -6,7 +6,10 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+<<<<<<< HEAD
 import com.google.android.gms.tasks.OnCompleteListener;
+=======
+>>>>>>> masterenam
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseException;
@@ -221,9 +224,10 @@ public class AuthModel implements AuthContract.Model, SplashContract.Model, Phon
                 Log.w(TAG, "onAccountTypeFound: " + documentSnapshot.toString());
                 Log.e(TAG, "Fucked Here : " + documentSnapshot.toString());
 
+                detachListener();
                 Object o = documentSnapshot.get("account_major");
-                if (datastore != null ) {
-                    if ( datastore.getAccountManjor() != null){
+                if (datastore != null) {
+                    if (datastore.getAccountManjor() != null) {
                         Map<String, Object> newMap = new HashMap<>();
                         newMap.put("account_major", datastore.getAccountManjor());
                         final Task<Void> mini_users1 = firestore.collection("mini_users").document(user.getUid()).update(newMap).addOnFailureListener(new OnFailureListener() {
@@ -232,7 +236,8 @@ public class AuthModel implements AuthContract.Model, SplashContract.Model, Phon
                                 Log.e(TAG, "onFailure: Enam " + e.getLocalizedMessage());
                             }
                         }).addOnCompleteListener(task -> {
-                            Log.e(TAG, "addOnCompleteListener: Enam " );
+
+                            Log.e(TAG, "addOnCompleteListener: Enam ");
                             String account_major = "";
                             account_major = datastore.getAccountManjor();
                             assert account_major != null;
@@ -242,11 +247,12 @@ public class AuthModel implements AuthContract.Model, SplashContract.Model, Phon
                                 listener.onTeacherFound();
                             }
                         });
-                    }else {
-                        Log.w(TAG, "onAccountTypeFound: UnKnown Error" );
+
+                    } else {
+                        Log.w(TAG, "onAccountTypeFound: UnKnown Error");
                     }
 
-                }else {
+                } else {
                     String account_major = "";
                     assert o != null;
                     account_major = o.toString();
@@ -270,7 +276,8 @@ public class AuthModel implements AuthContract.Model, SplashContract.Model, Phon
     public void detachListener() {
         if (listenerRegistration != null) {
             listenerRegistration.remove();
-        } if (listenerRegistration1 != null) {
+        }
+        if (listenerRegistration1 != null) {
             listenerRegistration1.remove();
         }
 

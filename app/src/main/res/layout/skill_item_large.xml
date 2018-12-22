@@ -3,21 +3,26 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="10dp"
-    app:carbon_cornerRadius="10dp"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:layout_marginTop="10dp"
+    app:carbon_cornerRadius="6dp"
+    app:carbon_elevation="1dp"
     app:carbon_rippleColor="@color/colorAccent">
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:background="@color/white"
-        android:padding="10dp">
+        android:padding="7dp">
 
         <ImageView
             android:id="@+id/skillDots"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_gravity="end"
+            android:layout_margin="5dp"
+            android:padding="3dp"
             app:srcCompat="@drawable/ic_more_vert_black_24dp" />
 
         <LinearLayout
@@ -32,8 +37,8 @@
 
 
                 <LinearLayout
-                    android:layout_width="100dp"
-                    android:layout_height="match_parent"
+                    android:layout_width="90dp"
+                    android:layout_height="wrap_content"
                     android:orientation="vertical">
 
                     <ImageView
@@ -53,10 +58,9 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_weight="1"
-                            android:drawableLeft="@drawable/ic_like"
-                            android:drawableStart="@drawable/ic_like"
                             android:gravity="center"
-                            android:text="40%" />
+                            android:text="40% likes"
+                            android:textStyle="italic" />
 
                         <TextView
                             android:id="@+id/dislikeTV"
@@ -66,14 +70,23 @@
                             android:drawableLeft="@drawable/ic_dislike"
                             android:drawableStart="@drawable/ic_dislike"
                             android:gravity="center"
-                            android:text="60%" />
+                            android:text="60%"
+                            android:visibility="gone" />
                     </LinearLayout>
 
                 </LinearLayout>
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="#eee4e3e4"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="5dp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:orientation="vertical">
 
                     <TextView
@@ -81,65 +94,75 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
-                        android:text="Math | English"
-                        android:textColor="@color/black"
+                        android:layout_weight="1"
+                        android:text="Math, English,Phsysics"
                         android:textSize="16sp" />
 
-                    <info.hoang8f.android.segmented.SegmentedGroup xmlns:segmentedgroup="http://schemas.android.com/apk/res-auto"
-                        android:id="@+id/segmentGroup"
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        segmentedgroup:sc_border_width="1dp"
-                        segmentedgroup:sc_corner_radius="15dp"
-                        segmentedgroup:sc_tint_color="@color/colorAccent">
+                        android:layout_gravity="center_vertical"
+                        android:gravity="center">
 
-                        <RadioButton
-                            android:id="@+id/buttonActive"
-                            style="@style/RadioButton"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                        <android.support.v7.widget.SwitchCompat
+                            android:layout_width="40dp"
+                            android:layout_height="20dp"
+                            android:layout_marginBottom="1dp"
+                            android:layout_marginEnd="10dp"
+                            android:layout_marginRight="10dp"
+                            android:layout_marginTop="1dp"
+                            android:layout_weight="1"
                             android:checked="true"
-                            android:text="Active" />
+                            android:thumb="@drawable/thumb_selector"
+                            app:track="@drawable/switch_track" />
 
-                        <RadioButton
-                            android:id="@+id/buttonInActive"
-                            style="@style/RadioButton"
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="10dp"
+                            android:background="#eee4e3e4" />
+
+                        <TextView
+
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Inactive" />
-                    </info.hoang8f.android.segmented.SegmentedGroup>
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="10dp"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="BDT 5k" />
+
+                    </LinearLayout>
 
                     <TextView
                         android:id="@+id/skillAddDateTV"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_margin="1dp"
+                        android:layout_weight="1"
                         android:gravity="end"
-                        android:text="12/10/2016" />
+                        android:text="12/10/2016"
+                        android:visibility="gone" />
 
+                    <ImageView
+                        android:id="@+id/skillToggleButtonIV"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center"
+                        android:layout_marginEnd="40dp"
+                        android:layout_marginRight="40dp"
+                        android:layout_weight="1"
+                        app:srcCompat="@drawable/ic_keyboard_arrow_down_black_24dp" />
                 </LinearLayout>
 
 
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
 
-                <ImageView
-                    android:id="@+id/skillToggleButtonIV"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_gravity="center"
-                    android:foregroundGravity="center"
-                    app:srcCompat="@drawable/ic_keyboard_arrow_down_black_24dp" />
-            </LinearLayout>
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/skillDetailsRV"
                 android:layout_width="match_parent"
-                android:layout_height="300dp"
+                android:layout_height="150dp"
                 android:background="@color/colorAccent"
                 android:visibility="gone" />
         </LinearLayout>
