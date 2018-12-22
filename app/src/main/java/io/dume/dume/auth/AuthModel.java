@@ -5,11 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.util.Log;
-
-<<<<<<< HEAD
-import com.google.android.gms.tasks.OnCompleteListener;
-=======
->>>>>>> masterenam
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseException;
