@@ -107,6 +107,7 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:gravity="center"
+                    android:text="Performance"
                     android:textColor="@color/colorLink"
                     android:textSize="18sp"
                     android:textStyle="bold" />

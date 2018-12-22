@@ -3,12 +3,19 @@ package io.dume.dume.afterSplashTrp.adapter;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import carbon.widget.ImageView;
 import io.dume.dume.R;
+import io.dume.dume.afterSplashTrp.AfterSplashActivity;
+import io.dume.dume.student.grabingInfo.GrabingInfoActivity;
 
 public class DemoCardFragment extends Fragment
         implements View.OnClickListener {
@@ -16,21 +23,26 @@ public class DemoCardFragment extends Fragment
     private static final String ARG_ID = "id";
     private static final String ARG_TITLE = "title";
     private static final String ARG_DESCRIPTION = "description";
+    private static final String ARG_IMAGERESOURCE = "imageId";
+    private static final String TAG = "DemoCardFragment";
 
-    private int id;
+    private int id, imageSrc;
     private String title, description;
     private OnActionListener actionListener;
+    private Context context;
+    private AfterSplashActivity myMainActivity;
 
     public DemoCardFragment() {
 
     }
 
-    public static DemoCardFragment newInstance(int id, String title, String description) {
+    public static DemoCardFragment newInstance(int id, String title, String description, int imageSrc) {
         DemoCardFragment fragment = new DemoCardFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_ID, id);
         args.putString(ARG_TITLE, title);
         args.putString(ARG_DESCRIPTION, description);
+        args.putInt(ARG_IMAGERESOURCE, imageSrc);
         fragment.setArguments(args);
         return fragment;
     }
@@ -42,23 +54,49 @@ public class DemoCardFragment extends Fragment
             this.id = getArguments().getInt(ARG_ID);
             this.title = getArguments().getString(ARG_TITLE);
             this.description = getArguments().getString(ARG_DESCRIPTION);
+            this.imageSrc = getArguments().getInt(ARG_IMAGERESOURCE);
         }
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.trp_fragment_after_splash_cardview, container, false);
-
         TextView tvTitle = (TextView) v.findViewById(R.id.tvTitle);
         TextView tvDescription = (TextView) v.findViewById(R.id.tvDescription);
-        Button button = (Button) v.findViewById(R.id.button);
-
+        ImageView afterSplashImageView = v.findViewById(R.id.after_splash_imageview);
         tvTitle.setText(title);
         tvDescription.setText(description);
-
-
+        afterSplashImageView.setImageResource(imageSrc);
         return v;
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            myMainActivity = (AfterSplashActivity) getActivity();
+            if(myMainActivity!= null){
+                switch (id){
+                    case 0:
+                        myMainActivity.afterSplashBtn.setText("Next");
+                        break;
+                    case 1:
+                        myMainActivity.afterSplashBtn.setText("Next");
+                        break;
+                    case 2:
+                        myMainActivity.afterSplashBtn.setText("Accept & continue");
+                        break;
+                    case 3:
+                        myMainActivity.afterSplashBtn.setText("Next");
+                        break;
+                    case 4:
+                        myMainActivity.afterSplashBtn.setText("Start dume");
+                        break;
+                }
+            }
+        }else{
+
+        }
     }
 
     @Override
@@ -78,6 +116,7 @@ public class DemoCardFragment extends Fragment
 
     @Override
     public void onAttach(Context context) {
+        this.context = context;
         super.onAttach(context);
         if (context instanceof OnActionListener) {
             actionListener = (OnActionListener) context;

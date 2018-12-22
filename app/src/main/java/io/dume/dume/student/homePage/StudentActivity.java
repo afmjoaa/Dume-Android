@@ -69,13 +69,13 @@ public class StudentActivity extends AppCompatActivity implements StudentContrac
 
     @Override
     public void goTORecordsActivity2() {
-        startActivity(new Intent(this, SearchResultActivity.class));
+        startActivity(new Intent(this, SearchLoadingActivity.class));
         //startActivityForResult(new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI), REQUEST_CODE_PICK_CONTACTS);
     }
 
     @Override
     public void goTORecordsActivity3() {
-        startActivity(new Intent(this, CrudSkillActivity.class).setAction(DumeUtils.STUDENT));
+        startActivity(new Intent(this, CrudSkillActivity.class).setAction(DumeUtils.BOOTCAMP));
 
     }
 

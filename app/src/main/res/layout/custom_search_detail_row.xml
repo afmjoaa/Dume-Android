@@ -56,24 +56,19 @@
     </LinearLayout>
 
 
-    <carbon.widget.TextView
+    <Button
         android:id="@+id/search_interact_info"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="80dp"
+        android:layout_height="40dp"
+        android:background="@drawable/round_btn_joaa"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:paddingLeft="10dp"
-        android:paddingTop="4dp"
-        android:paddingRight="10dp"
-        android:paddingBottom="4dp"
-        android:singleLine="true"
         android:text="Change"
         android:textAllCaps="false"
         android:textColor="@color/colorLink"
         android:textSize="14sp"
-        app:carbon_rippleColor="#8c000000"
-        app:carbon_rippleStyle="background"
         app:fontFamily="@font/cairo_regular" />
 
     <View

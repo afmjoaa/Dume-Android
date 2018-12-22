@@ -12,6 +12,7 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import io.dume.dume.R;
+import io.dume.dume.util.DumeUtils;
 
 public class HorizontalLoadView extends View implements ValueAnimator.AnimatorUpdateListener {
 
@@ -36,8 +37,9 @@ public class HorizontalLoadView extends View implements ValueAnimator.AnimatorUp
 
     private void init(Context context, AttributeSet attr) {
         activity = (Activity) context;
-        mDisplayWidth = activity.getWindow().getWindowManager().getDefaultDisplay().getWidth();
-        valueAnimator = ValueAnimator.ofInt(15, mDisplayWidth - 30);
+        int[] mDisplayWidth = DumeUtils.getScreenSize(context);
+        int startPoint = (int) (8 * (getResources().getDisplayMetrics().density));
+        valueAnimator = ValueAnimator.ofInt(startPoint, (mDisplayWidth[0] - (startPoint*2)));
         valueAnimator.setRepeatMode(ValueAnimator.REVERSE);
         valueAnimator.setRepeatCount(ValueAnimator.INFINITE);
         valueAnimator.setDuration(750);
@@ -48,8 +50,8 @@ public class HorizontalLoadView extends View implements ValueAnimator.AnimatorUp
             paint.setColor(typedArray.getColor(R.styleable.HorizontalLoadView_rect_color, Color.BLACK));
             typedArray.recycle();
         } else paint.setColor(Color.BLACK);
-        widthRight = 15;
-        rectangle = new Rect(0, 0, widthRight, 8);
+        widthRight = (int) (15 * (getResources().getDisplayMetrics().density));
+        rectangle = new Rect(0, 0, widthRight, (int) (8 * (getResources().getDisplayMetrics().density)));
 
     }
 
@@ -59,13 +61,13 @@ public class HorizontalLoadView extends View implements ValueAnimator.AnimatorUp
     }
 
 
-   public void startLoading() {
+    public void startLoading() {
         valueAnimator.addUpdateListener(this);
         valueAnimator.start();
         isRunning = true;
     }
 
-   public void stopLoading() {
+    public void stopLoading() {
         if (valueAnimator != null) {
             valueAnimator.end();
             isRunning = false;

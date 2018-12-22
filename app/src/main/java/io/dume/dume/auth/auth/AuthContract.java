@@ -39,7 +39,7 @@ public interface AuthContract {
 
         void goToRegesterActivity(DataStore dataStore);
 
-        void showProgress(String titile, String message);
+        void showProgress();
 
         void hideProgress();
 

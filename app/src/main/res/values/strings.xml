@@ -3,7 +3,7 @@
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
     <string name="dume">Dume</string>
-    <string name="socialConnect">Or Connect with Social by signing in as ..</string>
+    <string name="socialConnect">Or connect with social by signing in as ..</string>
     <string-array name="promo_text_array">
         <item> Searching Teachers, Mentors, Couching or boot camp Dume got you all  covered</item>
         <item> Dume will find you the best mentor on your demand, whenever you need</item>
@@ -53,7 +53,6 @@
     <string name="title_activity_maps">Map</string>
     <string name="refresh">Refresh</string>
     <string name="intro1">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fugiat,</string>
-    nam.
     <string name="intro2">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloremque impedit ipsum nostrum odit officia rerum?</string>
     <string name="intro3">Lorem ipsum dolor sit amet, consectetur adipisicing elit. At, sit!</string>
     <string name="intro4">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</string>
@@ -650,4 +649,24 @@ provided.Tap salary for details.  </string>
         <item>Bkash</item>
         <item>NexusPay/Rocket</item>
     </string-array>
+
+    <string name="agree_terms"><![CDATA[Agree to Privacy Policy & Terms of Services]]></string>
+    <string name="afterSplashTitleOne">Set default</string>
+
+    <string-array name="after_splash_title">
+        <item>Find mentor anytime and anywhere</item>
+        <item>Real time service for student and mentor</item>
+        <item>Let Dume to access your location</item>
+        <item>Choose between Student, Mentor or Boot-camp profile</item>
+        <item>Search between Dume Gang, Regular Dume or Instant Dume  package</item>
+    </string-array>
+
+    <string-array name="after_splash_data">
+        <item>Welcome to Dume platform.It\'s a full featured skill share app of all category and type.</item>
+        <item><![CDATA[Know something better then other!! Start sharing and earn money.Don\'t have anything to share don\'t worry start taking dume and be the best at what you do.]]></item>
+        <item><![CDATA[Dume would like to access your current location for proper functioning & better search result.]]></item>
+        <item>Select which category suite you best and build your profile.You can switch profile anytime as you wish.</item>
+        <item>In simple and short Dume Gang is couching center whereas Regular Dume is monthly tuition and Instant Dume is weekly.</item>
+    </string-array>
+
 </resources>

@@ -20,7 +20,6 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.animation.FastOutLinearInInterpolator;
 import android.support.v4.view.animation.LinearOutSlowInInterpolator;
@@ -43,8 +42,6 @@ import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -68,13 +65,13 @@ import java.util.Objects;
 import carbon.widget.RelativeLayout;
 import io.dume.dume.R;
 import io.dume.dume.inter_face.OnTabModificationListener;
-import io.dume.dume.student.grabingLocation.GrabingLocationActivity;
 import io.dume.dume.student.grabingPackage.GrabingPackageActivity;
 import io.dume.dume.student.pojo.CusStuAppComMapActivity;
 import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
 import io.dume.dume.teacher.model.LocalDb;
 import io.dume.dume.util.DumeUtils;
 import io.dume.dume.util.OnViewClick;
+import io.dume.dume.util.RadioBtnDialogue;
 import io.dume.dume.util.VisibleToggleClickListener;
 
 public class GrabingInfoActivity extends CusStuAppComMapActivity implements GrabingInfoContract.View,
@@ -143,7 +140,11 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
     private String contactID;     // contacts unique ID
     private ArrayList<String> endOfNest;
     private String tempThreeHint;
-
+    private Boolean contactPermissionGranted = false;
+    private RelativeLayout secondContactLayout;
+    private carbon.widget.ImageView secondContactImageView;
+    private TextView secondContactPerson;
+    private TextView secondContactPersonNum;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -170,16 +171,11 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
         //mSectionsPagerAdapter.notifyDataSetChanged();
         setDarkStatusBarIcon();
         onNewTabCreated("Enam");
-        //AccessContact();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-    }
-
-    private void createTabDynamically() {
-
     }
 
     @Override
@@ -200,6 +196,10 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
         selectFromContact = findViewById(R.id.select_other_contact);
         endOfNest = new ArrayList<>(Arrays.asList("Subject", "Field", "Software", "Language", "Flavour", "Type", "Course", " Language "));
 
+        secondContactLayout = findViewById(R.id.second_contact);
+        secondContactImageView = findViewById(R.id.account_icon_two);
+        secondContactPerson = findViewById(R.id.account_type_textview_two);
+        secondContactPersonNum = findViewById(R.id.account_type_textview_two_value);
 
         //testing code
         wh = DumeUtils.getScreenSize(this);
@@ -314,28 +314,6 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                         }
                     }
                 }
-                /*switch (tabPosition) {
-                    case 0:
-                        hintIdOne.setText(givenInfo[tabPosition]);
-                        hintIdTwo.setText(givenInfo[tabPosition + 1]);
-                        hintIdThree.setText(givenInfo[tabPosition + 2]);
-                        break;
-                    case 1:
-                    case 2:
-                    case 3:
-                    case 4:
-                        hintIdOne.setText(givenInfo[tabPosition - 1]);
-                        hintIdTwo.setText(givenInfo[tabPosition]);
-                        hintIdThree.setText(givenInfo[tabPosition + 1]);
-                        break;
-                    case 5:
-                        hintIdOne.setText(givenInfo[tabPosition - 2]);
-                        hintIdTwo.setText(givenInfo[tabPosition - 1]);
-                        hintIdThree.setText(givenInfo[tabPosition]);
-                        break;
-                    default:
-                        break;
-                }*/
             }
 
             @Override
@@ -505,6 +483,7 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
             }
 
         });
+
     }
 
     @Override
@@ -607,12 +586,10 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
         mPresenter.onGrabingInfoViewIntracted(view);
     }
 
-
     public void getAction() {
         switch (Objects.requireNonNull(retrivedAction)) {
             case DumeUtils.STUDENT:
                 selected_category_position = getIntent().getIntExtra(DumeUtils.SELECTED_ID, 0);
-                createTabDynamically();
                 queryList.add(new LocalDb().getCategories().get(selected_category_position));
                 queryListName.add("Category");
                 break;
@@ -620,13 +597,18 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                 selected_category_position = getIntent().getIntExtra(DumeUtils.SELECTED_ID, 0);
                 forMeWrapper.setVisibility(View.GONE);
                 toolbar.setTitle("Select Skill");
-                createTabDynamically();
+                queryList.add(new LocalDb().getCategories().get(selected_category_position));
+                queryListName.add("Category");
+                break;
+            case DumeUtils.BOOTCAMP:
+                selected_category_position = getIntent().getIntExtra(DumeUtils.SELECTED_ID, 0);
+                forMeWrapper.setVisibility(View.GONE);
+                toolbar.setTitle("Select Skill");
                 queryList.add(new LocalDb().getCategories().get(selected_category_position));
                 queryListName.add("Category");
                 break;
             default:
                 selected_category_position = getIntent().getIntExtra(DumeUtils.SELECTED_ID, 0);
-                createTabDynamically();
                 queryList.add(new LocalDb().getCategories().get(selected_category_position));
                 queryListName.add("Category");
                 break;
@@ -660,7 +642,7 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                 hintIdTwo.setText(queryList.get(fragmentId + 1));
             } else if (fragmentId == (tabLayout.getTabCount() - 1)) {
                 hintIdThree.setText(queryList.get(fragmentId + 1));
-            } else if (fragmentId == (tabLayout.getTabCount() - 2)){
+            } else if (fragmentId == (tabLayout.getTabCount() - 2)) {
                 hintIdTwo.setText(queryList.get(fragmentId + 1));
             }
         }
@@ -691,6 +673,9 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
             switch (levelName) {
                 case "Gender":
                     if (!(fragmentId < tabLayout.getTabCount() - 1)) {
+                        if(retrivedAction.equals(DumeUtils.BOOTCAMP)){
+                            flush("now bootcamp will work");
+                        }
                         mSectionsPagerAdapter.newTab(db.payment);
                         mViewPager.setCurrentItem(fragmentId + 1);
                     } else mViewPager.setCurrentItem(fragmentId + 1);
@@ -747,99 +732,11 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
         mViewPager.setCurrentItem(tabLayout.getTabCount() - 1);
     }
 
-
     public void generateNextTabs(int fragment) {
         if (!(fragment < tabLayout.getTabCount() - 1)) {
             mSectionsPagerAdapter.newTab(db.getGenderPreferencesList());
             mViewPager.setCurrentItem(fragment + 1);
         } else mViewPager.setCurrentItem(fragment + 1);
-    }
-
-    //testing the contact retrival
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE_PICK_CONTACTS && resultCode == RESULT_OK) {
-            Log.d(TAG, "Response: " + data.toString());
-            uriContact = data.getData();
-
-            retrieveContactName();
-            retrieveContactNumber();
-            retrieveContactPhoto();
-        }
-    }
-
-    private void retrieveContactPhoto() {
-        Bitmap photo = null;
-        try {
-            InputStream inputStream = ContactsContract.Contacts.openContactPhotoInputStream(getContentResolver(),
-                    ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, new Long(contactID)));
-
-            if (inputStream != null) {
-                photo = BitmapFactory.decodeStream(inputStream);
-//                ImageView imageView = (ImageView) findViewById(R.id.img_contact);
-//                imageView.setImageBitmap(photo);
-                flush("image not null here");
-                inputStream.close();
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void retrieveContactNumber() {
-        String contactNumber = null;
-        // getting contacts ID
-        Cursor cursorID = getContentResolver().query(uriContact,
-                new String[]{ContactsContract.Contacts._ID},
-                null, null, null);
-
-        if (cursorID.moveToFirst()) {
-            contactID = cursorID.getString(cursorID.getColumnIndex(ContactsContract.Contacts._ID));
-        }
-        cursorID.close();
-        Log.d(TAG, "Contact ID: " + contactID);
-        ArrayList<String> allNumbers = new ArrayList<>();
-
-        for (int i = 0; i <= 20; i++) {
-            contactNumber = null;
-            // Using the contact ID now we will get contact phone number
-            Cursor cursorPhone = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                    new String[]{ContactsContract.CommonDataKinds.Phone.NUMBER},
-
-                    ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ? AND " +
-                            ContactsContract.CommonDataKinds.Phone.TYPE + " = " +
-                            i,
-
-                    new String[]{contactID},
-                    null);
-
-            //cursorPhone.moveToFirst();
-            while (cursorPhone.moveToNext()) {
-                contactNumber = cursorPhone.getString(cursorPhone.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-                if (contactNumber != null) {
-                    Log.d(TAG, "Contact Phone Number: " + contactNumber);
-                    allNumbers.add(contactNumber);
-                }
-            }
-            cursorPhone.close();
-        }
-    }
-
-    private void retrieveContactName() {
-        String contactName = null;
-        // querying contact data store
-        Cursor cursor = getContentResolver().query(uriContact, null, null, null, null);
-        if (cursor.moveToFirst()) {
-
-            // DISPLAY_NAME = The display name for the contact.
-            // HAS_PHONE_NUMBER =   An indicator of whether this contact has at least one phone number.
-            contactName = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-        }
-        cursor.close();
-        Log.d(TAG, "Contact Name: " + contactName);
-
     }
 
     public void flush(String msg) {
@@ -952,59 +849,162 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
 
     @Override
     public void selectFromContactClicked() {
+        if (contactPermissionGranted) {
+            startActivityForResult(new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI), REQUEST_CODE_PICK_CONTACTS);
+        } else {
+            AccessContact();
+        }
     }
-
-    public void onSelectFromOtherContact(View view) {
-        startActivityForResult(new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI), REQUEST_CODE_PICK_CONTACTS);
-    }
-
 
     final private int REQUEST_MULTIPLE_PERMISSIONS = 124;
 
     private boolean addPermission(List<String> permissionsList, String permission) {
         if (checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) {
             permissionsList.add(permission);
-
             if (!shouldShowRequestPermissionRationale(permission))
                 return false;
         }
         return true;
     }
 
-    private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
-        new AlertDialog.Builder(GrabingInfoActivity.this)
-                .setMessage(message)
-                .setPositiveButton("OK", okListener)
-                .setNegativeButton("Cancel", null)
-                .create()
-                .show();
-    }
-
     private void AccessContact() {
         List<String> permissionsNeeded = new ArrayList<String>();
         final List<String> permissionsList = new ArrayList<String>();
-        if (!addPermission(permissionsList, Manifest.permission.READ_CONTACTS))
+        if (!addPermission(permissionsList, Manifest.permission.READ_CONTACTS)){
             permissionsNeeded.add("Read Contacts");
-        if (!addPermission(permissionsList, Manifest.permission.WRITE_CONTACTS))
-            permissionsNeeded.add("Write Contacts");
-        if (permissionsList.size() > 0) {
-            if (permissionsNeeded.size() > 0) {
-                String message = "You need to grant access to " + permissionsNeeded.get(0);
-                for (int i = 1; i < permissionsNeeded.size(); i++)
-                    message = message + ", " + permissionsNeeded.get(i);
-                showMessageOKCancel(message,
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                requestPermissions(permissionsList.toArray(new String[permissionsList.size()]),
-                                        REQUEST_MULTIPLE_PERMISSIONS);
-                            }
-                        });
-                return;
-            }
-            requestPermissions(permissionsList.toArray(new String[permissionsList.size()]),
-                    REQUEST_MULTIPLE_PERMISSIONS);
-            return;
         }
+        if (permissionsList.size() > 0) {
+            requestPermissions(permissionsList.toArray(new String[permissionsList.size()]), REQUEST_MULTIPLE_PERMISSIONS);
+            return;
+        }else{
+            contactPermissionGranted = true;
+            selectFromContactClicked();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == REQUEST_MULTIPLE_PERMISSIONS) {
+            if (permissions[0].equals(Manifest.permission.READ_CONTACTS) && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                contactPermissionGranted = true;
+                selectFromContactClicked();
+            } else if (permissions[0].equals(Manifest.permission.READ_CONTACTS) && grantResults[0] == PackageManager.PERMISSION_DENIED) {
+                contactPermissionGranted = false;
+            }
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    //testing the contact retrival
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_PICK_CONTACTS && resultCode == RESULT_OK) {
+            Log.d(TAG, "Response: " + data.toString());
+            uriContact = data.getData();
+            secondContactLayout.setVisibility(View.VISIBLE);
+            retrieveContactName();
+            retrieveContactNumber();
+            retrieveContactPhoto();
+        }
+    }
+
+    private void retrieveContactPhoto() {
+        Bitmap photo = null;
+        try {
+            InputStream inputStream = ContactsContract.Contacts.openContactPhotoInputStream(getContentResolver(),
+                    ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, new Long(contactID)));
+
+            if (inputStream != null) {
+                photo = BitmapFactory.decodeStream(inputStream);
+                secondContactImageView.setImageBitmap(photo);
+                flush("image not null here");
+                inputStream.close();
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void retrieveContactNumber() {
+        String contactNumber = null;
+        // getting contacts ID
+        Cursor cursorID = getContentResolver().query(uriContact,
+                new String[]{ContactsContract.Contacts._ID},
+                null, null, null);
+
+        if (cursorID.moveToFirst()) {
+            contactID = cursorID.getString(cursorID.getColumnIndex(ContactsContract.Contacts._ID));
+        }
+        cursorID.close();
+        Log.d(TAG, "Contact ID: " + contactID);
+        ArrayList<String> allNumbers = new ArrayList<>();
+
+        for (int i = 0; i <= 20; i++) {
+            contactNumber = null;
+            // Using the contact ID now we will get contact phone number
+            Cursor cursorPhone = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                    new String[]{ContactsContract.CommonDataKinds.Phone.NUMBER},
+
+                    ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ? AND " +
+                            ContactsContract.CommonDataKinds.Phone.TYPE + " = " +
+                            i,
+
+                    new String[]{contactID},
+                    null);
+
+            //cursorPhone.moveToFirst();
+            while (cursorPhone.moveToNext()) {
+                contactNumber = cursorPhone.getString(cursorPhone.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                if (contactNumber != null) {
+                    Log.d(TAG, "Contact Phone Number: " + contactNumber);
+                    allNumbers.add(contactNumber);
+                }
+            }
+            cursorPhone.close();
+        }
+        String[] simpleArray = new String[ allNumbers.size() ];
+        allNumbers.toArray( simpleArray );
+        if (allNumbers.size() > 1) {
+            selectOneNum(simpleArray);
+        }else{
+            secondContactPersonNum.setText(simpleArray[0]);
+        }
+    }
+
+    public void selectOneNum(String[] allNumber) {
+        Bundle pRargs = new Bundle();
+        String finalTitle = "Select the number for contact ";
+        finalTitle = finalTitle + secondContactPerson.getText();
+        pRargs.putString("title", finalTitle);
+        pRargs.putStringArray("radioOptions", allNumber);
+        RadioBtnDialogue selectOneNumDialogue = new RadioBtnDialogue();
+        selectOneNumDialogue.setItemChoiceListener(new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                secondContactPersonNum.setText(allNumber[i]);
+            }
+        });
+        selectOneNumDialogue.setCancelListener(new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                secondContactPersonNum.setText("Null");
+            }
+        });
+        selectOneNumDialogue.setArguments(pRargs);
+        selectOneNumDialogue.show(getSupportFragmentManager(), "selectOneNumDialogue");
+        secondContactPersonNum.setText(allNumber[0]);
+    }
+
+    private void retrieveContactName() {
+        String contactName = null;
+        Cursor cursor = getContentResolver().query(uriContact, null, null, null, null);
+        if (cursor.moveToFirst()) {
+            contactName = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+        }
+        cursor.close();
+        //Log.d(TAG, "Contact Name: " + contactName);
+        secondContactPerson.setText(contactName);
     }
 }

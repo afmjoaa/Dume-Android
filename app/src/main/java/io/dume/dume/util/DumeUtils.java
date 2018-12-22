@@ -41,6 +41,7 @@ import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class DumeUtils {
     public static final String TEACHER = "teacher";
+    public static final String BOOTCAMP = "boot-camp";
     public static final String STUDENT = "student";
     public static final String SELECTED_ID = "s_id";
 
@@ -348,6 +349,13 @@ public class DumeUtils {
             }
         });
         imageView.startAnimation(shrink);
+    }
+
+    public static void makeFullScreen(Activity activity) {
+        View decorView = activity.getWindow().getDecorView();
+        // Hide the status bar.
+        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
+        decorView.setSystemUiVisibility(uiOptions);
     }
 
 

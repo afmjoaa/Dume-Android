@@ -27,29 +27,44 @@ public class AfterSplashPagerAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int position) {
         String title = null;
         String description = null;
+        int imageSrc = 0;
+        String[] titleArr = context.getResources().getStringArray(R.array.after_splash_title);
+        String[] descriptionArr = context.getResources().getStringArray(R.array.after_splash_data);
+        int[] imageIcons = {
+                R.drawable.intro_bg,
+                R.drawable.real_time_bg,
+                R.drawable.permission_bg,
+                R.drawable.profiles_bg,
+                R.drawable.package_bg,
+        };
         switch (position) {
             case ID_DEFAULT:
-                title = context.getString(R.string.sample_title_holder);
-                description = context.getString(R.string.intro1);
+                title = titleArr[0];
+                description = descriptionArr[0];
+                imageSrc= imageIcons[0];
                 break;
             case ID_STYLED:
-                title = context.getString(R.string.sample_title_holder);
-                description = context.getString(R.string.intro2);
+                title = titleArr[1];
+                description = descriptionArr[1];
+                imageSrc= imageIcons[1];
                 break;
             case ID_CUSTOM_LAYOUT:
-                title = context.getString(R.string.sample_title_holder);
-                description = context.getString(R.string.intro3);
+                title = titleArr[2];
+                description = descriptionArr[2];
+                imageSrc= imageIcons[2];
                 break;
             case ID_CUSTOM_VIEW_HOLDER:
-                title = context.getString(R.string.sample_title_holder);
-                description = context.getString(R.string.intro4);
+                title = titleArr[3];
+                description = descriptionArr[3];
+                imageSrc= imageIcons[3];
                 break;
             case ID_CUSTOM_CONTENT:
-                title = context.getString(R.string.sample_title_holder);
-                description = context.getString(R.string.intro5);
+                title = titleArr[4];
+                description = descriptionArr[4];
+                imageSrc= imageIcons[4];
                 break;
         }
-        return DemoCardFragment.newInstance(position, title, description);
+        return DemoCardFragment.newInstance(position, title, description, imageSrc);
     }
 
     @Override

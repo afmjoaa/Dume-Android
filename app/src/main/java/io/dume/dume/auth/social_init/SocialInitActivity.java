@@ -1,12 +1,9 @@
 package io.dume.dume.auth.social_init;
 
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -34,10 +31,12 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import java.util.Arrays;
 import java.util.Objects;
 
-import dmax.dialog.SpotsDialog;
 import io.dume.dume.R;
 import io.dume.dume.auth.DataStore;
 import io.dume.dume.auth.auth_final.AuthRegisterActivity;
+import io.dume.dume.customView.HorizontalLoadView;
+
+import static io.dume.dume.util.DumeUtils.configureAppbar;
 
 public class SocialInitActivity extends AppCompatActivity {
 
@@ -47,8 +46,7 @@ public class SocialInitActivity extends AppCompatActivity {
     private CallbackManager mCallbackManager;
     public final static int RC_SIGN_IN = 2;
     private DataStore dataStore;
-    private SpotsDialog.Builder spotsBuilder;
-    private AlertDialog spotDialog;
+    private HorizontalLoadView loadView;
 
     @Override
     protected void onStart() {
@@ -60,13 +58,9 @@ public class SocialInitActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_social_init);
-        spotsBuilder = new SpotsDialog.Builder().setContext(this);
-        spotsBuilder.setCancelable(false);
-        spotsBuilder.setMessage("Loading");
-        spotDialog = spotsBuilder.build();
-
+        configureAppbar(this, "Choose an account", true);
+        loadView = findViewById(R.id.loadView);
         init();
-
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -88,7 +82,6 @@ public class SocialInitActivity extends AppCompatActivity {
                 }
             }
         };
-
     }
 
 
@@ -104,9 +97,7 @@ public class SocialInitActivity extends AppCompatActivity {
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 firebaseAuthWithGoogle(account);
             } catch (ApiException e) {
-                if (spotDialog != null) {
-                    spotDialog.dismiss();
-                }
+                hideProgress();
                 //  Log.w("Tag", "Google sign in failed due to canceling", e);
             }
         }
@@ -125,9 +116,7 @@ public class SocialInitActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
 //                            Log.d("Tag", "signInWithCredential:success");
                         } else {
-                            if (spotDialog != null) {
-                                spotDialog.dismiss();
-                            }
+                            hideProgress();
 //                            Log.w("Tag", "signInWithCredential:failure", task.getException());
                             Toast.makeText(SocialInitActivity.this, "failed.", Toast.LENGTH_SHORT).show();
 
@@ -148,9 +137,7 @@ public class SocialInitActivity extends AppCompatActivity {
 //                            Log.d("fbtag", "signInWithCredential:success");
                         } else {
 //                            Log.w("fbtag", "signInWithCredential:failure", task.getException());
-                            if (spotDialog != null) {
-                                spotDialog.dismiss();
-                            }
+                            hideProgress();
                             Toast.makeText(SocialInitActivity.this, "failed.", Toast.LENGTH_SHORT).show();
                         }
 
@@ -183,17 +170,13 @@ public class SocialInitActivity extends AppCompatActivity {
 
                     @Override
                     public void onCancel() {
-                        if (spotDialog != null) {
-                            spotDialog.dismiss();
-                        }
+                        hideProgress();
 //                        Log.d("login canceled", "Login");
                     }
 
                     @Override
                     public void onError(FacebookException exception) {
-                        if (spotDialog != null) {
-                            spotDialog.dismiss();
-                        }
+                        hideProgress();
                         Toast.makeText(SocialInitActivity.this, exception.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 });
@@ -202,11 +185,11 @@ public class SocialInitActivity extends AppCompatActivity {
     public void onSocialViewClicked(View view) {
         switch (view.getId()) {
             case R.id.facebook_btn:
-                spotDialog.show();
+                showProgress();
                 signInWithFacebook();
                 break;
             case R.id.google_btn:
-                spotDialog.show();
+                showProgress();
                 signInWithGoogle();
                 break;
         }
@@ -217,9 +200,7 @@ public class SocialInitActivity extends AppCompatActivity {
         Intent intent = new Intent(getApplicationContext(), AuthRegisterActivity.class);
         intent.putExtra("datastore", dataStore);
         startActivity(intent);
-        if (spotDialog != null) {
-            spotDialog.dismiss();
-        }
+        hideProgress();
         finish();
     }
 
@@ -239,11 +220,27 @@ public class SocialInitActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        if (spotDialog != null) {
-            spotDialog.dismiss();
-        }
+        hideProgress();
         mAuth.removeAuthStateListener(mAuthListener);
         super.onDestroy();
+    }
+
+    public void showProgress() {
+        if (loadView.getVisibility() == View.INVISIBLE || loadView.getVisibility() == View.GONE) {
+            loadView.setVisibility(View.VISIBLE);
+        }
+        if (!loadView.isRunningAnimation()) {
+            loadView.startLoading();
+        }
+    }
+
+    public void hideProgress() {
+        if (loadView.isRunningAnimation()) {
+            loadView.stopLoading();
+        }
+        if (loadView.getVisibility() == View.VISIBLE) {
+            loadView.setVisibility(View.INVISIBLE);
+        }
     }
 
 }
