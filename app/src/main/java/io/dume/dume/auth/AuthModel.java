@@ -3,8 +3,12 @@ package io.dume.dume.auth;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.FirebaseTooManyRequestsException;
 import com.google.firebase.auth.FirebaseAuth;
@@ -12,6 +16,7 @@ import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -21,7 +26,9 @@ import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.internal.api.FirebaseNoSignedInUserException;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Nullable;
@@ -205,20 +212,50 @@ public class AuthModel implements AuthContract.Model, SplashContract.Model, Phon
     @Override
     public void onAccountTypeFound(FirebaseUser user, AuthGlobalContract.AccountTypeFoundListener listener) {
         listener.onStart();
-        listenerRegistration = firestore.collection("mini_users").document(user.getUid()).addSnapshotListener((documentSnapshot, e) -> {
+        final DocumentReference mini_users = firestore.collection("mini_users").document(user.getUid());
+        listenerRegistration = mini_users.addSnapshotListener((documentSnapshot, e) -> {
             if (documentSnapshot != null) {
 
                 Log.w(TAG, "onAccountTypeFound: " + documentSnapshot.toString());
                 Log.e(TAG, "Fucked Here : " + documentSnapshot.toString());
-                String account_major = "";
+
                 Object o = documentSnapshot.get("account_major");
-                account_major = o == null ? "" : o.toString();
-                assert account_major != null;
-                if (account_major.equals("teacher")) {
-                    listener.onTeacherFound();
-                } else {
-                    listener.onStudentFound();
+                if (datastore != null ) {
+                    if ( datastore.getAccountManjor() != null){
+                        Map<String, Object> newMap = new HashMap<>();
+                        newMap.put("account_major", datastore.getAccountManjor());
+                        final Task<Void> mini_users1 = firestore.collection("mini_users").document(user.getUid()).update(newMap).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.e(TAG, "onFailure: Enam " + e.getLocalizedMessage());
+                            }
+                        }).addOnCompleteListener(task -> {
+                            Log.e(TAG, "addOnCompleteListener: Enam " );
+                            String account_major = "";
+                            account_major = datastore.getAccountManjor();
+                            assert account_major != null;
+                            if (account_major.equals("student")) {
+                                listener.onStudentFound();
+                            } else {
+                                listener.onTeacherFound();
+                            }
+                        });
+                    }else {
+                        Log.w(TAG, "onAccountTypeFound: UnKnown Error" );
+                    }
+
+                }else {
+                    String account_major = "";
+                    assert o != null;
+                    account_major = o.toString();
+                    assert account_major != null;
+                    if (account_major.equals("student")) {
+                        listener.onStudentFound();
+                    } else {
+                        listener.onTeacherFound();
+                    }
                 }
+
             } else {
                 listener.onFail("Does not found any user");
                 Log.w(TAG, "onAccountTypeFound: document is not null");

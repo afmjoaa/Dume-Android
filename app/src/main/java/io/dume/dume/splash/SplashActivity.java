@@ -8,9 +8,12 @@ import android.support.v7.app.AppCompatActivity;
 import io.dume.dume.afterSplashTrp.AfterSplashActivity;
 import io.dume.dume.auth.AuthModel;
 import io.dume.dume.auth.auth.AuthActivity;
+import io.dume.dume.student.homePage.HomePageActivity;
 import io.dume.dume.student.homePage.StudentActivity;
 import io.dume.dume.teacher.homepage.TeacherActivityMock;
 import io.dume.dume.teacher.homepage.TeacherActivtiy;
+
+import static io.dume.dume.util.DumeUtils.makeFullScreen;
 
 public class SplashActivity extends AppCompatActivity implements SplashContract.View {
     SplashContract.Presenter presenter;
@@ -21,6 +24,7 @@ public class SplashActivity extends AppCompatActivity implements SplashContract.
         super.onCreate(savedInstanceState);
         presenter = new SplashPresenter(this, new AuthModel(this, this));
         presenter.enqueue();
+        makeFullScreen(this);
         presenter.init(this);
 
     }
@@ -40,7 +44,7 @@ public class SplashActivity extends AppCompatActivity implements SplashContract.
 
     @Override
     public void gotoStudentActivity() {
-        startActivity(new Intent(this, StudentActivity.class));
+        startActivity(new Intent(this, HomePageActivity.class));
         finish();
     }
 }

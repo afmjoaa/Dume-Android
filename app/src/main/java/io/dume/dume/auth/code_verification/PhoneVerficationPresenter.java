@@ -62,7 +62,8 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
         model.verifyCode(pin, new PhoneVerificationContract.Model.CodeVerificationCallBack() {
             @Override
             public void onStart() {
-                view.showProgress("Authenticating...");
+                view.showProgress();
+                //"Authenticating..."
             }
 
             @Override
@@ -89,7 +90,9 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
         model.onResendCode(new AuthContract.Model.Callback() {
             @Override
             public void onStart() {
-                view.showProgress("Resending Code");
+                view.showProgress();
+                Log.w(TAG, "onStart: " );
+                //"Resending Code"
             }
 
             @Override
@@ -123,7 +126,8 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
         model.onAccountTypeFound(FirebaseAuth.getInstance().getCurrentUser(), new AuthGlobalContract.AccountTypeFoundListener() {
             @Override
             public void onStart() {
-                view.showProgress("Authenticating...");
+                view.showProgress();
+                //"Authenticating..."
             }
 
             @Override
@@ -136,6 +140,11 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
             public void onStudentFound() {
                 view.hideProgress();
                 view.gotoStudentActivity();
+            }
+
+            @Override
+            public void onBootcamp() {
+
             }
 
             @Override
@@ -165,7 +174,8 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
             user.put("religion", "");
             user.put("birth_date", "");
 
-            view.showProgress("Saving User...");
+            view.showProgress();
+            //"Saving User..."
             fireStore.collection("mini_users").document(model.getUser().getUid()).set(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
@@ -179,12 +189,8 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
                     Log.w(TAG, "onFailure: User Not Added  " + e.getLocalizedMessage());
                 }
             });
-
-
         } else {
             Log.w(TAG, "saveUserToDb: " + "Datastore null or user not logged in");
         }
-
     }
-
 }

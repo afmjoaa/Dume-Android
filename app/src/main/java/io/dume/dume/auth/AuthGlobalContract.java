@@ -30,6 +30,7 @@ public interface AuthGlobalContract {
         void onTeacherFound();
 
         void onStudentFound();
+        void onBootcamp();
 
         void onFail(String exeption);
     }

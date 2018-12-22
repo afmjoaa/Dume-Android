@@ -16,7 +16,7 @@ public interface PhoneVerificationContract {
 
         void onVerificationFailed(String msg);
 
-        void showProgress(String title);
+        void showProgress();
 
         void hideProgress();
 

@@ -103,35 +103,48 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:orientation="horizontal"
-                android:paddingBottom="10dp"
+                android:paddingBottom="6dp"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
-                android:paddingTop="10dp"
+                android:paddingTop="6dp"
                 app:carbon_rippleColor="#50000000"
                 app:carbon_rippleStyle="background">
 
                 <carbon.widget.ImageView
                     android:id="@+id/account_icon"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
                     android:layout_marginEnd="16dp"
                     android:layout_marginRight="16dp"
-                    app:carbon_cornerRadius="12dp"
+                    app:carbon_cornerRadius="16dp"
                     app:srcCompat="@drawable/alias_profile_icon" />
 
                 <TextView
                     android:id="@+id/account_type_textview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
                     android:layout_toEndOf="@id/account_icon"
                     android:layout_toRightOf="@id/account_icon"
                     android:text="Me"
                     android:textColor="@color/textColorPrimary"
-                    android:textSize="16sp"
+                    android:textSize="15sp"
+                    android:translationY="2dp"
+                    app:fontFamily="@font/cairo_regular" />
+
+                <TextView
+                    android:id="@+id/account_type_textview_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toEndOf="@id/account_icon"
+                    android:layout_toRightOf="@id/account_icon"
+                    android:text="01536100076"
+                    android:layout_below="@id/account_type_textview"
+                    android:translationY="-2dp"
+                    android:textColor="@color/textColorPrimary"
+                    android:textSize="12sp"
                     app:fontFamily="@font/cairo_regular" />
 
 
@@ -167,36 +180,49 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:orientation="horizontal"
-                android:paddingBottom="10dp"
+                android:paddingBottom="6dp"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
-                android:paddingTop="10dp"
+                android:paddingTop="6dp"
                 android:visibility="gone"
                 app:carbon_rippleColor="#50000000"
                 app:carbon_rippleStyle="background">
 
                 <carbon.widget.ImageView
                     android:id="@+id/account_icon_two"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
                     android:layout_marginEnd="16dp"
                     android:layout_marginRight="16dp"
-                    app:carbon_cornerRadius="12dp"
+                    app:carbon_cornerRadius="16dp"
                     app:srcCompat="@drawable/alias_profile_icon" />
 
                 <TextView
                     android:id="@+id/account_type_textview_two"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
                     android:layout_toEndOf="@id/account_icon_two"
                     android:layout_toRightOf="@id/account_icon_two"
                     android:text="Student"
                     android:textColor="@color/textColorPrimary"
-                    android:textSize="16sp"
+                    android:textSize="15sp"
+                    android:translationY="2dp"
+                    app:fontFamily="@font/cairo_regular" />
+
+                <TextView
+                    android:id="@+id/account_type_textview_two_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toEndOf="@id/account_icon_two"
+                    android:layout_toRightOf="@id/account_icon_two"
+                    android:layout_below="@+id/account_type_textview_two"
+                    android:text="Student"
+                    android:translationY="-2dp"
+                    android:textColor="@color/textColorPrimary"
+                    android:textSize="12sp"
                     app:fontFamily="@font/cairo_regular" />
 
 
@@ -232,24 +258,24 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:orientation="horizontal"
-                android:paddingBottom="10dp"
+                android:paddingBottom="8dp"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
-                android:paddingTop="10dp"
-                android:onClick="onSelectFromOtherContact"
+                android:paddingTop="8dp"
+                android:onClick="onGrabingInfoViewClicked"
                 app:carbon_rippleColor="#50000000"
                 app:carbon_rippleStyle="background">
 
                 <carbon.widget.ImageView
                     android:id="@+id/plus_icon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
                     android:layout_marginEnd="16dp"
                     android:layout_marginRight="16dp"
-                    app:carbon_cornerRadius="12dp"
+                    app:carbon_cornerRadius="16dp"
                     app:srcCompat="@drawable/ic_plus_icon" />
 
                 <TextView
@@ -287,7 +313,7 @@
             android:layout_width="match_parent"
             android:layout_height="20dp"
             android:layout_below="@id/tabs"
-            android:layout_gravity="top"
+            android:layout_gravity="center"
             android:orientation="horizontal">
 
             <TextView

@@ -2,19 +2,16 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/parent_coor_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".auth.auth.AuthActivity">
-
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbarLayout"
         android:layout_width="match_parent"
         android:layout_height="260dp"
-        android:stateListAnimator="@drawable/appbar_always_elevated"
-        android:theme="@style/ThemeOverlay.AppCompat.Light"
-        app:elevation="0dp"
-        tools:targetApi="lollipop">
+        android:theme="@style/ThemeOverlay.AppCompat.Light">
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/collapsing_toolbar"
@@ -22,11 +19,14 @@
             android:layout_height="match_parent"
             app:collapsedTitleGravity="bottom"
             app:collapsedTitleTextAppearance="@style/MyTextApprncCol"
-
-            app:contentScrim="@color/colorWhite"
+            app:contentScrim="@color/black"
+            app:expandedTitleGravity="start"
+            app:expandedTitleMarginBottom="@dimen/expTittleMarginBottom"
+            app:expandedTitleMarginStart="@dimen/expTittleMarginStart"
+            app:expandedTitleMarginTop="@dimen/expTittleMarginTop"
+            app:scrimVisibleHeightTrigger="86dp"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:titleEnabled="true">
-
 
             <com.daimajia.slider.library.SliderLayout
                 android:id="@+id/slidingLayout"
@@ -71,14 +71,30 @@
                 android:layout_height="80dp"
                 android:gravity="bottom"
                 app:buttonGravity="bottom"
+                app:logo="@drawable/signin_logo"
                 app:layout_collapseMode="pin"
-                app:navigationIcon="@drawable/back_arraw_icon"
+                app:titleMarginBottom="@dimen/titleMarginBottom"
+                app:titleMarginStart="@dimen/titleMarginStart"
+                app:titleMarginTop="@dimen/titleMarginTop"
+                app:navigationIcon="@drawable/ic_arrow_back_white_24dp"
                 app:popupTheme="@style/AppTheme.PopupOverlay"
-                app:title="Sign In" />
+                app:theme="@style/ThemeToolbar.default"
+                app:title="" />
 
         </android.support.design.widget.CollapsingToolbarLayout>
 
     </android.support.design.widget.AppBarLayout>
+
+    <io.dume.dume.customView.HorizontalLoadView
+        android:id="@+id/loadView"
+        android:layout_width="12dp"
+        android:layout_height="4dp"
+        android:elevation="8dp"
+        android:translationY="2dp"
+        android:visibility="gone"
+        app:layout_anchor="@id/appbarLayout"
+        app:layout_anchorGravity="bottom"
+        app:rect_color="@color/carbon_black" />
 
 
     <android.support.v4.widget.NestedScrollView

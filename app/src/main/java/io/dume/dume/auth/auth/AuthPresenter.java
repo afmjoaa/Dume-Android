@@ -47,12 +47,15 @@ public class AuthPresenter implements AuthContract.Presenter {
     public void onBottomNavChange(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.student_nav:
+                dataStore.setAccountManjor(DataStore.STUDENT);
                 view.onStudentSelected();
                 break;
             case R.id.teacher_nav:
+                dataStore.setAccountManjor(DataStore.TEACHER);
                 view.onTeacherSelected();
                 break;
             case R.id.bootcamp_nav:
+                dataStore.setAccountManjor(DataStore.BOOTCAMP);
                 view.onBootcampSelected();
                 break;
         }
@@ -75,7 +78,7 @@ public class AuthPresenter implements AuthContract.Presenter {
         model.isExistingUser(phoneNumber, new AuthGlobalContract.OnExistingUserCallback() {
             @Override
             public void onStart() {
-                view.showProgress("Searching...", "");
+                view.showProgress();
                 Log.w(TAG, "onStart: Showing dialog");
             }
 
@@ -86,7 +89,7 @@ public class AuthPresenter implements AuthContract.Presenter {
                 model.sendMessage("+88" + phoneNumber, new AuthContract.Model.Callback() {
                     @Override
                     public void onStart() {
-                        view.showProgress("Sending Code....", "");
+                        view.showProgress();
                         view.showToast("Sending Code..");
                         Log.w(TAG, "onStart: showing dialog");
                     }
@@ -117,7 +120,7 @@ public class AuthPresenter implements AuthContract.Presenter {
                             @Override
                             public void onStart() {
                                 Log.w(TAG, "onStart: auto success-showing dialog");
-                                view.showProgress("Getting User Info", "");
+                                view.showProgress();
                             }
 
                             @Override
@@ -132,6 +135,11 @@ public class AuthPresenter implements AuthContract.Presenter {
                                 Log.w(TAG, "onStudentFound: hiding dialog");
                                 view.hideProgress();
                                 view.gotoStudentActivity();
+                            }
+
+                            @Override
+                            public void onBootcamp() {
+
                             }
 
                             @Override

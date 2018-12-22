@@ -44,6 +44,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.MapStyleOptions;
+import com.google.firebase.auth.FirebaseAuth;
 import com.hanks.htextview.scale.ScaleTextView;
 import com.tomergoldst.tooltips.ToolTipsManager;
 
@@ -412,7 +413,8 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         scaleTextView.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Cairo_Regular.ttf"));
         scaleTextView.setAnimationListener(hTextView -> {
 
-        });  scaleTextView.setSelected(true);
+        });
+        scaleTextView.setSelected(true);
     }
 
     public void toggle(android.view.View view) {
@@ -475,6 +477,9 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
                 break;
             case R.id.skills:
                 startActivity(new Intent(this, SkillActivity.class));
+                break;
+            case R.id.about_us:
+                FirebaseAuth.getInstance().signOut();
                 break;
         }
         drawerLayout.closeDrawer(GravityCompat.START);

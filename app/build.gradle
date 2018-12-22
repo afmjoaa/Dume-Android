@@ -153,4 +153,6 @@ dependencies {
 
     def htextview_version = "0.1.6"
     implementation "com.hanks:htextview-scale:$htextview_version"
+    implementation "me.philio:pinentryview:1.0.6"
+
 }

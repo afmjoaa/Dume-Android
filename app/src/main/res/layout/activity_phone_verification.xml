@@ -6,37 +6,58 @@
     android:layout_height="match_parent"
     tools:context=".auth.code_verification.PhoneVerificationActivity">
 
-
     <android.support.design.widget.AppBarLayout
-        android:id="@+id/verifyAppBar"
+        android:id="@+id/app_bar"
         android:layout_width="match_parent"
-        android:layout_height="120dp"
-        android:theme="@style/ThemeOverlay.AppCompat.ActionBar">
+        android:layout_height="@dimen/appbarLayoutHeight"
+        android:stateListAnimator="@drawable/appbar_always_elevated"
+        android:theme="@style/AppTheme.AppBarOverlay">
 
         <android.support.design.widget.CollapsingToolbarLayout
-            android:id="@+id/verifyCollapsingToolbar"
-            style="@style/Widget.BottomNavigationView"
+            android:id="@+id/accountCollapsing"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:elevation="0dp"
-            app:collapsedTitleTextAppearance="?android:textAppearanceMedium"
-            app:contentScrim="@color/colorDefaultAndroid"
-            app:expandedTitleMarginStart="20dp"
-            app:expandedTitleTextAppearance="?android:textAppearanceLarge"
+            android:fitsSystemWindows="true"
+            android:theme="@style/CollapsingToolBarStyle"
+            app:collapsedTitleGravity="start"
+            app:collapsedTitleTextAppearance="@style/MyTextApprncCol.darkBg"
+            app:contentScrim="@color/colorBlack"
+            app:expandedTitleGravity="start"
+            app:expandedTitleMarginBottom="@dimen/expTittleMarginBottom"
+            app:expandedTitleMarginStart="@dimen/expTittleMarginStart"
+            app:expandedTitleMarginTop="@dimen/expTittleMarginTop"
+            app:expandedTitleTextAppearance="@style/MyTextApprncExp.darkBg"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            app:title="Phone Verification"
-            app:titleEnabled="true">
-
+            app:scrimVisibleHeightTrigger="@dimen/scrimVisibleHeightTrigger"
+            app:title="Verify your number"
+            app:toolbarId="@+id/toolbar">
 
             <android.support.v7.widget.Toolbar
-                android:id="@+id/verifyToolbar"
+                android:id="@+id/accountToolbar"
                 android:layout_width="match_parent"
-                android:layout_height="?android:attr/actionBarSize"
-                app:layout_collapseMode="pin" />
+                android:layout_height="@dimen/toolbarLayoutHeight"
+                app:buttonGravity="bottom"
+                app:layout_collapseMode="pin"
+                app:navigationIcon="@drawable/ic_arrow_back_white_24dp"
+                app:popupTheme="@style/AppTheme.PopupOverlay"
+                app:theme="@style/ThemeToolbar.default"
+                app:titleMarginBottom="@dimen/titleMarginBottom"
+                app:titleMarginStart="@dimen/titleMarginStart"
+                app:titleMarginTop="@dimen/titleMarginTop" />
 
         </android.support.design.widget.CollapsingToolbarLayout>
-
     </android.support.design.widget.AppBarLayout>
+
+    <io.dume.dume.customView.HorizontalLoadView
+        android:id="@+id/loadView"
+        android:layout_width="12dp"
+        android:layout_height="4dp"
+        android:elevation="8dp"
+        android:translationY="2dp"
+        android:visibility="gone"
+        app:layout_anchor="@id/app_bar"
+        app:layout_anchorGravity="bottom"
+        app:rect_color="@color/carbon_black" />
 
 
     <android.support.v4.widget.NestedScrollView
@@ -44,8 +65,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center_vertical"
-        android:layout_marginLeft="10dp"
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
@@ -57,21 +81,40 @@
                 android:id="@+id/detailsTxt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Enter the 4 digit verification code sent
-to you at " />
+                android:text="Enter the 6 digit verification code sent to you at " />
 
-            <EditText
+            <!--<carbon.widget.EditText
                 android:id="@+id/pinEditTxt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_margin="5dp"
-                android:background="@drawable/edit_text_background"
+                android:background="@drawable/bg_white_round_corner"
                 android:fontFamily="monospace"
                 android:hint="Pin Code"
                 android:inputType="phone"
                 android:padding="8dp"
-             />
+                android:visibility="gone" />-->
+
+            <me.philio.pinentry.PinEntryView
+                android:id="@+id/pinEditTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="12dp"
+                app:accentType="character"
+                app:accentWidth="1dp"
+                app:digitBackground="@drawable/bg_white_round_corner"
+                app:digitElevation="3dp"
+                app:digitHeight="36dp"
+                app:digitSpacing="8dp"
+                app:digitTextColor="@android:color/black"
+                app:digitTextSize="8sp"
+                app:digitWidth="36dp"
+                app:mask=""
+                app:numDigits="6"
+                app:pinAccentColor="@color/colorAccent" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -86,9 +129,10 @@ to you at " />
 
                     <Button
                         android:id="@+id/resendButton"
-                        style="@style/MyDarkBlueButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        style="@style/Base.Widget.AppCompat.Button.Borderless"
+                        android:layout_width="120dp"
+                        android:layout_height="40dp"
+                        android:background="@drawable/round_btn_joaa"
                         android:text="Resend Code"
                         android:visibility="gone" />
 
@@ -105,6 +149,7 @@ to you at " />
                         android:layout_height="wrap_content"
                         android:onClick="onPhoneEdit"
                         android:text="Edit Phone Number"
+
                         android:textColor="@color/colorAccent" />
                 </LinearLayout>
 
@@ -117,8 +162,8 @@ to you at " />
                     android:clickable="true"
                     android:focusable="true"
                     android:gravity="end"
-                    app:srcCompat="@drawable/ic_arrow_forward_white_24dp"
-                    app:rippleColor="@color/colorDarkAzure" />
+                    app:rippleColor="@color/colorDarkAzure"
+                    app:srcCompat="@drawable/ic_arrow_forward_white_24dp" />
             </LinearLayout>
         </LinearLayout>
 

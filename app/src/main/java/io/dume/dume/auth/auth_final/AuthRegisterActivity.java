@@ -6,13 +6,9 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -43,42 +39,34 @@ import io.dume.dume.auth.AuthModel;
 import io.dume.dume.auth.DataStore;
 import io.dume.dume.auth.auth.AuthActivity;
 import io.dume.dume.auth.code_verification.PhoneVerificationActivity;
+import io.dume.dume.customView.HorizontalLoadView;
 import io.dume.dume.student.homePage.StudentActivity;
 import io.dume.dume.teacher.homepage.TeacherActivtiy;
 import io.dume.dume.util.DumeUtils;
 
+import static io.dume.dume.util.DumeUtils.configureAppbar;
+
 public class AuthRegisterActivity extends AppCompatActivity {
     EditText firstname, lastName, phoneNumber;
     AutoCompleteTextView email;
-    private AlertDialog dialog;
     private DataStore datastore = null;
-    private SpotsDialog.Builder spotBuilder;
     private FirebaseFirestore firestore;
     private Activity activity;
     private static final String TAG = "AuthRegisterActivity";
     private Context context;
-    private CollapsingToolbarLayout toolbarLayout;
+    private HorizontalLoadView loadView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_auth_final);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        ActionBar supportActionBar = getSupportActionBar();
-        if (supportActionBar != null) {
-            supportActionBar.setDisplayShowTitleEnabled(true);
-            supportActionBar.setTitle("Sign In");
-
-        }
         init();
         if (getIntent().getSerializableExtra("datastore") != null) {
             datastore = (DataStore) getIntent().getSerializableExtra("datastore");
             restoreData(datastore);
         }
         activity = this;
-        dialog = new AlertDialog.Builder(this).create();
-
     }
 
     private void restoreData(DataStore dataStore) {
@@ -94,20 +82,17 @@ public class AuthRegisterActivity extends AppCompatActivity {
         lastName = findViewById(R.id.input_lastname);
         email = findViewById(R.id.input_email);
         phoneNumber = findViewById(R.id.phoneNumberEditText);
-        toolbarLayout = findViewById(R.id.toolbar_layout);
-        toolbarLayout.setExpandedTitleTypeface(Typeface.createFromAsset(getAssets(), "fonts/Cairo_Regular.ttf"));
-        toolbarLayout.setCollapsedTitleTypeface(Typeface.createFromAsset(getAssets(), "fonts/Cairo-Bold.ttf"));
-        spotBuilder = new SpotsDialog.Builder().setContext(this);
+        loadView = findViewById(R.id.loadView);
         firestore = FirebaseFirestore.getInstance();
         ArrayList<String> emailAddress = getEmailAddress();
         if (emailAddress.size() != 0) {
             email.setThreshold(1);
             email.setAdapter(new ArrayAdapter<String>(this, R.layout.item_layout_suggestion, R.id.suggetionTextView, emailAddress));
         }
-
         for (String s : emailAddress) {
             Log.w(TAG, "init: " + s);
         }
+        configureAppbar(this, "Confirm your info", true);
     }
 
     private ArrayList<String> getEmailAddress() {
@@ -124,19 +109,18 @@ public class AuthRegisterActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.auth_menu, menu);
+        getMenuInflater().inflate(R.menu.menu_only_help, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.aboutMenu) {
+        if (item.getItemId() == R.id.action_help) {
             Toast.makeText(this, "About", Toast.LENGTH_SHORT).show();
         } else {
             this.startActivity(new Intent(this, AuthActivity.class).putExtra("datastore", datastore).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
             this.finish();
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -165,14 +149,14 @@ public class AuthRegisterActivity extends AppCompatActivity {
                 new AuthModel(this, this).isExistingUser(phoneStr, new AuthGlobalContract.OnExistingUserCallback() {
                     @Override
                     public void onStart() {
-                        showDialog("Querying Database");
+                        showDialog();
                     }
 
                     @Override
                     public void onUserFound() {
                         DataStore.STATION = 1;
-                        hideDialog();
-                        showDialog("Authenticating...");
+                        //hideDialog();
+                        showDialog();
                         PhoneAuthProvider.getInstance().verifyPhoneNumber("+88" + phoneStr, 60, TimeUnit.SECONDS, activity, new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
                             @Override
                             public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
@@ -183,7 +167,7 @@ public class AuthRegisterActivity extends AppCompatActivity {
                                         new AuthModel(activity, getApplicationContext()).onAccountTypeFound(authResultTask.getResult().getUser(), new AuthGlobalContract.AccountTypeFoundListener() {
                                             @Override
                                             public void onStart() {
-                                                showDialog("Authenticating...");
+                                                showDialog();
                                             }
 
                                             @Override
@@ -198,6 +182,11 @@ public class AuthRegisterActivity extends AppCompatActivity {
                                                 hideDialog();
                                                 startActivity(new Intent(AuthRegisterActivity.this, StudentActivity.class));
                                                 finish();
+                                            }
+
+                                            @Override
+                                            public void onBootcamp() {
+
                                             }
 
                                             @Override
@@ -244,8 +233,8 @@ public class AuthRegisterActivity extends AppCompatActivity {
 
                     @Override
                     public void onNewUserFound() {
-                        hideDialog();
-                        showDialog("Saving User...");
+                        //hideDialog();
+                        showDialog();
                         PhoneAuthProvider.getInstance().verifyPhoneNumber("+88" + phoneStr, 60, TimeUnit.SECONDS, activity, new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
                             @Override
                             public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
@@ -285,6 +274,11 @@ public class AuthRegisterActivity extends AppCompatActivity {
                                                         hideDialog();
                                                         startActivity(new Intent(AuthRegisterActivity.this, StudentActivity.class));
                                                         finish();
+                                                    }
+
+                                                    @Override
+                                                    public void onBootcamp() {
+
                                                     }
 
                                                     @Override
@@ -342,26 +336,37 @@ public class AuthRegisterActivity extends AppCompatActivity {
                         toast(err);
                     }
                 });
-
-
-                /**  */
-
                 break;
             case R.id.hiperlink_privacy_text:
-                /*dialogBuilder.setTitle("Privacy Policy");
-                dialogBuilder.setMessage(R.string.lorem_para);
-                dialogBuilder.create().show();*/
+
                 break;
             case R.id.hiperlink_terms_text:
-                /*dialogBuilder.setTitle("Terms and Conditions");
-                dialogBuilder.setMessage(R.string.lorem_para);
-                dialogBuilder.create().show();*/
+
                 break;
         }
-
     }
 
-    void showDialog(String msg) {
+
+    public void showDialog() {
+        if (loadView.getVisibility() == View.INVISIBLE || loadView.getVisibility() == View.GONE) {
+            loadView.setVisibility(View.VISIBLE);
+        }
+        if (!loadView.isRunningAnimation()) {
+            loadView.startLoading();
+        }
+    }
+
+    public void hideDialog() {
+
+        if (loadView.isRunningAnimation()) {
+            loadView.stopLoading();
+        }
+        if (loadView.getVisibility() == View.VISIBLE) {
+            loadView.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    /*void showDialog(String msg) {
         if (!((Activity) context).isFinishing()) {
             spotBuilder.setMessage(msg);
             dialog = spotBuilder.build();
@@ -375,7 +380,7 @@ public class AuthRegisterActivity extends AppCompatActivity {
             dialog.dismiss();
             Log.w(TAG, "hideDialog: ");
         }
-    }
+    }*/
 
     @Override
     public void onBackPressed() {

@@ -32,7 +32,9 @@
         android:layout_height="match_parent"
         android:background="@color/dark_black_overlay"
         android:fitsSystemWindows="true"
-        android:orientation="vertical" />
+        android:orientation="vertical"
+        app:layout_anchor="@+id/parent_coor_layout"
+        app:layout_anchorGravity="left|bottom" />
 
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/secondary_view_musk"
@@ -85,8 +87,8 @@
                             android:layout_height="40dp"
                             android:layout_gravity="center"
                             android:layout_margin="8dp"
-                            app:carbon_cornerRadius="20dp"
                             android:onClick="onSearchLoadingViewCLicked"
+                            app:carbon_cornerRadius="20dp"
                             app:carbon_elevation="4dp"
                             app:srcCompat="@drawable/image_loading_search" />
 
@@ -125,6 +127,7 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/search_detail_block"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
@@ -172,25 +175,16 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="8dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginRight="8dp">
+                        android:layout_marginTop="4dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_marginBottom="4dp">
 
                     </android.support.v7.widget.RecyclerView>
-
-
-                    <!--<Button
-                        style="@style/Base.Widget.AppCompat.Button.Borderless"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Cancel"
-                        android:textAllCaps="false"
-                        android:textColor="@color/cancle_red"
-                        android:textSize="16sp"
-                        app:fontFamily="@font/cairo_regular" />-->
 
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/package_detail_block"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
@@ -238,25 +232,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="8dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginRight="8dp">
+                        android:layout_marginTop="2dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_marginBottom="2dp">
 
                     </android.support.v7.widget.RecyclerView>
 
-
-                    <!--<Button
-                        style="@style/Base.Widget.AppCompat.Button.Borderless"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Cancel"
-                        android:textAllCaps="false"
-                        android:textColor="@color/cancle_red"
-                        android:textSize="16sp"
-                        app:fontFamily="@font/cairo_regular" />-->
-
                 </LinearLayout>
-
-
 
             </carbon.widget.LinearLayout>
         </android.support.v4.widget.NestedScrollView>

@@ -12,42 +12,51 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/appbarLayoutHeight"
         android:stateListAnimator="@drawable/appbar_always_elevated"
-        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-        tools:targetApi="lollipop">
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar">
 
         <android.support.design.widget.CollapsingToolbarLayout
-            android:id="@+id/toolbar_layout"
+            android:id="@+id/accountCollapsing"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
-            android:theme="@style/CollapsingToolBarStyle"
             app:collapsedTitleGravity="start"
-            app:collapsedTitleTextAppearance="@style/MyTextApprncCol"
-            app:contentScrim="@color/colorDefaultAndroid"
+            app:collapsedTitleTextAppearance="@style/MyTextApprncCol.darkBg"
+            app:contentScrim="@color/black"
             app:expandedTitleGravity="start"
             app:expandedTitleMarginBottom="@dimen/expTittleMarginBottom"
             app:expandedTitleMarginStart="@dimen/expTittleMarginStart"
             app:expandedTitleMarginTop="@dimen/expTittleMarginTop"
-            app:expandedTitleTextAppearance="@style/MyTextApprncExp"
-
+            app:expandedTitleTextAppearance="@style/MyTextApprncExp.darkBg"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:scrimVisibleHeightTrigger="@dimen/scrimVisibleHeightTrigger"
-            app:title="Sign Up"
-            app:toolbarId="@+id/toolbar">
+            app:title="Sign Up">
 
             <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar"
+                android:id="@+id/accountToolbar"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/toolbarLayoutHeight"
                 app:buttonGravity="bottom"
                 app:layout_collapseMode="pin"
-                app:navigationIcon="@drawable/back_arraw_icon"
+                app:navigationIcon="@drawable/ic_arrow_back_white_24dp"
+                app:popupTheme="@style/AppTheme.PopupOverlay"
+                app:theme="@style/ThemeToolbar.default"
                 app:titleMarginBottom="@dimen/titleMarginBottom"
                 app:titleMarginStart="@dimen/titleMarginStart"
                 app:titleMarginTop="@dimen/titleMarginTop" />
 
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
+
+    <io.dume.dume.customView.HorizontalLoadView
+        android:id="@+id/loadView"
+        android:layout_width="12dp"
+        android:layout_height="4dp"
+        android:elevation="8dp"
+        android:translationY="2dp"
+        android:visibility="gone"
+        app:layout_anchor="@id/app_bar"
+        app:layout_anchorGravity="bottom"
+        app:rect_color="@color/carbon_black" />
 
     <include layout="@layout/content_auth_final" />
 
