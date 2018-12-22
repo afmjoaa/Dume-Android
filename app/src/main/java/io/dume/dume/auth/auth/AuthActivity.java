@@ -37,12 +37,14 @@ import io.dume.dume.auth.DataStore;
 import io.dume.dume.auth.auth_final.AuthRegisterActivity;
 import io.dume.dume.auth.code_verification.PhoneVerificationActivity;
 import io.dume.dume.auth.social_init.SocialInitActivity;
+import io.dume.dume.customView.HorizontalLoadView;
 import io.dume.dume.splash.FeaturedSliderAdapter;
 import io.dume.dume.student.homePage.StudentActivity;
+import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
 import io.dume.dume.teacher.homepage.TeacherActivtiy;
 
 
-public class AuthActivity extends AppCompatActivity implements AuthContract.View, BottomNavigationView.OnNavigationItemSelectedListener, TextView.OnEditorActionListener, TextWatcher {
+public class AuthActivity extends CustomStuAppCompatActivity implements AuthContract.View, BottomNavigationView.OnNavigationItemSelectedListener, TextView.OnEditorActionListener, TextWatcher {
     SliderLayout sliderLayout;
     AuthContract.Presenter presenter;
     private String[] promoTextArray;
@@ -64,17 +66,18 @@ public class AuthActivity extends AppCompatActivity implements AuthContract.View
     private AlertDialog spotDialog;
     private Context context;
     private Typeface cairoRegular;
+    private HorizontalLoadView loadView;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_authentication);
+        setActivityContext(this, fromFlag);
         presenter = new AuthPresenter(this, new AuthModel(this, this));
         presenter.enqueue();
         socialConnect.setOnClickListener(view -> startActivity(new Intent(AuthActivity.this, SocialInitActivity.class)));
         presenter.setBundle();
-
     }
 
 
@@ -155,6 +158,8 @@ public class AuthActivity extends AppCompatActivity implements AuthContract.View
         numberCounter = findViewById(R.id.phoneCount);
         changingTextView = findViewById(R.id.changingText);
         socialConnect = findViewById(R.id.socialConnect);
+        loadView = findViewById(R.id.loadView);
+
     }
 
     @Override
@@ -180,13 +185,15 @@ public class AuthActivity extends AppCompatActivity implements AuthContract.View
         toolbar.setVisibility(View.INVISIBLE);
         floatingButoon.hide();
         collapsingToolbarLayout.setTitle("");
+        setDarkStatusBarIcon();
     }
 
     @Override
     public void onAppBarLayoutCollapsed() {
         toolbar.setVisibility(View.VISIBLE);
         floatingButoon.show();
-        collapsingToolbarLayout.setTitle("Sign In");
+        collapsingToolbarLayout.setTitle("");
+        setLightStatusBarIcon();
     }
 
     @Override
@@ -232,23 +239,32 @@ public class AuthActivity extends AppCompatActivity implements AuthContract.View
     }
 
     @Override
-    public void showProgress(String titile, String message) {
-        if (!((Activity) context).isFinishing()) {
+    public void showProgress() {
+        /*if (!((Activity) context).isFinishing()) {
             spotDialog = spotsBuilder.setMessage(titile).build();
             spotDialog.show();
             Log.w(TAG, "showProgress: ");
+        }*/
+        if (loadView.getVisibility() == View.INVISIBLE || loadView.getVisibility() == View.GONE) {
+            loadView.setVisibility(View.VISIBLE);
         }
-
+        if (!loadView.isRunningAnimation()) {
+            loadView.startLoading();
+        }
     }
 
     @Override
     public void hideProgress() {
-        if (spotDialog.isShowing()) {
+        /*if (spotDialog.isShowing()) {
             spotDialog.dismiss();
             Log.w(TAG, "hideProgress: ");
+        }*/
+        if (loadView.isRunningAnimation()) {
+            loadView.stopLoading();
         }
-
-
+        if (loadView.getVisibility() == View.VISIBLE) {
+            loadView.setVisibility(View.INVISIBLE);
+        }
     }
 
     @Override

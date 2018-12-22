@@ -20,9 +20,20 @@ public class RadioBtnDialogue extends DialogFragment {
     String title;
     String[] radioOptions;
     DialogInterface.OnClickListener myListener;
+    DialogInterface.OnClickListener cancelListener;
+    DialogInterface.OnClickListener selectListener;
+    private AlertDialog.Builder builder;
 
     public void setItemChoiceListener(DialogInterface.OnClickListener myListener) {
         this.myListener = myListener;
+    }
+
+    public void setCancelListener(DialogInterface.OnClickListener cancelListener) {
+        this.cancelListener = cancelListener;
+    }
+
+    public void setSelectListener(DialogInterface.OnClickListener selectListener) {
+        this.selectListener = selectListener;
     }
 
     @Override
@@ -36,21 +47,38 @@ public class RadioBtnDialogue extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+        if(cancelListener == null && selectListener == null){
+            builder = new AlertDialog.Builder(Objects.requireNonNull(getActivity()), R.style.RadioDialogTheme);
+            builder.setTitle(title).setSingleChoiceItems(radioOptions, 0, myListener)
+                    .setPositiveButton("Select", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            Toast.makeText(getActivity(), "Set", Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            Toast.makeText(getActivity(), "Canceled", Toast.LENGTH_SHORT).show();
+                        }
+                    });
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(getActivity()), R.style.RadioDialogTheme);
-        builder.setTitle(title).setSingleChoiceItems(radioOptions, 0, myListener)
-                .setPositiveButton("Select", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        Toast.makeText(getActivity(), "Set", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        Toast.makeText(getActivity(), "Canceled", Toast.LENGTH_SHORT).show();
-                    }
-                });
+        }else if(cancelListener == null){
+            builder = new AlertDialog.Builder(Objects.requireNonNull(getActivity()), R.style.RadioDialogTheme);
+            builder.setTitle(title).setSingleChoiceItems(radioOptions, 0, myListener)
+                    .setPositiveButton("Select", selectListener)
+                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            Toast.makeText(getActivity(), "Canceled", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        }else{
+            builder = new AlertDialog.Builder(Objects.requireNonNull(getActivity()), R.style.RadioDialogTheme);
+            builder.setTitle(title).setSingleChoiceItems(radioOptions, 0, myListener)
+                    .setPositiveButton("Select", selectListener)
+                    .setNegativeButton("Cancel",cancelListener);
+        }
 
         AlertDialog alertDialog = builder.create();
         alertDialog.show();

@@ -44,6 +44,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.MapStyleOptions;
+import com.google.firebase.auth.FirebaseAuth;
 import com.hanks.htextview.scale.ScaleTextView;
 import com.tomergoldst.tooltips.ToolTipsManager;
 
@@ -55,8 +56,14 @@ import butterknife.ButterKnife;
 import fr.castorflex.android.verticalviewpager.VerticalViewPager;
 import info.hoang8f.android.segmented.SegmentedGroup;
 import io.dume.dume.R;
+import io.dume.dume.common.aboutUs.AboutUsActivity;
+import io.dume.dume.common.inboxActivity.InboxActivity;
+import io.dume.dume.common.privacyPolicy.PrivacyPolicyActivity;
+import io.dume.dume.student.freeCashBack.FreeCashBackActivity;
 import io.dume.dume.student.pojo.CusStuAppComMapActivity;
 import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
+import io.dume.dume.student.recordsPage.RecordsPageActivity;
+import io.dume.dume.student.studentHelp.StudentHelpActivity;
 import io.dume.dume.teacher.homepage.fragments.AcademicFragment;
 import io.dume.dume.teacher.homepage.fragments.InboxFragment;
 import io.dume.dume.teacher.homepage.fragments.PayFragment;
@@ -412,7 +419,8 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         scaleTextView.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Cairo_Regular.ttf"));
         scaleTextView.setAnimationListener(hTextView -> {
 
-        });  scaleTextView.setSelected(true);
+        });
+        scaleTextView.setSelected(true);
     }
 
     public void toggle(android.view.View view) {
@@ -475,6 +483,36 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
                 break;
             case R.id.skills:
                 startActivity(new Intent(this, SkillActivity.class));
+                break;
+            case R.id.about_us:
+                startActivity(new Intent(this, AboutUsActivity.class));
+                FirebaseAuth.getInstance().signOut();
+                break;
+            case R.id.help:
+                startActivity(new Intent(this, StudentHelpActivity.class));
+                break;
+            case R.id.payments:
+
+                break;
+            case R.id.forum:
+                Toast.makeText(context, "Coming soon", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.messages:
+                startActivity(new Intent(this, InboxActivity.class));
+                break;
+            case R.id.notifications:
+                Intent notificationTabIntent = new Intent(this, InboxActivity.class);
+                notificationTabIntent.putExtra("notiTab", 1);
+                startActivity(notificationTabIntent);
+                break;
+            case R.id.free_cashback:
+                startActivity(new Intent(this, FreeCashBackActivity.class));
+                break;
+            case R.id.privacy_policy:
+                startActivity(new Intent(this, PrivacyPolicyActivity.class));
+                break;
+            case R.id.records:
+                startActivity(new Intent(this, RecordsPageActivity.class));
                 break;
         }
         drawerLayout.closeDrawer(GravityCompat.START);

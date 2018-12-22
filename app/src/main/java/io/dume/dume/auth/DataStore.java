@@ -7,6 +7,7 @@ import java.io.Serializable;
 public class DataStore implements Serializable {
     public static String TEACHER = "teacher";
     public static String STUDENT = "student";
+    public static String BOOTCAMP = "bootcamp";
     public static int STATION = 1;
     private String firstName = null;
     private String lastName = null;

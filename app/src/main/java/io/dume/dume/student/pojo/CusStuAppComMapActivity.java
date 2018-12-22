@@ -181,7 +181,6 @@ public class CusStuAppComMapActivity extends CustomStuAppCompatActivity implemen
                         break;
                     case Activity.RESULT_CANCELED:
                         Log.i(TAG, "User chose not to make required location settings changes.");
-
                         break;
                 }
                 break;

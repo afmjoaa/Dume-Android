@@ -74,28 +74,32 @@ public class CrudSkillActivity extends CusStuAppComMapActivity implements CrudCo
     @Override
     public void init() {
         fromWhere = getIntent().getAction();
-        if(fromWhere!= null){
+        if (fromWhere != null) {
             if (fromWhere.equals("add")) {
                 configureAppbar(this, "Add New Skill");
             } else if (fromWhere.equals("edit")) {
                 configureAppbar(this, "Edit Skill");
-            }else if(fromWhere.equals(DumeUtils.STUDENT)){
+            } else if (fromWhere.equals(DumeUtils.STUDENT)) {
                 flush("fucked it from student");
+            } else if (fromWhere.equals(DumeUtils.TEACHER)) {
+                flush("fucked it from Teacher");
+            }else if (fromWhere.equals((DumeUtils.BOOTCAMP))){
+                flush("fucked it from Boot-camp");
             }
         }
         //getting the width
         int[] wh = DumeUtils.getScreenSize(this);
-        spacing = (int) ((wh[0]-((330) * (getResources().getDisplayMetrics().density))) / 4);
+        spacing = (int) ((wh[0] - ((330) * (getResources().getDisplayMetrics().density))) / 4);
         Log.e(TAG, "init: " + spacing);
         //initializing the title
-        configureAppbar(this,"Select category");
+        configureAppbar(this, "Select category");
         mainScrollingContainer.getBackground().setAlpha(90);
         //testing code here for elevation
         appBarLayout.addOnOffsetChangedListener((appBarLayout, verticalOffset) -> {
-            if (Math.abs(verticalOffset)-appBarLayout.getTotalScrollRange() == 0) {
+            if (Math.abs(verticalOffset) - appBarLayout.getTotalScrollRange() == 0) {
                 //  Collapsed
                 hackElevation.setVisibility(View.GONE);
-            }else {
+            } else {
                 //Expanded
                 hackElevation.setVisibility(View.VISIBLE);
             }
@@ -131,10 +135,15 @@ public class CrudSkillActivity extends CusStuAppComMapActivity implements CrudCo
         categoryGrid.setAdapter(new CategoryAdapter(categoryList, drawableList) {
             @Override
             protected void onCategoryItemClick(View view, int position) {
-                if(fromWhere.equals(DumeUtils.STUDENT)){
+                if (fromWhere.equals(DumeUtils.STUDENT)) {
                     startActivity(new Intent(getApplicationContext(), GrabingInfoActivity.class).setAction(DumeUtils.STUDENT).putExtra(DumeUtils.SELECTED_ID, position));
-                }else{
+                } else if (fromWhere.equals(DumeUtils.TEACHER)) {
                     startActivity(new Intent(getApplicationContext(), GrabingInfoActivity.class).setAction(DumeUtils.TEACHER).putExtra(DumeUtils.SELECTED_ID, position));
+                } else if (fromWhere.equals(DumeUtils.BOOTCAMP)) {
+                    startActivity(new Intent(getApplicationContext(), GrabingInfoActivity.class).setAction(DumeUtils.BOOTCAMP).putExtra(DumeUtils.SELECTED_ID, position));
+                } else {
+                    flush("this is else working ");
+                    startActivity(new Intent(getApplicationContext(), GrabingInfoActivity.class).setAction(DumeUtils.STUDENT).putExtra(DumeUtils.SELECTED_ID, position));
                 }
             }
         });

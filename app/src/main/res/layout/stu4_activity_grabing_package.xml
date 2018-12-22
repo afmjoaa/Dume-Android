@@ -25,7 +25,6 @@
 
     </io.dume.dume.customView.WindowInsetsFrameLayout>
 
-
     <io.dume.dume.customView.HorizontalLoadView
         android:id="@+id/loadView"
         android:layout_width="20dp"
@@ -38,6 +37,7 @@
         android:translationY="11dp"
         app:layout_anchor="@id/packageBottomSheet"
         app:layout_anchorGravity="top"
+        android:visibility="gone"
         app:rect_color="@color/carbon_black" />
 
     <carbon.widget.LinearLayout

@@ -14,8 +14,11 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,25 +28,28 @@ import io.dume.dume.auth.AuthModel;
 import io.dume.dume.auth.DataStore;
 import io.dume.dume.auth.auth.AuthActivity;
 import io.dume.dume.auth.auth_final.AuthRegisterActivity;
+import io.dume.dume.customView.HorizontalLoadView;
+import io.dume.dume.student.homePage.HomePageActivity;
 import io.dume.dume.student.homePage.StudentActivity;
 import io.dume.dume.teacher.homepage.TeacherActivtiy;
+import me.philio.pinentry.PinEntryView;
+
+import static io.dume.dume.util.DumeUtils.configureAppbar;
 
 public class PhoneVerificationActivity extends AppCompatActivity implements PhoneVerificationContract.View {
     private PhoneVerificationContract.Presenter presenter;
-    private Toolbar toolbar;
     private TextView detailsTextView;
     private static final String TAG = "PhoneVerificationActivi";
-    private EditText pinEditText;
+    private PinEntryView pinEditText;
     private AppBarLayout appbar;
     private FloatingActionButton fab;
-
     private TextView timerTextView;
     private Button resendButton;
     private DataStore dataStore;
-    private SpotsDialog.Builder spotsBuilder;
-    private AlertDialog alertDialog;
     private AlertDialog dialog = null;
     private Context context;
+    private HorizontalLoadView loadView;
+    private TextView editPhn;
 
 
     @Override
@@ -59,9 +65,15 @@ public class PhoneVerificationActivity extends AppCompatActivity implements Phon
     public void init() {
         context = this;
         pinEditText.setOnClickListener(view -> appbar.setExpanded(false));
-        fab.setOnClickListener(view -> presenter.onPinConfirm(pinEditText.getText().toString()));
-        resendButton.setOnClickListener(view -> presenter.onResendCode());
-        spotsBuilder = new SpotsDialog.Builder().setContext(this);
+        fab.setOnClickListener(view -> {
+            presenter.onPinConfirm(pinEditText.getText().toString());
+        });
+        resendButton.setOnClickListener(view -> {
+            showProgress();
+            resendButton.setText("Sending Code....");
+            resendButton.setEnabled(false);
+            presenter.onResendCode();
+        });
         dataStore = (DataStore) this.getIntent().getSerializableExtra("datastore");
         detailsTextView.setText("Enter the 6 digit verification code sent to you at +88 " + dataStore.getPhoneNumber());
         detailsTextView.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Cairo-ExtraLight.ttf"));
@@ -69,25 +81,19 @@ public class PhoneVerificationActivity extends AppCompatActivity implements Phon
 
     @Override
     public void initActionBar() {
-        toolbar.setTitleTextAppearance(this, R.style.Widget_BottomNavigationView);
-        setSupportActionBar(toolbar);
-        ActionBar supportActionBar = getSupportActionBar();
-        if (supportActionBar != null) {
-            supportActionBar.setDisplayHomeAsUpEnabled(true);
-            supportActionBar.setDisplayShowHomeEnabled(true);
-        }
-        Log.w(TAG, "initActionBar: ");
+        configureAppbar(this, "Verify your number", true);
     }
 
     @Override
     public void findView() {
-        toolbar = findViewById(R.id.verifyToolbar);
         detailsTextView = findViewById(R.id.detailsTxt);
         pinEditText = findViewById(R.id.pinEditTxt);
-        appbar = findViewById(R.id.verifyAppBar);
+        appbar = findViewById(R.id.app_bar);
         fab = findViewById(R.id.verifyFab);
         timerTextView = findViewById(R.id.timerTxt);
         resendButton = findViewById(R.id.resendButton);
+        loadView = findViewById(R.id.loadView);
+        editPhn = findViewById(R.id.editPhn);
     }
 
     @Override
@@ -98,7 +104,7 @@ public class PhoneVerificationActivity extends AppCompatActivity implements Phon
 
     @Override
     public void onVerificationFailed(String msg) {
-        pinEditText.setError(msg);
+        showToast(msg);
     }
 
     @Override
@@ -109,24 +115,27 @@ public class PhoneVerificationActivity extends AppCompatActivity implements Phon
 
     @Override
     public void gotoStudentActivity() {
-        startActivity(new Intent(this, StudentActivity.class));
+        startActivity(new Intent(this, HomePageActivity.class));
         finish();
     }
 
-
     @Override
-    public void showProgress(String title) {
-        if (!((Activity) context).isFinishing()) {
-            dialog = spotsBuilder.setMessage(title).build();
-            dialog.show();
+    public void showProgress() {
+        if (loadView.getVisibility() == View.INVISIBLE || loadView.getVisibility() == View.GONE) {
+            loadView.setVisibility(View.VISIBLE);
         }
-
+        if (!loadView.isRunningAnimation()) {
+            loadView.startLoading();
+        }
     }
 
     @Override
     public void hideProgress() {
-        if (dialog != null) {
-            dialog.dismiss();
+        if (loadView.isRunningAnimation()) {
+            loadView.stopLoading();
+        }
+        if (loadView.getVisibility() == View.VISIBLE) {
+            loadView.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -137,8 +146,13 @@ public class PhoneVerificationActivity extends AppCompatActivity implements Phon
 
     @Override
     public void onTimerCompleted() {
+        resendButton.setText("Resend Code");
+        resendButton.setEnabled(true);
         timerTextView.setVisibility(View.GONE);
         resendButton.setVisibility(View.VISIBLE);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        layoutParams.setMarginStart(10 * (int) getResources().getDisplayMetrics().density);
+        editPhn.setLayoutParams(layoutParams);
     }
 
     @Override
@@ -148,8 +162,13 @@ public class PhoneVerificationActivity extends AppCompatActivity implements Phon
 
     @Override
     public void onTimerStarted() {
+        hideProgress();
         timerTextView.setVisibility(View.VISIBLE);
         resendButton.setVisibility(View.GONE);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        layoutParams.setMarginStart(0);
+        editPhn.setLayoutParams(layoutParams);
+
     }
 
     @Override

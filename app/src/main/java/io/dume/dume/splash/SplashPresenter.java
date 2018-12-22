@@ -57,6 +57,13 @@ public class SplashPresenter implements SplashContract.Presenter {
                 }
 
                 @Override
+                public void onBootcamp() {
+                    model.detachListener();
+                    view.gotoTeacherActivity();
+                    Log.w(TAG, "onBootcamp: ");
+                }
+
+                @Override
                 public void onFail(String exeption) {
 
                 }
