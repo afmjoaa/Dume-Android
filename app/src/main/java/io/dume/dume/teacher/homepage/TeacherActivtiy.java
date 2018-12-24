@@ -60,10 +60,13 @@ import io.dume.dume.common.aboutUs.AboutUsActivity;
 import io.dume.dume.common.inboxActivity.InboxActivity;
 import io.dume.dume.common.privacyPolicy.PrivacyPolicyActivity;
 import io.dume.dume.student.freeCashBack.FreeCashBackActivity;
+import io.dume.dume.student.heatMap.HeatMapActivity;
+import io.dume.dume.student.homePage.HomePageActivity;
 import io.dume.dume.student.pojo.CusStuAppComMapActivity;
 import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
 import io.dume.dume.student.recordsPage.RecordsPageActivity;
 import io.dume.dume.student.studentHelp.StudentHelpActivity;
+import io.dume.dume.student.studentPayment.StudentPaymentActivity;
 import io.dume.dume.teacher.homepage.fragments.AcademicFragment;
 import io.dume.dume.teacher.homepage.fragments.InboxFragment;
 import io.dume.dume.teacher.homepage.fragments.PayFragment;
@@ -459,12 +462,17 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
                 break;
             case R.id.al_records:
                 updateRecordsBadge(++mRecPendingCount, ++mRecAcceptedCount, ++mRecCurrentCount);
+                startActivity(new Intent(this, RecordsPageActivity.class));
                 break;
             case R.id.al_messages:
                 updateChatBadge(++mChatCount);
+                startActivity(new Intent(this, InboxActivity.class));
                 break;
             case R.id.al_notifications:
                 updateNotificationsBadge(++mNotificationsCount);
+                Intent notificationTabIntent = new Intent(this, InboxActivity.class);
+                notificationTabIntent.putExtra("notiTab", 1);
+                startActivity(notificationTabIntent);
                 break;
 
         }
@@ -492,7 +500,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
                 startActivity(new Intent(this, StudentHelpActivity.class));
                 break;
             case R.id.payments:
-
+                startActivity(new Intent(this, StudentPaymentActivity.class));
                 break;
             case R.id.forum:
                 Toast.makeText(context, "Coming soon", Toast.LENGTH_SHORT).show();
@@ -514,8 +522,19 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
             case R.id.records:
                 startActivity(new Intent(this, RecordsPageActivity.class));
                 break;
+            case R.id.heat_map:
+                startActivity(new Intent(this, HeatMapActivity.class));
+                break;
+            case R.id.student:
+                startActivity(new Intent(this, HomePageActivity.class));
+                break;
+            case R.id.mentor:
+                break;
+            case R.id.boot_camp:
+                break;
+
         }
-        drawerLayout.closeDrawer(GravityCompat.START);
+        drawerLayout.closeDrawer(GravityCompat.START,true);
         return true;
     }
 

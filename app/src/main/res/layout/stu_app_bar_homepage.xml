@@ -67,6 +67,7 @@
                 app:layout_collapseMode="pin"
                 app:navigationIcon="@drawable/ic_arrow_back_white_24dp"
                 app:popupTheme="@style/Base.ThemeOverlay.AppCompat.Dark"
+                app:theme="@style/ThemeToolbar.default"
                 app:titleMarginBottom="@dimen/titleMarginBottom"
                 app:titleMarginStart="@dimen/titleMarginStart"
                 app:titleMarginTop="@dimen/titleMarginTop">

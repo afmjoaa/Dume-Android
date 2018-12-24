@@ -23,6 +23,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.GravityCompat;
@@ -30,6 +31,7 @@ import android.support.v4.view.ViewCompat;
 import android.support.v4.view.animation.FastOutLinearInInterpolator;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.NestedScrollView;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -89,6 +91,7 @@ import io.dume.dume.teacher.homepage.TeacherActivtiy;
 import io.dume.dume.util.DumeUtils;
 import me.zhanghai.android.materialratingbar.MaterialRatingBar;
 
+import static com.facebook.FacebookSdk.getApplicationContext;
 import static io.dume.dume.util.DumeUtils.animateImage;
 
 public class HomePageActivity extends CusStuAppComMapActivity implements HomePageContract.View,
@@ -142,6 +145,17 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
     private RecyclerView hPageBSRecycler;
     private String[] feedbackStrings;
     private SegmentedGroup radioSegmentGroup;
+    private ActionBar supportActionBarMain;
+    private ActionBar supportActionBarSecond;
+    private MenuItem alProfile;
+    private MenuItem alNoti;
+    private MenuItem alChat;
+    private MenuItem alRecords;
+    private LayerDrawable alProfileIcon;
+    private LayerDrawable alNotiIcon;
+    private LayerDrawable alChatIcon;
+    private LayerDrawable alRecordsIcon;
+    private int optionMenu = R.menu.stu_homepage;
 
 
     @Override
@@ -297,8 +311,9 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
         secondaryCollapsableToolbar.setCollapsedTitleTypeface(Typeface.createFromAsset(activity.getAssets(), "fonts/Cairo-Light.ttf"));
         secondaryCollapsableToolbar.setExpandedTitleTypeface(Typeface.createFromAsset(activity.getAssets(), "fonts/Cairo-Light.ttf"));
         secondaryCollapsableToolbar.setTitle("Messages");
+        Drawable drawable = ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_more_vert_white_24dp);
+        secondaryToolbar.setOverflowIcon(drawable);
     }
-
 
     @Override
     public void makingCallbackInterfaces() {
@@ -389,7 +404,6 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
     }
 
 
-
     @Override
     public void onBackPressed() {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -429,71 +443,92 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
         mPresenter.onMenuItemInteracted(item);
-        drawer.closeDrawer(GravityCompat.START);
+        drawer.closeDrawer(GravityCompat.START, true);
         return true;
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.stu_homepage, menu);
-        //testing visibility  -----   menu.findItem(R.id.al_messages).setVisible(false);
+        getMenuInflater().inflate(optionMenu, menu);
+        if(optionMenu == R.menu.stu_homepage){
+            alProfile = menu.findItem(R.id.al_display_pic);
+            alProfileIcon = (LayerDrawable) alProfile.getIcon();
+            DumeUtils.setBadgeChar(this, alProfileIcon, 0xfff56161, Color.BLACK, mProfileChar, 3.0f, 3.0f);
 
-        MenuItem alProfile = menu.findItem(R.id.al_display_pic);
-        LayerDrawable alProfileIcon = (LayerDrawable) alProfile.getIcon();
-        DumeUtils.setBadgeChar(this, alProfileIcon, 0xfff56161, Color.BLACK, mProfileChar, 3.0f, 3.0f);
+            alNoti = menu.findItem(R.id.al_notifications);
+            alNotiIcon = (LayerDrawable) alNoti.getIcon();
+            DumeUtils.setBadgeCount(this, alNotiIcon, R.id.ic_badge, 0xfface0ac, Color.BLACK, mNotificationsCount, 3.0f, 3.0f);
 
-        MenuItem alNoti = menu.findItem(R.id.al_notifications);
-        LayerDrawable alNotiIcon = (LayerDrawable) alNoti.getIcon();
-        DumeUtils.setBadgeCount(this, alNotiIcon, R.id.ic_badge, 0xfface0ac, Color.BLACK, mNotificationsCount, 3.0f, 3.0f);
+            alChat = menu.findItem(R.id.al_messages);
+            alChatIcon = (LayerDrawable) alChat.getIcon();
+            DumeUtils.setBadgeCount(this, alChatIcon, R.id.ic_badge, 0xfface0ac, Color.BLACK, mChatCount, 3.0f, 3.0f);
 
-        MenuItem alChat = menu.findItem(R.id.al_messages);
-        LayerDrawable alChatIcon = (LayerDrawable) alChat.getIcon();
-        DumeUtils.setBadgeCount(this, alChatIcon, R.id.ic_badge, 0xfface0ac, Color.BLACK, mChatCount, 3.0f, 3.0f);
-
-        MenuItem alRecords = menu.findItem(R.id.al_records);
-        LayerDrawable alRecordsIcon = (LayerDrawable) alRecords.getIcon();
-        DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badgeTwo, 0xfff56161, Color.BLACK, mRecCurrentCount, 3.0f, 3.0f);
-        DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badgeOne, 0xfff4f094, Color.BLACK, mRecAcceptedCount, 8.0f, -3.4f);
-        DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badge, 0xfface0ac, Color.BLACK, mRecPendingCount, 12.0f, 3.0f);
-
-        if (ISNIGHT && false) {
-            Drawable alProfileDrawable = ResourcesCompat.getDrawable(getResources(), R.drawable.alias_profile_icon, null);
-            alProfileDrawable = DrawableCompat.wrap(Objects.requireNonNull(alProfileDrawable));
-            DrawableCompat.setTint(alProfileDrawable, Color.WHITE);
-            alProfileIcon.setDrawableByLayerId(R.id.ic_al_profile_pic, alProfileDrawable);
-
-            Drawable alRecordDrawable = ResourcesCompat.getDrawable(getResources(), R.drawable.record_icon, null);
-            alRecordDrawable = DrawableCompat.wrap(Objects.requireNonNull(alRecordDrawable));
-            DrawableCompat.setTint(alRecordDrawable, Color.WHITE);
-            alRecordsIcon.setDrawableByLayerId(R.id.ic_al_record, alRecordDrawable);
-
-            Drawable alNotiDrawable = ResourcesCompat.getDrawable(getResources(), R.drawable.noti_icon, null);
-            alNotiDrawable = DrawableCompat.wrap(Objects.requireNonNull(alNotiDrawable));
-            DrawableCompat.setTint(alNotiDrawable, Color.WHITE);
-            alNotiIcon.setDrawableByLayerId(R.id.ic_al_noti, alNotiDrawable);
-
-            Drawable alChatDrawable = ResourcesCompat.getDrawable(getResources(), R.drawable.chat_icon, null);
-            alChatDrawable = DrawableCompat.wrap(Objects.requireNonNull(alChatDrawable));
-            DrawableCompat.setTint(alChatDrawable, Color.WHITE);
-            alChatIcon.setDrawableByLayerId(R.id.ic_al_chat, alChatDrawable);
-
+            alRecords = menu.findItem(R.id.al_records);
+            alRecordsIcon = (LayerDrawable) alRecords.getIcon();
+            DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badgeTwo, 0xfff56161, Color.BLACK, mRecCurrentCount, 3.0f, 3.0f);
+            DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badgeOne, 0xfff4f094, Color.BLACK, mRecAcceptedCount, 8.0f, -3.4f);
+            DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badge, 0xfface0ac, Color.BLACK, mRecPendingCount, 12.0f, 3.0f);
         }
-        return true;
+       return true;
+    }
+
+    private void hideToolbarMenu() {
+        alProfile.setVisible(false);
+        alNoti.setVisible(false);
+        alChat.setVisible(false);
+        alRecords.setVisible(false);
+    }
+
+    private void showToolbarMenu() {
+        alProfile.setVisible(true);
+        alNoti.setVisible(true);
+        alChat.setVisible(true);
+        alRecords.setVisible(true);
+    }
+
+    private void setMenuIconColor(int tint) {
+        Drawable alProfileDrawable = ResourcesCompat.getDrawable(getResources(), R.drawable.alias_profile_icon, null);
+        alProfileDrawable = DrawableCompat.wrap(Objects.requireNonNull(alProfileDrawable));
+        DrawableCompat.setTint(alProfileDrawable, tint);
+        alProfileIcon.setDrawableByLayerId(R.id.ic_al_profile_pic, alProfileDrawable);
+
+        Drawable alRecordDrawable = ResourcesCompat.getDrawable(getResources(), R.drawable.record_icon, null);
+        alRecordDrawable = DrawableCompat.wrap(Objects.requireNonNull(alRecordDrawable));
+        DrawableCompat.setTint(alRecordDrawable, tint);
+        alRecordsIcon.setDrawableByLayerId(R.id.ic_al_record, alRecordDrawable);
+
+        Drawable alNotiDrawable = ResourcesCompat.getDrawable(getResources(), R.drawable.noti_icon, null);
+        alNotiDrawable = DrawableCompat.wrap(Objects.requireNonNull(alNotiDrawable));
+        DrawableCompat.setTint(alNotiDrawable, tint);
+        alNotiIcon.setDrawableByLayerId(R.id.ic_al_noti, alNotiDrawable);
+
+        Drawable alChatDrawable = ResourcesCompat.getDrawable(getResources(), R.drawable.chat_icon, null);
+        alChatDrawable = DrawableCompat.wrap(Objects.requireNonNull(alChatDrawable));
+        DrawableCompat.setTint(alChatDrawable, tint);
+        alChatIcon.setDrawableByLayerId(R.id.ic_al_chat, alChatDrawable);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         mPresenter.onMenuItemInteracted(item);
         Drawable drawableGeneral = item.getIcon();
         if (drawableGeneral instanceof Animatable) {
             ((Animatable) drawableGeneral).start();
         }
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            } else {
+                drawer.openDrawer(GravityCompat.START, true);
+                //super.onBackPressed();
+            }
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
+
 
     public void bottomSheetCallbackConfig() {
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
@@ -508,13 +543,21 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
                     fab.animate().translationYBy((float) (60.0f * (getResources().getDisplayMetrics().density))).setDuration(60).start();
                     COMPASSBTN.animate().translationYBy((float) (54.0f * (getResources().getDisplayMetrics().density))).setDuration(60).start();
                 } else if (BottomSheetBehavior.STATE_COLLAPSED == newState) {
-                    if (ISNIGHT) setLightStatusBarIcon();
-                    else setDarkStatusBarIcon();
+                    setDarkStatusBarIcon();
                     nestedScrollViewContent.setVisibility(View.VISIBLE);
                     viewMusk.setVisibility(View.GONE);
                     secondaryAppBarLayout.setVisibility(View.GONE);
                     defaultAppBerLayout.setVisibility(View.VISIBLE);
                     llBottomSheet.animate().scaleY(1).setDuration(0).start();
+                    //hack
+                    setSupportActionBar(toolbar);
+                    supportActionBarMain = getSupportActionBar();
+                    if (supportActionBarMain != null) {
+                        supportActionBarMain.setDisplayHomeAsUpEnabled(true);
+                        supportActionBarMain.setDisplayShowHomeEnabled(true);
+                        optionMenu = R.menu.stu_homepage;
+                        invalidateOptionsMenu();
+                    }
 
                 } else if (BottomSheetBehavior.STATE_EXPANDED == newState) {
                     setLightStatusBarIcon();
@@ -522,8 +565,15 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
                     viewMusk.setVisibility(View.VISIBLE);
                     secondaryAppBarLayout.setVisibility(View.VISIBLE);
                     defaultAppBerLayout.setVisibility(View.GONE);
-
-
+                    //hack
+                    setSupportActionBar(secondaryToolbar);
+                    supportActionBarSecond = getSupportActionBar();
+                    if (supportActionBarSecond != null) {
+                        supportActionBarSecond.setDisplayHomeAsUpEnabled(true);
+                        supportActionBarSecond.setDisplayShowHomeEnabled(true);
+                        optionMenu = R.menu.menu_only_help;
+                        invalidateOptionsMenu();
+                    }
                 } else if (BottomSheetBehavior.STATE_DRAGGING == newState) {
                     viewMusk.setVisibility(View.VISIBLE);
                     secondaryAppBarLayout.setVisibility(View.VISIBLE);
@@ -674,8 +724,9 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
             /** Called when a drawer has settled in a completely closed state. */
             public void onDrawerClosed(View view) {
                 super.onDrawerClosed(view);
-                if (ISNIGHT) setLightStatusBarIcon();
-                else setDarkStatusBarIcon();
+                //if (ISNIGHT) setLightStatusBarIcon();
+                //else
+                setDarkStatusBarIcon();
                 switchAcountBtn.setCompoundDrawablesWithIntrinsicBounds(leftDrawable, null, more, null);
                 mainMenu();
             }
@@ -833,7 +884,6 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
         Button SubmitBtn = dialog.findViewById(R.id.submit_btn);
 
 
-
         //testing the recycle view here
         HomePageRatingAdapter itemRatingRecycleAdapter = new HomePageRatingAdapter(this, getFinalRatingData());
         itemRatingRecycleView.setAdapter(itemRatingRecycleAdapter);
@@ -898,7 +948,7 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
                     itemRatingRecycleView.setVisibility(View.VISIBLE);
                     feedbackTextViewLayout.setVisibility(View.VISIBLE);
 
-                } else{
+                } else {
                     Toast.makeText(HomePageActivity.this, "else running", Toast.LENGTH_SHORT).show();
                 }
             }

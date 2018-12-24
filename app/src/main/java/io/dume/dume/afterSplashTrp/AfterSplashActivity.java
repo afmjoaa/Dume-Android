@@ -1,18 +1,25 @@
 package io.dume.dume.afterSplashTrp;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+
+import java.util.Objects;
 
 import io.dume.dume.R;
 import io.dume.dume.afterSplashTrp.adapter.AfterSplashPagerAdapter;
@@ -33,6 +40,7 @@ public class AfterSplashActivity extends AppCompatActivity implements DemoCardFr
     private static Boolean MLOCATIONPERMISSIONGRANTED = false;
     private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
     private static final String COURSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
+    private static final String READ_PHONE_STATE = Manifest.permission.READ_PHONE_STATE;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
 
 
@@ -52,36 +60,30 @@ public class AfterSplashActivity extends AppCompatActivity implements DemoCardFr
                 Button button = (Button) view;
                /*button.setEnabled(false);
                 button.setBackgroundColor(getResources().getColor(R.color.green));*/
-               switch (mPager.getCurrentItem()){
-                   case 0:
-                       mPager.setCurrentItem(mPager.getCurrentItem() + 1, true);
-                       break;
-                   case 1:
-                       mPager.setCurrentItem(mPager.getCurrentItem() + 1, true);
-                       break;
-                   case 2:
-                       getLocationPermission();
-                       break;
-                   case 3:
-                       mPager.setCurrentItem(mPager.getCurrentItem() + 1, true);
-                       break;
-                   case 4:
-                       if(checkLocationPermission()){
-                           startActivity(new Intent(getApplicationContext(), AuthActivity.class));
-                           AfterSplashActivity.this.finish();
-                       }else{
-                           Toast.makeText(AfterSplashActivity.this, "Please grant the permission", Toast.LENGTH_SHORT).show();
-                           //getLocationPermission();
-                           mPager.setCurrentItem(2, true);
-                       }
-                       break;
-               }
-               /* if (mPager.getCurrentItem() < 4) {
-                    mPager.setCurrentItem(mPager.getCurrentItem() + 1, true);
-                } else if (mPager.getCurrentItem() == 4) {
-                    startActivity(new Intent(getApplicationContext(), AuthActivity.class));
-                    AfterSplashActivity.this.finish();
-                }*/
+                switch (mPager.getCurrentItem()) {
+                    case 0:
+                        mPager.setCurrentItem(mPager.getCurrentItem() + 1, true);
+                        break;
+                    case 1:
+                        mPager.setCurrentItem(mPager.getCurrentItem() + 1, true);
+                        break;
+                    case 2:
+                        getLocationPermission();
+                        break;
+                    case 3:
+                        mPager.setCurrentItem(mPager.getCurrentItem() + 1, true);
+                        break;
+                    case 4:
+                        if (checkPermissions()) {
+                            startActivity(new Intent(getApplicationContext(), AuthActivity.class));
+                            AfterSplashActivity.this.finish();
+                        } else {
+                            Toast.makeText(AfterSplashActivity.this, "Please grant the permission", Toast.LENGTH_SHORT).show();
+                            //getLocationPermission();
+                            mPager.setCurrentItem(2, true);
+                        }
+                        break;
+                }
             }
         });
     }
@@ -93,18 +95,18 @@ public class AfterSplashActivity extends AppCompatActivity implements DemoCardFr
 
     public void getLocationPermission() {
         Log.d(TAG, "getLocationPermission: getting location permissions");
-        String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
+        String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.READ_PHONE_STATE};
         if (ContextCompat.checkSelfPermission(this.getApplicationContext(), FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(this.getApplicationContext(), COURSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                ContextCompat.checkSelfPermission(this.getApplicationContext(), COURSE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(this.getApplicationContext(), READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
             MLOCATIONPERMISSIONGRANTED = true;
             Toast.makeText(this, "permission granted", Toast.LENGTH_SHORT).show();
             mPager.setCurrentItem(mPager.getCurrentItem() + 1, true);
         } else {
-            Toast.makeText(this, "fucked it called", Toast.LENGTH_SHORT).show();
             ActivityCompat.requestPermissions(AfterSplashActivity.this, permissions, LOCATION_PERMISSION_REQUEST_CODE);
         }
     }
-    
+
     //checking the permission result here
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -112,12 +114,12 @@ public class AfterSplashActivity extends AppCompatActivity implements DemoCardFr
             case 1234: {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    MLOCATIONPERMISSIONGRANTED = true;
-                    mPager.setCurrentItem(mPager.getCurrentItem() + 1, true);
+                    if(checkPermissions()){
+                        MLOCATIONPERMISSIONGRANTED = true;
+                        mPager.setCurrentItem(mPager.getCurrentItem() + 1, true);
+                    }
                 } else {
                     Toast.makeText(this, "Please accept the permission to proceed", Toast.LENGTH_SHORT).show();
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
                 }
             }
             break;
@@ -126,15 +128,28 @@ public class AfterSplashActivity extends AppCompatActivity implements DemoCardFr
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
+    public boolean checkPermissions() {
+        int resOne = this.checkCallingOrSelfPermission(FINE_LOCATION);
+        int resTwo = this.checkCallingOrSelfPermission(COURSE_LOCATION);
+        int resPhone = this.checkCallingOrSelfPermission(READ_PHONE_STATE);
+        return (resOne == PackageManager.PERMISSION_GRANTED
+                && resTwo == PackageManager.PERMISSION_GRANTED
+                && resPhone ==PackageManager.PERMISSION_GRANTED );
+    }
 
+    @SuppressLint("HardwareIds")
+    public String getIMEI(Activity activity) {
+        TelephonyManager telephonyManager = (TelephonyManager) activity.getSystemService(Context.TELEPHONY_SERVICE);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
+            return Objects.requireNonNull(telephonyManager).getDeviceId();
+        }else{
+            return "not permitted";
+        }
+    }
 
-    public boolean checkLocationPermission()
-    {
-        String permissionOne = "android.permission.ACCESS_FINE_LOCATION";
-        String permissionTwo = "android.permission.ACCESS_COARSE_LOCATION";
-        int resOne = this.checkCallingOrSelfPermission(permissionOne);
-        int resTwo = this.checkCallingOrSelfPermission(permissionTwo);
-        return (resOne == PackageManager.PERMISSION_GRANTED && resTwo == PackageManager.PERMISSION_GRANTED);
+    public String getDeviceUniqueID(Activity activity) {
+        @SuppressLint("HardwareIds") String device_unique_id = Settings.Secure.getString(activity.getContentResolver(), Settings.Secure.ANDROID_ID);
+        return device_unique_id;
     }
 }
 

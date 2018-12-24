@@ -656,7 +656,7 @@ provided.Tap salary for details.  </string>
     <string-array name="after_splash_title">
         <item>Find mentor anytime and anywhere</item>
         <item>Real time service for student and mentor</item>
-        <item>Let Dume to access your location</item>
+        <item>Allow Dume to access location &amp; phone</item>
         <item>Choose between Student, Mentor or Boot-camp profile</item>
         <item>Search between Dume Gang, Regular Dume or Instant Dume  package</item>
     </string-array>
@@ -664,7 +664,7 @@ provided.Tap salary for details.  </string>
     <string-array name="after_splash_data">
         <item>Welcome to Dume platform.It\'s a full featured skill share app of all category and type.</item>
         <item><![CDATA[Know something better then other!! Start sharing and earn money.Don\'t have anything to share don\'t worry start taking dume and be the best at what you do.]]></item>
-        <item><![CDATA[Dume would like to access your current location for proper functioning & better search result.]]></item>
+        <item><![CDATA[Dume would like to access your current location & make phone for proper functioning & better search result.]]></item>
         <item>Select which category suite you best and build your profile.You can switch profile anytime as you wish.</item>
         <item>In simple and short Dume Gang is couching center whereas Regular Dume is monthly tuition and Instant Dume is weekly.</item>
     </string-array>
