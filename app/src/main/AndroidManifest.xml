@@ -11,6 +11,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
          Google Maps Android API v2, but you must specify either coarse or fine
@@ -62,8 +63,9 @@
         <activity
             android:name=".auth.auth.AuthActivity"
             android:theme="@style/LoginTheme" />
-        <activity android:name=".auth.code_verification.PhoneVerificationActivity"
-            android:theme="@style/MyStyle"/>
+        <activity
+            android:name=".auth.code_verification.PhoneVerificationActivity"
+            android:theme="@style/MyStyle" />
         <activity
             android:name=".auth.auth_final.AuthRegisterActivity"
             android:label="@string/title_activity_auth_final"
@@ -130,6 +132,11 @@
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
                 <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".broadcastReceiver.SMSAutoVerfication">
+            <intent-filter>
+                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>
         </receiver>
 

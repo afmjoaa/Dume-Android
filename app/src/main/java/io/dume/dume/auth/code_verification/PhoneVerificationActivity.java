@@ -1,13 +1,16 @@
 package io.dume.dume.auth.code_verification;
 
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,7 +45,14 @@ public class PhoneVerificationActivity extends AppCompatActivity implements Phon
     private Context context;
     private HorizontalLoadView loadView;
     private TextView editPhn;
+    public static boolean isAlive;
+    private BroadcastReceiver smsAutoVerfication;
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        isAlive = true;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +60,30 @@ public class PhoneVerificationActivity extends AppCompatActivity implements Phon
         setContentView(R.layout.activity_phone_verification);
         presenter = new PhoneVerficationPresenter(this, this, new AuthModel(this, this));
         presenter.enqueue();
+        smsAutoVerfication = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                Bundle extras = intent.getExtras();
+
+                String sms_body = null;
+                if (extras != null) {
+                    sms_body = extras.getString("sms_body");
+
+                    if (sms_body != null && sms_body.contains("code")) {
+                        String[] split = sms_body.split(" ");
+                        String smsCode = split[0];
+                        char[] chars = smsCode.toCharArray();
+                        pinEditText.setText(smsCode);
+                        Log.w(TAG, "onReceive: Sms Code " + smsCode);
+                        fab.performClick();
+                    }
+
+                }
+
+            }
+        };
+        registerReceiver(smsAutoVerfication, new IntentFilter("got_sms"));
+
 
     }
 
@@ -143,7 +177,7 @@ public class PhoneVerificationActivity extends AppCompatActivity implements Phon
         timerTextView.setVisibility(View.GONE);
         resendButton.setVisibility(View.VISIBLE);
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        layoutParams.setMargins(10 * (int) getResources().getDisplayMetrics().density,0,0,0);
+        layoutParams.setMargins(10 * (int) getResources().getDisplayMetrics().density, 0, 0, 0);
         editPhn.setLayoutParams(layoutParams);
     }
 
@@ -158,7 +192,7 @@ public class PhoneVerificationActivity extends AppCompatActivity implements Phon
         timerTextView.setVisibility(View.VISIBLE);
         resendButton.setVisibility(View.GONE);
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        layoutParams.setMargins(0,0,0,0);
+        layoutParams.setMargins(0, 0, 0, 0);
         editPhn.setLayoutParams(layoutParams);
 
     }
@@ -168,6 +202,10 @@ public class PhoneVerificationActivity extends AppCompatActivity implements Phon
         super.onDestroy();
         if (dialog != null) {
             dialog.dismiss();
+        }
+        isAlive = false;
+        if (smsAutoVerfication != null) {
+            unregisterReceiver(smsAutoVerfication);
         }
     }
 

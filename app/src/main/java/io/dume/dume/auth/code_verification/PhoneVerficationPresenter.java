@@ -23,6 +23,7 @@ import io.dume.dume.auth.auth.AuthContract;
 import io.dume.dume.util.DumeUtils;
 
 public class PhoneVerficationPresenter implements PhoneVerificationContract.Presenter {
+
     PhoneVerificationContract.View view;
     PhoneVerificationContract.Model model;
     private CountDownTimer countDownTimer;
