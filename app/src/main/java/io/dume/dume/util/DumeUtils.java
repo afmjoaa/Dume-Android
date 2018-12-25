@@ -1,5 +1,6 @@
 package io.dume.dume.util;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Point;
@@ -29,6 +30,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Objects;
 import java.util.TimeZone;
@@ -44,6 +46,7 @@ public class DumeUtils {
     public static final String BOOTCAMP = "boot-camp";
     public static final String STUDENT = "student";
     public static final String SELECTED_ID = "s_id";
+    private static final String TAG = "Bal";
 
     public static int GALLARY_IMAGE = 1;
     public static int CAMERA_IMAGE = 2;
@@ -356,6 +359,46 @@ public class DumeUtils {
         // Hide the status bar.
         int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
         decorView.setSystemUiVisibility(uiOptions);
+    }
+
+
+    @SuppressLint("HardwareIds")
+    public static ArrayList<String> getImei(Context context) {
+        ArrayList<String> imeiList = new ArrayList<>();
+/*
+        TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(context, (telephonyManager != null ? telephonyManager.getDeviceId() : null), Toast.LENGTH_SHORT).show();
+
+            if (telephonyManager != null) {
+                String slotOne = telephonyManager.getDeviceId();
+
+            }
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
+            }
+        }*/
+        TelephonyInfo telephonyInfo = TelephonyInfo.getInstance(context);
+
+        String imeiSIM1 = telephonyInfo.getImsiSIM1();
+        String imeiSIM2 = telephonyInfo.getImsiSIM2();
+        boolean isSIM1Ready = telephonyInfo.isSIM1Ready();
+        boolean isSIM2Ready = telephonyInfo.isSIM2Ready();
+        boolean isDualSIM = telephonyInfo.isDualSIM();
+
+        Log.e("bal", " IME1 : " + imeiSIM1 + "\n" +
+                " IME2 : " + imeiSIM2 + "\n" +
+                " IS DUAL SIM : " + isDualSIM + "\n" +
+                " IS SIM1 READY : " + isSIM1Ready + "\n" +
+                " IS SIM2 READY : " + isSIM2Ready + "\n");
+        imeiList.add(imeiSIM1);
+        if (isDualSIM) {
+            imeiList.add(imeiSIM2);
+        }
+
+
+        return imeiList;
     }
 
 

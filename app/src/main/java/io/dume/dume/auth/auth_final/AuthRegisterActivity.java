@@ -3,7 +3,6 @@ package io.dume.dume.auth.auth_final;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -28,11 +27,12 @@ import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
-import dmax.dialog.SpotsDialog;
 import io.dume.dume.R;
 import io.dume.dume.auth.AuthGlobalContract;
 import io.dume.dume.auth.AuthModel;
@@ -233,7 +233,7 @@ public class AuthRegisterActivity extends AppCompatActivity {
 
                     @Override
                     public void onNewUserFound() {
-                        //hideDialog();
+                        Log.w(TAG, "onNewUserFound: " );
                         showDialog();
                         PhoneAuthProvider.getInstance().verifyPhoneNumber("+88" + phoneStr, 60, TimeUnit.SECONDS, activity, new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
                             @Override
@@ -252,8 +252,18 @@ public class AuthRegisterActivity extends AppCompatActivity {
                                         user.put("phone_number", datastore.getPhoneNumber());
                                         user.put("avatar", datastore.getPhotoUri());
                                         user.put("email", datastore.getEmail());
+                                        user.put("gender", "");
+                                        user.put("marital", "");
+                                        user.put("religion", "");
+                                        user.put("obligation", false);
+                                        user.put("referred", false);
+                                        user.put("referer_id", "");
+                                        user.put("user_ref_link", "");
+                                        user.put("account_active", true);
+                                        user.put("imei", new ArrayList<>(Arrays.asList("Device 1", "Device 2", "Device 3")));
 
-                                        firestore.collection("users").document(authResultTask.getResult().getUser().getUid()).set(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+
+                                        firestore.collection("users").document(Objects.requireNonNull(authResultTask.getResult()).getUser().getUid()).set(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                                             @Override
                                             public void onComplete(@NonNull Task<Void> task) {
                                                 new AuthModel(AuthRegisterActivity.this, getApplicationContext()).onAccountTypeFound(authResultTask.getResult().getUser(), new AuthGlobalContract.AccountTypeFoundListener() {

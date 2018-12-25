@@ -56,5 +56,6 @@ public interface PhoneVerificationContract {
         void onResendCode();
 
         void startTimer();
+
     }
 }

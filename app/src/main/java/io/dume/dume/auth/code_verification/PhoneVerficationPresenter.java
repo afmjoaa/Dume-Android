@@ -1,5 +1,6 @@
 package io.dume.dume.auth.code_verification;
 
+import android.content.Context;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -12,6 +13,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,11 +28,15 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
     private CountDownTimer countDownTimer;
     private static final String TAG = "PhoneVerficationPresent";
     private final FirebaseFirestore fireStore;
+    private Context context;
+    private final ArrayList<String> imeiList;
 
-    public PhoneVerficationPresenter(PhoneVerificationContract.View view, PhoneVerificationContract.Model authModel) {
+    public PhoneVerficationPresenter(Context context, PhoneVerificationContract.View view, PhoneVerificationContract.Model authModel) {
+        this.context = context;
         this.view = view;
         this.model = authModel;
         fireStore = FirebaseFirestore.getInstance();
+        imeiList = DumeUtils.getImei(context);
     }
 
     @Override
@@ -91,7 +97,7 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
             @Override
             public void onStart() {
                 view.showProgress();
-                Log.w(TAG, "onStart: " );
+                Log.w(TAG, "onStart: ");
                 //"Resending Code"
             }
 
@@ -161,6 +167,7 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
         countDownTimer.start();
     }
 
+
     private void saveUserToDb(DataStore dataStore) {
         if (dataStore != null && FirebaseAuth.getInstance().getCurrentUser() != null) {
             Map<String, Object> user = new HashMap<>();
@@ -173,7 +180,12 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
             user.put("gender", "");
             user.put("religion", "");
             user.put("birth_date", "");
-
+            user.put("obligation", false);
+            user.put("referred", false);
+            user.put("referer_id", "");
+            user.put("user_ref_link", "");
+            user.put("account_active", true);
+            user.put("imei", imeiList);
             view.showProgress();
             //"Saving User..."
             fireStore.collection("mini_users").document(model.getUser().getUid()).set(user).addOnCompleteListener(new OnCompleteListener<Void>() {

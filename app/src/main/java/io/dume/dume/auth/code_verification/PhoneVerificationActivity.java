@@ -1,6 +1,5 @@
 package io.dume.dume.auth.code_verification;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -8,21 +7,15 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import dmax.dialog.SpotsDialog;
 import io.dume.dume.R;
 import io.dume.dume.auth.AuthModel;
 import io.dume.dume.auth.DataStore;
@@ -30,7 +23,6 @@ import io.dume.dume.auth.auth.AuthActivity;
 import io.dume.dume.auth.auth_final.AuthRegisterActivity;
 import io.dume.dume.customView.HorizontalLoadView;
 import io.dume.dume.student.homePage.HomePageActivity;
-import io.dume.dume.student.homePage.StudentActivity;
 import io.dume.dume.teacher.homepage.TeacherActivtiy;
 import me.philio.pinentry.PinEntryView;
 
@@ -56,7 +48,7 @@ public class PhoneVerificationActivity extends AppCompatActivity implements Phon
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_phone_verification);
-        presenter = new PhoneVerficationPresenter(this, new AuthModel(this, this));
+        presenter = new PhoneVerficationPresenter(this, this, new AuthModel(this, this));
         presenter.enqueue();
 
     }
@@ -151,7 +143,7 @@ public class PhoneVerificationActivity extends AppCompatActivity implements Phon
         timerTextView.setVisibility(View.GONE);
         resendButton.setVisibility(View.VISIBLE);
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        layoutParams.setMarginStart(10 * (int) getResources().getDisplayMetrics().density);
+        layoutParams.setMargins(10 * (int) getResources().getDisplayMetrics().density,0,0,0);
         editPhn.setLayoutParams(layoutParams);
     }
 
@@ -166,7 +158,7 @@ public class PhoneVerificationActivity extends AppCompatActivity implements Phon
         timerTextView.setVisibility(View.VISIBLE);
         resendButton.setVisibility(View.GONE);
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        layoutParams.setMarginStart(0);
+        layoutParams.setMargins(0,0,0,0);
         editPhn.setLayoutParams(layoutParams);
 
     }
