@@ -46,17 +46,15 @@ public class RecordsAcceptedActivity extends CustomStuAppCompatActivity implemen
     private BottomSheetDialog mBottomSheetContactDialog;
     private View contactSheetView;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.stu12_activity_records_accepted);
         setActivityContext(this, fromFlag);
+        findLoadView();
         mPresenter = new RecordsAcceptedPresenter(this, new RecordsAcceptedModel());
         mPresenter.recordsAcceptedEnqueue();
         DumeUtils.configureAppbar(this, "Accepted Requests");
-
-
     }
 
     @Override
@@ -100,14 +98,20 @@ public class RecordsAcceptedActivity extends CustomStuAppCompatActivity implemen
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-
         switch (id) {
             case R.id.action_help:
                 //Toast.makeText(MainActivity.this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
                 break;
+            case android.R.id.home:
+                super.onBackPressed();
+                break;
         }
-
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 
     //testing code goes here

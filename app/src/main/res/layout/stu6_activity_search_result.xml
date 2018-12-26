@@ -26,7 +26,6 @@
 
     </io.dume.dume.customView.WindowInsetsFrameLayout>
 
-
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/view_musk"
         android:layout_width="match_parent"
@@ -1210,13 +1209,14 @@
         <io.dume.dume.customView.HorizontalLoadView
             android:id="@+id/loadView"
             android:layout_width="20dp"
-            android:layout_height="10dp"
-            android:elevation="20dp"
-            android:translationY="5dp"
+            android:layout_height="3dp"
+            android:background="@drawable/bg_black_bottom_less_round"
+            android:elevation="8dp"
+            android:translationY="2dp"
+            android:visibility="gone"
             app:layout_anchor="@id/secondary_Appbar"
             app:layout_anchorGravity="bottom"
-            app:rect_color="@color/carbon_black"
-            android:visibility="gone"/>
+            app:rect_color="@color/transparent" />
 
 
     </android.support.design.widget.CoordinatorLayout>

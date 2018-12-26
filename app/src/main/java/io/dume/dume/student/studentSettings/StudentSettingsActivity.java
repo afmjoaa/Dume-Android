@@ -40,6 +40,7 @@ import io.dume.dume.student.heatMap.AccountRecyData;
 import io.dume.dume.student.heatMap.HeatMapAccountRecyAda;
 import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
 import io.dume.dume.student.profilePage.ProfilePageActivity;
+import io.dume.dume.student.studentPayment.StudentPaymentActivity;
 import io.dume.dume.util.AlertMsgDialogue;
 
 import java.util.ArrayList;
@@ -70,6 +71,7 @@ public class StudentSettingsActivity extends CustomStuAppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.stunav_activity4_settings);
         setActivityContext(this, fromFlag);
+        findLoadView();
         mPresenter = new StudentSettingsPresenter(this, new StudentSettingsModel());
         mPresenter.studentSettingsEnqueue();
         configureAppbar(this, "Settings");
@@ -158,6 +160,20 @@ public class StudentSettingsActivity extends CustomStuAppCompatActivity
     @Override
     public void configStudentSettings() {
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            super.onBackPressed();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 
     private static Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = new Preference.OnPreferenceChangeListener() {

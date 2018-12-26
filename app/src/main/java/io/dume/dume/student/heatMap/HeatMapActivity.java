@@ -55,6 +55,7 @@ import java.util.Scanner;
 
 import carbon.widget.LinearLayout;
 import io.dume.dume.R;
+import io.dume.dume.customView.HorizontalLoadView;
 import io.dume.dume.student.pojo.CusStuAppComMapActivity;
 import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
 import io.dume.dume.util.VisibleToggleClickListener;
@@ -102,12 +103,14 @@ public class HeatMapActivity extends CusStuAppComMapActivity implements OnMapRea
     private TileOverlay mOverlay;
     private HashMap<String, DataSet> mLists = new HashMap<String, DataSet>();
     private HeatMapAccountRecyAda heatMapAccountRecyAda;
+    private HorizontalLoadView myLoadView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.stunav_activity1_heat_map);
         setActivityContextMap(this, fromFlag);
+        findLoadView();
         mPresenter = new HeatMapPresenter(this, new HeatMapModel());
         mPresenter.heatMapEnqueue();
         setSupportActionBar(toolbar);
@@ -155,6 +158,7 @@ public class HeatMapActivity extends CusStuAppComMapActivity implements OnMapRea
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         fab = findViewById(R.id.fab);
         accountTypeArr = getResources().getStringArray(R.array.AccountType);
+        myLoadView = findViewById(R.id.loadView);
 
     }
 
@@ -168,9 +172,10 @@ public class HeatMapActivity extends CusStuAppComMapActivity implements OnMapRea
             supportActionBar.setDisplayHomeAsUpEnabled(true);
             supportActionBar.setDisplayShowHomeEnabled(true);
         }
-        Drawable drawable = ContextCompat.getDrawable(getApplicationContext(),R.drawable.ic_more_vert_black_24dp);
+        Drawable drawable = ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_more_vert_black_24dp);
         toolbar.setOverflowIcon(drawable);
 
+        showProgress();
     }
 
     @Override
@@ -192,7 +197,7 @@ public class HeatMapActivity extends CusStuAppComMapActivity implements OnMapRea
 
                             @Override
                             public void onTransitionEnd(@NonNull Transition transition) {
-                                if(!visible){
+                                if (!visible) {
                                     myAccountRecycler.setVisibility(View.GONE);
                                     viewMusk.setVisibility(View.GONE);
                                 }
@@ -220,12 +225,14 @@ public class HeatMapActivity extends CusStuAppComMapActivity implements OnMapRea
                 TransitionManager.beginDelayedTransition(viewMusk, set1);
                 if (visible) {
                     myAccountRecycler.setVisibility(View.VISIBLE);
-                    chooseAccouTypeBtn.setCompoundDrawablesWithIntrinsicBounds( imageIcons[thisPosition], 0, R.drawable.ic_keyboard_arrow_up_black_24dp, 0);
+                    chooseAccouTypeBtn.setCompoundDrawablesWithIntrinsicBounds(imageIcons[thisPosition], 0, R.drawable.ic_keyboard_arrow_up_black_24dp, 0);
                     viewMusk.setVisibility(View.VISIBLE);
+                    myLoadView.setTranslationY(2*getResources().getDisplayMetrics().density);
                 } else {
                     myAccountRecycler.setVisibility(View.INVISIBLE);
                     viewMusk.setVisibility(View.INVISIBLE);
-                    chooseAccouTypeBtn.setCompoundDrawablesWithIntrinsicBounds( imageIcons[thisPosition], 0, R.drawable.ic_keyboard_arrow_down_black_24dp, 0);
+                    myLoadView.setTranslationY(-8*getResources().getDisplayMetrics().density);
+                    chooseAccouTypeBtn.setCompoundDrawablesWithIntrinsicBounds(imageIcons[thisPosition], 0, R.drawable.ic_keyboard_arrow_down_black_24dp, 0);
                     /*myAccountRecycler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
@@ -252,7 +259,7 @@ public class HeatMapActivity extends CusStuAppComMapActivity implements OnMapRea
 
     }
 
-    public void startHeatMap(GoogleMap mMap){
+    public void startHeatMap(GoogleMap mMap) {
         if (mProvider == null) {
             mProvider = new HeatmapTileProvider.Builder().data(
                     mLists.get(getString(R.string.police_stations)).getData()).build();
@@ -285,21 +292,6 @@ public class HeatMapActivity extends CusStuAppComMapActivity implements OnMapRea
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_grabing_info, menu);
         return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_help) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -342,6 +334,7 @@ public class HeatMapActivity extends CusStuAppComMapActivity implements OnMapRea
         public ArrayList<LatLng> getData() {
             return mDataset;
         }
+
         public String getUrl() {
             return mUrl;
         }
@@ -362,4 +355,24 @@ public class HeatMapActivity extends CusStuAppComMapActivity implements OnMapRea
         return list;
     }
 
+    //view_musk
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_help) {
+            return true;
+        } else if (id == android.R.id.home) {
+            if(viewMusk.getVisibility() == View.VISIBLE){
+                chooseAccouTypeBtn.performClick();
+            }else {
+                super.onBackPressed();
+            }
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
 }

@@ -21,10 +21,12 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.animation.FastOutLinearInInterpolator;
 import android.support.v4.view.animation.LinearOutSlowInInterpolator;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
@@ -81,6 +83,7 @@ import io.dume.dume.util.DumeUtils;
 import io.dume.dume.util.TimePickerFragment;
 import io.dume.dume.util.VisibleToggleClickListener;
 
+import static com.facebook.FacebookSdk.getApplicationContext;
 import static io.dume.dume.util.DumeUtils.firstThree;
 import static io.dume.dume.util.DumeUtils.firstTwo;
 import static io.dume.dume.util.DumeUtils.getScreenSize;
@@ -145,6 +148,7 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
         super.onCreate(savedInstanceState);
         setContentView(R.layout.stu4_activity_grabing_package);
         setActivityContextMap(this, fromFlag);
+        findLoadView();
         mPresenter = new GrabingPackagePresenter(this, new GrabingPackageModel());
         mPresenter.grabingPackagePageEnqueue();
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
@@ -226,18 +230,20 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
     public void initGrabingPackagePage() {
         //setting the support action bar
         setSupportActionBar(toolbar);
+        ActionBar supportActionBar = getSupportActionBar();
+        if (supportActionBar != null) {
+            supportActionBar.setDisplayHomeAsUpEnabled(true);
+            supportActionBar.setDisplayShowHomeEnabled(true);
+        }
+        Drawable drawable = ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_more_vert_black_24dp);
+        toolbar.setOverflowIcon(drawable);
         //status bar and action bar transparent
         settingStatusBarTransparent();
         setDarkStatusBarIcon();
         myAppBarLayout.bringToFront();
         myAppBarLayout.setBackgroundColor(getResources().getColor(android.R.color.transparent));
-
-        if (!loadView.isRunningAnimation()) {
-            loadView.startLoading();
-        }
         //initializing the product block thing
         specificPromoText.setText(specificPromoTextArr[0]);
-
         //bottom sheet height fix
         ViewTreeObserver vto = llBottomSheet.getViewTreeObserver();
         vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -704,18 +710,6 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-
-    @Override
     public void onMyGpsLocationChanged(Location location) {
 
     }
@@ -735,6 +729,26 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
 
     public void onGrabingPackageViewCLicked(View view) {
         mPresenter.onGrabingPackageViewIntracted(view);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            } else {
+                super.onBackPressed();
+            }
+        }else if (id == R.id.action_help){
+            //add function here
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 
     /**

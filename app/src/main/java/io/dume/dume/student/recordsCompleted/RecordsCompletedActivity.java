@@ -40,6 +40,7 @@ public class RecordsCompletedActivity extends CustomStuAppCompatActivity impleme
         super.onCreate(savedInstanceState);
         setContentView(R.layout.stu11_activity_records_completed);
         setActivityContext(this, fromFlag);
+        findLoadView();
         mPresenter = new RecordsCompletedPresenter(this, new RecordsCompletedModel());
         mPresenter.recordsCompletedEnqueue();
         DumeUtils.configureAppbar(this, "Completed Records");
@@ -74,14 +75,20 @@ public class RecordsCompletedActivity extends CustomStuAppCompatActivity impleme
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-
         switch (id) {
             case R.id.action_help:
                 //Toast.makeText(MainActivity.this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
                 break;
+            case android.R.id.home:
+                super.onBackPressed();
+                break;
         }
-
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 
     //testing code goes here

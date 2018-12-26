@@ -120,6 +120,17 @@
 
     </android.support.design.widget.AppBarLayout>
 
+    <io.dume.dume.customView.HorizontalLoadView
+        android:id="@+id/loadView"
+        android:layout_width="20dp"
+        android:layout_height="3dp"
+        android:background="@drawable/bg_black_bottom_less_round"
+        android:elevation="8dp"
+        android:translationY="2dp"
+        android:visibility="gone"
+        app:layout_anchor="@id/my_appbarLayout_cardView"
+        app:layout_anchorGravity="bottom"
+        app:rect_color="@color/transparent" />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -148,7 +159,6 @@
             app:srcCompat="@drawable/geo_icon" />
 
     </LinearLayout>
-
 
     <carbon.widget.Button
         android:id="@+id/location_done_btn"

@@ -35,6 +35,7 @@ import io.dume.dume.R;
 import io.dume.dume.auth.auth.AuthActivity;
 import io.dume.dume.broadcastReceiver.MyConnectivityHandler;
 import io.dume.dume.broadcastReceiver.NetworkChangeReceiver;
+import io.dume.dume.customView.HorizontalLoadView;
 import io.dume.dume.student.homePage.HomePageContract;
 import io.dume.dume.util.MyApplication;
 import io.dume.dume.util.NetworkUtil;
@@ -54,6 +55,7 @@ public class CustomStuAppCompatActivity extends AppCompatActivity implements MyC
     protected static Boolean ISNIGHT;
     protected static int HOUR;
     private CoordinatorLayout v;
+    private HorizontalLoadView loadView;
 
     public void setActivityContext(Context context, int i) {
         this.context = context;
@@ -307,6 +309,28 @@ public class CustomStuAppCompatActivity extends AppCompatActivity implements MyC
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
             FirebaseAuth.getInstance().signOut();
             startActivity(new Intent(this, AuthActivity.class));
+        }
+    }
+
+    public void findLoadView(){
+        loadView = rootView.findViewById(R.id.loadView);
+    }
+
+    public void showProgress() {
+        if (loadView.getVisibility() == View.INVISIBLE || loadView.getVisibility() == View.GONE) {
+            loadView.setVisibility(View.VISIBLE);
+        }
+        if (!loadView.isRunningAnimation()) {
+            loadView.startLoading();
+        }
+    }
+
+    public void hideProgress() {
+        if (loadView.isRunningAnimation()) {
+            loadView.stopLoading();
+        }
+        if (loadView.getVisibility() == View.VISIBLE) {
+            loadView.setVisibility(View.INVISIBLE);
         }
     }
 }

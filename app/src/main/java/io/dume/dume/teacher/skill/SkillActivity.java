@@ -19,13 +19,12 @@ import io.dume.dume.teacher.crudskill.CrudSkillActivity;
 import io.dume.dume.util.DumeUtils;
 
 public class SkillActivity extends AppCompatActivity implements SkillContract.View, View.OnClickListener {
-    @BindView(R.id.skillLoad)
+    @BindView(R.id.loadView)
     HorizontalLoadView loadView;
     @BindView(R.id.skillRV)
     RecyclerView skillRV;
     private SkillContract.Presenter presenter;
     private FloatingActionButton fabAdd;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +40,6 @@ public class SkillActivity extends AppCompatActivity implements SkillContract.Vi
         DumeUtils.configureAppbar(this, "Skill Management");
         fabAdd = findViewById(R.id.fabAdd);
         fabAdd.setOnClickListener(this);
-
     }
 
     @Override
@@ -81,6 +79,24 @@ public class SkillActivity extends AppCompatActivity implements SkillContract.Vi
     public void loadSkillRV(ArrayList list) {
         skillRV.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         skillRV.setAdapter(new SkillAdapter(SkillAdapter.ACTIVITY));
+    }
+
+    public void showProgress() {
+        if (loadView.getVisibility() == View.INVISIBLE || loadView.getVisibility() == View.GONE) {
+            loadView.setVisibility(View.VISIBLE);
+        }
+        if (!loadView.isRunningAnimation()) {
+            loadView.startLoading();
+        }
+    }
+
+    public void hideProgress() {
+        if (loadView.isRunningAnimation()) {
+            loadView.stopLoading();
+        }
+        if (loadView.getVisibility() == View.VISIBLE) {
+            loadView.setVisibility(View.INVISIBLE);
+        }
     }
 
 

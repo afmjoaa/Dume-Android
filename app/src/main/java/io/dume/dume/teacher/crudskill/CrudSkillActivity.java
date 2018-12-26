@@ -179,9 +179,15 @@ public class CrudSkillActivity extends CusStuAppComMapActivity implements CrudCo
 
         int id = item.getItemId();
         if (id == R.id.action_help) {
-            return true;
+            //add function here
+        }else if(id == android.R.id.home){
+            super.onBackPressed();
         }
-
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 }

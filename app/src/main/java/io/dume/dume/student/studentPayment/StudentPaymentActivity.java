@@ -20,6 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AutoCompleteTextView;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
@@ -61,6 +62,7 @@ public class StudentPaymentActivity extends CustomStuAppCompatActivity implement
     private RelativeLayout idBlock;
     private RelativeLayout refBlock;
     private String[] paymentMethodArr;
+    private FrameLayout content;
 
 
     @Override
@@ -68,6 +70,7 @@ public class StudentPaymentActivity extends CustomStuAppCompatActivity implement
         super.onCreate(savedInstanceState);
         setContentView(R.layout.stunav_activity2_student_payment);
         setActivityContext(this, fromFlag);
+        findLoadView();
         mPresenter = new StudentPaymentPresenter(this, new StudentPaymentModel());
         mPresenter.studentPaymentEnqueue();
         configureAppbar(this, "Payment");
@@ -127,6 +130,7 @@ public class StudentPaymentActivity extends CustomStuAppCompatActivity implement
         secondaryHideAbleLayout = findViewById(R.id.secondary_hide_able_layout);
         idBlock = findViewById(R.id.id_block);
         refBlock = findViewById(R.id.ref_block);
+        content = findViewById(R.id.content);
         paymentMethodArr = this.getResources().getStringArray(R.array.add_payment_methods);
 
     }
@@ -144,6 +148,7 @@ public class StudentPaymentActivity extends CustomStuAppCompatActivity implement
     @Override
     public void onAddPromoCodeApplied() {
         mainLayoutContent.setVisibility(View.GONE);
+        content.setVisibility(View.VISIBLE);
         configAppbarTittle(StudentPaymentActivity.this, "Add Promo Code");
         getSupportFragmentManager().beginTransaction().replace(R.id.content, new ApplyPromoCodeFragment()).commit();
     }
@@ -151,6 +156,7 @@ public class StudentPaymentActivity extends CustomStuAppCompatActivity implement
     @Override
     public void onViewPromotionsClicked() {
         mainLayoutContent.setVisibility(View.GONE);
+        content.setVisibility(View.VISIBLE);
         configAppbarTittle(StudentPaymentActivity.this, "Promotions");
         getSupportFragmentManager().beginTransaction().replace(R.id.content, new ViewPromotionsFragment()).commit();
     }
@@ -158,6 +164,7 @@ public class StudentPaymentActivity extends CustomStuAppCompatActivity implement
     @Override
     public void onTransactionHistoryClicked() {
         mainLayoutContent.setVisibility(View.GONE);
+        content.setVisibility(View.VISIBLE);
         configAppbarTittle(StudentPaymentActivity.this, "Your History");
         getSupportFragmentManager().beginTransaction().replace(R.id.content, new ViewTransactionHistoryFragment()).commit();
     }
@@ -165,6 +172,7 @@ public class StudentPaymentActivity extends CustomStuAppCompatActivity implement
     @Override
     public void onObligtionClaimClicked() {
         mainLayoutContent.setVisibility(View.GONE);
+        content.setVisibility(View.VISIBLE);
         configAppbarTittle(StudentPaymentActivity.this, "Obligations");
         getSupportFragmentManager().beginTransaction().replace(R.id.content, new ViewObligationFragment()).commit();
     }
@@ -196,10 +204,16 @@ public class StudentPaymentActivity extends CustomStuAppCompatActivity implement
                 configAppbarTittle(StudentPaymentActivity.this, "Payment");
                 mainLayoutContent.setVisibility(View.VISIBLE);
                 secondaryHideAbleLayout.setVisibility(View.GONE);
+                content.setVisibility(View.GONE);
             }
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 
     public List<PaymentData> getFinalData() {

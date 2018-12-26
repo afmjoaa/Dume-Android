@@ -62,6 +62,7 @@ public class SearchResultTabviewActivity extends CustomStuAppCompatActivity impl
         super.onCreate(savedInstanceState);
         setContentView(R.layout.stu5_activity_search_result_tabview);
         setActivityContext(this, fromFlag);
+        findLoadView();
         mPresenter = new SearchResultTabviewPresenter(this, new SearchResultTabviewModel());
         mPresenter.searchResultTabviewEnqueue();
         configureAppbarWithoutColloapsing(this, "Search Results");
@@ -194,26 +195,6 @@ public class SearchResultTabviewActivity extends CustomStuAppCompatActivity impl
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        switch (id) {
-            case R.id.action_search_set:
-                //Toast.makeText(MainActivity.this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.action_help:
-                //Toast.makeText(MainActivity.this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.action_scatter_view:
-                //Toast.makeText(MainActivity.this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(this, SearchResultActivity.class));
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-
     public static class PlaceholderFragment extends Fragment {
 
         private static final String ARG_SECTION_NUMBER = "section_number";
@@ -287,5 +268,32 @@ public class SearchResultTabviewActivity extends CustomStuAppCompatActivity impl
             // Show 3 total pages.
             return 4;
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        switch (id) {
+            case R.id.action_search_set:
+                //Toast.makeText(MainActivity.this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.action_help:
+                //Toast.makeText(MainActivity.this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.action_scatter_view:
+                //Toast.makeText(MainActivity.this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(this, SearchResultActivity.class));
+                break;
+            case android.R.id.home:
+                super.onBackPressed();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 }

@@ -25,6 +25,8 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -49,6 +51,7 @@ import com.hanks.htextview.scale.ScaleTextView;
 import com.tomergoldst.tooltips.ToolTipsManager;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import butterknife.BindView;
@@ -62,6 +65,8 @@ import io.dume.dume.common.privacyPolicy.PrivacyPolicyActivity;
 import io.dume.dume.student.freeCashBack.FreeCashBackActivity;
 import io.dume.dume.student.heatMap.HeatMapActivity;
 import io.dume.dume.student.homePage.HomePageActivity;
+import io.dume.dume.student.homePage.adapter.HomePageRecyclerAdapter;
+import io.dume.dume.student.homePage.adapter.HomePageRecyclerData;
 import io.dume.dume.student.pojo.CusStuAppComMapActivity;
 import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
 import io.dume.dume.student.recordsPage.RecordsPageActivity;
@@ -102,6 +107,8 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
     private char mProfileChar = '!';
     private int mChatCount = 0;
     private int mRecPendingCount = 0, mRecAcceptedCount = 0, mRecCurrentCount = 0;
+    private ActionBar supportActionBarMain;
+    private ActionBar supportActionBarSecond;
 
     private Menu menu;
     private MenuItem home, records, payments, messages, notifications, heat_map, free_cashback, settings, forum, help, selectAccount, infoItem, studentProfile, mentorProfile, bootCampProfile;
@@ -141,6 +148,8 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
     private RadioButton buttonActive;
     private RadioButton buttonInActive;
     private TextView userName;
+    private RecyclerView hPageBSRecycler;
+    private int optionMenu = R.menu.stu_homepage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -207,6 +216,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         buttonActive = findViewById(R.id.buttonActive);
         buttonInActive = findViewById(R.id.buttonInActive);
         userName = findViewById(R.id.user_name);
+        hPageBSRecycler = findViewById(R.id.homePage_bottomSheet_recycler);
     }
 
     @Override
@@ -227,6 +237,11 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         navigationView.setNavigationItemSelectedListener(this);
         //listener for the active inactive radio btn
         radioSegmentGroup.setOnCheckedChangeListener(this);
+        //initializing the recycler
+        List<HomePageRecyclerData> promoData = new ArrayList<>();
+        HomePageRecyclerAdapter hPageBSRcyclerAdapter = new HomePageRecyclerAdapter(this, promoData);
+        hPageBSRecycler.setAdapter(hPageBSRcyclerAdapter);
+        hPageBSRecycler.setLayoutManager(new LinearLayoutManager(this));
     }
 
     @Override
@@ -277,14 +292,29 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
                     secondaryAppBarLayout.setVisibility(View.GONE);
                     mainAppbar.setVisibility(View.VISIBLE);
                     bottomSheet.animate().scaleY(1).setDuration(0).start();
-
+                    //hack
+                    setSupportActionBar(toolbar);
+                    supportActionBarMain = getSupportActionBar();
+                    if (supportActionBarMain != null) {
+                        supportActionBarMain.setDisplayHomeAsUpEnabled(true);
+                        supportActionBarMain.setDisplayShowHomeEnabled(true);
+                        optionMenu = R.menu.stu_homepage;
+                        invalidateOptionsMenu();
+                    }
                 } else if (BottomSheetBehavior.STATE_EXPANDED == newState) {
                     setLightStatusBarIcon();
                     viewMusk.setVisibility(View.VISIBLE);
                     secondaryAppBarLayout.setVisibility(View.VISIBLE);
                     mainAppbar.setVisibility(View.GONE);
-
-
+                    //hack
+                    setSupportActionBar(secondaryToolbar);
+                    supportActionBarSecond = getSupportActionBar();
+                    if (supportActionBarSecond != null) {
+                        supportActionBarSecond.setDisplayHomeAsUpEnabled(true);
+                        supportActionBarSecond.setDisplayShowHomeEnabled(true);
+                        optionMenu = R.menu.menu_only_help;
+                        invalidateOptionsMenu();
+                    }
                 } else if (BottomSheetBehavior.STATE_DRAGGING == newState) {
                     viewMusk.setVisibility(View.VISIBLE);
                     secondaryAppBarLayout.setVisibility(View.VISIBLE);
@@ -315,9 +345,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 
-
     private void initAdvance() {
-
         drawerLayout.setScrimColor(getResources().getColor(R.color.black_overlay));
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
@@ -385,8 +413,6 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
                 viewPager.setCurrentItem(position);
                 fragmentTitle.animateText(tabModelArrayList.get(position).getTabName());
                 scaleTextView.animateText(tabModelArrayList.get(position).getTabName());
-
-
             }
 
             @Override
@@ -433,24 +459,28 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.stu_homepage, menu);
-        MenuItem alProfile = menu.findItem(R.id.al_display_pic);
-        LayerDrawable alProfileIcon = (LayerDrawable) alProfile.getIcon();
-        DumeUtils.setBadgeChar(this, alProfileIcon, 0xfff56161, Color.BLACK, mProfileChar, 3.0f, 3.0f);
+        getMenuInflater().inflate(optionMenu, menu);
+        if(optionMenu == R.menu.stu_homepage){
+            MenuItem alProfile = menu.findItem(R.id.al_display_pic);
+            LayerDrawable alProfileIcon = (LayerDrawable) alProfile.getIcon();
+            DumeUtils.setBadgeChar(this, alProfileIcon, 0xfff56161, Color.BLACK, mProfileChar, 3.0f, 3.0f);
 
-        MenuItem alNoti = menu.findItem(R.id.al_notifications);
-        LayerDrawable alNotiIcon = (LayerDrawable) alNoti.getIcon();
-        DumeUtils.setBadgeCount(this, alNotiIcon, R.id.ic_badge, 0xfface0ac, Color.BLACK, mNotificationsCount, 3.0f, 3.0f);
+            MenuItem alNoti = menu.findItem(R.id.al_notifications);
+            LayerDrawable alNotiIcon = (LayerDrawable) alNoti.getIcon();
+            DumeUtils.setBadgeCount(this, alNotiIcon, R.id.ic_badge, 0xfface0ac, Color.BLACK, mNotificationsCount, 3.0f, 3.0f);
 
-        MenuItem alChat = menu.findItem(R.id.al_messages);
-        LayerDrawable alChatIcon = (LayerDrawable) alChat.getIcon();
-        DumeUtils.setBadgeCount(this, alChatIcon, R.id.ic_badge, 0xfface0ac, Color.BLACK, mChatCount, 3.0f, 3.0f);
+            MenuItem alChat = menu.findItem(R.id.al_messages);
+            LayerDrawable alChatIcon = (LayerDrawable) alChat.getIcon();
+            DumeUtils.setBadgeCount(this, alChatIcon, R.id.ic_badge, 0xfface0ac, Color.BLACK, mChatCount, 3.0f, 3.0f);
 
-        MenuItem alRecords = menu.findItem(R.id.al_records);
-        LayerDrawable alRecordsIcon = (LayerDrawable) alRecords.getIcon();
-        DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badgeTwo, 0xfff56161, Color.BLACK, mRecCurrentCount, 3.0f, 3.0f);
-        DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badgeOne, 0xfff4f094, Color.BLACK, mRecAcceptedCount, 8.0f, -3.4f);
-        DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badge, 0xfface0ac, Color.BLACK, mRecPendingCount, 12.0f, 3.0f);
+            MenuItem alRecords = menu.findItem(R.id.al_records);
+            LayerDrawable alRecordsIcon = (LayerDrawable) alRecords.getIcon();
+            DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badgeTwo, 0xfff56161, Color.BLACK, mRecCurrentCount, 3.0f, 3.0f);
+            DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badgeOne, 0xfff4f094, Color.BLACK, mRecAcceptedCount, 8.0f, -3.4f);
+            DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badge, 0xfface0ac, Color.BLACK, mRecPendingCount, 12.0f, 3.0f);
+        }else if (optionMenu == R.menu.menu_only_help){
+
+        }
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -473,6 +503,14 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
                 Intent notificationTabIntent = new Intent(this, InboxActivity.class);
                 notificationTabIntent.putExtra("notiTab", 1);
                 startActivity(notificationTabIntent);
+                break;
+            case android.R.id.home:
+                if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
+                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                } else {
+                    drawerLayout.openDrawer(GravityCompat.START, true);
+                    //super.onBackPressed();
+                }
                 break;
 
         }

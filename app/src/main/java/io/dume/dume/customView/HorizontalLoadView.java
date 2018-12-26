@@ -39,7 +39,8 @@ public class HorizontalLoadView extends View implements ValueAnimator.AnimatorUp
         activity = (Activity) context;
         int[] mDisplayWidth = DumeUtils.getScreenSize(context);
         int startPoint = (int) (8 * (getResources().getDisplayMetrics().density));
-        valueAnimator = ValueAnimator.ofInt(startPoint, (mDisplayWidth[0] - (startPoint*2)));
+        int selfWidth = (int) (20 * (getResources().getDisplayMetrics().density));
+        valueAnimator = ValueAnimator.ofInt(startPoint, (mDisplayWidth[0] - (startPoint+selfWidth)));
         valueAnimator.setRepeatMode(ValueAnimator.REVERSE);
         valueAnimator.setRepeatCount(ValueAnimator.INFINITE);
         valueAnimator.setDuration(750);
