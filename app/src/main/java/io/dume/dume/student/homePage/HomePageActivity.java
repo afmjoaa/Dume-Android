@@ -194,6 +194,7 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
         super.onCreate(savedInstanceState);
         setContentView(R.layout.stu_activity_homepage);
         setActivityContextMap(this, fromFlag);
+        findLoadView();
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         getLocationPermission(mapFragment);
         mPresenter = new HomePagePresenter(this, new HomePageModel());
@@ -400,7 +401,6 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
         hPageBSRecycler.setAdapter(hPageBSRcyclerAdapter);
         hPageBSRecycler.setLayoutManager(new LinearLayoutManager(this));
 
-
     }
 
 
@@ -469,8 +469,10 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
             DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badgeTwo, 0xfff56161, Color.BLACK, mRecCurrentCount, 3.0f, 3.0f);
             DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badgeOne, 0xfff4f094, Color.BLACK, mRecAcceptedCount, 8.0f, -3.4f);
             DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badge, 0xfface0ac, Color.BLACK, mRecPendingCount, 12.0f, 3.0f);
+        }else if(optionMenu == R.menu.menu_only_help){
+
         }
-       return true;
+       return super.onCreateOptionsMenu(menu);
     }
 
     private void hideToolbarMenu() {

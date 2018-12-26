@@ -33,10 +33,10 @@ public class RecordsRejectedActivity extends CustomStuAppCompatActivity implemen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.stu10_activity_records_rejected);
         setActivityContext(this, fromFlag);
+        findLoadView();
         mPresenter = new RecordsRejectedPresenter(this, new RecordsRejectedModel());
         mPresenter.recordsRejectedEnqueue();
         DumeUtils.configureAppbar(this, "Rejected Requests");
-
     }
 
     @Override
@@ -65,16 +65,21 @@ public class RecordsRejectedActivity extends CustomStuAppCompatActivity implemen
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-
         switch (id) {
             case R.id.action_help:
                 //Toast.makeText(MainActivity.this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
                 break;
+            case android.R.id.home:
+                super.onBackPressed();
+                break;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
     //testing code goes here
     public static class PlaceholderFragment extends Fragment {
 

@@ -8,7 +8,6 @@
     android:fitsSystemWindows="true"
     tools:context=".student.recordsPage.RecordsPageActivity">
 
-
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
@@ -80,6 +79,17 @@
 
     </android.support.design.widget.AppBarLayout>
 
+    <io.dume.dume.customView.HorizontalLoadView
+        android:id="@+id/loadView"
+        android:layout_width="20dp"
+        android:layout_height="3dp"
+        android:background="@drawable/bg_black_bottom_less_round"
+        android:elevation="8dp"
+        android:translationY="2dp"
+        android:visibility="gone"
+        app:layout_anchor="@id/app_bar"
+        app:layout_anchorGravity="bottom"
+        app:rect_color="@color/transparent" />
 
     <android.support.v4.view.ViewPager
         android:id="@+id/container"
@@ -87,6 +97,5 @@
         android:layout_height="match_parent"
         android:background="@color/tabViewPager"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
 
 </android.support.design.widget.CoordinatorLayout>

@@ -527,6 +527,7 @@ provided.Tap salary for details.  </string>
     <string name="switch_learner">Switch Learner</string>
     <string name="for_me">For Me</string>
     <string name="dume_products"><![CDATA[Dume Gang: This is our finding nearby boot camp package.\nRegular Dume : This is the regular monthly tuition we are generally familiar with.\nInstant Dume : This is our premier package here we instantly give you a capable mentor for a certain time to teach & guide you in a specific subject.]]></string>
+    <string name="dume_products_mentor"><![CDATA[Dume Gang: This is our finding nearby boot camp package.\nRegular Dume : This is the regular monthly tuition we are generally familiar with.\nInstant Dume : This is our premier package. One will be eligible for this if he unlocks the premier badge.]]></string>
     <string name="dume_product_intro">You can choose between regular, instant or boot camp/couching center with ease.</string>
     <string name="choosing_text">Choosing mentors have never been easy with Dume</string>
     <string name="start_couching_text">Life is constantly bringing us challenges and opportunities. When we have the courage to step up to the challenges and seize the opportunities we move forward. As a coach, you can help others make this kind of progress.</string>
@@ -652,6 +653,8 @@ provided.Tap salary for details.  </string>
 
     <string name="agree_terms"><![CDATA[Agree to Privacy Policy & Terms of Services]]></string>
     <string name="afterSplashTitleOne">Set default</string>
+    <string name="choosing_text_mentor">Finding tuition have never been easy with dume</string>
+    <string name="intro_mentor">You can build your profile for mentor or boot-camp/couching center with ease. Just add skill and let other find you at what you are best.</string>
 
     <string-array name="after_splash_title">
         <item>Find mentor anytime and anywhere</item>

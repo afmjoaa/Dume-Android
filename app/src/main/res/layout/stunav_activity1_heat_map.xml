@@ -29,17 +29,6 @@
     </io.dume.dume.customView.WindowInsetsFrameLayout>
 
 
-    <io.dume.dume.customView.HorizontalLoadView
-        android:id="@+id/loadView"
-        android:layout_width="20dp"
-        android:layout_height="10dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:elevation="20dp"
-        android:translationY="5dp"
-        app:layout_anchor="@id/toolbar"
-        app:layout_anchorGravity="bottom"
-        app:rect_color="@color/carbon_black" />
 
     <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -150,6 +139,17 @@
 
         </android.support.design.widget.AppBarLayout>
 
+        <io.dume.dume.customView.HorizontalLoadView
+            android:id="@+id/loadView"
+            android:layout_width="20dp"
+            android:layout_height="3dp"
+            android:background="@drawable/bg_black_bottom_less_round"
+            android:elevation="8dp"
+            android:translationY="-8dp"
+            android:visibility="gone"
+            app:layout_anchor="@id/my_appbarLayout"
+            app:layout_anchorGravity="bottom"
+            app:rect_color="@color/transparent" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab"

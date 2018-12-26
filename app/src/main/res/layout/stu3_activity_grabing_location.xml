@@ -10,7 +10,6 @@
     android:fitsSystemWindows="true"
     tools:context=".student.grabingLocation.GrabingLocationActivity">
 
-
     <io.dume.dume.customView.WindowInsetsFrameLayout
         android:id="@+id/map_container"
         android:layout_width="match_parent"
@@ -40,16 +39,6 @@
             app:srcCompat="@drawable/ic_current_location_marker_start" />
 
     </io.dume.dume.customView.WindowInsetsFrameLayout>
-
-    <io.dume.dume.customView.HorizontalLoadView
-        android:id="@+id/loadView"
-        android:layout_width="20dp"
-        android:layout_height="10dp"
-        android:elevation="20dp"
-        android:translationY="5dp"
-        app:layout_anchor="@id/my_appbarLayout_cardView"
-        app:layout_anchorGravity="bottom"
-        app:rect_color="@color/carbon_black" />
 
     <LinearLayout
         android:id="@+id/searchBottomSheet"

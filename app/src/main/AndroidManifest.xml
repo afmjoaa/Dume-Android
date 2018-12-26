@@ -51,11 +51,10 @@
             android:name=".teacher.homepage.TeacherActivtiy"
             android:label="" />
         <activity
-            android:name=".splash.SplashActivity"
-            android:theme="@style/SplashTheme">
+        android:name=".splash.SplashActivity"
+        android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

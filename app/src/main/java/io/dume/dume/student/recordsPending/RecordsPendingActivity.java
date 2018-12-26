@@ -54,13 +54,13 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
         super.onCreate(savedInstanceState);
         setContentView(R.layout.stu9_activity_records_pendding);
         setActivityContext(this, fromFlag);
+        findLoadView();
         mPresenter = new RecordsPendingPresenter(this, new RecordsPendingModel());
         mPresenter.recordsPendingEnqueue();
         DumeUtils.configureAppbar(this, "Pending Requests");
 
-
-
     }
+
     @Override
     public void findView() {
         recordsHostLayout = findViewById(R.id.recordsHostLayout);
@@ -98,17 +98,21 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-
         switch (id) {
             case R.id.action_help:
                 //Toast.makeText(MainActivity.this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
                 break;
+            case android.R.id.home:
+                super.onBackPressed();
+                break;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
-
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
 
     //testing code goes here
     public static class PlaceholderFragment extends Fragment {

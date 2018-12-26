@@ -25,6 +25,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.animation.FastOutLinearInInterpolator;
 import android.support.v4.view.animation.LinearOutSlowInInterpolator;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -143,7 +144,6 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
     private LinearLayout basicInfoInsider;
     private LinearLayout.LayoutParams basicInfoInsiderLayoutParams;
     private OnSwipeTouchListener onSwipeTouchListener;
-    private HorizontalLoadView loadView;
     private View mCustomMarkerView;
     private ImageView mMarkerImageView;
     private LatLng mDummyLatLng;
@@ -158,13 +158,16 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
     private List<Polyline> polylines;
     private static final int[] COLORS = new int[]{R.color.black, R.color.badge_red, R.color.badge_green, R.color.blue, R.color.badge_yellow};
     private CollapsingToolbarLayout secondaryCollapsingToolbarLayout;
-
+    private ActionBar supportActionBarMain;
+    private ActionBar supportActionBarSecond;
+    private int optionMenu = R.menu.menu_search_result;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.stu6_activity_search_result);
         setActivityContextMap(this, fromFlag);
+        findLoadView();
         mPresenter = new SearchResultPresenter(this, new SearchResultModel());
         mPresenter.searchResultEnqueue();
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -241,7 +244,6 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
         basicInfoInsiderLayoutParams = (LinearLayout.LayoutParams) basicInfoInsider.getLayoutParams();
         swipeLeft = findViewById(R.id.swipe_left);
         swipeRight = findViewById(R.id.swipe_right);
-        loadView = findViewById(R.id.loadView);
         mCustomMarkerView = ((LayoutInflater) Objects.requireNonNull(getSystemService(LAYOUT_INFLATER_SERVICE))).inflate(R.layout.custom_marker_view, null);
         mMarkerImageView = mCustomMarkerView.findViewById(R.id.profile_image);
         fab = findViewById(R.id.fab);
@@ -303,7 +305,6 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                     setDarkStatusBarIcon();
                     viewMusk.setVisibility(View.GONE);
                     secondaryAppbarLayout.setVisibility(View.INVISIBLE);
-                    loadView.setVisibility(View.GONE);
                     defaultAppbarLayout.setVisibility(View.VISIBLE);
                     changingOrientationContainer.setOrientation(LinearLayout.HORIZONTAL);
                     changingOrientationParams.height = LinearLayout.LayoutParams.WRAP_CONTENT;
@@ -321,20 +322,35 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                     swipeRight.setVisibility(View.GONE);
                     basicInfoInsiderLayoutParams.height = LinearLayout.LayoutParams.WRAP_CONTENT;
                     basicInfoInsider.setLayoutParams(basicInfoInsiderLayoutParams);
-
-
+                    //hack
+                    setSupportActionBar(toolbar);
+                    supportActionBarMain = getSupportActionBar();
+                    if (supportActionBarMain != null) {
+                        supportActionBarMain.setDisplayHomeAsUpEnabled(true);
+                        supportActionBarMain.setDisplayShowHomeEnabled(true);
+                        optionMenu = R.menu.menu_search_result;
+                        invalidateOptionsMenu();
+                    }
+                    hideProgress();
                 } else if (BottomSheetBehavior.STATE_EXPANDED == newState) {
                     setLightStatusBarIcon();
                     viewMusk.setVisibility(View.VISIBLE);
                     secondaryAppbarLayout.setVisibility(View.VISIBLE);
-                    loadView.setVisibility(View.VISIBLE);
                     defaultAppbarLayout.setVisibility(View.INVISIBLE);
-
                     circleProgressbarARatio.setProgressWithAnimation(80, ANIMATIONDURATION);
                     circleProgressbarExpertise.setProgressWithAnimation(50, ANIMATIONDURATION);
                     swipeLeft.setVisibility(View.VISIBLE);
                     swipeRight.setVisibility(View.VISIBLE);
-
+                    //hack
+                    setSupportActionBar(secondaryToolbar);
+                    supportActionBarSecond = getSupportActionBar();
+                    if (supportActionBarSecond != null) {
+                        supportActionBarSecond.setDisplayHomeAsUpEnabled(true);
+                        supportActionBarSecond.setDisplayShowHomeEnabled(true);
+                        optionMenu = R.menu.menu_only_help;
+                        invalidateOptionsMenu();
+                    }
+                    showProgress();
                 } else if (BottomSheetBehavior.STATE_DRAGGING == newState) {
                     viewMusk.setVisibility(View.VISIBLE);
                     secondaryAppbarLayout.setVisibility(View.VISIBLE);
@@ -708,7 +724,13 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_search_result, menu);
+        getMenuInflater().inflate(optionMenu, menu);
+        if(optionMenu == R.menu.menu_search_result){
+
+        }else if(optionMenu == R.menu.menu_only_help){
+
+        }
+        //getMenuInflater().inflate(R.menu.menu_search_result, menu);
         return true;
     }
 
@@ -727,9 +749,21 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                 //Toast.makeText(MainActivity.this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(this, SearchResultTabviewActivity.class));
                 break;
+            case android.R.id.home:
+                if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
+                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                } else {
+                    super.onBackPressed();
+                }
+                break;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 
 
@@ -850,14 +884,12 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
 
             //In case of more than 5 alternative routes
             int colorIndex = i % COLORS.length;
-
             PolylineOptions polyOptions = new PolylineOptions();
             polyOptions.color(getResources().getColor(COLORS[colorIndex]));
             polyOptions.width(7 + i * 3);
             polyOptions.addAll(route.get(i).getPoints());
             Polyline polyline = mMap.addPolyline(polyOptions);
             polylines.add(polyline);
-
             Toast.makeText(getApplicationContext(), "Route " + (i + 1) + ": distance - " + route.get(i).getDistanceValue() + ": duration - " + route.get(i).getDurationValue(), Toast.LENGTH_SHORT).show();
         }
     }

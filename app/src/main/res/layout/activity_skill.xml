@@ -4,18 +4,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/recordsBgColor"
     tools:context=".teacher.skill.SkillActivity">
 
-    <include layout="@layout/activity_header" />
+    <include
+        android:id="@+id/included_appber"
+        layout="@layout/activity_header" />
 
     <io.dume.dume.customView.HorizontalLoadView
-        android:id="@+id/skillLoad"
-        android:layout_width="15dp"
-        android:layout_height="10dp"
-        android:translationY="5dp"
-        app:layout_anchor="@id/skillRV"
+        android:id="@+id/loadView"
+        android:layout_width="20dp"
+        android:layout_height="3dp"
+        android:background="@drawable/bg_black_bottom_less_round"
+        android:elevation="8dp"
+        android:translationY="2dp"
         android:visibility="gone"
-        app:layout_anchorGravity="top" />
+        app:layout_anchor="@id/included_appber"
+        app:layout_anchorGravity="bottom"
+        app:rect_color="@color/transparent" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/skillRV"

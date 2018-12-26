@@ -76,6 +76,18 @@
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 
+    <io.dume.dume.customView.HorizontalLoadView
+        android:id="@+id/loadView"
+        android:layout_width="20dp"
+        android:layout_height="3dp"
+        android:background="@drawable/bg_black_bottom_less_round"
+        android:elevation="8dp"
+        android:translationY="2dp"
+        android:visibility="gone"
+        app:layout_anchor="@id/secondary_Appbar"
+        app:layout_anchorGravity="bottom"
+        app:rect_color="@color/transparent" />
+
     <android.support.design.widget.CoordinatorLayout
         android:id="@+id/main_interface"
         android:layout_width="match_parent"
@@ -86,7 +98,7 @@
         <LinearLayout
             android:id="@+id/quickContainer"
             android:layout_width="match_parent"
-            android:layout_height="350dp"
+            android:layout_height="352dp"
             android:layout_margin="16dp"
             android:gravity="center"
             android:orientation="vertical">
@@ -114,7 +126,6 @@
                     android:textStyle="bold" />
 
             </carbon.widget.LinearLayout>
-
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -222,20 +233,10 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
-                <io.dume.dume.customView.HorizontalLoadView
-                    android:id="@+id/bsLoad"
-                    android:layout_width="15dp"
-                    android:layout_height="10dp"
-                    android:translationY="5dp"
-                    android:visibility="gone"
-                    app:layout_anchor="@id/messagesRV"
-                    app:layout_anchorGravity="top" />
-
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/homePage_bottomSheet_recycler"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:visibility="gone" />
+                    android:layout_height="wrap_content" />
 
                 <LinearLayout
                     android:id="@+id/dume_bangladesh_block"
@@ -262,7 +263,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="14dp"
                         android:gravity="start"
-                        android:text="@string/choosing_text"
+                        android:text="@string/choosing_text_mentor"
                         android:textAlignment="viewStart"
                         android:textColor="@color/colorBlack"
                         android:textSize="18sp"
@@ -273,7 +274,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="12dp"
                         android:gravity="start"
-                        android:text="@string/dume_product_intro"
+                        android:text="@string/intro_mentor"
                         android:textAlignment="viewStart"
                         android:textColor="@color/colorBlack"
                         android:textSize="14sp"
@@ -283,7 +284,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="start"
-                        android:text="@string/dume_products"
+                        android:text="@string/dume_products_mentor"
                         android:textAlignment="viewStart"
                         android:textColor="@color/colorBlack"
                         android:textSize="14sp"

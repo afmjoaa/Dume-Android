@@ -70,6 +70,7 @@ public class StudentHelpActivity extends CustomStuAppCompatActivity implements S
         super.onCreate(savedInstanceState);
         setContentView(R.layout.stunav_activity3_student_help);
         setActivityContext(this, fromFlag);
+        findLoadView();
         mPresenter = new StudentHelpPresenter(this, new StudentHelpModel());
         mPresenter.studentHelpEnqueue();
         configureAppbar(this, "Help");
@@ -151,6 +152,20 @@ public class StudentHelpActivity extends CustomStuAppCompatActivity implements S
     @Override
     public void configStudentHelp() {
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            super.onBackPressed();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 
     public List<SettingData> getFinalData() {
@@ -259,7 +274,6 @@ public class StudentHelpActivity extends CustomStuAppCompatActivity implements S
             return true;
         }
     };
-
 
     //testing the contact up
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)

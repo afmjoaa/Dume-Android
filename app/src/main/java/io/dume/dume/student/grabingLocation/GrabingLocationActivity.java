@@ -14,6 +14,7 @@ import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
@@ -24,11 +25,11 @@ import android.text.TextWatcher;
 import android.text.style.CharacterStyle;
 import android.text.style.StyleSpan;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -55,13 +56,11 @@ import java.util.Objects;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
-import carbon.beta.AppBarLayout;
 import carbon.widget.Button;
 import carbon.widget.ImageView;
 import carbon.widget.RelativeLayout;
 import io.dume.dume.R;
 import io.dume.dume.customView.HorizontalLoadView;
-import io.dume.dume.student.grabingInfo.GrabingInfoActivity;
 import io.dume.dume.student.pojo.CusStuAppComMapActivity;
 import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
 import io.dume.dume.teacher.crudskill.CrudSkillActivity;
@@ -72,9 +71,7 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
-import static io.dume.dume.util.DumeUtils.STUDENT;
 import static io.dume.dume.util.DumeUtils.hideKeyboard;
-import static io.dume.dume.util.DumeUtils.setMargins;
 import static io.dume.dume.util.DumeUtils.showKeyboard;
 
 public class GrabingLocationActivity extends CusStuAppComMapActivity implements OnMapReadyCallback,
@@ -95,7 +92,6 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
     private LinearLayout llBottomSheet;
     private FloatingActionButton bottomSheetFab;
     private boolean firstTime = true;
-    private HorizontalLoadView loadView;
     private android.support.design.widget.AppBarLayout myAppbarlayout;
     private CoordinatorLayout coordinatorLayout;
     private RecyclerView autoCompleteRecyView;
@@ -118,6 +114,7 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
         setContentView(R.layout.stu3_activity_grabing_location);
         buildGoogleApiClient();
         setActivityContextMap(this, fromFlag);
+        findLoadView();
         mContext = this;
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
@@ -187,7 +184,6 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
         fab = findViewById(R.id.fab);
         map = findViewById(R.id.map);
         //mLocationMarkerText = (TextView) findViewById(R.id.locationMarkertext);
-        loadView = findViewById(R.id.loadView);
         toolbar = findViewById(R.id.accountToolbar);
         llBottomSheet = findViewById(R.id.searchBottomSheet);
         myAppbarlayout = findViewById(R.id.my_appbarLayout_cardView);
@@ -218,9 +214,6 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
         bottomSheetBehavior = BottomSheetBehavior.from(llBottomSheet);
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         llBottomSheet.animate().scaleX(1 + (1 * 0.058f)).setDuration(0).start();
-        if (!loadView.isRunningAnimation()) {
-            loadView.startLoading();
-        }
         ViewTreeObserver vto = llBottomSheet.getViewTreeObserver();
         vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -249,6 +242,7 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                showProgress();
                 getAutocomplete(s);
                 if (discardImage.getVisibility() == View.INVISIBLE && !s.equals("")) {
                     discardImage.setVisibility(View.VISIBLE);
@@ -348,6 +342,7 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
             public void onCameraMoveStarted(int i) {
                 locationDoneBtn.setEnabled(false);
                 locationDoneBtn.setBackgroundColor(getResources().getColor(R.color.disable_color));
+                showProgress();
                 inputSearch.setText(R.string.LoadingText);
             }
         });
@@ -367,6 +362,7 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
                 inputSearch.setText(mainAddress);
                 locationDoneBtn.setEnabled(true);
                 locationDoneBtn.setBackgroundColor(getResources().getColor(R.color.colorBlack));
+                hideProgress();
 
             }
         });
@@ -466,9 +462,11 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
         if (results == null) {
             Log.e(TAG, "publishTheAutoResults: null found");
             autoCompleteRecyView.invalidate();
+            hideProgress();
         } else {
             Log.e(TAG, "publishTheAutoResults: " + results);
             recyclerAutoAdapter.update(results);
+            hideProgress();
             //recyclerAutoAdapter.notifyDataSetChanged();
         }
     }
@@ -496,4 +494,21 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
         return data;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            } else {
+                super.onBackPressed();
+            }
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
 }

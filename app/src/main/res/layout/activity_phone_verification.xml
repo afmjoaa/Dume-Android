@@ -50,14 +50,15 @@
 
     <io.dume.dume.customView.HorizontalLoadView
         android:id="@+id/loadView"
-        android:layout_width="12dp"
-        android:layout_height="4dp"
+        android:layout_width="20dp"
+        android:layout_height="3dp"
         android:elevation="8dp"
         android:translationY="2dp"
-        android:visibility="gone"
+        android:background="@drawable/bg_black_bottom_less_round"
         app:layout_anchor="@id/app_bar"
+        android:visibility="gone"
         app:layout_anchorGravity="bottom"
-        app:rect_color="@color/carbon_black" />
+        app:rect_color="@color/transparent" />
 
 
     <android.support.v4.widget.NestedScrollView

@@ -151,6 +151,7 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
         super.onCreate(savedInstanceState);
         setContentView(R.layout.stu2_activity_grabing_info);
         setActivityContextMap(this, fromFlag);
+        findLoadView();
         mPresenter = new GrabingInfoPresenter(this, new GrabingInfoModel());
         mPresenter.grabingInfoPageEnqueue();
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
@@ -524,17 +525,6 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_grabing_info, menu);
         return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        int id = item.getItemId();
-        if (id == R.id.action_help) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     protected void animateFab(int position) {
@@ -1006,5 +996,21 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
         cursor.close();
         //Log.d(TAG, "Contact Name: " + contactName);
         secondContactPerson.setText(contactName);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_help) {
+            //add function here
+        }else if(id == android.R.id.home){
+            super.onBackPressed();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 }

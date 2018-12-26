@@ -77,6 +77,7 @@ public class RecordsCurrentActivity extends CustomStuAppCompatActivity implement
         super.onCreate(savedInstanceState);
         setContentView(R.layout.stu13_activity_records_current);
         setActivityContext(this, fromFlag);
+        findLoadView();
         mPresenter = new RecordsCurrentPresenter(this, new RecordsCurrentModel());
         mPresenter.recordsCurrentEnqueue();
         DumeUtils.configureAppbar(this, "Current Records");
@@ -127,16 +128,21 @@ public class RecordsCurrentActivity extends CustomStuAppCompatActivity implement
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-
         switch (id) {
             case R.id.action_help:
                 //Toast.makeText(MainActivity.this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
                 break;
+            case android.R.id.home:
+                super.onBackPressed();
+                break;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
 
     //testing code goes here
     public static class PlaceholderFragment extends Fragment {
