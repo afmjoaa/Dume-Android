@@ -33,6 +33,8 @@ public interface TeacherContract {
         void freeCashBackImageViewClicked();
 
         void enhanceVIewImageClicked();
+
+        void testingCustomDialogue();
     }
 
 

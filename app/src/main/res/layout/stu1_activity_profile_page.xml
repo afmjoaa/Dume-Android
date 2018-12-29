@@ -102,6 +102,24 @@
                     android:contentDescription="@string/display_pic"
                     app:srcCompat="@drawable/alias_profile_icon" />
 
+                <TextView
+                    android:id="@+id/label"
+                    android:layout_width="120dp"
+                    android:layout_height="26dp"
+                    android:layout_gravity="top|end"
+                    android:background="@color/black_overlay"
+                    android:gravity="center"
+                    android:maxLength="7"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:rotation="45"
+                    android:translationX="38dp"
+                    android:translationY="8dp"
+                    android:text="Change"
+                    android:textAppearance="?android:textAppearanceLargeInverse"
+                    android:textSize="10sp"
+                    tools:ignore="SmallSp" />
+
             </android.support.v7.widget.CardView>
 
             <TextView

@@ -73,18 +73,19 @@ public class CrudSkillActivity extends CusStuAppComMapActivity implements CrudCo
 
     @Override
     public void init() {
+        configureAppbar(this, "Add New Skill");
         fromWhere = getIntent().getAction();
         if (fromWhere != null) {
-            if (fromWhere.equals("add")) {
-                configureAppbar(this, "Add New Skill");
-            } else if (fromWhere.equals("edit")) {
-                configureAppbar(this, "Edit Skill");
-            } else if (fromWhere.equals(DumeUtils.STUDENT)) {
-                flush("fucked it from student");
-            } else if (fromWhere.equals(DumeUtils.TEACHER)) {
-                flush("fucked it from Teacher");
-            }else if (fromWhere.equals((DumeUtils.BOOTCAMP))){
-                flush("fucked it from Boot-camp");
+            switch (fromWhere) {
+                case DumeUtils.STUDENT:
+                    flush("fucked it from student");
+                    break;
+                case DumeUtils.TEACHER:
+                    flush("fucked it from Teacher");
+                    break;
+                case (DumeUtils.BOOTCAMP):
+                    flush("fucked it from Boot-camp");
+                    break;
             }
         }
         //getting the width
@@ -159,7 +160,6 @@ public class CrudSkillActivity extends CusStuAppComMapActivity implements CrudCo
         onMapReadyListener(mMap);
         onMapReadyGeneralConfig();
         mMap.setPadding((int) (10 * (getResources().getDisplayMetrics().density)), (int) (250 * (getResources().getDisplayMetrics().density)), 0, (int) (6 * (getResources().getDisplayMetrics().density)));
-
     }
 
     @Override
@@ -180,7 +180,7 @@ public class CrudSkillActivity extends CusStuAppComMapActivity implements CrudCo
         int id = item.getItemId();
         if (id == R.id.action_help) {
             //add function here
-        }else if(id == android.R.id.home){
+        } else if (id == android.R.id.home) {
             super.onBackPressed();
         }
         return super.onOptionsItemSelected(item);

@@ -1,5 +1,6 @@
 package io.dume.dume.auth.code_verification;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
@@ -11,7 +12,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.GeoPoint;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,6 +24,8 @@ import io.dume.dume.auth.AuthGlobalContract;
 import io.dume.dume.auth.DataStore;
 import io.dume.dume.auth.auth.AuthContract;
 import io.dume.dume.util.DumeUtils;
+
+import static io.dume.dume.student.pojo.StuBaseModel.setStuProfile;
 
 public class PhoneVerficationPresenter implements PhoneVerificationContract.Presenter {
 
@@ -38,6 +43,7 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
         this.model = authModel;
         fireStore = FirebaseFirestore.getInstance();
         imeiList = DumeUtils.getImei(context);
+
     }
 
     @Override
@@ -177,7 +183,9 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
             user.put("account_major", dataStore.getAccountManjor());
             user.put("phone_number", dataStore.getPhoneNumber());
             user.put("avatar", dataStore.getPhotoUri());
-            user.put("email", dataStore.getEmail());
+            if (dataStore.getEmail() != null) {
+                user.put("email", dataStore.getEmail());
+            }
             user.put("gender", "");
             user.put("religion", "");
             user.put("birth_date", "");
@@ -189,9 +197,11 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
             user.put("imei", imeiList);
             view.showProgress();
             //"Saving User..."
+            DocumentReference userStudentProInfo = fireStore.collection("/users/students/stu_pro_info").document(model.getUser().getUid());
             fireStore.collection("mini_users").document(model.getUser().getUid()).set(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
+                    setStuProfile((Activity) context,userStudentProInfo,generateStuProInfo(dataStore));
                     view.hideProgress();
                     nextActivity();
                     Log.w(TAG, "onComplete: User Added");
@@ -206,4 +216,34 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
             Log.w(TAG, "saveUserToDb: " + "Datastore null or user not logged in");
         }
     }
+
+    private Map<String, Object> generateStuProInfo(DataStore dataStore){
+        Map<String, Object> stuProInfo = new HashMap<>();
+        stuProInfo.put("first_name", dataStore.getFirstName());
+        stuProInfo.put("last_name", dataStore.getLastName());
+        stuProInfo.put("phone_number", dataStore.getPhoneNumber());
+        stuProInfo.put("avatar", dataStore.getPhotoUri());
+        stuProInfo.put("email", dataStore.getEmail());
+        stuProInfo.put("gender", "");
+        stuProInfo.put("current_status", "");
+        stuProInfo.put("previous_result", "");
+
+        GeoPoint current_address = new GeoPoint(84.9, -180);
+        stuProInfo.put("current_address", current_address);
+
+        ArrayList<String> appliedPromoList = null;
+        stuProInfo.put("applied_promo", appliedPromoList);
+        ArrayList<String> availablePromoList = null;
+        stuProInfo.put("available_promo", availablePromoList);
+
+        Map<String, Object> selfRating = new HashMap<>();
+        selfRating.put("star_rating", 5.00);
+        selfRating.put("communication", "100%");
+        selfRating.put("behaviour", "100%");
+        stuProInfo.put("self_rating", selfRating);
+
+        return stuProInfo;
+    }
+
+
 }

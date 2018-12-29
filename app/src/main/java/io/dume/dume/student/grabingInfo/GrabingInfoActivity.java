@@ -95,7 +95,8 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
             R.drawable.xxx_degree_vector,
             R.drawable.ic_cross_check,
             R.drawable.ic_gender_preference,
-            R.drawable.ic_payment
+            R.drawable.ic_payment,
+            R.drawable.xxx_item_capacity
     };
     private int[] navLabels = {
             R.string.tab_payment,
@@ -505,6 +506,10 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                 AppCompatRadioButton rd = new AppCompatRadioButton(this);
                 rd.setText("null");
                 onRadioButtonClick(rd, tabLayout.getSelectedTabPosition(), levelName);
+            }else if (levelName.equals("Capacity")) {
+                AppCompatRadioButton rd = new AppCompatRadioButton(this);
+                rd.setText("null");
+                onRadioButtonClick(rd, tabLayout.getSelectedTabPosition(), levelName);
             } else if (levelName.equals("Cross Check")) {
                 //cross_check block here
                 gotoGrabingPackage();
@@ -655,9 +660,8 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
         }
         Log.e(TAG, queryList.toString());
         Log.e(TAG, queryListName.toString());
-
         db = new LocalDb();
-        ArrayList<String> arr = new ArrayList<>(Arrays.asList("Salary", "Gender", "justForData"));
+        ArrayList<String> arr = new ArrayList<>(Arrays.asList("Salary", "Gender", "justForData","Capacity"));
         if (arr.contains(levelName)) {
             fab.setVisibility(View.VISIBLE);
             switch (levelName) {
@@ -665,14 +669,23 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                     if (!(fragmentId < tabLayout.getTabCount() - 1)) {
                         if(retrivedAction.equals(DumeUtils.BOOTCAMP)){
                             flush("now bootcamp will work");
+                            mSectionsPagerAdapter.newTab(db.capacity);
+                            mViewPager.setCurrentItem(fragmentId + 1);
+                        }else{
+                            mSectionsPagerAdapter.newTab(db.payment);
+                            mViewPager.setCurrentItem(fragmentId + 1);
                         }
-                        mSectionsPagerAdapter.newTab(db.payment);
-                        mViewPager.setCurrentItem(fragmentId + 1);
                     } else mViewPager.setCurrentItem(fragmentId + 1);
                     return;
                 case "Salary":
                     if (!(fragmentId < tabLayout.getTabCount() - 1)) {
                         mSectionsPagerAdapter.newTab(db.crossCheck);
+                        mViewPager.setCurrentItem(fragmentId + 1);
+                    } else mViewPager.setCurrentItem(fragmentId + 1);
+                    return;
+                case "Capacity":
+                    if (!(fragmentId < tabLayout.getTabCount() - 1)) {
+                        mSectionsPagerAdapter.newTab(db.payment);
                         mViewPager.setCurrentItem(fragmentId + 1);
                     } else mViewPager.setCurrentItem(fragmentId + 1);
                     return;
@@ -827,6 +840,8 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                 return 15;
             case "Cross Check":
                 return 13;
+            case "Capacity":
+                return 16;
             default:
                 return 5;
         }
@@ -1004,7 +1019,11 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
         if (id == R.id.action_help) {
             //add function here
         }else if(id == android.R.id.home){
-            super.onBackPressed();
+            if(viewMusk.getVisibility() == View.VISIBLE){
+                forMeBtn.performClick();
+            }else{
+                super.onBackPressed();
+            }
         }
         return super.onOptionsItemSelected(item);
     }

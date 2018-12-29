@@ -289,6 +289,52 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
                 }
             }
             return rootLast;
+        }else if (list != null && list.toString().equals("Capacity")) {
+            View viewCapacity = inflater.inflate(R.layout.fragment_capacity, container, false);
+            hostingNestedScrollLayout = viewCapacity.findViewById(R.id.hosting_nestedScroll_layout);
+            hostingNestedScrollLayout.getBackground().setAlpha(90);
+            RangeBar rangeBar = viewCapacity.findViewById(R.id.rangeSlider);
+            TextView min, max;
+            min = viewCapacity.findViewById(R.id.minSal);
+            max = viewCapacity.findViewById(R.id.maxSal);
+            rangeBar.setFormatter(new IRangeBarFormatter() {
+                @Override
+                public String format(String value) {
+                    return value + "옷";
+                }
+            });
+            //⺅
+
+            rangeBar.setOnRangeBarChangeListener(new RangeBar.OnRangeBarChangeListener() {
+                @Override
+                public void onRangeChangeListener(RangeBar rangeBar, int leftPinIndex, int rightPinIndex, String leftPinValue, String rightPinValue) {
+                    min.setText(String.format("Min Count : %s Student", leftPinValue));
+                    max.setText(String.format("Max Count : %s Student", rightPinValue));
+                    String capacityValue = leftPinValue + "옷 - " + rightPinValue + "옷";
+                    AppCompatRadioButton rd = new AppCompatRadioButton(mContext);
+                    rd.setText(capacityValue);
+                    listener.onRadioButtonClick(rd, sectionNumber, "justForData");
+                }
+            });
+            if(sectionNumber == 0){
+                if(myMainActivity.hintIdOne.getText().equals("One")){
+                    myMainActivity.hintIdOne.setText(R.string.example_capacity);
+                }
+            }else if(sectionNumber == 1){
+                if(firstTime){
+                    myMainActivity.hintIdOne.setText(myMainActivity.queryList.get(sectionNumber));
+                    myMainActivity.hintIdTwo.setText(R.string.example_capacity);
+                    firstTime= false;
+                }
+            }else{
+                if(firstTime){
+                    myMainActivity.hintIdOne.setText(myMainActivity.queryList.get(sectionNumber-1));
+                    myMainActivity.hintIdTwo.setText(myMainActivity.queryList.get(sectionNumber));
+                    myMainActivity.hintIdThree.setText(R.string.example_capacity);
+                    firstTime= false;
+                }
+            }
+            return viewCapacity;
         }
 
         root = inflater.inflate(R.layout.grabbing_info_fragment, container, false);

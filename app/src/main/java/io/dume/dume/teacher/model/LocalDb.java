@@ -42,6 +42,7 @@ public class LocalDb {
     private final List<String> genderPreferencesList;
     public final List<String> crossCheck;
     public final List<String> payment;
+    public final List<String> capacity;
 
 
     public List<String> getInnerSchoolEnglishMediumEdExcelOLevel() {
@@ -631,6 +632,13 @@ public class LocalDb {
                 return "Cross Check";
             }
         };
+        capacity = new ArrayList<String>(Arrays.asList("10", "20", "30")) {
+            @Override
+            public String toString() {
+                return "Capacity";
+            }
+        };
+
 
         levelOneMap = new HashMap<>(categories.size());
         levelOneMap.put(categories.get(0), innerLevel);

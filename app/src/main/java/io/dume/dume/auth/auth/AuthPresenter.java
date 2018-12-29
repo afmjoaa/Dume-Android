@@ -33,7 +33,6 @@ public class AuthPresenter implements AuthContract.Presenter {
         view.findView();
         view.initActionBar();
         view.init();
-
     }
 
     @Override
@@ -139,7 +138,9 @@ public class AuthPresenter implements AuthContract.Presenter {
 
                             @Override
                             public void onBootcamp() {
-
+                                Log.w(TAG, "onBootcampFound: hiding dialog");
+                                view.hideProgress();
+                                view.gotoTeacherActivity();
                             }
 
                             @Override

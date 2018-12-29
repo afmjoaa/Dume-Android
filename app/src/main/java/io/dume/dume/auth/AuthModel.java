@@ -143,7 +143,6 @@ public class AuthModel implements AuthContract.Model, SplashContract.Model, Phon
 
     @Override
     public void verifyCode(String code, PhoneVerificationContract.Model.CodeVerificationCallBack listener) {
-
         if (listener != null && datastore != null) {
             listener.onStart();
             PhoneAuthCredential credential = PhoneAuthProvider.getCredential(datastore.getVerificationId(), code);
@@ -191,7 +190,6 @@ public class AuthModel implements AuthContract.Model, SplashContract.Model, Phon
                 super.onCodeSent(s, forceResendingToken);
             }
         }, DataStore.resendingToken);
-
     }
 
     @Override
@@ -225,7 +223,7 @@ public class AuthModel implements AuthContract.Model, SplashContract.Model, Phon
                     if (datastore.getAccountManjor() != null) {
                         Map<String, Object> newMap = new HashMap<>();
                         newMap.put("account_major", datastore.getAccountManjor());
-                        final Task<Void> mini_users1 = firestore.collection("mini_users").document(user.getUid()).update(newMap).addOnFailureListener(new OnFailureListener() {
+                        final Task<Void> mini_users1 = mini_users.update(newMap).addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
                                 Log.e(TAG, "onFailure: Enam " + e.getLocalizedMessage());

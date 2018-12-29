@@ -29,6 +29,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -43,7 +45,7 @@ import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class DumeUtils {
     public static final String TEACHER = "teacher";
-    public static final String BOOTCAMP = "boot-camp";
+    public static final String BOOTCAMP = "bootcamp";
     public static final String STUDENT = "student";
     public static final String SELECTED_ID = "s_id";
     private static final String TAG = "Bal";
@@ -110,7 +112,6 @@ public class DumeUtils {
             badge = new TextDrawable(context);
         }
         badge.setCircleTextColor(textColor);
-
         badge.setString(data);
         icon.mutate();
         icon.setDrawableByLayerId(id, badge);
@@ -365,20 +366,6 @@ public class DumeUtils {
     @SuppressLint("HardwareIds")
     public static ArrayList<String> getImei(Context context) {
         ArrayList<String> imeiList = new ArrayList<>();
-/*
-        TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
-            Toast.makeText(context, (telephonyManager != null ? telephonyManager.getDeviceId() : null), Toast.LENGTH_SHORT).show();
-
-            if (telephonyManager != null) {
-                String slotOne = telephonyManager.getDeviceId();
-
-            }
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-
-            }
-        }*/
         TelephonyInfo telephonyInfo = TelephonyInfo.getInstance(context);
 
         String imeiSIM1 = telephonyInfo.getImsiSIM1();
@@ -401,6 +388,8 @@ public class DumeUtils {
         return imeiList;
     }
 
-
+    public static String getUserUID(){
+        return Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
+    }
 }
 

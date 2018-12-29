@@ -1,7 +1,5 @@
 package io.dume.dume.auth.auth;
 
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -13,7 +11,6 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.SpannableString;
@@ -30,7 +27,6 @@ import android.widget.Toast;
 
 import com.daimajia.slider.library.SliderLayout;
 
-import dmax.dialog.SpotsDialog;
 import io.dume.dume.R;
 import io.dume.dume.auth.AuthModel;
 import io.dume.dume.auth.DataStore;
@@ -42,6 +38,7 @@ import io.dume.dume.splash.FeaturedSliderAdapter;
 import io.dume.dume.student.homePage.StudentActivity;
 import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
 import io.dume.dume.teacher.homepage.TeacherActivtiy;
+import io.dume.dume.util.DumeUtils;
 
 
 public class AuthActivity extends CustomStuAppCompatActivity implements AuthContract.View, BottomNavigationView.OnNavigationItemSelectedListener, TextView.OnEditorActionListener, TextWatcher {
@@ -62,8 +59,6 @@ public class AuthActivity extends CustomStuAppCompatActivity implements AuthCont
     private String[] changingTextArray;
     private TextView changingTextView;
     private TextView socialConnect;
-    private SpotsDialog.Builder spotsBuilder;
-    private AlertDialog spotDialog;
     private Context context;
     private Typeface cairoRegular;
     private HorizontalLoadView loadView;
@@ -99,11 +94,6 @@ public class AuthActivity extends CustomStuAppCompatActivity implements AuthCont
         phoneEditText.setOnClickListener(view -> appBar.setExpanded(false, true));
         floatingButoon.setOnClickListener(view -> presenter.onPhoneValidation(phoneEditText.getText().toString()));
         phoneEditText.addTextChangedListener(this);
-
-
-        spotsBuilder = new SpotsDialog.Builder().setContext(this);
-        spotsBuilder.setCancelable(false);
-        spotDialog = new AlertDialog.Builder(this).create();
         Typeface custom_font = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Medium.ttf");
         cairoRegular = Typeface.createFromAsset(getAssets(), "fonts/Cairo_Regular.ttf");
 
@@ -177,7 +167,6 @@ public class AuthActivity extends CustomStuAppCompatActivity implements AuthCont
     @Override
     public void onBootcampSelected() {
         changingTextView.setText(changingTextArray[2]);
-
     }
 
     @Override
@@ -231,20 +220,27 @@ public class AuthActivity extends CustomStuAppCompatActivity implements AuthCont
     @Override
     public void goToRegesterActivity(DataStore dataStore) {
         Intent intent = new Intent(this, AuthRegisterActivity.class);
-        dataStore.setAccountManjor(bottomNavigationView.getSelectedItemId() == R.id.student_nav ? "student" : "teacher");
+        //J
+        String accountMajor = null;
+        switch (bottomNavigationView.getSelectedItemId()){
+            case R.id.student_nav:
+                accountMajor = DumeUtils.STUDENT;
+                break;
+            case R.id.teacher_nav:
+                accountMajor = DumeUtils.TEACHER;
+                break;
+            default:
+                accountMajor = DumeUtils.BOOTCAMP;
+                break;
+        }
+        dataStore.setAccountManjor(accountMajor);
         intent.putExtra("datastore", dataStore);
         startActivity(intent);
         finish();
-
     }
 
     @Override
     public void showProgress() {
-        /*if (!((Activity) context).isFinishing()) {
-            spotDialog = spotsBuilder.setMessage(titile).build();
-            spotDialog.show();
-            Log.w(TAG, "showProgress: ");
-        }*/
         if (loadView.getVisibility() == View.INVISIBLE || loadView.getVisibility() == View.GONE) {
             loadView.setVisibility(View.VISIBLE);
         }
@@ -255,10 +251,6 @@ public class AuthActivity extends CustomStuAppCompatActivity implements AuthCont
 
     @Override
     public void hideProgress() {
-        /*if (spotDialog.isShowing()) {
-            spotDialog.dismiss();
-            Log.w(TAG, "hideProgress: ");
-        }*/
         if (loadView.isRunningAnimation()) {
             loadView.stopLoading();
         }
@@ -327,17 +319,11 @@ public class AuthActivity extends CustomStuAppCompatActivity implements AuthCont
 
     @Override
     protected void onPause() {
-        if (spotDialog.isShowing()) {
-            spotDialog.dismiss();
-        }
         super.onPause();
     }
 
     @Override
     protected void onDestroy() {
-        if (spotDialog.isShowing()) {
-            spotDialog.dismiss();
-        }
         super.onDestroy();
     }
 

@@ -3,7 +3,7 @@
     <item
         android:id="@+id/bootcamp_nav"
         android:icon="@drawable/boot_camp_icon"
-        android:title="BootCamp"
+        android:title="Boot Camp"
         />
     <item
         android:id="@+id/student_nav"

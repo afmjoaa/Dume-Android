@@ -2,27 +2,48 @@ package io.dume.dume.student.profilePage;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.Parcelable;
+import android.provider.MediaStore;
 import android.support.v7.widget.AppCompatCheckBox;
+import android.support.v7.widget.PopupMenu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+import com.google.firebase.auth.FirebaseAuth;
 import com.warkiz.widget.IndicatorSeekBar;
 import com.warkiz.widget.IndicatorStayLayout;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
+import carbon.widget.ImageView;
 import io.dume.dume.R;
 import io.dume.dume.student.grabingLocation.GrabingLocationActivity;
 import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
 import io.dume.dume.util.DumeUtils;
 import io.dume.dume.util.RadioBtnDialogue;
+
+import static io.dume.dume.util.DumeUtils.getUserUID;
 
 public class ProfilePageActivity extends CustomStuAppCompatActivity implements ProfilePageContract.View,
         CompoundButton.OnCheckedChangeListener {
@@ -42,6 +63,16 @@ public class ProfilePageActivity extends CustomStuAppCompatActivity implements P
     private EditText currentAddressTextView;
     private String[] gpaOptionsArr;
     private String[] cgpaOptionsArr;
+    private ImageView discardImageView;
+    private ImageView doneImageView;
+    private Button doneBtn;
+    private Button discardBtn;
+    private TextView profileUserName;
+    private TextView profileUserNumber;
+    private android.widget.ImageView profileUserDP;
+    private ProgressBar loadingSpiner;
+    private Uri outputFileUri;
+    private int IMAGE_RESULT_CODE = 3333;
 
 
     @Override
@@ -62,7 +93,6 @@ public class ProfilePageActivity extends CustomStuAppCompatActivity implements P
         }
         seekbar.setIndicatorTextFormat("${PROGRESS}%");
 
-
         ArrayList<String> emailAddress = getEmailAddress();
         if (emailAddress.size() != 0) {
             email.setThreshold(1);
@@ -76,7 +106,29 @@ public class ProfilePageActivity extends CustomStuAppCompatActivity implements P
         decor = getWindow().getDecorView();
         cgpaCheckBox.setOnCheckedChangeListener(this);
         gpaCheckBox.setOnCheckedChangeListener(this);
-
+        profileUserDP.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                PopupMenu popup = new PopupMenu(context, view);
+                popup.inflate(R.menu.menu_dp_long_click);
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem menuItem) {
+                        int id = menuItem.getItemId();
+                        switch (id){
+                            case R.id.action_update:
+                                openImageIntent();
+                                break;
+                            case R.id.action_remove:
+                                Toast.makeText(context, "fucked it.....", Toast.LENGTH_SHORT).show();
+                                break;
+                        }
+                        return false;
+                    }
+                });
+                popup.show();
+            }
+        });
     }
 
     @Override
@@ -93,7 +145,14 @@ public class ProfilePageActivity extends CustomStuAppCompatActivity implements P
         genderSelcetionArr = this.getResources().getStringArray(R.array.select_gender);
         gpaOptionsArr = this.getResources().getStringArray(R.array.gpa_options);
         cgpaOptionsArr = this.getResources().getStringArray(R.array.cgpa_options);
-
+        discardImageView = findViewById(R.id.discard_imageview);
+        doneImageView = findViewById(R.id.done_imageview);
+        discardBtn = findViewById(R.id.profile_discard_btn);
+        doneBtn = findViewById(R.id.profile_update_btn);
+        profileUserName = findViewById(R.id.Profile_page_user_name);
+        profileUserNumber = findViewById(R.id.Profile_page_user_phone_no);
+        profileUserDP = findViewById(R.id.imageView1);
+        loadingSpiner = findViewById(R.id.loading_spinner);
     }
 
 
@@ -179,4 +238,67 @@ public class ProfilePageActivity extends CustomStuAppCompatActivity implements P
     public void onProfilePageClicked(View view) {
         mPresenter.onProfileViewIntracted(view);
     }
+
+    private void openImageIntent() {
+        // Determine Uri of camera image to save.
+        final File root = new File(Environment.getExternalStorageDirectory() + File.separator + "MyDir" + File.separator);
+        root.mkdirs();
+        final String fname = getUserUID() + ".jpg";
+        final File sdImageMainDirectory = new File(root, fname);
+        outputFileUri = Uri.fromFile(sdImageMainDirectory);
+
+        // Camera.
+        final List<Intent> cameraIntents = new ArrayList<Intent>();
+        final Intent captureIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        final PackageManager packageManager = getPackageManager();
+        final List<ResolveInfo> listCam = packageManager.queryIntentActivities(captureIntent, 0);
+        for(ResolveInfo res : listCam) {
+            final String packageName = res.activityInfo.packageName;
+            final Intent intent = new Intent(captureIntent);
+            intent.setComponent(new ComponentName(packageName, res.activityInfo.name));
+            intent.setPackage(packageName);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
+            cameraIntents.add(intent);
+        }
+
+        // Filesystem.
+        final Intent galleryIntent = new Intent();
+        galleryIntent.setType("image/*");
+        galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
+
+        // Chooser of filesystem options.
+        final Intent chooserIntent = Intent.createChooser(galleryIntent, "Select Source");
+
+        // Add the camera options.
+        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, cameraIntents.toArray(new Parcelable[cameraIntents.size()]));
+        startActivityForResult(chooserIntent, IMAGE_RESULT_CODE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+            if (requestCode == IMAGE_RESULT_CODE) {
+                final boolean isCamera;
+                if (data == null) {
+                    isCamera = true;
+                } else {
+                    final String action = data.getAction();
+                    if (action == null) {
+                        isCamera = false;
+                    } else {
+                        isCamera = action.equals(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                    }
+                }
+
+                Uri selectedImageUri;
+                if (isCamera) {
+                    selectedImageUri = outputFileUri;
+                } else {
+                    selectedImageUri = data == null ? null : data.getData();
+                }
+                Glide.with(this).load(selectedImageUri).apply(new RequestOptions()).into(profileUserDP);
+            }
+        }
+    }
+    //       Glide.with(this).load().apply()
 }

@@ -44,7 +44,6 @@ public class ProfilePagePresenter implements ProfilePageContract.Presenter {
                 mView.onPreviousResultClicked();
                 break;
 
-
         }
     }
 

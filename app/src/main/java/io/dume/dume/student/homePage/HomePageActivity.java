@@ -951,7 +951,7 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
                     feedbackTextViewLayout.setVisibility(View.VISIBLE);
 
                 } else {
-                    Toast.makeText(HomePageActivity.this, "else running", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(HomePageActivity.this, "please rate your experience", Toast.LENGTH_SHORT).show();
                 }
             }
         });

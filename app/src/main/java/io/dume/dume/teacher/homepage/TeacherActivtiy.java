@@ -1,5 +1,6 @@
 package io.dume.dume.teacher.homepage;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -16,22 +17,26 @@ import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v4.view.animation.FastOutLinearInInterpolator;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -39,6 +44,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,6 +55,10 @@ import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.hanks.htextview.scale.ScaleTextView;
 import com.tomergoldst.tooltips.ToolTipsManager;
+import com.transitionseverywhere.Fade;
+import com.transitionseverywhere.Slide;
+import com.transitionseverywhere.TransitionManager;
+import com.transitionseverywhere.TransitionSet;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,6 +75,8 @@ import io.dume.dume.common.privacyPolicy.PrivacyPolicyActivity;
 import io.dume.dume.student.freeCashBack.FreeCashBackActivity;
 import io.dume.dume.student.heatMap.HeatMapActivity;
 import io.dume.dume.student.homePage.HomePageActivity;
+import io.dume.dume.student.homePage.adapter.HomePageRatingAdapter;
+import io.dume.dume.student.homePage.adapter.HomePageRatingData;
 import io.dume.dume.student.homePage.adapter.HomePageRecyclerAdapter;
 import io.dume.dume.student.homePage.adapter.HomePageRecyclerData;
 import io.dume.dume.student.pojo.CusStuAppComMapActivity;
@@ -82,6 +94,7 @@ import io.dume.dume.teacher.mentor_settings.AccountSettings;
 import io.dume.dume.teacher.pojo.TabModel;
 import io.dume.dume.teacher.skill.SkillActivity;
 import io.dume.dume.util.DumeUtils;
+import me.zhanghai.android.materialratingbar.MaterialRatingBar;
 import q.rorbin.verticaltablayout.VerticalTabLayout;
 import q.rorbin.verticaltablayout.adapter.TabAdapter;
 import q.rorbin.verticaltablayout.widget.ITabView;
@@ -150,6 +163,8 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
     private TextView userName;
     private RecyclerView hPageBSRecycler;
     private int optionMenu = R.menu.stu_homepage;
+    private String[] feedbackStrings;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -217,6 +232,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         buttonInActive = findViewById(R.id.buttonInActive);
         userName = findViewById(R.id.user_name);
         hPageBSRecycler = findViewById(R.id.homePage_bottomSheet_recycler);
+        feedbackStrings = getResources().getStringArray(R.array.review_hint_text_dependent);
     }
 
     @Override
@@ -728,5 +744,116 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         public int getCount() {
             return 6;
         }
+    }
+
+    //rating dialog not used right now
+    @Override
+    public void testingCustomDialogue() {
+        // custom dialog
+        final Dialog dialog = new Dialog(context);
+        dialog.setContentView(R.layout.custom_rating_dialogue);
+        dialog.setCanceledOnTouchOutside(false);
+
+        //all find view here
+        MaterialRatingBar mDecimalRatingBars = dialog.findViewById(R.id.rated_mentor_rating_bar);
+        RecyclerView itemRatingRecycleView = dialog.findViewById(R.id.rating_item_recycler);
+        carbon.widget.ImageView ratedMentorDP = dialog.findViewById(R.id.rated_mentor_dp);
+        TextView ratingPrimaryText = dialog.findViewById(R.id.rating_primary_text);
+        TextView ratingSecondaryText = dialog.findViewById(R.id.rating_secondary_text);
+        TextInputLayout feedbackTextViewLayout = dialog.findViewById(R.id.input_layout_firstname);
+        AutoCompleteTextView feedbackTextView = dialog.findViewById(R.id.feedback_textview);
+        Button dismissBtn = (Button) dialog.findViewById(R.id.skip_btn);
+        Button nextSubmitBtn = dialog.findViewById(R.id.next_btn);
+        RelativeLayout dialogHostingLayout = dialog.findViewById(R.id.dialog_hosting_layout);
+        Button SubmitBtn = dialog.findViewById(R.id.submit_btn);
+
+
+        //testing the recycle view here
+        HomePageRatingAdapter itemRatingRecycleAdapter = new HomePageRatingAdapter(this, getFinalRatingData());
+        itemRatingRecycleView.setAdapter(itemRatingRecycleAdapter);
+        itemRatingRecycleView.setLayoutManager(new LinearLayoutManager(this));
+
+        mDecimalRatingBars.setOnRatingChangeListener(new MaterialRatingBar.OnRatingChangeListener() {
+            @Override
+            public void onRatingChanged(MaterialRatingBar ratingBar, float rating) {
+                nextSubmitBtn.performClick();
+            }
+        });
+
+        feedbackTextView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    int rating = mDecimalRatingBars.getProgress();
+                    if (rating <= 100) {
+                        String userName = "Azgor";
+                        feedbackTextView.setHint("Share how " + userName + " can improve");
+                    } else if (rating > 100 && rating <= 200) {
+                        feedbackTextView.setHint(feedbackStrings[1]);
+                    } else if (rating > 200 && rating <= 300) {
+                        String userName = "Azgor";
+                        feedbackTextView.setHint("Say something about " + userName);
+                    } else if (rating > 300 && rating <= 400) {
+                        feedbackTextView.setHint(feedbackStrings[3]);
+                    } else if (rating > 400 && rating <= 500) {
+                        feedbackTextView.setHint(feedbackStrings[4]);
+                    }
+                } else {
+                    feedbackTextView.setHint(feedbackStrings[4]);
+                }
+            }
+        });
+        dialog.show();
+
+
+        dismissBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        nextSubmitBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                TransitionSet set = new TransitionSet()
+                        .addTransition(new Fade())
+                        .addTransition(new Slide(Gravity.START))
+                        .setInterpolator(new FastOutLinearInInterpolator());
+                TransitionManager.beginDelayedTransition(dialogHostingLayout, set);
+                if (nextSubmitBtn.getText().equals("Next") && mDecimalRatingBars.getProgress() != 0) {
+                    nextSubmitBtn.setVisibility(View.GONE);
+                    SubmitBtn.setVisibility(View.VISIBLE);
+
+                    mDecimalRatingBars.setVisibility(View.GONE);
+                    ratedMentorDP.setVisibility(View.GONE);
+                    ratingPrimaryText.setVisibility(View.GONE);
+
+                    ratingSecondaryText.setVisibility(View.VISIBLE);
+                    itemRatingRecycleView.setVisibility(View.VISIBLE);
+                    feedbackTextViewLayout.setVisibility(View.VISIBLE);
+
+                } else {
+                    Toast.makeText(TeacherActivtiy.this, "please rate your experience", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        SubmitBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+    }
+
+    public List<HomePageRatingData> getFinalRatingData() {
+        List<HomePageRatingData> data = new ArrayList<>();
+        String[] primaryText = getResources().getStringArray(R.array.rating_demo_data);
+        for (String aPrimaryText : primaryText) {
+            HomePageRatingData current = new HomePageRatingData();
+            current.ratingAboutName = aPrimaryText;
+            data.add(current);
+        }
+        return data;
     }
 }

@@ -186,7 +186,9 @@ public class AuthRegisterActivity extends AppCompatActivity {
 
                                             @Override
                                             public void onBootcamp() {
-
+                                                hideDialog();
+                                                startActivity(new Intent(AuthRegisterActivity.this, TeacherActivtiy.class));
+                                                finish();
                                             }
 
                                             @Override
@@ -288,7 +290,9 @@ public class AuthRegisterActivity extends AppCompatActivity {
 
                                                     @Override
                                                     public void onBootcamp() {
-
+                                                        hideDialog();
+                                                        startActivity(new Intent(AuthRegisterActivity.this, TeacherActivtiy.class));
+                                                        finish();
                                                     }
 
                                                     @Override
@@ -375,22 +379,6 @@ public class AuthRegisterActivity extends AppCompatActivity {
             loadView.setVisibility(View.INVISIBLE);
         }
     }
-
-    /*void showDialog(String msg) {
-        if (!((Activity) context).isFinishing()) {
-            spotBuilder.setMessage(msg);
-            dialog = spotBuilder.build();
-            dialog.show();
-            Log.w(TAG, "showDialog: ");
-        }
-    }
-
-    void hideDialog() {
-        if (dialog.isShowing()) {
-            dialog.dismiss();
-            Log.w(TAG, "hideDialog: ");
-        }
-    }*/
 
     @Override
     public void onBackPressed() {

@@ -31,7 +31,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:layout_marginBottom="10dp"
-                android:text="Select salary range in BDT"
+                android:text="Select accommodation capacity"
                 android:textAlignment="center"
                 android:textColor="@color/textColorPrimary"
                 android:textSize="20sp" />
@@ -58,7 +58,7 @@
                     android:paddingEnd="6dp"
                     android:paddingRight="6dp"
                     android:paddingBottom="4dp"
-                    android:text="Min Salary : "
+                    android:text="Min Count : "
                     android:textSize="16sp" />
 
                 <TextView
@@ -76,7 +76,7 @@
                     android:paddingEnd="6dp"
                     android:paddingRight="6dp"
                     android:paddingBottom="4dp"
-                    android:text="Max Salary : "
+                    android:text="Max Count : "
                     android:textSize="16sp" />
 
             </LinearLayout>
@@ -106,9 +106,9 @@
                 app:mrb_selectorSize="5dp"
                 app:mrb_temporaryPins="false"
                 app:mrb_tickColor="@color/textColorSecondaryDark"
-                app:mrb_tickEnd="50"
+                app:mrb_tickEnd="30"
                 app:mrb_tickInterval="1"
-                app:mrb_tickStart="1" />
+                app:mrb_tickStart="2" />
 
         </LinearLayout>
 
