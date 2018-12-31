@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.util.Log;
+
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseException;
@@ -210,7 +211,8 @@ public class AuthModel implements AuthContract.Model, SplashContract.Model, Phon
     @Override
     public void onAccountTypeFound(FirebaseUser user, AuthGlobalContract.AccountTypeFoundListener listener) {
         listener.onStart();
-         DocumentReference mini_users = firestore.collection("mini_users").document(user.getUid());
+
+        DocumentReference mini_users = firestore.collection("mini_users").document(user.getUid());
         listenerRegistration = mini_users.addSnapshotListener((documentSnapshot, e) -> {
             if (documentSnapshot != null) {
 
