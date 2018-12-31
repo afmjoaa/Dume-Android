@@ -5,9 +5,11 @@ import android.content.ContentUris;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
@@ -24,7 +26,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.view.animation.FastOutLinearInInterpolator;
 import android.support.v4.view.animation.LinearOutSlowInInterpolator;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatRadioButton;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -48,6 +49,7 @@ import android.widget.Toast;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.transitionseverywhere.Fade;
 import com.transitionseverywhere.Slide;
@@ -59,16 +61,22 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
 import carbon.widget.RelativeLayout;
 import io.dume.dume.R;
 import io.dume.dume.inter_face.OnTabModificationListener;
+import io.dume.dume.model.DumeModel;
+import io.dume.dume.model.TeacherModel;
 import io.dume.dume.student.grabingPackage.GrabingPackageActivity;
 import io.dume.dume.student.pojo.CusStuAppComMapActivity;
 import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
+import io.dume.dume.teacher.homepage.TeacherContract;
 import io.dume.dume.teacher.model.LocalDb;
+import io.dume.dume.teacher.pojo.Skill;
 import io.dume.dume.util.DumeUtils;
 import io.dume.dume.util.OnViewClick;
 import io.dume.dume.util.RadioBtnDialogue;
@@ -146,6 +154,7 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
     private carbon.widget.ImageView secondContactImageView;
     private TextView secondContactPerson;
     private TextView secondContactPersonNum;
+    TeacherModel teacherModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -154,6 +163,7 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
         setActivityContextMap(this, fromFlag);
         findLoadView();
         mPresenter = new GrabingInfoPresenter(this, new GrabingInfoModel());
+        teacherModel = new DumeModel();
         mPresenter.grabingInfoPageEnqueue();
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         getLocationPermission(mapFragment);
@@ -239,6 +249,7 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                         ((Animatable) drawableIcon).start();
                     }
                 }
+
                 int tabPosition = tab.getPosition();
                 if (fab.getVisibility() == View.VISIBLE) {
                     animateFab(tabPosition);
@@ -506,13 +517,45 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                 AppCompatRadioButton rd = new AppCompatRadioButton(this);
                 rd.setText("null");
                 onRadioButtonClick(rd, tabLayout.getSelectedTabPosition(), levelName);
-            }else if (levelName.equals("Capacity")) {
+            } else if (levelName.equals("Capacity")) {
                 AppCompatRadioButton rd = new AppCompatRadioButton(this);
                 rd.setText("null");
                 onRadioButtonClick(rd, tabLayout.getSelectedTabPosition(), levelName);
             } else if (levelName.equals("Cross Check")) {
-                //cross_check block here
-                gotoGrabingPackage();
+                switch (retrivedAction) {
+                    case DumeUtils.TEACHER:
+                    case DumeUtils.BOOTCAMP:
+                        HashMap<String, Object> queryMap = new HashMap<>();
+                        for (int i = 0; i < queryList.size(); i++) {
+                            queryMap.put(queryListName.get(i), queryList.get(i));
+                        }
+                        showProgress();
+                        fab.setBackgroundTintList(ColorStateList.valueOf(Color.GRAY));
+                        fab.setEnabled(false);
+                        Skill skill = new Skill(true, queryMap.get("Gender").toString(), Float.parseFloat(queryMap.get("Salary").toString().replace("k", "")), new Date(), queryMap, "SFKJYEKF", new LatLng(84.9, 180), 5, 4.6f);
+                        teacherModel.saveSkill(skill, new TeacherContract.Model.Listener<Void>() {
+                            @Override
+                            public void onSuccess(Void list) {
+                                fab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorAccent)));
+                                fab.setEnabled(true);
+
+                            }
+
+                            @Override
+                            public void onError(String msg) {
+                                flush(msg);
+                                fab.setBackgroundTintList(ColorStateList.valueOf(Color.BLUE));
+                                fab.setEnabled(true);
+                            }
+                        });
+                        break;
+                    case DumeUtils.STUDENT:
+                        gotoGrabingPackage();
+                        break;
+
+
+                }
+
             }
         } else {
             //other general block "just go to the next one"
@@ -661,17 +704,17 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
         Log.e(TAG, queryList.toString());
         Log.e(TAG, queryListName.toString());
         db = new LocalDb();
-        ArrayList<String> arr = new ArrayList<>(Arrays.asList("Salary", "Gender", "justForData","Capacity"));
+        ArrayList<String> arr = new ArrayList<>(Arrays.asList("Salary", "Gender", "justForData", "Capacity"));
         if (arr.contains(levelName)) {
             fab.setVisibility(View.VISIBLE);
             switch (levelName) {
                 case "Gender":
                     if (!(fragmentId < tabLayout.getTabCount() - 1)) {
-                        if(retrivedAction.equals(DumeUtils.BOOTCAMP)){
+                        if (retrivedAction.equals(DumeUtils.BOOTCAMP)) {
                             flush("now bootcamp will work");
                             mSectionsPagerAdapter.newTab(db.capacity);
                             mViewPager.setCurrentItem(fragmentId + 1);
-                        }else{
+                        } else {
                             mSectionsPagerAdapter.newTab(db.payment);
                             mViewPager.setCurrentItem(fragmentId + 1);
                         }
@@ -875,13 +918,13 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
     private void AccessContact() {
         List<String> permissionsNeeded = new ArrayList<String>();
         final List<String> permissionsList = new ArrayList<String>();
-        if (!addPermission(permissionsList, Manifest.permission.READ_CONTACTS)){
+        if (!addPermission(permissionsList, Manifest.permission.READ_CONTACTS)) {
             permissionsNeeded.add("Read Contacts");
         }
         if (permissionsList.size() > 0) {
             requestPermissions(permissionsList.toArray(new String[permissionsList.size()]), REQUEST_MULTIPLE_PERMISSIONS);
             return;
-        }else{
+        } else {
             contactPermissionGranted = true;
             selectFromContactClicked();
         }
@@ -969,11 +1012,11 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
             }
             cursorPhone.close();
         }
-        String[] simpleArray = new String[ allNumbers.size() ];
-        allNumbers.toArray( simpleArray );
+        String[] simpleArray = new String[allNumbers.size()];
+        allNumbers.toArray(simpleArray);
         if (allNumbers.size() > 1) {
             selectOneNum(simpleArray);
-        }else{
+        } else {
             secondContactPersonNum.setText(simpleArray[0]);
         }
     }
@@ -1018,10 +1061,10 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
         int id = item.getItemId();
         if (id == R.id.action_help) {
             //add function here
-        }else if(id == android.R.id.home){
-            if(viewMusk.getVisibility() == View.VISIBLE){
+        } else if (id == android.R.id.home) {
+            if (viewMusk.getVisibility() == View.VISIBLE) {
                 forMeBtn.performClick();
-            }else{
+            } else {
                 super.onBackPressed();
             }
         }
