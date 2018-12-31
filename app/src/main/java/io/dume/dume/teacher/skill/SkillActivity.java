@@ -16,6 +16,7 @@ import io.dume.dume.R;
 import io.dume.dume.customView.HorizontalLoadView;
 import io.dume.dume.teacher.adapters.SkillAdapter;
 import io.dume.dume.teacher.crudskill.CrudSkillActivity;
+import io.dume.dume.teacher.pojo.Skill;
 import io.dume.dume.util.DumeUtils;
 
 public class SkillActivity extends AppCompatActivity implements SkillContract.View, View.OnClickListener {
@@ -76,9 +77,9 @@ public class SkillActivity extends AppCompatActivity implements SkillContract.Vi
     }
 
     @Override
-    public void loadSkillRV(ArrayList list) {
+    public void loadSkillRV(ArrayList<Skill> list) {
         skillRV.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        skillRV.setAdapter(new SkillAdapter(SkillAdapter.ACTIVITY));
+        skillRV.setAdapter(new SkillAdapter(SkillAdapter.ACTIVITY,list));
     }
 
     public void showProgress() {

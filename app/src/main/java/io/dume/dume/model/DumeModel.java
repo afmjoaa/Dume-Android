@@ -1,6 +1,7 @@
 package io.dume.dume.model;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -24,9 +25,11 @@ import io.dume.dume.teacher.pojo.Skill;
 
 public class DumeModel implements TeacherModel {
 
+    private static final String TAG = "DumeModel";
     private final FirebaseFirestore firebaseFirestore;
     private final FirebaseAuth firebaseAuth;
     private ListenerRegistration listenerRegistration;
+    private ListenerRegistration listenerRegistration1;
 
     public DumeModel() {
         firebaseFirestore = FirebaseFirestore.getInstance();
@@ -39,13 +42,13 @@ public class DumeModel implements TeacherModel {
         HashMap<String, Object> dataMap = new HashMap<>();
         dataMap.put("status", skill.isStatus());
         dataMap.put("salary", skill.getSalary());
-        dataMap.put("creation", skill.getCreationDate());
-        dataMap.put("jizz", skill.getMap());
-        dataMap.put("rating", skill.getRatingValue());
+        dataMap.put("creation", skill.getCreation());
+        dataMap.put("jizz", skill.getJizz());
+        dataMap.put("rating", skill.getRating());
         dataMap.put("totalRating", skill.getTotalRating());
-        dataMap.put("query_string", skill.getQueryString());
+        dataMap.put("query_string", skill.getQuery_string());
         dataMap.put("mentor_uid", firebaseAuth.getCurrentUser().getUid());
-        dataMap.put("enrolled", skill.getEnrolledStudent());
+        dataMap.put("enrolled", skill.getEnrolled());
         HashMap<String, Object> stringObjectHashMap = new HashMap<>();
         stringObjectHashMap.put(firebaseAuth.getCurrentUser().getUid(), "Baler Teacher");
         stringObjectHashMap.put(firebaseAuth.getCurrentUser().getUid() + "K", "Wow Vala Sir");
@@ -66,20 +69,29 @@ public class DumeModel implements TeacherModel {
     }
 
     @Override
-    public void getSkill(TeacherContract.Model.Listener listener) {
+    public void getSkill(TeacherContract.Model.Listener<ArrayList<Skill>> listener) {
         CollectionReference skillCollection = firebaseFirestore.collection("users").document("mentors").collection("skills");
-        ListenerRegistration listenerRegistration = skillCollection.addSnapshotListener(new EventListener<QuerySnapshot>() {
+        listenerRegistration1 = skillCollection.addSnapshotListener(new EventListener<QuerySnapshot>() {
+
+            private ArrayList<Skill> skillList= new ArrayList<>();
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
 
-                for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
-                    ArrayList<Skill> skillList = new ArrayList<>();
+                List<DocumentSnapshot> documents = queryDocumentSnapshots.getDocuments();
+                for (DocumentSnapshot document : documents) {
                     Skill skill = document.toObject(Skill.class);
                     skillList.add(skill);
+                    Log.w(TAG, "onEvent: " + document.toString());
+                }
+                listenerRegistration1.remove();
+                listener.onSuccess(skillList);
+                if (e != null) {
+                    listener.onError(e.getLocalizedMessage());
                 }
 
             }
         });
+
     }
 
 

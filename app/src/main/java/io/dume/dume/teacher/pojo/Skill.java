@@ -1,43 +1,69 @@
 package io.dume.dume.teacher.pojo;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.firestore.PropertyName;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
 
-public class Skill {
-    private boolean status = true;
-    private String gender;
-    private float salary;
-    private Date creationDate;
-    private HashMap<String, Object> map;
-    private String queryString;
-    private LatLng location;
-    private int totalRating;
-    private int enrolledStudent;
-    private String mentor_uid;
-    private float ratingValue;
+public class Skill implements Serializable {
+    @PropertyName("status")
+    boolean status = true;
+    @PropertyName("gender")
+    String gender;
+    @PropertyName("salary")
+    float salary;
+    @PropertyName("creation_date")
+    Date creation;
+    @PropertyName("map")
+    HashMap<String, Object> jizz;
+    @PropertyName("query_string")
+    String query_string;
+    @PropertyName("location")
+    LatLng location;
+    @PropertyName("totalRating")
+    int totalRating;
+    @PropertyName("enrolled")
+    int enrolled;
+    @PropertyName("mentor_uid")
+    String mentor_uid;
+    @PropertyName("rating")
+    float rating;
+    HashMap<String, Object> feedback;
 
-    public Skill(boolean status, String gender, float salary, Date creationDate, HashMap<String, Object> map, String queryString, LatLng location, int totalRating, int enrolledStudent, String mentor_uid, float ratingValue) {
+    public HashMap<String, Object> getFeedback() {
+        return feedback;
+    }
+
+    public void setFeedback(HashMap<String, Object> feedback) {
+        this.feedback = feedback;
+    }
+
+    public Skill() {
+
+    }
+
+    public Skill(boolean status, String gender, float salary, Date creationDate, HashMap<String, Object> map, String queryString, LatLng location, int totalRating, int enrolledStudent, String mentor_uid, float rating) {
         this.status = status;
         this.gender = gender;
         this.salary = salary;
-        this.creationDate = creationDate;
-        this.map = map;
-        this.queryString = queryString;
+        this.creation = creationDate;
+        this.jizz = map;
+        this.query_string = queryString;
         this.location = location;
         this.totalRating = totalRating;
-        this.enrolledStudent = enrolledStudent;
+        this.enrolled = enrolledStudent;
         this.mentor_uid = mentor_uid;
-        this.ratingValue = ratingValue;
+        this.rating = rating;
     }
 
-    public int getEnrolledStudent() {
-        return enrolledStudent;
+    public int getEnrolled() {
+        return enrolled;
     }
 
-    public void setEnrolledStudent(int enrolledStudent) {
-        this.enrolledStudent = enrolledStudent;
+    public void setEnrolled(int enrolled) {
+        this.enrolled = enrolled;
     }
 
     public String getMentor_uid() {
@@ -56,12 +82,12 @@ public class Skill {
         this.totalRating = totalRating;
     }
 
-    public float getRatingValue() {
-        return ratingValue;
+    public float getRating() {
+        return rating;
     }
 
-    public void setRatingValue(float ratingValue) {
-        this.ratingValue = ratingValue;
+    public void setRating(float rating) {
+        this.rating = rating;
     }
 
     public boolean isStatus() {
@@ -88,28 +114,28 @@ public class Skill {
         this.salary = salary;
     }
 
-    public Date getCreationDate() {
-        return creationDate;
+    public Date getCreation() {
+        return creation;
     }
 
-    public void setCreationDate(Date creationDate) {
-        this.creationDate = creationDate;
+    public void setCreation(Date creation) {
+        this.creation = creation;
     }
 
-    public HashMap<String, Object> getMap() {
-        return map;
+    public HashMap<String, Object> getJizz() {
+        return jizz;
     }
 
-    public void setMap(HashMap<String, Object> map) {
-        this.map = map;
+    public void setJizz(HashMap<String, Object> jizz) {
+        this.jizz = jizz;
     }
 
-    public String getQueryString() {
-        return queryString;
+    public String getQuery_string() {
+        return query_string;
     }
 
-    public void setQueryString(String queryString) {
-        this.queryString = queryString;
+    public void setQuery_string(String query_string) {
+        this.query_string = query_string;
     }
 
     public LatLng getLocation() {

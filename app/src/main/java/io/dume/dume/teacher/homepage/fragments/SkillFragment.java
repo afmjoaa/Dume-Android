@@ -39,7 +39,7 @@ public class SkillFragment extends Fragment {
         int spacing = (int) ((wh[0] - ((336) * (getResources().getDisplayMetrics().density))) / 3);
         skillRV.setLayoutManager(new GridLayoutManager(getContext(), 2));
         skillRV.addItemDecoration(new GridSpacingItemDecoration(2, spacing, true));
-        skillRV.setAdapter(new SkillAdapter(SkillAdapter.FRAGMENT));
+        skillRV.setAdapter(new SkillAdapter(SkillAdapter.FRAGMENT,null));
         return root;
     }
 

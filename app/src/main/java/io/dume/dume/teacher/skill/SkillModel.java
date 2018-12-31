@@ -1,4 +1,7 @@
 package io.dume.dume.teacher.skill;
 
-public class SkillModel implements SkillContract.Model {
+import io.dume.dume.model.DumeModel;
+
+public class SkillModel extends DumeModel implements SkillContract.Model {
+
 }

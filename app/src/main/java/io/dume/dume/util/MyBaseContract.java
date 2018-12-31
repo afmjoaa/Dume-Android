@@ -2,6 +2,9 @@ package io.dume.dume.util;
 
 import java.util.List;
 
+import io.dume.dume.model.DumeModel;
+import io.dume.dume.model.TeacherModel;
+
 public interface MyBaseContract {
 
     interface View {
