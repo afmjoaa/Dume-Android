@@ -62,14 +62,16 @@
         <activity android:name=".student.homePage.StudentActivity" />
         <activity
             android:name=".auth.auth.AuthActivity"
-            android:theme="@style/LoginTheme" />
+            android:theme="@style/LoginTheme"
+            android:windowSoftInputMode="stateHidden|adjustResize"/>
         <activity
             android:name=".auth.code_verification.PhoneVerificationActivity"
             android:theme="@style/MyStyle" />
         <activity
             android:name=".auth.auth_final.AuthRegisterActivity"
             android:label="@string/title_activity_auth_final"
-            android:theme="@style/MyStyle" />
+            android:theme="@style/MyStyle"
+            android:windowSoftInputMode="stateHidden|adjustResize"/>
         <activity
             android:name=".auth.social_init.SocialInitActivity"
             android:label="@string/title_activity_social_init"

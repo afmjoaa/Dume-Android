@@ -10,6 +10,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
 
@@ -22,11 +23,11 @@ public class StuBaseModel {
     private static final String TAG = "StuBaseModel";
     protected Context context;
     protected Activity activity;
-    private final FirebaseAuth mAuth;
-    private final FirebaseFirestore firestore;
+    protected final FirebaseAuth mAuth;
+    protected final FirebaseFirestore firestore;
     private StuDataStore stuDataStore = null;
-    private final DocumentReference mini_users;
-    private final DocumentReference userStudentProInfo;
+    protected final DocumentReference mini_users;
+    protected final DocumentReference userStudentProInfo;
 
 
     public StuBaseModel(Activity activity, Context context) {
@@ -56,28 +57,33 @@ public class StuBaseModel {
         return mini_users.update(userInfo).isSuccessful();
     }
 
-    public static boolean setStuProfile(Activity activity, DocumentReference userStudentProInfo, Map<String, Object> stuProfileInfo){
-        return  userStudentProInfo.set(stuProfileInfo).addOnCompleteListener(activity, new OnCompleteListener<Void>() {
+    public static boolean setStuProfile(Activity activity, DocumentReference userStudentProInfo, Map<String, Object> stuProfileInfo) {
+        return userStudentProInfo.set(stuProfileInfo).addOnCompleteListener(activity, new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                if(task.isComplete()){
-                    Log.e(TAG, "onComplete: " + "written to student database" );
+                if (task.isComplete()) {
+                    Log.e(TAG, "onComplete: " + "written to student database");
                 }
             }
         }).isSuccessful();
     }
 
-    public boolean updateStuProfile(Map<String, Object> stuProfileInfo){
-        return  userStudentProInfo.update(stuProfileInfo).addOnCompleteListener(activity, new OnCompleteListener<Void>() {
+    public boolean updateStuProfile(Map<String, Object> stuProfileInfo) {
+        return userStudentProInfo.update(stuProfileInfo).addOnCompleteListener(activity, new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                if(task.isComplete()){
-                    Log.e(TAG, "onComplete: " + "written to student database" );
+                if (task.isComplete()) {
+                    Log.e(TAG, "onComplete: " + "written to student database");
                 }
             }
         }).isSuccessful();
     }
 
+    public DocumentSnapshot getStuProfile() {
+        return userStudentProInfo.get().getResult();
+    }
 
 }
-//   Map<String, Object> newMap = new HashMap<>();
+//Map<String, Object> newMap = new HashMap<>();
+//only set get and update functions will be there
+//and addSnapshotListener or query functions will be in the specific model class

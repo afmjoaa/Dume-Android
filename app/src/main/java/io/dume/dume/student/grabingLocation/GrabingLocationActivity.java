@@ -49,6 +49,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
+import com.google.firebase.firestore.GeoPoint;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,6 +64,7 @@ import io.dume.dume.R;
 import io.dume.dume.customView.HorizontalLoadView;
 import io.dume.dume.student.pojo.CusStuAppComMapActivity;
 import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
+import io.dume.dume.student.profilePage.ProfilePageActivity;
 import io.dume.dume.teacher.crudskill.CrudSkillActivity;
 import io.dume.dume.util.DumeUtils;
 import io.reactivex.Observable;
@@ -106,6 +108,9 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
     private Button locationDoneBtn;
     private RelativeLayout inputSearchContainer;
     private String retrivedAction;
+    private LatLng queriedLocation;
+    //queriedLocation for text to geopoint
+    //mCenterLatLong for geopoint to text
 
 
     @Override
@@ -138,7 +143,7 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
                             public void onResult(PlaceBuffer places) {
                                 if (places.getStatus().isSuccess()) {
                                     final Place myPlace = places.get(0);
-                                    LatLng queriedLocation = myPlace.getLatLng();
+                                    queriedLocation = myPlace.getLatLng();
                                     Log.e(TAG, " " + queriedLocation.latitude);
                                     Log.e(TAG, " " + queriedLocation.longitude);
                                     moveCamera(new LatLng(queriedLocation.latitude, queriedLocation.longitude), DEFAULT_ZOOM
@@ -165,8 +170,6 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
         if(Objects.requireNonNull(retrivedAction).equals("fromPPA")){
             fromProfilePage();
         }
-
-
     }
 
     private void fromProfilePage() {
@@ -389,8 +392,16 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
     //not interested right now
     @Override
     public void onLocationDoneBtnClicked() {
-        //startActivity(new Intent(this, GrabingInfoActivity.class).setAction(DumeUtils.STUDENT));
-        startActivity(new Intent(this, CrudSkillActivity.class).setAction(DumeUtils.STUDENT));
+        if(Objects.requireNonNull(retrivedAction).equals("fromPPA")){
+            //testing
+            Intent goBackToPPAIntent = new Intent(this, ProfilePageActivity.class);
+            goBackToPPAIntent.putExtra("selected_location", mCenterLatLong);
+            setResult(RESULT_OK,goBackToPPAIntent);
+            finish();
+            //GeoPoint selectedLocation = new GeoPoint(mCenterLatLong.latitude, mCenterLatLong.longitude);
+        }else{
+            startActivity(new Intent(this, CrudSkillActivity.class).setAction(DumeUtils.STUDENT));
+        }
     }
 
     public void onGrabingLocationViewClicked(View view) {

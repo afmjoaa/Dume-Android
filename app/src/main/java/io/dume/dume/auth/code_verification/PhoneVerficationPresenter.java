@@ -227,6 +227,7 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
         stuProInfo.put("gender", "");
         stuProInfo.put("current_status", "");
         stuProInfo.put("previous_result", "");
+        stuProInfo.put("pro_com_%", "60");
 
         GeoPoint current_address = new GeoPoint(84.9, -180);
         stuProInfo.put("current_address", current_address);
