@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.Objects;
 
 import io.dume.dume.R;
+import io.dume.dume.util.DumeUtils;
 import io.dume.dume.util.OnViewClick;
 
 public class DataHolderFragment extends Fragment implements RadioGroup.OnCheckedChangeListener,
@@ -158,33 +159,48 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
                 }
             });
 
+            if (myMainActivity.retrivedAction.equals(DumeUtils.STUDENT)) {
+                rangeBar.setRangeBarEnabled(true);
+            } else {
+                rangeBar.setRangeBarEnabled(false);
+                max.setVisibility(View.GONE);
+                min.setText("Salaray - " );
+            }
+
             rangeBar.setOnRangeBarChangeListener(new RangeBar.OnRangeBarChangeListener() {
                 @Override
                 public void onRangeChangeListener(RangeBar rangeBar, int leftPinIndex, int rightPinIndex, String leftPinValue, String rightPinValue) {
-                    min.setText("Min Salary : " + leftPinValue);
-                    max.setText("Max Salary : " + rightPinValue);
-                    String salaryValue = leftPinValue + "k - " + rightPinValue + "k";
+                    String salaryValue = "";
+                    if (myMainActivity.retrivedAction.equals(DumeUtils.TEACHER)) {
+                        min.setText("Salary - " + rightPinValue+"k");
+                        salaryValue = rightPinValue;
+                    } else {
+                        min.setText("Min Salary - " + leftPinValue);
+                        max.setText("Max Salary = " + rightPinValue);
+                        salaryValue = leftPinValue + "k - " + rightPinValue + "k";
+                    }
+
                     AppCompatRadioButton rd = new AppCompatRadioButton(mContext);
                     rd.setText(salaryValue);
                     listener.onRadioButtonClick(rd, sectionNumber, "justForData");
                 }
             });
-            if(sectionNumber == 0){
-                if(myMainActivity.hintIdOne.getText().equals("One")){
+            if (sectionNumber == 0) {
+                if (myMainActivity.hintIdOne.getText().equals("One")) {
                     myMainActivity.hintIdOne.setText("Ex.4k-10k");
                 }
-            }else if(sectionNumber == 1){
-                if(firstTime){
+            } else if (sectionNumber == 1) {
+                if (firstTime) {
                     myMainActivity.hintIdOne.setText(myMainActivity.queryList.get(sectionNumber));
                     myMainActivity.hintIdTwo.setText("Ex.4k-10k");
-                    firstTime= false;
+                    firstTime = false;
                 }
-            }else{
-                if(firstTime){
-                    myMainActivity.hintIdOne.setText(myMainActivity.queryList.get(sectionNumber-1));
+            } else {
+                if (firstTime) {
+                    myMainActivity.hintIdOne.setText(myMainActivity.queryList.get(sectionNumber - 1));
                     myMainActivity.hintIdTwo.setText(myMainActivity.queryList.get(sectionNumber));
                     myMainActivity.hintIdThree.setText("Ex.4k-10k");
-                    firstTime= false;
+                    firstTime = false;
                 }
             }
             return view;
@@ -216,12 +232,12 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
             mRecyclerView.addItemDecoration(new VerticalSpaceItemDecoration(VERTICAL_ITEM_SPACE * (int) (mContext.getResources().getDisplayMetrics().density)));
             mRecyclerView.setAdapter(recyclerAdapter);
             mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-            if(sectionNumber >= 2){
-                if(firstTime){
-                    myMainActivity.hintIdOne.setText(myMainActivity.queryList.get(sectionNumber-1));
+            if (sectionNumber >= 2) {
+                if (firstTime) {
+                    myMainActivity.hintIdOne.setText(myMainActivity.queryList.get(sectionNumber - 1));
                     myMainActivity.hintIdTwo.setText(myMainActivity.queryList.get(sectionNumber));
                     myMainActivity.hintIdThree.setText(String.format("Ex.%s", list.get(0)));
-                    firstTime= false;
+                    firstTime = false;
                     //Log.e(TAG, String.format("Ex.%s", list.get(0)) );
                 }
             }
@@ -269,27 +285,27 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
             //TODO not finished
             //Log.e(TAG, grabbedData.toString());
             //Log.e(TAG, idList.toString());
-            if(sectionNumber == 0){
-                if(myMainActivity.hintIdOne.getText().equals("One")){
+            if (sectionNumber == 0) {
+                if (myMainActivity.hintIdOne.getText().equals("One")) {
                     myMainActivity.hintIdOne.setText(String.format("Ex.%s", list.get(0)));
                 }
-            }else if(sectionNumber == 1){
-                if(firstTime){
+            } else if (sectionNumber == 1) {
+                if (firstTime) {
                     myMainActivity.hintIdOne.setText(myMainActivity.queryList.get(sectionNumber));
                     myMainActivity.hintIdTwo.setText(String.format("Ex.%s", list.get(0)));
-                    firstTime= false;
+                    firstTime = false;
                 }
-            }else{
-                if(firstTime){
-                    myMainActivity.hintIdOne.setText(myMainActivity.queryList.get(sectionNumber-1));
+            } else {
+                if (firstTime) {
+                    myMainActivity.hintIdOne.setText(myMainActivity.queryList.get(sectionNumber - 1));
                     myMainActivity.hintIdTwo.setText(myMainActivity.queryList.get(sectionNumber));
                     myMainActivity.hintIdThree.setText(String.format("Ex.%s", list.get(0)));
-                    firstTime= false;
+                    firstTime = false;
                     //Log.e(TAG, String.format("Ex.%s", list.get(0)) );
                 }
             }
             return rootLast;
-        }else if (list != null && list.toString().equals("Capacity")) {
+        } else if (list != null && list.toString().equals("Capacity")) {
             View viewCapacity = inflater.inflate(R.layout.fragment_capacity, container, false);
             hostingNestedScrollLayout = viewCapacity.findViewById(R.id.hosting_nestedScroll_layout);
             hostingNestedScrollLayout.getBackground().setAlpha(90);
@@ -316,22 +332,22 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
                     listener.onRadioButtonClick(rd, sectionNumber, "justForData");
                 }
             });
-            if(sectionNumber == 0){
-                if(myMainActivity.hintIdOne.getText().equals("One")){
+            if (sectionNumber == 0) {
+                if (myMainActivity.hintIdOne.getText().equals("One")) {
                     myMainActivity.hintIdOne.setText(R.string.example_capacity);
                 }
-            }else if(sectionNumber == 1){
-                if(firstTime){
+            } else if (sectionNumber == 1) {
+                if (firstTime) {
                     myMainActivity.hintIdOne.setText(myMainActivity.queryList.get(sectionNumber));
                     myMainActivity.hintIdTwo.setText(R.string.example_capacity);
-                    firstTime= false;
+                    firstTime = false;
                 }
-            }else{
-                if(firstTime){
-                    myMainActivity.hintIdOne.setText(myMainActivity.queryList.get(sectionNumber-1));
+            } else {
+                if (firstTime) {
+                    myMainActivity.hintIdOne.setText(myMainActivity.queryList.get(sectionNumber - 1));
                     myMainActivity.hintIdTwo.setText(myMainActivity.queryList.get(sectionNumber));
                     myMainActivity.hintIdThree.setText(R.string.example_capacity);
-                    firstTime= false;
+                    firstTime = false;
                 }
             }
             return viewCapacity;
@@ -342,7 +358,7 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
         sectionLevel = root.findViewById(R.id.section_label);
         if (list.toString().equals("Gender")) {
             sectionLevel.setText("Select gender preference");
-        }else{
+        } else {
             sectionLevel.setText(String.format("Select %s", list.toString()));
         }
         hostingNestedScrollLayout = root.findViewById(R.id.hosting_nestedScroll_layout);
@@ -361,22 +377,22 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
             }
         }
         group.setOnCheckedChangeListener(this);
-        if(sectionNumber == 0){
-            if(myMainActivity.hintIdOne.getText().equals("One")){
+        if (sectionNumber == 0) {
+            if (myMainActivity.hintIdOne.getText().equals("One")) {
                 myMainActivity.hintIdOne.setText(String.format("Ex.%s", list.get(0)));
             }
-        }else if(sectionNumber == 1){
-            if(firstTime){
+        } else if (sectionNumber == 1) {
+            if (firstTime) {
                 myMainActivity.hintIdOne.setText(myMainActivity.queryList.get(sectionNumber));
                 myMainActivity.hintIdTwo.setText(String.format("Ex.%s", list.get(0)));
-                firstTime= false;
+                firstTime = false;
             }
-        }else{
-            if(firstTime){
-                myMainActivity.hintIdOne.setText(myMainActivity.queryList.get(sectionNumber-1));
+        } else {
+            if (firstTime) {
+                myMainActivity.hintIdOne.setText(myMainActivity.queryList.get(sectionNumber - 1));
                 myMainActivity.hintIdTwo.setText(myMainActivity.queryList.get(sectionNumber));
                 myMainActivity.hintIdThree.setText(String.format("Ex.%s", list.get(0)));
-                firstTime= false;
+                firstTime = false;
                 //Log.e(TAG, String.format("Ex.%s", list.get(0)) );
             }
         }
@@ -446,9 +462,9 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
                 }
             }
         }
-        if(modifiedMulResult == null){
+        if (modifiedMulResult == null) {
             return "null";
-        }else{
+        } else {
             return Objects.requireNonNull(modifiedMulResult).toString();
         }
     }

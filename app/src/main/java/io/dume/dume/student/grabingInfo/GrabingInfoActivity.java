@@ -77,6 +77,7 @@ import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
 import io.dume.dume.teacher.homepage.TeacherContract;
 import io.dume.dume.teacher.model.LocalDb;
 import io.dume.dume.teacher.pojo.Skill;
+import io.dume.dume.teacher.skill.SkillActivity;
 import io.dume.dume.util.DumeUtils;
 import io.dume.dume.util.OnViewClick;
 import io.dume.dume.util.RadioBtnDialogue;
@@ -133,7 +134,7 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
     private int selected_category_position;
     private int dynamicTab;
     private LocalDb db;
-    private String retrivedAction;
+    public  String retrivedAction;
     protected List<String> queryList;
     protected List<String> queryListName;
     private int[] wh;
@@ -532,19 +533,20 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                         showProgress();
                         fab.setBackgroundTintList(ColorStateList.valueOf(Color.GRAY));
                         fab.setEnabled(false);
-                        Skill skill = new Skill(true, queryMap.get("Gender").toString(), Float.parseFloat(queryMap.get("Salary").toString().replace("k", "")), new Date(), queryMap, "SFKJYEKF", new LatLng(84.9, 180), 5, 4.6f);
+                        Skill skill = new Skill(true, queryMap.get("Gender").toString(), Float.parseFloat(queryMap.get("Salary").toString().replace("k", "")), new Date(), queryMap, "SFKJYEKF", new LatLng(84.9, 180), 5, 10, "", 4.6f);
                         teacherModel.saveSkill(skill, new TeacherContract.Model.Listener<Void>() {
                             @Override
                             public void onSuccess(Void list) {
-                                fab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorAccent)));
-                                fab.setEnabled(true);
+                                hideProgress();
+                              startActivity(new Intent(GrabingInfoActivity.this,SkillActivity.class));
 
                             }
 
                             @Override
                             public void onError(String msg) {
                                 flush(msg);
-                                fab.setBackgroundTintList(ColorStateList.valueOf(Color.BLUE));
+                                hideProgress();
+                                fab.setBackgroundTintList(ColorStateList.valueOf(Color.RED));
                                 fab.setEnabled(true);
                             }
                         });

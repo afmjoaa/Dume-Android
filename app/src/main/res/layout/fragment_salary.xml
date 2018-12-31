@@ -76,6 +76,7 @@
                     android:paddingEnd="6dp"
                     android:paddingRight="6dp"
                     android:paddingBottom="4dp"
+
                     android:text="Max Salary : "
                     android:textSize="16sp" />
 
@@ -97,7 +98,7 @@
                 app:mrb_pinPadding="5dp"
                 app:mrb_pinRadius="14dp"
                 app:mrb_pinTextColor="@color/white"
-                app:mrb_rangeBar="true"
+                app:mrb_rangeBar="false"
                 app:mrb_rangeBarPaddingBottom="20dp"
                 app:mrb_rangeBar_rounded="true"
                 app:mrb_selectorBoundaryColor="@color/colorAccent"
@@ -108,7 +109,8 @@
                 app:mrb_tickColor="@color/textColorSecondaryDark"
                 app:mrb_tickEnd="50"
                 app:mrb_tickInterval="1"
-                app:mrb_tickStart="1" />
+                app:mrb_tickStart="1"
+                />
 
         </LinearLayout>
 

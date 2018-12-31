@@ -15,6 +15,38 @@ public class Skill {
     private LatLng location;
     private int totalRating;
     private int enrolledStudent;
+    private String mentor_uid;
+    private float ratingValue;
+
+    public Skill(boolean status, String gender, float salary, Date creationDate, HashMap<String, Object> map, String queryString, LatLng location, int totalRating, int enrolledStudent, String mentor_uid, float ratingValue) {
+        this.status = status;
+        this.gender = gender;
+        this.salary = salary;
+        this.creationDate = creationDate;
+        this.map = map;
+        this.queryString = queryString;
+        this.location = location;
+        this.totalRating = totalRating;
+        this.enrolledStudent = enrolledStudent;
+        this.mentor_uid = mentor_uid;
+        this.ratingValue = ratingValue;
+    }
+
+    public int getEnrolledStudent() {
+        return enrolledStudent;
+    }
+
+    public void setEnrolledStudent(int enrolledStudent) {
+        this.enrolledStudent = enrolledStudent;
+    }
+
+    public String getMentor_uid() {
+        return mentor_uid;
+    }
+
+    public void setMentor_uid(String mentor_uid) {
+        this.mentor_uid = mentor_uid;
+    }
 
     public int getTotalRating() {
         return totalRating;
@@ -29,20 +61,6 @@ public class Skill {
     }
 
     public void setRatingValue(float ratingValue) {
-        this.ratingValue = ratingValue;
-    }
-
-    private float ratingValue;
-
-    public Skill(boolean status, String gender, float salary, Date creationDate, HashMap<String, Object> map, String queryString, LatLng location,int totalRating,float ratingValue) {
-        this.status = status;
-        this.gender = gender;
-        this.salary = salary;
-        this.creationDate = creationDate;
-        this.map = map;
-        this.queryString = queryString;
-        this.location = location;
-        this.totalRating = totalRating;
         this.ratingValue = ratingValue;
     }
 
