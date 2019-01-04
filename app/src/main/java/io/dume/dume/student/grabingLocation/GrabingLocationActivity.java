@@ -157,7 +157,7 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
                 inputSearchContainer.requestFocus();
                 llBottomSheet.setVisibility(View.INVISIBLE);
                 locationDoneBtn.setVisibility(View.VISIBLE);
-             }
+            }
         };
         autoCompleteRecyView.setAdapter(recyclerAutoAdapter);
         autoCompleteRecyView.setLayoutManager(new LinearLayoutManager(this));
@@ -167,7 +167,7 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
         menualCompleteRecyView.setLayoutManager(new LinearLayoutManager(this));
 
         retrivedAction = getIntent().getAction();
-        if(Objects.requireNonNull(retrivedAction).equals("fromPPA")){
+        if (Objects.requireNonNull(retrivedAction).equals("fromPPA")) {
             fromProfilePage();
         }
     }
@@ -324,16 +324,16 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        ISNIGHT = HOUR < 4 || HOUR > 24;
+        /*ISNIGHT = HOUR < 4 || HOUR > 24;
         if (ISNIGHT) {
             MapStyleOptions style = MapStyleOptions.loadRawResourceStyle(
                     this, R.raw.map_style_night_json);
             googleMap.setMapStyle(style);
-        } else {
-            MapStyleOptions style = MapStyleOptions.loadRawResourceStyle(
-                    this, R.raw.map_style_default_json);
-            googleMap.setMapStyle(style);
-        }
+        } else {}*/
+        MapStyleOptions style = MapStyleOptions.loadRawResourceStyle(
+                this, R.raw.map_style_default_json);
+        googleMap.setMapStyle(style);
+
         mMap = googleMap;
         onMapReadyListener(mMap);
         onMapReadyGeneralConfig();
@@ -392,14 +392,14 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
     //not interested right now
     @Override
     public void onLocationDoneBtnClicked() {
-        if(Objects.requireNonNull(retrivedAction).equals("fromPPA")){
+        if (Objects.requireNonNull(retrivedAction).equals("fromPPA")) {
             //testing
             Intent goBackToPPAIntent = new Intent(this, ProfilePageActivity.class);
             goBackToPPAIntent.putExtra("selected_location", mCenterLatLong);
-            setResult(RESULT_OK,goBackToPPAIntent);
+            setResult(RESULT_OK, goBackToPPAIntent);
             finish();
             //GeoPoint selectedLocation = new GeoPoint(mCenterLatLong.latitude, mCenterLatLong.longitude);
-        }else{
+        } else {
             startActivity(new Intent(this, CrudSkillActivity.class).setAction(DumeUtils.STUDENT));
         }
     }
@@ -441,8 +441,7 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
                 AutocompletePredictionBuffer autocompletePredictions = results.await(60, TimeUnit.SECONDS);
                 final Status status = autocompletePredictions.getStatus();
                 if (!status.isSuccess()) {
-                    Toast.makeText(GrabingLocationActivity.this, "Error contacting API: " + status.toString(),
-                            Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(GrabingLocationActivity.this, "Error contacting API: " + status.toString(), Toast.LENGTH_SHORT).show();
                     Log.e(TAG, "Error getting autocomplete prediction API call: " + status.toString());
                     autocompletePredictions.release();
                     return null;

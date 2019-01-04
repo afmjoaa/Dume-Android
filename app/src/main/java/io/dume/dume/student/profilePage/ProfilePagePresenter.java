@@ -19,6 +19,7 @@ import java.util.Objects;
 import javax.annotation.Nullable;
 
 import io.dume.dume.R;
+import io.dume.dume.inter_face.usefulListeners;
 
 public class ProfilePagePresenter implements ProfilePageContract.Presenter {
 
@@ -51,15 +52,24 @@ public class ProfilePagePresenter implements ProfilePageContract.Presenter {
                 mView.setUserName(o1, o);
                 mView.setGmail(documentSnapshot.getString("email"));
                 final GeoPoint current_address = documentSnapshot.getGeoPoint("current_address");
-                if(Objects.requireNonNull(current_address).getLatitude() != 84.9 && current_address.getLongitude() != 180){
-                    mView.setCurrentAddress(current_address);
+                if (current_address != null) {
+                    if (Objects.requireNonNull(current_address).getLatitude() != 84.9 && current_address.getLongitude() != 180) {
+                        mView.setCurrentAddress(current_address);
+                    }
                 }
                 mView.setCurrentStatus(documentSnapshot.getString("current_status"));
                 mView.setPreviousResult(documentSnapshot.getString("previous_result"));
                 mView.setGender(documentSnapshot.getString("gender"));
-                mView.setProfileComPercent(documentSnapshot.getString("pro_com_%"));
+
+                if (Objects.requireNonNull(documentSnapshot.getString("pro_com_%")).equals("100")) {
+                    mView.initProfileCompleteView();
+                    mView.setProfileComPercent(documentSnapshot.getString("pro_com_%"));
+                }else{
+                    mView.setProfileComPercent(documentSnapshot.getString("pro_com_%"));
+                }
+
                 final String avatar = documentSnapshot.getString("avatar");
-                if(avatar != null && !avatar.equals("")){
+                if (avatar != null && !avatar.equals("")) {
                     mView.setAvatar(avatar);
                 }
             } else {
@@ -91,9 +101,68 @@ public class ProfilePagePresenter implements ProfilePageContract.Presenter {
                 break;
             case R.id.profile_update_btn:
             case R.id.done_imageview:
-                mView.updateChangesClicked();
+                mView.showSpiner();
+                if(mView.checkIfValidUpdate()){
+                    if (mView.getAvatarUri() != null) {
+                        mModel.uploadImage(mView.getAvatarUri(), new usefulListeners.uploadToSTGListererMin() {
+                            @Override
+                            public void onSuccessSTG(Object obj) {
+                                mView.setAvatar((String) obj);
+                                mView.flush("Display pic uploaded");
+                                mView.updateChangesClicked();
+                                mModel.synWithDataBase(mView.getFirstName(), mView.getLastName(),
+                                        mView.getGmail(), mView.getCurrentAddress(), mView.getCurrentStatus(),
+                                        mView.getPreviousResult(), mView.getGender(), mView.getProfileComPercent(),
+                                        mView.getAvatarString(), new usefulListeners.uploadToDBListerer() {
+                                            @Override
+                                            public void onSuccessDB(Object obj) {
+                                                mView.flush(obj.toString());
+                                                mView.hideSpiner();
+                                                mView.goBack();
+                                            }
+
+                                            @Override
+                                            public void onFailDB(Object obj) {
+                                                mView.flush(obj.toString());
+                                                mView.hideSpiner();
+                                            }
+                                        });
+                                mView.hideSpiner();
+                            }
+
+                            @Override
+                            public void onFailSTG(Object obj) {
+                                mView.flush((String) obj);
+                                mView.hideSpiner();
+                            }
+                        });
+                    } else {
+                        mView.updateChangesClicked();
+                        mModel.synWithDataBase(mView.getFirstName(), mView.getLastName(),
+                                mView.getGmail(), mView.getCurrentAddress(), mView.getCurrentStatus(),
+                                mView.getPreviousResult(), mView.getGender(), mView.getProfileComPercent(),
+                                mView.getAvatarString(), new usefulListeners.uploadToDBListerer() {
+                                    @Override
+                                    public void onSuccessDB(Object obj) {
+                                        mView.flush(obj.toString());
+                                        mView.hideSpiner();
+                                        mView.goBack();
+                                    }
+
+                                    @Override
+                                    public void onFailDB(Object obj) {
+                                        mView.flush(obj.toString());
+                                        mView.hideSpiner();
+                                    }
+                                });
+                    }
+                }else{
+                    //show toast and error empty fill
+                    mView.showInvalideInfo();
+                    mView.hideSpiner();
+                }
+
                 break;
         }
     }
-
 }

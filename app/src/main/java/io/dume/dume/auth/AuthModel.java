@@ -71,7 +71,6 @@ public class AuthModel implements AuthContract.Model, SplashContract.Model, Phon
         PhoneAuthProvider.getInstance().verifyPhoneNumber(phoneNumber, 60, TimeUnit.SECONDS, activity, new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
             @Override
             public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
-
                 mAuth.signInWithCredential(phoneAuthCredential).addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         listener.onAutoSuccess(task.getResult());

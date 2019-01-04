@@ -149,8 +149,9 @@ public class AfterSplashActivity extends AppCompatActivity implements DemoCardFr
                 && resTwo == PackageManager.PERMISSION_GRANTED
                 && resPhone == PackageManager.PERMISSION_GRANTED
                 && resWrite == PackageManager.PERMISSION_GRANTED
-                && resRead == PackageManager.PERMISSION_GRANTED
-                && resSms == PackageManager.PERMISSION_GRANTED);
+                && resRead == PackageManager.PERMISSION_GRANTED);
+        //this is flexible
+        //&& resSms == PackageManager.PERMISSION_GRANTED
     }
 
     @SuppressLint("HardwareIds")

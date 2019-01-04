@@ -10,6 +10,7 @@ import android.graphics.PixelFormat;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+
 import io.dume.dume.R;
 
 public class BadgeDrawable extends Drawable {
@@ -73,7 +74,11 @@ public class BadgeDrawable extends Drawable {
     Sets the count (i.e notifications) to display.
      */
     public void setCount(int count) {
-        mCount = Integer.toString(count);
+        if (count > 9) {
+            mCount = "9+";
+        }else {
+            mCount = Integer.toString(count);
+        }
 
         // Only draw a badge if there are notifications.
         mWillDraw = count > 0;
@@ -87,7 +92,6 @@ public class BadgeDrawable extends Drawable {
         mWillDraw = character == '!' || character == '?' || character == '$';
         invalidateSelf();
     }
-
 
 
     public void setCircleColor(int color) {

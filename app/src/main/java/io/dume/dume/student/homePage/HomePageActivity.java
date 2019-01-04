@@ -761,20 +761,6 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
         Objects.requireNonNull(getSupportActionBar()).setHomeAsUpIndicator(R.drawable.drawer_menu);
     }
 
-    /*public void secondaryAppbarChangerListener() {
-        secondaryAppBarLayout.addOnOffsetChangedListener(new AppbarStateChangeListener() {
-            @Override
-            public void onStateChanged(AppBarLayout appBarLayout, State state) {
-                if (state.toString().equals("EXPANDED") &&
-                        bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
-
-                } else if (state.toString().equals("COLLAPSED") &&
-                        bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
-                }
-            }
-        });
-    }*/
-
     public void subMenu() {
         home.setVisible(false);
         records.setVisible(false);

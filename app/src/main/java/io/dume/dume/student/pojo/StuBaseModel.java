@@ -5,7 +5,9 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.google.android.gms.tasks.OnCanceledListener;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -17,7 +19,7 @@ import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import java.util.Map;
 
 import io.dume.dume.auth.DataStore;
-
+import io.dume.dume.inter_face.usefulListeners;
 
 public class StuBaseModel {
     private static final String TAG = "StuBaseModel";
@@ -28,7 +30,6 @@ public class StuBaseModel {
     private StuDataStore stuDataStore = null;
     protected final DocumentReference mini_users;
     protected final DocumentReference userStudentProInfo;
-
 
     public StuBaseModel(Activity activity, Context context) {
         this.context = context;
@@ -68,13 +69,24 @@ public class StuBaseModel {
         }).isSuccessful();
     }
 
-    public boolean updateStuProfile(Map<String, Object> stuProfileInfo) {
+    public boolean updateStuProfile(Map<String, Object> stuProfileInfo, usefulListeners.uploadToDBListerer updateListener) {
         return userStudentProInfo.update(stuProfileInfo).addOnCompleteListener(activity, new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isComplete()) {
                     Log.e(TAG, "onComplete: " + "written to student database");
+                    updateListener.onSuccessDB("Profile updated.");
                 }
+            }
+        }).addOnFailureListener(activity, new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                updateListener.onFailDB(e.getMessage());
+            }
+        }).addOnCanceledListener(activity, new OnCanceledListener() {
+            @Override
+            public void onCanceled() {
+                updateListener.onFailDB("on cancel called ");
             }
         }).isSuccessful();
     }

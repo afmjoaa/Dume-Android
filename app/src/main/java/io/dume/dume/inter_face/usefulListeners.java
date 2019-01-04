@@ -2,23 +2,27 @@ package io.dume.dume.inter_face;
 
 public interface usefulListeners {
 
-    interface uploadListenerMin {
+    interface uploadToDBListerer {
 
-        void onStart(Object obj);
+        void onSuccessDB(Object obj);
 
-        void onSuccess(Object obj);
-
-        void onFail(Object obj);
+        void onFailDB(Object obj);
     }
 
-    interface uploadListenerMax {
+    interface uploadToSTGListererMin {
 
-        void onSuccess(Object obj);
+        void onSuccessSTG(Object obj);
 
-        //used for pause cancel and exception
-        void onFail(Object obj);
+        void onFailSTG(Object obj);
+    }
 
-        void onProgress(Object obj);
+    interface uploadToSTGListererMax {
+
+        void onSuccessSTG(Object obj);
+
+        void onFailSTG(Object obj);
+
+        void onProgressSTG(Object obj);
 
     }
 }

@@ -3,19 +3,11 @@ package io.dume.dume.student.profilePage;
 import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
-import android.support.annotation.NonNull;
 
-import com.google.android.gms.tasks.OnCanceledListener;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnPausedListener;
-import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
@@ -53,7 +45,8 @@ public class ProfilePageModel extends StuBaseModel implements ProfilePageContrac
     }
 
     @Override
-    public Boolean synWithDataBase(String fn, String ln, String mail, GeoPoint ca, String cs, String pr,String gender, Number progress, String avatar) {
+    public Boolean synWithDataBase(String fn, String ln, String mail, GeoPoint ca, String cs, String pr,String gender, String progress, String avatar,
+                                   usefulListeners.uploadToDBListerer progressListener) {
         Map<String, Object> map = new HashMap<>();
         map.put("first_name", fn);
         map.put("last_name", ln);
@@ -64,7 +57,7 @@ public class ProfilePageModel extends StuBaseModel implements ProfilePageContrac
         map.put("gender", gender);
         map.put("pro_com_%", progress);
         map.put("avatar", avatar);
-        return updateStuProfile(map);
+        return updateStuProfile(map, progressListener);
     }
 
     @Override
@@ -73,19 +66,18 @@ public class ProfilePageModel extends StuBaseModel implements ProfilePageContrac
     }
 
     @Override
-    public void uploadImage(Uri uri, usefulListeners.uploadListenerMin progressListener) {
+    public void uploadImage(Uri uri, usefulListeners.uploadToSTGListererMin progressListener) {
         StorageReference imgRef = storage.getReference(Objects.requireNonNull(getUser().getUid()));
         UploadTask uploadTask = imgRef.putFile(uri);
 
         uploadTask.continueWithTask(task -> imgRef.getDownloadUrl())
                 .addOnCompleteListener(task -> {
-                    progressListener.onSuccess(task.getResult().toString());//this is the url returned
+                    progressListener.onSuccessSTG(task.getResult().toString());//this is the url returned
                 }).addOnFailureListener(exception -> {
-            progressListener.onFail(exception.toString());
+            progressListener.onFailSTG(exception.toString());
         }).addOnCanceledListener(() -> {
-            progressListener.onFail("Upload is canceled");
+            progressListener.onFailSTG("Upload is canceled");
         });
     }
-
 
 }

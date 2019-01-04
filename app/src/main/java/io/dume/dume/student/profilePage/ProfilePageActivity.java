@@ -15,6 +15,8 @@ import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.PopupMenu;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -29,17 +31,13 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.GeoPoint;
 import com.warkiz.widget.IndicatorSeekBar;
 import com.warkiz.widget.IndicatorStayLayout;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 
 import carbon.widget.ImageView;
 import io.dume.dume.R;
@@ -59,8 +57,7 @@ public class ProfilePageActivity extends CustomStuAppCompatActivity implements P
     private View decor;
     private IndicatorSeekBar seekbar;
     private IndicatorStayLayout seekbarStaylayout;
-
-    AutoCompleteTextView email;
+    private AutoCompleteTextView email;
     private AppCompatCheckBox cgpaCheckBox;
     private AppCompatCheckBox gpaCheckBox;
     private EditText selectGenderTextView;
@@ -78,46 +75,30 @@ public class ProfilePageActivity extends CustomStuAppCompatActivity implements P
     private TextView profileUserNumber;
     private android.widget.ImageView profileUserDP;
     private ProgressBar loadingSpiner;
-    private Uri outputFileUri;
-    private  int LOCATION_REQUEST_CODE = 2222;
+    private Uri outputFileUri = null;
+    private int LOCATION_REQUEST_CODE = 2222;
     private int IMAGE_RESULT_CODE = 3333;
     private AutoCompleteTextView inputLastName;
     private AutoCompleteTextView inputFirstName;
     private AutoCompleteTextView inputCurrentStatus;
-
-    Map<String, Object> localData;
-    private String avatarUrl = null;
+    private String avatarString = null;
     private GeoPoint userLocation = null;
     public String action = "null";
+    private Uri selectedImageUri = null;
+    private TextView profileCompleteTextView;
+    private View dividerHorizontalUnderPCT;
+    private ImageView emailEmptyFound;
+    private ImageView lnEmptyFound;
+    private ImageView fnEmptyFound;
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-
-       /* outState.putString("first_name", getFirstName());
-        outState.putString("last_name", getLastName());
-        outState.putString("email", getGmail());
-        outState.putParcelable("current_address", new LatLng(getCurrentAddress().getLatitude(), getCurrentAddress().getLongitude()));
-        outState.putString("current_status", getCurrentStatus());
-        outState.putString("previous_result", getPreviousResult());
-        outState.putString("gender", getGender());
-        outState.putString("pro_com_%", getProfileComPercent());
-        outState.putParcelable("avatar", outputFileUri);*/
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        localData = new HashMap<>();
-        localData.put("first_name", savedInstanceState.getString("first_name"));
-        localData.put("last_name", savedInstanceState.getString("first_name"));
-        localData.put("email", savedInstanceState.getString("first_name"));
-        localData.put("current_address", (GeoPoint) savedInstanceState.getParcelable("current_address"));
-        localData.put("current_status", savedInstanceState.getString("current_status"));
-        localData.put("previous_result", savedInstanceState.getString("previous_result"));
-        localData.put("gender", savedInstanceState.getString("gender"));
-        localData.put("pro_com_%", savedInstanceState.getString("pro_com_%"));
-        localData.put("avatar", savedInstanceState.getString("avatar"));
     }
 
     @Override
@@ -126,7 +107,6 @@ public class ProfilePageActivity extends CustomStuAppCompatActivity implements P
         setContentView(R.layout.stu1_activity_profile_page);
         setActivityContext(this, fromFlag);
         action = getIntent().getAction();
-
         settingStatusBarTransparent();
         mPresenter = new ProfilePagePresenter(this, this, new ProfilePageModel(this, this));
         mPresenter.profilePageEnqueue();
@@ -146,7 +126,68 @@ public class ProfilePageActivity extends CustomStuAppCompatActivity implements P
             email.setAdapter(new ArrayAdapter<String>(this, R.layout.item_layout_suggestion, R.id.suggetionTextView, emailAddress));
         }
 
-        //LatLng objLatLng = Objects.requireNonNull(getIntent().getExtras()).getParcelable("selected_location");
+        inputFirstName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+               if(!s.equals("")){
+                   fnEmptyFound.setVisibility(View.GONE);
+               }else {
+                   fnEmptyFound.setVisibility(View.VISIBLE);
+               }
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.toString().equals("")) {
+                    fnEmptyFound.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+        inputLastName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(!s.equals("")){
+                    lnEmptyFound.setVisibility(View.GONE);
+                }else {
+                    lnEmptyFound.setVisibility(View.VISIBLE);
+                }
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.toString().equals("")) {
+                    lnEmptyFound.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+        email.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(!s.equals("")){
+                    emailEmptyFound.setVisibility(View.GONE);
+                }else {
+                    emailEmptyFound.setVisibility(View.VISIBLE);
+                }
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.toString().equals("")) {
+                    emailEmptyFound.setVisibility(View.VISIBLE);
+                }
+            }
+        });
 
     }
 
@@ -169,7 +210,10 @@ public class ProfilePageActivity extends CustomStuAppCompatActivity implements P
                                 openImageIntent();
                                 break;
                             case R.id.action_remove:
-                                Toast.makeText(context, "fucked it.....", Toast.LENGTH_SHORT).show();
+                                avatarString = null;
+                                selectedImageUri = null;
+                                profileUserDP.setImageDrawable(getResources().getDrawable(R.drawable.alias_profile_icon));
+                                flush("Display pic Removed");
                                 break;
                         }
                         return false;
@@ -179,6 +223,7 @@ public class ProfilePageActivity extends CustomStuAppCompatActivity implements P
             }
         });
     }
+
 
     @Override
     public void findView() {
@@ -206,6 +251,12 @@ public class ProfilePageActivity extends CustomStuAppCompatActivity implements P
         currentAddressTextView = findViewById(R.id.input_current_address);
         previousResultTextView = findViewById(R.id.input_previous_result);
         selectGenderTextView = findViewById(R.id.input_gerder);
+        profileCompleteTextView = findViewById(R.id.profile_complete_text);
+        dividerHorizontalUnderPCT = findViewById(R.id.divider_horizontal);
+        //
+        fnEmptyFound = findViewById(R.id.empty_fn_found);
+        lnEmptyFound = findViewById(R.id.empty_ln_found);
+        emailEmptyFound = findViewById(R.id.empty_email_found);
 
     }
 
@@ -269,7 +320,7 @@ public class ProfilePageActivity extends CustomStuAppCompatActivity implements P
 
     @Override
     public void onCurrentAddressClicked() {
-        startActivityForResult(new Intent(this, GrabingLocationActivity.class).setAction("fromPPA"),LOCATION_REQUEST_CODE );
+        startActivityForResult(new Intent(this, GrabingLocationActivity.class).setAction("fromPPA"), LOCATION_REQUEST_CODE);
     }
 
     @Override
@@ -344,16 +395,15 @@ public class ProfilePageActivity extends CustomStuAppCompatActivity implements P
                     }
                 }
 
-                Uri selectedImageUri;
                 if (isCamera) {
                     selectedImageUri = outputFileUri;
                 } else {
                     selectedImageUri = data == null ? null : data.getData();
                 }
                 Glide.with(this).load(selectedImageUri).apply(new RequestOptions().override(100, 100)).into(profileUserDP);
-            }else if(requestCode == LOCATION_REQUEST_CODE){
+            } else if (requestCode == LOCATION_REQUEST_CODE) {
                 LatLng selectedLocation = data.getParcelableExtra("selected_location");
-                if(selectedLocation != null){
+                if (selectedLocation != null) {
                     GeoPoint retrivedLocation = new GeoPoint(selectedLocation.latitude, selectedLocation.longitude);
                     setCurrentAddress(retrivedLocation);
                     //currentAddressTextView.setText(getAddress(this, selectedLocation.latitude, selectedLocation.longitude));
@@ -401,8 +451,13 @@ public class ProfilePageActivity extends CustomStuAppCompatActivity implements P
 
     //TODO
     @Override
-    public String getAvatarUrl() {
-        return avatarUrl;
+    public String getAvatarString() {
+        return avatarString;
+    }
+
+    @Override
+    public Uri getAvatarUri() {
+        return selectedImageUri;
     }
 
     @Override
@@ -467,13 +522,17 @@ public class ProfilePageActivity extends CustomStuAppCompatActivity implements P
     //TODO
     @Override
     public void setAvatar(String uri) {
-        avatarUrl = uri;
+        avatarString = uri;
         Glide.with(this).load(uri).apply(new RequestOptions().override(100, 100)).into(profileUserDP);
     }
 
     @Override
     public void setProfileComPercent(String num) {
-        seekbar.setProgress(Float.parseFloat(num));
+        if (num.equals("")) {
+            seekbar.setProgress(60);
+        } else {
+            seekbar.setProgress(Float.parseFloat(num));
+        }
     }
 
     @Override
@@ -488,40 +547,114 @@ public class ProfilePageActivity extends CustomStuAppCompatActivity implements P
 
     @Override
     public void updateChangesClicked() {
+        //go for the 16 way
+        if (getCurrentAddress() == null && getCurrentStatus().equals("")
+                && getPreviousResult().equals("") && getGender().equals("")) {
+            setProfileComPercent("60");
+        } else if (getCurrentAddress() != null && getCurrentStatus().equals("")
+                && getPreviousResult().equals("") && getGender().equals("")) {
+            setProfileComPercent("70");
+        } else if (getCurrentAddress() == null && !getCurrentStatus().equals("")
+                && getPreviousResult().equals("") && getGender().equals("")) {
+            setProfileComPercent("70");
+        } else if (getCurrentAddress() == null && getCurrentStatus().equals("")
+                && !getPreviousResult().equals("") && getGender().equals("")) {
+            setProfileComPercent("65");
+        } else if (getCurrentAddress() == null && getCurrentStatus().equals("")
+                && getPreviousResult().equals("") && !getGender().equals("")) {
+            setProfileComPercent("65");
+        } else if (getCurrentAddress() != null && !getCurrentStatus().equals("")
+                && getPreviousResult().equals("") && getGender().equals("")) {
+            setProfileComPercent("80");
+        } else if (getCurrentAddress() != null && getCurrentStatus().equals("")
+                && !getPreviousResult().equals("") && getGender().equals("")) {
+            setProfileComPercent("75");
+        } else if (getCurrentAddress() != null && getCurrentStatus().equals("")
+                && getPreviousResult().equals("") && !getGender().equals("")) {
+            setProfileComPercent("75");
+        } else if (getCurrentAddress() == null && !getCurrentStatus().equals("")
+                && !getPreviousResult().equals("") && getGender().equals("")) {
+            setProfileComPercent("75");
+        } else if (getCurrentAddress() == null && !getCurrentStatus().equals("")
+                && getPreviousResult().equals("") && !getGender().equals("")) {
+            setProfileComPercent("75");
+        } else if (getCurrentAddress() == null && getCurrentStatus().equals("")
+                && !getPreviousResult().equals("") && !getGender().equals("")) {
+            setProfileComPercent("70");
+        } else if (getCurrentAddress() == null && !getCurrentStatus().equals("")
+                && !getPreviousResult().equals("") && !getGender().equals("")) {
+            setProfileComPercent("80");
+        } else if (getCurrentAddress() != null && getCurrentStatus().equals("")
+                && !getPreviousResult().equals("") && !getGender().equals("")) {
+            setProfileComPercent("80");
+        } else if (getCurrentAddress() != null && !getCurrentStatus().equals("")
+                && getPreviousResult().equals("") && !getGender().equals("")) {
+            setProfileComPercent("85");
+        } else if (getCurrentAddress() != null && !getCurrentStatus().equals("")
+                && !getPreviousResult().equals("") && getGender().equals("")) {
+            setProfileComPercent("85");
+        } else {
+            setProfileComPercent("90");
+        }
 
+
+        if (getAvatarUri() != null && getAvatarString() == null) {
+            Float profileComPercent = Float.parseFloat(getProfileComPercent()) + 10;
+            setProfileComPercent(profileComPercent.toString());
+        } else if (getAvatarString() != null) {
+            Float profileComPercent = Float.parseFloat(getProfileComPercent()) + 10;
+            setProfileComPercent(profileComPercent.toString());
+        }
+
+        if (getProfileComPercent().equals("100")) {
+            flush("Profile completed");
+        } else {
+            flush("Your profile is only " + getProfileComPercent() + "% complete");
+        }
     }
 
     @Override
-    public void setResortedBundle() {
-        if (action.equals("toPPA")) {
-            if (!localData.get("first_name").toString().equals("")) {
-                setFirstName(localData.get("first_name").toString());
-            }
-            if (!localData.get("last_name").toString().equals("")) {
-                setLastName(localData.get("last_name").toString());
-            }
-            if (!localData.get("email").toString().equals("")) {
-                setGmail(localData.get("email").toString());
-            }
-            if (localData.get("current_address") != null) {
-                setCurrentAddress((GeoPoint) localData.get("current_address"));
-            }
-            if (!localData.get("current_status").toString().equals("")) {
-                setCurrentStatus(localData.get("current_status").toString());
-            }
-            if (!localData.get("previous_result").toString().equals("")) {
-                setPreviousResult(localData.get("previous_result").toString());
-            }
-            if (!localData.get("gender").toString().equals("")) {
-                setGender(localData.get("gender").toString());
-            }
-            if (!localData.get("avatar").toString().equals("")) {
-                setAvatar(localData.get("avatar").toString());
-            }
-            if (!localData.get("pro_com_%").toString().equals("")) {
-                setProfileComPercent(localData.get("pro_com_%").toString());
-            }
-
-        }
+    public void hideSpiner() {
+        loadingSpiner.setVisibility(View.GONE);
     }
+
+    @Override
+    public void showSpiner() {
+        loadingSpiner.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void goBack() {
+        startActivity(new Intent(ProfilePageActivity.this, HomePageActivity.class));
+    }
+
+    @Override
+    public void initProfileCompleteView() {
+        seekbarStaylayout.setVisibility(View.GONE);
+        profileCompleteTextView.setVisibility(View.VISIBLE);
+        dividerHorizontalUnderPCT.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public boolean checkIfValidUpdate() {
+        return getFirstName() != null && !getFirstName().equals("") &&
+                getLastName() != null && !getLastName().equals("") &&
+                getGmail() != null && !getGmail().equals("");
+    }
+
+    @Override
+    public void showInvalideInfo() {
+        if(getFirstName() != null && !getFirstName().equals("") ){
+            fnEmptyFound.setVisibility(View.VISIBLE);
+        }
+        if(getLastName() != null && !getLastName().equals("")){
+            lnEmptyFound.setVisibility(View.VISIBLE);
+        }
+        if( getGmail() != null && !getGmail().equals("")){
+            emailEmptyFound.setVisibility(View.VISIBLE);
+        }
+        flush("Please fill in the mandatory field");
+    }
+
 }
+

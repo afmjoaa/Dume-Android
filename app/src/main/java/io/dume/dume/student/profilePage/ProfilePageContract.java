@@ -37,7 +37,9 @@ public interface ProfilePageContract {
 
         String getPreviousResult();
 
-        String getAvatarUrl();
+        String getAvatarString();
+
+        Uri getAvatarUri();
 
         String getProfileComPercent();
 
@@ -72,7 +74,17 @@ public interface ProfilePageContract {
 
         void updateChangesClicked();
 
-        void setResortedBundle();
+        void hideSpiner();
+
+        void showSpiner();
+
+        void goBack();
+
+        void initProfileCompleteView();
+
+        boolean checkIfValidUpdate();
+
+        void showInvalideInfo();
     }
 
     interface Presenter {
@@ -88,11 +100,11 @@ public interface ProfilePageContract {
         void setInstance(ProfilePageModel mModel);
 
         //stage the data and call the base update method
-        Boolean synWithDataBase(String fn, String ln, String mail, GeoPoint ca, String cs, String pr,String gender, Number progress, String avatar);
+        Boolean synWithDataBase(String fn, String ln, String mail, GeoPoint ca, String cs, String pr,String gender, String progress, String avatar, usefulListeners.uploadToDBListerer progressListener);
 
         void addShapShotListener(EventListener<DocumentSnapshot> updateViewListener);
 
-        void uploadImage(Uri uri, usefulListeners.uploadListenerMin progressListener);
+        void uploadImage(Uri uri, usefulListeners.uploadToSTGListererMin progressListener);
 
     }
 }
