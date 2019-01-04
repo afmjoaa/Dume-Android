@@ -47,6 +47,7 @@
                             android:textSize="10sp" />
 
                         <android.support.v7.widget.SwitchCompat
+                            android:id="@+id/skillStatus"
                             android:layout_width="40dp"
                             android:layout_height="20dp"
                             android:checked="true"

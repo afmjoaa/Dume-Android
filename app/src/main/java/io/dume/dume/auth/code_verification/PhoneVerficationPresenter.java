@@ -194,6 +194,7 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
             user.put("referer_id", "");
             user.put("user_ref_link", "");
             user.put("account_active", true);
+            user.put("marital_status", "");
             user.put("imei", imeiList);
             view.showProgress();
             //"Saving User..."
@@ -201,7 +202,7 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
             fireStore.collection("mini_users").document(model.getUser().getUid()).set(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
-                    setStuProfile((Activity) context,userStudentProInfo,generateStuProInfo(dataStore));
+                    setStuProfile((Activity) context, userStudentProInfo, generateStuProInfo(dataStore));
                     view.hideProgress();
                     nextActivity();
                     Log.w(TAG, "onComplete: User Added");
@@ -217,7 +218,7 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
         }
     }
 
-    private Map<String, Object> generateStuProInfo(DataStore dataStore){
+    private Map<String, Object> generateStuProInfo(DataStore dataStore) {
         Map<String, Object> stuProInfo = new HashMap<>();
         stuProInfo.put("first_name", dataStore.getFirstName());
         stuProInfo.put("last_name", dataStore.getLastName());
@@ -228,6 +229,8 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
         stuProInfo.put("current_status", "");
         stuProInfo.put("previous_result", "");
         stuProInfo.put("pro_com_%", "60");
+        stuProInfo.put("unread_msg", "0");
+        stuProInfo.put("unread_noti", "0");
 
         GeoPoint current_address = new GeoPoint(84.9, -180);
         stuProInfo.put("current_address", current_address);
@@ -242,6 +245,12 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
         selfRating.put("communication", "100%");
         selfRating.put("behaviour", "100%");
         stuProInfo.put("self_rating", selfRating);
+
+        Map<String, Object> unreadRecords = new HashMap<>();
+        unreadRecords.put("pending_count", "0");
+        unreadRecords.put("accepted_count", "0");
+        unreadRecords.put("current_count", "0");
+        stuProInfo.put("unread_records", unreadRecords);
 
         return stuProInfo;
     }

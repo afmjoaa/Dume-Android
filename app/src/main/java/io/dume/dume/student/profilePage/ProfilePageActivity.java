@@ -644,13 +644,13 @@ public class ProfilePageActivity extends CustomStuAppCompatActivity implements P
 
     @Override
     public void showInvalideInfo() {
-        if(getFirstName() != null && !getFirstName().equals("") ){
+        if(getFirstName() == null || getFirstName().equals("")){
             fnEmptyFound.setVisibility(View.VISIBLE);
         }
-        if(getLastName() != null && !getLastName().equals("")){
+        if(getLastName() == null || getLastName().equals("")){
             lnEmptyFound.setVisibility(View.VISIBLE);
         }
-        if( getGmail() != null && !getGmail().equals("")){
+        if( getGmail() == null || getGmail().equals("")){
             emailEmptyFound.setVisibility(View.VISIBLE);
         }
         flush("Please fill in the mandatory field");

@@ -85,9 +85,18 @@ public class SkillAdapter extends RecyclerView.Adapter<SkillAdapter.SkillVH> {
 
     @Override
     public int getItemCount() {
+        int size = 0;
         if (skillList != null) {
-            return skillList.size();
-        } else return 4;
+            if (layoutSize == FRAGMENT) {
+                if (skillList.size() > 4) {
+                    size = 4;
+                } else size = skillList.size();
+            } else {
+                return size = skillList.size();
+            }
+
+        }
+        return size;
     }
 
     class SkillVH extends RecyclerView.ViewHolder {
