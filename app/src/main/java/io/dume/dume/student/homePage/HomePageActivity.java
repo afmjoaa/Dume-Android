@@ -197,7 +197,7 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
         findLoadView();
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         getLocationPermission(mapFragment);
-        mPresenter = new HomePagePresenter(this, new HomePageModel());
+        mPresenter = new HomePagePresenter(this, new HomePageModel(this, this));
         mPresenter.homePageEnqueue();
         settingStatusBarTransparent();
         setDarkStatusBarIcon();
