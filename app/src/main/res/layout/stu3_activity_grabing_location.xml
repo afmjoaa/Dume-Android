@@ -48,7 +48,6 @@
         android:background="@drawable/bottom_sheet_bg"
         app:behavior_peekHeight="70dp"
         app:elevation="8dp"
-        android:layout_gravity="bottom|end"
         app:layout_behavior="@string/bottom_sheet_behavior"
         tools:ignore="MissingPrefix">
 
@@ -70,6 +69,12 @@
                     android:id="@+id/recycler_view_manual"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
+
+                <LinearLayout
+                    android:id="@+id/hack_height"
+                    android:layout_width="match_parent"
+                    android:layout_height="275dp"
+                    android:orientation="vertical"/>
 
             </carbon.widget.LinearLayout>
 

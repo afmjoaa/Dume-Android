@@ -110,6 +110,7 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
     private RelativeLayout inputSearchContainer;
     private String retrivedAction;
     private LatLng queriedLocation;
+    private LinearLayout hackHeight;
     //queriedLocation for text to geopoint
     //mCenterLatLong for geopoint to text
 
@@ -154,6 +155,7 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
                             }
                         });
                 hideKeyboard(GrabingLocationActivity.this);
+                hackHeight.setVisibility(View.GONE);
                 inputSearch.clearFocus();
                 inputSearchContainer.requestFocus();
                 llBottomSheet.setVisibility(View.INVISIBLE);
@@ -168,6 +170,8 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
             void OnItemClicked(View v, int position) {
                 switch (position){
                     case 5:
+                        hideKeyboard(GrabingLocationActivity.this);
+                        hackHeight.setVisibility(View.GONE);
                         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                         inputSearch.clearFocus();
                         inputSearchContainer.requestFocus();
@@ -196,18 +200,6 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
         }
     }
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-
-        // Checks whether a hardware keyboard is available
-        if (newConfig.hardKeyboardHidden == Configuration.HARDKEYBOARDHIDDEN_NO) {
-            Toast.makeText(this, "keyboard visible", Toast.LENGTH_SHORT).show();
-        } else if (newConfig.hardKeyboardHidden == Configuration.HARDKEYBOARDHIDDEN_YES) {
-            Toast.makeText(this, "keyboard hidden", Toast.LENGTH_SHORT).show();
-        }
-    }
-
     private void fromProfilePage() {
         Toast.makeText(mContext, "from Profile Page", Toast.LENGTH_SHORT).show();
     }
@@ -233,6 +225,7 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
         discardImage = findViewById(R.id.discard_image);
         locationDoneBtn = findViewById(R.id.location_done_btn);
         inputSearchContainer = findViewById(R.id.input_search_container);
+        hackHeight = findViewById(R.id.hack_height);
 
     }
 
@@ -327,10 +320,12 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
                         fab.setVisibility(View.VISIBLE);
                     }
                     hideKeyboard(GrabingLocationActivity.this);
+                    hackHeight.setVisibility(View.GONE);
                     inputSearch.clearFocus();
                     inputSearchContainer.requestFocus();
                 } else if (BottomSheetBehavior.STATE_EXPANDED == newState) {
                     showKeyboard(GrabingLocationActivity.this);
+                    hackHeight.setVisibility(View.VISIBLE);
                 } else if (BottomSheetBehavior.STATE_DRAGGING == newState) {
 
                 } else if (BottomSheetBehavior.STATE_SETTLING == newState) {
@@ -348,8 +343,6 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
 
             }
         });
-
-
     }
 
     @Override
