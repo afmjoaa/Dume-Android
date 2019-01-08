@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +30,7 @@ public class SkillAdapter extends RecyclerView.Adapter<SkillAdapter.SkillVH> {
     private ArrayList<Skill> skillList;
     private View inflate;
     private Context context;
+    private String TAG="SkillAdapter";
 
     public SkillAdapter(int layoutSize, ArrayList<Skill> skillList) {
 
@@ -96,6 +98,7 @@ public class SkillAdapter extends RecyclerView.Adapter<SkillAdapter.SkillVH> {
             }
 
         }
+        Log.e(TAG, "getItemCount: "+size );
         return size;
     }
 

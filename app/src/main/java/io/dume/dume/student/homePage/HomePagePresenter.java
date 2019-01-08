@@ -12,6 +12,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.firebase.firestore.GeoPoint;
+
+import java.util.Map;
+import java.util.Objects;
+
 import io.dume.dume.R;
 import io.dume.dume.teacher.homepage.TeacherActivtiy;
 
@@ -35,13 +40,43 @@ public class HomePagePresenter implements HomePageContract.Presenter {
         this.mModel = mModel;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void homePageEnqueue() {
         mView.findView();
         mView.init();
         mView.makingCallbackInterfaces();
         mView.configHomePage();
-//        checkNetworkAndGps();
+
+        mModel.addShapShotListener((documentSnapshot, e) -> {
+            if (documentSnapshot != null) {
+                mView.setDocumentSnapshot(documentSnapshot);
+                final String avatar = documentSnapshot.getString("avatar");
+                if (avatar != null && !avatar.equals("")) {
+                    mView.setAvatar(avatar);
+                }
+                String o = documentSnapshot.getString("last_name");
+                String o1 = documentSnapshot.getString("first_name");
+                mView.setUserName(o1,o);
+                mView.setMsgName(mView.generateMsgName(o1,o));
+                mView.setRating((Map<String, Object>) documentSnapshot.get("self_rating"));
+
+                mView.setUnreadMsg(documentSnapshot.getString("unread_msg"));
+                mView.setUnreadNoti(documentSnapshot.getString("unread_noti"));
+                mView.setUnreadRecords((Map<String, Object>) documentSnapshot.get("unread_records"));
+
+                if (Objects.requireNonNull(documentSnapshot.getString("pro_com_%")).equals("100")) {
+                    mView.setProfileComPercent(documentSnapshot.getString("pro_com_%"));
+                }else{
+                    mView.setProfileComPercent(documentSnapshot.getString("pro_com_%"));
+                    mView.showSnackBar(documentSnapshot.getString("pro_com_%"));
+                }
+
+            } else {
+                mView.flush("Does not found any user");
+                Log.w(TAG, "onAccountTypeFound: document is not null");
+            }
+        });
     }
 
     @Override
@@ -62,6 +97,7 @@ public class HomePagePresenter implements HomePageContract.Presenter {
                 mView.gotoMentorAddvertise();
                 break;
             case R.id.search_mentor_btn:
+            case R.id.search_mentor_btn_nogps:
                 //mView.gotoGrabingInfoPage();
                 mView.gotoGrabingLocationPage();
                 break;
@@ -104,16 +140,16 @@ public class HomePagePresenter implements HomePageContract.Presenter {
                 mView.gotoProfilePage();
                 break;
             case R.id.al_records:
-                mView.updateRecordsBadge(++mRecPendingCount, ++mRecAcceptedCount, ++mRecCurrentCount);
+                //mView.updateRecordsBadge(++mRecPendingCount, ++mRecAcceptedCount, ++mRecCurrentCount);
                 mView.gotoRecordsPage();
                 break;
             case R.id.al_messages:
                 mView.gotoInboxActivity();
-                mView.updateChatBadge(++mChatCount);
+                //mView.updateChatBadge(++mChatCount);
                 break;
             case R.id.al_notifications:
                 mView.gotoNotificationTab();
-                mView.updateNotificationsBadge(++mNotificationsCount);
+                //mView.updateNotificationsBadge(++mNotificationsCount);
                 break;
             case R.id.heat_map:
                 mView.gotoHeatMapActivity();
@@ -195,6 +231,22 @@ public class HomePagePresenter implements HomePageContract.Presenter {
             });
             dialog.show();
         }
+    }
+
+    @Override
+    public void defaultOptionMenuCreated() {
+        mModel.addShapShotListener((documentSnapshot, e) -> {
+            if (documentSnapshot != null) {
+                final String avatar = documentSnapshot.getString("avatar");
+                if (avatar != null && !avatar.equals("")) {
+                    mView.setAvatarForMenu(avatar);
+                }
+
+            } else {
+                mView.flush("Does not found any user");
+                Log.w(TAG, "onAccountTypeFound: document is not null");
+            }
+        });
     }
 
 }

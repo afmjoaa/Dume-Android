@@ -2,6 +2,12 @@ package io.dume.dume.student.homePage;
 
 import android.view.MenuItem;
 
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+
+import java.util.ArrayList;
+import java.util.Map;
+
 public interface HomePageContract {
     interface View {
 
@@ -64,6 +70,56 @@ public interface HomePageContract {
         void gotoMentorProfile();
 
         void gotoStudentProfile();
+
+        void flush(String msg);
+
+        void setDocumentSnapshot(DocumentSnapshot documentSnapshot);
+
+        //getters
+
+        String getAvatarString();
+
+        Map<String, Object> getSelfRating();
+
+        Map<String, Object> getUnreadRecords();
+
+        String unreadMsg();
+
+        String unreadNoti();
+
+        String getProfileComPercent();
+
+        ArrayList<String> getAppliedPromo();
+
+        ArrayList<String> getAvailablePromo();
+
+        String generateMsgName(String last, String first);
+
+        //setters
+
+        void setUserName(String last, String first);
+
+        void setAvatar(String avatarString);
+
+        void setRating(Map<String, Object> selfRating);
+
+        void setMsgName(String msgName);
+
+        void setAvailablePromo(ArrayList<String> availablePromo);
+
+        void setAppliedPromo(ArrayList<String> appliedPromo);
+
+        void setProfileComPercent(String num);
+
+        void setUnreadMsg(String unreadMsg);
+
+        void setUnreadNoti(String unreadNoti);
+
+        void setUnreadRecords(Map<String, Object> unreadRecords);
+
+        void showSnackBar(String completePercent);
+
+        void setAvatarForMenu(String avatar);
     }
 
     interface Presenter {
@@ -75,11 +131,15 @@ public interface HomePageContract {
         void onMenuItemInteracted(MenuItem item);
 
         void checkNetworkAndGps();
+
+        void defaultOptionMenuCreated();
     }
 
     interface Model {
 
         void hawwa();
+
+        void addShapShotListener(EventListener<DocumentSnapshot> updateViewListener);
     }
 
     interface ParentCallback {

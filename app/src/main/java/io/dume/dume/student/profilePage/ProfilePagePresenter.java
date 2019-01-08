@@ -127,9 +127,7 @@ public class ProfilePagePresenter implements ProfilePageContract.Presenter {
                                                 mView.hideSpiner();
                                             }
                                         });
-                                mView.hideSpiner();
                             }
-
                             @Override
                             public void onFailSTG(Object obj) {
                                 mView.flush((String) obj);
@@ -161,7 +159,6 @@ public class ProfilePagePresenter implements ProfilePageContract.Presenter {
                     mView.showInvalideInfo();
                     mView.hideSpiner();
                 }
-
                 break;
         }
     }

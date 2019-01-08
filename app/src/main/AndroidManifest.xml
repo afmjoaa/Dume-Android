@@ -125,6 +125,7 @@
         <activity
             android:name=".student.grabingLocation.GrabingLocationActivity"
             android:label="@string/title_activity_grabing_location"
+            android:windowSoftInputMode="adjustResize"
             android:theme="@style/AppTheme.NoActionBar.transparent" />
         <activity android:name=".student.pojo.CusStuAppComMapActivity" />
 

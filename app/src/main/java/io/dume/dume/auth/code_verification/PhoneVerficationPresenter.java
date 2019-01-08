@@ -194,7 +194,7 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
             user.put("referer_id", "");
             user.put("user_ref_link", "");
             user.put("account_active", true);
-            user.put("marital_status", "");
+            user.put("marital", "");
             user.put("imei", imeiList);
             view.showProgress();
             //"Saving User..."
@@ -241,7 +241,7 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
         stuProInfo.put("available_promo", availablePromoList);
 
         Map<String, Object> selfRating = new HashMap<>();
-        selfRating.put("star_rating", 5.00);
+        selfRating.put("star_rating", "5.00");
         selfRating.put("communication", "100%");
         selfRating.put("behaviour", "100%");
         stuProInfo.put("self_rating", selfRating);

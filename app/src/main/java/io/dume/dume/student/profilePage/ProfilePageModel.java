@@ -45,7 +45,7 @@ public class ProfilePageModel extends StuBaseModel implements ProfilePageContrac
     }
 
     @Override
-    public Boolean synWithDataBase(String fn, String ln, String mail, GeoPoint ca, String cs, String pr,String gender, String progress, String avatar,
+    public Boolean synWithDataBase(String fn, String ln, String mail, GeoPoint ca, String cs, String pr, String gender, String progress, String avatar,
                                    usefulListeners.uploadToDBListerer progressListener) {
         Map<String, Object> map = new HashMap<>();
         map.put("first_name", fn);
@@ -67,7 +67,7 @@ public class ProfilePageModel extends StuBaseModel implements ProfilePageContrac
 
     @Override
     public void uploadImage(Uri uri, usefulListeners.uploadToSTGListererMin progressListener) {
-        StorageReference imgRef = storage.getReference(Objects.requireNonNull(getUser().getUid()));
+        StorageReference imgRef = storage.getReference(Objects.requireNonNull("stu_" + getUser().getUid()));
         UploadTask uploadTask = imgRef.putFile(uri);
 
         uploadTask.continueWithTask(task -> imgRef.getDownloadUrl())

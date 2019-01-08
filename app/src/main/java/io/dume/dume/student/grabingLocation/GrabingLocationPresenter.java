@@ -39,6 +39,8 @@ public class GrabingLocationPresenter implements GrabingLocaitonContract.Present
                 break;
             case R.id.location_done_btn:
                 mView.onLocationDoneBtnClicked();
+                break;
+
 
         }
 

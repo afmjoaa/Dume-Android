@@ -24,7 +24,7 @@ public class AccountSettingsPresenter implements AccountSettingsContract.Present
     @Override
     public void enqueue() {
         view.setViewConfig();
-        view.setUpBadge();
+        view.initJoaaRV();
 
 
     }
@@ -48,9 +48,7 @@ public class AccountSettingsPresenter implements AccountSettingsContract.Present
             case R.id.updateBTN:
                 view.updateLocation();
                 break;
-            case R.id.addAcademicBTN:
-                view.addAcademic();
-                break;
+
             default:
 
 
@@ -59,19 +57,6 @@ public class AccountSettingsPresenter implements AccountSettingsContract.Present
 
     @Override
     public void loadData() {
-      /*  view.showLoading();
-        mentorModel.getDataArray(new AccountSettingsContract.MentorModel.DataListener() {
-            @Override
-            public void onSuccess(ArrayList<String> arrayList) {
-                view.gatherDataInListView(arrayList);
-                view.hideLoading();
-            }
-
-            @Override
-            public void onFailure(String message) {
-                view.hideLoading();
-            }
-        });*/
         mentorModel.queryUserData(new UserQueryListener() {
 
             @Override
@@ -91,23 +76,6 @@ public class AccountSettingsPresenter implements AccountSettingsContract.Present
                 view.showLoading();
             }
         });
-        mentorModel.queryAcademicData(new GlobalListener.AcademicQuery() {
-            @Override
-            public void onSuccess(ArrayList<Education> educationlist) {
-                view.hideLoading();
-                view.updatAcademicList(educationlist);
-            }
 
-            @Override
-            public void onFailure(String error) {
-                view.hideLoading();
-                view.toast(error);
-            }
-
-            @Override
-            public void onStart() {
-                view.showLoading();
-            }
-        });
     }
 }

@@ -162,7 +162,30 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
         autoCompleteRecyView.setAdapter(recyclerAutoAdapter);
         autoCompleteRecyView.setLayoutManager(new LinearLayoutManager(this));
         //menual one
-        recyclerMenualAdapter = new PlaceMenualRecyAda(this, getFinalData());
+        recyclerMenualAdapter = new PlaceMenualRecyAda(this, getFinalData()) {
+            @Override
+            void OnItemClicked(View v, int position) {
+                switch (position){
+                    case 5:
+                        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                        inputSearch.clearFocus();
+                        inputSearchContainer.requestFocus();
+                        llBottomSheet.setVisibility(View.INVISIBLE);
+                        locationDoneBtn.setVisibility(View.VISIBLE);
+                        break;
+                    case 4:
+                        break;
+                    case 3:
+                        break;
+                    case 2:
+                        break;
+                    case 1:
+                        break;
+                    case 0:
+                        break;
+                }
+            }
+        };
         menualCompleteRecyView.setAdapter(recyclerMenualAdapter);
         menualCompleteRecyView.setLayoutManager(new LinearLayoutManager(this));
 

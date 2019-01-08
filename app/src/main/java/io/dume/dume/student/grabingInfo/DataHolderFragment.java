@@ -175,11 +175,10 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
                         min.setText("Salary - " + rightPinValue+"k");
                         salaryValue = rightPinValue;
                     } else {
-                        min.setText("Min Salary - " + leftPinValue);
+                        min.setText("Min Salary = " + leftPinValue);
                         max.setText("Max Salary = " + rightPinValue);
                         salaryValue = leftPinValue + "k - " + rightPinValue + "k";
                     }
-
                     AppCompatRadioButton rd = new AppCompatRadioButton(mContext);
                     rd.setText(salaryValue);
                     listener.onRadioButtonClick(rd, sectionNumber, "justForData");
@@ -398,7 +397,6 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
         }
         return root;
     }
-
 
     @Override
     public void onAttach(Context context) {

@@ -33,15 +33,11 @@ public interface AccountSettingsContract {
 
         void updateLocation();
 
-        void addAcademic();
-
-        void setUpBadge();
-
-        void setUpAcademic();
+        void initJoaaRV();
 
         void updateUserInfo(Map<String, Object> data);
 
-        void updatAcademicList(ArrayList<Education> arrayList);
+
     }
 
     interface Presenter {

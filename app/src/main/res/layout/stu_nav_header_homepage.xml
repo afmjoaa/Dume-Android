@@ -26,13 +26,16 @@
             android:onClick="onHomePageViewClicked"
             android:orientation="vertical">
 
-            <ImageView
+            <carbon.widget.ImageView
                 android:id="@+id/user_dp"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginTop="@dimen/nav_header_vertical_spacing"
                 android:contentDescription="@string/nav_header_desc"
                 android:onClick="onNavigationHeaderClick"
+                app:carbon_cornerRadius="6dp"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
                 app:srcCompat="@drawable/demo_alias_dp" />
 
             <TextView

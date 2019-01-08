@@ -29,6 +29,8 @@
     <color name="color_selector_navigation_item">#FFFFFF</color>
     <color name="drawer_active_item">#11212a</color>
     <color name="snackbar_red">#d90000</color>
+    <color name="snackbar_yellow">#ffeb3b</color>
+    <color name="snackbar_green">#369c3a</color>
     <color name="badge_red">#fff56161</color>
     <color name="badge_yellow">#fff4f094</color>
     <color name="badge_green">#ace0ac</color>

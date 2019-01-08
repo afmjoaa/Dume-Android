@@ -2,6 +2,10 @@ package io.dume.dume.student.homePage;
 
 import android.app.Activity;
 import android.content.Context;
+
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+
 import io.dume.dume.student.pojo.StuBaseModel;
 
 public class HomePageModel extends StuBaseModel implements HomePageContract.Model {
@@ -18,5 +22,10 @@ public class HomePageModel extends StuBaseModel implements HomePageContract.Mode
     @Override
     public void hawwa() {
 
+    }
+
+    @Override
+    public void addShapShotListener(EventListener<DocumentSnapshot> updateViewListener) {
+        userStudentProInfo.addSnapshotListener(activity, updateViewListener);
     }
 }

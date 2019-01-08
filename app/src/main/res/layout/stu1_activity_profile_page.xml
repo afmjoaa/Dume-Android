@@ -102,8 +102,8 @@
                     android:layout_alignParentTop="true"
                     android:layout_centerHorizontal="true"
                     android:adjustViewBounds="true"
-                    android:contentDescription="@string/display_pic"
                     android:scaleType="centerCrop"
+                    android:contentDescription="@string/display_pic"
                     app:srcCompat="@drawable/alias_profile_icon" />
 
                 <TextView

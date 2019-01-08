@@ -25,4 +25,11 @@ public interface usefulListeners {
         void onProgressSTG(Object obj);
 
     }
+
+    interface withKeyboardListener {
+
+        void onOpen();
+
+        void onClose();
+    }
 }

@@ -88,8 +88,13 @@ public class BadgeDrawable extends Drawable {
     public void setChar(char character) {
         mCount = Character.toString(character);
 
+        if(character == '%'){
+            setCircleColor(0x00ffffff);
+            setCircleTextColor(0x00ffffff);
+        }
+
         // Only draw a badge if there are notifications.
-        mWillDraw = character == '!' || character == '?' || character == '$';
+        mWillDraw = character == '!' || character == '?' || character == '%';
         invalidateSelf();
     }
 

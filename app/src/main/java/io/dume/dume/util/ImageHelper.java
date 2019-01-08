@@ -34,4 +34,27 @@ public class ImageHelper {
         return output;
     }
 
+    public static Bitmap getRoundedCornerBitmapSquare(Bitmap bitmap, int pixels, int square) {
+
+        Bitmap output = Bitmap.createBitmap(square, square, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(output);
+
+        final int color = 0xff424242;
+        final Paint paint = new Paint();
+        final Rect rect = new Rect(0, 0, square, square);
+        //final Rect rect = new Rect(0, 0, (int) (28 * (context.getResources().getDisplayMetrics().density)), (int) (28 * (context.getResources().getDisplayMetrics().density)));
+        final RectF rectF = new RectF(rect);
+        final float roundPx = pixels;
+
+        paint.setAntiAlias(true);
+        canvas.drawARGB(0, 0, 0, 0);
+        paint.setColor(color);
+        canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
+
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        canvas.drawBitmap(bitmap, rect, rect, paint);
+
+        return output;
+    }
+
 }

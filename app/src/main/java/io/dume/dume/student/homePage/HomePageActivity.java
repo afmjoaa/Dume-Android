@@ -5,9 +5,11 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Animatable;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.location.Location;
@@ -22,6 +24,7 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
@@ -38,6 +41,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -51,10 +55,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.MapStyleOptions;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.transitionseverywhere.Fade;
 import com.transitionseverywhere.Slide;
 import com.transitionseverywhere.TransitionManager;
@@ -62,6 +70,7 @@ import com.transitionseverywhere.TransitionSet;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import info.hoang8f.android.segmented.SegmentedGroup;
@@ -91,8 +100,8 @@ import io.dume.dume.teacher.homepage.TeacherActivtiy;
 import io.dume.dume.util.DumeUtils;
 import me.zhanghai.android.materialratingbar.MaterialRatingBar;
 
-import static com.facebook.FacebookSdk.getApplicationContext;
 import static io.dume.dume.util.DumeUtils.animateImage;
+import static io.dume.dume.util.ImageHelper.getRoundedCornerBitmapSquare;
 
 public class HomePageActivity extends CusStuAppComMapActivity implements HomePageContract.View,
         NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback, HomePageContract.ParentCallback,
@@ -112,7 +121,7 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
     private Toolbar toolbar;
     private DrawerLayout drawer;
     private int mNotificationsCount = 0;
-    private char mProfileChar = '!';
+    private char mProfileChar = '%';
     private int mChatCount = 0;
     private int mRecPendingCount = 0, mRecAcceptedCount = 0, mRecCurrentCount = 0;
     private View llBottomSheet;
@@ -156,6 +165,15 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
     private LayerDrawable alChatIcon;
     private LayerDrawable alRecordsIcon;
     private int optionMenu = R.menu.stu_homepage;
+    private DocumentSnapshot documentSnapshot;
+    private TextView userNameTextView;
+    private TextView userAddressingTextView;
+    private TextView userRatingTextView;
+    private carbon.widget.ImageView userDP;
+    private TextView doMoreTextView;
+    private TextView doMoreDetailTextView;
+    private TextView promotionValidityTextView;
+    private TextView promotionTextView;
 
 
     @Override
@@ -278,6 +296,17 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
         hPageBSRecycler = findViewById(R.id.homePage_bottomSheet_recycler);
         feedbackStrings = getResources().getStringArray(R.array.review_hint_text_dependent);
         radioSegmentGroup = findViewById(R.id.segmentGroup);
+        //
+        userNameTextView = findViewById(R.id.user_name);
+        userAddressingTextView = findViewById(R.id.user_addressing);
+        userRatingTextView = findViewById(R.id.user_rating);
+        userDP = findViewById(R.id.user_dp);
+        doMoreTextView = findViewById(R.id.do_more);
+        doMoreDetailTextView = findViewById(R.id.make_money_mentoring);
+
+        promotionTextView = findViewById(R.id.promotion_text);
+        promotionValidityTextView = findViewById(R.id.promotion_validity_text);
+
     }
 
     @Override
@@ -451,7 +480,7 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(optionMenu, menu);
-        if(optionMenu == R.menu.stu_homepage){
+        if (optionMenu == R.menu.stu_homepage) {
             alProfile = menu.findItem(R.id.al_display_pic);
             alProfileIcon = (LayerDrawable) alProfile.getIcon();
             DumeUtils.setBadgeChar(this, alProfileIcon, 0xfff56161, Color.BLACK, mProfileChar, 3.0f, 3.0f);
@@ -466,13 +495,41 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
 
             alRecords = menu.findItem(R.id.al_records);
             alRecordsIcon = (LayerDrawable) alRecords.getIcon();
-            DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badgeTwo, 0xfff56161, Color.BLACK, mRecCurrentCount, 3.0f, 3.0f);
-            DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badgeOne, 0xfff4f094, Color.BLACK, mRecAcceptedCount, 8.0f, -3.4f);
-            DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badge, 0xfface0ac, Color.BLACK, mRecPendingCount, 12.0f, 3.0f);
-        }else if(optionMenu == R.menu.menu_only_help){
+            if (mRecPendingCount != 0 && mRecAcceptedCount == 0 && mRecCurrentCount == 0) {
+                DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badgeTwo, 0xfff56161, Color.BLACK, mRecPendingCount, 3.0f, 3.0f);
+                DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badgeOne, 0xfff4f094, Color.BLACK, mRecAcceptedCount, 8.0f, -3.4f);
+                DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badge, 0xfface0ac, Color.BLACK, mRecCurrentCount, 12.0f, 3.0f);
+            }else if(mRecPendingCount == 0 && mRecAcceptedCount != 0 && mRecCurrentCount == 0){
+                DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badgeTwo, 0xfff56161, Color.BLACK, mRecPendingCount, 8.0f, -3.4f);
+                DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badgeOne, 0xfff4f094, Color.BLACK, mRecAcceptedCount, 3.0f, 3.0f);
+                DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badge, 0xfface0ac, Color.BLACK, mRecCurrentCount, 12.0f, 3.0f);
+            }else if(mRecPendingCount == 0 && mRecAcceptedCount == 0 && mRecCurrentCount != 0){
+                DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badgeTwo, 0xfff56161, Color.BLACK, mRecPendingCount, 12.0f, 3.0f);
+                DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badgeOne, 0xfff4f094, Color.BLACK, mRecAcceptedCount, 8.0f, -3.4f);
+                DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badge, 0xfface0ac, Color.BLACK, mRecCurrentCount, 3.0f, 3.0f);
+            }else if(mRecPendingCount != 0 && mRecAcceptedCount != 0 && mRecCurrentCount == 0){
+                DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badgeTwo, 0xfff56161, Color.BLACK, mRecPendingCount, 3.0f, 3.0f);
+                DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badgeOne, 0xfff4f094, Color.BLACK, mRecAcceptedCount, 8.0f, -3.4f);
+                DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badge, 0xfface0ac, Color.BLACK, mRecCurrentCount, 12.0f, 3.0f);
+            }else if(mRecPendingCount != 0 && mRecAcceptedCount == 0 && mRecCurrentCount != 0){
+                DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badgeTwo, 0xfff56161, Color.BLACK, mRecPendingCount, 3.0f, 3.0f);
+                DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badgeOne, 0xfff4f094, Color.BLACK, mRecAcceptedCount, 12.0f, 3.0f);
+                DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badge, 0xfface0ac, Color.BLACK, mRecCurrentCount, 8.0f, -3.4f);
+            }else if(mRecPendingCount == 0 && mRecAcceptedCount != 0 && mRecCurrentCount != 0){
+                DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badgeTwo, 0xfff56161, Color.BLACK, mRecPendingCount, 12.0f, 3.0f);
+                DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badgeOne, 0xfff4f094, Color.BLACK, mRecAcceptedCount, 3.0f, 3.0f);
+                DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badge, 0xfface0ac, Color.BLACK, mRecCurrentCount, 8.0f, -3.4f);
+            }else{
+                DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badgeTwo, 0xfff56161, Color.BLACK, mRecPendingCount, 3.0f, 3.0f);
+                DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badgeOne, 0xfff4f094, Color.BLACK, mRecAcceptedCount, 8.0f, -3.4f);
+                DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badge, 0xfface0ac, Color.BLACK, mRecCurrentCount, 12.0f, 3.0f);
+            }
+            mPresenter.defaultOptionMenuCreated();
+
+        } else if (optionMenu == R.menu.menu_only_help) {
 
         }
-       return super.onCreateOptionsMenu(menu);
+        return super.onCreateOptionsMenu(menu);
     }
 
     private void hideToolbarMenu() {
@@ -494,6 +551,7 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
         alProfileDrawable = DrawableCompat.wrap(Objects.requireNonNull(alProfileDrawable));
         DrawableCompat.setTint(alProfileDrawable, tint);
         alProfileIcon.setDrawableByLayerId(R.id.ic_al_profile_pic, alProfileDrawable);
+
 
         Drawable alRecordDrawable = ResourcesCompat.getDrawable(getResources(), R.drawable.record_icon, null);
         alRecordDrawable = DrawableCompat.wrap(Objects.requireNonNull(alRecordDrawable));
@@ -959,6 +1017,173 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
     public void gotoStudentProfile() {
         //startActivity(new Intent(this, HomePageActivity.class));
     }
+
+    @Override
+    public void flush(String msg) {
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void setDocumentSnapshot(DocumentSnapshot documentSnapshot) {
+        this.documentSnapshot = documentSnapshot;
+    }
+
+    @Override
+    public String getAvatarString() {
+        return documentSnapshot.getString("avatar");
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public Map<String, Object> getSelfRating() {
+        return (Map<String, Object>) documentSnapshot.get("self_rating");
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public Map<String, Object> getUnreadRecords() {
+        return (Map<String, Object>) documentSnapshot.get("unread_records");
+    }
+
+    @Override
+    public String unreadMsg() {
+        return documentSnapshot.getString("unread_msg");
+    }
+
+    @Override
+    public String unreadNoti() {
+        return documentSnapshot.getString("unread_noti");
+    }
+
+    @Override
+    public String getProfileComPercent() {
+        return documentSnapshot.getString("pro_com_%");
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public ArrayList<String> getAppliedPromo() {
+        return (ArrayList<String>) documentSnapshot.get("applied_promo");
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public ArrayList<String> getAvailablePromo() {
+        return (ArrayList<String>) documentSnapshot.get("applied_promo");
+    }
+
+    @Override
+    public String generateMsgName(String first, String last) {
+        return "@" + first + last;
+    }
+
+    @Override
+    public void setUserName(String first, String last) {
+        userNameTextView.setText(String.format("%s %s", first, last));
+    }
+
+    @Override
+    public void setAvatar(String avatarString) {
+        Glide.with(this).load(avatarString).apply(new RequestOptions().override(100, 100)).into(userDP);
+    }
+
+    @Override
+    public void setAvatarForMenu(String avatar) {
+        Glide.with(this).asBitmap().load(avatar)
+                .apply(new RequestOptions().override((int) (20 * (getResources().getDisplayMetrics().density)), (int) (20 * (getResources().getDisplayMetrics().density))).centerCrop())
+                .into(new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(@NonNull Bitmap resource, @Nullable com.bumptech.glide.request.transition.Transition<? super Bitmap> transition) {
+                        final Bitmap roundedCornerBitmap = getRoundedCornerBitmapSquare(resource, (int) (10 * (getResources().getDisplayMetrics().density)), (int) (20 * (getResources().getDisplayMetrics().density)));
+                        Drawable drawable = new BitmapDrawable(getResources(), roundedCornerBitmap);
+                        if (drawable != null) {
+                            alProfileIcon.setDrawableByLayerId(R.id.ic_al_profile_pic, drawable);
+                            //invalidateOptionsMenu();
+                            alProfile.setIcon(alProfileIcon);
+                        }
+                    }
+                });
+    }
+
+    @Override
+    public void setRating(Map<String, Object> selfRating) {
+        userRatingTextView.setText(selfRating.get("star_rating") + "  ★");
+    }
+
+    @Override
+    public void setMsgName(String msgName) {
+        userAddressingTextView.setText(msgName);
+    }
+
+    //TODO
+    @Override
+    public void setAvailablePromo(ArrayList<String> availablePromo) {
+
+    }
+
+    //TODO
+    @Override
+    public void setAppliedPromo(ArrayList<String> appliedPromo) {
+
+    }
+
+
+    @Override
+    public void setProfileComPercent(String num) {
+        if (Integer.parseInt(num) < 100) {
+            updateProfileBadge('!');
+        } else {
+            updateProfileBadge('%');
+        }
+    }
+
+    @Override
+    public void setUnreadMsg(String unreadMsg) {
+        updateChatBadge(Integer.parseInt(unreadMsg));
+    }
+
+    @Override
+    public void setUnreadNoti(String unreadNoti) {
+        updateNotificationsBadge(Integer.parseInt(unreadNoti));
+    }
+
+    @Override
+    public void setUnreadRecords(Map<String, Object> unreadRecords) {
+        updateRecordsBadge(Integer.parseInt((String) unreadRecords.get("pending_count")),
+                Integer.parseInt((String) unreadRecords.get("accepted_count")),
+                Integer.parseInt((String) unreadRecords.get("current_count")));
+    }
+
+    @Override
+    public void showSnackBar(String completePercent) {
+        Snackbar mySnackbar = Snackbar.make(coordinatorLayout, "Replace with your own action", Snackbar.LENGTH_LONG);
+        Snackbar.SnackbarLayout layout = (Snackbar.SnackbarLayout) mySnackbar.getView();
+
+        TextView textView = (TextView) layout.findViewById(android.support.design.R.id.snackbar_text);
+        textView.setVisibility(View.INVISIBLE);
+        LayoutInflater inflater = LayoutInflater.from(context);
+        View snackView = inflater.inflate(R.layout.custom_snackbar_layout_one, null);
+
+        TextView textViewStart = snackView.findViewById(R.id.custom_snackbar_text);
+        textViewStart.setText("Profile only " + completePercent + "% complete");
+
+
+        layout.setPadding(0, 0, 0, 0);
+        if (Integer.parseInt(completePercent) < 90) {
+            layout.setBackgroundColor(ContextCompat.getColor(context, R.color.snackbar_yellow));
+            textViewStart.setTextColor(Color.BLACK);
+        } else {
+            layout.setBackgroundColor(ContextCompat.getColor(context, R.color.snackbar_green));
+            textViewStart.setTextColor(Color.WHITE);
+        }
+        CoordinatorLayout.LayoutParams parentParams = (CoordinatorLayout.LayoutParams) layout.getLayoutParams();
+        parentParams.height = (int) (30 * (getResources().getDisplayMetrics().density));
+
+        layout.setLayoutParams(parentParams);
+        layout.addView(snackView, 0);
+        mySnackbar.show();
+    }
+
 
     /*for animation of the rating bar
      * mDecimalRatingBars.startAnimation(new RatingAnimation(mDecimalRatingBars));

@@ -2,11 +2,13 @@ package io.dume.dume.student.profilePage;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.annotation.SuppressLint;
 import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -36,16 +38,22 @@ import com.warkiz.widget.IndicatorSeekBar;
 import com.warkiz.widget.IndicatorStayLayout;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import carbon.widget.ImageView;
+import id.zelory.compressor.Compressor;
 import io.dume.dume.R;
 import io.dume.dume.student.grabingLocation.GrabingLocationActivity;
 import io.dume.dume.student.homePage.HomePageActivity;
 import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
 import io.dume.dume.util.DumeUtils;
+import io.dume.dume.util.FileUtil;
 import io.dume.dume.util.RadioBtnDialogue;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 import static io.dume.dume.util.DumeUtils.getAddress;
 import static io.dume.dume.util.DumeUtils.getUserUID;
@@ -90,6 +98,8 @@ public class ProfilePageActivity extends CustomStuAppCompatActivity implements P
     private ImageView emailEmptyFound;
     private ImageView lnEmptyFound;
     private ImageView fnEmptyFound;
+    private File compressedImage;
+    private File actualImage;
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -133,12 +143,13 @@ public class ProfilePageActivity extends CustomStuAppCompatActivity implements P
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-               if(!s.equals("")){
-                   fnEmptyFound.setVisibility(View.GONE);
-               }else {
-                   fnEmptyFound.setVisibility(View.VISIBLE);
-               }
+                if (!s.equals("")) {
+                    fnEmptyFound.setVisibility(View.GONE);
+                } else {
+                    fnEmptyFound.setVisibility(View.VISIBLE);
+                }
             }
+
             @Override
             public void afterTextChanged(Editable s) {
                 if (s.toString().equals("")) {
@@ -154,12 +165,13 @@ public class ProfilePageActivity extends CustomStuAppCompatActivity implements P
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(!s.equals("")){
+                if (!s.equals("")) {
                     lnEmptyFound.setVisibility(View.GONE);
-                }else {
+                } else {
                     lnEmptyFound.setVisibility(View.VISIBLE);
                 }
             }
+
             @Override
             public void afterTextChanged(Editable s) {
                 if (s.toString().equals("")) {
@@ -175,12 +187,13 @@ public class ProfilePageActivity extends CustomStuAppCompatActivity implements P
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(!s.equals("")){
+                if (!s.equals("")) {
                     emailEmptyFound.setVisibility(View.GONE);
-                }else {
+                } else {
                     emailEmptyFound.setVisibility(View.VISIBLE);
                 }
             }
+
             @Override
             public void afterTextChanged(Editable s) {
                 if (s.toString().equals("")) {
@@ -348,7 +361,7 @@ public class ProfilePageActivity extends CustomStuAppCompatActivity implements P
         // Determine Uri of camera image to save.
         final File root = new File(Environment.getExternalStorageDirectory() + File.separator + "MyDir" + File.separator);
         root.mkdirs();
-        final String fname = getUserUID() + ".jpg";
+        final String fname = "stu_" + getUserUID() + ".jpg";
         final File sdImageMainDirectory = new File(root, fname);
         outputFileUri = Uri.fromFile(sdImageMainDirectory);
 
@@ -400,19 +413,49 @@ public class ProfilePageActivity extends CustomStuAppCompatActivity implements P
                 } else {
                     selectedImageUri = data == null ? null : data.getData();
                 }
-                Glide.with(this).load(selectedImageUri).apply(new RequestOptions().override(100, 100)).into(profileUserDP);
+                if (selectedImageUri != null) {
+                    showSpiner();
+                    try {
+                        actualImage = FileUtil.from(this, selectedImageUri);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    compressImage(actualImage);
+                }
+                //Glide.with(this).load(selectedImageUri).apply(new RequestOptions().override(100, 100)).into(profileUserDP);
             } else if (requestCode == LOCATION_REQUEST_CODE) {
                 LatLng selectedLocation = data.getParcelableExtra("selected_location");
                 if (selectedLocation != null) {
                     GeoPoint retrivedLocation = new GeoPoint(selectedLocation.latitude, selectedLocation.longitude);
                     setCurrentAddress(retrivedLocation);
-                    //currentAddressTextView.setText(getAddress(this, selectedLocation.latitude, selectedLocation.longitude));
-                    //Toast.makeText(this, selectedLocation.latitude +":" + selectedLocation.longitude, Toast.LENGTH_SHORT).show();
                 }
             }
         }
     }
     //       Glide.with(this).load().apply()
+
+    @SuppressLint("CheckResult")
+    private void compressImage(File actualImage) {
+        new Compressor(this)
+                .compressToFileAsFlowable(actualImage)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<File>() {
+                    @Override
+                    public void accept(File file) {
+                        compressedImage = file;
+                        Glide.with(ProfilePageActivity.this).load(compressedImage).apply(new RequestOptions().override(100, 100)).into(profileUserDP);
+                        hideSpiner();
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) {
+                        throwable.printStackTrace();
+                        flush(throwable.getMessage());
+                        hideSpiner();
+                    }
+                });
+    }
 
     @Override
     public String getFirstName() {
@@ -457,7 +500,11 @@ public class ProfilePageActivity extends CustomStuAppCompatActivity implements P
 
     @Override
     public Uri getAvatarUri() {
-        return selectedImageUri;
+        if (compressedImage != null) {
+            return Uri.fromFile(compressedImage);
+        } else {
+            return null;
+        }
     }
 
     @Override
@@ -644,13 +691,13 @@ public class ProfilePageActivity extends CustomStuAppCompatActivity implements P
 
     @Override
     public void showInvalideInfo() {
-        if(getFirstName() == null || getFirstName().equals("")){
+        if (getFirstName() == null || getFirstName().equals("")) {
             fnEmptyFound.setVisibility(View.VISIBLE);
         }
-        if(getLastName() == null || getLastName().equals("")){
+        if (getLastName() == null || getLastName().equals("")) {
             lnEmptyFound.setVisibility(View.VISIBLE);
         }
-        if( getGmail() == null || getGmail().equals("")){
+        if (getGmail() == null || getGmail().equals("")) {
             emailEmptyFound.setVisibility(View.VISIBLE);
         }
         flush("Please fill in the mandatory field");
