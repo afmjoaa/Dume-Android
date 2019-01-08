@@ -33,6 +33,8 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.google.firebase.firestore.DocumentSnapshot;
+
 import io.dume.dume.R;
 import io.dume.dume.student.common.SettingData;
 import io.dume.dume.student.common.SettingsAdapter;
@@ -41,10 +43,12 @@ import io.dume.dume.student.heatMap.HeatMapAccountRecyAda;
 import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
 import io.dume.dume.student.profilePage.ProfilePageActivity;
 import io.dume.dume.student.studentPayment.StudentPaymentActivity;
+import io.dume.dume.teacher.homepage.TeacherContract;
 import io.dume.dume.util.AlertMsgDialogue;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static io.dume.dume.util.DumeUtils.configAppbarTittle;
 import static io.dume.dume.util.DumeUtils.configureAppbar;
@@ -64,6 +68,7 @@ public class StudentSettingsActivity extends CustomStuAppCompatActivity
     private RelativeLayout basicInfoLayout;
     private RelativeLayout basicInfoLayout1;
     private FloatingActionButton fab;
+    private StudentSettingsModel mModel;
 
 
     @Override
@@ -72,7 +77,8 @@ public class StudentSettingsActivity extends CustomStuAppCompatActivity
         setContentView(R.layout.stunav_activity4_settings);
         setActivityContext(this, fromFlag);
         findLoadView();
-        mPresenter = new StudentSettingsPresenter(this, new StudentSettingsModel());
+        mModel = new StudentSettingsModel(this, this);
+        mPresenter = new StudentSettingsPresenter(this, mModel);
         mPresenter.studentSettingsEnqueue();
         configureAppbar(this, "Settings");
 
@@ -266,6 +272,11 @@ public class StudentSettingsActivity extends CustomStuAppCompatActivity
         startActivity(new Intent(this, ProfilePageActivity.class));
     }
 
+    @Override
+    public void flush(String msg) {
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+    }
+
     /**
      * This fragment shows general preferences only. It is used when the
      * activity is showing a two-pane settings UI.
@@ -454,12 +465,14 @@ public class StudentSettingsActivity extends CustomStuAppCompatActivity
         public void onCreate(@Nullable Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             setHasOptionsMenu(true);
+            myMainActivity = (StudentSettingsActivity) getActivity();
+
         }
 
         @Nullable
         @Override
         public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-            myMainActivity = (StudentSettingsActivity) getActivity();
+            //myMainActivity = (StudentSettingsActivity) getActivity();
             View rootView = inflater.inflate(R.layout.stu_setting_saved_places_fragment, container, false);
             savedPlacesRecycler = rootView.findViewById(R.id.saved_place_recycler);
             //testing code goes here
@@ -467,6 +480,20 @@ public class StudentSettingsActivity extends CustomStuAppCompatActivity
             savedPlacesAdapter = new SavedPlacesAdapter(myMainActivity, recordDataCurrent);
             savedPlacesRecycler.setAdapter(savedPlacesAdapter);
             savedPlacesRecycler.setLayoutManager(new LinearLayoutManager(myMainActivity));
+
+            myMainActivity.mPresenter.retriveSavedPlacesData(new TeacherContract.Model.Listener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot list) {
+                    ArrayList<Map<String, Object>> favorites = (ArrayList<Map<String, Object>>) list.get("favorite_places");
+                    ArrayList<Map<String, Object>> saved_places = (ArrayList<Map<String, Object>>) list.get("saved_places");
+                    ArrayList<Map<String, Object>> recently_used = (ArrayList<Map<String, Object>>) list.get("recent_places");
+                }
+
+                @Override
+                public void onError(String msg) {
+                    Toast.makeText(myMainActivity, msg, Toast.LENGTH_SHORT).show();
+                }
+            });
             return rootView;
         }
 
@@ -480,6 +507,7 @@ public class StudentSettingsActivity extends CustomStuAppCompatActivity
             }
             return super.onOptionsItemSelected(item);
         }
+
     }
 
 }

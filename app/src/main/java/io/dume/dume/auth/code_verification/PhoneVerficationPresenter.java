@@ -252,6 +252,13 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
         unreadRecords.put("current_count", "0");
         stuProInfo.put("unread_records", unreadRecords);
 
+        ArrayList<Map<String, Object>> favorites = null;
+        stuProInfo.put("favorite_places", favorites);
+        ArrayList<Map<String, Object>> savedPlaces = null;
+        stuProInfo.put("saved_places", savedPlaces);
+        ArrayList<Map<String, Object>> recentlyUsedPlaces = null;
+        stuProInfo.put("recent_places", recentlyUsedPlaces);
+
         return stuProInfo;
     }
 

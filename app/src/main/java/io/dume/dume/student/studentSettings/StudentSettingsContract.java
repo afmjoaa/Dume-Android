@@ -1,5 +1,10 @@
 package io.dume.dume.student.studentSettings;
 
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+
+import io.dume.dume.teacher.homepage.TeacherContract;
+
 public interface StudentSettingsContract {
     interface View {
 
@@ -10,6 +15,8 @@ public interface StudentSettingsContract {
         void findView();
 
         void gotoProfilePage();
+
+        void flush(String msg);
     }
 
     interface Presenter {
@@ -18,10 +25,14 @@ public interface StudentSettingsContract {
 
         void onStudentSettingsIntracted(android.view.View view);
 
+        void retriveSavedPlacesData(TeacherContract.Model.Listener<DocumentSnapshot> listener);
     }
 
     interface Model {
 
         void studentSettingshawwa();
+
+        void addShapShotListener(EventListener<DocumentSnapshot> updateViewListener);
+
     }
 }

@@ -3,7 +3,6 @@ package io.dume.dume.student.grabingLocation;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
@@ -15,7 +14,6 @@ import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
@@ -54,6 +52,7 @@ import com.google.firebase.firestore.GeoPoint;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
@@ -62,7 +61,6 @@ import carbon.widget.Button;
 import carbon.widget.ImageView;
 import carbon.widget.RelativeLayout;
 import io.dume.dume.R;
-import io.dume.dume.customView.HorizontalLoadView;
 import io.dume.dume.student.pojo.CusStuAppComMapActivity;
 import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
 import io.dume.dume.student.profilePage.ProfilePageActivity;
@@ -99,7 +97,9 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
     private CoordinatorLayout coordinatorLayout;
     private RecyclerView autoCompleteRecyView;
     private RecyclerView menualCompleteRecyView;
-    private static final LatLngBounds LAT_LNG_BOUNDS = new LatLngBounds(new LatLng(-40, -168), new LatLng(71, 136));
+    private static final LatLngBounds LAT_LNG_BOUNDS = new LatLngBounds(new LatLng(19, 87), new LatLng(27, 93));
+    //india new LatLngBounds(new LatLng(23.63936, 68.14712), new LatLng(28.20453, 97.34466));
+    //new LatLng(-40, -168), new LatLng(71, 136)
     protected EditText inputSearch;
     private CompositeDisposable compositeDisposable;
     private PlaceAutoRecyAda recyclerAutoAdapter;
@@ -111,6 +111,10 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
     private String retrivedAction;
     private LatLng queriedLocation;
     private LinearLayout hackHeight;
+    private GeoPoint userLocation = null;
+    private String[] primaryText;
+    private String[] secondaryText;
+
     //queriedLocation for text to geopoint
     //mCenterLatLong for geopoint to text
 
@@ -126,7 +130,7 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         getLocationPermission(mapFragment);
-        mPresenter = new GrabingLocationPresenter(this, new GrabingLocationModel());
+        mPresenter = new GrabingLocationPresenter(this, new GrabingLocationModel(this, this));
         mPresenter.grabingLocationPageEnqueue();
         setDarkStatusBarIcon();
         setIsNight();
@@ -168,7 +172,7 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
         recyclerMenualAdapter = new PlaceMenualRecyAda(this, getFinalData()) {
             @Override
             void OnItemClicked(View v, int position) {
-                switch (position){
+                switch (position) {
                     case 5:
                         hideKeyboard(GrabingLocationActivity.this);
                         hackHeight.setVisibility(View.GONE);
@@ -226,6 +230,8 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
         locationDoneBtn = findViewById(R.id.location_done_btn);
         inputSearchContainer = findViewById(R.id.input_search_container);
         hackHeight = findViewById(R.id.hack_height);
+        primaryText = getResources().getStringArray(R.array.MenualPrimaryText);
+        secondaryText = getResources().getStringArray(R.array.MenualSecondaryText);
 
     }
 
@@ -317,7 +323,8 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
                 if (BottomSheetBehavior.STATE_COLLAPSED == newState) {
                     if (fab.getVisibility() == View.INVISIBLE) {
-                        fab.setVisibility(View.VISIBLE);
+                        //fab.setVisibility(View.VISIBLE);
+                        fab.show();
                     }
                     hideKeyboard(GrabingLocationActivity.this);
                     hackHeight.setVisibility(View.GONE);
@@ -433,6 +440,7 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
         }
     }
 
+
     public void onGrabingLocationViewClicked(View view) {
         mPresenter.onGrabingLocationViewIntracted(view);
     }
@@ -512,8 +520,6 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
 
     public List<MenualRecyclerData> getFinalData() {
         List<MenualRecyclerData> data = new ArrayList<>();
-        String[] primaryText = getResources().getStringArray(R.array.MenualPrimaryText);
-        String[] secondaryText = getResources().getStringArray(R.array.MenualSecondaryText);
         int[] imageIcons = {
                 R.drawable.ic_back_in_time,
                 R.drawable.ic_current_location_icon,
@@ -529,6 +535,8 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
             current.secondaryText = secondaryText[i];
             current.imageSrc = imageIcons[i];
             data.add(current);
+
+            secondaryText[1] = "fuck fuck";
         }
         return data;
     }
@@ -549,5 +557,64 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+    }
+
+    @Override
+    public GeoPoint getCurrentAddress() {
+        return null;
+    }
+
+    @Override
+    public Map<String, Object> getHomeAddress() {
+        return null;
+    }
+
+    @Override
+    public Map<String, Object> getWorkAddress() {
+        return null;
+    }
+
+    @Override
+    public ArrayList<Map<String, Object>> getSavedPlaces() {
+        return null;
+    }
+
+    @Override
+    public ArrayList<Map<String, Object>> getBackInTime() {
+        return null;
+    }
+
+    @Override
+    public void setCurrentAddress(GeoPoint currentAddress) {
+        userLocation = currentAddress;
+        final String address = getAddress(currentAddress.getLatitude(), currentAddress.getLongitude());
+        secondaryText[1] = "fuck fuck";
+        recyclerMenualAdapter.update(getFinalData());
+    }
+
+    @Override
+    public void setHomeAddress(Map<String, Object> homeAddress) {
+
+
+    }
+
+    @Override
+    public void setWorkAddress(Map<String, Object> workAddress) {
+
+    }
+
+    @Override
+    public void setSavedPlaces(ArrayList<Map<String, Object>> savedPlaces) {
+
+    }
+
+    @Override
+    public void setBackInTimePlaces(ArrayList<Map<String, Object>> backInTimePlaces) {
+
+    }
+
+    @Override
+    public void flush(String msg) {
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 }

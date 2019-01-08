@@ -4,7 +4,14 @@ import android.app.Activity;
 import android.content.Context;
 import android.view.View;
 
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+
+import javax.annotation.Nullable;
+
 import io.dume.dume.R;
+import io.dume.dume.teacher.homepage.TeacherContract;
 
 public class StudentSettingsPresenter implements StudentSettingsContract.Presenter {
 
@@ -12,6 +19,7 @@ public class StudentSettingsPresenter implements StudentSettingsContract.Present
     private StudentSettingsContract.Model mModel;
     private Context context;
     private Activity activity;
+    private static final String TAG = "StudentSettingsPresente";
 
     public StudentSettingsPresenter(Context context, StudentSettingsContract.Model mModel) {
         this.context = context;
@@ -35,5 +43,19 @@ public class StudentSettingsPresenter implements StudentSettingsContract.Present
                 mView.gotoProfilePage();
                 break;
         }
+    }
+
+    @Override
+    public void retriveSavedPlacesData(TeacherContract.Model.Listener<DocumentSnapshot> listener) {
+        mModel.addShapShotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+              if(documentSnapshot != null){
+                  listener.onSuccess(documentSnapshot);
+              }else{
+                  listener.onError(e.getMessage().toString());
+              }
+            }
+        });
     }
 }

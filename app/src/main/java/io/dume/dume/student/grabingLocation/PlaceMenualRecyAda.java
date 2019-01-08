@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.google.android.gms.location.places.AutocompletePrediction;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.dume.dume.R;
@@ -60,6 +61,12 @@ public abstract class PlaceMenualRecyAda extends RecyclerView.Adapter<PlaceMenua
     }
 
     abstract void OnItemClicked(View v, int position);
+
+    public void update(List<MenualRecyclerData> newData){
+        data.clear();
+        data.addAll(newData);
+        this.notifyDataSetChanged();
+    }
 
     @Override
     public int getItemCount() {
