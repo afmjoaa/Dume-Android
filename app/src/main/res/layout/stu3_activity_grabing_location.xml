@@ -63,16 +63,18 @@
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/recycler_view_autoPlaces"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                </android.support.v7.widget.RecyclerView>
+                    android:layout_height="wrap_content" />
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/recycler_view_manual"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content" />
 
-                </android.support.v7.widget.RecyclerView>
+                <LinearLayout
+                    android:id="@+id/hack_height"
+                    android:layout_width="match_parent"
+                    android:layout_height="275dp"
+                    android:orientation="vertical"/>
 
             </carbon.widget.LinearLayout>
 
