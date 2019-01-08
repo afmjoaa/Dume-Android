@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/transitionContainer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorWhite">
+
+    <include layout="@layout/activity_header" />
+
+    <io.dume.dume.customView.HorizontalLoadView
+        android:id="@+id/horizontalLoading"
+        android:layout_width="15dp"
+        android:layout_height="10dp"
+        app:layout_anchor="@id/accountScrolling"
+        app:layout_anchorGravity="top" />
+
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/accountScrolling"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:descendantFocusability="blocksDescendants"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/profileSection"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="onViewClicked"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
+                    android:text="Basic Information"
+                    android:textAllCaps="true"
+                    android:textColor="@color/colorMaterialBlack" />
+
+                <include layout="@layout/account_settings_profile" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/basicInfoRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone" />
+
+                <FrameLayout
+                    android:id="@+id/framLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/shadow_background">
+
+                    <ImageView
+                        android:id="@+id/indicatorImg"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="bottom|center"
+                        android:layout_margin="0dp"
+                        android:contentDescription="Hawwa"
+                        android:focusableInTouchMode="false"
+                        android:src="@drawable/ic_action_down" />
+                </FrameLayout>
+
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/colorAsh" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/sectionTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginStart="10dp"
+                        android:text="Academic Qualification"
+                        android:textAllCaps="true"
+                        android:textColor="@color/colorMaterialBlack" />
+
+                    <TextView
+                        android:id="@+id/itemSubTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="30dp"
+                        android:drawableTop="@drawable/warning_icon_light"
+                        android:gravity="center"
+                        android:text="no qualification added yet"
+                        android:textStyle="italic"
+                        android:visibility="gone" />
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/academic_list"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="start">
+
+                        <Button
+                            android:id="@+id/addAcademicBTN"
+                            style="@style/MyEditButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:drawableLeft="@drawable/ic_action_edit_button_colored"
+                            android:drawableStart="@drawable/ic_action_edit_button_colored"
+                            android:gravity="center"
+                            android:onClick="onViewClicked"
+                            android:text="Add"
+                            android:textColor="@color/colorLink" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginStart="10dp"
+                        android:text="Location"
+                        android:textAllCaps="true"
+                        android:textColor="@color/colorMaterialBlack" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/locationTV"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginStart="15dp"
+                            android:layout_weight="1"
+                            android:drawableLeft="@drawable/ic_action_home"
+                            android:drawablePadding="3dp"
+                            android:drawableStart="@drawable/ic_action_home"
+                            android:gravity="center_vertical"
+                            android:text="West Mollartek Uttara,Dhaka" />
+
+                        <Button
+                            android:id="@+id/updateBTN"
+                            style="@style/MyEditButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:drawableLeft="@drawable/ic_action_update"
+                            android:drawableStart="@drawable/ic_action_update"
+                            android:gravity="center"
+                            android:onClick="onViewClicked"
+                            android:text="Update"
+                            android:textColor="@color/colorLink"
+                            android:textSize="12dp" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/warningTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="30dp"
+                        android:drawableTop="@drawable/warning_icon_light"
+                        android:gravity="center"
+                        android:text="no qualification added yet"
+                        android:textStyle="italic" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="start">
+
+                        <Button
+                            android:id="@+id/addLocationBTN"
+                            style="@style/MyEditButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:drawableLeft="@drawable/ic_action_edit_button_colored"
+                            android:drawableStart="@drawable/ic_action_edit_button_colored"
+                            android:gravity="center"
+                            android:onClick="onViewClicked"
+                            android:text="Add"
+                            android:textColor="@color/colorLink" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <!--     <android.support.v7.widget.RecyclerView
+                         android:id="@+id/accountRecyclerView"
+                         android:layout_width="match_parent"
+                         android:layout_height="wrap_content" />-->
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
+
+</android.support.design.widget.CoordinatorLayout>

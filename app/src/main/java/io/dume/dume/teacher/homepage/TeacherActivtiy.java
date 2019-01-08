@@ -17,10 +17,12 @@ import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
@@ -32,6 +34,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -233,6 +236,39 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         userName = findViewById(R.id.user_name);
         hPageBSRecycler = findViewById(R.id.homePage_bottomSheet_recycler);
         feedbackStrings = getResources().getStringArray(R.array.review_hint_text_dependent);
+        showSnackBar("Point your location", "Go to Settings");
+    }
+
+
+    public void showSnackBar(String messages, String actionName) {
+        Snackbar mySnackbar = Snackbar.make(coordinatorLayout, "Replace with your own action", Snackbar.LENGTH_LONG);
+        Snackbar.SnackbarLayout layout = (Snackbar.SnackbarLayout) mySnackbar.getView();
+
+        TextView textView = (TextView) layout.findViewById(android.support.design.R.id.snackbar_text);
+        textView.setVisibility(View.INVISIBLE);
+        LayoutInflater inflater = LayoutInflater.from(context);
+        View snackView = inflater.inflate(R.layout.teachers_snakbar_layout, null);
+
+        TextView textViewStart = snackView.findViewById(R.id.custom_snackbar_text);
+        textViewStart.setText(messages);
+        TextView actionTV = snackView.findViewById(R.id.actionTV);
+        actionTV.setText(actionName);
+
+        layout.setPadding(0, 0, 0, 0);
+        if (Integer.parseInt(messages) < 90) {
+            layout.setBackgroundColor(ContextCompat.getColor(context, R.color.snackbar_yellow));
+            textViewStart.setTextColor(Color.BLACK);
+        } else {
+            layout.setBackgroundColor(ContextCompat.getColor(context, R.color.snackbar_green));
+            textViewStart.setTextColor(Color.WHITE);
+        }
+        CoordinatorLayout.LayoutParams parentParams = (CoordinatorLayout.LayoutParams) layout.getLayoutParams();
+        parentParams.height = (int) (30 * (getResources().getDisplayMetrics().density));
+        parentParams.setAnchorId(R.id.loadView);
+        parentParams.anchorGravity = Gravity.BOTTOM;
+        layout.setLayoutParams(parentParams);
+        layout.addView(snackView, 0);
+        mySnackbar.show();
     }
 
     @Override
@@ -476,7 +512,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(optionMenu, menu);
-        if(optionMenu == R.menu.stu_homepage){
+        if (optionMenu == R.menu.stu_homepage) {
             MenuItem alProfile = menu.findItem(R.id.al_display_pic);
             LayerDrawable alProfileIcon = (LayerDrawable) alProfile.getIcon();
             DumeUtils.setBadgeChar(this, alProfileIcon, 0xfff56161, Color.BLACK, mProfileChar, 3.0f, 3.0f);
@@ -494,7 +530,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
             DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badgeTwo, 0xfff56161, Color.BLACK, mRecCurrentCount, 3.0f, 3.0f);
             DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badgeOne, 0xfff4f094, Color.BLACK, mRecAcceptedCount, 8.0f, -3.4f);
             DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badge, 0xfface0ac, Color.BLACK, mRecPendingCount, 12.0f, 3.0f);
-        }else if (optionMenu == R.menu.menu_only_help){
+        } else if (optionMenu == R.menu.menu_only_help) {
 
         }
         return super.onCreateOptionsMenu(menu);
@@ -588,7 +624,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
                 break;
 
         }
-        drawerLayout.closeDrawer(GravityCompat.START,true);
+        drawerLayout.closeDrawer(GravityCompat.START, true);
         return true;
     }
 
