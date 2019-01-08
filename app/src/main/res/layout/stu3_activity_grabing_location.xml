@@ -48,6 +48,7 @@
         android:background="@drawable/bottom_sheet_bg"
         app:behavior_peekHeight="70dp"
         app:elevation="8dp"
+        android:layout_gravity="bottom|end"
         app:layout_behavior="@string/bottom_sheet_behavior"
         tools:ignore="MissingPrefix">
 
@@ -63,16 +64,12 @@
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/recycler_view_autoPlaces"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                </android.support.v7.widget.RecyclerView>
+                    android:layout_height="wrap_content" />
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/recycler_view_manual"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                </android.support.v7.widget.RecyclerView>
+                    android:layout_height="wrap_content" />
 
             </carbon.widget.LinearLayout>
 

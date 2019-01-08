@@ -1,5 +1,6 @@
 package io.dume.dume.student.grabingLocation;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -23,16 +24,11 @@ public abstract class PlaceMenualRecyAda extends RecyclerView.Adapter<PlaceMenua
     private LayoutInflater inflater;
     private Context context;
     private List<MenualRecyclerData> data;
-    private usefulListeners.withKeyboardListener myListerner;
 
     public PlaceMenualRecyAda(Context context, List<MenualRecyclerData> data) {
         inflater = LayoutInflater.from(context);
         this.data = data;
         this.context = context;
-    }
-
-    public void setListener(usefulListeners.withKeyboardListener myListener) {
-        this.myListerner = myListener;
     }
 
     @NonNull
