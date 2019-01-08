@@ -474,7 +474,7 @@ public class StudentSettingsActivity extends CustomStuAppCompatActivity
         public boolean onOptionsItemSelected(MenuItem item) {
             int id = item.getItemId();
             if (id == android.R.id.home) {
-                myMainActivity.fab.setVisibility(View.GONE);
+                myMainActivity.fab.hide();
                 startActivity(new Intent(getActivity(), StudentSettingsActivity.class));
                 return true;
             }
