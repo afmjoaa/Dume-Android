@@ -16,6 +16,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
@@ -33,6 +34,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -94,6 +96,7 @@ import io.dume.dume.teacher.homepage.fragments.PerformanceFragment;
 import io.dume.dume.teacher.homepage.fragments.SkillFragment;
 import io.dume.dume.teacher.homepage.fragments.StatisticsFragment;
 import io.dume.dume.teacher.mentor_settings.AccountSettings;
+import io.dume.dume.teacher.mentor_settings.basicinfo.EditAccount;
 import io.dume.dume.teacher.pojo.TabModel;
 import io.dume.dume.teacher.skill.SkillActivity;
 import io.dume.dume.util.DumeUtils;
@@ -167,6 +170,8 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
     private RecyclerView hPageBSRecycler;
     private int optionMenu = R.menu.stu_homepage;
     private String[] feedbackStrings;
+    private FloatingActionButton fab;
+
 
 
     @Override
@@ -196,7 +201,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         navigationView = findViewById(R.id.navigationView);
         mToolTipsManager = new ToolTipsManager();
         menu = navigationView.getMenu();
-
+        fab = findViewById(R.id.fab);
         home = menu.findItem(R.id.home_id);
         records = menu.findItem(R.id.records);
         payments = menu.findItem(R.id.payments);
@@ -236,10 +241,10 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         userName = findViewById(R.id.user_name);
         hPageBSRecycler = findViewById(R.id.homePage_bottomSheet_recycler);
         feedbackStrings = getResources().getStringArray(R.array.review_hint_text_dependent);
-        showSnackBar("Point your location", "Go to Settings");
+
     }
 
-
+    @Override
     public void showSnackBar(String messages, String actionName) {
         Snackbar mySnackbar = Snackbar.make(coordinatorLayout, "Replace with your own action", Snackbar.LENGTH_LONG);
         Snackbar.SnackbarLayout layout = (Snackbar.SnackbarLayout) mySnackbar.getView();
@@ -248,24 +253,16 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         textView.setVisibility(View.INVISIBLE);
         LayoutInflater inflater = LayoutInflater.from(context);
         View snackView = inflater.inflate(R.layout.teachers_snakbar_layout, null);
-
+        // layout.setBackgroundColor(R.color.red);
         TextView textViewStart = snackView.findViewById(R.id.custom_snackbar_text);
         textViewStart.setText(messages);
         TextView actionTV = snackView.findViewById(R.id.actionTV);
         actionTV.setText(actionName);
-
         layout.setPadding(0, 0, 0, 0);
-        if (Integer.parseInt(messages) < 90) {
-            layout.setBackgroundColor(ContextCompat.getColor(context, R.color.snackbar_yellow));
-            textViewStart.setTextColor(Color.BLACK);
-        } else {
-            layout.setBackgroundColor(ContextCompat.getColor(context, R.color.snackbar_green));
-            textViewStart.setTextColor(Color.WHITE);
-        }
         CoordinatorLayout.LayoutParams parentParams = (CoordinatorLayout.LayoutParams) layout.getLayoutParams();
         parentParams.height = (int) (30 * (getResources().getDisplayMetrics().density));
-        parentParams.setAnchorId(R.id.loadView);
-        parentParams.anchorGravity = Gravity.BOTTOM;
+       /* parentParams.setAnchorId(R.id.Secondary_toolbar);
+        parentParams.anchorGravity = Gravity.BOTTOM;*/
         layout.setLayoutParams(parentParams);
         layout.addView(snackView, 0);
         mySnackbar.show();
@@ -273,6 +270,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
 
     @Override
     public void configView() {
+        fab.setAlpha(0.90f);
         // Toolbar :: Transparent
         mainAppbar.bringToFront();
         mainAppbar.setBackgroundColor(getResources().getColor(android.R.color.transparent));
@@ -280,6 +278,8 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         secondaryCollapsableToolbar.setCollapsedTitleTypeface(Typeface.createFromAsset(activity.getAssets(), "fonts/Cairo-Light.ttf"));
         secondaryCollapsableToolbar.setExpandedTitleTypeface(Typeface.createFromAsset(activity.getAssets(), "fonts/Cairo-Light.ttf"));
         secondaryCollapsableToolbar.setTitle("Messages");
+        Drawable drawable = ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_more_vert_white_24dp);
+        secondaryToolbar.setOverflowIcon(drawable);
         //config the bottom sheet
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
         bottomSheetCallbackConfig();
@@ -382,6 +382,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
             @Override
             public void onSlide(@NonNull View bottomSheet, float slideOffset) {
                 if (slideOffset > 0.0f && slideOffset < 1.0f) {
+                    fab.animate().scaleX(1 - slideOffset).scaleY(1 - slideOffset).setDuration(0).start();
                     bottomSheet.animate().scaleX(1 + (slideOffset * 0.058f)).setDuration(0).start();
                     viewMusk.animate().alpha(2 * slideOffset).setDuration(0).start();
                     mainInterface.animate().scaleX(1 - slideOffset).scaleY(1 - slideOffset).setDuration(0).start();
@@ -389,6 +390,17 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
                 }
             }
         });
+
+    }
+
+    @Override
+    public void onCenterCurrentLocation() {
+        Drawable d = fab.getDrawable();
+        if (d instanceof Animatable) {
+            ((Animatable) d).start();
+        }
+        Log.d(TAG, "onClick: clicked gps icon");
+        getDeviceLocation(mMap);
 
     }
 
@@ -541,6 +553,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         switch (item.getItemId()) {
             case R.id.al_display_pic:
                 //mView.updateProfileBadge(mProfileChar);
+                startActivity(new Intent(this, EditAccount.class));
                 break;
             case R.id.al_records:
                 updateRecordsBadge(++mRecPendingCount, ++mRecAcceptedCount, ++mRecCurrentCount);
@@ -782,7 +795,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         }
     }
 
-    //rating dialog not used right now
+    //testing the customDialogue
     @Override
     public void testingCustomDialogue() {
         // custom dialog
@@ -799,9 +812,13 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         TextInputLayout feedbackTextViewLayout = dialog.findViewById(R.id.input_layout_firstname);
         AutoCompleteTextView feedbackTextView = dialog.findViewById(R.id.feedback_textview);
         Button dismissBtn = (Button) dialog.findViewById(R.id.skip_btn);
+        Button dismissBtnOne = (Button) dialog.findViewById(R.id.skip_btn_two);
         Button nextSubmitBtn = dialog.findViewById(R.id.next_btn);
         RelativeLayout dialogHostingLayout = dialog.findViewById(R.id.dialog_hosting_layout);
         Button SubmitBtn = dialog.findViewById(R.id.submit_btn);
+        RelativeLayout firstLayout = dialog.findViewById(R.id.first_layout);
+        RelativeLayout secondLayout = dialog.findViewById(R.id.second_layout);
+
 
 
         //testing the recycle view here
@@ -847,6 +864,12 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
                 dialog.dismiss();
             }
         });
+        dismissBtnOne.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
 
         nextSubmitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -857,16 +880,8 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
                         .setInterpolator(new FastOutLinearInInterpolator());
                 TransitionManager.beginDelayedTransition(dialogHostingLayout, set);
                 if (nextSubmitBtn.getText().equals("Next") && mDecimalRatingBars.getProgress() != 0) {
-                    nextSubmitBtn.setVisibility(View.GONE);
-                    SubmitBtn.setVisibility(View.VISIBLE);
-
-                    mDecimalRatingBars.setVisibility(View.GONE);
-                    ratedMentorDP.setVisibility(View.GONE);
-                    ratingPrimaryText.setVisibility(View.GONE);
-
-                    ratingSecondaryText.setVisibility(View.VISIBLE);
-                    itemRatingRecycleView.setVisibility(View.VISIBLE);
-                    feedbackTextViewLayout.setVisibility(View.VISIBLE);
+                    firstLayout.setVisibility(View.GONE);
+                    secondLayout.setVisibility(View.VISIBLE);
 
                 } else {
                     Toast.makeText(TeacherActivtiy.this, "please rate your experience", Toast.LENGTH_SHORT).show();

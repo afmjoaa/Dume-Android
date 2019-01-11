@@ -151,7 +151,7 @@ public class AccountSettings extends AppCompatActivity implements AccountSetting
         userMail.setText(data.get("email").toString());
         userName.setText(data.get("first_name").toString() + " " + data.get("last_name").toString());
         ArrayList<KeyValueModel> keyValueModels = new ArrayList<>();
-        keyValueModels.add(new KeyValueModel("Sex", data.get("gender").toString()));
+        keyValueModels.add(new KeyValueModel("Gender", data.get("gender").toString()));
         keyValueModels.add(new KeyValueModel("Marital Status", data.get("marital").toString()));
         keyValueModels.add(new KeyValueModel("Religion", data.get("religion").toString()));
         basicRecyclerView.setAdapter(new BasicInfoAdapter(keyValueModels));
@@ -561,6 +561,20 @@ public class AccountSettings extends AppCompatActivity implements AccountSetting
                         .getString(preference.getKey(), ""));
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            super.onBackPressed();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
+
 
 }
 
@@ -636,4 +650,5 @@ class EducationAdapter extends RecyclerView.Adapter<EducationAdapter.MyViewVH> {
             duration = itemView.findViewById(R.id.durationTV);
         }
     }
+
 }

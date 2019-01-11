@@ -26,6 +26,8 @@ public interface TeacherContract {
 
         void showChart(LineData data);*/
 
+        void onCenterCurrentLocation();
+
         void configView();
 
         void referMentorImageViewClicked();
@@ -35,6 +37,8 @@ public interface TeacherContract {
         void enhanceVIewImageClicked();
 
         void testingCustomDialogue();
+
+         void showSnackBar(String messages, String actionName) ;
     }
 
 
@@ -57,6 +61,10 @@ public interface TeacherContract {
         void getInbox(Listener listener);
 
         void getChartEntry(Listener t);
+
+
+        void getMendatory(Listener<Void> listener);
+
 
         interface Listener<T> {
             void onSuccess(T list);

@@ -526,6 +526,9 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                 switch (retrivedAction) {
                     case DumeUtils.TEACHER:
                     case DumeUtils.BOOTCAMP:
+
+
+
                         HashMap<String, Object> queryMap = new HashMap<>();
                         for (int i = 0; i < queryList.size(); i++) {
                             queryMap.put(queryListName.get(i), queryList.get(i));
@@ -550,6 +553,9 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                                 fab.setEnabled(true);
                             }
                         });
+
+
+
                         break;
                     case DumeUtils.STUDENT:
                         gotoGrabingPackage();

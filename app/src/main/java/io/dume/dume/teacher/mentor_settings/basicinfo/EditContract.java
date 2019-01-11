@@ -1,7 +1,12 @@
 package io.dume.dume.teacher.mentor_settings.basicinfo;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+
+import com.google.firebase.firestore.GeoPoint;
+
+import io.dume.dume.teacher.homepage.TeacherContract;
 
 public class EditContract {
     interface View {
@@ -39,6 +44,17 @@ public class EditContract {
 
         void disableLoad();
 
+        void onLocationUpdate(String location);
+
+        Context getActivtiyContext();
+
+        void onGenderClicked();
+
+        void onMaritalStatusClicked();
+
+        void onReligionClicked();
+
+        void onBirthDateClicked();
     }
 
     interface Presenter {
@@ -55,6 +71,10 @@ public class EditContract {
         void setListener(onDataUpdate listener);
 
         void uploadImage(Uri uri, DownloadListener progressListener);
+
+        void getLocation(TeacherContract.Model.Listener<GeoPoint> listener);
+
+        void updateLocaiton(GeoPoint point, TeacherContract.Model.Listener listener);
     }
 
     interface onDataUpdate {

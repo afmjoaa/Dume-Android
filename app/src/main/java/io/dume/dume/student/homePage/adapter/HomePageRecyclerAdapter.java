@@ -72,6 +72,7 @@ public class HomePageRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
             RatingVH headerVH = (RatingVH) holder;
             headerVH.smallTitle.setVisibility(View.VISIBLE);
             headerVH.dismissBtn.setVisibility(View.GONE);
+            headerVH.dismissBtnOne.setVisibility(View.GONE);
             //button margin fix
             LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) headerVH.nextSubmitBtn.getLayoutParams();
             params.setMargins(0, 0, (int) (20 * (context.getResources().getDisplayMetrics().density)), (int) (10 * (context.getResources().getDisplayMetrics().density)));
@@ -131,20 +132,12 @@ public class HomePageRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
                             .setInterpolator(new FastOutLinearInInterpolator());
                     TransitionManager.beginDelayedTransition(headerVH.dialogHostingLayout, set);
                     if (headerVH.nextSubmitBtn.getText().equals("Next") && headerVH.mDecimalRatingBars.getProgress() != 0) {
-                        headerVH.nextSubmitBtn.setVisibility(View.GONE);
-                        headerVH.submitBtn.setVisibility(View.VISIBLE);
-                        headerVH.smallTitle.setVisibility(View.GONE);
 
-                        headerVH.mDecimalRatingBars.setVisibility(View.GONE);
-                        headerVH.ratedMentorDP.setVisibility(View.GONE);
-                        headerVH.ratingPrimaryText.setVisibility(View.GONE);
-
-                        headerVH.ratingSecondaryText.setVisibility(View.VISIBLE);
-                        headerVH.itemRatingRecycleView.setVisibility(View.VISIBLE);
-                        headerVH.feedbackTextViewLayout.setVisibility(View.VISIBLE);
+                        headerVH.firstLayout.setVisibility(View.GONE);
+                        headerVH.secondLayout.setVisibility(View.VISIBLE);
 
                     } else{
-                        Toast.makeText(context, "else running", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "please rate your experience", Toast.LENGTH_SHORT).show();
                     }
                 }
             });
@@ -201,6 +194,7 @@ public class HomePageRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
             mainAboutImage = itemView.findViewById(R.id.main_about_image);
             mainAbotuBtn = itemView.findViewById(R.id.main_about_btn);
 
+
         }
     }
 
@@ -214,10 +208,13 @@ public class HomePageRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
         private final TextInputLayout feedbackTextViewLayout;
         private final AutoCompleteTextView feedbackTextView;
         private final Button dismissBtn;
+        private final Button dismissBtnOne;
         private final Button nextSubmitBtn;
         private final RelativeLayout dialogHostingLayout;
         private final TextView smallTitle;
         private final Button submitBtn;
+        private final RelativeLayout secondLayout;
+        private final RelativeLayout firstLayout;
 
         public RatingVH(View itemView) {
             super(itemView);
@@ -229,10 +226,13 @@ public class HomePageRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
             feedbackTextViewLayout = itemView.findViewById(R.id.input_layout_firstname);
             feedbackTextView = itemView.findViewById(R.id.feedback_textview);
             dismissBtn = itemView.findViewById(R.id.skip_btn);
+            dismissBtnOne = itemView.findViewById(R.id.skip_btn_two);
             nextSubmitBtn = itemView.findViewById(R.id.next_btn);
             dialogHostingLayout = itemView.findViewById(R.id.dialog_hosting_layout);
             smallTitle = itemView.findViewById(R.id.small_title);
             submitBtn = itemView.findViewById(R.id.submit_btn);
+            firstLayout = itemView.findViewById(R.id.first_layout);
+            secondLayout = itemView.findViewById(R.id.second_layout);
         }
     }
 }

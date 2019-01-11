@@ -309,6 +309,7 @@ public class ProfilePageActivity extends CustomStuAppCompatActivity implements P
         Bundle args = new Bundle();
         RadioBtnDialogue previousResultDialogue = new RadioBtnDialogue();
         if (gpaCheckBox.isChecked()) {
+            previousResultTextView.setText(String.format("%s (GPA)", gpaOptionsArr[0]));
             args.putString("title", "Select your GPA");
             args.putStringArray("radioOptions", gpaOptionsArr);
             previousResultDialogue.setItemChoiceListener(new DialogInterface.OnClickListener() {
@@ -318,6 +319,7 @@ public class ProfilePageActivity extends CustomStuAppCompatActivity implements P
                 }
             });
         } else {
+            previousResultTextView.setText(String.format("%s (CGPA)", cgpaOptionsArr[0]));
             args.putString("title", "Select your CGPA");
             args.putStringArray("radioOptions", cgpaOptionsArr);
             previousResultDialogue.setItemChoiceListener(new DialogInterface.OnClickListener() {
@@ -338,8 +340,9 @@ public class ProfilePageActivity extends CustomStuAppCompatActivity implements P
 
     @Override
     public void onGenderClicked() {
+        selectGenderTextView.setText(genderSelcetionArr[0]);
         Bundle pRargs = new Bundle();
-        pRargs.putString("title", "Select your GPA");
+        pRargs.putString("title", "Select your gender");
         pRargs.putStringArray("radioOptions", genderSelcetionArr);
         RadioBtnDialogue genderBtnDialogue = new RadioBtnDialogue();
         genderBtnDialogue.setItemChoiceListener(new DialogInterface.OnClickListener() {

@@ -28,8 +28,6 @@ public class DumeModel implements TeacherModel {
     private static final String TAG = "DumeModel";
     private final FirebaseFirestore firebaseFirestore;
     private final FirebaseAuth firebaseAuth;
-    private ListenerRegistration listenerRegistration;
-    private ListenerRegistration listenerRegistration1;
 
     public DumeModel() {
         firebaseFirestore = FirebaseFirestore.getInstance();
@@ -71,9 +69,9 @@ public class DumeModel implements TeacherModel {
     @Override
     public void getSkill(TeacherContract.Model.Listener<ArrayList<Skill>> listener) {
         CollectionReference skillCollection = firebaseFirestore.collection("users").document("mentors").collection("skills");
-        listenerRegistration1 = skillCollection.addSnapshotListener(new EventListener<QuerySnapshot>() {
+        skillCollection.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            private ArrayList<Skill> skillList = new ArrayList<>();
 
-            private ArrayList<Skill> skillList= new ArrayList<>();
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
 
@@ -83,15 +81,12 @@ public class DumeModel implements TeacherModel {
                     skillList.add(skill);
                     Log.w(TAG, "onEvent: " + document.toString());
                 }
-                listenerRegistration1.remove();
                 listener.onSuccess(skillList);
                 if (e != null) {
                     listener.onError(e.getLocalizedMessage());
                 }
-
             }
         });
-
     }
 
 
