@@ -1,19 +1,13 @@
 package io.dume.dume.teacher.mentor_settings.basicinfo;
 
 import android.app.DatePickerDialog;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.Parcelable;
-import android.provider.MediaStore;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -26,18 +20,13 @@ import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.transitionseverywhere.TransitionManager;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.List;
 
 import io.dume.dume.R;
 import io.dume.dume.customView.HorizontalLoadView;
@@ -46,8 +35,6 @@ import io.dume.dume.util.DatePickerFragment;
 import io.dume.dume.util.DumeUtils;
 import io.dume.dume.util.RadioBtnDialogue;
 
-import static io.dume.dume.util.DumeUtils.getUserUID;
-
 public class EditAccount extends AppCompatActivity implements EditContract.View, View.OnClickListener {
     private FloatingActionButton fb;
     private EditContract.Presenter presenter;
@@ -55,7 +42,6 @@ public class EditAccount extends AppCompatActivity implements EditContract.View,
     private int oldScrollYPostion = 0;
     private static final String TAG = "EditAccount";
     private EditText first, last, phone, mail;
-    private Spinner gender, religion, marital;
     private ImageView avatar;
     private String avatarUrl = null;
     private HorizontalLoadView loadView;
@@ -92,9 +78,7 @@ public class EditAccount extends AppCompatActivity implements EditContract.View,
         last = findViewById(R.id.lastNameEdt);
         mail = findViewById(R.id.mailEt);
         phone = findViewById(R.id.phoneEdt);
-        gender = findViewById(R.id.genderSp);
-        marital = findViewById(R.id.maritalSp);
-        religion = findViewById(R.id.religionSp);
+
         mScrollView = findViewById(R.id.editAccountScrolling);
         avatar = findViewById(R.id.profileImage);
         loadView = findViewById(R.id.loadView);
@@ -129,9 +113,9 @@ public class EditAccount extends AppCompatActivity implements EditContract.View,
             //selectMaritalStatusET.setText(bundle.getString("marital"));
             //selectBirthDataET.setText(bundle.getString("marital"));
 
-            religion.setSelection(Arrays.asList(getResources().getStringArray(R.array.religion)).indexOf(bundle.getString("religion")));
-            gender.setSelection(Arrays.asList(getResources().getStringArray(R.array.gender)).indexOf(bundle.getString("gender")));
-            marital.setSelection(Arrays.asList(getResources().getStringArray(R.array.marital_status)).indexOf(bundle.getString("marital")));
+            selectReligionET.setText(bundle.getString("religion"));
+            selectGenderEditText.setText(bundle.getString("gender"));
+            selectMaritalStatusET.setText(bundle.getString("marital"));
             Log.e(TAG, "loadCarryData: " + bundle.toString());
             avatarUrl = bundle.getString("avatar");
         }
@@ -179,7 +163,7 @@ public class EditAccount extends AppCompatActivity implements EditContract.View,
 
     @Override
     public String maritalStatus() {
-        return marital.getSelectedItem().toString();
+        return selectMaritalStatusET.getText().toString();
     }
 
     @Override
@@ -189,12 +173,12 @@ public class EditAccount extends AppCompatActivity implements EditContract.View,
 
     @Override
     public String religion() {
-        return religion.getSelectedItem().toString();
+        return selectReligionET.getText().toString();
     }
 
     @Override
     public String gender() {
-        return gender.getSelectedItem().toString();
+        return selectGenderEditText.getText().toString();
     }
 
     @Override
@@ -344,8 +328,13 @@ public class EditAccount extends AppCompatActivity implements EditContract.View,
                 selectBirthDataET.setText(currentDateStr);
             }
         });
-        thisDatePicker.setInitialDate(1997 , 1, 1);
+        thisDatePicker.setInitialDate(1997, 1, 1);
         thisDatePicker.show(getSupportFragmentManager(), "Package_date_picker");
+    }
+
+    @Override
+    public String getBirthDate() {
+        return selectBirthDataET.getText().toString();
     }
 
 

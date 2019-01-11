@@ -37,20 +37,17 @@ public class AccountSettingsModel implements AccountSettingsContract.MentorModel
     @Override
     public void queryUserData(UserQueryListener listener) {
         listener.onStart();
-        firestore.collection("mini_users").document(Objects.requireNonNull(FirebaseAuth.getInstance().getUid())).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                Log.w(TAG, "onComplete: ");
-                if (task.isSuccessful()) {
-                    DocumentSnapshot user = task.getResult();
-                    if (user.exists()) {
-                        Map<String, Object> data = user.getData();
-                        Log.w(TAG, "onComplete: " + data);
-                        listener.onSuccess(data);
-                    }
+        firestore.collection("users/mentors/mentor_profile/").document(Objects.requireNonNull(FirebaseAuth.getInstance().getUid())).get().addOnCompleteListener(task -> {
+            Log.w(TAG, "onComplete: ");
+            if (task.isSuccessful()) {
+                DocumentSnapshot user = task.getResult();
+                if (user != null && user.exists()) {
+                    Map<String, Object> data = user.getData();
+                    Log.w(TAG, "onComplete: " + data);
+                    listener.onSuccess(data);
+                }
 
-                } else listener.onFailure("Request was not successful");
-            }
+            } else listener.onFailure("Request was not successful");
         });
 
     }

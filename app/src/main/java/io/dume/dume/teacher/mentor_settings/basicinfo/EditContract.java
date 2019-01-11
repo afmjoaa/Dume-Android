@@ -55,6 +55,7 @@ public class EditContract {
         void onReligionClicked();
 
         void onBirthDateClicked();
+        String getBirthDate();
     }
 
     interface Presenter {
@@ -66,7 +67,7 @@ public class EditContract {
     }
 
     interface Model {
-        void synWithDataBase(String first, String last, String avaterUrl, String email, String gender, String phone, String religion, String marital);
+        void synWithDataBase(String first, String last, String avaterUrl, String email, String gender, String phone, String religion, String marital,String birth_date);
 
         void setListener(onDataUpdate listener);
 

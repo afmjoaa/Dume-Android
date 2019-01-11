@@ -248,6 +248,7 @@ public class AccountSettings extends AppCompatActivity implements AccountSetting
         bundle.putString("gender", data.get("gender").toString());
         bundle.putString("phone_number", data.get("phone_number").toString());
         bundle.putString("email", data.get("email").toString());
+        bundle.putString("birth_date", data.get("birth_date").toString());
         startActivity(new Intent(this, EditAccount.class).putExtra("user_data", bundle));
     }
 

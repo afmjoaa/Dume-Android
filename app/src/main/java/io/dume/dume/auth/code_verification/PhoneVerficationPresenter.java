@@ -19,6 +19,7 @@ import com.google.firebase.firestore.GeoPoint;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -190,7 +191,7 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
             user.put("imei", imeiList);
             view.showProgress();
             //not needed
-            user.put("avatar", dataStore.getPhotoUri());
+          /*  user.put("avatar", dataStore.getPhotoUri());
             user.put("gender", "");
             user.put("religion", "");
             user.put("birth_date", "");
@@ -199,7 +200,7 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
             user.put("referer_id", "");
             user.put("user_ref_link", "");
             user.put("account_active", true);
-            user.put("marital", "");
+            user.put("marital", "");*/
             //"Saving User..."
 
             DocumentReference userStudentProInfo = fireStore.collection("/users/students/stu_pro_info").document(model.getUser().getUid());
@@ -270,9 +271,9 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
         selfRating.put("dl_experience", "0");
         mentorFeild.put("self_rating", selfRating);
 
-        ArrayList<String> appliedPromoList = null;
+        List<String> appliedPromoList = new ArrayList<>();
         mentorFeild.put("applied_promo", appliedPromoList);
-        ArrayList<String> availablePromoList = null;
+        ArrayList<String> availablePromoList = new ArrayList<>();
         mentorFeild.put("available_promo", availablePromoList);
 
         Map<String, Object> achievements = new HashMap<>();
@@ -282,7 +283,7 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
         unreadRecords.put("premier", false);
         mentorFeild.put("achievements", achievements);
 
-        if (FirebaseAuth.getInstance().getCurrentUser().getUid() != null) {
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
             fireStore.document("users/mentors/mentor_profile/" + FirebaseAuth.getInstance().getCurrentUser().getUid()).set(mentorFeild).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {

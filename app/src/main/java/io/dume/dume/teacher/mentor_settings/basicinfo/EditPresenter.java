@@ -3,7 +3,6 @@ package io.dume.dume.teacher.mentor_settings.basicinfo;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -14,8 +13,6 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.firestore.GeoPoint;
 
@@ -26,7 +23,6 @@ import java.util.List;
 
 import id.zelory.compressor.Compressor;
 import io.dume.dume.R;
-import io.dume.dume.student.profilePage.ProfilePageActivity;
 import io.dume.dume.teacher.homepage.TeacherContract;
 import io.dume.dume.util.DumeUtils;
 import io.dume.dume.util.FileUtil;
@@ -76,7 +72,7 @@ public class EditPresenter implements EditContract.Presenter, EditContract.onDat
         switch (element.getId()) {
             case R.id.fabEdit:
                 view.enableLoad();
-                model.synWithDataBase(view.firstName(), view.lastName(), view.getAvatarUrl(), view.gmail(), view.gender(), view.phone(), view.religion(), view.maritalStatus());
+                model.synWithDataBase(view.firstName(), view.lastName(), view.getAvatarUrl(), view.gmail(), view.gender(), view.phone(), view.religion(), view.maritalStatus(), view.getBirthDate());
                 break;
             case R.id.profileImage:
                 openImageIntent();
@@ -118,6 +114,7 @@ public class EditPresenter implements EditContract.Presenter, EditContract.onDat
                                     //view.setImage(url);
                                     view.disableLoad();
                                 }
+
                                 @Override
                                 public void onFail(String msg) {
                                     view.toast(msg);

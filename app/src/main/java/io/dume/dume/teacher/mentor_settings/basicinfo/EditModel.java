@@ -52,7 +52,7 @@ public class EditModel implements EditContract.Model {
 
 
     @Override
-    public void synWithDataBase(String first, String last, String avatarUrl, String email, String gender, String phone, String religion, String marital) {
+    public void synWithDataBase(String first, String last, String avatarUrl, String email, String gender, String phone, String religion, String marital,String birth_date) {
         if (this.listener != null) {
             map.put("avatar", avatarUrl);
             map.put("first_name", first);
@@ -60,9 +60,10 @@ public class EditModel implements EditContract.Model {
             map.put("email", email);
             map.put("gender", gender);
             map.put("religion", religion);
+            map.put("birth_date",birth_date);
             map.put("marital", marital);
             /*users/mentors/mentor_profile/*/
-            database.collection("mini_users").document(Objects.requireNonNull(auth.getUid())).update(map).addOnCompleteListener(task -> {
+            database.collection("users/mentors/mentor_profile").document(Objects.requireNonNull(auth.getUid())).update(map).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     listener.onUpdateSuccess();
                 } else if (task.isCanceled()) {
