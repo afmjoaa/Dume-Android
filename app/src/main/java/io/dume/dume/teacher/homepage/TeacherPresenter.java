@@ -21,7 +21,7 @@ public class TeacherPresenter implements TeacherContract.Presenter {
     TeacherContract.View view;
     TeacherContract.Model model;
 
-    public TeacherPresenter(TeacherContract.View view, TeacherModel model) {
+    public TeacherPresenter(TeacherContract.View view, TeacherContract.Model model) {
         this.view = view;
         this.model = model;
         init();
@@ -84,6 +84,17 @@ public class TeacherPresenter implements TeacherContract.Presenter {
                 view.flush(msg);
             }
         });
+        model.getMendatory(new TeacherContract.Model.Listener<Void>() {
+            @Override
+            public void onSuccess(Void list) {
+                view.flush("Ok");
+            }
+
+            @Override
+            public void onError(String msg) {
+                view.showSnackBar("Point Your Location","Settings > Location");
+            }
+        });
 
     }
 
@@ -100,7 +111,6 @@ public class TeacherPresenter implements TeacherContract.Presenter {
             case R.id.switch_account_btn:
                 view.onSwitchAccount();
                 break;
-
             case R.id.refer_mentor_imageView:
                 view.referMentorImageViewClicked();
                 break;
@@ -109,6 +119,9 @@ public class TeacherPresenter implements TeacherContract.Presenter {
                 break;
             case R.id.enhance_skill_imageview:
                 view.enhanceVIewImageClicked();
+                break;
+            case R.id.fab:
+                view.onCenterCurrentLocation();
                 break;
 
         }

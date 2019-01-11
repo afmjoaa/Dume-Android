@@ -103,9 +103,6 @@ public class SkillAdapter extends RecyclerView.Adapter<SkillAdapter.SkillVH> {
     }
 
     class SkillVH extends RecyclerView.ViewHolder {
-        @BindView(R.id.skillToggleButtonIV)
-        ImageView toggleButton;
-
         @BindView(R.id.skillDetailsRV)
         RecyclerView detailsRV;
 

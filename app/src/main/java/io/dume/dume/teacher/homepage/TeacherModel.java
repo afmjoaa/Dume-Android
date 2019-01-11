@@ -2,10 +2,16 @@ package io.dume.dume.teacher.homepage;
 
 import com.github.mikephil.charting.data.Entry;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.GeoPoint;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.annotation.Nullable;
 
 import io.dume.dume.teacher.pojo.Feedback;
 import io.dume.dume.teacher.pojo.Inbox;
@@ -60,4 +66,21 @@ public class TeacherModel implements TeacherContract.Model {
         lists.add(entries1);
         t.onSuccess(lists);
     }
+
+    @Override
+    public void getMendatory(Listener<Void> listener) {
+        firestore.document("/mini_users/mentors/mentor_profile/" + FirebaseAuth.getInstance().getUid()).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                GeoPoint location = (GeoPoint) documentSnapshot.get("location");
+                if (location != null) {
+                    listener.onSuccess(null);
+                } else {
+                    listener.onError("");
+                }
+            }
+        });
+    }
+
+
 }

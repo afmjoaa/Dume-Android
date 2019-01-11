@@ -9,7 +9,7 @@
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <!-- if any object needs to read local storage -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
@@ -52,8 +52,8 @@
             android:name=".teacher.homepage.TeacherActivtiy"
             android:label="" />
         <activity
-        android:name=".splash.SplashActivity"
-        android:theme="@style/SplashTheme">
+            android:name=".splash.SplashActivity"
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -63,7 +63,7 @@
         <activity
             android:name=".auth.auth.AuthActivity"
             android:theme="@style/LoginTheme"
-            android:windowSoftInputMode="stateHidden|adjustResize"/>
+            android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".auth.code_verification.PhoneVerificationActivity"
             android:theme="@style/MyStyle" />
@@ -71,7 +71,7 @@
             android:name=".auth.auth_final.AuthRegisterActivity"
             android:label="@string/title_activity_auth_final"
             android:theme="@style/MyStyle"
-            android:windowSoftInputMode="stateHidden|adjustResize"/>
+            android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".auth.social_init.SocialInitActivity"
             android:label="@string/title_activity_social_init"
@@ -107,7 +107,9 @@
             android:name=".student.homePage.MapsActivity"
             android:label="@string/title_activity_maps" />
         <activity android:name=".teacher.mentor_settings.AccountSettings" />
-        <activity android:name=".teacher.mentor_settings.basicinfo.EditAccount" />
+        <activity
+            android:name=".teacher.mentor_settings.basicinfo.EditAccount"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity android:name=".teacher.mentor_settings.academic.AcademicActivity" />
         <activity
             android:name=".teacher.mentor_settings.LocationPicker"
@@ -125,8 +127,8 @@
         <activity
             android:name=".student.grabingLocation.GrabingLocationActivity"
             android:label="@string/title_activity_grabing_location"
-            android:windowSoftInputMode="adjustResize"
-            android:theme="@style/AppTheme.NoActionBar.transparent" />
+            android:theme="@style/AppTheme.NoActionBar.transparent"
+            android:windowSoftInputMode="adjustResize" />
         <activity android:name=".student.pojo.CusStuAppComMapActivity" />
 
         <receiver

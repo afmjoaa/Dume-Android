@@ -11,19 +11,21 @@
     <android.support.design.widget.AppBarLayout
         android:id="@+id/settingsAppbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/appbarLayoutHeightLow"
         android:background="@drawable/bg_black_bottom_round"
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/accountCollapsing"
             android:layout_width="match_parent"
-            android:layout_height="90dp"
+            android:layout_height="match_parent"
             android:background="@drawable/bg_black_bottom_round"
+            app:collapsedTitleGravity="start"
             app:collapsedTitleTextAppearance="@style/MyTextApprncCol.darkBg"
-            app:expandedTitleMargin="15dp"
-            app:expandedTitleMarginBottom="20dp"
-            app:expandedTitleMarginStart="20dp"
+            app:expandedTitleGravity="start"
+            app:expandedTitleMarginBottom="@dimen/expTittleMarginBottom"
+            app:expandedTitleMarginStart="@dimen/expTittleMarginStart"
+            app:expandedTitleMarginTop="@dimen/expTittleMarginTop"
             app:expandedTitleTextAppearance="@style/MyTextApprncExp.darkBg"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:title="Account Settings"
@@ -35,6 +37,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:theme="@style/AccountToolbarStyle"
+                app:buttonGravity="bottom"
                 app:layout_collapseMode="pin"
                 app:navigationIcon="@drawable/ic_arrow_back_white_24dp"
                 app:popupTheme="@style/AppTheme.PopupOverlay"
@@ -64,7 +67,9 @@
         android:background="@drawable/bg_black_bottom_less_round"
         android:elevation="8dp"
         android:translationY="2dp"
-        android:visibility="visible"
+        android:visibility="gone"
+        app:layout_anchor="@id/settingsAppbar"
+        app:layout_anchorGravity="bottom"
         app:rect_color="@color/transparent" />
 
     <android.support.v4.widget.NestedScrollView
@@ -87,21 +92,13 @@
                 android:onClick="onViewClicked"
                 android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginLeft="10dp"
-                    android:text="Basic Information"
-                    android:textAllCaps="true"
-                    android:textColor="@color/colorMaterialBlack" />
-
                 <include layout="@layout/account_settings_profile" />
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/basicInfoRecyclerView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
                     android:visibility="gone" />
 
                 <FrameLayout
@@ -121,7 +118,6 @@
                         android:src="@drawable/ic_action_down" />
                 </FrameLayout>
 
-
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
@@ -140,8 +136,6 @@
         android:id="@+id/frameLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-    </FrameLayout>
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 </android.support.design.widget.CoordinatorLayout>

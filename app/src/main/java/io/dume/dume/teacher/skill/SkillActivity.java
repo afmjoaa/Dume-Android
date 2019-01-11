@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -61,7 +62,7 @@ public class SkillActivity extends AppCompatActivity implements SkillContract.Vi
 
     @Override
     public void flush(String message) {
-
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
 
@@ -79,7 +80,7 @@ public class SkillActivity extends AppCompatActivity implements SkillContract.Vi
     @Override
     public void loadSkillRV(ArrayList<Skill> list) {
         skillRV.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        skillRV.setAdapter(new SkillAdapter(SkillAdapter.ACTIVITY,list));
+        skillRV.setAdapter(new SkillAdapter(SkillAdapter.ACTIVITY, list));
     }
 
     public void showProgress() {

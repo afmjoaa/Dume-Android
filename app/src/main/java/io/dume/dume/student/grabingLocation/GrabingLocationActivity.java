@@ -67,6 +67,7 @@ import io.dume.dume.student.pojo.CusStuAppComMapActivity;
 import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
 import io.dume.dume.student.profilePage.ProfilePageActivity;
 import io.dume.dume.teacher.crudskill.CrudSkillActivity;
+import io.dume.dume.teacher.mentor_settings.basicinfo.EditAccount;
 import io.dume.dume.util.DumeUtils;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -168,7 +169,7 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
         recyclerMenualAdapter = new PlaceMenualRecyAda(this, getFinalData()) {
             @Override
             void OnItemClicked(View v, int position) {
-                switch (position){
+                switch (position) {
                     case 5:
                         hideKeyboard(GrabingLocationActivity.this);
                         hackHeight.setVisibility(View.GONE);
@@ -428,9 +429,15 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
             setResult(RESULT_OK, goBackToPPAIntent);
             finish();
             //GeoPoint selectedLocation = new GeoPoint(mCenterLatLong.latitude, mCenterLatLong.longitude);
+        } else if (Objects.requireNonNull(retrivedAction).equals("fromMPA")) {
+            Intent mpaIntent = new Intent(this, EditAccount.class);
+            mpaIntent.putExtra("selected_location", mCenterLatLong);
+            setResult(RESULT_OK, mpaIntent);
+            finish();
         } else {
             startActivity(new Intent(this, CrudSkillActivity.class).setAction(DumeUtils.STUDENT));
         }
+
     }
 
     public void onGrabingLocationViewClicked(View view) {

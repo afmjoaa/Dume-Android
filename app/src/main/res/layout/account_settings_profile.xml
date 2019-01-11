@@ -3,7 +3,12 @@
     android:id="@+id/profile_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="10dp"
+    android:layout_marginStart="16dp"
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp"
+    android:layout_marginEnd="16dp"
+    android:layout_marginTop="10dp"
+    android:layout_marginBottom="4dp"
     android:alpha=".5">
 
     <de.hdodenhof.circleimageview.CircleImageView
@@ -19,14 +24,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
         android:orientation="horizontal">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
             android:duplicateParentState="true"
-
             android:orientation="vertical">
 
             <TextView
@@ -62,15 +67,15 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="right">
+            android:gravity="end|center_vertical">
 
             <Button
                 android:id="@+id/accountEditButton"
                 style="@style/MyEditButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/ic_action_edit_button_colored"
                 android:drawableStart="@drawable/ic_action_edit_button_colored"
+                android:drawableLeft="@drawable/ic_action_edit_button_colored"
                 android:gravity="center"
                 android:onClick="onViewClicked"
                 android:text="Edit"

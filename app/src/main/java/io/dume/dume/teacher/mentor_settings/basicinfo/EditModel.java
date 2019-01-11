@@ -2,16 +2,28 @@ package io.dume.dume.teacher.mentor_settings.basicinfo;
 
 
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.util.HashMap;
 import java.util.Objects;
+
+import javax.annotation.Nullable;
+
+import io.dume.dume.teacher.homepage.TeacherContract;
 
 public class EditModel implements EditContract.Model {
     private FirebaseFirestore database;
@@ -21,6 +33,7 @@ public class EditModel implements EditContract.Model {
     private static final String TAG = "Enam";
     private HashMap<String, Object> map;
     private final FirebaseStorage storage;
+    private ListenerRegistration listenerRegistration;
 
     private EditModel() {
         database = FirebaseFirestore.getInstance();
@@ -36,6 +49,7 @@ public class EditModel implements EditContract.Model {
         }
         return instance;
     }
+
 
     @Override
     public void synWithDataBase(String first, String last, String avatarUrl, String email, String gender, String phone, String religion, String marital) {
@@ -88,6 +102,44 @@ public class EditModel implements EditContract.Model {
                         progressListener.onFail("Upload Cancelled")
                 );
 
+    }
+
+    @Override
+    public void getLocation(TeacherContract.Model.Listener<GeoPoint> listener) {
+        listenerRegistration = database.document("users/mentors/mentor_profile/" + FirebaseAuth.getInstance().getUid()).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+
+                GeoPoint location = (GeoPoint) documentSnapshot.get("location");
+
+                if (location != null) {
+                    listener.onSuccess(location);
+                } else {
+                    listener.onError("");
+
+                }Log.w(TAG, "onEvent: " + location.toString());
+                listenerRegistration.remove();
+            }
+        });
+    }
+
+
+    @Override
+    public void updateLocaiton(GeoPoint point, TeacherContract.Model.Listener listener) {
+
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("location", point);
+        database.document("users/mentors/mentor_profile/" + FirebaseAuth.getInstance().getUid()).set(map).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                listener.onSuccess(null);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                listener.onError(e.getLocalizedMessage());
+            }
+        });
     }
 
 

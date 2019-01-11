@@ -598,7 +598,6 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
         bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
-
                 if (BottomSheetBehavior.STATE_HIDDEN == newState) {
                     fab.animate().translationYBy((float) (60.0f * (getResources().getDisplayMetrics().density))).setDuration(60).start();
                     COMPASSBTN.animate().translationYBy((float) (54.0f * (getResources().getDisplayMetrics().density))).setDuration(60).start();
@@ -811,8 +810,6 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
             navDrawable = DrawableCompat.wrap(Objects.requireNonNull(navDrawable));
             DrawableCompat.setTint(navDrawable, Color.WHITE);
             Objects.requireNonNull(getSupportActionBar()).setHomeAsUpIndicator(navDrawable);
-
-
         } else {
             Objects.requireNonNull(getSupportActionBar()).setHomeAsUpIndicator(R.drawable.drawer_menu);
         }*/
@@ -925,9 +922,13 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
         TextInputLayout feedbackTextViewLayout = dialog.findViewById(R.id.input_layout_firstname);
         AutoCompleteTextView feedbackTextView = dialog.findViewById(R.id.feedback_textview);
         Button dismissBtn = (Button) dialog.findViewById(R.id.skip_btn);
+        Button dismissBtnOne = (Button) dialog.findViewById(R.id.skip_btn_two);
         Button nextSubmitBtn = dialog.findViewById(R.id.next_btn);
         RelativeLayout dialogHostingLayout = dialog.findViewById(R.id.dialog_hosting_layout);
         Button SubmitBtn = dialog.findViewById(R.id.submit_btn);
+        RelativeLayout firstLayout = dialog.findViewById(R.id.first_layout);
+        RelativeLayout secondLayout = dialog.findViewById(R.id.second_layout);
+
 
 
         //testing the recycle view here
@@ -973,6 +974,12 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
                 dialog.dismiss();
             }
         });
+        dismissBtnOne.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
 
         nextSubmitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -983,16 +990,8 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
                         .setInterpolator(new FastOutLinearInInterpolator());
                 TransitionManager.beginDelayedTransition(dialogHostingLayout, set);
                 if (nextSubmitBtn.getText().equals("Next") && mDecimalRatingBars.getProgress() != 0) {
-                    nextSubmitBtn.setVisibility(View.GONE);
-                    SubmitBtn.setVisibility(View.VISIBLE);
-
-                    mDecimalRatingBars.setVisibility(View.GONE);
-                    ratedMentorDP.setVisibility(View.GONE);
-                    ratingPrimaryText.setVisibility(View.GONE);
-
-                    ratingSecondaryText.setVisibility(View.VISIBLE);
-                    itemRatingRecycleView.setVisibility(View.VISIBLE);
-                    feedbackTextViewLayout.setVisibility(View.VISIBLE);
+                    firstLayout.setVisibility(View.GONE);
+                    secondLayout.setVisibility(View.VISIBLE);
 
                 } else {
                     Toast.makeText(HomePageActivity.this, "please rate your experience", Toast.LENGTH_SHORT).show();

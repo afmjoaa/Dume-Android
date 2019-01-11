@@ -164,20 +164,20 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
             } else {
                 rangeBar.setRangeBarEnabled(false);
                 max.setVisibility(View.GONE);
-                min.setText("Salaray - " );
+                min.setText("Salaray - ");
             }
 
             rangeBar.setOnRangeBarChangeListener(new RangeBar.OnRangeBarChangeListener() {
                 @Override
                 public void onRangeChangeListener(RangeBar rangeBar, int leftPinIndex, int rightPinIndex, String leftPinValue, String rightPinValue) {
                     String salaryValue = "";
-                    if (myMainActivity.retrivedAction.equals(DumeUtils.TEACHER)) {
-                        min.setText("Salary - " + rightPinValue+"k");
-                        salaryValue = rightPinValue;
-                    } else {
+                    if (myMainActivity.retrivedAction.equals(DumeUtils.STUDENT)) {
                         min.setText("Min Salary = " + leftPinValue);
                         max.setText("Max Salary = " + rightPinValue);
                         salaryValue = leftPinValue + "k - " + rightPinValue + "k";
+                    } else {
+                        min.setText("Salary - " + rightPinValue + "k");
+                        salaryValue = rightPinValue;
                     }
                     AppCompatRadioButton rd = new AppCompatRadioButton(mContext);
                     rd.setText(salaryValue);
@@ -419,7 +419,7 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
     public void onCheckedChanged(RadioGroup radioGroup, int i) {
         AppCompatRadioButton
                 checked = radioGroup.findViewById(i);
-        //  checked.setButtonDrawable(radioGroup.getContext().getResources().getDrawable(R.drawable.radio_btn_background));
+        //  checked.setButtonDrawable(radioGroup.getActivtiyContext().getResources().getDrawable(R.drawable.radio_btn_background));
         if (getArguments() != null) {
             getArguments().putString("" + sectionNumber, checked.getText().toString());
         }

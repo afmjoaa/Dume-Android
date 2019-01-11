@@ -153,7 +153,7 @@
             android:id="@+id/switch_account_btn"
             style="?android:attr/borderlessButtonStyle"
             android:layout_width="76dp"
-            android:layout_height="34dp"
+            android:layout_height="32dp"
             android:layout_below="@+id/segmentGroup"
             android:background="@drawable/round_btn_joaa"
             android:drawableStart="@drawable/student_account_icon"

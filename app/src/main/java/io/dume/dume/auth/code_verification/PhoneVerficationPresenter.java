@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -19,6 +20,7 @@ import com.google.firebase.firestore.GeoPoint;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import io.dume.dume.auth.AuthGlobalContract;
 import io.dume.dume.auth.DataStore;
@@ -182,10 +184,13 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
             user.put("last_name", dataStore.getLastName());
             user.put("account_major", dataStore.getAccountManjor());
             user.put("phone_number", dataStore.getPhoneNumber());
-            user.put("avatar", dataStore.getPhotoUri());
             if (dataStore.getEmail() != null) {
                 user.put("email", dataStore.getEmail());
             }
+            user.put("imei", imeiList);
+            view.showProgress();
+            //not needed
+            user.put("avatar", dataStore.getPhotoUri());
             user.put("gender", "");
             user.put("religion", "");
             user.put("birth_date", "");
@@ -195,13 +200,13 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
             user.put("user_ref_link", "");
             user.put("account_active", true);
             user.put("marital", "");
-            user.put("imei", imeiList);
-            view.showProgress();
             //"Saving User..."
+
             DocumentReference userStudentProInfo = fireStore.collection("/users/students/stu_pro_info").document(model.getUser().getUid());
             fireStore.collection("mini_users").document(model.getUser().getUid()).set(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
+                    configMentorProfile(dataStore);
                     setStuProfile((Activity) context, userStudentProInfo, generateStuProInfo(dataStore));
                     view.hideProgress();
                     nextActivity();
@@ -215,6 +220,80 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
             });
         } else {
             Log.w(TAG, "saveUserToDb: " + "Datastore null or user not logged in");
+        }
+    }
+
+    private void configMentorProfile(DataStore dataStore) {
+        Map<String, Object> mentorFeild = new HashMap<>();
+        GeoPoint location = null;
+        mentorFeild.put("first_name", dataStore.getFirstName());
+        mentorFeild.put("last_name", dataStore.getLastName());
+        mentorFeild.put("email", dataStore.getEmail());
+        mentorFeild.put("phone_number", dataStore.getPhoneNumber());
+        mentorFeild.put("obligation", false);
+        mentorFeild.put("avatar", dataStore.getPhotoUri());
+        mentorFeild.put("location", location);
+
+        mentorFeild.put("gender", "");
+        mentorFeild.put("religion", "");
+        mentorFeild.put("birth_date", "");
+        mentorFeild.put("marital", "");
+        mentorFeild.put("current_status", "");
+
+        mentorFeild.put("referred", false);
+        mentorFeild.put("referer_id", "");
+        mentorFeild.put("user_ref_link", "");
+
+        mentorFeild.put("account_active", true);
+        mentorFeild.put("pro_com_%", "60");
+
+        mentorFeild.put("unread_msg", "0");
+        mentorFeild.put("unread_noti", "0");
+        Map<String, Object> unreadRecords = new HashMap<>();
+        unreadRecords.put("pending_count", "0");
+        unreadRecords.put("accepted_count", "0");
+        unreadRecords.put("current_count", "0");
+        unreadRecords.put("completed_count", "0");
+        unreadRecords.put("rejected_count", "0");
+        mentorFeild.put("unread_records", unreadRecords);
+
+        Map<String, Object> selfRating = new HashMap<>();
+        selfRating.put("star_rating", "5.00");
+        selfRating.put("star_count", "1");
+        selfRating.put("l_communication", "1");
+        selfRating.put("dl_communication", "0");
+        selfRating.put("l_behaviour", "1");
+        selfRating.put("dl_behaviour", "0");
+        selfRating.put("l_expertise", "1");
+        selfRating.put("dl_expertise", "0");
+        selfRating.put("l_experience", "1");
+        selfRating.put("dl_experience", "0");
+        mentorFeild.put("self_rating", selfRating);
+
+        ArrayList<String> appliedPromoList = null;
+        mentorFeild.put("applied_promo", appliedPromoList);
+        ArrayList<String> availablePromoList = null;
+        mentorFeild.put("available_promo", availablePromoList);
+
+        Map<String, Object> achievements = new HashMap<>();
+        unreadRecords.put("joined", true);
+        unreadRecords.put("inaugural", false);
+        unreadRecords.put("leading", false);
+        unreadRecords.put("premier", false);
+        mentorFeild.put("achievements", achievements);
+
+        if (FirebaseAuth.getInstance().getCurrentUser().getUid() != null) {
+            fireStore.document("users/mentors/mentor_profile/" + FirebaseAuth.getInstance().getCurrentUser().getUid()).set(mentorFeild).addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    Log.w(TAG, "onSuccess: Teacher Dummy Profile Created");
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.e(TAG, "onSuccess: Teacher Dummy Profile Creation Failed");
+                }
+            });
         }
     }
 
@@ -242,15 +321,24 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
 
         Map<String, Object> selfRating = new HashMap<>();
         selfRating.put("star_rating", "5.00");
-        selfRating.put("communication", "100%");
-        selfRating.put("behaviour", "100%");
+        selfRating.put("star_count", "1");
+        selfRating.put("l_communication", "1");
+        selfRating.put("dl_communication", "0");
+        selfRating.put("l_behaviour", "1");
+        selfRating.put("dl_behaviour", "0");
         stuProInfo.put("self_rating", selfRating);
 
         Map<String, Object> unreadRecords = new HashMap<>();
         unreadRecords.put("pending_count", "0");
         unreadRecords.put("accepted_count", "0");
         unreadRecords.put("current_count", "0");
+        unreadRecords.put("completed_count", "0");
+        unreadRecords.put("rejected_count", "0");
         stuProInfo.put("unread_records", unreadRecords);
+
+        stuProInfo.put("referred", false);
+        stuProInfo.put("referer_id", "");
+        stuProInfo.put("user_ref_link", "");
 
         return stuProInfo;
     }

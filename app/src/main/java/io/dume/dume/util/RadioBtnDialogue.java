@@ -75,7 +75,7 @@ public class RadioBtnDialogue extends DialogFragment {
                     });
         }else{
             builder = new AlertDialog.Builder(Objects.requireNonNull(getActivity()), R.style.RadioDialogTheme);
-            builder.setTitle(title).setSingleChoiceItems(radioOptions, 0, myListener)
+            builder.setTitle(title).setSingleChoiceItems(radioOptions, -1, myListener)
                     .setPositiveButton("Select", selectListener)
                     .setNegativeButton("Cancel",cancelListener);
         }
