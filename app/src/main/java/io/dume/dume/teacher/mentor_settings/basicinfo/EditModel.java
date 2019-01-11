@@ -124,7 +124,6 @@ public class EditModel implements EditContract.Model {
         });
     }
 
-
     @Override
     public void updateLocaiton(GeoPoint point, TeacherContract.Model.Listener listener) {
 
