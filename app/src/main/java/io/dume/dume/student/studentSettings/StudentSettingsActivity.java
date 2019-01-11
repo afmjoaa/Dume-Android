@@ -469,6 +469,7 @@ public class StudentSettingsActivity extends CustomStuAppCompatActivity
 
         }
 
+        @SuppressWarnings("unchecked")
         @Nullable
         @Override
         public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

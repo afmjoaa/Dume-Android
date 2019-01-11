@@ -111,6 +111,7 @@ public class AfterSplashActivity extends AppCompatActivity implements DemoCardFr
             MLOCATIONPERMISSIONGRANTED = true;
             Toast.makeText(this, "permission granted", Toast.LENGTH_SHORT).show();
             mPager.setCurrentItem(mPager.getCurrentItem() + 1, true);
+            makeFullScreen(this);
         } else {
             ActivityCompat.requestPermissions(AfterSplashActivity.this, permissions, LOCATION_PERMISSION_REQUEST_CODE);
         }
@@ -126,6 +127,7 @@ public class AfterSplashActivity extends AppCompatActivity implements DemoCardFr
                     if (checkPermissions()) {
                         MLOCATIONPERMISSIONGRANTED = true;
                         mPager.setCurrentItem(mPager.getCurrentItem() + 1, true);
+                        makeFullScreen(this);
                     }
                 } else {
                     Toast.makeText(this, "Please accept the permission to proceed", Toast.LENGTH_SHORT).show();

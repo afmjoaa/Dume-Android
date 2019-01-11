@@ -18,10 +18,13 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import io.dume.dume.R;
 import io.dume.dume.auth.AuthGlobalContract;
 import io.dume.dume.auth.DataStore;
 import io.dume.dume.auth.auth.AuthContract;
@@ -207,6 +210,7 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     configMentorProfile(dataStore);
+                    configBootCampProfile(dataStore);
                     setStuProfile((Activity) context, userStudentProInfo, generateStuProInfo(dataStore));
                     view.hideProgress();
                     nextActivity();
@@ -276,10 +280,10 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
         mentorFeild.put("available_promo", availablePromoList);
 
         Map<String, Object> achievements = new HashMap<>();
-        unreadRecords.put("joined", true);
-        unreadRecords.put("inaugural", false);
-        unreadRecords.put("leading", false);
-        unreadRecords.put("premier", false);
+        achievements.put("joined", true);
+        achievements.put("inaugural", false);
+        achievements.put("leading", false);
+        achievements.put("premier", false);
         mentorFeild.put("achievements", achievements);
 
         if (FirebaseAuth.getInstance().getCurrentUser().getUid() != null) {
@@ -296,6 +300,82 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
             });
         }
     }
+
+    private void configBootCampProfile(DataStore dataStore) {
+        //admin, member, viewer
+        Map<String, Object> bootCampField = new HashMap<>();
+        GeoPoint location = null;
+        bootCampField.put("associated_uid", "");
+        bootCampField.put("association_set", false);
+        bootCampField.put("user_role", "Admin");
+
+        List<Map<String, Object>> memberList = new ArrayList<Map<String, Object>>();
+        Map<String, Object> creator = new HashMap<>();
+        creator.put("uid", FirebaseAuth.getInstance().getCurrentUser().getUid());
+        creator.put("role", "Admin");
+        memberList.add(creator);
+        bootCampField.put("member_list", memberList);
+
+        bootCampField.put("bootcamp_name", "");
+        bootCampField.put("email", dataStore.getEmail());
+        bootCampField.put("phone_number", dataStore.getPhoneNumber());
+        bootCampField.put("obligation", false);
+        bootCampField.put("avatar", "");
+        bootCampField.put("location", location);
+
+        bootCampField.put("account_active", true);
+        bootCampField.put("pro_com_%", "60");
+
+        bootCampField.put("unread_msg", "0");
+        bootCampField.put("unread_noti", "0");
+        Map<String, Object> unreadRecords = new HashMap<>();
+        unreadRecords.put("pending_count", "0");
+        unreadRecords.put("accepted_count", "0");
+        unreadRecords.put("current_count", "0");
+        unreadRecords.put("completed_count", "0");
+        unreadRecords.put("rejected_count", "0");
+        bootCampField.put("unread_records", unreadRecords);
+
+        Map<String, Object> selfRating = new HashMap<>();
+        selfRating.put("star_rating", "5.00");
+        selfRating.put("star_count", "1");
+        selfRating.put("l_communication", "1");
+        selfRating.put("dl_communication", "0");
+        selfRating.put("l_behaviour", "1");
+        selfRating.put("dl_behaviour", "0");
+        selfRating.put("l_expertise", "1");
+        selfRating.put("dl_expertise", "0");
+        selfRating.put("l_experience", "1");
+        selfRating.put("dl_experience", "0");
+        bootCampField.put("self_rating", selfRating);
+
+        List<String> appliedPromoList = new ArrayList<>();
+        bootCampField.put("applied_promo", appliedPromoList);
+        List<String> availablePromoList = new ArrayList<>();
+        bootCampField.put("available_promo", availablePromoList);
+
+        Map<String, Object> achievements = new HashMap<>();
+        achievements.put("joined", true);
+        achievements.put("inaugural", false);
+        achievements.put("leading", false);
+        achievements.put("premier", false);
+        bootCampField.put("achievements", achievements);
+
+        if (FirebaseAuth.getInstance().getCurrentUser().getUid() != null) {
+            fireStore.document("users/bootcamps/camp_profile/" + FirebaseAuth.getInstance().getCurrentUser().getUid()).set(bootCampField).addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    Log.w(TAG, "onSuccess: Teacher Dummy Profile Created");
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.e(TAG, "onSuccess: Teacher Dummy Profile Creation Failed");
+                }
+            });
+        }
+    }
+
 
     private Map<String, Object> generateStuProInfo(DataStore dataStore) {
         Map<String, Object> stuProInfo = new HashMap<>();
@@ -314,9 +394,10 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
         GeoPoint current_address = new GeoPoint(84.9, -180);
         stuProInfo.put("current_address", current_address);
 
-        ArrayList<String> appliedPromoList = null;
+        //String[] hawwa = {"joaa", "Enam", "sumon"};Arrays.asList(hawwa);
+        List<String> appliedPromoList = new ArrayList<String>();
         stuProInfo.put("applied_promo", appliedPromoList);
-        ArrayList<String> availablePromoList = null;
+        List<String> availablePromoList = new ArrayList<String>();
         stuProInfo.put("available_promo", availablePromoList);
 
         Map<String, Object> selfRating = new HashMap<>();
@@ -336,19 +417,17 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
         unreadRecords.put("rejected_count", "0");
         stuProInfo.put("unread_records", unreadRecords);
 
-        ArrayList<Map<String, Object>> favorites = null;
+        List<Map<String, Object>> favorites = new ArrayList<Map<String, Object>>();
+        //favorites.add(unreadRecords);
         stuProInfo.put("favorite_places", favorites);
-        ArrayList<Map<String, Object>> savedPlaces = null;
+        List<Map<String, Object>> savedPlaces = new ArrayList<Map<String, Object>>();
         stuProInfo.put("saved_places", savedPlaces);
-        ArrayList<Map<String, Object>> recentlyUsedPlaces = null;
+        List<Map<String, Object>> recentlyUsedPlaces = new ArrayList<Map<String, Object>>();
         stuProInfo.put("recent_places", recentlyUsedPlaces);
 
         stuProInfo.put("referred", false);
         stuProInfo.put("referer_id", "");
         stuProInfo.put("user_ref_link", "");
-
         return stuProInfo;
     }
-
-
 }
