@@ -67,6 +67,7 @@ import com.transitionseverywhere.TransitionSet;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import butterknife.BindView;
@@ -77,6 +78,8 @@ import io.dume.dume.R;
 import io.dume.dume.common.aboutUs.AboutUsActivity;
 import io.dume.dume.common.inboxActivity.InboxActivity;
 import io.dume.dume.common.privacyPolicy.PrivacyPolicyActivity;
+import io.dume.dume.inter_face.UserQueryListener;
+import io.dume.dume.model.DumeModel;
 import io.dume.dume.student.freeCashBack.FreeCashBackActivity;
 import io.dume.dume.student.heatMap.HeatMapActivity;
 import io.dume.dume.student.homePage.HomePageActivity;
@@ -96,6 +99,7 @@ import io.dume.dume.teacher.homepage.fragments.PerformanceFragment;
 import io.dume.dume.teacher.homepage.fragments.SkillFragment;
 import io.dume.dume.teacher.homepage.fragments.StatisticsFragment;
 import io.dume.dume.teacher.mentor_settings.AccountSettings;
+import io.dume.dume.teacher.mentor_settings.AccountSettingsModel;
 import io.dume.dume.teacher.mentor_settings.basicinfo.EditAccount;
 import io.dume.dume.teacher.pojo.TabModel;
 import io.dume.dume.teacher.skill.SkillActivity;
@@ -171,7 +175,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
     private int optionMenu = R.menu.stu_homepage;
     private String[] feedbackStrings;
     private FloatingActionButton fab;
-
+    private Map<String, Object> data;
 
 
     @Override
@@ -552,8 +556,36 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.al_display_pic:
-                //mView.updateProfileBadge(mProfileChar);
-                startActivity(new Intent(this, EditAccount.class));
+
+                new AccountSettingsModel().queryUserData(new UserQueryListener() {
+                    @Override
+                    public void onSuccess(Map<String, Object> data) {
+
+                        Bundle bundle = new Bundle();
+                        bundle.putString("avatar", data.get("avatar") == null ? "" : data.get("avatar").toString());
+                        bundle.putString("religion", data.get("religion").toString());
+                        bundle.putString("first_name", data.get("first_name").toString());
+                        bundle.putString("last_name", data.get("last_name").toString());
+                        bundle.putString("marital", data.get("marital").toString());
+                        bundle.putString("gender", data.get("gender").toString());
+                        bundle.putString("phone_number", data.get("phone_number").toString());
+                        bundle.putString("email", data.get("email").toString());
+                        bundle.putString("birth_date", data.get("birth_date").toString());
+                        startActivity(new Intent(getApplicationContext(), EditAccount.class).putExtra("user_data", bundle));
+                    }
+
+                    @Override
+                    public void onFailure(String error) {
+                        flush(error);
+                    }
+
+                    @Override
+                    public void onStart() {
+                        flush("Please Wait.....");
+                    }
+                });
+
+
                 break;
             case R.id.al_records:
                 updateRecordsBadge(++mRecPendingCount, ++mRecAcceptedCount, ++mRecCurrentCount);
@@ -629,7 +661,18 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
                 startActivity(new Intent(this, HeatMapActivity.class));
                 break;
             case R.id.student:
-                startActivity(new Intent(this, HomePageActivity.class));
+                flush("Please wait...");
+                new DumeModel().switchAcount(DumeUtils.STUDENT, new TeacherContract.Model.Listener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        startActivity(new Intent(getApplicationContext(), HomePageActivity.class));
+                    }
+
+                    @Override
+                    public void onError(String msg) {
+                        flush("Error : " + msg);
+                    }
+                });
                 break;
             case R.id.mentor:
                 break;
@@ -818,7 +861,6 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         Button SubmitBtn = dialog.findViewById(R.id.submit_btn);
         RelativeLayout firstLayout = dialog.findViewById(R.id.first_layout);
         RelativeLayout secondLayout = dialog.findViewById(R.id.second_layout);
-
 
 
         //testing the recycle view here

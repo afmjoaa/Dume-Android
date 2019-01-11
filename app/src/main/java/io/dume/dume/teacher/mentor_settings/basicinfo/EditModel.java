@@ -118,7 +118,7 @@ public class EditModel implements EditContract.Model {
                 } else {
                     listener.onError("");
 
-                }Log.w(TAG, "onEvent: " + location.toString());
+                }
                 listenerRegistration.remove();
             }
         });

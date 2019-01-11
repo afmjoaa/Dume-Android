@@ -46,7 +46,7 @@ public class SkillPresenter implements SkillContract.Presenter {
             @Override
             public void onSuccess(ArrayList<Skill> list) {
                 view.loadSkillRV(list);
-                Log.e(TAG, "onSuccess: "+list.size() );
+                Log.e(TAG, "onSuccess: " + list.size());
             }
 
             @Override
@@ -66,6 +66,18 @@ public class SkillPresenter implements SkillContract.Presenter {
 
     @Override
     public void onViewInteracted(View element) {
+        switch (element.getTag().toString()) {
+            case "fab_gang":
+                view.flush("Gang Clicked");
+                break;
+            case "fab_regular":
+                view.flush("Regular Clicked");
+
+                break;
+
+        }
+
+
         switch (element.getId()) {
             case R.id.fabAdd:
                 DocumentReference mini_users = firestore.collection("mini_users").document(Objects.requireNonNull(mAuth.getCurrentUser()).getUid());

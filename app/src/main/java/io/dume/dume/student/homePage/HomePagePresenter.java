@@ -18,7 +18,10 @@ import java.util.Map;
 import java.util.Objects;
 
 import io.dume.dume.R;
+import io.dume.dume.model.DumeModel;
 import io.dume.dume.teacher.homepage.TeacherActivtiy;
+import io.dume.dume.teacher.homepage.TeacherContract;
+import io.dume.dume.util.DumeUtils;
 
 public class HomePagePresenter implements HomePageContract.Presenter {
 
@@ -57,8 +60,8 @@ public class HomePagePresenter implements HomePageContract.Presenter {
                 }
                 String o = documentSnapshot.getString("last_name");
                 String o1 = documentSnapshot.getString("first_name");
-                mView.setUserName(o1,o);
-                mView.setMsgName(mView.generateMsgName(o1,o));
+                mView.setUserName(o1, o);
+                mView.setMsgName(mView.generateMsgName(o1, o));
                 mView.setRating((Map<String, Object>) documentSnapshot.get("self_rating"));
 
                 mView.setUnreadMsg(documentSnapshot.getString("unread_msg"));
@@ -67,11 +70,10 @@ public class HomePagePresenter implements HomePageContract.Presenter {
 
                 if (Objects.requireNonNull(documentSnapshot.getString("pro_com_%")).equals("100")) {
                     mView.setProfileComPercent(documentSnapshot.getString("pro_com_%"));
-                }else{
+                } else {
                     mView.setProfileComPercent(documentSnapshot.getString("pro_com_%"));
                     mView.showSnackBar(documentSnapshot.getString("pro_com_%"));
                 }
-
 
 
             } else {
@@ -112,7 +114,7 @@ public class HomePagePresenter implements HomePageContract.Presenter {
             case R.id.start_mentoring_imageView:
                 mView.startMentoringImageViewClicked();
                 break;
-                //temporary code goes here
+            //temporary code goes here
             case R.id.promotion_validity_text:
                 mView.testingCustomDialogue();
                 break;
@@ -132,7 +134,19 @@ public class HomePagePresenter implements HomePageContract.Presenter {
                 mView.gotoStudentProfile();
                 break;
             case R.id.mentor:
-                mView.gotoMentorProfile();
+                mView.flush("Please Wait...");
+                new DumeModel().switchAcount(DumeUtils.TEACHER, new TeacherContract.Model.Listener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        mView.gotoMentorProfile();
+                    }
+
+                    @Override
+                    public void onError(String msg) {
+                        mView.flush("Error : " + msg);
+                    }
+                });
+
                 break;
             case R.id.boot_camp:
 

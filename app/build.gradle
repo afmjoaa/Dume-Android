@@ -155,4 +155,6 @@ dependencies {
     implementation "com.hanks:htextview-scale:$htextview_version"
     implementation "me.philio:pinentryview:1.0.6"
     implementation 'id.zelory:compressor:2.1.0'
+
+    implementation 'com.getbase:floatingactionbutton:1.10.1'
 }

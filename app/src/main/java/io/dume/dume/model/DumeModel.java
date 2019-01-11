@@ -34,6 +34,19 @@ public class DumeModel implements TeacherModel {
         firebaseAuth = FirebaseAuth.getInstance();
     }
 
+    public void switchAcount(String to, TeacherContract.Model.Listener<Void> listener) {
+        firebaseFirestore.document("mini_users/" + firebaseAuth.getUid()).update("account_major", to).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                listener.onSuccess(aVoid);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                listener.onError(e.getLocalizedMessage());
+            }
+        });
+    }
 
     @Override
     public void saveSkill(Skill skill, TeacherContract.Model.Listener<Void> listener) {

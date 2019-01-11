@@ -83,7 +83,7 @@ public class EditAccount extends AppCompatActivity implements EditContract.View,
         avatar = findViewById(R.id.profileImage);
         loadView = findViewById(R.id.loadView);
         wrapper = findViewById(R.id.wrapperAccountEdit);
-        loadCarryData();
+
         pickLocationET = findViewById(R.id.pickAddressET);
         pickLocationET.setOnClickListener(view -> {
             final Intent intent = new Intent(getApplicationContext(), GrabingLocationActivity.class);
@@ -97,13 +97,15 @@ public class EditAccount extends AppCompatActivity implements EditContract.View,
         selectMaritalStatusET = findViewById(R.id.input_marital_status);
         selectReligionET = findViewById(R.id.input_religion);
         selectBirthDataET = findViewById(R.id.input_birth_date);
-
+        loadCarryData();
     }
 
     private void loadCarryData() {
         Bundle bundle = getIntent().getBundleExtra("user_data");
         if (bundle != null) {
-            Glide.with(this).load(bundle.getString("avatar")).apply(new RequestOptions().override(100, 100)).into(avatar);
+            final RequestOptions requestOptions = new RequestOptions();
+            requestOptions.placeholder(R.drawable.avatar);
+            Glide.with(this).load(bundle.getString("avatar")).apply(requestOptions.override(100, 100)).into(avatar);
             first.setText(bundle.getString("first_name"));
             last.setText(bundle.getString("last_name"));
             phone.setText(bundle.getString("phone_number"));
