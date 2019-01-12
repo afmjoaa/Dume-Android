@@ -189,12 +189,13 @@ public class StudentSettingsActivity extends CustomStuAppCompatActivity
                     current.secondary_text = secondaryText;
                     current.location = location;
                     savedPlacesAdapter.updateFav(current);
+
                     Map<String, Object> myMap = new HashMap<>();
                     myMap.put("location", location);
                     myMap.put("primary_text","Home" );
                     myMap.put("secondary_text",secondaryText );
 
-                    mModel.updateFavoritePlaces(myMap, new TeacherContract.Model.Listener<Void>() {
+                    mModel.updateFavoritePlaces("home",current, new TeacherContract.Model.Listener<Void>() {
                         @Override
                         public void onSuccess(Void list) {
                             flush("on success ");

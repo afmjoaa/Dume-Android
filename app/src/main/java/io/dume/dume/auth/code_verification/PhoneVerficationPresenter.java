@@ -192,18 +192,6 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
             }
             user.put("imei", imeiList);
             view.showProgress();
-            //not needed
-          /*  user.put("avatar", dataStore.getPhotoUri());
-            user.put("gender", "");
-            user.put("religion", "");
-            user.put("birth_date", "");
-            user.put("obligation", false);
-            user.put("referred", false);
-            user.put("referer_id", "");
-            user.put("user_ref_link", "");
-            user.put("account_active", true);
-            user.put("marital", "");*/
-            //"Saving User..."
 
             DocumentReference userStudentProInfo = fireStore.collection("/users/students/stu_pro_info").document(model.getUser().getUid());
             fireStore.collection("mini_users").document(model.getUser().getUid()).set(user).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -417,12 +405,11 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
         unreadRecords.put("rejected_count", "0");
         stuProInfo.put("unread_records", unreadRecords);
 
-        List<Map<String, Object>> favorites = new ArrayList<Map<String, Object>>();
-        //favorites.add(unreadRecords);
+        Map<String,Map<String, Object>> favorites =new HashMap<>();
         stuProInfo.put("favourite_places", favorites);
-        List<Map<String, Object>> savedPlaces = new ArrayList<Map<String, Object>>();
+        Map<String,Map<String, Object>> savedPlaces = new HashMap<>();
         stuProInfo.put("saved_places", savedPlaces);
-        List<Map<String, Object>> recentlyUsedPlaces = new ArrayList<Map<String, Object>>();
+        Map<String,Map<String, Object>> recentlyUsedPlaces =new HashMap<>();
         stuProInfo.put("recent_places", recentlyUsedPlaces);
 
         stuProInfo.put("referred", false);

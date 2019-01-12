@@ -37,6 +37,7 @@ public class SavedPlacesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             R.drawable.ic_back_in_time
     };
     private int ADD_HOME_LOCATION = 1001;
+    private int ADD_WORK_LOCATION = 1002;
 
 
     public SavedPlacesAdapter(Context context, List<SavedPlacesAdaData> favorite,
@@ -171,6 +172,8 @@ public class SavedPlacesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 public void onClick(View view) {
                     if(holder.getAdapterPosition() == 1 ){
                         activity.startActivityForResult(new Intent(context, GrabingLocationActivity.class).setAction("fromSPA"), ADD_HOME_LOCATION);
+                    }else if(holder.getAdapterPosition()== 2){
+                        activity.startActivityForResult(new Intent(context, GrabingLocationActivity.class).setAction("fromSPA"), ADD_WORK_LOCATION);
                     }
                 }
             });

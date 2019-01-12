@@ -35,8 +35,39 @@ public class StudentSettingsModel extends StuBaseModel implements StudentSetting
         userStudentProInfo.addSnapshotListener(activity, updateViewListener);
     }
 
-    public void updateFavoritePlaces(Map<String, Object> savedPlacesAdaData, TeacherContract.Model.Listener<Void> listener) {
-        userStudentProInfo.update("favourite_places", FieldValue.arrayUnion(savedPlacesAdaData)).addOnSuccessListener(new OnSuccessListener<Void>() {
+    public void updateFavoritePlaces(String identify, SavedPlacesAdaData savedPlacesAdaData, TeacherContract.Model.Listener<Void> listener) {
+        switch (identify) {
+            case "home":
+                userStudentProInfo.update("favourite_places.home", savedPlacesAdaData).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        listener.onSuccess(aVoid);
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        listener.onError(e.getLocalizedMessage());
+                    }
+                });
+                break;
+            case "work":
+                userStudentProInfo.update("favourite_places.work", savedPlacesAdaData).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        listener.onSuccess(aVoid);
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        listener.onError(e.getLocalizedMessage());
+                    }
+                });
+                break;
+            default:
+                listener.onError("else running");
+                break;
+        }
+        /* userStudentProInfo.update("favourite_places", FieldValue.arrayUnion(savedPlacesAdaData)).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 Log.w(TAG, "onSuccess: " + "Ok");
@@ -47,14 +78,7 @@ public class StudentSettingsModel extends StuBaseModel implements StudentSetting
             public void onFailure(@NonNull Exception e) {
                 listener.onError(e.getLocalizedMessage());
             }
-        });
-
-        userStudentProInfo.update("fp.home", savedPlacesAdaData).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-
-            }
-        });
+        });*/
     }
 
 
