@@ -69,6 +69,10 @@ public class SkillAdapter extends RecyclerView.Adapter<SkillAdapter.SkillVH> {
     @Override
     public void onBindViewHolder(@NonNull SkillVH skillVH, int i) {
         if (layoutSize == ACTIVITY) {
+
+
+            SkillDetailsAdapter skillDetailsAdapter = new SkillDetailsAdapter(null);
+            skillVH.detailsRV.setAdapter(skillDetailsAdapter);
             skillVH.itemView.setOnClickListener(view -> {
                 skillVH.detailsRV.setVisibility(skillVH.detailsRV.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
             });
