@@ -10,11 +10,17 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.dume.dume.R;
+import io.dume.dume.model.DumeModel;
 import io.dume.dume.teacher.adapters.SkillAdapter;
+import io.dume.dume.teacher.homepage.TeacherContract;
+import io.dume.dume.teacher.pojo.Skill;
 import io.dume.dume.util.DumeUtils;
 import io.dume.dume.util.GridSpacingItemDecoration;
 
@@ -39,7 +45,19 @@ public class SkillFragment extends Fragment {
         int spacing = (int) ((wh[0] - ((336) * (getResources().getDisplayMetrics().density))) / 3);
         skillRV.setLayoutManager(new GridLayoutManager(getContext(), 2));
         skillRV.addItemDecoration(new GridSpacingItemDecoration(2, spacing, true));
-        skillRV.setAdapter(new SkillAdapter(SkillAdapter.FRAGMENT,null));
+
+        new DumeModel().getSkill(new TeacherContract.Model.Listener<ArrayList<Skill>>() {
+            @Override
+            public void onSuccess(ArrayList<Skill> list) {
+                skillRV.setAdapter(new SkillAdapter(SkillAdapter.FRAGMENT, list));
+            }
+
+            @Override
+            public void onError(String msg) {
+                Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
+            }
+        });
+
         return root;
     }
 
