@@ -419,7 +419,7 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
 
         List<Map<String, Object>> favorites = new ArrayList<Map<String, Object>>();
         //favorites.add(unreadRecords);
-        stuProInfo.put("favorite_places", favorites);
+        stuProInfo.put("favourite_places", favorites);
         List<Map<String, Object>> savedPlaces = new ArrayList<Map<String, Object>>();
         stuProInfo.put("saved_places", savedPlaces);
         List<Map<String, Object>> recentlyUsedPlaces = new ArrayList<Map<String, Object>>();

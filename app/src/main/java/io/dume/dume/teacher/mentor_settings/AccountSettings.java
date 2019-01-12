@@ -461,10 +461,10 @@ public class AccountSettings extends AppCompatActivity implements AccountSetting
             View rootView = inflater.inflate(R.layout.stu_setting_saved_places_fragment, container, false);
             savedPlacesRecycler = rootView.findViewById(R.id.saved_place_recycler);
             //testing code goes here
-            List<SavedPlacesAdaData> recordDataCurrent = new ArrayList<>();
+            /*List<SavedPlacesAdaData> recordDataCurrent = new ArrayList<>();
             savedPlacesAdapter = new SavedPlacesAdapter(myMainActivity, recordDataCurrent);
             savedPlacesRecycler.setAdapter(savedPlacesAdapter);
-            savedPlacesRecycler.setLayoutManager(new LinearLayoutManager(myMainActivity));
+            savedPlacesRecycler.setLayoutManager(new LinearLayoutManager(myMainActivity));*/
             return rootView;
         }
 

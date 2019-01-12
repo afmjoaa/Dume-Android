@@ -58,4 +58,5 @@ public class StudentSettingsPresenter implements StudentSettingsContract.Present
             }
         });
     }
+
 }

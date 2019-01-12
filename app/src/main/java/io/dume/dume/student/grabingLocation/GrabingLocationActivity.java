@@ -64,6 +64,7 @@ import io.dume.dume.R;
 import io.dume.dume.student.pojo.CusStuAppComMapActivity;
 import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
 import io.dume.dume.student.profilePage.ProfilePageActivity;
+import io.dume.dume.student.studentSettings.StudentSettingsActivity;
 import io.dume.dume.teacher.crudskill.CrudSkillActivity;
 import io.dume.dume.teacher.mentor_settings.basicinfo.EditAccount;
 import io.dume.dume.util.DumeUtils;
@@ -441,7 +442,12 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
             mpaIntent.putExtra("selected_location", mCenterLatLong);
             setResult(RESULT_OK, mpaIntent);
             finish();
-        } else {
+        } else if(Objects.requireNonNull(retrivedAction).equals("fromSPA")){
+            Intent goBackToPPAIntent = new Intent(this, StudentSettingsActivity.class);
+            goBackToPPAIntent.putExtra("selected_location", mCenterLatLong);
+            setResult(RESULT_OK, goBackToPPAIntent);
+            finish();
+        }else {
             startActivity(new Intent(this, CrudSkillActivity.class).setAction(DumeUtils.STUDENT));
         }
 

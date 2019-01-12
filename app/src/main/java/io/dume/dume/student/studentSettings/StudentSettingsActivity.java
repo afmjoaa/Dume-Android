@@ -33,7 +33,10 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.GeoPoint;
 
 import io.dume.dume.R;
 import io.dume.dume.student.common.SettingData;
@@ -45,13 +48,17 @@ import io.dume.dume.student.profilePage.ProfilePageActivity;
 import io.dume.dume.student.studentPayment.StudentPaymentActivity;
 import io.dume.dume.teacher.homepage.TeacherContract;
 import io.dume.dume.util.AlertMsgDialogue;
+import io.dume.dume.util.FileUtil;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import static io.dume.dume.util.DumeUtils.configAppbarTittle;
 import static io.dume.dume.util.DumeUtils.configureAppbar;
+import static io.dume.dume.util.DumeUtils.getAddress;
 
 public class StudentSettingsActivity extends CustomStuAppCompatActivity
         implements StudentSettingsContract.View {
@@ -69,6 +76,8 @@ public class StudentSettingsActivity extends CustomStuAppCompatActivity
     private RelativeLayout basicInfoLayout1;
     private FloatingActionButton fab;
     private StudentSettingsModel mModel;
+    private int ADD_HOME_LOCATION = 1001;
+    private static SavedPlacesAdapter savedPlacesAdapter;
 
 
     @Override
@@ -81,7 +90,6 @@ public class StudentSettingsActivity extends CustomStuAppCompatActivity
         mPresenter = new StudentSettingsPresenter(this, mModel);
         mPresenter.studentSettingsEnqueue();
         configureAppbar(this, "Settings");
-
 
         //setting the recycler view
         settingsAdapter = new SettingsAdapter(this, getFinalData()) {
@@ -130,7 +138,7 @@ public class StudentSettingsActivity extends CustomStuAppCompatActivity
 
     }
 
-    private void inviteAFriendCalled(){
+    private void inviteAFriendCalled() {
         try {
             Intent i = new Intent(Intent.ACTION_SEND);
             i.setType("text/plain");
@@ -142,8 +150,8 @@ public class StudentSettingsActivity extends CustomStuAppCompatActivity
             Uri screenshotUri = Uri.parse("android.resource://io.dume.dume/drawable/avatar.png");
             i.putExtra(Intent.EXTRA_STREAM, screenshotUri);*/
             startActivity(Intent.createChooser(i, "Share via"));
-        } catch(Exception e) {
-            Log.e(TAG, "inviteAFriendCalled: "+ e.toString());
+        } catch (Exception e) {
+            Log.e(TAG, "inviteAFriendCalled: " + e.toString());
         }
     }
 
@@ -166,6 +174,42 @@ public class StudentSettingsActivity extends CustomStuAppCompatActivity
     @Override
     public void configStudentSettings() {
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+           if (requestCode == ADD_HOME_LOCATION) {
+                LatLng selectedLocation = data.getParcelableExtra("selected_location");
+                if (selectedLocation != null) {
+                    SavedPlacesAdaData current = new SavedPlacesAdaData();
+                    GeoPoint location = new GeoPoint(selectedLocation.latitude, selectedLocation.longitude);
+                    String secondaryText = getAddress(this, selectedLocation.latitude, selectedLocation.longitude);
+                    current.primary_text = "Home";
+                    current.secondary_text = secondaryText;
+                    current.location = location;
+                    savedPlacesAdapter.updateFav(current);
+                    Map<String, Object> myMap = new HashMap<>();
+                    myMap.put("location", location);
+                    myMap.put("primary_text","Home" );
+                    myMap.put("secondary_text",secondaryText );
+
+                    mModel.updateFavoritePlaces(myMap, new TeacherContract.Model.Listener<Void>() {
+                        @Override
+                        public void onSuccess(Void list) {
+                            flush("on success ");
+                        }
+
+                        @Override
+                        public void onError(String msg) {
+                            flush(msg);
+
+                        }
+                    });
+
+                }
+            }
+        }
     }
 
     @Override
@@ -455,11 +499,13 @@ public class StudentSettingsActivity extends CustomStuAppCompatActivity
 
     //Saved places fragment here
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public static class SavedPlacesFragment extends Fragment{
+    public static class SavedPlacesFragment extends Fragment {
 
         private StudentSettingsActivity myMainActivity;
         private RecyclerView savedPlacesRecycler;
-        private SavedPlacesAdapter savedPlacesAdapter;
+        private List<Map<String, Object>> favorites;
+        private ArrayList<Map<String, Object>> saved_places;
+        private ArrayList<Map<String, Object>> recently_used;
 
         @Override
         public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -477,22 +523,57 @@ public class StudentSettingsActivity extends CustomStuAppCompatActivity
             View rootView = inflater.inflate(R.layout.stu_setting_saved_places_fragment, container, false);
             savedPlacesRecycler = rootView.findViewById(R.id.saved_place_recycler);
             //testing code goes here
-            List<SavedPlacesAdaData> recordDataCurrent = new ArrayList<>();
-            savedPlacesAdapter = new SavedPlacesAdapter(myMainActivity, recordDataCurrent);
-            savedPlacesRecycler.setAdapter(savedPlacesAdapter);
-            savedPlacesRecycler.setLayoutManager(new LinearLayoutManager(myMainActivity));
+            List<SavedPlacesAdaData> favoriteAdaData = new ArrayList<>();
+            List<SavedPlacesAdaData> savedAdaData = new ArrayList<>();
+            List<SavedPlacesAdaData> recentAdaData = new ArrayList<>();
+            SavedPlacesAdaData savedPlacesAdaData = new SavedPlacesAdaData();
 
+            myMainActivity.showProgress();
             myMainActivity.mPresenter.retriveSavedPlacesData(new TeacherContract.Model.Listener<DocumentSnapshot>() {
                 @Override
                 public void onSuccess(DocumentSnapshot list) {
-                    ArrayList<Map<String, Object>> favorites = (ArrayList<Map<String, Object>>) list.get("favorite_places");
-                    ArrayList<Map<String, Object>> saved_places = (ArrayList<Map<String, Object>>) list.get("saved_places");
-                    ArrayList<Map<String, Object>> recently_used = (ArrayList<Map<String, Object>>) list.get("recent_places");
+                    favorites = (List<Map<String, Object>>) list.get("favorite_places");
+                    if (favorites != null && favorites.size() > 0) {
+                        for (Map<String, Object> foo : favorites) {
+                            savedPlacesAdaData.primary_text = (String) foo.get("primary_text");
+                            savedPlacesAdaData.secondary_text = (String) foo.get("secondary_text");
+                            savedPlacesAdaData.location = (GeoPoint) foo.get("location");
+                            favoriteAdaData.add(savedPlacesAdaData);
+                            GeoPoint geoPoint = savedPlacesAdaData.location;
+                            Log.w(TAG, "onEvent: " + geoPoint.getLongitude());
+                            //final ObjectMapper mapper = new ObjectMapper(); // jackson's objectmapper
+                            //final SavedPlacesAdaData savedPlacesAdaData = mapper.convertValue(foo, SavedPlacesAdaData.class);
+                        }
+                    }
+                    saved_places = (ArrayList<Map<String, Object>>) list.get("saved_places");
+                    if (saved_places != null && saved_places.size() > 0) {
+                        for (Map<String, Object> foo : saved_places) {
+                            savedPlacesAdaData.primary_text = (String) foo.get("primary_text");
+                            savedPlacesAdaData.secondary_text = (String) foo.get("secondary_text");
+                            savedPlacesAdaData.location = (GeoPoint) foo.get("location");
+                            savedAdaData.add(savedPlacesAdaData);
+                        }
+                    }
+                    recently_used = (ArrayList<Map<String, Object>>) list.get("recent_places");
+                    if (recently_used != null && recently_used.size() > 0) {
+                        for (Map<String, Object> foo : recently_used) {
+                            savedPlacesAdaData.primary_text = (String) foo.get("primary_text");
+                            savedPlacesAdaData.secondary_text = (String) foo.get("secondary_text");
+                            savedPlacesAdaData.location = (GeoPoint) foo.get("location");
+                            recentAdaData.add(savedPlacesAdaData);
+                        }
+                    }
+
+                    savedPlacesAdapter = new SavedPlacesAdapter(myMainActivity, favoriteAdaData, savedAdaData, recentAdaData);
+                    savedPlacesRecycler.setAdapter(savedPlacesAdapter);
+                    savedPlacesRecycler.setLayoutManager(new LinearLayoutManager(myMainActivity));
+                    myMainActivity.hideProgress();
                 }
 
                 @Override
                 public void onError(String msg) {
                     Toast.makeText(myMainActivity, msg, Toast.LENGTH_SHORT).show();
+                    myMainActivity.hideProgress();
                 }
             });
             return rootView;
