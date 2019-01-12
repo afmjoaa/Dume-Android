@@ -21,7 +21,7 @@ import java.util.List;
 import io.dume.dume.R;
 import io.dume.dume.student.grabingLocation.GrabingLocationActivity;
 
-public class SavedPlacesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public abstract class SavedPlacesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static final String TAG = "SavedPlacesAdapter";
     private LayoutInflater inflater;
@@ -38,6 +38,8 @@ public class SavedPlacesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     };
     private int ADD_HOME_LOCATION = 1001;
     private int ADD_WORK_LOCATION = 1002;
+    private int ADD_SAVED_PLACES = 1003;
+    private int ADD_RECENT_PLACES = 1004;
 
 
     public SavedPlacesAdapter(Context context, List<SavedPlacesAdaData> favorite,
@@ -149,17 +151,7 @@ public class SavedPlacesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             myViewHolder.moreVertImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
-                    PopupMenu popup = new PopupMenu(context, view);
-                    popup.inflate(R.menu.menu_saved_places);
-                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(MenuItem menuItem) {
-                            Toast.makeText(context, "fucked it....." + holder.getAdapterPosition(), Toast.LENGTH_SHORT).show();
-                            return false;
-                        }
-                    });
-                    popup.show();
+                    OnItemDeleteClicked(view, holder.getAdapterPosition());
                 }
             });
             if (myViewHolder.secondaryText.getText().toString().equals("")) {
@@ -200,6 +192,8 @@ public class SavedPlacesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         recent.addAll(newRecent);
         this.notifyDataSetChanged();
     }
+
+    abstract void OnItemDeleteClicked(View v, int position);
 
     @Override
     public int getItemCount() {

@@ -35,9 +35,9 @@ public class StudentSettingsModel extends StuBaseModel implements StudentSetting
         userStudentProInfo.addSnapshotListener(activity, updateViewListener);
     }
 
-    public void updateFavoritePlaces(String identify, SavedPlacesAdaData savedPlacesAdaData, TeacherContract.Model.Listener<Void> listener) {
+    public void updateFavoritePlaces(String identify, Map<String, Object> savedPlacesAdaData, TeacherContract.Model.Listener<Void> listener) {
         switch (identify) {
-            case "home":
+            case "Home":
                 userStudentProInfo.update("favourite_places.home", savedPlacesAdaData).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -50,7 +50,7 @@ public class StudentSettingsModel extends StuBaseModel implements StudentSetting
                     }
                 });
                 break;
-            case "work":
+            case "Work":
                 userStudentProInfo.update("favourite_places.work", savedPlacesAdaData).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -81,5 +81,38 @@ public class StudentSettingsModel extends StuBaseModel implements StudentSetting
         });*/
     }
 
+    public void deleteFavouritePlaces(String identify, TeacherContract.Model.Listener<Void> listener) {
+        switch (identify) {
+            case "Home":
+                userStudentProInfo.update("favourite_places.home", FieldValue.delete()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        listener.onSuccess(aVoid);
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        listener.onError(e.getLocalizedMessage());
+                    }
+                });
+                break;
+            case "Work":
+                userStudentProInfo.update("favourite_places.work", FieldValue.delete()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        listener.onSuccess(aVoid);
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        listener.onError(e.getLocalizedMessage());
+                    }
+                });
+                break;
+            default:
+                listener.onError("else running");
+                break;
+        }
+    }
 
 }

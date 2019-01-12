@@ -11,16 +11,15 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
+import android.preference.PreferenceFragment;
+import android.preference.PreferenceManager;
+import android.preference.RingtonePreference;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.preference.PreferenceFragment;
-import android.preference.PreferenceManager;
-import android.preference.RingtonePreference;
-import android.support.v7.preference.PreferenceFragmentCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -33,10 +32,14 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.GeoPoint;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import io.dume.dume.R;
 import io.dume.dume.student.common.SettingData;
@@ -45,16 +48,8 @@ import io.dume.dume.student.heatMap.AccountRecyData;
 import io.dume.dume.student.heatMap.HeatMapAccountRecyAda;
 import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
 import io.dume.dume.student.profilePage.ProfilePageActivity;
-import io.dume.dume.student.studentPayment.StudentPaymentActivity;
 import io.dume.dume.teacher.homepage.TeacherContract;
 import io.dume.dume.util.AlertMsgDialogue;
-import io.dume.dume.util.FileUtil;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import static io.dume.dume.util.DumeUtils.configAppbarTittle;
 import static io.dume.dume.util.DumeUtils.configureAppbar;
@@ -77,6 +72,9 @@ public class StudentSettingsActivity extends CustomStuAppCompatActivity
     private FloatingActionButton fab;
     private StudentSettingsModel mModel;
     private int ADD_HOME_LOCATION = 1001;
+    private int ADD_WORK_LOCATION = 1002;
+    private int ADD_SAVED_PLACES = 1003;
+    private int ADD_RECENT_PLACES = 1004;
     private static SavedPlacesAdapter savedPlacesAdapter;
 
 
@@ -179,38 +177,49 @@ public class StudentSettingsActivity extends CustomStuAppCompatActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
-           if (requestCode == ADD_HOME_LOCATION) {
+            if (requestCode == ADD_HOME_LOCATION) {
                 LatLng selectedLocation = data.getParcelableExtra("selected_location");
                 if (selectedLocation != null) {
-                    SavedPlacesAdaData current = new SavedPlacesAdaData();
-                    GeoPoint location = new GeoPoint(selectedLocation.latitude, selectedLocation.longitude);
-                    String secondaryText = getAddress(this, selectedLocation.latitude, selectedLocation.longitude);
-                    current.primary_text = "Home";
-                    current.secondary_text = secondaryText;
-                    current.location = location;
-                    savedPlacesAdapter.updateFav(current);
-
-                    Map<String, Object> myMap = new HashMap<>();
-                    myMap.put("location", location);
-                    myMap.put("primary_text","Home" );
-                    myMap.put("secondary_text",secondaryText );
-
-                    mModel.updateFavoritePlaces("home",current, new TeacherContract.Model.Listener<Void>() {
-                        @Override
-                        public void onSuccess(Void list) {
-                            flush("on success ");
-                        }
-
-                        @Override
-                        public void onError(String msg) {
-                            flush(msg);
-
-                        }
-                    });
-
+                    distributeResult(selectedLocation, "Home");
                 }
+            } else if (requestCode == ADD_WORK_LOCATION) {
+                LatLng selectedLocation = data.getParcelableExtra("selected_location");
+                if (selectedLocation != null) {
+                    distributeResult(selectedLocation, "Work");
+                }
+            } else if (requestCode == ADD_SAVED_PLACES) {
+                LatLng selectedLocation = data.getParcelableExtra("selected_location");
+
             }
         }
+    }
+
+    private void distributeResult(LatLng selectedLocation, String Name) {
+        SavedPlacesAdaData current = new SavedPlacesAdaData();
+        GeoPoint location = new GeoPoint(selectedLocation.latitude, selectedLocation.longitude);
+        String secondaryText = getAddress(this, selectedLocation.latitude, selectedLocation.longitude);
+        current.primary_text = Name;
+        current.secondary_text = secondaryText;
+        current.location = location;
+        savedPlacesAdapter.updateFav(current);
+
+        Map<String, Object> myMap = new HashMap<>();
+        myMap.put("location", location);
+        myMap.put("primary_text", Name);
+        myMap.put("secondary_text", secondaryText);
+
+        mModel.updateFavoritePlaces(Name, myMap, new TeacherContract.Model.Listener<Void>() {
+            @Override
+            public void onSuccess(Void list) {
+                flush("on success ");
+            }
+
+            @Override
+            public void onError(String msg) {
+                flush(msg);
+
+            }
+        });
     }
 
     @Override
@@ -565,7 +574,39 @@ public class StudentSettingsActivity extends CustomStuAppCompatActivity
                         }
                     }
 
-                    savedPlacesAdapter = new SavedPlacesAdapter(myMainActivity, favoriteAdaData, savedAdaData, recentAdaData);
+                    savedPlacesAdapter = new SavedPlacesAdapter(myMainActivity, favoriteAdaData, savedAdaData, recentAdaData) {
+                        @Override
+                        void OnItemDeleteClicked(View v, int position) {
+                            switch (position){
+                                case 1:
+                                    myMainActivity.mModel.deleteFavouritePlaces("Home", new TeacherContract.Model.Listener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void list) {
+                                            flush("Home address Deleted");
+                                        }
+
+                                        @Override
+                                        public void onError(String msg) {
+                                            flush(msg);
+                                        }
+                                    });
+                                    break;
+                                case 2:
+                                    myMainActivity.mModel.deleteFavouritePlaces("Work", new TeacherContract.Model.Listener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void list) {
+                                            flush("Work address Deleted");
+                                        }
+
+                                        @Override
+                                        public void onError(String msg) {
+                                            flush(msg);
+                                        }
+                                    });
+                                    break;
+                            }
+                        }
+                    };
                     savedPlacesRecycler.setAdapter(savedPlacesAdapter);
                     savedPlacesRecycler.setLayoutManager(new LinearLayoutManager(myMainActivity));
                     myMainActivity.hideProgress();
@@ -578,6 +619,10 @@ public class StudentSettingsActivity extends CustomStuAppCompatActivity
                 }
             });
             return rootView;
+        }
+
+        private void flush(String msg){
+            Toast.makeText(myMainActivity, msg, Toast.LENGTH_SHORT).show();
         }
 
         @Override
