@@ -40,8 +40,8 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:ellipsize="end"
-                            android:maxLines="1"
                             android:maxWidth="70dp"
+                            android:maxLines="1"
                             android:text="Math | English | Enam"
                             android:textColor="@color/black"
                             android:textSize="10sp" />
@@ -60,9 +60,9 @@
                     <LinearLayout
                         android:layout_width="60dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
-
                         android:layout_marginStart="5dp"
+
+                        android:layout_marginLeft="5dp"
                         android:orientation="vertical">
 
 
@@ -76,8 +76,8 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:layout_weight="1"
-                                android:drawableLeft="@drawable/ic_like"
                                 android:drawableStart="@drawable/ic_like"
+                                android:drawableLeft="@drawable/ic_like"
                                 android:text="40% likes"
                                 android:textSize="10sp" />
 
@@ -86,8 +86,8 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:drawableLeft="@drawable/ic_dislike"
                                 android:drawableStart="@drawable/ic_dislike"
+                                android:drawableLeft="@drawable/ic_dislike"
                                 android:gravity="center"
                                 android:text="60%"
                                 android:textSize="10sp"
@@ -158,5 +158,18 @@
         </LinearLayout>
     </FrameLayout>
 
+    <TextView
+        android:id="@+id/enrolledTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="Sold - 3 times"
+        android:textSize="14sp"
+        android:visibility="gone" />
 
 </carbon.widget.FrameLayout>
