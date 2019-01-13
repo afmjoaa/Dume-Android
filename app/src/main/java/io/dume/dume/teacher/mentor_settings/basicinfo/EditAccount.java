@@ -14,6 +14,8 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -55,6 +57,10 @@ public class EditAccount extends AppCompatActivity implements EditContract.View,
     private EditText selectMaritalStatusET;
     private EditText selectReligionET;
     private EditText selectBirthDataET;
+    private carbon.widget.ImageView emptyFirstNameFound;
+    private carbon.widget.ImageView emptyLastNameFound;
+    private carbon.widget.ImageView emptyEmailFound;
+    private carbon.widget.ImageView emptyLocationFound;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,6 +103,10 @@ public class EditAccount extends AppCompatActivity implements EditContract.View,
         selectMaritalStatusET = findViewById(R.id.input_marital_status);
         selectReligionET = findViewById(R.id.input_religion);
         selectBirthDataET = findViewById(R.id.input_birth_date);
+        emptyFirstNameFound = findViewById(R.id.empty_fn_found);
+        emptyLastNameFound = findViewById(R.id.empty_ln_found);
+        emptyEmailFound = findViewById(R.id.empty_email_found);
+        emptyLocationFound = findViewById(R.id.empty_address_found);
         loadCarryData();
     }
 
@@ -110,10 +120,6 @@ public class EditAccount extends AppCompatActivity implements EditContract.View,
             last.setText(bundle.getString("last_name"));
             phone.setText(bundle.getString("phone_number"));
             mail.setText(bundle.getString("email"));
-            //selectGenderEditText.setText(bundle.getString("gender"));
-            //selectReligionET.setText(bundle.getString("religion"));
-            //selectMaritalStatusET.setText(bundle.getString("marital"));
-            //selectBirthDataET.setText(bundle.getString("marital"));
 
             selectReligionET.setText(bundle.getString("religion"));
             selectGenderEditText.setText(bundle.getString("gender"));
@@ -137,6 +143,91 @@ public class EditAccount extends AppCompatActivity implements EditContract.View,
             Log.w(TAG, "onScrollChanged: " + oldScrollYPostion);
         });
         avatar.setOnClickListener(this);
+
+        first.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (!s.equals("")) {
+                    emptyFirstNameFound.setVisibility(View.GONE);
+                } else {
+                    emptyFirstNameFound.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.toString().equals("")) {
+                    emptyFirstNameFound.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+        last.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (!s.equals("")) {
+                    emptyLastNameFound.setVisibility(View.GONE);
+                } else {
+                    emptyLastNameFound.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.toString().equals("")) {
+                    emptyLastNameFound.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+        mail.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (!s.equals("")) {
+                    emptyEmailFound.setVisibility(View.GONE);
+                } else {
+                    emptyEmailFound.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.toString().equals("")) {
+                    emptyEmailFound.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+        pickLocationET.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (!s.equals("")) {
+                    emptyLocationFound.setVisibility(View.GONE);
+                } else {
+                    emptyLocationFound.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.toString().equals("")) {
+                    emptyLocationFound.setVisibility(View.VISIBLE);
+                }
+            }
+        });
     }
 
     @Override
@@ -171,6 +262,11 @@ public class EditAccount extends AppCompatActivity implements EditContract.View,
     @Override
     public String gmail() {
         return mail.getText().toString();
+    }
+
+    @Override
+    public String getLocation() {
+        return pickLocationET.getText().toString();
     }
 
     @Override
@@ -339,5 +435,22 @@ public class EditAccount extends AppCompatActivity implements EditContract.View,
         return selectBirthDataET.getText().toString();
     }
 
+    @Override
+    public void invalidFound(String Name) {
+        switch (Name){
+            case "first":
+                emptyFirstNameFound.setVisibility(View.VISIBLE);
+                break;
+            case "last":
+                emptyLastNameFound.setVisibility(View.VISIBLE);
+                break;
+            case "email":
+                emptyEmailFound.setVisibility(View.VISIBLE);
+                break;
+            case "location":
+                emptyLocationFound.setVisibility(View.VISIBLE);
+                break;
+        }
+    }
 
 }

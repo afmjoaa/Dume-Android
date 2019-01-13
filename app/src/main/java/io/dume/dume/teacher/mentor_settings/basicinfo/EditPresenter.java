@@ -72,7 +72,24 @@ public class EditPresenter implements EditContract.Presenter, EditContract.onDat
         switch (element.getId()) {
             case R.id.fabEdit:
                 view.enableLoad();
-                model.synWithDataBase(view.firstName(), view.lastName(), view.getAvatarUrl(), view.gmail(), view.gender(), view.phone(), view.religion(), view.maritalStatus(), view.getBirthDate());
+                if(view.firstName().equals("")||view.lastName().equals("")||view.gmail().equals("")||view.getLocation().equals("") ){
+                    if(view.firstName().equals("")){
+                        view.invalidFound("first");
+                    }
+                    if(view.lastName().equals("")){
+                        view.invalidFound("last");
+                    }
+                    if(view.gmail().equals("")){
+                        view.invalidFound("email");
+                    }
+                    if(view.getLocation().equals("")){
+                        view.invalidFound("location");
+                    }
+                    view.toast("Mandatory can't be kept empty.");
+                    view.disableLoad();
+                }else {
+                    model.synWithDataBase(view.firstName(), view.lastName(), view.getAvatarUrl(), view.gmail(), view.gender(), view.phone(), view.religion(), view.maritalStatus(), view.getBirthDate());
+                }
                 break;
             case R.id.profileImage:
                 openImageIntent();

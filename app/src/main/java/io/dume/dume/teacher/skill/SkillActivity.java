@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
@@ -29,7 +30,7 @@ public class SkillActivity extends AppCompatActivity implements SkillContract.Vi
     RecyclerView skillRV;
     private SkillContract.Presenter presenter;
     private FloatingActionButton fabAdd;
-    private FloatingActionsMenu fooMenu;
+    private LinearLayout noDataBlock;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,23 +45,9 @@ public class SkillActivity extends AppCompatActivity implements SkillContract.Vi
     public void init() {
         DumeUtils.configureAppbar(this, "Skill Management");
         fabAdd = findViewById(R.id.fabAdd);
-        fooMenu = findViewById(R.id.fabFoo);
         fabAdd.setOnClickListener(this);
-        com.getbase.floatingactionbutton.FloatingActionButton gang = new com.getbase.floatingactionbutton.FloatingActionButton(this);
-        gang.setTitle("Dume Gang");
-        gang.setIcon(R.drawable.dume_gang_image);
-        gang.setTag("fab_gang");
-        com.getbase.floatingactionbutton.FloatingActionButton regular = new com.getbase.floatingactionbutton.FloatingActionButton(this);
-        regular.setTitle("Regular Dume");
 
-        regular.setIcon(R.drawable.dume_regular_image);
-        regular.setTag("fab_regular");
-        gang.setOnClickListener(this);
-        regular.setOnClickListener(this);
-        fooMenu.addButton(gang);
-        fooMenu.addButton(regular);
-
-
+        noDataBlock = findViewById(R.id.no_data_block);
     }
 
     @Override

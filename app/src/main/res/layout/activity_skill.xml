@@ -30,18 +30,33 @@
         android:layout_height="wrap_content"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fabAdd"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        android:clickable="true"
-        android:focusable="true"
+    <LinearLayout
+        android:id="@+id/no_data_block"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
         android:visibility="gone"
-        app:backgroundTint="@color/colorBlack"
-        app:rippleColor="@color/colorDarkAzure"
-        app:srcCompat="@drawable/ic_plus_icon_white" />
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <carbon.widget.ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:translationY="-46dp"
+            app:carbon_elevation="3dp"
+            app:srcCompat="@drawable/no_data_wallpaper" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sorry, no item to show right now ..."
+            android:textAlignment="center"
+            android:textAllCaps="false"
+            android:textColor="@color/textColorSecondary"
+            android:textSize="16sp"
+            android:translationY="-38dp" />
+
+    </LinearLayout>
 
     <com.getbase.floatingactionbutton.FloatingActionsMenu
         android:id="@+id/multiple_actions"
@@ -54,7 +69,6 @@
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginBottom="16dp"
-
         fab:fab_addButtonColorNormal="@color/black"
         fab:fab_addButtonColorPressed="@color/colorDarkAzure"
         fab:fab_addButtonPlusIconColor="@color/white"
@@ -83,19 +97,5 @@
             fab:fab_title="Regular Dume" />
 
     </com.getbase.floatingactionbutton.FloatingActionsMenu>
-
-    <com.getbase.floatingactionbutton.FloatingActionsMenu
-        android:id="@+id/fabFoo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        android:clickable="true"
-        android:focusable="true"
-        android:visibility="gone"
-        app:backgroundTint="@color/colorBlack"
-        app:fab_addButtonColorNormal="@color/black"
-        app:rippleColor="@color/colorDarkAzure"
-        app:srcCompat="@drawable/ic_plus_icon_white" />
 
 </android.support.design.widget.CoordinatorLayout>

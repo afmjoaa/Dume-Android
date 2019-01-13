@@ -24,7 +24,9 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -285,6 +287,8 @@ public class StudentSettingsActivity extends CustomStuAppCompatActivity
         AutoCompleteTextView addressTextView = dialog.findViewById(R.id.address_textView);
         Button discardBtn = dialog.findViewById(R.id.skip_btn);
         Button saveBtn = dialog.findViewById(R.id.save_btn);
+        ImageView emptyNameFound = dialog.findViewById(R.id.empty_name_found);
+        ImageView emptyAddressFound = dialog.findViewById(R.id.empty_address_found);
         addressTextView.setText(address);
         if (addressName != null) {
             if (!addressName.equals("")) {
@@ -302,13 +306,54 @@ public class StudentSettingsActivity extends CustomStuAppCompatActivity
                 }
             }
         });
-
         addressTextView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
                     addressTextView.setHint(R.string.address_example);
                 } else {
                     addressTextView.setHint("");
+                }
+            }
+        });
+        nameTextView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (!s.equals("")) {
+                    emptyNameFound.setVisibility(View.GONE);
+                } else {
+                    emptyNameFound.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.toString().equals("")) {
+                    emptyNameFound.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+        addressTextView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (!s.equals("")) {
+                    emptyAddressFound.setVisibility(View.GONE);
+                } else {
+                    emptyAddressFound.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.toString().equals("")) {
+                    emptyAddressFound.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -324,31 +369,41 @@ public class StudentSettingsActivity extends CustomStuAppCompatActivity
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showProgress();
-                dialog.dismiss();
-                //save data to db and update view
-                Map<String, Object> myMap = new HashMap<>();
-                myMap.put("location", location);
-                myMap.put("primary_text", nameTextView.getText().toString());
-                myMap.put("secondary_text", addressTextView.getText().toString());
-                mModel.updateSavedPlaces(nameTextView.getText().toString(), myMap, new TeacherContract.Model.Listener<Void>() {
-                    @Override
-                    public void onSuccess(Void list) {
-                        flush("Successfully saved");
-                        SavedPlacesAdaData current = new SavedPlacesAdaData();
-                        current.primary_text = nameTextView.getText().toString();
-                        current.secondary_text = addressTextView.getText().toString();
-                        current.location = location;
-                        savedPlacesAdapter.updateSaved(nameTextView.getText().toString(), current);
-                        hideProgress();
+                if(nameTextView.getText().toString().equals("") || addressTextView.getText().toString().equals("")){
+                    flush("Field can't be kept empty");
+                    if(nameTextView.getText().toString().equals("")){
+                        emptyNameFound.setVisibility(View.VISIBLE);
                     }
+                    if(addressTextView.getText().toString().equals("")){
+                        emptyAddressFound.setVisibility(View.VISIBLE);
+                    }
+                }else{
+                    showProgress();
+                    dialog.dismiss();
+                    //save data to db and update view
+                    Map<String, Object> myMap = new HashMap<>();
+                    myMap.put("location", location);
+                    myMap.put("primary_text", nameTextView.getText().toString());
+                    myMap.put("secondary_text", addressTextView.getText().toString());
+                    mModel.updateSavedPlaces(nameTextView.getText().toString(), myMap, new TeacherContract.Model.Listener<Void>() {
+                        @Override
+                        public void onSuccess(Void list) {
+                            flush("Successfully saved");
+                            SavedPlacesAdaData current = new SavedPlacesAdaData();
+                            current.primary_text = nameTextView.getText().toString();
+                            current.secondary_text = addressTextView.getText().toString();
+                            current.location = location;
+                            savedPlacesAdapter.updateSaved(nameTextView.getText().toString(), current);
+                            hideProgress();
+                        }
 
-                    @Override
-                    public void onError(String msg) {
-                        flush(msg);
-                        hideProgress();
-                    }
-                });
+                        @Override
+                        public void onError(String msg) {
+                            flush(msg);
+                            hideProgress();
+                        }
+                    });
+                }
             }
         });
     }

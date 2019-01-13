@@ -24,7 +24,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
@@ -55,8 +54,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import de.hdodenhof.circleimageview.CircleImageView;
-import fr.castorflex.android.verticalviewpager.VerticalViewPager;
 import io.dume.dume.R;
 import io.dume.dume.auth.auth.AuthActivity;
 import io.dume.dume.customView.HorizontalLoadView;
@@ -65,11 +62,9 @@ import io.dume.dume.student.common.SettingsAdapter;
 import io.dume.dume.student.heatMap.AccountRecyData;
 import io.dume.dume.student.heatMap.HeatMapAccountRecyAda;
 import io.dume.dume.student.homePage.MapsActivity;
-import io.dume.dume.student.studentSettings.SavedPlacesAdaData;
 import io.dume.dume.student.studentSettings.SavedPlacesAdapter;
 import io.dume.dume.student.studentSettings.StudentSettingsActivity;
 import io.dume.dume.teacher.adapters.BasicInfoAdapter;
-import io.dume.dume.teacher.mentor_settings.academic.AcademicActivity;
 import io.dume.dume.teacher.mentor_settings.basicinfo.EditAccount;
 import io.dume.dume.teacher.model.KeyValueModel;
 import io.dume.dume.teacher.pojo.Education;
@@ -94,7 +89,7 @@ public class AccountSettings extends AppCompatActivity implements AccountSetting
     private TextView profileSecTxtm, userName, userPhone, userMail;
     private RecyclerView academicRV;
     private Map<String, Object> data;
-    private CircleImageView avatarIV;
+    private carbon.widget.ImageView avatarIV;
 
     private TextView academicError;
     private RecyclerView joarBaccha;
@@ -155,9 +150,10 @@ public class AccountSettings extends AppCompatActivity implements AccountSetting
         keyValueModels.add(new KeyValueModel("Marital Status", data.get("marital").toString()));
         keyValueModels.add(new KeyValueModel("Religion", data.get("religion").toString()));
         basicRecyclerView.setAdapter(new BasicInfoAdapter(keyValueModels));
-        Glide.with(this).load(data.get("avatar") == null ? "" : data.get("avatar").toString()).apply(new RequestOptions().override(100, 100)).into(avatarIV);
+        final RequestOptions requestOptions = new RequestOptions();
+        requestOptions.placeholder(R.drawable.avatar);
+        Glide.with(this).load(data.get("avatar") == null ? "" : data.get("avatar").toString()).apply(requestOptions).into(avatarIV);
         profileSec.setAlpha(1.0f);
-
     }
 
 

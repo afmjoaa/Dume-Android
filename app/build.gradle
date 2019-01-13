@@ -105,7 +105,7 @@ dependencies {
     implementation 'com.github.warkiz.widget:indicatorseekbar:2.0.9'
     implementation 'tk.zielony:carbon:0.15.3'
 
-    implementation 'de.hdodenhof:circleimageview:2.2.0'
+    //implementation 'de.hdodenhof:circleimageview:2.2.0'
     implementation 'com.andkulikov:transitionseverywhere:1.8.0'
     implementation 'com.tomergoldst.android:tooltips:1.0.10'
     implementation 'com.google.firebase:firebase-storage:16.0.5'

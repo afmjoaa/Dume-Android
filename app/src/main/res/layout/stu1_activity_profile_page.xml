@@ -102,8 +102,8 @@
                     android:layout_alignParentTop="true"
                     android:layout_centerHorizontal="true"
                     android:adjustViewBounds="true"
-                    android:scaleType="centerCrop"
                     android:contentDescription="@string/display_pic"
+                    android:scaleType="centerCrop"
                     app:srcCompat="@drawable/alias_profile_icon" />
 
                 <TextView
@@ -300,8 +300,8 @@
 
                     <carbon.widget.ImageView
                         android:id="@+id/empty_fn_found"
-                        android:layout_width="15dp"
-                        android:layout_height="15dp"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
@@ -310,6 +310,8 @@
                         android:contentDescription="@string/search_icon"
                         android:translationY="5dp"
                         android:visibility="gone"
+                        app:carbon_cornerRadius="8dp"
+                        app:carbon_elevation="1dp"
                         app:srcCompat="@drawable/ic_empty_field" />
 
                 </RelativeLayout>
@@ -337,8 +339,8 @@
 
                     <carbon.widget.ImageView
                         android:id="@+id/empty_ln_found"
-                        android:layout_width="15dp"
-                        android:layout_height="15dp"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
@@ -347,6 +349,8 @@
                         android:contentDescription="@string/search_icon"
                         android:translationY="5dp"
                         android:visibility="gone"
+                        app:carbon_cornerRadius="8dp"
+                        app:carbon_elevation="1dp"
                         app:srcCompat="@drawable/ic_empty_field" />
 
                 </RelativeLayout>
@@ -378,8 +382,8 @@
 
                 <carbon.widget.ImageView
                     android:id="@+id/empty_email_found"
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
@@ -388,6 +392,8 @@
                     android:contentDescription="@string/search_icon"
                     android:translationY="5dp"
                     android:visibility="gone"
+                    app:carbon_cornerRadius="8dp"
+                    app:carbon_elevation="1dp"
                     app:srcCompat="@drawable/ic_empty_field" />
 
             </RelativeLayout>

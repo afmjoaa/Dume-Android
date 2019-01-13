@@ -26,6 +26,8 @@ public class EditContract {
 
         String gmail();
 
+        String getLocation();
+
         String religion();
 
         String gender();
@@ -55,7 +57,10 @@ public class EditContract {
         void onReligionClicked();
 
         void onBirthDateClicked();
+
         String getBirthDate();
+
+        void invalidFound(String Name);
     }
 
     interface Presenter {

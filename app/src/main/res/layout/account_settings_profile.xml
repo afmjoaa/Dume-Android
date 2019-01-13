@@ -1,24 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/profile_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginStart="16dp"
     android:layout_marginLeft="16dp"
-    android:layout_marginRight="16dp"
-    android:layout_marginEnd="16dp"
     android:layout_marginTop="10dp"
+    android:layout_marginEnd="16dp"
+    android:layout_marginRight="16dp"
     android:layout_marginBottom="4dp"
     android:alpha=".5">
 
-    <de.hdodenhof.circleimageview.CircleImageView
+    <carbon.widget.ImageView
         android:id="@+id/avatarImageView"
         android:layout_width="70dp"
         android:layout_height="70dp"
         android:layout_gravity="center_vertical"
         android:layout_marginEnd="10dp"
         android:layout_marginRight="10dp"
-        android:src="@drawable/avatar" />
+        android:src="@drawable/avatar"
+        app:carbon_cornerRadius="35dp"
+        app:carbon_elevation="3dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
