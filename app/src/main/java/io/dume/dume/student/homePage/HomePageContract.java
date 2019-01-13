@@ -95,6 +95,8 @@ public interface HomePageContract {
 
         String generateMsgName(String last, String first);
 
+        String getUserName();
+
         //setters
 
         void setUserName(String last, String first);

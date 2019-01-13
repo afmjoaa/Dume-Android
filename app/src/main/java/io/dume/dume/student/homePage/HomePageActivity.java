@@ -695,7 +695,16 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
 
     @Override
     public void gotoSettingActivity() {
-        startActivity(new Intent(this, StudentSettingsActivity.class));
+        Intent settingIntent = new Intent(this, StudentSettingsActivity.class);
+        Map<String, Map<String, Object>> saved_places = (Map<String, Map<String, Object>>) documentSnapshot.get("saved_places");
+        settingIntent.putExtra("avatar", getAvatarString());
+        settingIntent.putExtra("userName", getUserName());
+        settingIntent.putExtra("phone", documentSnapshot.getString("phone_number"));
+        settingIntent.putExtra("email", documentSnapshot.getString("email"));
+        if (saved_places != null) {
+            settingIntent.putExtra("sp_count", saved_places.size());
+        }
+        startActivity(settingIntent);
     }
 
     @Override
@@ -1074,6 +1083,11 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
     @Override
     public String generateMsgName(String first, String last) {
         return "@" + first + last;
+    }
+
+    @Override
+    public String getUserName() {
+        return  userNameTextView.getText().toString();
     }
 
     @Override

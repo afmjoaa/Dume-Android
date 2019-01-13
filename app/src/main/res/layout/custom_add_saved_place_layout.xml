@@ -1,36 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/recycler_container_layout"
+    android:id="@+id/add_saved_place_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:clickable="true"
     android:focusable="true"
     android:foreground="?android:attr/selectableItemBackground"
     android:orientation="vertical"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp">
+    android:paddingLeft="18dp"
+    android:paddingRight="18dp">
 
-
-    <ImageView
-        android:id="@+id/auto_image_icon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_marginEnd="30dp"
-        android:layout_marginRight="30dp"
-        android:contentDescription="@string/autocomplete_image"
-        app:srcCompat="@drawable/ic_autocomplete_places" />
 
     <LinearLayout
         android:id="@+id/vertical_textview_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_toStartOf="@+id/more_vertical_icon"
-        android:layout_toLeftOf="@+id/more_vertical_icon"
-        android:layout_toEndOf="@id/auto_image_icon"
-        android:layout_toRightOf="@id/auto_image_icon"
         android:orientation="vertical"
         android:paddingTop="10dp"
         android:paddingBottom="10dp">
@@ -44,8 +30,9 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:singleLine="true"
-            android:text="testing"
+            android:text="Add Saved Place"
             android:textAppearance="?android:attr/textAppearanceListItem"
+            android:textColor="@color/linkColorDark"
             app:fontFamily="@font/cairo_regular" />
 
         <TextView
@@ -57,30 +44,10 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:singleLine="true"
-            android:text="testing"
+            android:text="Select your anchor point faster"
             android:textAppearance="?android:attr/textAppearanceSmall"
             app:fontFamily="@font/cairo_regular" />
     </LinearLayout>
-
-    <carbon.widget.ImageView
-        android:id="@+id/more_vertical_icon"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_marginStart="20dp"
-        android:layout_marginLeft="20dp"
-        android:clickable="true"
-        android:contentDescription="@string/autocomplete_image"
-        android:focusable="true"
-        android:padding="8dp"
-        app:carbon_rippleColor="@color/colorDarkAzure"
-        app:carbon_rippleStyle="background"
-        app:carbon_rippleRadius="18dp"
-        app:carbon_cornerRadius="18dp"
-        app:srcCompat="@drawable/ic_delete_icon" />
-
 
     <View
         android:id="@+id/divider2"

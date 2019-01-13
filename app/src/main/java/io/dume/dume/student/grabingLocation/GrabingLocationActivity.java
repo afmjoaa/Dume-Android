@@ -74,6 +74,7 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
+import static io.dume.dume.util.DumeUtils.configToolbarTittle;
 import static io.dume.dume.util.DumeUtils.hideKeyboard;
 import static io.dume.dume.util.DumeUtils.showKeyboard;
 
@@ -116,6 +117,8 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
     private GeoPoint userLocation = null;
     private String[] primaryText;
     private String[] secondaryText;
+    private String addressName;
+    private Intent fromIntent;
 
     //queriedLocation for text to geopoint
     //mCenterLatLong for geopoint to text
@@ -200,14 +203,38 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
         menualCompleteRecyView.setAdapter(recyclerMenualAdapter);
         menualCompleteRecyView.setLayoutManager(new LinearLayoutManager(this));
 
-        retrivedAction = getIntent().getAction();
-        if (Objects.requireNonNull(retrivedAction).equals("fromPPA")) {
-            fromProfilePage();
-        }
+        fromIntent = getIntent();
+        retrivedAction = fromIntent.getAction();
+        setProperTittle();
     }
 
-    private void fromProfilePage() {
-        Toast.makeText(mContext, "from Profile Page", Toast.LENGTH_SHORT).show();
+    private void setProperTittle() {
+        switch (Objects.requireNonNull(retrivedAction)) {
+            case "fromPPA":
+                configToolbarTittle(this, "Select current address");
+                break;
+            case "fromSPAH":
+                configToolbarTittle(this, "Select home address");
+                break;
+            case "fromSPAW":
+                configToolbarTittle(this, "Select work address");
+                break;
+            case "fromSPAS":
+                configToolbarTittle(this, "Select saving address");
+                break;
+            case "fromSPASN":
+                addressName = fromIntent.getStringExtra("addressName");
+                if(addressName!= null ){
+                    if(!addressName.equals("")){
+                        configToolbarTittle(this, "Select " + addressName + " address");
+                    }else {
+                        configToolbarTittle(this, "Select saving address");
+                    }
+                }else{
+                    configToolbarTittle(this, "Select saving address");
+                }
+                break;
+        }
     }
 
     @Override
@@ -442,12 +469,15 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
             mpaIntent.putExtra("selected_location", mCenterLatLong);
             setResult(RESULT_OK, mpaIntent);
             finish();
-        } else if(Objects.requireNonNull(retrivedAction).equals("fromSPA")){
+        } else if (Objects.requireNonNull(retrivedAction).startsWith("fromSPA")) {
             Intent goBackToPPAIntent = new Intent(this, StudentSettingsActivity.class);
             goBackToPPAIntent.putExtra("selected_location", mCenterLatLong);
+            if (Objects.requireNonNull(retrivedAction).equals("fromSPASN")) {
+                goBackToPPAIntent.putExtra("addressName", addressName);
+            }
             setResult(RESULT_OK, goBackToPPAIntent);
             finish();
-        }else {
+        } else {
             startActivity(new Intent(this, CrudSkillActivity.class).setAction(DumeUtils.STUDENT));
         }
 

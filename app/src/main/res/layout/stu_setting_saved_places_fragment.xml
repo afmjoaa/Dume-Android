@@ -7,8 +7,6 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/saved_place_recycler"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="4dp"
-        android:paddingRight="4dp" />
+        android:layout_height="wrap_content" />
 
 </android.support.design.widget.CoordinatorLayout>

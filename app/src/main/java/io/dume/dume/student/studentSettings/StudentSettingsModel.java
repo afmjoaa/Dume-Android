@@ -35,6 +35,7 @@ public class StudentSettingsModel extends StuBaseModel implements StudentSetting
         userStudentProInfo.addSnapshotListener(activity, updateViewListener);
     }
 
+
     public void updateFavoritePlaces(String identify, Map<String, Object> savedPlacesAdaData, TeacherContract.Model.Listener<Void> listener) {
         switch (identify) {
             case "Home":
@@ -115,4 +116,34 @@ public class StudentSettingsModel extends StuBaseModel implements StudentSetting
         }
     }
 
+    public void updateSavedPlaces(String identify, Map<String, Object> savedPlacesAdaData, TeacherContract.Model.Listener<Void> listener) {
+        String myFieldPath = "saved_places." + identify;
+        userStudentProInfo.update(myFieldPath, savedPlacesAdaData).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                listener.onSuccess(aVoid);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                listener.onError(e.getLocalizedMessage());
+            }
+        });
+    }
+
+    public void deleteSavedPlaces(String identify, TeacherContract.Model.Listener<Void> listener) {
+        String myFieldPath = "saved_places." + identify;
+        userStudentProInfo.update(myFieldPath, FieldValue.delete()).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                listener.onSuccess(aVoid);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                listener.onError(e.getLocalizedMessage());
+            }
+        });
+
+    }
 }

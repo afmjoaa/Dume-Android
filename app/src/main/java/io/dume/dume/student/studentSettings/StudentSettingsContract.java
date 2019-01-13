@@ -17,6 +17,17 @@ public interface StudentSettingsContract {
         void gotoProfilePage();
 
         void flush(String msg);
+
+        void fabClicked();
+
+        void setUserName(String name);
+
+        void setAvatar(String avatarString);
+
+        void setPhoneNum(String phoneNum);
+
+        void setEmail(String email);
+
     }
 
     interface Presenter {

@@ -4,14 +4,13 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.support.v7.view.ContextThemeWrapper;
-import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -58,9 +57,11 @@ public abstract class SavedPlacesAdapter extends RecyclerView.Adapter<RecyclerVi
             return 9997;
         } else if (position == 3) {
             return 9998;
-        } else if (position == 3 + 3) {
+        } else if (position == (3 + saved.size() + 2)) {
             return 9999;
-        } //3==data.get(position).typeView
+        } else if (position == (3 + saved.size() + 1)) {
+            return 1000;
+        }
         return super.getItemViewType(position);
     }
 
@@ -70,6 +71,9 @@ public abstract class SavedPlacesAdapter extends RecyclerView.Adapter<RecyclerVi
         if (viewType == 9997 || viewType == 9998 || viewType == 9999) {
             View view = inflater.inflate(R.layout.custom_saved_places_barrier, viewGroup, false);
             return new HeaderVH(view);
+        } else if (viewType == 1000) {
+            View view = inflater.inflate(R.layout.custom_add_saved_place_layout, viewGroup, false);
+            return new AddSavedView(view);
         }
         View view = inflater.inflate(R.layout.custom_saved_places_row, viewGroup, false);
         SavedPlacesAdapter.MyViewHolder holder = new SavedPlacesAdapter.MyViewHolder(view);
@@ -87,117 +91,171 @@ public abstract class SavedPlacesAdapter extends RecyclerView.Adapter<RecyclerVi
         } else if (holder.getItemViewType() == 9999) {
             HeaderVH headerVH = (HeaderVH) holder;
             headerVH.headerText.setText(R.string.recent_used_places);
+            if (recent.size() == 0) {
+                headerVH.containerLinearLayout.setVisibility(View.GONE);
+            } else {
+                headerVH.containerLinearLayout.setVisibility(View.VISIBLE);
+            }
+        } else if (holder.getItemViewType() == 1000) {
+            AddSavedView addSavedView = (AddSavedView) holder;
+            addSavedView.addSavedPlaceLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    activity.startActivityForResult(new Intent(context, GrabingLocationActivity.class).setAction("fromSPAS"), ADD_SAVED_PLACES);
+                }
+            });
         } else {
             SavedPlacesAdaData current = new SavedPlacesAdaData();
             current.primary_text = "foo";
             MyViewHolder myViewHolder = (MyViewHolder) holder;
-            switch (position) {
+            if (position == 1) {
                 //home block
-                case 1:
-                    myViewHolder.imageIcon.setImageResource(imageIcons[0]);
-                    if (favorite.size() > 0) {
-                        for (SavedPlacesAdaData foo : favorite) {
-                            if (foo.primary_text.equals("Home")){
-                                current = foo;
-                            }
+                myViewHolder.imageIcon.setImageResource(imageIcons[0]);
+                if (favorite.size() > 0) {
+                    for (SavedPlacesAdaData foo : favorite) {
+                        if (foo.primary_text.equals("Home")) {
+                            current = foo;
                         }
-                        if (current.primary_text.equals("Home")){
-                            myViewHolder.primaryText.setText(current.primary_text);
-                            myViewHolder.secondaryText.setText(current.secondary_text);
-                            myViewHolder.moreVertImage.setVisibility(View.VISIBLE);
-                        }else {
-                            myViewHolder.primaryText.setText("Add Home");
-                            myViewHolder.secondaryText.setText("");
-                            myViewHolder.moreVertImage.setVisibility(View.GONE);
-                        }
-                    }else{
+                    }
+                    if (current.primary_text.equals("Home")) {
+                        myViewHolder.primaryText.setText(current.primary_text);
+                        myViewHolder.secondaryText.setText(current.secondary_text);
+                        myViewHolder.moreVertImage.setVisibility(View.VISIBLE);
+                        myViewHolder.primaryText.setTranslationY((0 * (context.getResources().getDisplayMetrics().density)));
+                    } else {
                         myViewHolder.primaryText.setText("Add Home");
                         myViewHolder.secondaryText.setText("");
                         myViewHolder.moreVertImage.setVisibility(View.GONE);
+                        myViewHolder.primaryText.setTranslationY((10 * (context.getResources().getDisplayMetrics().density)));
                     }
-                    break;
+                } else {
+                    myViewHolder.primaryText.setText("Add Home");
+                    myViewHolder.secondaryText.setText("");
+                    myViewHolder.moreVertImage.setVisibility(View.GONE);
+                    myViewHolder.primaryText.setTranslationY((10 * (context.getResources().getDisplayMetrics().density)));
+                }
+            } else if (position == 2) {
                 //work block
-                case 2:
-                    myViewHolder.imageIcon.setImageResource(imageIcons[1]);
-                    if (favorite.size() > 0) {
-                        for (SavedPlacesAdaData foo : favorite) {
-                            if (foo.primary_text.equals("Work")){
-                                current = foo;
-                            }
+                myViewHolder.imageIcon.setImageResource(imageIcons[1]);
+                if (favorite.size() > 0) {
+                    for (SavedPlacesAdaData foo : favorite) {
+                        if (foo.primary_text.equals("Work")) {
+                            current = foo;
                         }
-                        if (current.primary_text.equals("Work")){
-                            myViewHolder.primaryText.setText(current.primary_text);
-                            myViewHolder.secondaryText.setText(current.secondary_text);
-                            myViewHolder.moreVertImage.setVisibility(View.VISIBLE);
-                        }else {
-                            myViewHolder.primaryText.setText("Add Work");
-                            myViewHolder.secondaryText.setText("");
-                            myViewHolder.moreVertImage.setVisibility(View.GONE);
-                        }
-                    }else{
+                    }
+                    if (current.primary_text.equals("Work")) {
+                        myViewHolder.primaryText.setText(current.primary_text);
+                        myViewHolder.secondaryText.setText(current.secondary_text);
+                        myViewHolder.moreVertImage.setVisibility(View.VISIBLE);
+                        myViewHolder.primaryText.setTranslationY((0 * (context.getResources().getDisplayMetrics().density)));
+                    } else {
                         myViewHolder.primaryText.setText("Add Work");
                         myViewHolder.secondaryText.setText("");
                         myViewHolder.moreVertImage.setVisibility(View.GONE);
+                        myViewHolder.primaryText.setTranslationY((10 * (context.getResources().getDisplayMetrics().density)));
                     }
-                    break;
+                } else {
+                    myViewHolder.primaryText.setText("Add Work");
+                    myViewHolder.secondaryText.setText("");
+                    myViewHolder.moreVertImage.setVisibility(View.GONE);
+                    myViewHolder.primaryText.setTranslationY((10 * (context.getResources().getDisplayMetrics().density)));
+                }
+            } else if (position >= 4 && position < (saved.size() + 4)) {
+                myViewHolder.imageIcon.setImageResource(imageIcons[2]);
 
-                case 4:
-                    /*current  = favorite.get(1);
-                    myViewHolder.imageIcon.setImageResource(imageIcons[1]);*/
-                    break;
+                SavedPlacesAdaData savedCurrent = saved.get((position - 4));
+                myViewHolder.primaryText.setText(savedCurrent.primary_text);
+                myViewHolder.secondaryText.setText(savedCurrent.secondary_text);
+                myViewHolder.moreVertImage.setVisibility(View.VISIBLE);
 
+            } else if (position > (saved.size() + 5) && position <= (saved.size() + 5 + recent.size())) {
+                myViewHolder.imageIcon.setImageResource(imageIcons[3]);
+                myViewHolder.moreVertImage.setVisibility(View.GONE);
 
+                SavedPlacesAdaData recentCurrent = recent.get((position - (saved.size() + 6)));
+                myViewHolder.primaryText.setText(recentCurrent.primary_text);
+                myViewHolder.secondaryText.setText(recentCurrent.secondary_text);
+
+            } else {
+                Log.e(TAG, "onBindViewHolder: " + "error error error bound");
             }
+
             myViewHolder.moreVertImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    OnItemDeleteClicked(view, holder.getAdapterPosition());
+                    int position = holder.getAdapterPosition();
+                    final String myPrimaryText = myViewHolder.primaryText.getText().toString();
+                    if (position == 1) {
+                        updateFav("Home", null);
+                        OnItemDeleteClicked(view, position, "Home");
+                    } else if (position == 2) {
+                        updateFav("Work", null);
+                        OnItemDeleteClicked(view, position, "Work");
+                    } else if (position >= 4 && position < (saved.size() + 4)) {
+                        OnItemDeleteClicked(view, position, myPrimaryText);
+                        updateSaved(myPrimaryText, null);
+                    }
                 }
             });
-            if (myViewHolder.secondaryText.getText().toString().equals("")) {
-                myViewHolder.primaryText.setTranslationY((10 * (context.getResources().getDisplayMetrics().density)));
-            }
 
             //testing some onclick
             myViewHolder.hostLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(holder.getAdapterPosition() == 1 ){
-                        activity.startActivityForResult(new Intent(context, GrabingLocationActivity.class).setAction("fromSPA"), ADD_HOME_LOCATION);
-                    }else if(holder.getAdapterPosition()== 2){
-                        activity.startActivityForResult(new Intent(context, GrabingLocationActivity.class).setAction("fromSPA"), ADD_WORK_LOCATION);
+                    if (holder.getAdapterPosition() == 1) {
+                        activity.startActivityForResult(new Intent(context, GrabingLocationActivity.class).setAction("fromSPAH"), ADD_HOME_LOCATION);
+                    } else if (holder.getAdapterPosition() == 2) {
+                        activity.startActivityForResult(new Intent(context, GrabingLocationActivity.class).setAction("fromSPAW"), ADD_WORK_LOCATION);
+                    } else if (position >= 4 && position < (saved.size() + 4)) {
+                        Intent myIntent = new Intent(context, GrabingLocationActivity.class).setAction("fromSPASN");
+                        myIntent.putExtra("addressName", myViewHolder.primaryText.getText());
+                        activity.startActivityForResult(myIntent, ADD_SAVED_PLACES);
+                    }else if (position > (saved.size() + 5) && position <= (saved.size() + 5 + recent.size())) {
+                        Toast.makeText(context, "Can't edit this item", Toast.LENGTH_SHORT).show();
                     }
                 }
             });
 
 
+
         }
     }
 
-    public void updateFav(SavedPlacesAdaData newFav){
-        favorite.add(newFav);
-        //favorite.clear();
-        //favorite.addAll(newFav);
+    public void updateFav(String identify, SavedPlacesAdaData newFav) {
+        for (int i = 0; i < favorite.size(); i++) {
+            if (favorite.get(i).primary_text.equals(identify)) {
+                favorite.remove(i);
+            }
+        }
+        if (newFav != null) {
+            favorite.add(newFav);
+        }
         this.notifyDataSetChanged();
     }
 
-    public void updateSaved(List<SavedPlacesAdaData> newSaved){
-        saved.clear();
-        saved.addAll(newSaved);
+    public void updateSaved(String identify, SavedPlacesAdaData newSaved) {
+        for (int i = 0; i < saved.size(); i++) {
+            if (saved.get(i).primary_text.equals(identify)) {
+                saved.remove(i);
+            }
+        }
+        if (newSaved != null) {
+            saved.add(newSaved);
+        }
         this.notifyDataSetChanged();
     }
 
-    public void updateRecent(List<SavedPlacesAdaData> newRecent){
+    public void updateRecent(List<SavedPlacesAdaData> newRecent) {
         recent.clear();
         recent.addAll(newRecent);
         this.notifyDataSetChanged();
     }
 
-    abstract void OnItemDeleteClicked(View v, int position);
+    abstract void OnItemDeleteClicked(View v, int position, String identify);
 
     @Override
     public int getItemCount() {
-        return 10;
+        return (saved.size() + 6 + recent.size());
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
@@ -224,10 +282,22 @@ public abstract class SavedPlacesAdapter extends RecyclerView.Adapter<RecyclerVi
     class HeaderVH extends RecyclerView.ViewHolder {
 
         private final TextView headerText;
+        private final LinearLayout containerLinearLayout;
 
         public HeaderVH(View itemView) {
             super(itemView);
             headerText = itemView.findViewById(R.id.recent_updates);
+            containerLinearLayout = itemView.findViewById(R.id.constraintLayout);
+        }
+    }
+
+    class AddSavedView extends RecyclerView.ViewHolder {
+
+        private final RelativeLayout addSavedPlaceLayout;
+
+        public AddSavedView(View itemView) {
+            super(itemView);
+            addSavedPlaceLayout = itemView.findViewById(R.id.add_saved_place_layout);
         }
     }
 }

@@ -660,6 +660,8 @@ provided.Tap salary for details.  </string>
     <string name="phone_number">Phone Number</string>
     <string name="marital_status">Marital Status</string>
     <string name="birth_date">Birth Date</string>
+    <string name="home_example">e.g. Omi\'s Home</string>
+    <string name="address_example">Rajuk Uttara Model College, Sector 6</string>
 
     <string-array name="after_splash_title">
         <item>Find mentor anytime and anywhere</item>

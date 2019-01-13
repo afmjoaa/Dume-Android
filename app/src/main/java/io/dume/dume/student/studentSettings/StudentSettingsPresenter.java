@@ -42,6 +42,9 @@ public class StudentSettingsPresenter implements StudentSettingsContract.Present
             case R.id.basic_info_layout:
                 mView.gotoProfilePage();
                 break;
+            case R.id.fab:
+                mView.fabClicked();
+                break;
         }
     }
 
