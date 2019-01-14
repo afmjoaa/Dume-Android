@@ -66,25 +66,17 @@ public class SkillPresenter implements SkillContract.Presenter {
 
     @Override
     public void onViewInteracted(View element) {
-        switch (element.getTag().toString()) {
-            case "fab_gang":
-                view.flush("Gang Clicked");
-                break;
-            case "fab_regular":
-                view.flush("Regular Clicked");
-
-                break;
-
-        }
-
-
         switch (element.getId()) {
-            case R.id.fabAdd:
+            case R.id.fab_regular:
+                view.goToCrudActivity(DumeUtils.TEACHER);
+                break;
+            case R.id.fab_gang:
+                view.goToCrudActivity(DumeUtils.BOOTCAMP);
+                break;
+            /*case R.id.fabAdd:
                 DocumentReference mini_users = firestore.collection("mini_users").document(Objects.requireNonNull(mAuth.getCurrentUser()).getUid());
                 listenerRegistration = mini_users.addSnapshotListener((documentSnapshot, e) -> {
                     if (documentSnapshot != null) {
-                        //Log.w(TAG, "onAccountTypeFound: " + documentSnapshot.toString());
-                        //Log.e(TAG, "Fucked Here : " + documentSnapshot.toString());
                         detachListener();
                         Object o = documentSnapshot.get("account_major");
                         String account_major = "";
@@ -99,7 +91,7 @@ public class SkillPresenter implements SkillContract.Presenter {
                         }
                     }
                 });
-                break;
+                break;*/
         }
     }
 

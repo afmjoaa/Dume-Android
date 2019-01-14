@@ -29,8 +29,10 @@ public class SkillActivity extends AppCompatActivity implements SkillContract.Vi
     @BindView(R.id.skillRV)
     RecyclerView skillRV;
     private SkillContract.Presenter presenter;
-    private FloatingActionButton fabAdd;
     private LinearLayout noDataBlock;
+    private com.getbase.floatingactionbutton.FloatingActionButton fabGang;
+    private com.getbase.floatingactionbutton.FloatingActionButton fabRegular;
+    private FloatingActionsMenu multiFab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,10 +46,10 @@ public class SkillActivity extends AppCompatActivity implements SkillContract.Vi
     @Override
     public void init() {
         DumeUtils.configureAppbar(this, "Skill Management");
-        fabAdd = findViewById(R.id.fabAdd);
-        fabAdd.setOnClickListener(this);
-
         noDataBlock = findViewById(R.id.no_data_block);
+        multiFab = findViewById(R.id.multiple_actions);
+        fabRegular = findViewById(R.id.fab_regular);
+        fabGang = findViewById(R.id.fab_gang);
     }
 
     @Override
@@ -87,6 +89,11 @@ public class SkillActivity extends AppCompatActivity implements SkillContract.Vi
     public void loadSkillRV(ArrayList<Skill> list) {
         skillRV.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         skillRV.setAdapter(new SkillAdapter(SkillAdapter.ACTIVITY, list));
+        if(list.size() == 0 ){
+            noDataBlock.setVisibility(View.VISIBLE);
+        }else {
+            noDataBlock.setVisibility(View.GONE);
+        }
     }
 
     public void showProgress() {
@@ -106,6 +113,5 @@ public class SkillActivity extends AppCompatActivity implements SkillContract.Vi
             loadView.setVisibility(View.INVISIBLE);
         }
     }
-
 
 }
