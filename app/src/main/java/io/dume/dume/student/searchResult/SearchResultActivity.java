@@ -161,6 +161,12 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
     private ActionBar supportActionBarMain;
     private ActionBar supportActionBarSecond;
     private int optionMenu = R.menu.menu_search_result;
+    private LinearLayout agreementHostLayout;
+    private Button agreementInfoBtn;
+    private LinearLayout agreementHideable;
+    private LinearLayout locationHostLayout;
+    private Button locationInfoBtn;
+    private LinearLayout locationHideable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -230,15 +236,19 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
         onlyRatingContainer = findViewById(R.id.rating_layout_vertical);
         qualificationRecyView = findViewById(R.id.recycler_view_qualifications);
         reviewRecyView = findViewById(R.id.recycler_view_reviews);
-        reviewInfoBtn = findViewById(R.id.review_info_btn);
+
         moreInfoBtn = findViewById(R.id.show_more_info_btn);
         moreInfoHost = findViewById(R.id.more_info_host_linearlayout);
         moreInfoHidable = findViewById(R.id.more_info_layout_vertical);
+
         reviewHost = findViewById(R.id.review_host_linearlayout);
         reviewHidable = findViewById(R.id.review_layout_vertical);
+        reviewInfoBtn = findViewById(R.id.review_info_btn);
+
         achievementInfoBtn = findViewById(R.id.show_achievement_btn);
         achievementHost = findViewById(R.id.achievement_host_linearlayout);
         achievementHidable = findViewById(R.id.achievement_layout_vertical);
+
         basicInfo = findViewById(R.id.basic_info);
         basicInfoInsider = findViewById(R.id.basic_info_insider_layout);
         basicInfoInsiderLayoutParams = (LinearLayout.LayoutParams) basicInfoInsider.getLayoutParams();
@@ -251,6 +261,17 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
         mDummyLatLngOne = new LatLng(latitude1, longitude1);
         //iconFactory instance
         iconFactory = new IconGenerator(this);
+
+        agreementHostLayout = findViewById(R.id.agreement_term_host_linearlayout);
+        agreementInfoBtn = findViewById(R.id.show_agreement_terms_btn);
+        agreementHideable = findViewById(R.id.agreement_term_layout_vertical);
+
+        locationHostLayout = findViewById(R.id.location_host_linearlayout);
+        locationInfoBtn = findViewById(R.id.show_location_btn);
+        locationHideable = findViewById(R.id.location_layout_vertical);
+
+
+
 
     }
 
@@ -477,9 +498,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                 } else {
                     onlyRatingContainer.setVisibility(View.VISIBLE);
                 }
-
             }
-
         });
 
         //setting the animation for the more info btn
@@ -500,7 +519,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
 
                             @Override
                             public void onTransitionEnd(@NonNull Transition transition) {
-                                if (!visible) {
+                                if (visible) {
                                     moreInfoHidable.setVisibility(View.GONE);
                                 }
                             }
@@ -523,9 +542,9 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                 TransitionManager.beginDelayedTransition(moreInfoHost, set);
                 //onlyRatingContainer.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
                 if (visible) {
-                    moreInfoHidable.setVisibility(View.VISIBLE);
-                } else {
                     moreInfoHidable.setVisibility(View.INVISIBLE);
+                } else {
+                    moreInfoHidable.setVisibility(View.VISIBLE);
                 }
 
             }
@@ -542,7 +561,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                         .addTransition(new Fade())
                         .addTransition(new Slide(Gravity.TOP))
                         .setInterpolator(visible ? new LinearOutSlowInInterpolator() : new FastOutLinearInInterpolator())
-                        .setDuration(1000)
+                        .setDuration(600)
                         .addListener(new Transition.TransitionListener() {
                             @Override
                             public void onTransitionStart(@NonNull Transition transition) {
@@ -551,7 +570,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
 
                             @Override
                             public void onTransitionEnd(@NonNull Transition transition) {
-                                if (!visible) {
+                                if (visible) {
                                     reviewHidable.setVisibility(View.GONE);
                                 }
                             }
@@ -574,11 +593,107 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                 TransitionManager.beginDelayedTransition(reviewHost, set);
                 //onlyRatingContainer.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
                 if (visible) {
-                    reviewHidable.setVisibility(View.VISIBLE);
-                } else {
                     reviewHidable.setVisibility(View.INVISIBLE);
+                } else {
+                    reviewHidable.setVisibility(View.VISIBLE);
                 }
 
+            }
+
+        });
+
+        //setting the animation for the agreement btn
+        agreementInfoBtn.setOnClickListener(new VisibleToggleClickListener() {
+            @SuppressLint("CheckResult")
+            @Override
+            protected void changeVisibility(boolean visible) {
+                TransitionSet set = new TransitionSet()
+                        .addTransition(new Fade())
+                        .addTransition(new Slide(Gravity.TOP))
+                        .setInterpolator(visible ? new LinearOutSlowInInterpolator() : new FastOutLinearInInterpolator())
+                        .addListener(new Transition.TransitionListener() {
+                            @Override
+                            public void onTransitionStart(@NonNull Transition transition) {
+
+                            }
+
+                            @Override
+                            public void onTransitionEnd(@NonNull Transition transition) {
+                                if (visible) {
+                                    agreementHideable.setVisibility(View.GONE);
+                                }
+                            }
+
+                            @Override
+                            public void onTransitionCancel(@NonNull Transition transition) {
+
+                            }
+
+                            @Override
+                            public void onTransitionPause(@NonNull Transition transition) {
+
+                            }
+
+                            @Override
+                            public void onTransitionResume(@NonNull Transition transition) {
+
+                            }
+                        });
+                TransitionManager.beginDelayedTransition(agreementHostLayout, set);
+                //onlyRatingContainer.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
+                if (visible) {
+                    agreementHideable.setVisibility(View.INVISIBLE);
+                } else {
+                    agreementHideable.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+        //setting the animation for the location btn
+        locationInfoBtn.setOnClickListener(new VisibleToggleClickListener() {
+
+            @SuppressLint("CheckResult")
+            @Override
+            protected void changeVisibility(boolean visible) {
+                TransitionSet set = new TransitionSet()
+                        .addTransition(new Fade())
+                        .addTransition(new Slide(Gravity.TOP))
+                        .setInterpolator(visible ? new LinearOutSlowInInterpolator() : new FastOutLinearInInterpolator())
+                        .addListener(new Transition.TransitionListener() {
+                            @Override
+                            public void onTransitionStart(@NonNull Transition transition) {
+
+                            }
+
+                            @Override
+                            public void onTransitionEnd(@NonNull Transition transition) {
+                                if (visible) {
+                                    locationHideable.setVisibility(View.GONE);
+                                }
+                            }
+
+                            @Override
+                            public void onTransitionCancel(@NonNull Transition transition) {
+
+                            }
+
+                            @Override
+                            public void onTransitionPause(@NonNull Transition transition) {
+
+                            }
+
+                            @Override
+                            public void onTransitionResume(@NonNull Transition transition) {
+
+                            }
+                        });
+                TransitionManager.beginDelayedTransition(locationHostLayout, set);
+                //onlyRatingContainer.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
+                if (visible) {
+                    locationHideable.setVisibility(View.INVISIBLE);
+                } else {
+                    locationHideable.setVisibility(View.VISIBLE);
+                }
             }
 
         });
@@ -601,7 +716,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
 
                             @Override
                             public void onTransitionEnd(@NonNull Transition transition) {
-                                if (!visible) {
+                                if (visible) {
                                     achievementHidable.setVisibility(View.GONE);
                                 }
                             }
@@ -624,11 +739,10 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                 TransitionManager.beginDelayedTransition(achievementHost, set);
                 //onlyRatingContainer.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
                 if (visible) {
-                    achievementHidable.setVisibility(View.VISIBLE);
-                } else {
                     achievementHidable.setVisibility(View.INVISIBLE);
+                } else {
+                    achievementHidable.setVisibility(View.VISIBLE);
                 }
-
             }
 
         });
@@ -654,9 +768,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
             protected void onSwipeBottom() {
             }
         };
-
         basicInfo.setOnTouchListener(onSwipeTouchListener);
-
 
     }
 

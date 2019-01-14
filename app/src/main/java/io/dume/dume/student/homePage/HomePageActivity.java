@@ -98,14 +98,14 @@ import io.dume.dume.student.studentPayment.StudentPaymentActivity;
 import io.dume.dume.student.studentSettings.StudentSettingsActivity;
 import io.dume.dume.teacher.homepage.TeacherActivtiy;
 import io.dume.dume.util.DumeUtils;
+import io.dume.dume.util.NetworkUtil;
 import me.zhanghai.android.materialratingbar.MaterialRatingBar;
 
 import static io.dume.dume.util.DumeUtils.animateImage;
 import static io.dume.dume.util.ImageHelper.getRoundedCornerBitmapSquare;
 
 public class HomePageActivity extends CusStuAppComMapActivity implements HomePageContract.View,
-        NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback, HomePageContract.ParentCallback,
-        MyGpsLocationChangeListener {
+        NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback, MyGpsLocationChangeListener {
 
     private static final String TAG = "HomePageActivity";
     HomePageContract.Presenter mPresenter;
@@ -138,7 +138,6 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
     private Toolbar secondaryToolbar;
     private CollapsingToolbarLayout secondaryCollapsableToolbar;
     private static final int fromFlag = 1;
-    private HomePageContract.ParentCallback parentCallback;
     private carbon.widget.LinearLayout secondaryNavContainer;
     private SupportMapFragment mapFragment;
     private Intent locationServiceIntent;
@@ -174,6 +173,8 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
     private TextView doMoreDetailTextView;
     private TextView promotionValidityTextView;
     private TextView promotionTextView;
+    private Snackbar mySnackbar;
+    private CoordinatorLayout coordiHackFab;
 
 
     @Override
@@ -290,13 +291,13 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
         primaryNavContainer = findViewById(R.id.primary_navigation_container);
         secondaryNavContainer = findViewById(R.id.secondary_noGps_navigation_container);
         coordinatorLayout = findViewById(R.id.parent_coor_layout);
+        coordiHackFab = findViewById(R.id.coordi_hack_fab);
         startMentoringImageView = findViewById(R.id.start_mentoring_imageView);
         referMentorImageView = findViewById(R.id.refer_mentor_imageView);
         freeCashbackImageView = findViewById(R.id.free_cashback_imageView);
         hPageBSRecycler = findViewById(R.id.homePage_bottomSheet_recycler);
         feedbackStrings = getResources().getStringArray(R.array.review_hint_text_dependent);
         radioSegmentGroup = findViewById(R.id.segmentGroup);
-        //
         userNameTextView = findViewById(R.id.user_name);
         userAddressingTextView = findViewById(R.id.user_addressing);
         userRatingTextView = findViewById(R.id.user_rating);
@@ -411,8 +412,18 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
         navigationTogglerConfig();
         //bottom sheet config
         bottomSheetCallbackConfig();
-        //setting up parent callback listener
-        setParentCallback(this);
+        //setting my snackbar callback
+        snackbar.addCallback(new Snackbar.Callback() {
+            @Override
+            public void onDismissed(Snackbar snackbar, int event) {
+                //network resumed make functionality available
+            }
+            @Override
+            public void onShown(Snackbar snackbar) {
+                //network unavailable make functionality unavailable
+            }
+        });
+
 
         if (DumeUtils.isGpsEnabled(this)) {
             MAPCONTAINER.setVisibility(View.VISIBLE);
@@ -499,27 +510,27 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
                 DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badgeTwo, 0xfff56161, Color.BLACK, mRecPendingCount, 3.0f, 3.0f);
                 DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badgeOne, 0xfff4f094, Color.BLACK, mRecAcceptedCount, 8.0f, -3.4f);
                 DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badge, 0xfface0ac, Color.BLACK, mRecCurrentCount, 12.0f, 3.0f);
-            }else if(mRecPendingCount == 0 && mRecAcceptedCount != 0 && mRecCurrentCount == 0){
+            } else if (mRecPendingCount == 0 && mRecAcceptedCount != 0 && mRecCurrentCount == 0) {
                 DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badgeTwo, 0xfff56161, Color.BLACK, mRecPendingCount, 8.0f, -3.4f);
                 DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badgeOne, 0xfff4f094, Color.BLACK, mRecAcceptedCount, 3.0f, 3.0f);
                 DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badge, 0xfface0ac, Color.BLACK, mRecCurrentCount, 12.0f, 3.0f);
-            }else if(mRecPendingCount == 0 && mRecAcceptedCount == 0 && mRecCurrentCount != 0){
+            } else if (mRecPendingCount == 0 && mRecAcceptedCount == 0 && mRecCurrentCount != 0) {
                 DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badgeTwo, 0xfff56161, Color.BLACK, mRecPendingCount, 12.0f, 3.0f);
                 DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badgeOne, 0xfff4f094, Color.BLACK, mRecAcceptedCount, 8.0f, -3.4f);
                 DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badge, 0xfface0ac, Color.BLACK, mRecCurrentCount, 3.0f, 3.0f);
-            }else if(mRecPendingCount != 0 && mRecAcceptedCount != 0 && mRecCurrentCount == 0){
+            } else if (mRecPendingCount != 0 && mRecAcceptedCount != 0 && mRecCurrentCount == 0) {
                 DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badgeTwo, 0xfff56161, Color.BLACK, mRecPendingCount, 3.0f, 3.0f);
                 DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badgeOne, 0xfff4f094, Color.BLACK, mRecAcceptedCount, 8.0f, -3.4f);
                 DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badge, 0xfface0ac, Color.BLACK, mRecCurrentCount, 12.0f, 3.0f);
-            }else if(mRecPendingCount != 0 && mRecAcceptedCount == 0 && mRecCurrentCount != 0){
+            } else if (mRecPendingCount != 0 && mRecAcceptedCount == 0 && mRecCurrentCount != 0) {
                 DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badgeTwo, 0xfff56161, Color.BLACK, mRecPendingCount, 3.0f, 3.0f);
                 DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badgeOne, 0xfff4f094, Color.BLACK, mRecAcceptedCount, 12.0f, 3.0f);
                 DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badge, 0xfface0ac, Color.BLACK, mRecCurrentCount, 8.0f, -3.4f);
-            }else if(mRecPendingCount == 0 && mRecAcceptedCount != 0 && mRecCurrentCount != 0){
+            } else if (mRecPendingCount == 0 && mRecAcceptedCount != 0 && mRecCurrentCount != 0) {
                 DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badgeTwo, 0xfff56161, Color.BLACK, mRecPendingCount, 12.0f, 3.0f);
                 DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badgeOne, 0xfff4f094, Color.BLACK, mRecAcceptedCount, 3.0f, 3.0f);
                 DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badge, 0xfface0ac, Color.BLACK, mRecCurrentCount, 8.0f, -3.4f);
-            }else{
+            } else {
                 DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badgeTwo, 0xfff56161, Color.BLACK, mRecPendingCount, 3.0f, 3.0f);
                 DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badgeOne, 0xfff4f094, Color.BLACK, mRecAcceptedCount, 8.0f, -3.4f);
                 DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badge, 0xfface0ac, Color.BLACK, mRecCurrentCount, 12.0f, 3.0f);
@@ -868,17 +879,6 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
     }
 
     @Override
-    public void onNetworkPause() {
-        if (bottomSheetBehavior.getState() != BottomSheetBehavior.STATE_HIDDEN && !firstTime) {
-            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-        }
-    }
-
-    @Override
-    public void onNetworkResume() {
-    }
-
-    @Override
     public void onMyGpsLocationChanged(Location location) {
 
     }
@@ -937,7 +937,6 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
         Button SubmitBtn = dialog.findViewById(R.id.submit_btn);
         RelativeLayout firstLayout = dialog.findViewById(R.id.first_layout);
         RelativeLayout secondLayout = dialog.findViewById(R.id.second_layout);
-
 
 
         //testing the recycle view here
@@ -1087,7 +1086,7 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
 
     @Override
     public String getUserName() {
-        return  userNameTextView.getText().toString();
+        return userNameTextView.getText().toString();
     }
 
     @Override
@@ -1169,9 +1168,8 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
 
     @Override
     public void showSnackBar(String completePercent) {
-        Snackbar mySnackbar = Snackbar.make(coordinatorLayout, "Replace with your own action", Snackbar.LENGTH_LONG);
+        mySnackbar = Snackbar.make(coordinatorLayout, "Replace with your own action", Snackbar.LENGTH_LONG);
         Snackbar.SnackbarLayout layout = (Snackbar.SnackbarLayout) mySnackbar.getView();
-
         TextView textView = (TextView) layout.findViewById(android.support.design.R.id.snackbar_text);
         textView.setVisibility(View.INVISIBLE);
         LayoutInflater inflater = LayoutInflater.from(context);
@@ -1194,7 +1192,10 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
 
         layout.setLayoutParams(parentParams);
         layout.addView(snackView, 0);
-        mySnackbar.show();
+        int status = NetworkUtil.getConnectivityStatusString(context);
+        if (snackbar != null && !snackbar.isShown() && status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
+            mySnackbar.show();
+        }
     }
 
 

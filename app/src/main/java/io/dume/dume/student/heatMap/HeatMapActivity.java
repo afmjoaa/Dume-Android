@@ -164,6 +164,7 @@ public class HeatMapActivity extends CusStuAppComMapActivity implements OnMapRea
 
     @Override
     public void initHeatMap() {
+        fab.setAlpha(0.90f);
         //elevation and shadow transparent hack
         myAppBarLayout.bringToFront();
         myAppBarLayout.setBackgroundColor(getResources().getColor(android.R.color.transparent));

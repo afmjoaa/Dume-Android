@@ -205,7 +205,9 @@
             android:name=".student.recordsAccepted.RecordsAcceptedActivity"
             android:label="@string/title_activity_records_accepted"
             android:theme="@style/AppTheme.NoActionBar.transparent.accepted" />
-        <activity android:name=".teacher.skill.SkillActivity" />
+        <activity
+            android:name=".teacher.skill.SkillActivity"
+            android:theme="@style/MyStyle"/>
         <activity
             android:name=".teacher.crudskill.CrudSkillActivity"
             android:label="Select category"

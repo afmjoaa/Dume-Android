@@ -15,11 +15,13 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -424,6 +426,19 @@ public class DumeUtils {
             Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
             return null;
         }
+    }
+
+    public void onPopupButtonClick(Context context,View button) {
+        PopupMenu popup = new PopupMenu(context, button);
+        popup.getMenuInflater().inflate(R.menu.menu_edit_remove, popup.getMenu());
+
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            public boolean onMenuItemClick(MenuItem item) {
+                return true;
+            }
+        });
+
+        popup.show();
     }
 }
 

@@ -73,6 +73,15 @@ public class SkillPresenter implements SkillContract.Presenter {
             case R.id.fab_gang:
                 view.goToCrudActivity(DumeUtils.BOOTCAMP);
                 break;
+            case R.id.fab_instant:
+                //do something
+                view.flush("Unlock the Premier badge");
+                break;
+            case R.id.view_musk:
+                view.performMultiFabClick();
+                break;
+            case R.id.multiple_actions:
+                break;
             /*case R.id.fabAdd:
                 DocumentReference mini_users = firestore.collection("mini_users").document(Objects.requireNonNull(mAuth.getCurrentUser()).getUid());
                 listenerRegistration = mini_users.addSnapshotListener((documentSnapshot, e) -> {

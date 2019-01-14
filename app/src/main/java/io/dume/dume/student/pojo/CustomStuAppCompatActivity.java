@@ -181,24 +181,6 @@ public class CustomStuAppCompatActivity extends AppCompatActivity implements MyC
                 }
             }
         });
-
-        snackbar.addCallback(new Snackbar.Callback() {
-            @Override
-            public void onDismissed(Snackbar snackbar, int event) {
-                if (fromFlag == 1) {
-                    parentCallback.onNetworkResume();
-                }
-
-            }
-
-            @Override
-            public void onShown(Snackbar snackbar) {
-                if (fromFlag == 1) {
-                    parentCallback.onNetworkPause();
-                }
-
-            }
-        });
     }
 
     public void settingStatusBarTransparent() {

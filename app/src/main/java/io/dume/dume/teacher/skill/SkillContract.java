@@ -11,6 +11,7 @@ public interface SkillContract {
 
         void loadSkillRV(ArrayList<Skill> list);
 
+        void performMultiFabClick();
     }
 
     interface Model extends MyBaseContract.Model{

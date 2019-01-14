@@ -44,7 +44,7 @@ public class EditAccount extends AppCompatActivity implements EditContract.View,
     private int oldScrollYPostion = 0;
     private static final String TAG = "EditAccount";
     private EditText first, last, phone, mail;
-    private ImageView avatar;
+    private carbon.widget.ImageView avatar;
     private String avatarUrl = null;
     private HorizontalLoadView loadView;
     private CoordinatorLayout wrapper;

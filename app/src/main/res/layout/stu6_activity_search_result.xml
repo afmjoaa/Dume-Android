@@ -1021,6 +1021,14 @@
 
                     </carbon.widget.LinearLayout>
 
+                    <!-- agreementHostLayout = findViewById(R.id.agreement_term_host_linearlayout);
+        agreementInfoBtn = findViewById(R.id.show_agreement_terms_btn);
+        agreementHideable = findViewById(R.id.agreement_term_layout_vertical);
+
+        locationHostLayout = findViewById(R.id.location_host_linearlayout);
+        locationInfoBtn = findViewById(R.id.show_location_btn);
+        locationHideable = findViewById(R.id.location_layout_vertical);-->
+
                     <LinearLayout
                         android:id="@+id/location_layout_vertical"
                         android:layout_width="match_parent"

@@ -103,6 +103,9 @@
                                 android:textColor="@color/textColorPrimary"
                                 android:textSize="18sp"
                                 android:textStyle="normal"
+                                app:carbon_rippleColor="@color/colorRippleDefault"
+                                app:carbon_rippleHotspot="true"
+                                app:carbon_rippleStyle="background"
                                 app:fontFamily="@font/cairo_regular" />
                         </LinearLayout>
 
@@ -158,8 +161,6 @@
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:layout_marginTop="16dp"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
             android:onClick="onHeatMapViewClicked"
             app:backgroundTint="@color/colorWhite"
             app:fabSize="mini"

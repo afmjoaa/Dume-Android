@@ -287,7 +287,17 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         //config the bottom sheet
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
         bottomSheetCallbackConfig();
-        //
+        //setting my snackbar callback
+        snackbar.addCallback(new Snackbar.Callback() {
+            @Override
+            public void onDismissed(Snackbar snackbar, int event) {
+                //network resumed make functionality available
+            }
+            @Override
+            public void onShown(Snackbar snackbar) {
+                //network unavailable make functionality unavailable
+            }
+        });
         initAdvance();
         Objects.requireNonNull(getSupportActionBar()).setHomeAsUpIndicator(R.drawable.drawer_menu);
         navigationView.setNavigationItemSelectedListener(this);

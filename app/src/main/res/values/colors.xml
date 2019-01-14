@@ -16,7 +16,7 @@
     <color name="textColorPrimary">#575757</color>
     <color name="textColorSecondary">#989D9D</color>
     <color name="textColorSecondaryDark">#78909c</color>
-    <color name="windowBackground">#FFFFFF</color>
+    <color name="windowBackground">#ffffff</color>
     <color name="navigationBarColor">#afafaf</color>
     <color name="MystyleWindowBackground">#ffffff</color>
     <color name="transparent">#00ffffff</color>

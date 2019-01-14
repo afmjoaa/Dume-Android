@@ -56,19 +56,22 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="10dp">
 
-                <de.hdodenhof.circleimageview.CircleImageView
+                <carbon.widget.ImageView
                     android:id="@+id/profileImage"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:scaleType="centerCrop"
+                    app:carbon_cornerRadius="50dp"
+                    app:carbon_elevation="3dp"
                     android:src="@drawable/avatar" />
 
-                <ImageView
+                <carbon.widget.ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom|end"
                     android:background="@drawable/cirecle_background_white"
                     android:padding="5dp"
+                    app:carbon_elevation="4dp"
                     android:src="@drawable/ic_action_photo_edit" />
 
             </FrameLayout>

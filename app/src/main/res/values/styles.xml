@@ -6,12 +6,12 @@
         <item name="colorPrimary">@color/colorDeepIcon</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:colorBackground">@color/colorNarvik</item>
+        <item name="android:colorBackground">@color/windowBackground</item>
         <item name="colorControlHighlight">@color/colorDarkAzure</item>
         <item name="coordinatorLayoutStyle">@style/Widget.Support.CoordinatorLayout</item>
         <item name="carbon_linearLayoutStyle">@style/carbon_LinearLayout</item>
         <item name="android:fontFamily" tools:targetApi="jelly_bean">@font/cairo_regular</item>
-
+        <item name="android:actionMenuTextColor">@color/black</item>
     </style>
 
     <style name="SplashTheme" parent="AppTheme">
@@ -362,5 +362,6 @@
     <style name="menu_labels_style">
         <item name="android:background">@drawable/fab_label_background</item>
         <item name="android:textColor">@color/white</item>
+        <item name="android:fontFamily" tools:targetApi="jelly_bean">@font/cairo_regular</item>
     </style>
 </resources>

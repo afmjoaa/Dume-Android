@@ -1,16 +1,30 @@
 package io.dume.dume.teacher.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v4.view.animation.FastOutLinearInInterpolator;
+import android.support.v4.view.animation.LinearOutSlowInInterpolator;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.transitionseverywhere.Fade;
+import com.transitionseverywhere.Slide;
+import com.transitionseverywhere.Transition;
+import com.transitionseverywhere.TransitionManager;
+import com.transitionseverywhere.TransitionSet;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -19,9 +33,11 @@ import java.util.HashMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import carbon.widget.RelativeLayout;
 import io.dume.dume.R;
 import io.dume.dume.teacher.pojo.Skill;
 import io.dume.dume.teacher.skill.SkillActivity;
+import io.dume.dume.util.VisibleToggleClickListener;
 
 public class SkillAdapter extends RecyclerView.Adapter<SkillAdapter.SkillVH> {
     public static int FRAGMENT = 1;
@@ -69,12 +85,52 @@ public class SkillAdapter extends RecyclerView.Adapter<SkillAdapter.SkillVH> {
     @Override
     public void onBindViewHolder(@NonNull SkillVH skillVH, int i) {
         if (layoutSize == ACTIVITY) {
-
-
             SkillDetailsAdapter skillDetailsAdapter = new SkillDetailsAdapter(null);
             skillVH.detailsRV.setAdapter(skillDetailsAdapter);
-            skillVH.itemView.setOnClickListener(view -> {
-                skillVH.detailsRV.setVisibility(skillVH.detailsRV.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+            skillVH.itemView.setOnClickListener(new VisibleToggleClickListener() {
+
+                @SuppressLint("CheckResult")
+                @Override
+                protected void changeVisibility(boolean visible) {
+                    TransitionSet set = new TransitionSet()
+                            .addTransition(new Fade())
+                            .addTransition(new Slide(Gravity.TOP))
+                            .setInterpolator(visible ? new LinearOutSlowInInterpolator() : new FastOutLinearInInterpolator())
+                            .addListener(new Transition.TransitionListener() {
+                                @Override
+                                public void onTransitionStart(@NonNull Transition transition) {
+
+                                }
+
+                                @Override
+                                public void onTransitionEnd(@NonNull Transition transition) {
+                                    if (!visible) {
+                                        skillVH.recycleHostingLinear.setVisibility(View.GONE);
+                                    }
+                                }
+
+                                @Override
+                                public void onTransitionCancel(@NonNull Transition transition) {
+
+                                }
+
+                                @Override
+                                public void onTransitionPause(@NonNull Transition transition) {
+
+                                }
+
+                                @Override
+                                public void onTransitionResume(@NonNull Transition transition) {
+
+                                }
+                            });
+                   TransitionManager.beginDelayedTransition(skillVH.recycleHostingLinear, set);
+                    if (visible) {
+                        skillVH.recycleHostingLinear.setVisibility(View.VISIBLE);
+                    } else {
+                        skillVH.recycleHostingLinear.setVisibility(View.INVISIBLE);
+                    }
+                }
             });
         } else {
             skillVH.itemView.setOnClickListener(view -> {
@@ -93,6 +149,30 @@ public class SkillAdapter extends RecyclerView.Adapter<SkillAdapter.SkillVH> {
         skillVH.publishDate.setText(dateString);
         skillVH.enrolledTV.setText("Enrolled Students : " + skillList.get(i).getEnrolled());
         skillVH.likeTV.setText((int) (skillList.get(i).getRating() * 100) / 5 + " likes");
+
+        skillVH.moreVertSkill.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                PopupMenu popup = new PopupMenu(context, view);
+                popup.getMenuInflater().inflate(R.menu.menu_edit_remove, popup.getMenu());
+
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    public boolean onMenuItemClick(MenuItem item) {
+                        int id = item.getItemId();
+                        switch (id) {
+                            case R.id.action_remove:
+                                Toast.makeText(context, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
+                                break;
+                            case R.id.action_edit:
+                                Toast.makeText(context, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
+                                break;
+                        }
+                        return true;
+                    }
+                });
+                popup.show();
+            }
+        });
     }
 
     @Override
@@ -124,6 +204,12 @@ public class SkillAdapter extends RecyclerView.Adapter<SkillAdapter.SkillVH> {
         TextView enrolledTV;
         @BindView(R.id.likeTV)
         TextView likeTV;
+        @BindView(R.id.skillDots)
+        carbon.widget.ImageView moreVertSkill;
+        @BindView(R.id.hosting_relative_layout)
+        RelativeLayout hostingRelativeLayout;
+        @BindView(R.id.recycle_hosting_linear)
+        LinearLayout recycleHostingLinear;
 
         public SkillVH(@NonNull View itemView) {
             super(itemView);

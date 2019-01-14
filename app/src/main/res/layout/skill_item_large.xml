@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <carbon.widget.RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/hosting_relative_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginLeft="10dp"
@@ -15,9 +16,9 @@
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:padding="7dp"
-        app:carbon_elevation="2dp"
-        app:carbon_cornerRadius="5dp">
-        <!---->
+        app:carbon_cornerRadius="5dp"
+        app:carbon_elevation="2dp">
+        <!-- -->
 
         <carbon.widget.ImageView
             android:id="@+id/skillDots"
@@ -111,8 +112,8 @@
                         android:layout_marginRight="5dp"
                         android:layout_marginBottom="3dp"
                         android:layout_weight="1"
-                        android:textColor="@color/black"
                         android:text="Math, English,Phsysics"
+                        android:textColor="@color/black"
                         android:textSize="16sp" />
 
                     <LinearLayout
@@ -133,8 +134,8 @@
                             android:layout_marginRight="8dp"
                             android:layout_weight="1"
                             android:gravity="center"
-                            android:textSize="14sp"
-                            android:text="BDT 5k" />
+                            android:text="BDT 5k"
+                            android:textSize="14sp" />
 
 
                         <View
@@ -146,11 +147,11 @@
                             android:id="@+id/skillStatus"
                             android:layout_width="40dp"
                             android:layout_height="20dp"
+                            android:layout_marginStart="4dp"
+                            android:layout_marginLeft="4dp"
                             android:layout_marginTop="1dp"
                             android:layout_marginEnd="10dp"
                             android:layout_marginRight="10dp"
-                            android:layout_marginStart="4dp"
-                            android:layout_marginLeft="4dp"
                             android:layout_marginBottom="1dp"
                             android:layout_weight="1"
                             android:checked="true"
@@ -163,15 +164,14 @@
                         android:id="@+id/enrolledTV"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
                         android:layout_marginLeft="5dp"
-                        android:layout_weight="1"
                         android:layout_marginEnd="8dp"
                         android:layout_marginRight="8dp"
+                        android:layout_weight="1"
                         android:gravity="center"
                         android:text="Sold - 3 times"
-                        android:textSize="14sp"
-                        android:layout_marginStart="5dp" />
-
+                        android:textSize="14sp" />
 
 
                     <!--<ImageView
@@ -192,7 +192,6 @@
     </carbon.widget.FrameLayout>
 
     <LinearLayout
-        android:id="@+id/achievement_layout_vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/primary_framelayout"
@@ -206,22 +205,31 @@
         android:paddingBottom="8dp"
         android:translationY="-2dp">
 
+    </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/achievement_layout_horizontal"
+    <LinearLayout
+        android:id="@+id/recycle_hosting_linear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/primary_framelayout"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:background="@drawable/bg_white_bottom_round"
+        android:orientation="vertical"
+        android:paddingLeft="16dp"
+        android:paddingTop="8dp"
+        android:paddingRight="16dp"
+        android:paddingBottom="8dp"
+        android:translationY="-2dp"
+        android:visibility="gone">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/skillDetailsRV"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:baselineAligned="false"
-            android:orientation="horizontal">
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/skillDetailsRV"
-                android:layout_width="wrap_content"
-                android:layout_height="150dp"
-                android:visibility="gone" />
-        </LinearLayout>
+            android:layout_height="200dp" />
 
     </LinearLayout>
+
     <TextView
         android:id="@+id/skillAddDateTV"
         android:layout_width="wrap_content"
@@ -232,5 +240,5 @@
         android:text="12/10/2016"
         android:textSize="10sp"
         android:textStyle="italic"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 </carbon.widget.RelativeLayout>

@@ -137,8 +137,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
                         android:layout_marginTop="18dp"
+                        android:layout_marginBottom="10dp"
                         android:text="Dume Bangladesh"
                         android:textAlignment="center"
                         android:textColor="@color/colorBlack"
@@ -227,8 +227,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
                         android:layout_marginTop="18dp"
+                        android:layout_marginBottom="10dp"
                         android:text="Products"
                         android:textAlignment="center"
                         android:textColor="@color/colorBlack"
@@ -278,9 +278,9 @@
                         <ImageView
                             android:layout_width="80dp"
                             android:layout_height="60dp"
+                            android:layout_below="@+id/cloud"
                             android:layout_alignParentEnd="true"
                             android:layout_alignParentRight="true"
-                            android:layout_below="@+id/cloud"
                             android:contentDescription="@string/house"
                             app:srcCompat="@drawable/bs_house_image" />
 
@@ -289,8 +289,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
                         android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
                         android:gravity="start"
                         android:text="@string/take_couching_text"
                         android:textAlignment="viewStart"
@@ -343,8 +343,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
                         android:layout_marginTop="18dp"
+                        android:layout_marginBottom="10dp"
                         android:text="Refer Mentor"
                         android:textAlignment="center"
                         android:textColor="@color/colorBlack"
@@ -440,8 +440,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
                         android:layout_marginTop="18dp"
+                        android:layout_marginBottom="10dp"
                         android:text="Free Cashback"
                         android:textAlignment="center"
                         android:textColor="@color/colorBlack"
@@ -537,8 +537,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
                         android:layout_marginTop="18dp"
+                        android:layout_marginBottom="10dp"
                         android:text="Start Mentoring with Dume"
                         android:textAlignment="center"
                         android:textColor="@color/colorBlack"
@@ -604,20 +604,29 @@
         </android.support.v4.widget.NestedScrollView>
     </LinearLayout>
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        style="?android:attr/borderlessButtonStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_marginBottom="82dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="16dp"
-        android:onClick="onFabClicked"
-        app:backgroundTint="@color/colorWhite"
-        app:fabSize="mini"
-        app:srcCompat="@drawable/geo_icon" />
+    <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/coordi_hack_fab"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".student.searchLoading.SearchLoadingActivity">
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="82dp"
+            android:onClick="onFabClicked"
+            app:backgroundTint="@color/colorWhite"
+            app:fabSize="mini"
+            app:srcCompat="@drawable/geo_icon" />
+    </android.support.design.widget.CoordinatorLayout>
 
 
 </android.support.design.widget.CoordinatorLayout>
