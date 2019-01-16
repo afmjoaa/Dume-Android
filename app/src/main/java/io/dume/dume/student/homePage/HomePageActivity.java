@@ -691,7 +691,7 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
 
     @Override
     public void gotoGrabingLocationPage() {
-        startActivity(new Intent(this, GrabingLocationActivity.class).setAction("fromHomePage"));
+        startActivity(new Intent(this, GrabingLocationActivity.class).setAction("HomePage"));
     }
 
     @Override
@@ -1110,7 +1110,6 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
                         Drawable drawable = new BitmapDrawable(getResources(), roundedCornerBitmap);
                         if (drawable != null) {
                             alProfileIcon.setDrawableByLayerId(R.id.ic_al_profile_pic, drawable);
-                            //invalidateOptionsMenu();
                             alProfile.setIcon(alProfileIcon);
                         }
                     }

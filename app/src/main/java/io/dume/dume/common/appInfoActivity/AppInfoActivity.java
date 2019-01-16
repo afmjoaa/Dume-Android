@@ -1,6 +1,5 @@
 package io.dume.dume.common.appInfoActivity;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import io.dume.dume.R;
@@ -13,6 +12,7 @@ public class AppInfoActivity extends CustomStuAppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_app_info);
         setActivityContext(this, fromFlag);
+        settingStatusBarTransparent();
         makeFullScreen();
     }
 }

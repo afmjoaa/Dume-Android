@@ -7,9 +7,13 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.GeoPoint;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 import io.dume.dume.R;
 import io.dume.dume.teacher.pojo.Feedback;
@@ -84,18 +88,42 @@ public class TeacherPresenter implements TeacherContract.Presenter {
                 view.flush(msg);
             }
         });
-        model.getMendatory(new TeacherContract.Model.Listener<Void>() {
+        model.getMendatory(new TeacherContract.Model.Listener<DocumentSnapshot>() {
             @Override
-            public void onSuccess(Void list) {
-                view.flush("Ok");
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                view.setDocumentSnapshot(documentSnapshot);
+                GeoPoint location = (GeoPoint) documentSnapshot.get("location");
+                if(location == null){
+                    view.showSnackBar("Point Your Location","Settings > Location");
+                }
+
+                final String avatar = documentSnapshot.getString("avatar");
+                if (avatar != null && !avatar.equals("")) {
+                    view.setAvatar(avatar);
+                }
+                String o = documentSnapshot.getString("last_name");
+                String o1 = documentSnapshot.getString("first_name");
+                view.setUserName(o1, o);
+                view.setMsgName(view.generateMsgName(o1, o));
+                view.setRating((Map<String, Object>) documentSnapshot.get("self_rating"));
+
+                view.setUnreadMsg(documentSnapshot.getString("unread_msg"));
+                view.setUnreadNoti(documentSnapshot.getString("unread_noti"));
+                view.setUnreadRecords((Map<String, Object>) documentSnapshot.get("unread_records"));
+
+                if (Objects.requireNonNull(documentSnapshot.getString("pro_com_%")).equals("100")) {
+                    view.setProfileComPercent(documentSnapshot.getString("pro_com_%"));
+                } else {
+                    view.setProfileComPercent(documentSnapshot.getString("pro_com_%"));
+                    view.showPercentSnackBar(documentSnapshot.getString("pro_com_%"));
+                }
             }
 
             @Override
             public void onError(String msg) {
-                view.showSnackBar("Point Your Location","Settings > Location");
+                view.flush(msg);
             }
         });
-
     }
 
 

@@ -3,15 +3,18 @@ package io.dume.dume.teacher.homepage;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Animatable;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -53,11 +56,15 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.hanks.htextview.scale.ScaleTextView;
 import com.tomergoldst.tooltips.ToolTipsManager;
 import com.transitionseverywhere.Fade;
@@ -104,6 +111,7 @@ import io.dume.dume.teacher.mentor_settings.basicinfo.EditAccount;
 import io.dume.dume.teacher.pojo.TabModel;
 import io.dume.dume.teacher.skill.SkillActivity;
 import io.dume.dume.util.DumeUtils;
+import io.dume.dume.util.NetworkUtil;
 import me.zhanghai.android.materialratingbar.MaterialRatingBar;
 import q.rorbin.verticaltablayout.VerticalTabLayout;
 import q.rorbin.verticaltablayout.adapter.TabAdapter;
@@ -111,6 +119,7 @@ import q.rorbin.verticaltablayout.widget.ITabView;
 import q.rorbin.verticaltablayout.widget.TabView;
 
 import static io.dume.dume.util.DumeUtils.animateImage;
+import static io.dume.dume.util.ImageHelper.getRoundedCornerBitmapSquare;
 
 
 public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherContract.View,
@@ -175,7 +184,16 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
     private int optionMenu = R.menu.stu_homepage;
     private String[] feedbackStrings;
     private FloatingActionButton fab;
-    private Map<String, Object> data;
+    private DocumentSnapshot documentSnapshot;
+    private TextView userNameTextView;
+    private TextView userAddressingTextView;
+    private TextView userRatingTextView;
+    private carbon.widget.ImageView userDP;
+    private TextView doMoreTextView;
+    private TextView doMoreDetailTextView;
+    private MenuItem alProfile;
+    private LayerDrawable alProfileIcon;
+    private Snackbar enamSnackbar;
 
 
     @Override
@@ -246,35 +264,19 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         hPageBSRecycler = findViewById(R.id.homePage_bottomSheet_recycler);
         feedbackStrings = getResources().getStringArray(R.array.review_hint_text_dependent);
 
-    }
+        userNameTextView = findViewById(R.id.user_name);
+        userAddressingTextView = findViewById(R.id.user_addressing);
+        userRatingTextView = findViewById(R.id.user_rating);
+        userDP = findViewById(R.id.user_dp);
+        doMoreTextView = findViewById(R.id.do_more);
+        doMoreDetailTextView = findViewById(R.id.make_money_mentoring);
 
-    @Override
-    public void showSnackBar(String messages, String actionName) {
-        Snackbar mySnackbar = Snackbar.make(coordinatorLayout, "Replace with your own action", Snackbar.LENGTH_LONG);
-        Snackbar.SnackbarLayout layout = (Snackbar.SnackbarLayout) mySnackbar.getView();
-
-        TextView textView = (TextView) layout.findViewById(android.support.design.R.id.snackbar_text);
-        textView.setVisibility(View.INVISIBLE);
-        LayoutInflater inflater = LayoutInflater.from(context);
-        View snackView = inflater.inflate(R.layout.teachers_snakbar_layout, null);
-        // layout.setBackgroundColor(R.color.red);
-        TextView textViewStart = snackView.findViewById(R.id.custom_snackbar_text);
-        textViewStart.setText(messages);
-        TextView actionTV = snackView.findViewById(R.id.actionTV);
-        actionTV.setText(actionName);
-        layout.setPadding(0, 0, 0, 0);
-        CoordinatorLayout.LayoutParams parentParams = (CoordinatorLayout.LayoutParams) layout.getLayoutParams();
-        parentParams.height = (int) (30 * (getResources().getDisplayMetrics().density));
-       /* parentParams.setAnchorId(R.id.Secondary_toolbar);
-        parentParams.anchorGravity = Gravity.BOTTOM;*/
-        layout.setLayoutParams(parentParams);
-        layout.addView(snackView, 0);
-        mySnackbar.show();
     }
 
     @Override
     public void configView() {
         fab.setAlpha(0.90f);
+        enamSnackbar = Snackbar.make(coordinatorLayout, "Replace with your own action", Snackbar.LENGTH_LONG);
         // Toolbar :: Transparent
         mainAppbar.bringToFront();
         mainAppbar.setBackgroundColor(getResources().getColor(android.R.color.transparent));
@@ -308,6 +310,32 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         HomePageRecyclerAdapter hPageBSRcyclerAdapter = new HomePageRecyclerAdapter(this, promoData);
         hPageBSRecycler.setAdapter(hPageBSRcyclerAdapter);
         hPageBSRecycler.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+    @Override
+    public void showSnackBar(String messages, String actionName) {
+        Snackbar.SnackbarLayout layout = (Snackbar.SnackbarLayout) enamSnackbar.getView();
+
+        TextView textView = (TextView) layout.findViewById(android.support.design.R.id.snackbar_text);
+        textView.setVisibility(View.INVISIBLE);
+        LayoutInflater inflater = LayoutInflater.from(context);
+        View snackView = inflater.inflate(R.layout.teachers_snakbar_layout, null);
+        // layout.setBackgroundColor(R.color.red);
+        TextView textViewStart = snackView.findViewById(R.id.custom_snackbar_text);
+        textViewStart.setText(messages);
+        TextView actionTV = snackView.findViewById(R.id.actionTV);
+        actionTV.setText(actionName);
+        layout.setPadding(0, 0, 0, 0);
+        CoordinatorLayout.LayoutParams parentParams = (CoordinatorLayout.LayoutParams) layout.getLayoutParams();
+        parentParams.height = (int) (30 * (getResources().getDisplayMetrics().density));
+       /* parentParams.setAnchorId(R.id.Secondary_toolbar);
+        parentParams.anchorGravity = Gravity.BOTTOM;*/
+        layout.setLayoutParams(parentParams);
+        layout.addView(snackView, 0);
+        int status = NetworkUtil.getConnectivityStatusString(context);
+        if (snackbar != null && !snackbar.isShown() && status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
+            enamSnackbar.show();
+        }
     }
 
     @Override
@@ -539,8 +567,8 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(optionMenu, menu);
         if (optionMenu == R.menu.stu_homepage) {
-            MenuItem alProfile = menu.findItem(R.id.al_display_pic);
-            LayerDrawable alProfileIcon = (LayerDrawable) alProfile.getIcon();
+            alProfile = menu.findItem(R.id.al_display_pic);
+            alProfileIcon = (LayerDrawable) alProfile.getIcon();
             DumeUtils.setBadgeChar(this, alProfileIcon, 0xfff56161, Color.BLACK, mProfileChar, 3.0f, 3.0f);
 
             MenuItem alNoti = menu.findItem(R.id.al_notifications);
@@ -958,5 +986,172 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
             data.add(current);
         }
         return data;
+    }
+
+    @Override
+    public void setDocumentSnapshot(DocumentSnapshot documentSnapshot) {
+        this.documentSnapshot = documentSnapshot;
+    }
+
+    @Override
+    public String getAvatarString() {
+        return documentSnapshot.getString("avatar");
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public Map<String, Object> getSelfRating() {
+        return (Map<String, Object>) documentSnapshot.get("self_rating");
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public Map<String, Object> getUnreadRecords() {
+        return (Map<String, Object>) documentSnapshot.get("unread_records");
+    }
+
+    @Override
+    public String unreadMsg() {
+        return documentSnapshot.getString("unread_msg");
+    }
+
+    @Override
+    public String unreadNoti() {
+        return documentSnapshot.getString("unread_noti");
+    }
+
+    @Override
+    public String getProfileComPercent() {
+        return documentSnapshot.getString("pro_com_%");
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public ArrayList<String> getAppliedPromo() {
+        return (ArrayList<String>) documentSnapshot.get("applied_promo");
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public ArrayList<String> getAvailablePromo() {
+        return (ArrayList<String>) documentSnapshot.get("applied_promo");
+    }
+
+    @Override
+    public String generateMsgName(String first, String last) {
+        return "@" + first + last;
+    }
+
+    @Override
+    public String getUserName() {
+        return userNameTextView.getText().toString();
+    }
+
+    @Override
+    public void setUserName(String first, String last) {
+        userNameTextView.setText(String.format("%s %s", first, last));
+    }
+
+    @Override
+    public void setAvatar(String avatarString) {
+        Glide.with(this).load(avatarString).apply(new RequestOptions().override(100, 100)).into(userDP);
+    }
+
+    @Override
+    public void setAvatarForMenu(String avatar) {
+        Glide.with(this).asBitmap().load(avatar)
+                .apply(new RequestOptions().override((int) (20 * (getResources().getDisplayMetrics().density)), (int) (20 * (getResources().getDisplayMetrics().density))).centerCrop())
+                .into(new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(@NonNull Bitmap resource, @Nullable com.bumptech.glide.request.transition.Transition<? super Bitmap> transition) {
+                        final Bitmap roundedCornerBitmap = getRoundedCornerBitmapSquare(resource, (int) (10 * (getResources().getDisplayMetrics().density)), (int) (20 * (getResources().getDisplayMetrics().density)));
+                        Drawable drawable = new BitmapDrawable(getResources(), roundedCornerBitmap);
+                        if (drawable != null) {
+                            alProfileIcon.setDrawableByLayerId(R.id.ic_al_profile_pic, drawable);
+                            alProfile.setIcon(alProfileIcon);
+                        }
+                    }
+                });
+    }
+
+    @Override
+    public void setRating(Map<String, Object> selfRating) {
+        userRatingTextView.setText(selfRating.get("star_rating") + "  ★");
+    }
+
+    @Override
+    public void setMsgName(String msgName) {
+        userAddressingTextView.setText(msgName);
+    }
+
+    //TODO
+    @Override
+    public void setAvailablePromo(ArrayList<String> availablePromo) {
+
+    }
+
+    //TODO
+    @Override
+    public void setAppliedPromo(ArrayList<String> appliedPromo) {
+
+    }
+
+
+    @Override
+    public void setProfileComPercent(String num) {
+        if (Integer.parseInt(num) < 100) {
+            updateProfileBadge('!');
+        } else {
+            updateProfileBadge('%');
+        }
+    }
+
+    @Override
+    public void setUnreadMsg(String unreadMsg) {
+        updateChatBadge(Integer.parseInt(unreadMsg));
+    }
+
+    @Override
+    public void setUnreadNoti(String unreadNoti) {
+        updateNotificationsBadge(Integer.parseInt(unreadNoti));
+    }
+
+    @Override
+    public void setUnreadRecords(Map<String, Object> unreadRecords) {
+        updateRecordsBadge(Integer.parseInt((String) unreadRecords.get("pending_count")),
+                Integer.parseInt((String) unreadRecords.get("accepted_count")),
+                Integer.parseInt((String) unreadRecords.get("current_count")));
+    }
+
+    @Override
+    public void showPercentSnackBar(String completePercent) {
+        Snackbar mySnackbar = Snackbar.make(coordinatorLayout, "Replace with your own action", Snackbar.LENGTH_LONG);
+        Snackbar.SnackbarLayout layout = (Snackbar.SnackbarLayout) mySnackbar.getView();
+        TextView textView = (TextView) layout.findViewById(android.support.design.R.id.snackbar_text);
+        textView.setVisibility(View.INVISIBLE);
+        LayoutInflater inflater = LayoutInflater.from(context);
+        View snackView = inflater.inflate(R.layout.custom_snackbar_layout_one, null);
+
+        TextView textViewStart = snackView.findViewById(R.id.custom_snackbar_text);
+        textViewStart.setText("Profile only " + completePercent + "% complete");
+
+
+        layout.setPadding(0, 0, 0, 0);
+        if (Integer.parseInt(completePercent) < 90) {
+            layout.setBackgroundColor(ContextCompat.getColor(context, R.color.snackbar_yellow));
+            textViewStart.setTextColor(Color.BLACK);
+        } else {
+            layout.setBackgroundColor(ContextCompat.getColor(context, R.color.snackbar_green));
+            textViewStart.setTextColor(Color.WHITE);
+        }
+        CoordinatorLayout.LayoutParams parentParams = (CoordinatorLayout.LayoutParams) layout.getLayoutParams();
+        parentParams.height = (int) (30 * (getResources().getDisplayMetrics().density));
+
+        layout.setLayoutParams(parentParams);
+        layout.addView(snackView, 0);
+        int status = NetworkUtil.getConnectivityStatusString(context);
+        if (snackbar != null && !snackbar.isShown() && status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED && enamSnackbar != null && !enamSnackbar.isShown()) {
+            mySnackbar.show();
+        }
     }
 }

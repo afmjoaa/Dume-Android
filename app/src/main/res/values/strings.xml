@@ -91,7 +91,7 @@
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="display_pic">Display Pic</string>
-    <string name="current_address">Current Address</string>
+    <string name="current_address">Permanent Address</string>
     <string name="current_status">Current Status</string>
     <string name="previous_result">Previous Result</string>
     <string name="search_radius">Search Radius</string>
@@ -118,6 +118,7 @@
     <string name="marker_icon">marker_icon</string>
     <string name="enter_anchor_point">Enter anchor point</string>
     <string name="autocomplete_image">autocomplete_image</string>
+    <string name="set_location_on_map">Set location on map</string>
     <string-array name="BanglaMedium">
         <item>One</item>
         <item>Two</item>
@@ -149,23 +150,6 @@
         <item>O-Level</item>
     </string-array>
 
-    <string-array name="MenualPrimaryText">
-        <item>Back in time</item>
-        <item>Current location</item>
-        <item>Home</item>
-        <item>Work</item>
-        <item>Saved location</item>
-        <item>Set location on map</item>
-    </string-array>
-
-    <string-array name="MenualSecondaryText">
-        <item>Previously used location</item>
-        <item>Shahid Latif Rd, Dhaka 1230, bd</item>
-        <item>Johurunesha Madrasha Rd</item>
-        <item>MIST Academic Tower</item>
-        <item></item>
-        <item></item>
-    </string-array>
     <string name="title_activity_heat_map">Heat Map</string>
     <string name="title_activity_grabing_package">Select Package</string>
     <string name="tab_text_1">Tab 1</string>

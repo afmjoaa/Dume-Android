@@ -2,15 +2,20 @@ package io.dume.dume.student.grabingLocation;
 
 import android.app.Activity;
 import android.content.Context;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
 
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.GeoPoint;
 
 import java.util.Map;
 import java.util.Objects;
 
 import io.dume.dume.R;
+import io.dume.dume.teacher.homepage.TeacherContract;
 
 public class GrabingLocationPresenter implements GrabingLocaitonContract.Presenter {
 
@@ -33,8 +38,9 @@ public class GrabingLocationPresenter implements GrabingLocaitonContract.Present
         mView.initGrabingLocationPage();
         mView.makingCallbackInterfaces();
         mView.configGrabingLocationPage();
+        mView.retriveSavedData();
 
-        mModel.addShapShotListener((documentSnapshot, e) -> {
+        /*mModel.addShapShotListener((documentSnapshot, e) -> {
             if (documentSnapshot != null) {
                 final GeoPoint current_address = documentSnapshot.getGeoPoint("current_address");
                 if (current_address != null) {
@@ -42,33 +48,12 @@ public class GrabingLocationPresenter implements GrabingLocaitonContract.Present
                         mView.setCurrentAddress(current_address);
                     }
                 }
-                /* mView.setDocumentSnapshot(documentSnapshot);
-                final String avatar = documentSnapshot.getString("avatar");
-                if (avatar != null && !avatar.equals("")) {
-                    mView.setAvatar(avatar);
-                }
-                String o = documentSnapshot.getString("last_name");
-                String o1 = documentSnapshot.getString("first_name");
-                mView.setUserName(o1,o);
-                mView.setMsgName(mView.generateMsgName(o1,o));
-                mView.setRating((Map<String, Object>) documentSnapshot.get("self_rating"));
-
-                mView.setUnreadMsg(documentSnapshot.getString("unread_msg"));
-                mView.setUnreadNoti(documentSnapshot.getString("unread_noti"));
-                mView.setUnreadRecords((Map<String, Object>) documentSnapshot.get("unread_records"));
-
-                if (Objects.requireNonNull(documentSnapshot.getString("pro_com_%")).equals("100")) {
-                    mView.setProfileComPercent(documentSnapshot.getString("pro_com_%"));
-                }else{
-                    mView.setProfileComPercent(documentSnapshot.getString("pro_com_%"));
-                    mView.showSnackBar(documentSnapshot.getString("pro_com_%"));
-                }*/
 
             } else {
                 mView.flush("Does not found any user");
                 Log.w(TAG, "onAccountTypeFound: document is not null");
             }
-        });
+        });*/
     }
 
     @Override
@@ -83,10 +68,24 @@ public class GrabingLocationPresenter implements GrabingLocaitonContract.Present
             case R.id.location_done_btn:
                 mView.onLocationDoneBtnClicked();
                 break;
+            case R.id.hack_set_location_on_map:
+                mView.hackSetLocaOnMapClicked();
 
 
         }
+    }
 
-
+    @Override
+    public void retriveSavedPlacesData(TeacherContract.Model.Listener<DocumentSnapshot> listener) {
+        mModel.addShapShotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                if(documentSnapshot != null){
+                    listener.onSuccess(documentSnapshot);
+                }else{
+                    listener.onError(e.getMessage().toString());
+                }
+            }
+        });
     }
 }

@@ -44,6 +44,7 @@ public class AfterSplashActivity extends AppCompatActivity implements DemoCardFr
     private static final String READ_EXTERNAL_STORAGE = Manifest.permission.READ_EXTERNAL_STORAGE;
     private static final String WRITE_EXTERNAL_STORAGE = Manifest.permission.WRITE_EXTERNAL_STORAGE;
     private static final String RECEIVE_SMS = Manifest.permission.RECEIVE_SMS;
+    private static final String READ_PHONE_NUMBERS = Manifest.permission.READ_PHONE_NUMBERS;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
 
 

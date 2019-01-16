@@ -4,8 +4,10 @@ import android.view.View;
 
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import io.dume.dume.teacher.pojo.Feedback;
 import io.dume.dume.teacher.pojo.Inbox;
@@ -20,12 +22,6 @@ public interface TeacherContract {
 
         void flush(String msg);
 
-        /*void showInbox(ArrayList<Feedback> list);
-
-        void showInboxRV(ArrayList<Inbox> list);
-
-        void showChart(LineData data);*/
-
         void onCenterCurrentLocation();
 
         void configView();
@@ -39,6 +35,56 @@ public interface TeacherContract {
         void testingCustomDialogue();
 
          void showSnackBar(String messages, String actionName) ;
+
+        void setDocumentSnapshot(DocumentSnapshot documentSnapshot);
+
+        //getters
+
+        String getAvatarString();
+
+        Map<String, Object> getSelfRating();
+
+        Map<String, Object> getUnreadRecords();
+
+        String unreadMsg();
+
+        String unreadNoti();
+
+        String getProfileComPercent();
+
+        ArrayList<String> getAppliedPromo();
+
+        ArrayList<String> getAvailablePromo();
+
+        String generateMsgName(String last, String first);
+
+        String getUserName();
+
+        //setters
+
+        void setUserName(String last, String first);
+
+        void setAvatar(String avatarString);
+
+        void setRating(Map<String, Object> selfRating);
+
+        void setMsgName(String msgName);
+
+        void setAvailablePromo(ArrayList<String> availablePromo);
+
+        void setAppliedPromo(ArrayList<String> appliedPromo);
+
+        void setProfileComPercent(String num);
+
+        void setUnreadMsg(String unreadMsg);
+
+        void setUnreadNoti(String unreadNoti);
+
+        void setUnreadRecords(Map<String, Object> unreadRecords);
+
+        void setAvatarForMenu(String avatar);
+
+        void showPercentSnackBar(String string);
     }
 
 
@@ -63,7 +109,7 @@ public interface TeacherContract {
         void getChartEntry(Listener t);
 
 
-        void getMendatory(Listener<Void> listener);
+        void getMendatory(Listener<DocumentSnapshot> listener);
 
 
         interface Listener<T> {

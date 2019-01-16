@@ -75,10 +75,8 @@ public class HomePagePresenter implements HomePageContract.Presenter {
                     mView.showSnackBar(documentSnapshot.getString("pro_com_%"));
                 }
 
-
             } else {
                 mView.flush("Does not found any user");
-                Log.w(TAG, "onAccountTypeFound: document is not null");
             }
         });
     }

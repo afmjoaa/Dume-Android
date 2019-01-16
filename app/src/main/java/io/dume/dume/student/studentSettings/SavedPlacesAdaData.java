@@ -10,11 +10,11 @@ import java.io.Serializable;
 public class SavedPlacesAdaData implements Serializable {
 
     @JsonProperty("primary_text")
-    String primary_text;
+    public String primary_text;
     @JsonProperty("secondary_text")
-    String secondary_text;
+    public String secondary_text;
     @JsonProperty("location")
-    GeoPoint location;
+    public GeoPoint location;
 
     public SavedPlacesAdaData( @JsonProperty("primary_text")String primary_text,  @JsonProperty("secondary_text")String secondary_text,   @JsonProperty("location")GeoPoint location) {
         this.primary_text = primary_text;

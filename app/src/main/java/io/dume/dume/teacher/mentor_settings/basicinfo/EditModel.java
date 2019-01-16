@@ -88,7 +88,6 @@ public class EditModel implements EditContract.Model {
         StorageReference imgRef = storage.getReference(Objects.requireNonNull(auth.getUid()));
         UploadTask uploadTask = imgRef.putFile(uri);
 
-
         uploadTask.continueWithTask(task -> imgRef.getDownloadUrl())
                 .addOnCompleteListener(task ->
                 {

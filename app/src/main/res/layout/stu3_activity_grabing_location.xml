@@ -61,6 +61,12 @@
                 android:orientation="vertical">
 
                 <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recycle_view_search_found"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"/>
+
+                <android.support.v7.widget.RecyclerView
                     android:id="@+id/recycler_view_autoPlaces"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
@@ -71,9 +77,84 @@
                     android:layout_height="wrap_content" />
 
                 <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/hack_set_location_on_map"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:visibility="gone"
+                    android:onClick="onGrabingLocationViewClicked"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:orientation="vertical"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp">
+
+                        <ImageView
+                            android:id="@+id/auto_image_icon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginEnd="30dp"
+                            android:layout_marginRight="30dp"
+                            android:contentDescription="@string/autocomplete_image"
+                            app:srcCompat="@drawable/ic_set_location_on_map" />
+
+                        <LinearLayout
+                            android:id="@+id/vertical_textview_container"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/text_one"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginTop="3dp"
+                                android:ellipsize="end"
+                                android:maxLines="1"
+                                android:singleLine="true"
+                                android:text="@string/set_location_on_map"
+                                android:translationY="10dp"
+                                android:textAppearance="?android:attr/textAppearanceListItem"
+                                app:fontFamily="@font/cairo_regular" />
+
+                            <TextView
+                                android:id="@+id/text_two"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginTop="2dp"
+                                android:ellipsize="end"
+                                android:maxLines="1"
+                                android:singleLine="true"
+                                android:visibility="invisible"
+                                android:textAppearance="?android:attr/textAppearanceSmall"
+                                app:fontFamily="@font/cairo_regular" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <View
+                        android:id="@+id/divider2"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#41a7a7a7" />
+
+                </LinearLayout>
+
+                <LinearLayout
                     android:id="@+id/hack_height"
                     android:layout_width="match_parent"
-                    android:layout_height="275dp"
+                    android:layout_height="270dp"
                     android:orientation="vertical"/>
 
             </carbon.widget.LinearLayout>

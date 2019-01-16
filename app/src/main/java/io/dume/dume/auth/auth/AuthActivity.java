@@ -1,7 +1,9 @@
 package io.dume.dume.auth.auth;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -9,9 +11,11 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
+import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.SpannableString;
 import android.text.TextWatcher;
@@ -73,6 +77,18 @@ public class AuthActivity extends CustomStuAppCompatActivity implements AuthCont
         presenter.enqueue();
         socialConnect.setOnClickListener(view -> startActivity(new Intent(AuthActivity.this, SocialInitActivity.class)));
         presenter.setBundle();
+        TelephonyManager tMgr = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
+        if (ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.READ_SMS) == PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_NUMBERS) == PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
+            if (tMgr != null) {
+                String mPhoneNumber = tMgr.getLine1Number();
+                if(mPhoneNumber!= null || !mPhoneNumber.equals("")){
+                    phoneEditText.setText(mPhoneNumber);
+                }
+            }
+        }
     }
 
 

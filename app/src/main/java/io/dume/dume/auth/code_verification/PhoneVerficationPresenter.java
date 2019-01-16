@@ -378,6 +378,7 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
         stuProInfo.put("pro_com_%", "60");
         stuProInfo.put("unread_msg", "0");
         stuProInfo.put("unread_noti", "0");
+        stuProInfo.put("next_rp_write", "1");
 
         GeoPoint current_address = new GeoPoint(84.9, -180);
         stuProInfo.put("current_address", current_address);

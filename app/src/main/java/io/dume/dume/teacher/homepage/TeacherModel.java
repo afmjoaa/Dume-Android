@@ -68,15 +68,16 @@ public class TeacherModel implements TeacherContract.Model {
     }
 
     @Override
-    public void getMendatory(Listener<Void> listener) {
-        firestore.document("/mini_users/mentors/mentor_profile/" + FirebaseAuth.getInstance().getUid()).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+    public void getMendatory(Listener<DocumentSnapshot> listener) {
+        firestore.document("/users/mentors/mentor_profile/" + FirebaseAuth.getInstance().getUid()).addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-                GeoPoint location = (GeoPoint) documentSnapshot.get("location");
-                if (location != null) {
-                    listener.onSuccess(null);
-                } else {
-                    listener.onError("");
+                if(documentSnapshot != null){
+                    listener.onSuccess(documentSnapshot);
+                }else{
+                    if (e != null) {
+                        listener.onError(e.getLocalizedMessage().toString());
+                    }
                 }
             }
         });

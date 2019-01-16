@@ -2,6 +2,7 @@ package io.dume.dume.student.studentSettings;
 
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.GeoPoint;
 
 import io.dume.dume.teacher.homepage.TeacherContract;
 

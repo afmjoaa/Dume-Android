@@ -133,7 +133,7 @@ public class EditAccount extends AppCompatActivity implements EditContract.View,
     @Override
     public void configureCallback() {
         fb.setOnClickListener(this);
-        mScrollView.getViewTreeObserver().addOnScrollChangedListener(() -> {
+        /*mScrollView.getViewTreeObserver().addOnScrollChangedListener(() -> {
             if (mScrollView.getScrollY() > oldScrollYPostion) {
                 fb.show();
             } else if (mScrollView.getScrollY() < oldScrollYPostion || mScrollView.getScrollY() <= 0) {
@@ -141,7 +141,7 @@ public class EditAccount extends AppCompatActivity implements EditContract.View,
             }
             oldScrollYPostion = mScrollView.getScrollY();
             Log.w(TAG, "onScrollChanged: " + oldScrollYPostion);
-        });
+        });*/
         avatar.setOnClickListener(this);
 
         first.addTextChangedListener(new TextWatcher() {

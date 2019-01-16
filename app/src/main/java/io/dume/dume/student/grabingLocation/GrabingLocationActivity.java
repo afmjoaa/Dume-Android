@@ -48,9 +48,11 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.GeoPoint;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -64,8 +66,10 @@ import io.dume.dume.R;
 import io.dume.dume.student.pojo.CusStuAppComMapActivity;
 import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
 import io.dume.dume.student.profilePage.ProfilePageActivity;
+import io.dume.dume.student.studentSettings.SavedPlacesAdaData;
 import io.dume.dume.student.studentSettings.StudentSettingsActivity;
 import io.dume.dume.teacher.crudskill.CrudSkillActivity;
+import io.dume.dume.teacher.homepage.TeacherContract;
 import io.dume.dume.teacher.mentor_settings.basicinfo.EditAccount;
 import io.dume.dume.util.DumeUtils;
 import io.reactivex.Observable;
@@ -75,6 +79,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 import static io.dume.dume.util.DumeUtils.configToolbarTittle;
+import static io.dume.dume.util.DumeUtils.getAddress;
 import static io.dume.dume.util.DumeUtils.hideKeyboard;
 import static io.dume.dume.util.DumeUtils.showKeyboard;
 
@@ -95,7 +100,6 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
     private BottomSheetBehavior bottomSheetBehavior;
     private LinearLayout llBottomSheet;
     private FloatingActionButton bottomSheetFab;
-    private boolean firstTime = true;
     private android.support.design.widget.AppBarLayout myAppbarlayout;
     private CoordinatorLayout coordinatorLayout;
     private RecyclerView autoCompleteRecyView;
@@ -115,10 +119,21 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
     private LatLng queriedLocation;
     private LinearLayout hackHeight;
     private GeoPoint userLocation = null;
-    private String[] primaryText;
-    private String[] secondaryText;
     private String addressName;
     private Intent fromIntent;
+    private static Map<String, Map<String, Object>> favorites;
+    private static Map<String, Map<String, Object>> saved_places;
+    private static Map<String, Map<String, Object>> recently_used;
+    private int ADD_HOME_LOCATION = 1001;
+    private int ADD_WORK_LOCATION = 1002;
+    private int ADD_RECENT_PLACES = 1004;
+    private int ADD_PARMANENT_ADDRESS = 1005;
+    private GrabingLocationModel mModel;
+    private LinearLayout hackSetLocationOnMap;
+    private RecyclerView searchFoundRecycleView;
+    private SearchFoundRecyAda searchFoundRecyAda;
+    private DocumentSnapshot documentSnapshot;
+
 
     //queriedLocation for text to geopoint
     //mCenterLatLong for geopoint to text
@@ -135,7 +150,10 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         getLocationPermission(mapFragment);
-        mPresenter = new GrabingLocationPresenter(this, new GrabingLocationModel(this, this));
+        mModel = new GrabingLocationModel(this, this);
+        mPresenter = new GrabingLocationPresenter(this, mModel);
+        fromIntent = getIntent();
+        retrivedAction = fromIntent.getAction();
         mPresenter.grabingLocationPageEnqueue();
         setDarkStatusBarIcon();
         setIsNight();
@@ -163,78 +181,24 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
                                 places.release();
                             }
                         });
-                hideKeyboard(GrabingLocationActivity.this);
-                hackHeight.setVisibility(View.GONE);
-                inputSearch.clearFocus();
-                inputSearchContainer.requestFocus();
-                llBottomSheet.setVisibility(View.INVISIBLE);
-                locationDoneBtn.setVisibility(View.VISIBLE);
+                hideBSShowDB();
             }
         };
-        autoCompleteRecyView.setAdapter(recyclerAutoAdapter);
         autoCompleteRecyView.setLayoutManager(new LinearLayoutManager(this));
-        //menual one
-        recyclerMenualAdapter = new PlaceMenualRecyAda(this, getFinalData()) {
+        autoCompleteRecyView.setAdapter(recyclerAutoAdapter);
+
+        //search found one
+        List<MenualRecyclerData> data = new ArrayList<>();
+        searchFoundRecyAda = new SearchFoundRecyAda(this, data) {
             @Override
-            void OnItemClicked(View v, int position) {
-                switch (position) {
-                    case 5:
-                        hideKeyboard(GrabingLocationActivity.this);
-                        hackHeight.setVisibility(View.GONE);
-                        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                        inputSearch.clearFocus();
-                        inputSearchContainer.requestFocus();
-                        llBottomSheet.setVisibility(View.INVISIBLE);
-                        locationDoneBtn.setVisibility(View.VISIBLE);
-                        break;
-                    case 4:
-                        break;
-                    case 3:
-                        break;
-                    case 2:
-                        break;
-                    case 1:
-                        break;
-                    case 0:
-                        break;
-                }
+            void OnItemClicked(View v, MenualRecyclerData clickedData) {
+                hideBSShowDB();
+                moveCamera(new LatLng(clickedData.location.getLatitude(), clickedData.location.getLongitude()), DEFAULT_ZOOM, "Permanent_address", mMap);
             }
         };
-        menualCompleteRecyView.setAdapter(recyclerMenualAdapter);
-        menualCompleteRecyView.setLayoutManager(new LinearLayoutManager(this));
-
-        fromIntent = getIntent();
-        retrivedAction = fromIntent.getAction();
+        searchFoundRecycleView.setLayoutManager(new LinearLayoutManager(this));
+        searchFoundRecycleView.setAdapter(searchFoundRecyAda);
         setProperTittle();
-    }
-
-    private void setProperTittle() {
-        switch (Objects.requireNonNull(retrivedAction)) {
-            case "fromPPA":
-                configToolbarTittle(this, "Select current address");
-                break;
-            case "fromSPAH":
-                configToolbarTittle(this, "Select home address");
-                break;
-            case "fromSPAW":
-                configToolbarTittle(this, "Select work address");
-                break;
-            case "fromSPAS":
-                configToolbarTittle(this, "Select saving address");
-                break;
-            case "fromSPASN":
-                addressName = fromIntent.getStringExtra("addressName");
-                if(addressName!= null ){
-                    if(!addressName.equals("")){
-                        configToolbarTittle(this, "Select " + addressName + " address");
-                    }else {
-                        configToolbarTittle(this, "Select saving address");
-                    }
-                }else{
-                    configToolbarTittle(this, "Select saving address");
-                }
-                break;
-        }
     }
 
     @Override
@@ -242,6 +206,75 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
         super.onDestroy();
         compositeDisposable.dispose();
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == ADD_HOME_LOCATION) {
+                LatLng selectedLocation = data.getParcelableExtra("selected_location");
+                if (selectedLocation != null) {
+                    distributeResult(selectedLocation, "Home");
+                }
+            } else if (requestCode == ADD_WORK_LOCATION) {
+                LatLng selectedLocation = data.getParcelableExtra("selected_location");
+                if (selectedLocation != null) {
+                    distributeResult(selectedLocation, "Work");
+                }
+            } else if (requestCode == ADD_PARMANENT_ADDRESS) {
+                LatLng selectedLocation = data.getParcelableExtra("selected_location");
+                GeoPoint location = new GeoPoint(selectedLocation.latitude, selectedLocation.longitude);
+                if (selectedLocation != null) {
+                    showProgress();
+                    recyclerMenualAdapter.updateFav("Permanent address", generateCAAdapterData(location));
+                    mModel.updatePermanentAddress(location, new TeacherContract.Model.Listener() {
+                        @Override
+                        public void onSuccess(Object list) {
+                            flush("Successfully Added");
+                            hideProgress();
+                        }
+
+                        @Override
+                        public void onError(String msg) {
+                            flush(msg);
+                            hideProgress();
+                        }
+                    });
+                }
+            }
+        }
+    }
+
+    private void distributeResult(LatLng selectedLocation, String Name) {
+        showProgress();
+        SavedPlacesAdaData current = new SavedPlacesAdaData();
+        GeoPoint location = new GeoPoint(selectedLocation.latitude, selectedLocation.longitude);
+        String secondaryText = getAddress(selectedLocation.latitude, selectedLocation.longitude);
+        current.primary_text = Name;
+        current.secondary_text = secondaryText;
+        current.location = location;
+        recyclerMenualAdapter.updateFav(Name, current);
+
+        Map<String, Object> myMap = new HashMap<>();
+        myMap.put("location", location);
+        myMap.put("primary_text", Name);
+        myMap.put("secondary_text", secondaryText);
+
+        mModel.updateFavoritePlaces(Name, myMap, new TeacherContract.Model.Listener<Void>() {
+            @Override
+            public void onSuccess(Void list) {
+                flush("Successfully Added");
+                hideProgress();
+            }
+
+            @Override
+            public void onError(String msg) {
+                flush(msg);
+                hideProgress();
+            }
+        });
+    }
+
 
     @Override
     public void findView() {
@@ -259,8 +292,8 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
         locationDoneBtn = findViewById(R.id.location_done_btn);
         inputSearchContainer = findViewById(R.id.input_search_container);
         hackHeight = findViewById(R.id.hack_height);
-        primaryText = getResources().getStringArray(R.array.MenualPrimaryText);
-        secondaryText = getResources().getStringArray(R.array.MenualSecondaryText);
+        hackSetLocationOnMap = findViewById(R.id.hack_set_location_on_map);
+        searchFoundRecycleView = findViewById(R.id.recycle_view_search_found);
 
     }
 
@@ -270,7 +303,6 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
         //initializing actionbar/toolbar
         setSupportActionBar(toolbar);
         ActionBar supportActionBar = getSupportActionBar();
-
         if (supportActionBar != null) {
             supportActionBar.setDisplayHomeAsUpEnabled(true);
             supportActionBar.setDisplayShowHomeEnabled(true);
@@ -285,7 +317,6 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
         vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-
                 llBottomSheet.getLayoutParams().height = (llBottomSheet.getHeight() - myAppbarlayout.getHeight() - (int) (5 * (getResources().getDisplayMetrics().density)));
                 llBottomSheet.requestLayout();
                 bottomSheetBehavior.onLayoutChild(coordinatorLayout, llBottomSheet, ViewCompat.LAYOUT_DIRECTION_LTR);
@@ -300,7 +331,6 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
 
         });
 
-
         inputSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -311,6 +341,7 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 showProgress();
                 getAutocomplete(s);
+                updateViewOnMatch(s.toString());
                 if (discardImage.getVisibility() == View.INVISIBLE && !s.equals("")) {
                     discardImage.setVisibility(View.VISIBLE);
                 }
@@ -325,7 +356,6 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
             }
         });
 
-
         inputSearch.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
@@ -334,15 +364,109 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
                     //setMargins(fab,16, 16, 16, 10);
                     bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                     Log.e(TAG, "onFocusChange: has focus");
-
                 } else {
                     Log.e(TAG, "onFocusChange: nonononono focus");
-
                 }
             }
         });
+    }
 
+    @Override
+    public void updateViewOnMatch(String s) {
+        List<MenualRecyclerData> newMenualData = new ArrayList<>();
+        if (favorites != null && favorites.size() > 0) {
+            for (Map.Entry<String, Map<String, Object>> entry : favorites.entrySet()) {
+                if (entry.getKey().equals(s)) {
+                    MenualRecyclerData savedPlacesAdaData = new MenualRecyclerData();
+                    savedPlacesAdaData.setPrimaryText((String) entry.getValue().get("primary_text"));
+                    savedPlacesAdaData.setSecondaryText((String) entry.getValue().get("secondary_text"));
+                    savedPlacesAdaData.setIdentify((String) entry.getValue().get("primary_text"));
+                    savedPlacesAdaData.setLocation((GeoPoint) entry.getValue().get("location"));
+                    newMenualData.add(savedPlacesAdaData);
+                }
+            }
+        }
+        if (saved_places != null && saved_places.size() > 0) {
+            for (Map.Entry<String, Map<String, Object>> entry : saved_places.entrySet()) {
+                if (entry.getKey().equals(s)) {
+                    MenualRecyclerData savedPlacesAdaData = new MenualRecyclerData();
+                    savedPlacesAdaData.setPrimaryText((String) entry.getValue().get("primary_text"));
+                    savedPlacesAdaData.setSecondaryText((String) entry.getValue().get("secondary_text"));
+                    savedPlacesAdaData.setLocation((GeoPoint) entry.getValue().get("location"));
+                    savedPlacesAdaData.setIdentify("saved_one");
+                    newMenualData.add(savedPlacesAdaData);
+                }
+            }
+        }
+        if (recently_used != null && recently_used.size() > 0) {
+            for (Map.Entry<String, Map<String, Object>> entry : recently_used.entrySet()) {
+                if (entry.getValue().get("primary_text").equals(s)) {
+                    MenualRecyclerData savedPlacesAdaData = new MenualRecyclerData();
+                    savedPlacesAdaData.setPrimaryText((String) entry.getValue().get("primary_text"));
+                    savedPlacesAdaData.setSecondaryText((String) entry.getValue().get("secondary_text"));
+                    savedPlacesAdaData.setLocation((GeoPoint) entry.getValue().get("location"));
+                    savedPlacesAdaData.setIdentify("back_in_time");
+                    newMenualData.add(savedPlacesAdaData);
+                }
+            }
+        }
+        if (s.equals("Permanent address") || s.equals("permanent") || s.equals("Permanent") || s.equals("permanent address")) {
+            if (documentSnapshot != null) {
+                final GeoPoint current_address = documentSnapshot.getGeoPoint("current_address");
+                if (current_address != null) {
+                    MenualRecyclerData currentSavedPlace = new MenualRecyclerData();
+                    String address = getAddress(current_address.getLatitude(), current_address.getLongitude());
+                    currentSavedPlace.setPrimaryText("Permanent address");
+                    currentSavedPlace.setIdentify("Permanent address");
+                    currentSavedPlace.setSecondaryText(address);
+                    currentSavedPlace.setLocation(current_address);
+                    newMenualData.add(currentSavedPlace);
+                }
+            }
+        }
+        if (newMenualData.size() > 0) {
+            searchFoundRecyAda.update(newMenualData);
+            menualCompleteRecyView.setVisibility(View.GONE);
+            searchFoundRecycleView.setVisibility(View.VISIBLE);
+        } else {
+            menualCompleteRecyView.setVisibility(View.VISIBLE);
+            searchFoundRecycleView.setVisibility(View.GONE);
+        }
+    }
 
+    @Override
+    public boolean checkIfInDB(GeoPoint geoPoint) {
+        boolean found = false;
+        if (favorites != null && favorites.size() > 0) {
+            for (Map.Entry<String, Map<String, Object>> entry : favorites.entrySet()) {
+                if (entry.getValue().get("location").equals(geoPoint)) {
+                    found = true;
+                }
+            }
+        }
+        if (saved_places != null && saved_places.size() > 0) {
+            for (Map.Entry<String, Map<String, Object>> entry : saved_places.entrySet()) {
+                if (entry.getValue().get("location").equals(geoPoint)) {
+                    found = true;
+                }
+            }
+        }
+        if (recently_used != null && recently_used.size() > 0) {
+            for (Map.Entry<String, Map<String, Object>> entry : recently_used.entrySet()) {
+                if (entry.getValue().get("location").equals(geoPoint)) {
+                    found = true;
+                }
+            }
+        }
+        if (documentSnapshot != null) {
+            final GeoPoint current_address = documentSnapshot.getGeoPoint("current_address");
+            if (current_address != null) {
+                if (geoPoint.equals(current_address)) {
+                    found = true;
+                }
+            }
+        }
+        return found;
     }
 
     @Override
@@ -384,6 +508,195 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
     @Override
     public void makingCallbackInterfaces() {
 
+    }
+
+    @Override
+    public void retriveSavedData() {
+        showProgress();
+        mPresenter.retriveSavedPlacesData(new TeacherContract.Model.Listener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot list) {
+                setDocumentSnapshot(list);
+                List<SavedPlacesAdaData> favoriteAdaData = new ArrayList<>();
+                List<SavedPlacesAdaData> savedAdaData = new ArrayList<>();
+                List<MenualRecyclerData> recentAdaData = new ArrayList<>();
+
+                favorites = (Map<String, Map<String, Object>>) list.get("favourite_places");
+                if (favorites != null && favorites.size() > 0) {
+                    for (Map.Entry<String, Map<String, Object>> entry : favorites.entrySet()) {
+                        if (entry.getKey().equals("home") || entry.getKey().equals("work")) {
+                            SavedPlacesAdaData savedPlacesAdaData = new SavedPlacesAdaData();
+                            savedPlacesAdaData.setPrimary_text((String) entry.getValue().get("primary_text"));
+                            savedPlacesAdaData.setSecondary_text((String) entry.getValue().get("secondary_text"));
+                            savedPlacesAdaData.setLocation((GeoPoint) entry.getValue().get("location"));
+                            favoriteAdaData.add(savedPlacesAdaData);
+                        }
+                    }
+                    if (list.getGeoPoint("current_address") != null) {
+                        favoriteAdaData.add(generateCAAdapterData(list.getGeoPoint("current_address")));
+                    }
+                }
+                saved_places = (Map<String, Map<String, Object>>) list.get("saved_places");
+                if (saved_places != null && saved_places.size() > 0) {
+                    for (Map.Entry<String, Map<String, Object>> entry : saved_places.entrySet()) {
+                        SavedPlacesAdaData savedPlacesAdaData = new SavedPlacesAdaData();
+                        savedPlacesAdaData.setPrimary_text((String) entry.getValue().get("primary_text"));
+                        savedPlacesAdaData.setSecondary_text((String) entry.getValue().get("secondary_text"));
+                        savedPlacesAdaData.setLocation((GeoPoint) entry.getValue().get("location"));
+                        savedAdaData.add(savedPlacesAdaData);
+                    }
+                }
+                recently_used = (Map<String, Map<String, Object>>) list.get("recent_places");
+                if (recently_used != null && recently_used.size() > 0) {
+                    for (Map.Entry<String, Map<String, Object>> entry : recently_used.entrySet()) {
+                        MenualRecyclerData savedPlacesAdaData = new MenualRecyclerData();
+                        savedPlacesAdaData.setPrimaryText((String) entry.getValue().get("primary_text"));
+                        savedPlacesAdaData.setSecondaryText((String) entry.getValue().get("secondary_text"));
+                        savedPlacesAdaData.setLocation((GeoPoint) entry.getValue().get("location"));
+                        savedPlacesAdaData.setIdentify((String) entry.getKey());
+                        recentAdaData.add(savedPlacesAdaData);
+                    }
+                }
+                String preIdentifyOne = documentSnapshot.getString("next_rp_write");
+                recyclerMenualAdapter = new PlaceMenualRecyAda(GrabingLocationActivity.this, favoriteAdaData, savedAdaData, recentAdaData, preIdentifyOne) {
+                    @Override
+                    void OnItemClicked(View v, int position, String identify) {
+                        SavedPlacesAdaData current = new SavedPlacesAdaData();
+                        current.primary_text = "foo";
+                        if (position == 0) {
+                            //current location block
+                            if (identify.equals("Permanent address")) {
+                                for (SavedPlacesAdaData foo : favoriteAdaData) {
+                                    if (foo.primary_text.equals("Permanent address")) {
+                                        current = foo;
+                                    }
+                                }
+                                hideBSShowDB();
+                                moveCamera(new LatLng(current.location.getLatitude(), current.location.getLongitude()), DEFAULT_ZOOM, "Permanent_address", mMap);
+                            } else {
+                                startActivityForResult(new Intent(context, GrabingLocationActivity.class).setAction("fromGLAP"), ADD_PARMANENT_ADDRESS);
+                            }
+
+                        } else if (position == 1) {
+                            //home block
+                            if (identify.equals("Home")) {
+                                for (SavedPlacesAdaData foo : favoriteAdaData) {
+                                    if (foo.primary_text.equals("Home")) {
+                                        current = foo;
+                                    }
+                                }
+                                hideBSShowDB();
+                                moveCamera(new LatLng(current.location.getLatitude(), current.location.getLongitude()), DEFAULT_ZOOM, "home", mMap);
+                            } else {
+                                startActivityForResult(new Intent(context, GrabingLocationActivity.class).setAction("fromGLAH"), ADD_HOME_LOCATION);
+                            }
+
+                        } else if (position == 2) {
+                            //work block
+                            if (identify.equals("Work")) {
+                                for (SavedPlacesAdaData foo : favoriteAdaData) {
+                                    if (foo.primary_text.equals("Work")) {
+                                        current = foo;
+                                    }
+                                }
+                                hideBSShowDB();
+                                moveCamera(new LatLng(current.location.getLatitude(), current.location.getLongitude()), DEFAULT_ZOOM, "work", mMap);
+                            } else {
+                                activity.startActivityForResult(new Intent(context, GrabingLocationActivity.class).setAction("fromGLAW"), ADD_WORK_LOCATION);
+                            }
+
+                        } else if (position > 2 && position <= (2 + savedAdaData.size())) {
+                            //saved block
+                            for (SavedPlacesAdaData foo : savedAdaData) {
+                                if (foo.primary_text.equals(identify)) {
+                                    current = foo;
+                                }
+                            }
+                            hideBSShowDB();
+                            moveCamera(new LatLng(current.location.getLatitude(), current.location.getLongitude()), DEFAULT_ZOOM, "saved_places", mMap);
+                        } else if (position > (2 + savedAdaData.size()) && position <= (2 + savedAdaData.size() + recentAdaData.size())) {
+                            //back in time block
+                            GeoPoint cMLocation = null;
+                            switch (preIdentifyOne) {
+                                case "1":
+                                    switch (identify) {
+                                        case "one":
+                                            //3
+                                            cMLocation= (GeoPoint) recently_used.get("rp_3").get("location");
+                                            break;
+                                        case "two":
+                                            //2
+                                            cMLocation= (GeoPoint) recently_used.get("rp_2").get("location");
+                                            break;
+                                        case "three":
+                                            //1
+                                            cMLocation= (GeoPoint) recently_used.get("rp_1").get("location");
+                                            break;
+                                    }
+                                    break;
+                                case "2":
+                                    switch (identify) {
+                                        case "one":
+                                            //1
+                                            cMLocation= (GeoPoint) recently_used.get("rp_1").get("location");
+                                            break;
+                                        case "two":
+                                            //3
+                                            cMLocation= (GeoPoint) recently_used.get("rp_3").get("location");
+                                            break;
+                                        case "three":
+                                            //2
+                                            cMLocation= (GeoPoint) recently_used.get("rp_2").get("location");
+                                            break;
+                                    }
+                                    break;
+                                case "3":
+                                    switch (identify) {
+                                        case "one":
+                                            //2
+                                            cMLocation= (GeoPoint) recently_used.get("rp_2").get("location");
+                                            break;
+                                        case "two":
+                                            //1
+                                            cMLocation= (GeoPoint) recently_used.get("rp_1").get("location");
+                                            break;
+                                        case "three":
+                                            //3
+                                            cMLocation= (GeoPoint) recently_used.get("rp_3").get("location");
+                                            break;
+                                    }
+                                    break;
+                            }
+                            hideBSShowDB();
+                            if(cMLocation!= null){
+                                moveCamera(new LatLng(cMLocation.getLatitude(), cMLocation.getLongitude()), DEFAULT_ZOOM, "back_in_time", mMap);
+                            }
+                        } else if (position == (3 + savedAdaData.size() + recentAdaData.size())) {
+                            //set location on map block
+                            hideBSShowDB();
+                        }
+                    }
+                };
+                menualCompleteRecyView.setLayoutManager(new LinearLayoutManager(GrabingLocationActivity.this));
+                menualCompleteRecyView.setAdapter(recyclerMenualAdapter);
+
+            }
+
+            @Override
+            public void onError(String msg) {
+                flush(msg);
+            }
+        });
+    }
+
+    private void hideBSShowDB() {
+        hideKeyboard(GrabingLocationActivity.this);
+        hackHeight.setVisibility(View.GONE);
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        inputSearch.clearFocus();
+        inputSearchContainer.requestFocus();
+        llBottomSheet.setVisibility(View.INVISIBLE);
+        locationDoneBtn.setVisibility(View.VISIBLE);
     }
 
 
@@ -477,10 +790,60 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
             }
             setResult(RESULT_OK, goBackToPPAIntent);
             finish();
+        } else if (Objects.requireNonNull(retrivedAction).startsWith("fromGLA")) {
+            Intent goBackToGLAIntent = new Intent(this, StudentSettingsActivity.class);
+            goBackToGLAIntent.putExtra("selected_location", mCenterLatLong);
+            setResult(RESULT_OK, goBackToGLAIntent);
+            finish();
         } else {
-            startActivity(new Intent(this, CrudSkillActivity.class).setAction(DumeUtils.STUDENT));
-        }
+            LatLng target = mMap.getCameraPosition().target;
+            GeoPoint targetGeopoint = new GeoPoint(target.latitude, target.longitude);
+            if (!checkIfInDB(targetGeopoint)) {
+                //TODO
+                //updateRecentPlaces
+                String targetAddress = getAddress(target.latitude, target.longitude);
+                String[] targetAddressParts = targetAddress.split("\\s*,\\s*", 2);
+                String primary = targetAddressParts[0];
+                String secondary = targetAddressParts[1];
 
+                MenualRecyclerData current = new MenualRecyclerData();
+                current.setPrimaryText(primary);
+                current.setSecondaryText(secondary);
+                current.setLocation(targetGeopoint);
+
+                Map<String, Object> myMap = new HashMap<>();
+                myMap.put("location", targetGeopoint);
+                myMap.put("primary_text", primary);
+                myMap.put("secondary_text", secondary);
+                if (documentSnapshot != null) {
+                    String preIdentify = documentSnapshot.getString("next_rp_write");
+                    String identify = "rp_";
+                    identify = identify + preIdentify;
+
+                    current.setIdentify(identify);
+                    recyclerMenualAdapter.updateRecent(identify, current, preIdentify);
+
+                    mModel.updateRecentPlaces(identify, myMap, new TeacherContract.Model.Listener<Void>() {
+                        @Override
+                        public void onSuccess(Void list) {
+                            //flush("Successfully Added");
+                            hideProgress();
+                            startActivity(new Intent(GrabingLocationActivity.this, CrudSkillActivity.class).setAction(DumeUtils.STUDENT));
+                        }
+
+                        @Override
+                        public void onError(String msg) {
+                            //flush(msg);
+                            Log.e(TAG, msg);
+                            hideProgress();
+                            startActivity(new Intent(GrabingLocationActivity.this, CrudSkillActivity.class).setAction(DumeUtils.STUDENT));
+                        }
+                    });
+                }
+            } else {
+                startActivity(new Intent(this, CrudSkillActivity.class).setAction(DumeUtils.STUDENT));
+            }
+        }
     }
 
 
@@ -561,29 +924,6 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
         }
     }
 
-    public List<MenualRecyclerData> getFinalData() {
-        List<MenualRecyclerData> data = new ArrayList<>();
-        int[] imageIcons = {
-                R.drawable.ic_back_in_time,
-                R.drawable.ic_current_location_icon,
-                R.drawable.ic_home_place,
-                R.drawable.ic_work_places,
-                R.drawable.ic_star_border_black_24dp,
-                R.drawable.ic_set_location_on_map
-        };
-
-        for (int i = 0; i < primaryText.length && i < secondaryText.length && i < imageIcons.length; i++) {
-            MenualRecyclerData current = new MenualRecyclerData();
-            current.primaryText = primaryText[i];
-            current.secondaryText = secondaryText[i];
-            current.imageSrc = imageIcons[i];
-            data.add(current);
-
-            secondaryText[1] = "fuck fuck";
-        }
-        return data;
-    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -600,6 +940,44 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+    }
+
+    private void setProperTittle() {
+        switch (Objects.requireNonNull(retrivedAction)) {
+            case "fromPPA":
+            case "fromMPA":
+            case "fromGLAP":
+                configToolbarTittle(this, "Select permanent address");
+                break;
+            case "fromSPAH":
+            case "fromGLAH":
+                configToolbarTittle(this, "Select home address");
+                break;
+            case "fromSPAW":
+            case "fromGLAW":
+                configToolbarTittle(this, "Select work address");
+                break;
+            case "fromSPAS":
+                configToolbarTittle(this, "Select saving address");
+                break;
+            case "fromSPASN":
+                addressName = fromIntent.getStringExtra("addressName");
+                if (addressName != null) {
+                    if (!addressName.equals("")) {
+                        configToolbarTittle(this, "Select " + addressName + " address");
+                    } else {
+                        configToolbarTittle(this, "Select saving address");
+                    }
+                } else {
+                    configToolbarTittle(this, "Select saving address");
+                }
+                break;
+        }
+
+        if (Objects.requireNonNull(retrivedAction).startsWith("from")) {
+            menualCompleteRecyView.setVisibility(View.GONE);
+            hackSetLocationOnMap.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -631,8 +1009,8 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
     public void setCurrentAddress(GeoPoint currentAddress) {
         userLocation = currentAddress;
         final String address = getAddress(currentAddress.getLatitude(), currentAddress.getLongitude());
-        secondaryText[1] = "fuck fuck";
-        recyclerMenualAdapter.update(getFinalData());
+        //secondaryText[1] = "fuck fuck";
+        //recyclerMenualAdapter.update(getFinalData());
     }
 
     @Override
@@ -659,5 +1037,30 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
     @Override
     public void flush(String msg) {
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public SavedPlacesAdaData generateCAAdapterData(GeoPoint geoPoint) {
+        SavedPlacesAdaData currentSavedPlace = new SavedPlacesAdaData();
+        String address;
+        if (geoPoint != null) {
+            address = getAddress(geoPoint.getLatitude(), geoPoint.getLongitude());
+        } else {
+            address = "null";
+        }
+        currentSavedPlace.setPrimary_text("Permanent address");
+        currentSavedPlace.setSecondary_text(address);
+        currentSavedPlace.setLocation(geoPoint);
+        return currentSavedPlace;
+    }
+
+    @Override
+    public void hackSetLocaOnMapClicked() {
+        hideBSShowDB();
+    }
+
+    @Override
+    public void setDocumentSnapshot(DocumentSnapshot documentSnapshot) {
+        this.documentSnapshot = documentSnapshot;
     }
 }

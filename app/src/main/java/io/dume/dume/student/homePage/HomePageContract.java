@@ -119,9 +119,9 @@ public interface HomePageContract {
 
         void setUnreadRecords(Map<String, Object> unreadRecords);
 
-        void showSnackBar(String completePercent);
-
         void setAvatarForMenu(String avatar);
+
+        void showSnackBar(String completePercent);
     }
 
     interface Presenter {
