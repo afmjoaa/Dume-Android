@@ -50,9 +50,8 @@ public class EditModel implements EditContract.Model {
         return instance;
     }
 
-
     @Override
-    public void synWithDataBase(String first, String last, String avatarUrl, String email, String gender, String phone, String religion, String marital,String birth_date) {
+    public void synWithDataBase(String first, String last, String avatarUrl, String email, String gender, String phone, String religion, String marital,String birth_date, GeoPoint geoPoint, String currentStatus) {
         if (this.listener != null) {
             map.put("avatar", avatarUrl);
             map.put("first_name", first);
@@ -62,6 +61,8 @@ public class EditModel implements EditContract.Model {
             map.put("religion", religion);
             map.put("birth_date",birth_date);
             map.put("marital", marital);
+            map.put("location", geoPoint);
+            map.put("current_status", currentStatus);
             /*users/mentors/mentor_profile/*/
             database.collection("users/mentors/mentor_profile").document(Objects.requireNonNull(auth.getUid())).update(map).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
@@ -105,15 +106,12 @@ public class EditModel implements EditContract.Model {
     }
 
     @Override
-    public void getLocation(TeacherContract.Model.Listener<GeoPoint> listener) {
+    public void getDocumentSnapShot(TeacherContract.Model.Listener<DocumentSnapshot> listener) {
         listenerRegistration = database.document("users/mentors/mentor_profile/" + FirebaseAuth.getInstance().getUid()).addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-
-                GeoPoint location = (GeoPoint) documentSnapshot.get("location");
-
-                if (location != null) {
-                    listener.onSuccess(location);
+                if (documentSnapshot != null) {
+                    listener.onSuccess(documentSnapshot);
                 } else {
                     listener.onError("");
 
@@ -122,24 +120,5 @@ public class EditModel implements EditContract.Model {
             }
         });
     }
-
-    @Override
-    public void updateLocaiton(GeoPoint point, TeacherContract.Model.Listener listener) {
-
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("location", point);
-        database.document("users/mentors/mentor_profile/" + FirebaseAuth.getInstance().getUid()).set(map).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                listener.onSuccess(null);
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                listener.onError(e.getLocalizedMessage());
-            }
-        });
-    }
-
 
 }

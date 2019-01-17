@@ -19,6 +19,7 @@
         android:enabled="false"
         android:title=" " />
     <group
+        android:id="@+id/main_section"
         android:checkableBehavior="single"
         android:visible="true">
         <item
@@ -89,7 +90,6 @@
             </group>
         </menu>
     </item>
-
 
     <item
         android:id="@+id/information_item"

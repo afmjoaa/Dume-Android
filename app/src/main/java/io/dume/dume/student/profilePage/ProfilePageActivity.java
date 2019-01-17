@@ -202,6 +202,62 @@ public class ProfilePageActivity extends CustomStuAppCompatActivity implements P
             }
         });
 
+        currentAddressTextView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                updateChangesClicked();
+            }
+        });
+        inputCurrentStatus.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                updateChangesClicked();
+            }
+        });
+        previousResultTextView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                updateChangesClicked();
+            }
+        });
+        selectGenderTextView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                updateChangesClicked();
+            }
+        });
     }
 
     @Override
@@ -449,6 +505,7 @@ public class ProfilePageActivity extends CustomStuAppCompatActivity implements P
                         compressedImage = file;
                         Glide.with(ProfilePageActivity.this).load(compressedImage).apply(new RequestOptions().override(100, 100)).into(profileUserDP);
                         hideSpiner();
+                        updateChangesClicked();
                     }
                 }, new Consumer<Throwable>() {
                     @Override
@@ -656,11 +713,7 @@ public class ProfilePageActivity extends CustomStuAppCompatActivity implements P
             setProfileComPercent(profileComPercent.toString());
         }
 
-        if (getProfileComPercent().equals("100")) {
-            flush("Profile completed");
-        } else {
-            flush("Your profile is only " + getProfileComPercent() + "% complete");
-        }
+
     }
 
     @Override

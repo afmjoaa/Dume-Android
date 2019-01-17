@@ -192,8 +192,12 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
         searchFoundRecyAda = new SearchFoundRecyAda(this, data) {
             @Override
             void OnItemClicked(View v, MenualRecyclerData clickedData) {
-                hideBSShowDB();
-                moveCamera(new LatLng(clickedData.location.getLatitude(), clickedData.location.getLongitude()), DEFAULT_ZOOM, "Permanent_address", mMap);
+                if (clickedData.identify.equals("set_location")) {
+                    hideBSShowDB();
+                } else {
+                    hideBSShowDB();
+                    moveCamera(new LatLng(clickedData.location.getLatitude(), clickedData.location.getLongitude()), DEFAULT_ZOOM, clickedData.identify, mMap);
+                }
             }
         };
         searchFoundRecycleView.setLayoutManager(new LinearLayoutManager(this));
@@ -424,6 +428,16 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
                 }
             }
         }
+        if (s.equals("set") || s.equals("Set") || s.equals("set ") || s.equals("Set ") || s.startsWith("set l") ||
+                s.startsWith("Set l")) {
+            MenualRecyclerData currentSavedPlace = new MenualRecyclerData();
+            currentSavedPlace.setPrimaryText(getResources().getString(R.string.set_location_on_map));
+            currentSavedPlace.setIdentify("set_location");
+            currentSavedPlace.setSecondaryText("");
+            currentSavedPlace.setLocation(null);
+            newMenualData.add(currentSavedPlace);
+        }
+
         if (newMenualData.size() > 0) {
             searchFoundRecyAda.update(newMenualData);
             menualCompleteRecyView.setVisibility(View.GONE);
@@ -622,15 +636,15 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
                                     switch (identify) {
                                         case "one":
                                             //3
-                                            cMLocation= (GeoPoint) recently_used.get("rp_3").get("location");
+                                            cMLocation = (GeoPoint) recently_used.get("rp_3").get("location");
                                             break;
                                         case "two":
                                             //2
-                                            cMLocation= (GeoPoint) recently_used.get("rp_2").get("location");
+                                            cMLocation = (GeoPoint) recently_used.get("rp_2").get("location");
                                             break;
                                         case "three":
                                             //1
-                                            cMLocation= (GeoPoint) recently_used.get("rp_1").get("location");
+                                            cMLocation = (GeoPoint) recently_used.get("rp_1").get("location");
                                             break;
                                     }
                                     break;
@@ -638,15 +652,15 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
                                     switch (identify) {
                                         case "one":
                                             //1
-                                            cMLocation= (GeoPoint) recently_used.get("rp_1").get("location");
+                                            cMLocation = (GeoPoint) recently_used.get("rp_1").get("location");
                                             break;
                                         case "two":
                                             //3
-                                            cMLocation= (GeoPoint) recently_used.get("rp_3").get("location");
+                                            cMLocation = (GeoPoint) recently_used.get("rp_3").get("location");
                                             break;
                                         case "three":
                                             //2
-                                            cMLocation= (GeoPoint) recently_used.get("rp_2").get("location");
+                                            cMLocation = (GeoPoint) recently_used.get("rp_2").get("location");
                                             break;
                                     }
                                     break;
@@ -654,21 +668,21 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
                                     switch (identify) {
                                         case "one":
                                             //2
-                                            cMLocation= (GeoPoint) recently_used.get("rp_2").get("location");
+                                            cMLocation = (GeoPoint) recently_used.get("rp_2").get("location");
                                             break;
                                         case "two":
                                             //1
-                                            cMLocation= (GeoPoint) recently_used.get("rp_1").get("location");
+                                            cMLocation = (GeoPoint) recently_used.get("rp_1").get("location");
                                             break;
                                         case "three":
                                             //3
-                                            cMLocation= (GeoPoint) recently_used.get("rp_3").get("location");
+                                            cMLocation = (GeoPoint) recently_used.get("rp_3").get("location");
                                             break;
                                     }
                                     break;
                             }
                             hideBSShowDB();
-                            if(cMLocation!= null){
+                            if (cMLocation != null) {
                                 moveCamera(new LatLng(cMLocation.getLatitude(), cMLocation.getLongitude()), DEFAULT_ZOOM, "back_in_time", mMap);
                             }
                         } else if (position == (3 + savedAdaData.size() + recentAdaData.size())) {

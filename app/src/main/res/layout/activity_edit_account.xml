@@ -40,8 +40,6 @@
         android:id="@+id/editAccountScrolling"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="18dp"
-        android:layout_marginEnd="18dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
@@ -61,9 +59,9 @@
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:scaleType="centerCrop"
+                    android:src="@drawable/avatar"
                     app:carbon_cornerRadius="50dp"
-                    app:carbon_elevation="3dp"
-                    android:src="@drawable/avatar" />
+                    app:carbon_elevation="3dp" />
 
                 <carbon.widget.ImageView
                     android:layout_width="wrap_content"
@@ -71,8 +69,8 @@
                     android:layout_gravity="bottom|end"
                     android:background="@drawable/cirecle_background_white"
                     android:padding="5dp"
-                    app:carbon_elevation="4dp"
-                    android:src="@drawable/ic_action_photo_edit" />
+                    android:src="@drawable/ic_action_photo_edit"
+                    app:carbon_elevation="4dp" />
 
             </FrameLayout>
 
@@ -80,8 +78,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="8dp"
                 android:gravity="center">
 
                 <com.warkiz.widget.IndicatorStayLayout
@@ -98,7 +100,7 @@
                         app:isb_indicator_text_size="10sp"
                         app:isb_max="100"
                         app:isb_min="0"
-                        app:isb_progress="40"
+                        app:isb_progress="100"
                         app:isb_seek_smoothly="true"
                         app:isb_show_indicator="circular_bubble"
                         app:isb_show_tick_marks_type="divider"
@@ -143,7 +145,11 @@
                 android:id="@+id/user_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="18dp"
+                android:layout_marginLeft="18dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginEnd="18dp"
+                android:layout_marginRight="18dp"
                 android:layout_marginBottom="10dp"
                 android:baselineAligned="false"
                 android:orientation="horizontal">
@@ -182,9 +188,9 @@
                         android:layout_marginRight="20dp"
                         android:contentDescription="@string/search_icon"
                         android:translationY="5dp"
-                        app:carbon_elevation="1dp"
-                        app:carbon_cornerRadius="8dp"
                         android:visibility="gone"
+                        app:carbon_cornerRadius="8dp"
+                        app:carbon_elevation="1dp"
                         app:srcCompat="@drawable/ic_empty_field" />
 
                 </RelativeLayout>
@@ -221,9 +227,9 @@
                         android:layout_marginRight="10dp"
                         android:contentDescription="@string/search_icon"
                         android:translationY="5dp"
-                        app:carbon_elevation="1dp"
-                        app:carbon_cornerRadius="8dp"
                         android:visibility="gone"
+                        app:carbon_cornerRadius="8dp"
+                        app:carbon_elevation="1dp"
                         app:srcCompat="@drawable/ic_empty_field" />
 
                 </RelativeLayout>
@@ -233,6 +239,10 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="18dp"
+                android:layout_marginLeft="18dp"
+                android:layout_marginEnd="18dp"
+                android:layout_marginRight="18dp"
                 android:layout_marginBottom="10dp">
 
                 <android.support.design.widget.TextInputLayout
@@ -261,9 +271,9 @@
                     android:layout_marginRight="10dp"
                     android:contentDescription="@string/search_icon"
                     android:translationY="5dp"
-                    app:carbon_elevation="1dp"
-                    app:carbon_cornerRadius="8dp"
                     android:visibility="gone"
+                    app:carbon_cornerRadius="8dp"
+                    app:carbon_elevation="1dp"
                     app:srcCompat="@drawable/ic_empty_field" />
 
             </RelativeLayout>
@@ -272,6 +282,10 @@
                 android:id="@+id/input_layout_phone_num"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="18dp"
+                android:layout_marginLeft="18dp"
+                android:layout_marginEnd="18dp"
+                android:layout_marginRight="18dp"
                 android:layout_marginBottom="10dp">
 
                 <EditText
@@ -290,6 +304,10 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="18dp"
+                android:layout_marginLeft="18dp"
+                android:layout_marginEnd="18dp"
+                android:layout_marginRight="18dp"
                 android:layout_marginBottom="10dp">
 
                 <android.support.design.widget.TextInputLayout
@@ -320,8 +338,8 @@
                     android:contentDescription="@string/search_icon"
                     android:translationY="5dp"
                     android:visibility="gone"
-                    app:carbon_elevation="1dp"
                     app:carbon_cornerRadius="8dp"
+                    app:carbon_elevation="1dp"
                     app:srcCompat="@drawable/ic_empty_field" />
 
             </RelativeLayout>
@@ -330,6 +348,10 @@
                 android:id="@+id/input_layout_current_status"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="18dp"
+                android:layout_marginLeft="18dp"
+                android:layout_marginEnd="18dp"
+                android:layout_marginRight="18dp"
                 android:layout_marginBottom="10dp">
 
                 <EditText
@@ -346,6 +368,10 @@
                 android:id="@+id/input_layout_Gender"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="18dp"
+                android:layout_marginLeft="18dp"
+                android:layout_marginEnd="18dp"
+                android:layout_marginRight="18dp"
                 android:layout_marginBottom="10dp">
 
                 <EditText
@@ -364,6 +390,10 @@
                 android:id="@+id/input_layout_Religion"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="18dp"
+                android:layout_marginLeft="18dp"
+                android:layout_marginEnd="18dp"
+                android:layout_marginRight="18dp"
                 android:layout_marginBottom="10dp">
 
                 <EditText
@@ -381,6 +411,10 @@
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/input_layout_marital_status"
                 android:layout_width="match_parent"
+                android:layout_marginStart="18dp"
+                android:layout_marginEnd="18dp"
+                android:layout_marginLeft="18dp"
+                android:layout_marginRight="18dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp">
 
@@ -400,6 +434,10 @@
                 android:id="@+id/input_layout_birth_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="18dp"
+                android:layout_marginEnd="18dp"
+                android:layout_marginLeft="18dp"
+                android:layout_marginRight="18dp"
                 android:layout_marginBottom="10dp">
 
                 <EditText
@@ -408,14 +446,13 @@
                     android:layout_height="wrap_content"
                     android:focusable="false"
                     android:hint="@string/birth_date"
-                    android:onClick="onClick"
                     android:inputType="date"
+                    android:onClick="onClick"
                     app:fontFamily="@font/cairo_regular" />
 
             </android.support.design.widget.TextInputLayout>
 
         </LinearLayout>
-
 
     </android.support.v4.widget.NestedScrollView>
 

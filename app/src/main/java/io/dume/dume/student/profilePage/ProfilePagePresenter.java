@@ -110,6 +110,9 @@ public class ProfilePagePresenter implements ProfilePageContract.Presenter {
                                 mView.setAvatar((String) obj);
                                 mView.flush("Display pic uploaded");
                                 mView.updateChangesClicked();
+                                if (mView.getProfileComPercent().equals("100")) {
+                                    mView.flush("Profile completed");
+                                }
                                 mModel.synWithDataBase(mView.getFirstName(), mView.getLastName(),
                                         mView.getGmail(), mView.getCurrentAddress(), mView.getCurrentStatus(),
                                         mView.getPreviousResult(), mView.getGender(), mView.getProfileComPercent(),
@@ -136,6 +139,9 @@ public class ProfilePagePresenter implements ProfilePageContract.Presenter {
                         });
                     } else {
                         mView.updateChangesClicked();
+                        if (mView.getProfileComPercent().equals("100")) {
+                            mView.flush("Profile completed");
+                        }
                         mModel.synWithDataBase(mView.getFirstName(), mView.getLastName(),
                                 mView.getGmail(), mView.getCurrentAddress(), mView.getCurrentStatus(),
                                 mView.getPreviousResult(), mView.getGender(), mView.getProfileComPercent(),

@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.GeoPoint;
 
 import java.io.File;
@@ -52,10 +53,15 @@ public class EditPresenter implements EditContract.Presenter, EditContract.onDat
     public void enqueue() {
         view.configureView();
         view.configureCallback();
-        model.getLocation(new TeacherContract.Model.Listener<GeoPoint>() {
+        model.getDocumentSnapShot(new TeacherContract.Model.Listener<DocumentSnapshot>() {
             @Override
-            public void onSuccess(GeoPoint list) {
-                view.onLocationUpdate(DumeUtils.getAddress(view.getActivtiyContext(), list.getLatitude(), list.getLongitude()));
+            public void onSuccess(DocumentSnapshot list) {
+                GeoPoint geoPoint = list.getGeoPoint("location");
+                if (geoPoint != null) {
+                    view.setCurrentAddress(geoPoint);
+                }
+                String profileComPercent = list.getString("pro_com_%");
+                view.setProfileComPercent(profileComPercent);
                 Log.w(TAG, "onSuccess: Fucked Location");
             }
 
@@ -72,23 +78,24 @@ public class EditPresenter implements EditContract.Presenter, EditContract.onDat
         switch (element.getId()) {
             case R.id.fabEdit:
                 view.enableLoad();
-                if(view.firstName().equals("")||view.lastName().equals("")||view.gmail().equals("")||view.getLocation().equals("") ){
-                    if(view.firstName().equals("")){
+                if (view.firstName().equals("") || view.lastName().equals("") || view.gmail().equals("") || view.getLocation().equals("")) {
+                    if (view.firstName().equals("")) {
                         view.invalidFound("first");
                     }
-                    if(view.lastName().equals("")){
+                    if (view.lastName().equals("")) {
                         view.invalidFound("last");
                     }
-                    if(view.gmail().equals("")){
+                    if (view.gmail().equals("")) {
                         view.invalidFound("email");
                     }
-                    if(view.getLocation().equals("")){
+                    if (view.getLocation().equals("")) {
                         view.invalidFound("location");
                     }
                     view.toast("Mandatory can't be kept empty.");
                     view.disableLoad();
-                }else {
-                    model.synWithDataBase(view.firstName(), view.lastName(), view.getAvatarUrl(), view.gmail(), view.gender(), view.phone(), view.religion(), view.maritalStatus(), view.getBirthDate());
+                } else {
+                    //TODO calculate percent
+                    model.synWithDataBase(view.firstName(), view.lastName(), view.getAvatarUrl(), view.gmail(), view.gender(), view.phone(), view.religion(), view.maritalStatus(), view.getBirthDate(), view.getCurrentAddress(), view.getCurrentStatus());
                 }
                 break;
             case R.id.profileImage:
@@ -228,21 +235,7 @@ public class EditPresenter implements EditContract.Presenter, EditContract.onDat
                     LatLng selectedLocation = data.getParcelableExtra("selected_location");
                     if (selectedLocation != null) {
                         GeoPoint retrivedLocation = new GeoPoint(selectedLocation.latitude, selectedLocation.longitude);
-
-                        model.updateLocaiton(retrivedLocation, new TeacherContract.Model.Listener() {
-                            @Override
-                            public void onSuccess(Object list) {
-                                view.toast("Location Updated");
-                            }
-
-                            @Override
-                            public void onError(String msg) {
-                                view.toast(msg);
-                            }
-                        });
-
-                        String address = DumeUtils.getAddress(view.getActivtiyContext(), retrivedLocation.getLatitude(), retrivedLocation.getLongitude());
-                        view.onLocationUpdate(address);
+                        view.setCurrentAddress(retrivedLocation);
                     }
                 }
                 break;

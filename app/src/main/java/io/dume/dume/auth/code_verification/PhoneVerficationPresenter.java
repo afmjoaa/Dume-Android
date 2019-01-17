@@ -237,7 +237,7 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
         mentorFeild.put("user_ref_link", "");
 
         mentorFeild.put("account_active", true);
-        mentorFeild.put("pro_com_%", "60");
+        mentorFeild.put("pro_com_%", "40");
 
         mentorFeild.put("unread_msg", "0");
         mentorFeild.put("unread_noti", "0");

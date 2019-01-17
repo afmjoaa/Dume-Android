@@ -18,7 +18,6 @@ import com.google.firebase.firestore.FirebaseFirestoreSettings;
 
 import java.util.Map;
 
-import io.dume.dume.auth.DataStore;
 import io.dume.dume.inter_face.usefulListeners;
 
 public class StuBaseModel {
@@ -27,7 +26,6 @@ public class StuBaseModel {
     protected Activity activity;
     protected final FirebaseAuth mAuth;
     protected final FirebaseFirestore firestore;
-    private StuDataStore stuDataStore = null;
     protected final DocumentReference mini_users;
     protected final DocumentReference userStudentProInfo;
 

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.GeoPoint;
 
 import io.dume.dume.teacher.homepage.TeacherContract;
@@ -34,21 +35,27 @@ public class EditContract {
 
         String phone();
 
-        void updateImage();
-
-        void setImage(Uri uri);
-
-        void setAvatarUrl(String url);
-
         String getAvatarUrl();
+
+        GeoPoint getCurrentAddress();
+
+        String getBirthDate();
+
+        String getProfileComPercent();
+
+        String getCurrentStatus();
 
         void enableLoad();
 
         void disableLoad();
 
-        void onLocationUpdate(String location);
+        void setCurrentAddress(GeoPoint geoPoint);
 
         Context getActivtiyContext();
+
+        void setImage(Uri uri);
+
+        void setAvatarUrl(String url);
 
         void onGenderClicked();
 
@@ -58,9 +65,15 @@ public class EditContract {
 
         void onBirthDateClicked();
 
-        String getBirthDate();
-
         void invalidFound(String Name);
+
+        void generatePercent();
+
+        void setProfileComPercent(String num);
+
+        void setCurrentStatus(String currentStatus);
+
+
     }
 
     interface Presenter {
@@ -72,15 +85,14 @@ public class EditContract {
     }
 
     interface Model {
-        void synWithDataBase(String first, String last, String avaterUrl, String email, String gender, String phone, String religion, String marital,String birth_date);
+        void synWithDataBase(String first, String last, String avaterUrl, String email, String gender, String phone, String religion, String marital,String birth_date, GeoPoint location, String currentStatus);
 
         void setListener(onDataUpdate listener);
 
         void uploadImage(Uri uri, DownloadListener progressListener);
 
-        void getLocation(TeacherContract.Model.Listener<GeoPoint> listener);
+        void getDocumentSnapShot(TeacherContract.Model.Listener<DocumentSnapshot> listener);
 
-        void updateLocaiton(GeoPoint point, TeacherContract.Model.Listener listener);
     }
 
     interface onDataUpdate {

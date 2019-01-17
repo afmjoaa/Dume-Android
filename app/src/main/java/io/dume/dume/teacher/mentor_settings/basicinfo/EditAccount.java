@@ -26,7 +26,10 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.firebase.firestore.GeoPoint;
 import com.transitionseverywhere.TransitionManager;
+import com.warkiz.widget.IndicatorSeekBar;
+import com.warkiz.widget.IndicatorStayLayout;
 
 import java.util.Calendar;
 
@@ -36,6 +39,8 @@ import io.dume.dume.student.grabingLocation.GrabingLocationActivity;
 import io.dume.dume.util.DatePickerFragment;
 import io.dume.dume.util.DumeUtils;
 import io.dume.dume.util.RadioBtnDialogue;
+
+import static io.dume.dume.util.DumeUtils.getAddress;
 
 public class EditAccount extends AppCompatActivity implements EditContract.View, View.OnClickListener {
     private FloatingActionButton fb;
@@ -61,6 +66,11 @@ public class EditAccount extends AppCompatActivity implements EditContract.View,
     private carbon.widget.ImageView emptyLastNameFound;
     private carbon.widget.ImageView emptyEmailFound;
     private carbon.widget.ImageView emptyLocationFound;
+    private GeoPoint userLocation = null;
+    private IndicatorSeekBar seekbar;
+    private IndicatorStayLayout seekbarStaylayout;
+    private EditText currentStatusET;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +94,9 @@ public class EditAccount extends AppCompatActivity implements EditContract.View,
         last = findViewById(R.id.lastNameEdt);
         mail = findViewById(R.id.mailEt);
         phone = findViewById(R.id.phoneEdt);
+        seekbar = findViewById(R.id.complete_seekbar);
+        seekbarStaylayout = findViewById(R.id.complete_seekbar_staylayout);
+        currentStatusET = findViewById(R.id.input_current_status);
 
         mScrollView = findViewById(R.id.editAccountScrolling);
         avatar = findViewById(R.id.profileImage);
@@ -126,6 +139,7 @@ public class EditAccount extends AppCompatActivity implements EditContract.View,
             selectMaritalStatusET.setText(bundle.getString("marital"));
             Log.e(TAG, "loadCarryData: " + bundle.toString());
             avatarUrl = bundle.getString("avatar");
+            //TODO get the location data as well
         }
     }
 
@@ -133,6 +147,7 @@ public class EditAccount extends AppCompatActivity implements EditContract.View,
     @Override
     public void configureCallback() {
         fb.setOnClickListener(this);
+        seekbar.setIndicatorTextFormat("${PROGRESS}%");
         /*mScrollView.getViewTreeObserver().addOnScrollChangedListener(() -> {
             if (mScrollView.getScrollY() > oldScrollYPostion) {
                 fb.show();
@@ -284,11 +299,6 @@ public class EditAccount extends AppCompatActivity implements EditContract.View,
         return "+88" + phone.getText().toString();
     }
 
-    @Override
-    public void updateImage() {
-
-
-    }
 
     @Override
     public void setImage(Uri uri) {
@@ -328,10 +338,15 @@ public class EditAccount extends AppCompatActivity implements EditContract.View,
     }
 
     @Override
-    public void onLocationUpdate(String location) {
-        if (location != null) {
-            pickLocationET.setText(location);
-        }
+    public GeoPoint getCurrentAddress() {
+        return userLocation;
+    }
+
+    @Override
+    public void setCurrentAddress(GeoPoint geoPoint) {
+        userLocation = geoPoint;
+        final String address = getAddress(this, geoPoint.getLatitude(), geoPoint.getLongitude());
+        pickLocationET.setText(address);
     }
 
     @Override
@@ -437,7 +452,7 @@ public class EditAccount extends AppCompatActivity implements EditContract.View,
 
     @Override
     public void invalidFound(String Name) {
-        switch (Name){
+        switch (Name) {
             case "first":
                 emptyFirstNameFound.setVisibility(View.VISIBLE);
                 break;
@@ -451,6 +466,54 @@ public class EditAccount extends AppCompatActivity implements EditContract.View,
                 emptyLocationFound.setVisibility(View.VISIBLE);
                 break;
         }
+    }
+
+    @Override
+    public void generatePercent() {
+        setProfileComPercent("40");
+        if (getAvatarUrl() != null && !getAvatarUrl().equals("")){
+            Float profileComPercent = Float.parseFloat(getProfileComPercent()) + 10;
+            setProfileComPercent(profileComPercent.toString());
+        }
+        if(getCurrentAddress() != null){
+            Float profileComPercent = Float.parseFloat(getProfileComPercent()) + 10;
+            setProfileComPercent(profileComPercent.toString());
+        }
+        if(getCurrentStatus() != null && !getCurrentStatus().equals("")){
+            Float profileComPercent = Float.parseFloat(getProfileComPercent()) + 10;
+            setProfileComPercent(profileComPercent.toString());
+        }
+       /* if(qualification){
+            Float profileComPercent = Float.parseFloat(getProfileComPercent()) + 10;
+            setProfileComPercent(profileComPercent.toString());
+        }*/
+
+       //to be continued
+    }
+
+    @Override
+    public void setProfileComPercent(String num) {
+        if (num.equals("")) {
+            seekbar.setProgress(60);
+        } else {
+            seekbar.setProgress(Float.parseFloat(num));
+        }
+    }
+
+
+    @Override
+    public String getProfileComPercent() {
+        return Integer.toString(seekbar.getProgress());
+    }
+
+    @Override
+    public String getCurrentStatus() {
+        return String.valueOf(currentStatusET.getText());
+    }
+
+    @Override
+    public void setCurrentStatus(String currentStatus) {
+        currentStatusET.setText(currentStatus);
     }
 
 }

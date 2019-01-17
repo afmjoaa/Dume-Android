@@ -25,7 +25,8 @@ public abstract class SearchFoundRecyAda extends RecyclerView.Adapter<SearchFoun
             R.drawable.ic_home_place,
             R.drawable.ic_work_places,
             R.drawable.ic_star_border_black_24dp,
-            R.drawable.ic_back_in_time
+            R.drawable.ic_back_in_time,
+            R.drawable.ic_set_location_on_map
     };
 
     public SearchFoundRecyAda(Context context, List<MenualRecyclerData> data) {
@@ -45,6 +46,7 @@ public abstract class SearchFoundRecyAda extends RecyclerView.Adapter<SearchFoun
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int position) {
         MenualRecyclerData savedCurrent = data.get(position);
+        myViewHolder.primaryText.setTranslationY((0 * (context.getResources().getDisplayMetrics().density)));
         switch (savedCurrent.identify) {
             case "Permanent address":
             case "permanent":
@@ -62,6 +64,10 @@ public abstract class SearchFoundRecyAda extends RecyclerView.Adapter<SearchFoun
             case "saved_one":
             case "Saved_one":
                 myViewHolder.imageIcon.setImageResource(imageIcons[3]);
+                break;
+            case "set_location":
+                myViewHolder.imageIcon.setImageResource(imageIcons[5]);
+                myViewHolder.primaryText.setTranslationY((10 * (context.getResources().getDisplayMetrics().density)));
                 break;
             default:
                 myViewHolder.imageIcon.setImageResource(imageIcons[4]);
