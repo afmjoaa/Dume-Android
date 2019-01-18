@@ -14,6 +14,7 @@ public interface GrabingInfoContract {
         void fabClicked(android.view.View view);
 
         void selectFromContactClicked();
+
     }
 
     interface Presenter {

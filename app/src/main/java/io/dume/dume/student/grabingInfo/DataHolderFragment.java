@@ -164,7 +164,7 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
             } else {
                 rangeBar.setRangeBarEnabled(false);
                 max.setVisibility(View.GONE);
-                min.setText("Salaray - ");
+                min.setText("Salaray = ");
             }
 
             rangeBar.setOnRangeBarChangeListener(new RangeBar.OnRangeBarChangeListener() {
@@ -172,11 +172,11 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
                 public void onRangeChangeListener(RangeBar rangeBar, int leftPinIndex, int rightPinIndex, String leftPinValue, String rightPinValue) {
                     String salaryValue = "";
                     if (myMainActivity.retrivedAction.equals(DumeUtils.STUDENT)) {
-                        min.setText("Min Salary = " + leftPinValue);
-                        max.setText("Max Salary = " + rightPinValue);
+                        min.setText("Min Salary = " + leftPinValue + "k");
+                        max.setText("Max Salary = " + rightPinValue + "k");
                         salaryValue = leftPinValue + "k - " + rightPinValue + "k";
                     } else {
-                        min.setText("Salary - " + rightPinValue + "k");
+                        min.setText("Salary = " + rightPinValue + "k");
                         salaryValue = rightPinValue;
                     }
                     AppCompatRadioButton rd = new AppCompatRadioButton(mContext);
@@ -215,9 +215,7 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
                 protected void OnButtonClicked(View v, int position) {
                     //toolbar button clicked
                     if (position == 0) {
-
-                    } else if (position == 1) {
-
+                        Toast.makeText(getContext(), "Go back to reselect category", Toast.LENGTH_SHORT).show();
                     } else {
                         assert myMainActivity != null;
                         TabLayout.Tab tab = myMainActivity.tabLayout.getTabAt(position - 2);
@@ -225,7 +223,6 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
                             tab.select();
                         }
                     }
-
                 }
             };
             mRecyclerView.addItemDecoration(new VerticalSpaceItemDecoration(VERTICAL_ITEM_SPACE * (int) (mContext.getResources().getDisplayMetrics().density)));
@@ -323,8 +320,8 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
             rangeBar.setOnRangeBarChangeListener(new RangeBar.OnRangeBarChangeListener() {
                 @Override
                 public void onRangeChangeListener(RangeBar rangeBar, int leftPinIndex, int rightPinIndex, String leftPinValue, String rightPinValue) {
-                    min.setText(String.format("Min Count : %s Student", leftPinValue));
-                    max.setText(String.format("Max Count : %s Student", rightPinValue));
+                    min.setText(String.format("Min Count : %s stu", leftPinValue));
+                    max.setText(String.format("Max Count : %s stu", rightPinValue));
                     String capacityValue = leftPinValue + "옷 - " + rightPinValue + "옷";
                     AppCompatRadioButton rd = new AppCompatRadioButton(mContext);
                     rd.setText(capacityValue);
@@ -488,13 +485,8 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
         List<String> queryListName = myMainActivity.queryListName;
 
         String[] finalInfo = new String[(queryList.size() + 1)];
-        for (int i = 0; i < queryListName.size() + 1; i++) {
-            if (i == 0) {
-                // set the person name for whom it is set
-                finalInfo[i] = "For : Joaa";
-            } else {
-                finalInfo[i] = queryListName.get(i - 1) + " : " + queryList.get(i - 1);
-            }
+        for (int i = 0; i < queryListName.size(); i++) {
+            finalInfo[i] = queryListName.get(i - 1) + " : " + queryList.get(i - 1);
         }
 
         for (String title : finalInfo) {

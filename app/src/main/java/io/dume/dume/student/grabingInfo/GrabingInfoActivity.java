@@ -15,6 +15,7 @@ import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
@@ -126,7 +127,7 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
     private AppBarLayout mAppBarLayout;
     private GoogleMap mMap;
     private SupportMapFragment mapFragment;
-    private Button forMeBtn;
+    public Button forMeBtn;
     private FrameLayout viewMusk;
     private LinearLayout contractLayout;
     private AppBarLayout myAppBarLayout;
@@ -156,6 +157,7 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
     private TextView secondContactPerson;
     private TextView secondContactPersonNum;
     TeacherModel teacherModel;
+    public String forName = "Me";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -714,7 +716,7 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
         db = new LocalDb();
         ArrayList<String> arr = new ArrayList<>(Arrays.asList("Salary", "Gender", "justForData", "Capacity"));
         if (arr.contains(levelName)) {
-            fab.setVisibility(View.VISIBLE);
+            fab.show();
             switch (levelName) {
                 case "Gender":
                     if (!(fragmentId < tabLayout.getTabCount() - 1)) {
@@ -912,13 +914,16 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
         }
     }
 
+
     final private int REQUEST_MULTIPLE_PERMISSIONS = 124;
 
     private boolean addPermission(List<String> permissionsList, String permission) {
-        if (checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) {
-            permissionsList.add(permission);
-            if (!shouldShowRequestPermissionRationale(permission))
-                return false;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) {
+                permissionsList.add(permission);
+                if (!shouldShowRequestPermissionRationale(permission))
+                    return false;
+            }
         }
         return true;
     }
@@ -930,7 +935,9 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
             permissionsNeeded.add("Read Contacts");
         }
         if (permissionsList.size() > 0) {
-            requestPermissions(permissionsList.toArray(new String[permissionsList.size()]), REQUEST_MULTIPLE_PERMISSIONS);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                requestPermissions(permissionsList.toArray(new String[permissionsList.size()]), REQUEST_MULTIPLE_PERMISSIONS);
+            }
             return;
         } else {
             contactPermissionGranted = true;
