@@ -491,6 +491,7 @@
                     android:drawableLeft="@drawable/ic_action_edit_button_colored"
                     android:gravity="center"
                     android:text="Add New"
+                    android:layout_marginBottom="100dp"
                     android:textColor="@color/colorLink" />
             </LinearLayout>
 
