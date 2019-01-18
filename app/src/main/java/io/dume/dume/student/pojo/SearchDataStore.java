@@ -80,7 +80,7 @@ public class SearchDataStore implements Serializable {
         return null;
     }
 
-    public Map<String, Object> genSetRetForWhom(String name, String number, String avatarString, String uid, boolean self) {
+    public Map<String, Object> genSetRetForWhom(String name, String number, String uid, boolean self) {
         //TODO
         return null;
     }

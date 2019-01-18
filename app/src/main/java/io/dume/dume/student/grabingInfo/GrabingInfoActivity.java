@@ -998,6 +998,12 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                 //TODO update view
                 firstContactSelectImage.setVisibility(View.GONE);
                 secondContactSelectImage.setVisibility(View.VISIBLE);
+                forMeBtn.setText(String.format("For %s", conatactName));
+
+            }else{
+                secondContactLayout.setVisibility(View.GONE);
+                firstContactSelectImage.setVisibility(View.VISIBLE);
+                secondContactSelectImage.setVisibility(View.GONE);
             }
         }
     }

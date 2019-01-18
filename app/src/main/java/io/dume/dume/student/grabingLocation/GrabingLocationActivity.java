@@ -159,7 +159,7 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
         setDarkStatusBarIcon();
         setIsNight();
         compositeDisposable = new CompositeDisposable();
-        Log.e(TAG, SearchDataStore.getInstance().getPackageName());
+        //Log.e(TAG, SearchDataStore.getInstance().getPackageName());
         //auto one
         initAdapterData = new ArrayList<AutocompletePrediction>();
         recyclerAutoAdapter = new PlaceAutoRecyAda(this, initAdapterData, mGoogleApiClient) {
