@@ -810,11 +810,12 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
             setResult(RESULT_OK, goBackToGLAIntent);
             finish();
         } else {
+            showProgress();
+            locationDoneBtn.setEnabled(false);
+            locationDoneBtn.setBackgroundColor(getResources().getColor(R.color.disable_color));
             LatLng target = mMap.getCameraPosition().target;
             GeoPoint targetGeopoint = new GeoPoint(target.latitude, target.longitude);
             if (!checkIfInDB(targetGeopoint)) {
-                //TODO
-                //updateRecentPlaces
                 String targetAddress = getAddress(target.latitude, target.longitude);
                 String[] targetAddressParts = targetAddress.split("\\s*,\\s*", 2);
                 String primary = targetAddressParts[0];
@@ -840,14 +841,14 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
                     mModel.updateRecentPlaces(identify, myMap, new TeacherContract.Model.Listener<Void>() {
                         @Override
                         public void onSuccess(Void list) {
-                            //flush("Successfully Added");
+                            //locationDoneBtn.setEnabled(true);
+                            //locationDoneBtn.setBackgroundColor(getResources().getColor(R.color.colorBlack));
                             hideProgress();
                             startActivity(new Intent(GrabingLocationActivity.this, CrudSkillActivity.class).setAction(DumeUtils.STUDENT));
                         }
 
                         @Override
                         public void onError(String msg) {
-                            //flush(msg);
                             Log.e(TAG, msg);
                             hideProgress();
                             startActivity(new Intent(GrabingLocationActivity.this, CrudSkillActivity.class).setAction(DumeUtils.STUDENT));
