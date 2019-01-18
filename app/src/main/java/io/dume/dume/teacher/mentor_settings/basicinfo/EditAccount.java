@@ -30,20 +30,26 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.GeoPoint;
 import com.transitionseverywhere.TransitionManager;
 import com.warkiz.widget.IndicatorSeekBar;
 import com.warkiz.widget.IndicatorStayLayout;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.dume.dume.R;
 import io.dume.dume.customView.HorizontalLoadView;
 import io.dume.dume.student.grabingLocation.GrabingLocationActivity;
+import io.dume.dume.student.grabingLocation.MenualRecyclerData;
 import io.dume.dume.teacher.adapters.AcAdapter;
 import io.dume.dume.teacher.mentor_settings.academic.AcademicActivity;
+import io.dume.dume.teacher.pojo.Academic;
 import io.dume.dume.util.DatePickerFragment;
 import io.dume.dume.util.DumeUtils;
 import io.dume.dume.util.RadioBtnDialogue;
@@ -84,6 +90,7 @@ public class EditAccount extends AppCompatActivity implements EditContract.View,
     RecyclerView academicRV;
     @BindView(R.id.add_saved_place_layout)
     RelativeLayout addAcademicBtn;
+    private boolean qualification;
 
 
     @Override
@@ -92,7 +99,7 @@ public class EditAccount extends AppCompatActivity implements EditContract.View,
         setContentView(R.layout.activity_edit_account);
         ButterKnife.bind(this);
         DumeUtils.configureAppbar(this, "Edit Account");
-        presenter = new EditPresenter(this, EditModel.getModelInstance());
+        presenter = new EditPresenter(this, EditModel.getModelInstance(this));
         presenter.enqueue();
     }
 
@@ -137,9 +144,8 @@ public class EditAccount extends AppCompatActivity implements EditContract.View,
         emptyLastNameFound = findViewById(R.id.empty_ln_found);
         emptyEmailFound = findViewById(R.id.empty_email_found);
         emptyLocationFound = findViewById(R.id.empty_address_found);
-        loadCarryData();
-        academicRV.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        academicRV.setAdapter(new AcAdapter(null));
+        //loadCarryData();
+
     }
 
     private void loadCarryData() {
@@ -162,6 +168,42 @@ public class EditAccount extends AppCompatActivity implements EditContract.View,
         }
     }
 
+    @Override
+    public void onDataLoad(DocumentSnapshot documentSnapshot) {
+        final RequestOptions requestOptions = new RequestOptions();
+        requestOptions.placeholder(R.drawable.avatar);
+        Glide.with(this).load(documentSnapshot.getString("avatar")).apply(requestOptions.override(100, 100)).into(avatar);
+        first.setText(documentSnapshot.getString("first_name") == null ? "" : documentSnapshot.getString("first_name"));
+        last.setText(documentSnapshot.getString("last_name") == null ? "" : documentSnapshot.getString("last_name"));
+        phone.setText(documentSnapshot.getString("phone_number") == null ? "" : documentSnapshot.getString("phone_number"));
+        mail.setText(documentSnapshot.getString("email") == null ? "" : documentSnapshot.getString("email"));
+        selectReligionET.setText(documentSnapshot.getString("religion") == null ? "" : documentSnapshot.getString("religion"));
+        selectGenderEditText.setText(documentSnapshot.getString("gender") == null ? "" : documentSnapshot.getString("gender"));
+        selectMaritalStatusET.setText(documentSnapshot.getString("marital") == null ? "" : documentSnapshot.getString("marital"));
+        pickLocationET.setText(documentSnapshot.getGeoPoint("location") == null ? "" : documentSnapshot.getGeoPoint("location").toString());
+        Log.e(TAG, "loadCarryData: " + documentSnapshot.toString());
+        avatarUrl = documentSnapshot.getString("avatar") == null ? "" : documentSnapshot.getString("avatar");
+        List<Academic> arrayList = new ArrayList<>();
+        Map<String, Map<String, Object>> academicMap = (Map<String, Map<String, Object>>) documentSnapshot.get("academic");
+        if (academicMap != null && academicMap.size() > 0) {
+            for (Map.Entry<String, Map<String, Object>> entry : academicMap.entrySet()) {
+
+                String degree = (String) entry.getValue().get("degree");
+                String description = (String) entry.getValue().get("description");
+                String from_year = (String) entry.getValue().get("from_year");
+                String to_year = (String) entry.getValue().get("to_year");
+                String institution = (String) entry.getValue().get("institution");
+                String result = (String) entry.getValue().get("result");
+                Academic academic = new Academic(institution, degree, from_year, to_year, result, null, description);
+                arrayList.add(academic);
+            }
+            qualification = true;
+            generatePercent();
+        }
+
+        academicRV.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        academicRV.setAdapter(new AcAdapter(arrayList));
+    }
 
     @Override
     public void configureCallback() {
@@ -575,10 +617,10 @@ public class EditAccount extends AppCompatActivity implements EditContract.View,
             Float profileComPercent = Float.parseFloat(getProfileComPercent()) + 10;
             setProfileComPercent(profileComPercent.toString());
         }
-       /* if(qualification){
+        if (qualification) {
             Float profileComPercent = Float.parseFloat(getProfileComPercent()) + 10;
             setProfileComPercent(profileComPercent.toString());
-        }*/
+        }
         if (gender() != null && !gender().equals("")) {
             Float profileComPercent = Float.parseFloat(getProfileComPercent()) + 5;
             setProfileComPercent(profileComPercent.toString());

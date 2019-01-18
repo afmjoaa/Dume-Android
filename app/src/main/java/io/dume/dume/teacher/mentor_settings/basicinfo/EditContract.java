@@ -73,11 +73,13 @@ public class EditContract {
 
         void setCurrentStatus(String currentStatus);
 
-         void initProfileCompleteView();
+        void initProfileCompleteView();
 
         void addQualifiaction();
 
         void modifyQualification();
+
+        void onDataLoad(DocumentSnapshot documentSnapshot);
 
 
     }

@@ -54,9 +54,11 @@ public class EditPresenter implements EditContract.Presenter, EditContract.onDat
     public void enqueue() {
         view.configureView();
         view.configureCallback();
+        view.enableLoad();
         model.getDocumentSnapShot(new TeacherContract.Model.Listener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot list) {
+                view.onDataLoad(list);
                 GeoPoint geoPoint = list.getGeoPoint("location");
                 if (geoPoint != null) {
                     view.setCurrentAddress(geoPoint);
@@ -71,6 +73,7 @@ public class EditPresenter implements EditContract.Presenter, EditContract.onDat
                     }
                 }
                 Log.w(TAG, "onSuccess: Fucked Location");
+                view.disableLoad();
             }
 
             @Override

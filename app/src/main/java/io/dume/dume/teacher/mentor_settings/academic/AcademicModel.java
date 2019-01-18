@@ -3,6 +3,7 @@ package io.dume.dume.teacher.mentor_settings.academic;
 import android.support.annotation.NonNull;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
@@ -43,7 +44,7 @@ public class AcademicModel implements AcademicContract.Model {
             hashMap.put("description", description);
             hashMap.put("result_type", resultType);
             hashMap.put("result", result);
-            firestore.collection("users").document("mentors").collection("mentor_profile").document(Objects.requireNonNull(mAuth.getUid())).update("academic." + degree, hashMap).addOnCompleteListener(task -> {
+            firestore.collection("users").document("mentors").collection("mentor_profile").document(Objects.requireNonNull(mAuth.getUid())).update("academic." + degree.replace(".", ""), hashMap).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     listener.onSuccess();
                 }
@@ -66,6 +67,6 @@ public class AcademicModel implements AcademicContract.Model {
     public void removeFromDatabase(String itemUid, ModelCallback listener) {
         listener.onStart();
         firestore.collection("users").document("mentors").collection("mentor_profile").
-                document(Objects.requireNonNull(mAuth.getUid())).update("academic" + itemUid, FieldValue.delete()).addOnSuccessListener(aVoid -> listener.onSuccess()).addOnFailureListener(e -> listener.onFail(e.toString()));
+                document(Objects.requireNonNull(mAuth.getUid())).update("academic." + itemUid.replace(".", " "), FieldValue.delete()).addOnSuccessListener(aVoid -> listener.onSuccess()).addOnFailureListener(e -> listener.onFail(e.toString()));
     }
 }

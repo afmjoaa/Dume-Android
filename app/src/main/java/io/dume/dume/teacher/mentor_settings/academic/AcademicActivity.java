@@ -1,6 +1,7 @@
 package io.dume.dume.teacher.mentor_settings.academic;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -23,6 +24,7 @@ import java.util.List;
 import io.dume.dume.R;
 import io.dume.dume.customView.HorizontalLoadView;
 import io.dume.dume.teacher.adapters.MentorSpinnerAdapter;
+import io.dume.dume.teacher.mentor_settings.basicinfo.EditAccount;
 import io.dume.dume.util.DumeUtils;
 import io.dume.dume.util.RadioBtnDialogue;
 
@@ -89,7 +91,7 @@ public class AcademicActivity extends AppCompatActivity implements AcademicContr
     @Override
     public void snak(String msg) {
         Snackbar snakbar = Snackbar.make(fb, msg, Snackbar.LENGTH_SHORT);
-        snakbar.setAction("Go Back", view -> AcademicActivity.super.onBackPressed());
+        snakbar.setAction("Go Back", view -> startActivity(new Intent(getApplicationContext(), EditAccount.class)));
       /*  snakbar.addCallback(new BaseTransientBottomBar.BaseCallback<Snackbar>() {
             @Override
             public void onDismissed(Snackbar transientBottomBar, int event) {
@@ -111,12 +113,12 @@ public class AcademicActivity extends AppCompatActivity implements AcademicContr
 
     @Override
     public String getStartYear() {
-        return fromET.toString();
+        return fromET.getText().toString();
     }
 
     @Override
     public String getEndYear() {
-        return toET.toString();
+        return toET.getText().toString();
     }
 
     @Override
@@ -130,10 +132,8 @@ public class AcademicActivity extends AppCompatActivity implements AcademicContr
             Bundle bundle = getIntent().getExtras();
             if (bundle != null) {
                 instiEdt.setText(bundle.getString("institution"));
-                int from = fromArray.indexOf(bundle.getString("from"));
-                fromET.setText(from);
-                int to = toArray.indexOf(bundle.getString("to"));
-                toET.setText(to);
+                fromET.setText(bundle.getString("from"));
+                toET.setText(bundle.getString("to"));
                 degreeEdt.setText(bundle.getString("degree"));
                 desEdt.setText(bundle.getString("description"));
                 itemUid = bundle.getString("itemUid");
@@ -171,6 +171,7 @@ public class AcademicActivity extends AppCompatActivity implements AcademicContr
         String[] stringArray = getResources().getStringArray(R.array.fromYear);
         gpaOptionsArr = this.getResources().getStringArray(R.array.gpa_options);
         cgpaOptionsArr = this.getResources().getStringArray(R.array.cgpa_options);
+
         fromET.setOnClickListener(view -> {
             Bundle pRargs = new Bundle();
             pRargs.putString("title", "Select your gender");

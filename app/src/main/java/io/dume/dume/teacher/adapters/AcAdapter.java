@@ -19,13 +19,17 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.dume.dume.R;
 import io.dume.dume.teacher.mentor_settings.academic.AcademicActivity;
+import io.dume.dume.teacher.mentor_settings.academic.AcademicContract;
+import io.dume.dume.teacher.mentor_settings.academic.AcademicModel;
 import io.dume.dume.teacher.mentor_settings.basicinfo.EditAccount;
+import io.dume.dume.teacher.mentor_settings.basicinfo.EditModel;
+import io.dume.dume.teacher.pojo.Academic;
 
 public class AcAdapter extends RecyclerView.Adapter<AcAdapter.AcademicVH> {
-    private List<String> list;
+    private List<Academic> list;
     private Context context;
 
-    public AcAdapter(List<String> list) {
+    public AcAdapter(List<Academic> list) {
         this.list = list;
     }
 
@@ -43,12 +47,27 @@ public class AcAdapter extends RecyclerView.Adapter<AcAdapter.AcademicVH> {
         academicVH.menu.setOnClickListener(view -> {
             PopupMenu popup = new PopupMenu(context, view);
             popup.getMenuInflater().inflate(R.menu.menu_edit_remove, popup.getMenu());
-
             popup.setOnMenuItemClickListener(item -> {
                 int id = item.getItemId();
                 switch (id) {
                     case R.id.action_remove:
-                        Toast.makeText(context, "Item Should Be Removed", Toast.LENGTH_SHORT).show();
+                         AcademicModel model = AcademicModel.getInstance();
+                        model.removeFromDatabase(list.get(i).getDegree(), new AcademicContract.Model.ModelCallback() {
+                            @Override
+                            public void onStart() {
+                                Toast.makeText(context, "Item Removed", Toast.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void onSuccess() {
+                                AcademicActivity.isDeleted = true;
+                            }
+
+                            @Override
+                            public void onFail(String error) {
+                              
+                            }
+                        });
                         break;
                     case R.id.action_edit:
                         final Intent intent = new Intent(context, AcademicActivity.class);
@@ -59,14 +78,16 @@ public class AcAdapter extends RecyclerView.Adapter<AcAdapter.AcademicVH> {
                 return true;
             });
             popup.show();
-        });
 
+        });
+        academicVH.title.setText(list.get(i).getDegree());
+        academicVH.subTitle.setText(list.get(i).getInstitute());
 
     }
 
     @Override
     public int getItemCount() {
-        return 4;
+        return list.size();
     }
 
     class AcademicVH extends RecyclerView.ViewHolder {
