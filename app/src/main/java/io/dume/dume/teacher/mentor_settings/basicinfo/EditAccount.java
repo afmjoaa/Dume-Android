@@ -14,6 +14,8 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -22,6 +24,7 @@ import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,9 +37,13 @@ import com.warkiz.widget.IndicatorStayLayout;
 
 import java.util.Calendar;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import io.dume.dume.R;
 import io.dume.dume.customView.HorizontalLoadView;
 import io.dume.dume.student.grabingLocation.GrabingLocationActivity;
+import io.dume.dume.teacher.adapters.AcAdapter;
+import io.dume.dume.teacher.mentor_settings.academic.AcademicActivity;
 import io.dume.dume.util.DatePickerFragment;
 import io.dume.dume.util.DumeUtils;
 import io.dume.dume.util.RadioBtnDialogue;
@@ -73,12 +80,17 @@ public class EditAccount extends AppCompatActivity implements EditContract.View,
     private EditText currentStatusET;
     private TextView profileCompleteTextView;
     private View dividerHorizontalUnderPCT;
+    @BindView(R.id.academicRV)
+    RecyclerView academicRV;
+    @BindView(R.id.add_saved_place_layout)
+    RelativeLayout addAcademicBtn;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_account);
+        ButterKnife.bind(this);
         DumeUtils.configureAppbar(this, "Edit Account");
         presenter = new EditPresenter(this, EditModel.getModelInstance());
         presenter.enqueue();
@@ -126,6 +138,8 @@ public class EditAccount extends AppCompatActivity implements EditContract.View,
         emptyEmailFound = findViewById(R.id.empty_email_found);
         emptyLocationFound = findViewById(R.id.empty_address_found);
         loadCarryData();
+        academicRV.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        academicRV.setAdapter(new AcAdapter(null));
     }
 
     private void loadCarryData() {
@@ -144,7 +158,7 @@ public class EditAccount extends AppCompatActivity implements EditContract.View,
             selectMaritalStatusET.setText(bundle.getString("marital"));
             Log.e(TAG, "loadCarryData: " + bundle.toString());
             avatarUrl = bundle.getString("avatar");
-            //TODO get the location data as well
+
         }
     }
 
@@ -549,15 +563,15 @@ public class EditAccount extends AppCompatActivity implements EditContract.View,
     @Override
     public void generatePercent() {
         setProfileComPercent("40");
-        if (getAvatarUrl() != null && !getAvatarUrl().equals("")){
+        if (getAvatarUrl() != null && !getAvatarUrl().equals("")) {
             Float profileComPercent = Float.parseFloat(getProfileComPercent()) + 10;
             setProfileComPercent(profileComPercent.toString());
         }
-        if(getCurrentAddress() != null){
+        if (getCurrentAddress() != null) {
             Float profileComPercent = Float.parseFloat(getProfileComPercent()) + 10;
             setProfileComPercent(profileComPercent.toString());
         }
-        if(getCurrentStatus() != null && !getCurrentStatus().equals("")){
+        if (getCurrentStatus() != null && !getCurrentStatus().equals("")) {
             Float profileComPercent = Float.parseFloat(getProfileComPercent()) + 10;
             setProfileComPercent(profileComPercent.toString());
         }
@@ -565,24 +579,24 @@ public class EditAccount extends AppCompatActivity implements EditContract.View,
             Float profileComPercent = Float.parseFloat(getProfileComPercent()) + 10;
             setProfileComPercent(profileComPercent.toString());
         }*/
-       if(gender() != null && !gender().equals("")){
-           Float profileComPercent = Float.parseFloat(getProfileComPercent()) + 5;
-           setProfileComPercent(profileComPercent.toString());
-       }
-       if(religion() != null && !religion().equals("")){
-           Float profileComPercent = Float.parseFloat(getProfileComPercent()) + 5;
-           setProfileComPercent(profileComPercent.toString());
-       }
-       if(maritalStatus() != null && !maritalStatus().equals("")){
-           Float profileComPercent = Float.parseFloat(getProfileComPercent()) + 5;
-           setProfileComPercent(profileComPercent.toString());
-       }
-       if(getBirthDate() != null && !getBirthDate().equals("")){
-           Float profileComPercent = Float.parseFloat(getProfileComPercent()) + 5;
-           setProfileComPercent(profileComPercent.toString());
-       }
+        if (gender() != null && !gender().equals("")) {
+            Float profileComPercent = Float.parseFloat(getProfileComPercent()) + 5;
+            setProfileComPercent(profileComPercent.toString());
+        }
+        if (religion() != null && !religion().equals("")) {
+            Float profileComPercent = Float.parseFloat(getProfileComPercent()) + 5;
+            setProfileComPercent(profileComPercent.toString());
+        }
+        if (maritalStatus() != null && !maritalStatus().equals("")) {
+            Float profileComPercent = Float.parseFloat(getProfileComPercent()) + 5;
+            setProfileComPercent(profileComPercent.toString());
+        }
+        if (getBirthDate() != null && !getBirthDate().equals("")) {
+            Float profileComPercent = Float.parseFloat(getProfileComPercent()) + 5;
+            setProfileComPercent(profileComPercent.toString());
+        }
 
-       //to be continued
+        //to be continued
     }
 
     @Override
@@ -615,6 +629,19 @@ public class EditAccount extends AppCompatActivity implements EditContract.View,
         seekbarStaylayout.setVisibility(View.GONE);
         profileCompleteTextView.setVisibility(View.VISIBLE);
         dividerHorizontalUnderPCT.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void addQualifiaction() {
+        final Intent intent = new Intent(this, AcademicActivity.class);
+        intent.setAction("add");
+        this.startActivity(intent);
+
+    }
+
+    @Override
+    public void modifyQualification() {
+
     }
 
 }

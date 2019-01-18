@@ -1,5 +1,6 @@
 package io.dume.dume.teacher.mentor_settings.academic;
 
+import android.content.DialogInterface;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -7,6 +8,7 @@ import android.support.design.widget.BaseTransientBottomBar;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.AppCompatSpinner;
 import android.view.View;
 import android.widget.EditText;
@@ -22,6 +24,7 @@ import io.dume.dume.R;
 import io.dume.dume.customView.HorizontalLoadView;
 import io.dume.dume.teacher.adapters.MentorSpinnerAdapter;
 import io.dume.dume.util.DumeUtils;
+import io.dume.dume.util.RadioBtnDialogue;
 
 public class AcademicActivity extends AppCompatActivity implements AcademicContract.View, View.OnClickListener {
 
@@ -29,20 +32,35 @@ public class AcademicActivity extends AppCompatActivity implements AcademicContr
     private FloatingActionButton fb;
     private AcademicContract.Presenter presenter = null;
     private EditText instiEdt, degreeEdt, desEdt;
-    private AppCompatSpinner fromSpn, toSpn;
+    AppCompatCheckBox studyCB, gpaCB, cgpaCB;
     private SpinnerAdapter fromSpinnerAdapter;
     private List<String> fromArray;
+    EditText fromET, toET, resultET;
+
     private List<String> toArray;
     private MentorSpinnerAdapter toSpinnerAdapter;
     private static String ACTION_EDIT = "edit", ACTION_ADD = "add";
     public static String ACTION = null;
-    private ImageView deleteBtn;
+
     private String itemUid;
     public static boolean isDeleted = false;
+    private String[] cgpaOptionsArr;
+    private String[] gpaOptionsArr;
+
 
     @Override
     public String getAction() {
         return ACTION == null ? "" : ACTION;
+    }
+
+    @Override
+    public String getResultType() {
+        return null;
+    }
+
+    @Override
+    public String getRestult() {
+        return resultET.getText().toString();
     }
 
     @Override
@@ -52,8 +70,7 @@ public class AcademicActivity extends AppCompatActivity implements AcademicContr
         if (getIntent().getAction() == ACTION_EDIT) {
             ACTION = ACTION_EDIT;
             DumeUtils.configureAppbar(this, "Edit Education");
-            deleteBtn = findViewById(R.id.deleteButtonHeader);
-            deleteBtn.setVisibility(View.VISIBLE);
+
         } else {
             ACTION = ACTION_ADD;
             DumeUtils.configureAppbar(this, "Add Education");
@@ -73,7 +90,7 @@ public class AcademicActivity extends AppCompatActivity implements AcademicContr
     public void snak(String msg) {
         Snackbar snakbar = Snackbar.make(fb, msg, Snackbar.LENGTH_SHORT);
         snakbar.setAction("Go Back", view -> AcademicActivity.super.onBackPressed());
-        snakbar.addCallback(new BaseTransientBottomBar.BaseCallback<Snackbar>() {
+      /*  snakbar.addCallback(new BaseTransientBottomBar.BaseCallback<Snackbar>() {
             @Override
             public void onDismissed(Snackbar transientBottomBar, int event) {
                 super.onDismissed(transientBottomBar, event);
@@ -83,7 +100,7 @@ public class AcademicActivity extends AppCompatActivity implements AcademicContr
 
                 } else AcademicActivity.super.onBackPressed();
             }
-        });
+        });*/
         snakbar.show();
     }
 
@@ -94,12 +111,12 @@ public class AcademicActivity extends AppCompatActivity implements AcademicContr
 
     @Override
     public String getStartYear() {
-        return fromSpn.getSelectedItem().toString();
+        return fromET.toString();
     }
 
     @Override
     public String getEndYear() {
-        return toSpn.getSelectedItem().toString();
+        return toET.toString();
     }
 
     @Override
@@ -114,9 +131,9 @@ public class AcademicActivity extends AppCompatActivity implements AcademicContr
             if (bundle != null) {
                 instiEdt.setText(bundle.getString("institution"));
                 int from = fromArray.indexOf(bundle.getString("from"));
-                fromSpn.setSelection(from);
+                fromET.setText(from);
                 int to = toArray.indexOf(bundle.getString("to"));
-                toSpn.setSelection(to);
+                toET.setText(to);
                 degreeEdt.setText(bundle.getString("degree"));
                 desEdt.setText(bundle.getString("description"));
                 itemUid = bundle.getString("itemUid");
@@ -141,34 +158,85 @@ public class AcademicActivity extends AppCompatActivity implements AcademicContr
         instiEdt = findViewById(R.id.institutionET);
         degreeEdt = findViewById(R.id.degreeTV);
         desEdt = findViewById(R.id.descriptionET);
-        fromSpn = findViewById(R.id.fromSpn);
-        toSpn = findViewById(R.id.toSpn);
+        resultET = findViewById(R.id.resultET);
+        fromET = findViewById(R.id.fromET);
+        toET = findViewById(R.id.toET);
+
+
+        studyCB = findViewById(R.id.study_checkbox);
+        gpaCB = findViewById(R.id.gpa_checkbox);
+        cgpaCB = findViewById(R.id.cgpa_checkbox);
         fromArray = new ArrayList<>();
         toArray = new ArrayList<>();
         String[] stringArray = getResources().getStringArray(R.array.fromYear);
-        fromArray.addAll(Arrays.asList(stringArray));
-        fromArray.add("2012");
-        fromArray.add("2015");
-        fromArray.add("2012");
-        fromArray.add("2015");
-        fromArray.add("2012");
-        fromArray.add("2015");
-        fromArray.add("From");
-        toArray.addAll(Arrays.asList(stringArray));
-        toArray.add("To");
-        fromSpinnerAdapter = new MentorSpinnerAdapter(this, android.R.layout.simple_spinner_dropdown_item, fromArray);
-        toSpinnerAdapter = new MentorSpinnerAdapter(this, android.R.layout.simple_dropdown_item_1line, toArray);
-        fromSpn.setAdapter(fromSpinnerAdapter);
-        fromSpn.setSelection(fromSpinnerAdapter.getCount());
-        toSpn.setAdapter(toSpinnerAdapter);
-        toSpn.setSelection(toSpinnerAdapter.getCount());
+        gpaOptionsArr = this.getResources().getStringArray(R.array.gpa_options);
+        cgpaOptionsArr = this.getResources().getStringArray(R.array.cgpa_options);
+        fromET.setOnClickListener(view -> {
+            Bundle pRargs = new Bundle();
+            pRargs.putString("title", "Select your gender");
+            pRargs.putStringArray("radioOptions", stringArray);
+            RadioBtnDialogue genderBtnDialogue = new RadioBtnDialogue();
+            genderBtnDialogue.setItemChoiceListener((dialogInterface, i) -> fromET.setText(stringArray[i]));
+            genderBtnDialogue.setArguments(pRargs);
+            genderBtnDialogue.show(getSupportFragmentManager(), "genderDialogue");
+            fromET.setText(stringArray[0]);
+        });
+        toET.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Bundle pRargs = new Bundle();
+                pRargs.putString("title", "Select your gender");
+                pRargs.putStringArray("radioOptions", stringArray);
+                RadioBtnDialogue genderBtnDialogue = new RadioBtnDialogue();
+                genderBtnDialogue.setItemChoiceListener(new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        toET.setText(stringArray[i]);
+                    }
+                });
+                genderBtnDialogue.setArguments(pRargs);
+                genderBtnDialogue.show(getSupportFragmentManager(), "genderDialogue");
+                toET.setText(stringArray[0]);
+            }
+        });
+        resultET.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Bundle args = new Bundle();
+                RadioBtnDialogue previousResultDialogue = new RadioBtnDialogue();
+                if (gpaCB.isChecked()) {
+                    resultET.setText(String.format("%s (GPA)", gpaOptionsArr[0]));
+                    args.putString("title", "Select your GPA");
+                    args.putStringArray("radioOptions", gpaOptionsArr);
+                    previousResultDialogue.setItemChoiceListener(new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            resultET.setText(String.format("%s (GPA)", gpaOptionsArr[i]));
+                        }
+                    });
+                } else {
+                    resultET.setText(String.format("%s (CGPA)", cgpaOptionsArr[0]));
+                    args.putString("title", "Select your CGPA");
+                    args.putStringArray("radioOptions", cgpaOptionsArr);
+                    previousResultDialogue.setItemChoiceListener(new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            resultET.setText(String.format("%s (CGPA)", cgpaOptionsArr[i]));
+                        }
+                    });
+                }
+                previousResultDialogue.setArguments(args);
+                previousResultDialogue.show(getSupportFragmentManager(), "genderDialogue");
+            }
+        });
+
 
     }
 
     @Override
     public void setListener() {
         fb.setOnClickListener(this);
-        deleteBtn.setOnClickListener(this);
+
     }
 
 

@@ -35,16 +35,19 @@ public interface AcademicContract {
 
         String getAction();
 
+        String getResultType();
+
+        String getRestult();
     }
 
     interface Model {
-        void syncWithDatabase(String itemUID, String school, String degree, String from, String to, String description);
+        void syncWithDatabase( String school, String degree, String from, String to, String description, String result, String resultType);
 
-        void addToDatabase(String school, String degree, String from, String to, String description);
+
 
         void attachCallback(ModelCallback listener);
 
-        void removeFromDatabase(String itemUid, ModelCallback modelCallback);
+        void removeFromDatabase(String degree, ModelCallback modelCallback);
 
         void detachFirebaseListener();
 

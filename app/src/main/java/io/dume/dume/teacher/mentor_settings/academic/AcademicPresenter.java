@@ -25,15 +25,9 @@ public class AcademicPresenter implements AcademicContract.Presenter, AcademicCo
     public void onViewIntracted(View element) {
         switch (element.getId()) {
             case R.id.fabEdit:
-                if (view.getAction().equals("add")) {
+               if (view.getAction().equals("edit")) {
                     if (validateInput()) {
-                        model.addToDatabase(view.getInstitution(), view.getDegree(), view.getStartYear(), view.getEndYear(), view.getDescription());
-                    } else {
-                        view.toast("Required fields are empty");
-                    }
-                } else if (view.getAction().equals("edit")) {
-                    if (validateInput()) {
-                        model.syncWithDatabase("mfqDSAAVf0WwzwBsjaay", view.getInstitution(), view.getDegree(), view.getStartYear(), view.getEndYear(), view.getDescription());
+                        model.syncWithDatabase( view.getInstitution(), view.getDegree(), view.getStartYear(), view.getEndYear(), view.getDescription(),view.getResultType(),view.getRestult());
                     }
                     view.toast("Required fields are empty");
                 } else view.toast("Internal Error");

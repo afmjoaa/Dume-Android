@@ -66,7 +66,7 @@ public class EditPresenter implements EditContract.Presenter, EditContract.onDat
                     if (profileComPercent.equals("100")) {
                         view.initProfileCompleteView();
                         view.setProfileComPercent(profileComPercent);
-                    }else{
+                    } else {
                         view.setProfileComPercent(profileComPercent);
                     }
                 }
@@ -123,6 +123,9 @@ public class EditPresenter implements EditContract.Presenter, EditContract.onDat
                 break;
             case R.id.input_birth_date:
                 view.onBirthDateClicked();
+                break;
+            case R.id.add_saved_place_layout:
+                view.addQualifiaction();
                 break;
             default:
         }
