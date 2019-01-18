@@ -15,6 +15,15 @@ public class SearchDataStore implements Serializable {
     private String packageName;
     private Map<String, Object> packageJizz;
 
+    private static SearchDataStore instance = null;
+
+    public static SearchDataStore getInstance() {
+        if (instance == null) {
+            instance = new SearchDataStore();
+        }
+        return instance;
+    }
+
     public SearchDataStore(LatLng anchorPoint, Map<String, Object> jizz, Map<String, Object> forWhom, String packageName, Map<String, Object> packageJizz) {
         this.anchorPoint = anchorPoint;
         this.jizz = jizz;
@@ -66,17 +75,17 @@ public class SearchDataStore implements Serializable {
         this.packageJizz = packageJizz;
     }
 
-    public Map<String, Object> genSetRetPackageJizz(String daysPerWeek, ArrayList<WeekdaysDataItem> preferredDays, String startDate, String startTime){
+    public Map<String, Object> genSetRetPackageJizz(String daysPerWeek, ArrayList<WeekdaysDataItem> preferredDays, String startDate, String startTime) {
         //TODO
         return null;
     }
 
-    public Map<String, Object> genSetRetForWhom(String name, String number, String avatarString, String uid, boolean self){
+    public Map<String, Object> genSetRetForWhom(String name, String number, String avatarString, String uid, boolean self) {
         //TODO
-        return  null;
+        return null;
     }
 
-    public Map<String, Object> getSetRetJizz(List<String> queryList, List<String> queryListName){
+    public Map<String, Object> getSetRetJizz(List<String> queryList, List<String> queryListName) {
         //TODO
         return null;
     }

@@ -65,6 +65,7 @@ import carbon.widget.RelativeLayout;
 import io.dume.dume.R;
 import io.dume.dume.student.pojo.CusStuAppComMapActivity;
 import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
+import io.dume.dume.student.pojo.SearchDataStore;
 import io.dume.dume.student.profilePage.ProfilePageActivity;
 import io.dume.dume.student.studentSettings.SavedPlacesAdaData;
 import io.dume.dume.student.studentSettings.StudentSettingsActivity;
@@ -158,7 +159,7 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
         setDarkStatusBarIcon();
         setIsNight();
         compositeDisposable = new CompositeDisposable();
-
+        Log.e(TAG, SearchDataStore.getInstance().getPackageName());
         //auto one
         initAdapterData = new ArrayList<AutocompletePrediction>();
         recyclerAutoAdapter = new PlaceAutoRecyAda(this, initAdapterData, mGoogleApiClient) {

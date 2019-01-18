@@ -1,7 +1,9 @@
 package io.dume.dume.student.grabingInfo;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.ContentUris;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -18,16 +20,20 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.animation.FastOutLinearInInterpolator;
 import android.support.v4.view.animation.LinearOutSlowInInterpolator;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.AppCompatRadioButton;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
@@ -39,6 +45,7 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.ScaleAnimation;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
@@ -58,6 +65,7 @@ import com.transitionseverywhere.Transition;
 import com.transitionseverywhere.TransitionManager;
 import com.transitionseverywhere.TransitionSet;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -73,6 +81,8 @@ import io.dume.dume.inter_face.OnTabModificationListener;
 import io.dume.dume.model.DumeModel;
 import io.dume.dume.model.TeacherModel;
 import io.dume.dume.student.grabingPackage.GrabingPackageActivity;
+import io.dume.dume.student.homePage.HomePageActivity;
+import io.dume.dume.student.homePage.adapter.HomePageRatingAdapter;
 import io.dume.dume.student.pojo.CusStuAppComMapActivity;
 import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
 import io.dume.dume.teacher.homepage.TeacherContract;
@@ -83,6 +93,7 @@ import io.dume.dume.util.DumeUtils;
 import io.dume.dume.util.OnViewClick;
 import io.dume.dume.util.RadioBtnDialogue;
 import io.dume.dume.util.VisibleToggleClickListener;
+import me.zhanghai.android.materialratingbar.MaterialRatingBar;
 
 public class GrabingInfoActivity extends CusStuAppComMapActivity implements GrabingInfoContract.View,
         MyGpsLocationChangeListener, OnMapReadyCallback, OnViewClick, OnTabModificationListener {
@@ -158,6 +169,12 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
     private TextView secondContactPersonNum;
     TeacherModel teacherModel;
     public String forName = "Me";
+    private ImageView secondContactSelectImage;
+    private RelativeLayout firstContactLayout;
+    private carbon.widget.ImageView firstContactImageView;
+    private TextView firstContactPerson;
+    private TextView firstContactPersonNum;
+    private ImageView firstContactSelectImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -215,6 +232,13 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
         secondContactImageView = findViewById(R.id.account_icon_two);
         secondContactPerson = findViewById(R.id.account_type_textview_two);
         secondContactPersonNum = findViewById(R.id.account_type_textview_two_value);
+        secondContactSelectImage = findViewById(R.id.account_selected_icon_container_two);
+
+        firstContactLayout = findViewById(R.id.first_contact);
+        firstContactImageView = findViewById(R.id.account_icon);
+        firstContactPerson = findViewById(R.id.account_type_textview);
+        firstContactPersonNum = findViewById(R.id.account_type_textview_value);
+        firstContactSelectImage = findViewById(R.id.account_selected_icon_container);
 
         //testing code
         wh = DumeUtils.getScreenSize(this);
@@ -966,13 +990,19 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
             Log.d(TAG, "Response: " + data.toString());
             uriContact = data.getData();
             secondContactLayout.setVisibility(View.VISIBLE);
-            retrieveContactName();
+            String conatactName = retrieveContactName();
             retrieveContactNumber();
-            retrieveContactPhoto();
+            Bitmap contactBitmap = retrieveContactPhoto();
+            String contactNum = secondContactPersonNum.getText().toString();
+            if(contactNum != null && !contactNum.equals("")&& !contactNum.equals("null")){
+                //TODO update view
+                firstContactSelectImage.setVisibility(View.GONE);
+                secondContactSelectImage.setVisibility(View.VISIBLE);
+            }
         }
     }
 
-    private void retrieveContactPhoto() {
+    private Bitmap retrieveContactPhoto() {
         Bitmap photo = null;
         try {
             InputStream inputStream = ContactsContract.Contacts.openContactPhotoInputStream(getContentResolver(),
@@ -988,6 +1018,7 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return photo;
     }
 
     private void retrieveContactNumber() {
@@ -1052,15 +1083,18 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
         selectOneNumDialogue.setCancelListener(new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                secondContactPersonNum.setText("Null");
+                secondContactPersonNum.setText("null");
+                secondContactSelectImage.setVisibility(View.GONE);
+                secondContactLayout.setVisibility(View.GONE);
             }
         });
+        selectOneNumDialogue.setCancelOnOutPress(false);
         selectOneNumDialogue.setArguments(pRargs);
         selectOneNumDialogue.show(getSupportFragmentManager(), "selectOneNumDialogue");
         secondContactPersonNum.setText(allNumber[0]);
     }
 
-    private void retrieveContactName() {
+    private String retrieveContactName() {
         String contactName = null;
         Cursor cursor = getContentResolver().query(uriContact, null, null, null, null);
         if (cursor.moveToFirst()) {
@@ -1069,6 +1103,7 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
         cursor.close();
         //Log.d(TAG, "Contact Name: " + contactName);
         secondContactPerson.setText(contactName);
+        return contactName;
     }
 
     @Override
@@ -1089,5 +1124,13 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+    }
+
+    //convert bitmap to uri
+    public Uri getImageUri(Context inContext, Bitmap inImage) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
+        return Uri.parse(path);
     }
 }

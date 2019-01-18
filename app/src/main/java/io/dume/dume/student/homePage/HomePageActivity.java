@@ -32,8 +32,6 @@ import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.animation.FastOutLinearInInterpolator;
-import android.support.v4.view.animation.FastOutSlowInInterpolator;
-import android.support.v4.view.animation.LinearOutSlowInInterpolator;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.ActionBar;
@@ -67,7 +65,6 @@ import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.transitionseverywhere.Fade;
 import com.transitionseverywhere.Slide;
-import com.transitionseverywhere.Transition;
 import com.transitionseverywhere.TransitionManager;
 import com.transitionseverywhere.TransitionSet;
 
@@ -94,6 +91,7 @@ import io.dume.dume.student.homePage.adapter.HomePageRecyclerData;
 import io.dume.dume.student.mentorAddvertise.MentorAddvertiseActivity;
 import io.dume.dume.student.pojo.CusStuAppComMapActivity;
 import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
+import io.dume.dume.student.pojo.SearchDataStore;
 import io.dume.dume.student.profilePage.ProfilePageActivity;
 import io.dume.dume.student.recordsPage.RecordsPageActivity;
 import io.dume.dume.student.studentHelp.StudentHelpActivity;
@@ -421,6 +419,7 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
             public void onDismissed(Snackbar snackbar, int event) {
                 //network resumed make functionality available
             }
+
             @Override
             public void onShown(Snackbar snackbar) {
                 //network unavailable make functionality unavailable
@@ -694,6 +693,8 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
 
     @Override
     public void gotoGrabingLocationPage() {
+        SearchDataStore instance = SearchDataStore.getInstance();
+        instance.setPackageName("Fucker");
         startActivity(new Intent(this, GrabingLocationActivity.class).setAction("HomePage"));
     }
 

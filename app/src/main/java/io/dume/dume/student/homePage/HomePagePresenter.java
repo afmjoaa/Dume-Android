@@ -19,6 +19,7 @@ import java.util.Objects;
 
 import io.dume.dume.R;
 import io.dume.dume.model.DumeModel;
+import io.dume.dume.student.pojo.SearchDataStore;
 import io.dume.dume.teacher.homepage.TeacherActivtiy;
 import io.dume.dume.teacher.homepage.TeacherContract;
 import io.dume.dume.util.DumeUtils;
@@ -34,6 +35,7 @@ public class HomePagePresenter implements HomePageContract.Presenter {
     private char mProfileChar = '!';
     private int mChatCount = 0;
     private int mRecPendingCount = 0, mRecAcceptedCount = 0, mRecCurrentCount = 0;
+    private final SearchDataStore searchDataStore;
 
 
     public HomePagePresenter(Context context, HomePageContract.Model mModel) {
@@ -41,6 +43,7 @@ public class HomePagePresenter implements HomePageContract.Presenter {
         this.activity = (Activity) context;
         this.mView = (HomePageContract.View) context;
         this.mModel = mModel;
+        searchDataStore = SearchDataStore.getInstance();
     }
 
     @SuppressWarnings("unchecked")

@@ -75,7 +75,7 @@ public class CrudSkillActivity extends CusStuAppComMapActivity implements CrudCo
     public void init() {
         configureAppbar(this, "Add New Skill");
         fromWhere = getIntent().getAction();
-        if (fromWhere != null) {
+        /*if (fromWhere != null) {
             switch (fromWhere) {
                 case DumeUtils.STUDENT:
                     flush("fucked it from student");
@@ -87,7 +87,7 @@ public class CrudSkillActivity extends CusStuAppComMapActivity implements CrudCo
                     flush("fucked it from Boot-camp");
                     break;
             }
-        }
+        }*/
         //getting the width
         int[] wh = DumeUtils.getScreenSize(this);
         spacing = (int) ((wh[0] - ((330) * (getResources().getDisplayMetrics().density))) / 4);
