@@ -73,7 +73,14 @@ public class EditContract {
 
         void setCurrentStatus(String currentStatus);
 
-        public void initProfileCompleteView();
+        void initProfileCompleteView();
+
+        void addQualifiaction();
+
+        void modifyQualification();
+
+        void onDataLoad(DocumentSnapshot documentSnapshot);
+
 
     }
 
@@ -86,7 +93,7 @@ public class EditContract {
     }
 
     interface Model {
-        void synWithDataBase(String first, String last, String avaterUrl, String email, String gender, String phone, String religion, String marital,String birth_date, GeoPoint location, String currentStatus);
+        void synWithDataBase(String first, String last, String avaterUrl, String email, String gender, String phone, String religion, String marital, String birth_date, GeoPoint location, String currentStatus);
 
         void setListener(onDataUpdate listener);
 

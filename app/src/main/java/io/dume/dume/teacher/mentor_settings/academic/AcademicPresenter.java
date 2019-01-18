@@ -25,39 +25,15 @@ public class AcademicPresenter implements AcademicContract.Presenter, AcademicCo
     public void onViewIntracted(View element) {
         switch (element.getId()) {
             case R.id.fabEdit:
-                if (view.getAction().equals("add")) {
+               if (view.getAction().equals("edit")||view.getAction().equals("add")) {
                     if (validateInput()) {
-                        model.addToDatabase(view.getInstitution(), view.getDegree(), view.getStartYear(), view.getEndYear(), view.getDescription());
-                    } else {
-                        view.toast("Required fields are empty");
+                        model.syncWithDatabase( view.getInstitution(), view.getDegree(), view.getStartYear(), view.getEndYear(), view.getDescription(),view.getRestult(),view.getResultType());
                     }
-                } else if (view.getAction().equals("edit")) {
-                    if (validateInput()) {
-                        model.syncWithDatabase("mfqDSAAVf0WwzwBsjaay", view.getInstitution(), view.getDegree(), view.getStartYear(), view.getEndYear(), view.getDescription());
-                    }
-                    view.toast("Required fields are empty");
+                    else view.toast("Required fields are empty");
                 } else view.toast("Internal Error");
                 break;
             case R.id.deleteButtonHeader:
-                model.removeFromDatabase("mfqDSAAVf0WwzwBsjaay", new AcademicContract.Model.ModelCallback() {
-                    @Override
-                    public void onStart() {
-                        view.enableLoad();
-                    }
 
-                    @Override
-                    public void onSuccess() {
-                        view.disableLoad();
-                        view.snak("Deleted");
-                        AcademicActivity.isDeleted = true;
-                    }
-
-                    @Override
-                    public void onFail(String error) {
-                        view.disableLoad();
-                        view.toast(error);
-                    }
-                });
                 break;
             default:
         }
@@ -82,7 +58,7 @@ public class AcademicPresenter implements AcademicContract.Presenter, AcademicCo
         if (view.getAction().equals("add")) {
             view.disableLoad();
             view.snak("Education Added Successfully");
-            view.goBack();
+
         }
         if (view.getAction().equals("edit")) {
             view.disableLoad();

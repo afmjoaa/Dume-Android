@@ -54,9 +54,11 @@ public class EditPresenter implements EditContract.Presenter, EditContract.onDat
     public void enqueue() {
         view.configureView();
         view.configureCallback();
+        view.enableLoad();
         model.getDocumentSnapShot(new TeacherContract.Model.Listener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot list) {
+                view.onDataLoad(list);
                 GeoPoint geoPoint = list.getGeoPoint("location");
                 if (geoPoint != null) {
                     view.setCurrentAddress(geoPoint);
@@ -66,11 +68,12 @@ public class EditPresenter implements EditContract.Presenter, EditContract.onDat
                     if (profileComPercent.equals("100")) {
                         view.initProfileCompleteView();
                         view.setProfileComPercent(profileComPercent);
-                    }else{
+                    } else {
                         view.setProfileComPercent(profileComPercent);
                     }
                 }
                 Log.w(TAG, "onSuccess: Fucked Location");
+                view.disableLoad();
             }
 
             @Override
@@ -123,6 +126,9 @@ public class EditPresenter implements EditContract.Presenter, EditContract.onDat
                 break;
             case R.id.input_birth_date:
                 view.onBirthDateClicked();
+                break;
+            case R.id.add_saved_place_layout:
+                view.addQualifiaction();
                 break;
             default:
         }

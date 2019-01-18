@@ -152,7 +152,7 @@ public class AccountSettings extends AppCompatActivity implements AccountSetting
         basicRecyclerView.setAdapter(new BasicInfoAdapter(keyValueModels));
         final RequestOptions requestOptions = new RequestOptions();
         requestOptions.placeholder(R.drawable.avatar);
-        Glide.with(this).load(data.get("avatar") == null ? "" : data.get("avatar").toString()).apply(requestOptions).into(avatarIV);
+        Glide.with(AccountSettings.this).load(data.get("avatar") == null ? "" : data.get("avatar").toString()).apply(requestOptions).into(avatarIV);
         profileSec.setAlpha(1.0f);
     }
 
