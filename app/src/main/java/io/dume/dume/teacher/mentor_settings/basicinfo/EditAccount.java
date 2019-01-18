@@ -22,6 +22,7 @@ import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -70,6 +71,8 @@ public class EditAccount extends AppCompatActivity implements EditContract.View,
     private IndicatorSeekBar seekbar;
     private IndicatorStayLayout seekbarStaylayout;
     private EditText currentStatusET;
+    private TextView profileCompleteTextView;
+    private View dividerHorizontalUnderPCT;
 
 
     @Override
@@ -97,6 +100,8 @@ public class EditAccount extends AppCompatActivity implements EditContract.View,
         seekbar = findViewById(R.id.complete_seekbar);
         seekbarStaylayout = findViewById(R.id.complete_seekbar_staylayout);
         currentStatusET = findViewById(R.id.input_current_status);
+        profileCompleteTextView = findViewById(R.id.profile_complete_text);
+        dividerHorizontalUnderPCT = findViewById(R.id.divider_horizontal);
 
         mScrollView = findViewById(R.id.editAccountScrolling);
         avatar = findViewById(R.id.profileImage);
@@ -241,8 +246,81 @@ public class EditAccount extends AppCompatActivity implements EditContract.View,
                 if (s.toString().equals("")) {
                     emptyLocationFound.setVisibility(View.VISIBLE);
                 }
+                generatePercent();
             }
         });
+
+        currentStatusET.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                generatePercent();
+            }
+        });
+        selectGenderEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                generatePercent();
+            }
+        });
+        selectReligionET.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                generatePercent();
+            }
+        });
+        selectMaritalStatusET.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                generatePercent();
+            }
+        });
+        selectBirthDataET.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                generatePercent();
+            }
+        });
+
     }
 
     @Override
@@ -487,6 +565,22 @@ public class EditAccount extends AppCompatActivity implements EditContract.View,
             Float profileComPercent = Float.parseFloat(getProfileComPercent()) + 10;
             setProfileComPercent(profileComPercent.toString());
         }*/
+       if(gender() != null && !gender().equals("")){
+           Float profileComPercent = Float.parseFloat(getProfileComPercent()) + 5;
+           setProfileComPercent(profileComPercent.toString());
+       }
+       if(religion() != null && !religion().equals("")){
+           Float profileComPercent = Float.parseFloat(getProfileComPercent()) + 5;
+           setProfileComPercent(profileComPercent.toString());
+       }
+       if(maritalStatus() != null && !maritalStatus().equals("")){
+           Float profileComPercent = Float.parseFloat(getProfileComPercent()) + 5;
+           setProfileComPercent(profileComPercent.toString());
+       }
+       if(getBirthDate() != null && !getBirthDate().equals("")){
+           Float profileComPercent = Float.parseFloat(getProfileComPercent()) + 5;
+           setProfileComPercent(profileComPercent.toString());
+       }
 
        //to be continued
     }
@@ -514,6 +608,13 @@ public class EditAccount extends AppCompatActivity implements EditContract.View,
     @Override
     public void setCurrentStatus(String currentStatus) {
         currentStatusET.setText(currentStatus);
+    }
+
+    @Override
+    public void initProfileCompleteView() {
+        seekbarStaylayout.setVisibility(View.GONE);
+        profileCompleteTextView.setVisibility(View.VISIBLE);
+        dividerHorizontalUnderPCT.setVisibility(View.VISIBLE);
     }
 
 }

@@ -73,6 +73,7 @@ public class EditContract {
 
         void setCurrentStatus(String currentStatus);
 
+        public void initProfileCompleteView();
 
     }
 

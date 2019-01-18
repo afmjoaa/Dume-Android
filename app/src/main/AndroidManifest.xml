@@ -208,7 +208,7 @@
             android:theme="@style/AppTheme.NoActionBar.transparent.accepted" />
         <activity
             android:name=".teacher.skill.SkillActivity"
-            android:theme="@style/MyStyle"/>
+            android:theme="@style/MyStyle" />
         <activity
             android:name=".teacher.crudskill.CrudSkillActivity"
             android:label="Select category"
@@ -243,10 +243,12 @@
         <activity
             android:name=".afterSplashTrp.AfterSplashActivity"
             android:label="@string/title_activity_after_splash"
-            android:theme="@style/AppTheme" />
-        <activity android:name=".common.appInfoActivity.AppInfoActivity" />
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".common.appInfoActivity.AppInfoActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".teacher.addskill.AddSkillActivity" />
-        <activity android:name=".teacher.homepage.TeacherActivityMock"></activity>
+        <activity android:name=".teacher.homepage.TeacherActivityMock" />
     </application>
 
 </manifest>

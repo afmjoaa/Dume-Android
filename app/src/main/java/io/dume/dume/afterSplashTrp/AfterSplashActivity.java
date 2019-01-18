@@ -1,25 +1,18 @@
 package io.dume.dume.afterSplashTrp;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
-
-import java.util.Objects;
 
 import io.dume.dume.R;
 import io.dume.dume.afterSplashTrp.adapter.AfterSplashPagerAdapter;
@@ -28,7 +21,7 @@ import io.dume.dume.auth.auth.AuthActivity;
 import li.yohan.parallax.ParallaxViewPager;
 import me.relex.circleindicator.CircleIndicator;
 
-import static io.dume.dume.util.DumeUtils.makeFullScreen;
+import static io.dume.dume.util.DumeUtils.settingStatusBarTransparent;
 
 public class AfterSplashActivity extends AppCompatActivity implements DemoCardFragment.OnActionListener {
 
@@ -52,7 +45,9 @@ public class AfterSplashActivity extends AppCompatActivity implements DemoCardFr
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.after_splash_parallax_layout);
-        makeFullScreen(this);
+        settingStatusBarTransparent(this);
+        //setDarkStatusBarIcon(this);
+        //makeFullScreen(this);
         mPager = findViewById(R.id.pager);
         mPager.setAdapter(new AfterSplashPagerAdapter(this, getSupportFragmentManager()));
         CircleIndicator indicator = findViewById(R.id.indicator);
@@ -112,7 +107,6 @@ public class AfterSplashActivity extends AppCompatActivity implements DemoCardFr
             MLOCATIONPERMISSIONGRANTED = true;
             Toast.makeText(this, "permission granted", Toast.LENGTH_SHORT).show();
             mPager.setCurrentItem(mPager.getCurrentItem() + 1, true);
-            makeFullScreen(this);
         } else {
             ActivityCompat.requestPermissions(AfterSplashActivity.this, permissions, LOCATION_PERMISSION_REQUEST_CODE);
         }
@@ -128,7 +122,6 @@ public class AfterSplashActivity extends AppCompatActivity implements DemoCardFr
                     if (checkPermissions()) {
                         MLOCATIONPERMISSIONGRANTED = true;
                         mPager.setCurrentItem(mPager.getCurrentItem() + 1, true);
-                        makeFullScreen(this);
                     }
                 } else {
                     Toast.makeText(this, "Please accept the permission to proceed", Toast.LENGTH_SHORT).show();
@@ -157,7 +150,7 @@ public class AfterSplashActivity extends AppCompatActivity implements DemoCardFr
         //&& resSms == PackageManager.PERMISSION_GRANTED
     }
 
-    @SuppressLint("HardwareIds")
+    /*@SuppressLint("HardwareIds")
     public String getIMEI(Activity activity) {
         TelephonyManager telephonyManager = (TelephonyManager) activity.getSystemService(Context.TELEPHONY_SERVICE);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
@@ -170,7 +163,9 @@ public class AfterSplashActivity extends AppCompatActivity implements DemoCardFr
     public String getDeviceUniqueID(Activity activity) {
         @SuppressLint("HardwareIds") String device_unique_id = Settings.Secure.getString(activity.getContentResolver(), Settings.Secure.ANDROID_ID);
         return device_unique_id;
-    }
+    }*/
+
+
 }
 
 

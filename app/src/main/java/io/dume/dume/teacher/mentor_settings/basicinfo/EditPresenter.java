@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import id.zelory.compressor.Compressor;
 import io.dume.dume.R;
@@ -61,7 +62,14 @@ public class EditPresenter implements EditContract.Presenter, EditContract.onDat
                     view.setCurrentAddress(geoPoint);
                 }
                 String profileComPercent = list.getString("pro_com_%");
-                view.setProfileComPercent(profileComPercent);
+                if (profileComPercent != null) {
+                    if (profileComPercent.equals("100")) {
+                        view.initProfileCompleteView();
+                        view.setProfileComPercent(profileComPercent);
+                    }else{
+                        view.setProfileComPercent(profileComPercent);
+                    }
+                }
                 Log.w(TAG, "onSuccess: Fucked Location");
             }
 
@@ -94,7 +102,10 @@ public class EditPresenter implements EditContract.Presenter, EditContract.onDat
                     view.toast("Mandatory can't be kept empty.");
                     view.disableLoad();
                 } else {
-                    //TODO calculate percent
+                    view.generatePercent();
+                    if (view.getProfileComPercent().equals("100")) {
+                        view.toast("Profile completed");
+                    }
                     model.synWithDataBase(view.firstName(), view.lastName(), view.getAvatarUrl(), view.gmail(), view.gender(), view.phone(), view.religion(), view.maritalStatus(), view.getBirthDate(), view.getCurrentAddress(), view.getCurrentStatus());
                 }
                 break;
@@ -137,6 +148,7 @@ public class EditPresenter implements EditContract.Presenter, EditContract.onDat
                                     view.setAvatarUrl(url);
                                     //view.setImage(url);
                                     view.disableLoad();
+                                    view.generatePercent();
                                 }
 
                                 @Override
