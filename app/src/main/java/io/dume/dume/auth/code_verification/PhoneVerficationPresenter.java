@@ -211,7 +211,7 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
                 }
             });
         } else {
-            Log.w(TAG, "saveUserToDb: " + "Datastore null or user not logged in");
+            Log.w(TAG, "saveUserToDb: " + "DataStore null or user not logged in");
         }
     }
 

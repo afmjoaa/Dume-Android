@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import io.dume.dume.R;
+import io.dume.dume.student.pojo.SearchDataStore;
 import io.dume.dume.teacher.homepage.TeacherContract;
 
 public class GrabingLocationPresenter implements GrabingLocaitonContract.Presenter {
@@ -39,21 +40,6 @@ public class GrabingLocationPresenter implements GrabingLocaitonContract.Present
         mView.makingCallbackInterfaces();
         mView.configGrabingLocationPage();
         mView.retriveSavedData();
-
-        /*mModel.addShapShotListener((documentSnapshot, e) -> {
-            if (documentSnapshot != null) {
-                final GeoPoint current_address = documentSnapshot.getGeoPoint("current_address");
-                if (current_address != null) {
-                    if (Objects.requireNonNull(current_address).getLatitude() != 84.9 && current_address.getLongitude() != 180) {
-                        mView.setCurrentAddress(current_address);
-                    }
-                }
-
-            } else {
-                mView.flush("Does not found any user");
-                Log.w(TAG, "onAccountTypeFound: document is not null");
-            }
-        });*/
     }
 
     @Override

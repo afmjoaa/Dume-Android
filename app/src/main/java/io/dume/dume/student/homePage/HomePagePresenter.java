@@ -35,15 +35,12 @@ public class HomePagePresenter implements HomePageContract.Presenter {
     private char mProfileChar = '!';
     private int mChatCount = 0;
     private int mRecPendingCount = 0, mRecAcceptedCount = 0, mRecCurrentCount = 0;
-    private final SearchDataStore searchDataStore;
-
 
     public HomePagePresenter(Context context, HomePageContract.Model mModel) {
         this.context = context;
         this.activity = (Activity) context;
         this.mView = (HomePageContract.View) context;
         this.mModel = mModel;
-        searchDataStore = SearchDataStore.getInstance();
     }
 
     @SuppressWarnings("unchecked")
@@ -56,7 +53,6 @@ public class HomePagePresenter implements HomePageContract.Presenter {
 
         mModel.addShapShotListener((documentSnapshot, e) -> {
             if (documentSnapshot != null) {
-                mView.setDocumentSnapshot(documentSnapshot);
                 final String avatar = documentSnapshot.getString("avatar");
                 if (avatar != null && !avatar.equals("")) {
                     mView.setAvatar(avatar);
@@ -77,7 +73,7 @@ public class HomePagePresenter implements HomePageContract.Presenter {
                     mView.setProfileComPercent(documentSnapshot.getString("pro_com_%"));
                     mView.showSnackBar(documentSnapshot.getString("pro_com_%"));
                 }
-
+                mView.setDocumentSnapshot(documentSnapshot);
             } else {
                 mView.flush("Does not found any user");
             }

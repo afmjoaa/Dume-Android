@@ -218,7 +218,7 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
                         Toast.makeText(getContext(), "Go back to reselect category", Toast.LENGTH_SHORT).show();
                     } else {
                         assert myMainActivity != null;
-                        TabLayout.Tab tab = myMainActivity.tabLayout.getTabAt(position - 2);
+                        TabLayout.Tab tab = myMainActivity.tabLayout.getTabAt(position - 1);
                         if (tab != null) {
                             tab.select();
                         }
@@ -484,9 +484,9 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
         List<String> queryList = myMainActivity.queryList;
         List<String> queryListName = myMainActivity.queryListName;
 
-        String[] finalInfo = new String[(queryList.size() + 1)];
+        String[] finalInfo = new String[(queryList.size())];
         for (int i = 0; i < queryListName.size(); i++) {
-            finalInfo[i] = queryListName.get(i - 1) + " : " + queryList.get(i - 1);
+            finalInfo[i] = queryListName.get(i) + " : " + queryList.get(i);
         }
 
         for (String title : finalInfo) {

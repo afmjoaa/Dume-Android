@@ -32,7 +32,7 @@
                 app:isb_indicator_text_size="10sp"
                 app:isb_max="7"
                 app:isb_min="1"
-                app:isb_progress="4"
+                app:isb_progress="3"
                 app:isb_seek_smoothly="true"
                 app:isb_show_indicator="circular_bubble"
                 app:isb_show_tick_marks_type="oval"

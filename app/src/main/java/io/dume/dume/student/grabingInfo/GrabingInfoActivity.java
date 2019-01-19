@@ -14,6 +14,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Animatable;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.net.Uri;
@@ -22,6 +23,7 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
@@ -54,6 +56,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -94,6 +99,8 @@ import io.dume.dume.util.OnViewClick;
 import io.dume.dume.util.RadioBtnDialogue;
 import io.dume.dume.util.VisibleToggleClickListener;
 import me.zhanghai.android.materialratingbar.MaterialRatingBar;
+
+import static io.dume.dume.util.ImageHelper.getRoundedCornerBitmapSquare;
 
 public class GrabingInfoActivity extends CusStuAppComMapActivity implements GrabingInfoContract.View,
         MyGpsLocationChangeListener, OnMapReadyCallback, OnViewClick, OnTabModificationListener {
@@ -146,7 +153,7 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
     private int selected_category_position;
     private int dynamicTab;
     private LocalDb db;
-    public  String retrivedAction;
+    public String retrivedAction;
     protected List<String> queryList;
     protected List<String> queryListName;
     private int[] wh;
@@ -175,6 +182,11 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
     private TextView firstContactPerson;
     private TextView firstContactPersonNum;
     private ImageView firstContactSelectImage;
+    private Drawable imgKeyBoardDown;
+    private Drawable imgKeyBoardUp;
+    private Bitmap contactBitmap;
+    private String contactName;
+    private boolean forMySelf = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -248,6 +260,8 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
         textParamThree = new LinearLayout.LayoutParams(tabMinWidthThree, LinearLayout.LayoutParams.WRAP_CONTENT);
         textParamTwo = new LinearLayout.LayoutParams(tabMinWidthTwo, LinearLayout.LayoutParams.WRAP_CONTENT);
         textParamOne = new LinearLayout.LayoutParams(tabMinWidthOne, LinearLayout.LayoutParams.WRAP_CONTENT);
+        imgKeyBoardDown = getResources().getDrawable(R.drawable.ic_keyboard_arrow_down_black_24dp);
+        imgKeyBoardUp = getResources().getDrawable(R.drawable.ic_keyboard_arrow_down_black_24dp);
 
 
     }
@@ -294,7 +308,6 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                     } else if (tabPosition == tabLayout.getTabCount() - 2) {
                         //salary block
                         if (queryList.size() > tabPosition + 1) {
-                            Toast.makeText(GrabingInfoActivity.this, "salary block", Toast.LENGTH_SHORT).show();
                             hintIdOne.setText(queryList.get(tabPosition));
                             hintIdTwo.setText(queryList.get(tabPosition + 1));
                             hintIdThree.setText("→←");
@@ -457,6 +470,22 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                 }
             }
         });
+        //init the view here
+        Glide.with(this).load(searchDataStore.getAvatarString()).apply(new RequestOptions().override(100, 100).placeholder(R.drawable.alias_profile_icon)).into(firstContactImageView);
+        Glide.with(context).asBitmap().load(searchDataStore.getAvatarString())
+                .apply(new RequestOptions().override((int) (20 * (getResources().getDisplayMetrics().density)), (int) (20 * (getResources().getDisplayMetrics().density))).centerCrop().placeholder(R.drawable.alias_profile_icon))
+                .into(new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(@NonNull Bitmap resource, @Nullable com.bumptech.glide.request.transition.Transition<? super Bitmap> transition) {
+                        final Bitmap roundedCornerBitmap = getRoundedCornerBitmapSquare(resource, (int) (10 * (getResources().getDisplayMetrics().density)), (int) (20 * (getResources().getDisplayMetrics().density)));
+                        Drawable drawable = new BitmapDrawable(getResources(), roundedCornerBitmap);
+                        if (drawable != null) {
+                            forMeBtn.setCompoundDrawablesWithIntrinsicBounds(drawable, null, imgKeyBoardDown, null);
+                        }
+                    }
+                });
+        firstContactPerson.setText(searchDataStore.getUserName() + "-(Me)");
+        firstContactPersonNum.setText(searchDataStore.getUserNumber());
     }
 
     @Override
@@ -517,8 +546,35 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                     viewMusk.setVisibility(View.INVISIBLE);
                     tabHintLayout.setVisibility(View.VISIBLE);
                     tabLayout.setVisibility(View.VISIBLE);
-                    forMeBtn.setCompoundDrawablesWithIntrinsicBounds(R.drawable.alias_profile_icon, 0, R.drawable.ic_keyboard_arrow_down_black_24dp, 0);
-                    forMeBtn.setText(R.string.for_me);
+                    if (!forMySelf) {
+                        Glide.with(context).asBitmap().load(contactBitmap)
+                                .apply(new RequestOptions().override((int) (20 * (getResources().getDisplayMetrics().density)), (int) (20 * (getResources().getDisplayMetrics().density))).centerCrop().placeholder(R.drawable.alias_profile_icon))
+                                .into(new SimpleTarget<Bitmap>() {
+                                    @Override
+                                    public void onResourceReady(@NonNull Bitmap resource, @Nullable com.bumptech.glide.request.transition.Transition<? super Bitmap> transition) {
+                                        final Bitmap roundedCornerBitmap = getRoundedCornerBitmapSquare(resource, (int) (10 * (getResources().getDisplayMetrics().density)), (int) (20 * (getResources().getDisplayMetrics().density)));
+                                        Drawable drawable = new BitmapDrawable(getResources(), roundedCornerBitmap);
+                                        if (drawable != null) {
+                                            forMeBtn.setCompoundDrawablesWithIntrinsicBounds(drawable, null, imgKeyBoardDown, null);
+                                        }
+                                    }
+                                });
+                        forMeBtn.setText("For " + secondContactPerson.getText());
+                    } else {
+                        Glide.with(context).asBitmap().load(searchDataStore.getAvatarString())
+                                .apply(new RequestOptions().override((int) (20 * (getResources().getDisplayMetrics().density)), (int) (20 * (getResources().getDisplayMetrics().density))).centerCrop().placeholder(R.drawable.alias_profile_icon))
+                                .into(new SimpleTarget<Bitmap>() {
+                                    @Override
+                                    public void onResourceReady(@NonNull Bitmap resource, @Nullable com.bumptech.glide.request.transition.Transition<? super Bitmap> transition) {
+                                        final Bitmap roundedCornerBitmap = getRoundedCornerBitmapSquare(resource, (int) (10 * (getResources().getDisplayMetrics().density)), (int) (20 * (getResources().getDisplayMetrics().density)));
+                                        Drawable drawable = new BitmapDrawable(getResources(), roundedCornerBitmap);
+                                        if (drawable != null) {
+                                            forMeBtn.setCompoundDrawablesWithIntrinsicBounds(drawable, null, imgKeyBoardDown, null);
+                                        }
+                                    }
+                                });
+                        forMeBtn.setText(R.string.for_me);
+                    }
                 }
             }
 
@@ -553,8 +609,6 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                     case DumeUtils.TEACHER:
                     case DumeUtils.BOOTCAMP:
 
-
-
                         HashMap<String, Object> queryMap = new HashMap<>();
                         for (int i = 0; i < queryList.size(); i++) {
                             queryMap.put(queryListName.get(i), queryList.get(i));
@@ -567,8 +621,7 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                             @Override
                             public void onSuccess(Void list) {
                                 hideProgress();
-                              startActivity(new Intent(GrabingInfoActivity.this,SkillActivity.class));
-
+                                startActivity(new Intent(GrabingInfoActivity.this, SkillActivity.class));
                             }
 
                             @Override
@@ -579,17 +632,21 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                                 fab.setEnabled(true);
                             }
                         });
-
-
-
                         break;
                     case DumeUtils.STUDENT:
+                        showProgress();
+                        fab.setBackgroundTintList(ColorStateList.valueOf(Color.GRAY));
+                        fab.setEnabled(false);
+                        if(forMySelf){
+                            searchDataStore.genSetRetForWhom(searchDataStore.getUserName(),searchDataStore.getUserNumber(),searchDataStore.getUserUid(), forMySelf);
+                        }else{
+                            String name = secondContactPerson.getText().toString();
+                            String phoneNum = secondContactPersonNum.getText().toString();
+                            searchDataStore.genSetRetForWhom(name, phoneNum, searchDataStore.getUserUid(), forMySelf);
+                        }
                         gotoGrabingPackage();
                         break;
-
-
                 }
-
             }
         } else {
             //other general block "just go to the next one"
@@ -599,6 +656,9 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
 
 
     private void gotoGrabingPackage() {
+        fab.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.colorAccent)));
+        fab.setEnabled(true);
+        hideProgress();
         startActivity(new Intent(this, GrabingPackageActivity.class));
     }
 
@@ -938,6 +998,19 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
         }
     }
 
+    @Override
+    public void firstContactClicked() {
+        firstContactSelectImage.setVisibility(View.VISIBLE);
+        secondContactSelectImage.setVisibility(View.GONE);
+        forMySelf = true;
+    }
+
+    @Override
+    public void secondContactClicked() {
+        firstContactSelectImage.setVisibility(View.GONE);
+        secondContactSelectImage.setVisibility(View.VISIBLE);
+        forMySelf = false;
+    }
 
     final private int REQUEST_MULTIPLE_PERMISSIONS = 124;
 
@@ -989,15 +1062,17 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
         if (requestCode == REQUEST_CODE_PICK_CONTACTS && resultCode == RESULT_OK) {
             Log.d(TAG, "Response: " + data.toString());
             uriContact = data.getData();
-            secondContactLayout.setVisibility(View.VISIBLE);
-            String conatactName = retrieveContactName();
+            contactName = retrieveContactName();
             retrieveContactNumber();
-            Bitmap contactBitmap = retrieveContactPhoto();
+            contactBitmap = retrieveContactPhoto();
             String contactNum = secondContactPersonNum.getText().toString();
-            if(contactNum != null && !contactNum.equals("")&& !contactNum.equals("null")){
+            if (contactNum != null && !contactNum.equals("") && !contactNum.equals("null")) {
                 //TODO update view
-                firstContactSelectImage.setVisibility(View.GONE);
-                secondContactSelectImage.setVisibility(View.VISIBLE);
+                secondContactLayout.setVisibility(View.VISIBLE);
+                secondContactClicked();
+            } else {
+                secondContactLayout.setVisibility(View.GONE);
+                firstContactClicked();
             }
         }
     }
@@ -1084,8 +1159,15 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 secondContactPersonNum.setText("null");
-                secondContactSelectImage.setVisibility(View.GONE);
                 secondContactLayout.setVisibility(View.GONE);
+                firstContactClicked();
+            }
+        });
+        selectOneNumDialogue.setSelectListener(new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                secondContactLayout.setVisibility(View.VISIBLE);
+                secondContactClicked();
             }
         });
         selectOneNumDialogue.setCancelOnOutPress(false);

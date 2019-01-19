@@ -815,6 +815,7 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
             locationDoneBtn.setEnabled(false);
             locationDoneBtn.setBackgroundColor(getResources().getColor(R.color.disable_color));
             LatLng target = mMap.getCameraPosition().target;
+            searchDataStore.setAnchorPoint(target);
             GeoPoint targetGeopoint = new GeoPoint(target.latitude, target.longitude);
             if (!checkIfInDB(targetGeopoint)) {
                 String targetAddress = getAddress(target.latitude, target.longitude);
@@ -835,7 +836,6 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
                     String preIdentify = documentSnapshot.getString("next_rp_write");
                     String identify = "rp_";
                     identify = identify + preIdentify;
-
                     current.setIdentify(identify);
                     recyclerMenualAdapter.updateRecent(identify, current, preIdentify);
 
@@ -857,6 +857,7 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
                     });
                 }
             } else {
+                hideProgress();
                 startActivity(new Intent(this, CrudSkillActivity.class).setAction(DumeUtils.STUDENT));
             }
         }

@@ -15,6 +15,9 @@ public interface GrabingInfoContract {
 
         void selectFromContactClicked();
 
+        void firstContactClicked();
+
+        void secondContactClicked();
     }
 
     interface Presenter {

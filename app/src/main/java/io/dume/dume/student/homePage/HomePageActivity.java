@@ -1037,6 +1037,11 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
     @Override
     public void setDocumentSnapshot(DocumentSnapshot documentSnapshot) {
         this.documentSnapshot = documentSnapshot;
+        searchDataStore.setUserName(getUserName());
+        searchDataStore.setUserNumber(documentSnapshot.getString("phone_number"));
+        searchDataStore.setUserMail(documentSnapshot.getString("email"));
+        searchDataStore.setUserUid(documentSnapshot.getId());
+        searchDataStore.setAvatarString(getAvatarString());
     }
 
     @Override
@@ -1100,13 +1105,13 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
 
     @Override
     public void setAvatar(String avatarString) {
-        Glide.with(this).load(avatarString).apply(new RequestOptions().override(100, 100)).into(userDP);
+        Glide.with(this).load(avatarString).apply(new RequestOptions().override(100, 100).placeholder(R.drawable.demo_alias_dp)).into(userDP);
     }
 
     @Override
     public void setAvatarForMenu(String avatar) {
         Glide.with(this).asBitmap().load(avatar)
-                .apply(new RequestOptions().override((int) (20 * (getResources().getDisplayMetrics().density)), (int) (20 * (getResources().getDisplayMetrics().density))).centerCrop())
+                .apply(new RequestOptions().override((int) (20 * (getResources().getDisplayMetrics().density)), (int) (20 * (getResources().getDisplayMetrics().density))).centerCrop().placeholder(R.drawable.alias_profile_icon))
                 .into(new SimpleTarget<Bitmap>() {
                     @Override
                     public void onResourceReady(@NonNull Bitmap resource, @Nullable com.bumptech.glide.request.transition.Transition<? super Bitmap> transition) {

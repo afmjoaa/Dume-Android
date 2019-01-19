@@ -39,6 +39,12 @@ public class GrabingInfoPresenter implements GrabingInfoContract.Presenter {
             case R.id.select_other_contact:
                 mView.selectFromContactClicked();
                 break;
+            case R.id.first_contact:
+                mView.firstContactClicked();
+                break;
+            case R.id.second_contact:
+                mView.secondContactClicked();
+                break;
 
         }
     }
