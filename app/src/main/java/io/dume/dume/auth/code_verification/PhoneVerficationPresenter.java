@@ -32,9 +32,11 @@ import io.dume.dume.auth.auth.AuthContract;
 import io.dume.dume.util.DumeUtils;
 
 import static io.dume.dume.student.pojo.StuBaseModel.setStuProfile;
+import static io.dume.dume.util.DumeUtils.hideKeyboard;
 
 public class PhoneVerficationPresenter implements PhoneVerificationContract.Presenter {
 
+    private Activity activity;
     PhoneVerificationContract.View view;
     PhoneVerificationContract.Model model;
     private CountDownTimer countDownTimer;
@@ -46,6 +48,7 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
 
     public PhoneVerficationPresenter(Context context, PhoneVerificationContract.View view, PhoneVerificationContract.Model authModel) {
         this.context = context;
+        this.activity =(Activity) context;
         this.view = view;
         this.model = authModel;
         fireStore = FirebaseFirestore.getInstance();
@@ -89,9 +92,9 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
 
             @Override
             public void onSuccess() {
-                view.hideProgress();
 
-
+                hideKeyboard(activity);
+                //view.hideProgress();
                 if (DataStore.STATION == 1) {//user exist
                     mergeImei();
                 } else if (DataStore.STATION == 2) {//register user now
@@ -130,7 +133,7 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                view.showToast(e.getLocalizedMessage());
+                view.showToast("Network error !!");
             }
         });
 
@@ -185,7 +188,7 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
 
             @Override
             public void onTeacherFound() {
-                view.hideProgress();
+                //view.hideProgress();
                 view.gotoTeacherActivity();
             }
 
@@ -197,12 +200,13 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
 
             @Override
             public void onBootcamp() {
-
+                //view.hideProgress();
+                view.showToast("bootcamp found haha!!");
             }
 
             @Override
             public void onForeignObligation() {
-                view.hideProgress();
+                //view.hideProgress();
                 view.gotoForeignObligation();
             }
 
@@ -245,20 +249,19 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
                     configMentorProfile(dataStore);
                     configBootCampProfile(dataStore);
                     setStuProfile((Activity) context, userStudentProInfo, generateStuProInfo(dataStore));
-                    view.hideProgress();
-                    //
-
-
+                    //view.hideProgress();
                     nextActivity();
                     Log.w(TAG, "onComplete: User Added");
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
+                    view.showToast("Network error !!");
                     Log.w(TAG, "onFailure: User Not Added  " + e.getLocalizedMessage());
                 }
             });
         } else {
+            view.showToast("Unknown error 101!!");
             Log.w(TAG, "saveUserToDb: " + "DataStore null or user not logged in");
         }
     }
