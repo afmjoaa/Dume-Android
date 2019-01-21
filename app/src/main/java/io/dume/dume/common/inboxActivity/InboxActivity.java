@@ -72,6 +72,7 @@ public class InboxActivity extends CustomStuAppCompatActivity implements InboxAc
         mPresenter = new InboxActivityPresenter(this, new InboxActivityModel());
         mPresenter.inboxEnqueue();
         configureAppbarWithoutColloapsing(this, "Inbox");
+        findLoadView();
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -146,9 +147,6 @@ public class InboxActivity extends CustomStuAppCompatActivity implements InboxAc
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         switch (id){
             case R.id.action_delete:
@@ -162,12 +160,11 @@ public class InboxActivity extends CustomStuAppCompatActivity implements InboxAc
 
             case R.id.action_starred:
                 break;
+            case android.R.id.home:
+                super.onBackPressed();
+                break;
         }
 
-        //noinspection SimplifiableIfStatement
-        /*if (id == R.id.action_settings) {
-            return true;
-        }*/
 
         return super.onOptionsItemSelected(item);
     }
@@ -219,6 +216,8 @@ public class InboxActivity extends CustomStuAppCompatActivity implements InboxAc
             recordsRecyAda.unSelectAllItem();
         }
     }
+
+
 
     protected void animateFab(int position) {
         fab.clearAnimation();
@@ -304,7 +303,10 @@ public class InboxActivity extends CustomStuAppCompatActivity implements InboxAc
                             pairsPending[2] = new android.util.Pair<View, String>(onlineIndicatorCirPro, "tnThree");
                             pairsPending[3] = new android.util.Pair<View, String>(offlineIndicatorCirPro, "tnFour");
                             pairsPending[4] = new android.util.Pair<View, String>(chatUserName, "tnFive");
-                            ActivityOptions optionsPending = ActivityOptions.makeSceneTransitionAnimation(getActivity(), pairsPending);
+                            ActivityOptions optionsPending = null;
+                            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                                optionsPending = ActivityOptions.makeSceneTransitionAnimation(getActivity(), pairsPending);
+                            }
                             startActivity(new Intent(myThisActivity, ChatActivity.class).setAction("testing"), optionsPending.toBundle());
 
                         }

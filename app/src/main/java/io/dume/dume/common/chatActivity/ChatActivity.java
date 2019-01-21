@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.view.animation.LinearOutSlowInInterpolator;
 import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -60,6 +61,7 @@ public class ChatActivity extends DemoMessagesActivity implements ChatActivityCo
         mPresenter = new ChatActivityPresenter(this, new ChatActivityModel());
         mPresenter.chatEnqueue();
         configureAppbarWithoutColloapsing(this, " ");
+        //findLoadView
         this.messagesList = (MessagesList) findViewById(R.id.messagesList);
         initAdapter();
 
@@ -197,6 +199,20 @@ public class ChatActivity extends DemoMessagesActivity implements ChatActivityCo
 
     public void onChatActivityClicked(View view) {
         mPresenter.onChatViewIntracted(view);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            super.onBackPressed();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 
     /*@Override

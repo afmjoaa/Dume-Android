@@ -34,7 +34,7 @@ public class ContactActivity extends CustomStuAppCompatActivity implements Conta
         mPresenter.contactActivityEnqueue();
         DumeUtils.configureAppbar(this, "Select contact", true);
 
-
+        findLoadView();
         //testing the adapter here
         List<ContactData> contactDialogueData = new ArrayList<>();
         ContactDataAdapter contactRecyAda = new ContactDataAdapter(this, contactDialogueData);
@@ -72,8 +72,15 @@ public class ContactActivity extends CustomStuAppCompatActivity implements Conta
             case R.id.action_help:
                 //Toast.makeText(MainActivity.this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
                 break;
+            case android.R.id.home:
+                super.onBackPressed();
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 }

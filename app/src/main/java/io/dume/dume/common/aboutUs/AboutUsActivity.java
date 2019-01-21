@@ -5,6 +5,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 
 import io.dume.dume.R;
@@ -26,8 +27,8 @@ public class AboutUsActivity extends CustomStuAppCompatActivity implements About
         setActivityContext(this, fromFlag);
         mPresenter = new AboutUsPresenter(this, new AboutUsModel());
         mPresenter.aboutUsEnqueue();
-        configureAppbar(this, "About us");
-
+        configureAppbar(this, "About us", true);
+        findLoadView();
     }
 
     @Override
@@ -43,5 +44,19 @@ public class AboutUsActivity extends CustomStuAppCompatActivity implements About
     @Override
     public void configAboutUs() {
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            super.onBackPressed();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 }
