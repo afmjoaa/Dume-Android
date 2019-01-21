@@ -94,6 +94,8 @@ public interface TeacherContract {
         void onViewInteracted(android.view.View view);
 
         void init();
+
+        void loadProfile(Model.Listener<Void> nah);
     }
 
     interface Model {

@@ -125,7 +125,8 @@ import static io.dume.dume.util.ImageHelper.getRoundedCornerBitmapSquare;
 public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherContract.View,
         NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback, MyGpsLocationChangeListener,
         RadioGroup.OnCheckedChangeListener {
-    private TeacherContract.Presenter presenter;
+    public TeacherContract.Presenter presenter;
+    public TeacherDataStore teacherDataStore=null;
     private TextView textView;
     private Toolbar toolbar;
     private ActionBar actionBar;
@@ -202,7 +203,9 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         setActivityContextMap(this, 1604);
+        teacherDataStore=TeacherDataStore.getInstance();
         presenter = new TeacherPresenter(this, new TeacherModel());
+        presenter.init();
         settingStatusBarTransparent();
         setDarkStatusBarIcon();
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
@@ -295,6 +298,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
             public void onDismissed(Snackbar snackbar, int event) {
                 //network resumed make functionality available
             }
+
             @Override
             public void onShown(Snackbar snackbar) {
                 //network unavailable make functionality unavailable

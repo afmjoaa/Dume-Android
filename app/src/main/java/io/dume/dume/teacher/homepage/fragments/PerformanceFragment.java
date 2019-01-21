@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -22,7 +23,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.dume.dume.R;
 import io.dume.dume.teacher.adapters.ReportAdapter;
+import io.dume.dume.teacher.homepage.TeacherActivtiy;
+import io.dume.dume.teacher.homepage.TeacherContract;
 import io.dume.dume.teacher.homepage.TeacherDataStore;
+import io.dume.dume.teacher.homepage.TeacherModel;
 import io.dume.dume.teacher.model.KeyValueModel;
 import io.dume.dume.util.DumeUtils;
 import io.dume.dume.util.EqualSpacingItemDecoration;
@@ -36,8 +40,10 @@ public class PerformanceFragment extends Fragment {
     private static ReportAdapter reportAdapter;
     private int spacing;
     private TeacherDataStore teacherDataStore;
+    private TeacherActivtiy fragmentActivity;
 
     public static PerformanceFragment newInstance() {
+
 
         return new PerformanceFragment();
     }
@@ -53,11 +59,34 @@ public class PerformanceFragment extends Fragment {
         performanceRV.setLayoutManager(new GridLayoutManager(getContext(), 3));
         performanceRV.addItemDecoration(new GridSpacingItemDecoration(3, spacing, true));
 
+        fragmentActivity = (TeacherActivtiy) getActivity();
+        teacherDataStore = fragmentActivity != null ? fragmentActivity.teacherDataStore : null;
+        if (teacherDataStore != null) {
+            if (teacherDataStore.getDocumentSnapshot() == null) {
+                fragmentActivity.presenter.loadProfile(new TeacherContract.Model.Listener<Void>() {
+                    @Override
+                    public void onSuccess(Void list) {
+                        loadData();
+
+                    }
+
+                    @Override
+                    public void onError(String msg) {
+                        fragmentActivity.flush(msg);
+                    }
+                });
+            } else {
+                loadData();
+            }
+        }
 
         /*Gathering Data For Report Adapter*/
-        teacherDataStore = TeacherDataStore.getInstance();
 
 
+        return root;
+    }
+
+    private void loadData() {
         if (teacherDataStore.getSelfRating() != null) {
             ArrayList<KeyValueModel> arrayList = new ArrayList<>();
             String totalReview = (String) teacherDataStore.getSelfRating().get("star_count");
@@ -67,12 +96,13 @@ public class PerformanceFragment extends Fragment {
             arrayList.add(new KeyValueModel("Response Time", responseTime));
             String totalStudents = (String) teacherDataStore.getSelfRating().get("student_guided");
             arrayList.add(new KeyValueModel("Total Students", totalStudents));
-            String likeExpertize = (String) teacherDataStore.getSelfRating().get("l_expertize");
-            String disLikeExpertize = (String) teacherDataStore.getSelfRating().get("dl_expertize");
-            arrayList.add(new KeyValueModel("Expertize", "" + (100 * Integer.parseInt(likeExpertize)) / Integer.parseInt(disLikeExpertize) + "%"));
+            String likeExpertize = (String) teacherDataStore.getSelfRating().get("l_expertise");
+            String disLikeExpertize = (String) teacherDataStore.getSelfRating().get("dl_expertise");
+            int expertize = (100 * Integer.parseInt(likeExpertize)) / (Integer.parseInt(disLikeExpertize + Integer.parseInt(likeExpertize)));
+            arrayList.add(new KeyValueModel("Expertize", "" + expertize + "%"));
             String likeBehaviour = (String) teacherDataStore.getSelfRating().get("l_behaviour");
             String disLikeBehaviour = (String) teacherDataStore.getSelfRating().get("dl_behaviour");
-            arrayList.add(new KeyValueModel("Behaviour", "" + (100 * Integer.parseInt(likeBehaviour)) / Integer.parseInt(disLikeBehaviour)+"%"));
+            arrayList.add(new KeyValueModel("Behaviour", "" + (100 * Integer.parseInt(likeBehaviour)) / (Integer.parseInt(disLikeBehaviour) + Integer.parseInt(likeBehaviour)) + "%"));
 
 
             Map<String, Object> unread_records = (Map<String, Object>) teacherDataStore.getDocumentSnapshot().get("unread_records");
@@ -90,8 +120,6 @@ public class PerformanceFragment extends Fragment {
 
             performanceRV.setAdapter(new ReportAdapter(arrayList));
         }
-
-        return root;
     }
 
     @Override

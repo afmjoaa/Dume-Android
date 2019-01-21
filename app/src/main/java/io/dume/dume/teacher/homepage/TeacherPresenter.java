@@ -31,7 +31,7 @@ public class TeacherPresenter implements TeacherContract.Presenter {
         this.view = view;
         this.model = model;
         teachearDataStore = TeacherDataStore.getInstance();
-        init();
+
     }
 
     @Override
@@ -91,6 +91,11 @@ public class TeacherPresenter implements TeacherContract.Presenter {
                 view.flush(msg);
             }
         });
+
+    }
+
+    @Override
+    public void loadProfile(TeacherContract.Model.Listener<Void> listener) {
         model.getMendatory(new TeacherContract.Model.Listener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -127,6 +132,8 @@ public class TeacherPresenter implements TeacherContract.Presenter {
                     view.setProfileComPercent(documentSnapshot.getString("pro_com_%"));
                     view.showPercentSnackBar(documentSnapshot.getString("pro_com_%"));
                 }
+
+                listener.onSuccess(null);
             }
 
             @Override

@@ -1,6 +1,7 @@
 package io.dume.dume.teacher.homepage.fragments;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -11,13 +12,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.dume.dume.R;
 import io.dume.dume.teacher.adapters.InboxAdapter;
+import io.dume.dume.teacher.homepage.TeacherActivtiy;
 import io.dume.dume.teacher.homepage.TeacherContract;
 import io.dume.dume.teacher.pojo.Inbox;
 
@@ -26,6 +30,7 @@ public class InboxFragment extends Fragment {
     private InboxViewModel mViewModel;
     @BindView(R.id.inboxRV)
     RecyclerView inboxRv;
+    private TeacherActivtiy teacherActivtiy;
 
     public static InboxFragment newInstance() {
         return new InboxFragment();
@@ -37,21 +42,39 @@ public class InboxFragment extends Fragment {
         View root = inflater.inflate(R.layout.inbox_fragment, container, false);
         ButterKnife.bind(this, root);
         mViewModel = new InboxViewModel();
-        mViewModel.getInbox(new TeacherContract.Model.Listener<ArrayList<Inbox>>() {
+        if (teacherActivtiy.teacherDataStore.getDocumentSnapshot() == null) {
+            teacherActivtiy.presenter.loadProfile(new TeacherContract.Model.Listener<Void>() {
+                @Override
+                public void onSuccess(Void list) {
+                    explodeData();
+                }
 
-            @Override
-            public void onSuccess(ArrayList<Inbox> list) {
-                Log.w("BAL", "onSuccess: ");
-                showInbox(list);
-            }
+                @Override
+                public void onError(String msg) {
+                    Toast.makeText(teacherActivtiy, msg, Toast.LENGTH_SHORT).show();
+                }
+            });
+        } else {
+            explodeData();
+        }
 
-            @Override
-            public void onError(String msg) {
-
-            }
-        });
         return root;
     }
+
+    private void explodeData() {
+        String unreadMsg = (String) teacherActivtiy.teacherDataStore.getDocumentSnapshot().get("unread_msg");
+        Map<String, Object> unreadRecords = (Map<String, Object>) teacherActivtiy.teacherDataStore.getDocumentSnapshot().get("unread_records");
+        String pendingCount = (String) unreadRecords.get("pending_count");
+        String currentCount = (String) unreadRecords.get("current_count");
+        ArrayList<Inbox> arrayList = new ArrayList<>();
+        arrayList.add(new Inbox(false, "Unread Messages", Integer.parseInt(unreadMsg)));
+        arrayList.add(new Inbox(true, "Pending Request", Integer.parseInt(pendingCount)));
+        arrayList.add(new Inbox(true, "Accepted Request", Integer.parseInt(pendingCount)));
+        arrayList.add(new Inbox(false, "Ongoing Dume", Integer.parseInt(currentCount)));
+        showInbox(arrayList);
+
+    }
+
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -66,5 +89,9 @@ public class InboxFragment extends Fragment {
         inboxRv.setAdapter(new InboxAdapter(list));
     }
 
-
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        teacherActivtiy = (TeacherActivtiy) context;
+    }
 }
