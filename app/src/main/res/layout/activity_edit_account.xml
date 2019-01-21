@@ -470,29 +470,75 @@
                     android:paddingEnd="16dp"
                     android:paddingRight="16dp"
                     android:paddingBottom="6dp"
-                    android:text="Add Academic Qualification"
+                    android:text="Academic Qualifications"
                     android:textAllCaps="false"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:textColor="@color/colorAccent"
                     android:textSize="13sp"
                     app:fontFamily="@font/cairo_regular" />
+
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/academicRV"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content" />
 
-                </android.support.v7.widget.RecyclerView>
-                <Button
-                    android:id="@+id/addNewQualificationBTN"
-                    style="@style/MyEditButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="60dp"
-                    android:drawableStart="@drawable/ic_action_edit_button_colored"
-                    android:drawableLeft="@drawable/ic_action_edit_button_colored"
-                    android:gravity="center"
-                    android:text="Add New"
-                    android:layout_marginBottom="100dp"
-                    android:textColor="@color/colorLink" />
+                <RelativeLayout
+                    android:id="@+id/add_saved_place_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:orientation="vertical"
+                    android:paddingLeft="18dp"
+                    android:onClick="onClick"
+                    android:paddingRight="18dp">
+
+                    <LinearLayout
+                        android:id="@+id/vertical_textview_container"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:orientation="vertical"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp">
+
+                        <TextView
+                            android:id="@+id/text_one"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginTop="3dp"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:text="Add Qualification"
+                            android:textAppearance="?android:attr/textAppearanceListItem"
+                            android:textColor="@color/linkColorDark"
+                            app:fontFamily="@font/cairo_regular" />
+
+                        <TextView
+                            android:id="@+id/text_two"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginTop="2dp"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:text="Add qualification to get more exposer"
+                            android:textAppearance="?android:attr/textAppearanceSmall"
+                            app:fontFamily="@font/cairo_regular" />
+                    </LinearLayout>
+
+                    <View
+                        android:id="@+id/divider2"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_below="@+id/vertical_textview_container"
+                        android:background="#41a7a7a7" />
+
+                </RelativeLayout>
             </LinearLayout>
 
         </LinearLayout>

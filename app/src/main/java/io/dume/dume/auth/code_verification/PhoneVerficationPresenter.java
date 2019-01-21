@@ -14,6 +14,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
 
@@ -41,6 +42,7 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
     private final FirebaseFirestore fireStore;
     private Context context;
     private final ArrayList<String> imeiList;
+    private final DataStore dataStore;
 
     public PhoneVerficationPresenter(Context context, PhoneVerificationContract.View view, PhoneVerificationContract.Model authModel) {
         this.context = context;
@@ -48,6 +50,7 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
         this.model = authModel;
         fireStore = FirebaseFirestore.getInstance();
         imeiList = DumeUtils.getImei(context);
+        dataStore = DataStore.getInstance();
 
     }
 
@@ -81,13 +84,17 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
             @Override
             public void onStart() {
                 view.showProgress();
-                //"Authenticating..."
+
             }
 
             @Override
             public void onSuccess() {
                 view.hideProgress();
-                if (DataStore.STATION == 2) {
+
+
+                if (DataStore.STATION == 1) {//user exist
+                    mergeImei();
+                } else if (DataStore.STATION == 2) {//register user now
                     saveUserToDb(model.getData());
                 } else {
                     nextActivity();
@@ -100,6 +107,34 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
                 view.onVerificationFailed(error);
             }
         });
+    }
+
+    private void mergeImei() {
+
+        boolean isImeiMatched = false;
+        Map<String, Object> data = dataStore.getDocumentSnapshot();
+        List<String> imeiDbList = (List<String>) data.get("imei");
+        List<String> imeiList = DumeUtils.getImei(context);
+        for (int i = 0; i < imeiList.size(); i++) {
+            if (imeiDbList.contains(imeiList.get(i))) {
+                isImeiMatched = true;
+                break;
+            }
+        }
+        fireStore.document("mini_users/" + FirebaseAuth.getInstance().getUid()).update("imei", FieldValue.arrayUnion(imeiList.get(0)), "imei", FieldValue.arrayUnion(imeiList.get(1))).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                nextActivity();
+                //view.showToast("Imei Merged");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                view.showToast(e.getLocalizedMessage());
+            }
+        });
+
+
     }
 
     @Override
@@ -166,6 +201,12 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
             }
 
             @Override
+            public void onForeignObligation() {
+                view.hideProgress();
+                view.gotoForeignObligation();
+            }
+
+            @Override
             public void onFail(String exeption) {
                 view.hideProgress();
                 view.showToast(exeption);
@@ -187,11 +228,15 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
             user.put("last_name", dataStore.getLastName());
             user.put("account_major", dataStore.getAccountManjor());
             user.put("phone_number", dataStore.getPhoneNumber());
+            user.put("obligation", false);
+
             if (dataStore.getEmail() != null) {
                 user.put("email", dataStore.getEmail());
             }
             user.put("imei", imeiList);
             view.showProgress();
+            user.put("foreign_obligation", dataStore.isObligation());
+            user.put("obligated_user", dataStore.getObligatedUser());
 
             DocumentReference userStudentProInfo = fireStore.collection("/users/students/stu_pro_info").document(model.getUser().getUid());
             fireStore.collection("mini_users").document(model.getUser().getUid()).set(user).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -201,6 +246,9 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
                     configBootCampProfile(dataStore);
                     setStuProfile((Activity) context, userStudentProInfo, generateStuProInfo(dataStore));
                     view.hideProgress();
+                    //
+
+
                     nextActivity();
                     Log.w(TAG, "onComplete: User Added");
                 }
@@ -211,7 +259,7 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
                 }
             });
         } else {
-            Log.w(TAG, "saveUserToDb: " + "Datastore null or user not logged in");
+            Log.w(TAG, "saveUserToDb: " + "DataStore null or user not logged in");
         }
     }
 
@@ -260,6 +308,8 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
         selfRating.put("dl_expertise", "0");
         selfRating.put("l_experience", "1");
         selfRating.put("dl_experience", "0");
+        selfRating.put("response_time","90");
+        selfRating.put("student_guided","5");
         mentorFeild.put("self_rating", selfRating);
 
         List<String> appliedPromoList = new ArrayList<>();
@@ -406,11 +456,11 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
         unreadRecords.put("rejected_count", "0");
         stuProInfo.put("unread_records", unreadRecords);
 
-        Map<String,Map<String, Object>> favorites =new HashMap<>();
+        Map<String, Map<String, Object>> favorites = new HashMap<>();
         stuProInfo.put("favourite_places", favorites);
-        Map<String,Map<String, Object>> savedPlaces = new HashMap<>();
+        Map<String, Map<String, Object>> savedPlaces = new HashMap<>();
         stuProInfo.put("saved_places", savedPlaces);
-        Map<String,Map<String, Object>> recentlyUsedPlaces =new HashMap<>();
+        Map<String, Map<String, Object>> recentlyUsedPlaces = new HashMap<>();
         stuProInfo.put("recent_places", recentlyUsedPlaces);
 
         stuProInfo.put("referred", false);

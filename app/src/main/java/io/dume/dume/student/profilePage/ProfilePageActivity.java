@@ -57,6 +57,7 @@ import io.reactivex.schedulers.Schedulers;
 
 import static io.dume.dume.util.DumeUtils.getAddress;
 import static io.dume.dume.util.DumeUtils.getUserUID;
+import static io.dume.dume.util.DumeUtils.showKeyboard;
 
 public class ProfilePageActivity extends CustomStuAppCompatActivity implements ProfilePageContract.View,
         CompoundButton.OnCheckedChangeListener {
@@ -291,6 +292,17 @@ public class ProfilePageActivity extends CustomStuAppCompatActivity implements P
                 popup.show();
             }
         });
+        inputCurrentStatus.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    inputCurrentStatus.setHint("RUMC HSC Candidate...");
+                    showKeyboard(activity);
+                } else {
+                    inputCurrentStatus.setHint("");
+                }
+            }
+        });
+
     }
 
 
@@ -409,6 +421,7 @@ public class ProfilePageActivity extends CustomStuAppCompatActivity implements P
         });
         genderBtnDialogue.setArguments(pRargs);
         genderBtnDialogue.show(getSupportFragmentManager(), "genderDialogue");
+        selectGenderTextView.setText(genderSelcetionArr[0]);
     }
 
 

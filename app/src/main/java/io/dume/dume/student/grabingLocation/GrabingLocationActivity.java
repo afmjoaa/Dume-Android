@@ -159,7 +159,6 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
         setDarkStatusBarIcon();
         setIsNight();
         compositeDisposable = new CompositeDisposable();
-        //Log.e(TAG, SearchDataStore.getInstance().getPackageName());
         //auto one
         initAdapterData = new ArrayList<AutocompletePrediction>();
         recyclerAutoAdapter = new PlaceAutoRecyAda(this, initAdapterData, mGoogleApiClient) {
@@ -436,16 +435,27 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
             currentSavedPlace.setIdentify("set_location");
             currentSavedPlace.setSecondaryText("");
             currentSavedPlace.setLocation(null);
+            hackSetLocationOnMap.setVisibility(View.GONE);
             newMenualData.add(currentSavedPlace);
+        }else if(Objects.requireNonNull(retrivedAction).startsWith("from")){
+            hackSetLocationOnMap.setVisibility(View.VISIBLE);
         }
-
-        if (newMenualData.size() > 0) {
-            searchFoundRecyAda.update(newMenualData);
-            menualCompleteRecyView.setVisibility(View.GONE);
-            searchFoundRecycleView.setVisibility(View.VISIBLE);
-        } else {
-            menualCompleteRecyView.setVisibility(View.VISIBLE);
-            searchFoundRecycleView.setVisibility(View.GONE);
+        if (Objects.requireNonNull(retrivedAction).startsWith("from")) {
+            if (newMenualData.size() > 0) {
+                searchFoundRecyAda.update(newMenualData);
+                searchFoundRecycleView.setVisibility(View.VISIBLE);
+            } else {
+                searchFoundRecycleView.setVisibility(View.GONE);
+            }
+        }else{
+            if (newMenualData.size() > 0) {
+                searchFoundRecyAda.update(newMenualData);
+                menualCompleteRecyView.setVisibility(View.GONE);
+                searchFoundRecycleView.setVisibility(View.VISIBLE);
+            } else {
+                menualCompleteRecyView.setVisibility(View.VISIBLE);
+                searchFoundRecycleView.setVisibility(View.GONE);
+            }
         }
     }
 
@@ -815,6 +825,7 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
             locationDoneBtn.setEnabled(false);
             locationDoneBtn.setBackgroundColor(getResources().getColor(R.color.disable_color));
             LatLng target = mMap.getCameraPosition().target;
+            searchDataStore.setAnchorPoint(target);
             GeoPoint targetGeopoint = new GeoPoint(target.latitude, target.longitude);
             if (!checkIfInDB(targetGeopoint)) {
                 String targetAddress = getAddress(target.latitude, target.longitude);
@@ -835,7 +846,6 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
                     String preIdentify = documentSnapshot.getString("next_rp_write");
                     String identify = "rp_";
                     identify = identify + preIdentify;
-
                     current.setIdentify(identify);
                     recyclerMenualAdapter.updateRecent(identify, current, preIdentify);
 
@@ -857,6 +867,7 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
                     });
                 }
             } else {
+                hideProgress();
                 startActivity(new Intent(this, CrudSkillActivity.class).setAction(DumeUtils.STUDENT));
             }
         }
@@ -993,6 +1004,9 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
         if (Objects.requireNonNull(retrivedAction).startsWith("from")) {
             menualCompleteRecyView.setVisibility(View.GONE);
             hackSetLocationOnMap.setVisibility(View.VISIBLE);
+        }else{
+            menualCompleteRecyView.setVisibility(View.VISIBLE);
+            hackSetLocationOnMap.setVisibility(View.GONE);
         }
     }
 

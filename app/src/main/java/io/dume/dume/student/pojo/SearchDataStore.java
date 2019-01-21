@@ -5,15 +5,65 @@ import com.touchboarder.weekdaysbuttons.WeekdaysDataItem;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static io.dume.dume.student.grabingPackage.GrabingPackageActivity.PlaceholderFragment.getSelectedDaysFromWeekdaysData;
+
 public class SearchDataStore implements Serializable {
+    public static String TEACHER = "teacher";
+    public static String STUDENT = "student";
+    public static String BOOTCAMP = "bootcamp";
+    public  static int SHORTRADIUS = 300;
+    public  static int LONGRADIUS = 600;
+
+    private String userName;
+    private String userNumber;
+    private String userMail;
+    private String avatarString;
+    private String userUid;
+
     private LatLng anchorPoint;
     private Map<String, Object> jizz;
     private Map<String, Object> forWhom;
     private String packageName;
-    private Map<String, Object> packageJizz;
+    private String daysPerWeek;
+    private Map<String, Object> preferredDays;
+    private Map<String, Object> startTime;
+    private Map<String, Object> startDate;
+
+    public String getDaysPerWeek() {
+        return daysPerWeek;
+    }
+
+    public void setDaysPerWeek(String daysPerWeek) {
+        this.daysPerWeek = daysPerWeek;
+    }
+
+    public Map<String, Object> getPreferredDays() {
+        return preferredDays;
+    }
+
+    public void setPreferredDays(Map<String, Object> preferredDays) {
+        this.preferredDays = preferredDays;
+    }
+
+    public Map<String, Object> getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Map<String, Object> startTime) {
+        this.startTime = startTime;
+    }
+
+    public Map<String, Object> getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Map<String, Object> startDate) {
+        this.startDate = startDate;
+    }
 
     private static SearchDataStore instance = null;
 
@@ -24,17 +74,55 @@ public class SearchDataStore implements Serializable {
         return instance;
     }
 
-    public SearchDataStore(LatLng anchorPoint, Map<String, Object> jizz, Map<String, Object> forWhom, String packageName, Map<String, Object> packageJizz) {
-        this.anchorPoint = anchorPoint;
-        this.jizz = jizz;
-        this.forWhom = forWhom;
-        this.packageName = packageName;
-        this.packageJizz = packageJizz;
-    }
 
     public SearchDataStore() {
     }
 
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getUserNumber() {
+        return userNumber;
+    }
+
+    public void setUserNumber(String userNumber) {
+        this.userNumber = userNumber;
+    }
+
+    public String getUserMail() {
+        return userMail;
+    }
+
+    public void setUserMail(String userMail) {
+        this.userMail = userMail;
+    }
+
+    public String getAvatarString() {
+        return avatarString;
+    }
+
+    public void setAvatarString(String avatarString) {
+        this.avatarString = avatarString;
+    }
+
+    public String getUserUid() {
+        return userUid;
+    }
+
+    public void setUserUid(String userUid) {
+        this.userUid = userUid;
+    }
+
+    public static void setInstance(SearchDataStore instance) {
+        SearchDataStore.instance = instance;
+    }
+
+    //main part start
     public LatLng getAnchorPoint() {
         return anchorPoint;
     }
@@ -67,26 +155,42 @@ public class SearchDataStore implements Serializable {
         this.packageName = packageName;
     }
 
-    public Map<String, Object> getPackageJizz() {
-        return packageJizz;
-    }
-
-    public void setPackageJizz(Map<String, Object> packageJizz) {
-        this.packageJizz = packageJizz;
-    }
-
-    public Map<String, Object> genSetRetPackageJizz(String daysPerWeek, ArrayList<WeekdaysDataItem> preferredDays, String startDate, String startTime) {
-        //TODO
-        return null;
-    }
 
     public Map<String, Object> genSetRetForWhom(String name, String number, String uid, boolean self) {
-        //TODO
-        return null;
+        Map<String, Object> generatedforWhom = new HashMap<>();
+        generatedforWhom.put("name", name);
+        generatedforWhom.put("phone_number", number);
+        generatedforWhom.put("request_uid", uid);
+        generatedforWhom.put("is_self", self);
+        setForWhom(generatedforWhom);
+        return generatedforWhom;
     }
 
-    public Map<String, Object> getSetRetJizz(List<String> queryList, List<String> queryListName) {
+    public Map<String, Object> genSetRetJizz(List<String> queryList, List<String> queryListName) {
+        Map<String, Object> queryMap = new HashMap<>();
+        for (int i = 0; i < queryList.size(); i++) {
+            queryMap.put(queryListName.get(i), queryList.get(i));
+        }
+        setJizz(queryMap);
+        return queryMap;
+    }
+
+    public Map<String, Object> genSetRetStartTime() {
         //TODO
-        return null;
+        Map<String, Object> generatedStartTime = new HashMap<>();
+        return generatedStartTime;
+    }
+
+    public Map<String, Object> genSetRetStartDate() {
+        //TODO
+        Map<String, Object> generatedStartDate = new HashMap<>();
+        return generatedStartDate;
+    }
+
+    //generate main map
+    public Map<String, Object> genRetMainMap() {
+        //TODO
+        Map<String, Object> generatedMainMap = new HashMap<>();
+        return generatedMainMap;
     }
 }

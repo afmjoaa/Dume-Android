@@ -45,6 +45,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -294,6 +295,10 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
 
             }
         });
+
+        //initializing the search data store
+        searchDataStore.setDaysPerWeek("3");
+
     }
 
     @Override
@@ -803,6 +808,7 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
                         @Override
                         public void onSeeking(SeekParams seekParams) {
                             myMainActivity.hintIdOne.setText(String.format("%s days", Integer.toString(seekParams.progress)));
+                            myMainActivity.searchDataStore.setDaysPerWeek(Integer.toString(seekParams.progress));
                         }
 
                         @Override
@@ -811,6 +817,12 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
 
                         @Override
                         public void onStopTrackingTouch(IndicatorSeekBar seekBar) {
+                            if(seekBar.getProgress()== 7){
+                                Toast.makeText(myMainActivity, "Max 6 days/week allowed", Toast.LENGTH_SHORT).show();
+                                seekBar.setProgress(6f);
+                                myMainActivity.hintIdOne.setText(String.format("%s days", Integer.toString(seekBar.getProgress())));
+                                myMainActivity.searchDataStore.setDaysPerWeek(Integer.toString(seekBar.getProgress()));
+                            }
                         }
                     });
                     break;
@@ -819,14 +831,13 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
                     WeekdaysDataSource.Callback callback3 = new WeekdaysDataSource.Callback() {
                         @Override
                         public void onWeekdaysItemClicked(int i, WeekdaysDataItem weekdaysDataItem) {
-
+                            Toast.makeText(myMainActivity, i, Toast.LENGTH_SHORT).show();
                         }
 
                         @Override
                         public void onWeekdaysSelected(int i, ArrayList<WeekdaysDataItem> items) {
                             String selectedDays = getSelectedDaysFromWeekdaysData(items);
-                            if (!TextUtils.isEmpty(selectedDays))
-                                showSnackbarShort(selectedDays);
+
                             List<String> myWeekOfDays = Arrays.asList(selectedDays.split(","));
                             for (int fuck = 0; fuck < myWeekOfDays.size(); fuck++) {
                                 if (fuck == 0) {
@@ -836,13 +847,25 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
                                     finalWeekOfDays = finalWeekOfDays + "," + firstThree(myWeekOfDays.get(fuck));
                                 }
                             }
+
                             myMainActivity.hintIdTwo.setText(finalWeekOfDays);
+                            if( weekdaysDataSource3.isAllDaysSelected()){
+
+                            }
+                            if(weekdaysDataSource3.getWeekdaysCount()!= Integer.parseInt(myMainActivity.searchDataStore.getDaysPerWeek())){
+
+                            }
+
+                            if (!TextUtils.isEmpty(selectedDays))
+                                showSnackbarShort(selectedDays);
+                            weekdaysDataSource3.getWeekdaysCount();
+                            weekdaysDataSource3.isAllDaysSelected();
 
                         }
                     };
                     weekdaysDataSource3 = new WeekdaysDataSource(myMainActivity, R.id.weekdays_sample_3, rootView)
                             .setFirstDayOfWeek(Calendar.SUNDAY)
-                            .setSelectedDays(Calendar.MONDAY, Calendar.WEDNESDAY)
+                            .setSelectedDays(Calendar.MONDAY, Calendar.WEDNESDAY, Calendar.FRIDAY)
                             .setTextColorSelected(Color.WHITE)
                             .setFillWidth(true)
                             .setTextColorUnselectedRes(R.color.textColorPrimary)
@@ -930,7 +953,7 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
             }
         }
 
-        private String getSelectedDaysFromWeekdaysData(ArrayList<WeekdaysDataItem> items) {
+        public static String getSelectedDaysFromWeekdaysData(ArrayList<WeekdaysDataItem> items) {
             StringBuilder stringBuilder = new StringBuilder();
             boolean selected = false;
             for (WeekdaysDataItem dataItem : items) {
@@ -943,7 +966,7 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
             if (selected) {
                 String result = stringBuilder.toString();
                 return result.substring(0, result.lastIndexOf(","));
-            } else return "No days selected";
+            } else return "No-days selected";
         }
 
         public void showSnackbarShort(String message) {

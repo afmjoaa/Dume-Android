@@ -47,14 +47,17 @@ public class AuthPresenter implements AuthContract.Presenter {
         switch (item.getItemId()) {
             case R.id.student_nav:
                 dataStore.setAccountManjor(DataStore.STUDENT);
+                dataStore.setBottomNavAccountMajor(true);
                 view.onStudentSelected();
                 break;
             case R.id.teacher_nav:
                 dataStore.setAccountManjor(DataStore.TEACHER);
+                dataStore.setBottomNavAccountMajor(true);
                 view.onTeacherSelected();
                 break;
             case R.id.bootcamp_nav:
                 dataStore.setAccountManjor(DataStore.BOOTCAMP);
+                dataStore.setBottomNavAccountMajor(true);
                 view.onBootcampSelected();
                 break;
         }
@@ -141,6 +144,13 @@ public class AuthPresenter implements AuthContract.Presenter {
                                 Log.w(TAG, "onBootcampFound: hiding dialog");
                                 view.hideProgress();
                                 view.gotoTeacherActivity();
+                            }
+
+                            @Override
+                            public void onForeignObligation() {
+                                Log.w(TAG, "onForeignObligation: hiding dialog");
+                                view.hideProgress();
+                                view.gotoForeignObligation();
                             }
 
                             @Override

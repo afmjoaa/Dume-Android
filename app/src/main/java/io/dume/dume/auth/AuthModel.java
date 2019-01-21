@@ -35,6 +35,8 @@ import javax.annotation.Nullable;
 import io.dume.dume.auth.auth.AuthContract;
 import io.dume.dume.auth.code_verification.PhoneVerificationContract;
 import io.dume.dume.splash.SplashContract;
+import io.dume.dume.teacher.homepage.TeacherContract;
+import io.dume.dume.util.DumeUtils;
 
 public class AuthModel implements AuthContract.Model, SplashContract.Model, PhoneVerificationContract.Model {
     private static final String TAG = "AuthModel";
@@ -46,6 +48,7 @@ public class AuthModel implements AuthContract.Model, SplashContract.Model, Phon
     private final FirebaseFirestore firestore;
     private ListenerRegistration listenerRegistration;
     private ListenerRegistration listenerRegistration1;
+    private ListenerRegistration listenerRegistration2;
 
 
     public AuthModel(Activity activity, Context context) {
@@ -55,6 +58,8 @@ public class AuthModel implements AuthContract.Model, SplashContract.Model, Phon
         mIntent = this.activity.getIntent();
         if (mIntent.getSerializableExtra("datastore") != null) {
             datastore = (DataStore) mIntent.getSerializableExtra("datastore");
+        } else {
+            datastore = DataStore.getInstance();
         }
         firestore = FirebaseFirestore.getInstance();
         FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
@@ -123,10 +128,43 @@ public class AuthModel implements AuthContract.Model, SplashContract.Model, Phon
                 detachListener();
                 if (queryDocumentSnapshots != null) {
                     documents = queryDocumentSnapshots.getDocuments();
+
                     if (documents.size() >= 1) {
+                        datastore.setDocumentSnapshot(documents.get(0).getData());
                         listener.onUserFound();
+
                     } else {
-                        listener.onNewUserFound();
+                        //   listener.onNewUserFound();
+                        checkImei(new TeacherContract.Model.Listener<QuerySnapshot>() {
+                            @Override
+                            public void onSuccess(QuerySnapshot list) {
+                                if (list.getDocuments().size() > 0) {
+                                    /*context.startActivity(new Intent(context, PayActivity.class));*/
+                                    boolean obligation = false;
+                                    Map<String, Map<String, Object>> obligatedUser = new HashMap<>();
+                                    for (int i = 0; i < list.getDocuments().size(); i++) {
+                                        obligation = (boolean) list.getDocuments().get(i).getData().get("obligation");
+                                        if (obligation) {
+                                            obligatedUser.put(list.getDocuments().get(i).getId(), list.getDocuments().get(i).getData());
+                                        }
+                                    }
+                                    if (obligatedUser.size() > 0) {
+                                        DataStore.getInstance().setObligation(true);
+                                        DataStore.getInstance().setObligatedUser(obligatedUser);
+                                    } else DataStore.getInstance().setObligation(false);
+                                    listener.onNewUserFound();
+
+                                } else {
+                                    listener.onNewUserFound();
+                                }
+                            }
+
+                            @Override
+                            public void onError(String msg) {
+
+                            }
+                        });
+
                     }
                 } else {
                     listener.onError("Internal Error. No queryDocumentSpanshot Returned By Google");
@@ -141,6 +179,24 @@ public class AuthModel implements AuthContract.Model, SplashContract.Model, Phon
         return false;
     }
 
+    public void checkImei(TeacherContract.Model.Listener<QuerySnapshot> imeiFound) {
+
+        listenerRegistration2 = firestore.collection("mini_users").whereArrayContains("imei", DumeUtils.getImei(context).get(0)).addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                if (queryDocumentSnapshots != null) {
+                    imeiFound.onSuccess(queryDocumentSnapshots);
+                    Log.e(TAG, "onEvent: " + queryDocumentSnapshots.getDocuments().toString());
+
+                } else {
+                    Log.e(TAG, "onEvent: Balda KIchui Painai");
+                    imeiFound.onError(e == null ? "Baler Erro" : e.getLocalizedMessage());
+                }
+                listenerRegistration2.remove();
+            }
+        });
+    }
+
     @Override
     public void verifyCode(String code, PhoneVerificationContract.Model.CodeVerificationCallBack listener) {
         if (listener != null && datastore != null) {
@@ -149,6 +205,12 @@ public class AuthModel implements AuthContract.Model, SplashContract.Model, Phon
             mAuth.signInWithCredential(credential).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     listener.onSuccess();
+                    if (DataStore.STATION == 1) {
+                    } else if (DataStore.STATION == 2) {
+
+                    }
+
+
                 } else {
                     if (task.getException() != null) {
                         listener.onFail(task.getException().getLocalizedMessage());
@@ -218,10 +280,12 @@ public class AuthModel implements AuthContract.Model, SplashContract.Model, Phon
                 Log.w(TAG, "onAccountTypeFound: " + documentSnapshot.toString());
                 Log.e(TAG, "Fucked Here : " + documentSnapshot.toString());
 
+                boolean foreignObligation = (boolean) documentSnapshot.getData().get("foreign_obligation");
                 detachListener();
                 Object o = documentSnapshot.get("account_major");
-                if (datastore != null) {
+                if (datastore != null && datastore.isBottomNavAccountMajor()) {
                     if (datastore.getAccountManjor() != null) {
+                        datastore.setBottomNavAccountMajor(false);
                         Map<String, Object> newMap = new HashMap<>();
                         newMap.put("account_major", datastore.getAccountManjor());
                         final Task<Void> mini_users1 = mini_users.update(newMap).addOnFailureListener(new OnFailureListener() {
@@ -235,10 +299,14 @@ public class AuthModel implements AuthContract.Model, SplashContract.Model, Phon
                             String account_major = "";
                             account_major = datastore.getAccountManjor();
                             assert account_major != null;
-                            if (account_major.equals("student")) {
-                                listener.onStudentFound();
+                            if (!foreignObligation) {
+                                if (account_major.equals("student")) {
+                                    listener.onStudentFound();
+                                } else {
+                                    listener.onTeacherFound();
+                                }
                             } else {
-                                listener.onTeacherFound();
+                                listener.onForeignObligation();
                             }
                         });
 
@@ -251,11 +319,16 @@ public class AuthModel implements AuthContract.Model, SplashContract.Model, Phon
                     assert o != null;
                     account_major = o.toString();
                     assert account_major != null;
-                    if (account_major.equals("student")) {
-                        listener.onStudentFound();
+                    if (!foreignObligation) {
+                        if (account_major.equals("student")) {
+                            listener.onStudentFound();
+                        } else {
+                            listener.onTeacherFound();
+                        }
                     } else {
-                        listener.onTeacherFound();
+                        listener.onForeignObligation();
                     }
+
                 }
 
             } else {

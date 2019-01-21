@@ -58,14 +58,6 @@
     <string name="intro4">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</string>
     <string name="intro5">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur.</string>
     <string name="intro6">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cum cupiditate eos possimus saepe!</string>
-    <string-array name="fromYear">
-        <item>1996</item>
-        <item>1997</item>
-        <item>1998</item>
-        <item>1999</item>
-        <item>2006</item>
-        <item>2018</item>
-    </string-array>
 
 
     <string-array name="gender">
@@ -579,6 +571,13 @@ provided.Tap salary for details.  </string>
         <item>Others</item>
     </string-array>
 
+    <string-array name="level_option">
+        <item>School/O Level</item>
+        <item>College/A Level</item>
+        <item>Under Graduation</item>
+        <item>Post Graduation</item>
+    </string-array>
+
     <string-array name="gpa_options">
         <item>Golden A+</item>
         <item>A+</item>
@@ -646,6 +645,12 @@ provided.Tap salary for details.  </string>
     <string name="birth_date">Birth Date</string>
     <string name="home_example">e.g. Omi\'s Home</string>
     <string name="address_example">Rajuk Uttara Model College, Sector 6</string>
+    <string name="level">Level</string>
+    <string name="institution_">Institution</string>
+    <string name="degree_tittle">Degree Tittle</string>
+    <string name="status_achievement">Status/Achievement</string>
+    <string name="clear_obligation">Your have been accused of creating multiple account without paying the due amount of your previous account.\n Please pay the previous account due amount to clear the obligation</string>
+    <string name="academic_info"><![CDATA[•\tSetting false info is strictly prohibited & if you are found guilty your account will be obligated for false info.\n•\tPrimarily add your board exam institution as School/O Level & College/A Level.\n•\tYou can add multiple School/O Level, College/A Level, Under Graduation & Post Graduation according to your associated time and achievement. (optional)]]></string>
 
     <string-array name="after_splash_title">
         <item>Find mentor anytime and anywhere</item>

@@ -66,6 +66,7 @@
                     style="?android:attr/borderlessButtonStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:maxWidth="240dp"
                     android:drawableEnd="@drawable/ic_keyboard_arrow_down_black_24dp"
                     android:drawableLeft="@drawable/alias_profile_icon"
                     android:drawablePadding="10dp"
@@ -75,6 +76,9 @@
                     android:paddingLeft="15dp"
                     android:paddingRight="15dp"
                     android:paddingStart="15dp"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:singleLine="true"
                     android:text="For Me"
                     android:textAllCaps="false"
                     android:textColor="@color/textColorPrimary"
@@ -107,6 +111,7 @@
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
                 android:paddingTop="6dp"
+                android:onClick="onGrabingInfoViewClicked"
                 app:carbon_rippleColor="#50000000"
                 app:carbon_rippleStyle="background">
 
@@ -119,6 +124,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginEnd="16dp"
                     android:layout_marginRight="16dp"
+                    android:scaleType="centerCrop"
                     app:carbon_cornerRadius="16dp"
                     app:srcCompat="@drawable/alias_profile_icon" />
 
@@ -179,6 +185,7 @@
                 android:background="@color/white"
                 android:clickable="true"
                 android:focusable="true"
+                android:onClick="onGrabingInfoViewClicked"
                 android:orientation="horizontal"
                 android:paddingBottom="6dp"
                 android:paddingLeft="16dp"

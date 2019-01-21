@@ -25,6 +25,7 @@ import io.dume.dume.auth.DataStore;
 import io.dume.dume.auth.auth.AuthActivity;
 import io.dume.dume.auth.auth_final.AuthRegisterActivity;
 import io.dume.dume.customView.HorizontalLoadView;
+import io.dume.dume.obligation.foreignObli.PayActivity;
 import io.dume.dume.student.homePage.HomePageActivity;
 import io.dume.dume.teacher.homepage.TeacherActivtiy;
 import me.philio.pinentry.PinEntryView;
@@ -142,6 +143,12 @@ public class PhoneVerificationActivity extends AppCompatActivity implements Phon
     @Override
     public void gotoStudentActivity() {
         startActivity(new Intent(this, HomePageActivity.class));
+        finish();
+    }
+
+    @Override
+    public void gotoForeignObligation() {
+        startActivity(new Intent(this, PayActivity.class));
         finish();
     }
 

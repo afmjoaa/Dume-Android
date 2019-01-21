@@ -22,6 +22,8 @@ public interface AuthGlobalContract {
         void gotoTeacherActivity();
 
         void gotoStudentActivity();
+
+        void gotoForeignObligation();
     }
 
     interface AccountTypeFoundListener {
@@ -30,7 +32,10 @@ public interface AuthGlobalContract {
         void onTeacherFound();
 
         void onStudentFound();
+
         void onBootcamp();
+
+        void onForeignObligation();
 
         void onFail(String exeption);
     }

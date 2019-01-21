@@ -51,12 +51,14 @@
 
         <activity
             android:name=".teacher.homepage.TeacherActivtiy"
-            android:label="" />
+            android:label=""
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".splash.SplashActivity"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -107,11 +109,16 @@
         <activity
             android:name=".student.homePage.MapsActivity"
             android:label="@string/title_activity_maps" />
-        <activity android:name=".teacher.mentor_settings.AccountSettings" />
+        <activity
+            android:name=".teacher.mentor_settings.AccountSettings"
+            android:theme="@style/AppTheme.NoActionBar.transparent.black" />
         <activity
             android:name=".teacher.mentor_settings.basicinfo.EditAccount"
+            android:theme="@style/AppTheme.NoActionBar.transparent.black"
             android:windowSoftInputMode="stateHidden|adjustResize" />
-        <activity android:name=".teacher.mentor_settings.academic.AcademicActivity" />
+        <activity
+            android:name=".teacher.mentor_settings.academic.AcademicActivity"
+            android:theme="@style/AppTheme.NoActionBar.transparent.black" />
         <activity
             android:name=".teacher.mentor_settings.LocationPicker"
             android:label="@string/title_activity_location_picker" />
@@ -249,6 +256,9 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".teacher.addskill.AddSkillActivity" />
         <activity android:name=".teacher.homepage.TeacherActivityMock" />
+        <activity
+            android:name=".obligation.foreignObli.PayActivity"
+            android:theme="@style/AppTheme.NoActionBar.transparent.black" />
     </application>
 
 </manifest>

@@ -2,6 +2,7 @@ package io.dume.dume.afterSplashTrp;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -39,7 +40,8 @@ public class AfterSplashActivity extends AppCompatActivity implements DemoCardFr
     private static final String RECEIVE_SMS = Manifest.permission.RECEIVE_SMS;
     private static final String READ_PHONE_NUMBERS = Manifest.permission.READ_PHONE_NUMBERS;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
-
+    private static final String MY_PREFS_NAME = "welcome";
+    private SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +55,8 @@ public class AfterSplashActivity extends AppCompatActivity implements DemoCardFr
         CircleIndicator indicator = findViewById(R.id.indicator);
         afterSplashBtn = findViewById(R.id.after_splash_start_btn);
         indicator.setViewPager(mPager);
+        editor = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE).edit();
+
         afterSplashBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -74,6 +78,8 @@ public class AfterSplashActivity extends AppCompatActivity implements DemoCardFr
                         break;
                     case 4:
                         if (checkPermissions()) {
+                            editor.putBoolean("isShown", true);
+                            editor.apply();
                             startActivity(new Intent(getApplicationContext(), AuthActivity.class));
                             AfterSplashActivity.this.finish();
                         } else {
@@ -85,6 +91,7 @@ public class AfterSplashActivity extends AppCompatActivity implements DemoCardFr
                 }
             }
         });
+
     }
 
     @Override

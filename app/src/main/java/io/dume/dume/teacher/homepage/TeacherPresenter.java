@@ -22,12 +22,15 @@ import io.dume.dume.teacher.pojo.Inbox;
 public class TeacherPresenter implements TeacherContract.Presenter {
 
     private static final String TAG = TeacherPresenter.class.getSimpleName().toString();
-    TeacherContract.View view;
-    TeacherContract.Model model;
+    private TeacherContract.View view;
+    private TeacherContract.Model model;
+    private TeacherDataStore teachearDataStore;
+
 
     public TeacherPresenter(TeacherContract.View view, TeacherContract.Model model) {
         this.view = view;
         this.model = model;
+        teachearDataStore = TeacherDataStore.getInstance();
         init();
     }
 
@@ -91,10 +94,11 @@ public class TeacherPresenter implements TeacherContract.Presenter {
         model.getMendatory(new TeacherContract.Model.Listener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
+
                 view.setDocumentSnapshot(documentSnapshot);
                 GeoPoint location = (GeoPoint) documentSnapshot.get("location");
-                if(location == null){
-                    view.showSnackBar("Point Your Location","Settings > Location");
+                if (location == null) {
+                    view.showSnackBar("Point Your Location", "Settings > Location");
                 }
 
                 final String avatar = documentSnapshot.getString("avatar");
@@ -106,6 +110,12 @@ public class TeacherPresenter implements TeacherContract.Presenter {
                 view.setUserName(o1, o);
                 view.setMsgName(view.generateMsgName(o1, o));
                 view.setRating((Map<String, Object>) documentSnapshot.get("self_rating"));
+
+
+                /*Enams Code Goes Here*/
+                final Map<String, Object> selfRating = (Map<String, Object>) documentSnapshot.get("self_rating");
+                teachearDataStore.setSelfRating(selfRating);
+                teachearDataStore.setDocumentSnapshot(documentSnapshot);
 
                 view.setUnreadMsg(documentSnapshot.getString("unread_msg"));
                 view.setUnreadNoti(documentSnapshot.getString("unread_noti"));

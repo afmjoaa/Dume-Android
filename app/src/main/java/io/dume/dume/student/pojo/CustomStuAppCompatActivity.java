@@ -51,11 +51,11 @@ public class CustomStuAppCompatActivity extends AppCompatActivity implements MyC
     protected View rootView;
     protected static int fromFlag = 0;
     protected HomePageContract.ParentCallback parentCallback;
-
     protected static Boolean ISNIGHT;
     protected static int HOUR;
     private CoordinatorLayout v;
     private HorizontalLoadView loadView;
+    protected SearchDataStore searchDataStore;
 
     public void setActivityContext(Context context, int i) {
         this.context = context;
@@ -63,6 +63,7 @@ public class CustomStuAppCompatActivity extends AppCompatActivity implements MyC
         this.activity = (Activity) context;
         rootView = ((Activity) context).getWindow().getDecorView().findViewById(android.R.id.content);
         createNetworkCheckSnackbar();
+        searchDataStore = SearchDataStore.getInstance();
     }
 
     public void setParentCallback(HomePageContract.ParentCallback parentCallback) {
@@ -291,6 +292,7 @@ public class CustomStuAppCompatActivity extends AppCompatActivity implements MyC
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
             FirebaseAuth.getInstance().signOut();
             startActivity(new Intent(this, AuthActivity.class));
+            finish();
         }
     }
 

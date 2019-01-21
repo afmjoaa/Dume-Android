@@ -64,6 +64,13 @@ public class SplashPresenter implements SplashContract.Presenter {
                 }
 
                 @Override
+                public void onForeignObligation() {
+                    model.detachListener();
+                    view.gotoForeignObligation();
+                    Log.w(TAG, "onForeignObligation: ");
+                }
+
+                @Override
                 public void onFail(String exeption) {
 
                 }
