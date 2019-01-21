@@ -296,7 +296,7 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
         unreadRecords.put("pending_count", "0");
         unreadRecords.put("accepted_count", "0");
         unreadRecords.put("current_count", "0");
-        unreadRecords.put("completed_count", "0");
+        unreadRecords.put("completed_count", "1");
         unreadRecords.put("rejected_count", "0");
         mentorFeild.put("unread_records", unreadRecords);
 
@@ -373,7 +373,7 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
         unreadRecords.put("pending_count", "0");
         unreadRecords.put("accepted_count", "0");
         unreadRecords.put("current_count", "0");
-        unreadRecords.put("completed_count", "0");
+        unreadRecords.put("completed_count", "1");
         unreadRecords.put("rejected_count", "0");
         bootCampField.put("unread_records", unreadRecords);
 
@@ -388,6 +388,8 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
         selfRating.put("dl_expertise", "0");
         selfRating.put("l_experience", "1");
         selfRating.put("dl_experience", "0");
+        selfRating.put("response_time","90");
+        selfRating.put("student_guided","5");
         bootCampField.put("self_rating", selfRating);
 
         List<String> appliedPromoList = new ArrayList<>();

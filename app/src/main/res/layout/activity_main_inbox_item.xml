@@ -18,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="8dp"
-        android:background="@drawable/border_background">
+        android:background="@drawable/white_border_background">
 
         <TextView
             android:id="@+id/inboxTitleTV"
@@ -35,7 +35,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/border_background"
+            android:background="@drawable/white_border_background"
             android:gravity="center"
             android:text="5"
             android:textSize="14sp" />

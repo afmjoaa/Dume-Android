@@ -1,5 +1,6 @@
 package io.dume.dume.teacher.adapters;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -16,6 +17,7 @@ import io.dume.dume.teacher.pojo.Inbox;
 
 public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.InboxVH> {
     private ArrayList<Inbox> list;
+    private Context context;
 
     public InboxAdapter(ArrayList<Inbox> list) {
         this.list = list;
@@ -24,6 +26,7 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.InboxVH> {
     @NonNull
     @Override
     public InboxVH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        context = parent.getContext();
         View item = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_main_inbox_item, parent, false);
         return new InboxVH(item);
     }
@@ -33,8 +36,8 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.InboxVH> {
         holder.title.setText(list.get(position).getTitle());
         holder.value.setText(""+list.get(position).getUnreadNumber());
         if (list.get(position).isUnread()) {
-            holder.value.setBackgroundColor(Color.RED);
-            holder.value.setTextColor(Color.WHITE);
+            holder.value.setBackground(context.getResources().getDrawable(R.drawable.border_background));
+            holder.value.setTextColor(context.getResources().getColor(R.color.colorAccent));
         }
     }
 
