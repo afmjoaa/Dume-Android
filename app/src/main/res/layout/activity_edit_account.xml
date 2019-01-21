@@ -470,18 +470,18 @@
                     android:paddingEnd="16dp"
                     android:paddingRight="16dp"
                     android:paddingBottom="6dp"
-                    android:text="Add Academic Qualification"
+                    android:text="Academic Qualifications"
                     android:textAllCaps="false"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:textColor="@color/colorAccent"
                     android:textSize="13sp"
                     app:fontFamily="@font/cairo_regular" />
+
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/academicRV"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content" />
 
-                </android.support.v7.widget.RecyclerView>
                 <RelativeLayout
                     android:id="@+id/add_saved_place_layout"
                     android:layout_width="match_parent"
@@ -493,7 +493,6 @@
                     android:paddingLeft="18dp"
                     android:onClick="onClick"
                     android:paddingRight="18dp">
-
 
                     <LinearLayout
                         android:id="@+id/vertical_textview_container"

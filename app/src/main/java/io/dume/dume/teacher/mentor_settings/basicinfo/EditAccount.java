@@ -90,7 +90,7 @@ public class EditAccount extends AppCompatActivity implements EditContract.View,
     RecyclerView academicRV;
     @BindView(R.id.add_saved_place_layout)
     RelativeLayout addAcademicBtn;
-    private boolean qualification;
+    private AcAdapter acAdapter;
 
 
     @Override
@@ -145,27 +145,6 @@ public class EditAccount extends AppCompatActivity implements EditContract.View,
         emptyEmailFound = findViewById(R.id.empty_email_found);
         emptyLocationFound = findViewById(R.id.empty_address_found);
         //loadCarryData();
-
-    }
-
-    private void loadCarryData() {
-        Bundle bundle = getIntent().getBundleExtra("user_data");
-        if (bundle != null) {
-            final RequestOptions requestOptions = new RequestOptions();
-            requestOptions.placeholder(R.drawable.avatar);
-            Glide.with(this).load(bundle.getString("avatar")).apply(requestOptions.override(100, 100)).into(avatar);
-            first.setText(bundle.getString("first_name"));
-            last.setText(bundle.getString("last_name"));
-            phone.setText(bundle.getString("phone_number"));
-            mail.setText(bundle.getString("email"));
-
-            selectReligionET.setText(bundle.getString("religion"));
-            selectGenderEditText.setText(bundle.getString("gender"));
-            selectMaritalStatusET.setText(bundle.getString("marital"));
-            Log.e(TAG, "loadCarryData: " + bundle.toString());
-            avatarUrl = bundle.getString("avatar");
-
-        }
     }
 
     @Override
@@ -187,22 +166,21 @@ public class EditAccount extends AppCompatActivity implements EditContract.View,
         Map<String, Map<String, Object>> academicMap = (Map<String, Map<String, Object>>) documentSnapshot.get("academic");
         if (academicMap != null && academicMap.size() > 0) {
             for (Map.Entry<String, Map<String, Object>> entry : academicMap.entrySet()) {
-
+                String level = (String) entry.getValue().get("level");
+                String institution = (String) entry.getValue().get("institution");
                 String degree = (String) entry.getValue().get("degree");
-                String description = (String) entry.getValue().get("description");
                 String from_year = (String) entry.getValue().get("from_year");
                 String to_year = (String) entry.getValue().get("to_year");
-                String institution = (String) entry.getValue().get("institution");
                 String result = (String) entry.getValue().get("result");
-                Academic academic = new Academic(institution, degree, from_year, to_year, result, null, description);
+                Academic academic = new Academic(level, institution, degree, from_year, to_year, result);
                 arrayList.add(academic);
             }
-            qualification = true;
             generatePercent();
         }
-
+        acAdapter = new AcAdapter(this, arrayList);
         academicRV.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        academicRV.setAdapter(new AcAdapter(arrayList));
+        academicRV.setAdapter(acAdapter);
+
     }
 
     @Override
@@ -617,7 +595,7 @@ public class EditAccount extends AppCompatActivity implements EditContract.View,
             Float profileComPercent = Float.parseFloat(getProfileComPercent()) + 10;
             setProfileComPercent(profileComPercent.toString());
         }
-        if (qualification) {
+        if (acAdapter != null && acAdapter.getRecyItemCount() > 0) {
             Float profileComPercent = Float.parseFloat(getProfileComPercent()) + 10;
             setProfileComPercent(profileComPercent.toString());
         }

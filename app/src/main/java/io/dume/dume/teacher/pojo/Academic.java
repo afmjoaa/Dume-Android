@@ -6,11 +6,34 @@ public class Academic {
     String degree;
     String from, to;
     String result;
-    String resultType;
-    String description;
+    int resultType;
+    String level;
 
     public Academic() {
+    }
 
+    public Academic(String level, String institute, String degree, String from, String to, String result) {
+        this.institute = institute;
+        this.degree = degree;
+        this.from = from;
+        this.to = to;
+        this.result = result;
+        this.level = level;
+        if(result.equals("Studying")){
+            setResultType(1);
+        }else if(result.endsWith("(CGPA)")){
+            setResultType(3);
+        }else{
+            setResultType(2);
+        }
+    }
+
+    public String getLevel() {
+        return level;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
     }
 
     public String getFrom() {
@@ -29,17 +52,6 @@ public class Academic {
         this.to = to;
     }
 
-    public Academic(String institute, String degree, String from, String to, String result, String resultType, String description) {
-        this.institute = institute;
-        this.degree = degree;
-        this.from = from;
-        this.to = to;
-        this.result = result;
-
-        this.resultType = resultType;
-        this.description = description;
-    }
-
     public String getInstitute() {
         return institute;
     }
@@ -56,8 +68,6 @@ public class Academic {
         this.degree = degree;
     }
 
-
-
     public String getResult() {
         return result;
     }
@@ -66,20 +76,12 @@ public class Academic {
         this.result = result;
     }
 
-    public String getResultType() {
+    public int getResultType() {
         return resultType;
     }
 
-    public void setResultType(String resultType) {
+    public void setResultType(int resultType) {
         this.resultType = resultType;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
 

@@ -53,7 +53,7 @@ public class EditModel implements EditContract.Model {
     }
 
     @Override
-    public void synWithDataBase(String first, String last, String avatarUrl, String email, String gender, String phone, String religion, String marital, String birth_date, GeoPoint geoPoint, String currentStatus) {
+    public void synWithDataBase(String first, String last, String avatarUrl, String email, String gender, String phone, String religion, String marital, String birth_date, GeoPoint geoPoint, String currentStatus, String comPercent) {
         if (this.listener != null) {
             map.put("avatar", avatarUrl);
             map.put("first_name", first);
@@ -65,6 +65,7 @@ public class EditModel implements EditContract.Model {
             map.put("marital", marital);
             map.put("location", geoPoint);
             map.put("current_status", currentStatus);
+            map.put("pro_com_%", comPercent);
             /*users/mentors/mentor_profile/*/
             database.collection("users/mentors/mentor_profile").document(Objects.requireNonNull(auth.getUid())).update(map).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {

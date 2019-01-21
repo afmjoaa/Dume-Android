@@ -40,6 +40,7 @@ import io.dume.dume.auth.DataStore;
 import io.dume.dume.auth.auth.AuthActivity;
 import io.dume.dume.auth.code_verification.PhoneVerificationActivity;
 import io.dume.dume.customView.HorizontalLoadView;
+import io.dume.dume.obligation.foreignObli.PayActivity;
 import io.dume.dume.student.homePage.StudentActivity;
 import io.dume.dume.teacher.homepage.TeacherActivtiy;
 import io.dume.dume.util.DumeUtils;
@@ -192,6 +193,13 @@ public class AuthRegisterActivity extends AppCompatActivity {
                                             }
 
                                             @Override
+                                            public void onForeignObligation() {
+                                                hideDialog();
+                                                startActivity(new Intent(AuthRegisterActivity.this, PayActivity.class));
+                                                finish();
+                                            }
+
+                                            @Override
                                             public void onFail(String exeption) {
                                                 hideDialog();
                                                 toast(exeption);
@@ -292,6 +300,13 @@ public class AuthRegisterActivity extends AppCompatActivity {
                                                     public void onBootcamp() {
                                                         hideDialog();
                                                         startActivity(new Intent(AuthRegisterActivity.this, TeacherActivtiy.class));
+                                                        finish();
+                                                    }
+
+                                                    @Override
+                                                    public void onForeignObligation() {
+                                                        hideDialog();
+                                                        startActivity(new Intent(AuthRegisterActivity.this, PayActivity.class));
                                                         finish();
                                                     }
 

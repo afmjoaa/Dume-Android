@@ -1,8 +1,11 @@
 package io.dume.dume.auth;
 
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Map;
 
 public class DataStore implements Serializable {
     public static String TEACHER = "teacher";
@@ -12,12 +15,49 @@ public class DataStore implements Serializable {
     private String firstName = null;
     private String lastName = null;
     private String accountManjor = "student";
+
+    public boolean isBottomNavAccountMajor() {
+        return isBottomNavAccountMajor;
+    }
+
+    public void setBottomNavAccountMajor(boolean bottomNavAccountMajor) {
+        isBottomNavAccountMajor = bottomNavAccountMajor;
+    }
+
+    private boolean isBottomNavAccountMajor = false;
     private String phoneNumber = null;
     public static transient PhoneAuthProvider.ForceResendingToken resendingToken = null;
     private static DataStore dataStoreObj;
     private String verificationId = null;
     private String email = null;
     private String photoUrl = null;
+    private Map<String, Object> documentSnapshot;
+    private boolean obligation = false;
+    private Map<String, Map<String, Object>> obligatedUser;
+
+    public Map<String, Map<String, Object>> getObligatedUser() {
+        return obligatedUser;
+    }
+
+    public void setObligatedUser(Map<String, Map<String, Object>> obligatedUser) {
+        this.obligatedUser = obligatedUser;
+    }
+
+    public boolean isObligation() {
+        return obligation;
+    }
+
+    public void setObligation(boolean obligation) {
+        this.obligation = obligation;
+    }
+
+    public Map<String, Object> getDocumentSnapshot() {
+        return documentSnapshot;
+    }
+
+    public void setDocumentSnapshot(Map<String, Object> documentSnapshot) {
+        this.documentSnapshot = documentSnapshot;
+    }
 
     public String getEmail() {
         return email;

@@ -33,16 +33,15 @@ public class AcademicModel implements AcademicContract.Model {
     }
 
     @Override
-    public void syncWithDatabase(@NonNull String institution, String degree, String from, String to, String description, String result, String resultType) {
+    public void syncWithDatabase(@NonNull String level, String institution, String degree, String from, String to, String result) {
         if (listener != null) {
             listener.onStart();
             hashMap.clear();
+            hashMap.put("level", level);
             hashMap.put("institution", institution);
             hashMap.put("degree", degree);
             hashMap.put("from_year", from);
             hashMap.put("to_year", to);
-            hashMap.put("description", description);
-            hashMap.put("result_type", resultType);
             hashMap.put("result", result);
             firestore.collection("users").document("mentors").collection("mentor_profile").document(Objects.requireNonNull(mAuth.getUid())).update("academic." + degree.replace(".", ""), hashMap).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {

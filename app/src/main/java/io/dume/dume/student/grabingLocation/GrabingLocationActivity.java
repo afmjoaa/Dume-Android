@@ -159,7 +159,6 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
         setDarkStatusBarIcon();
         setIsNight();
         compositeDisposable = new CompositeDisposable();
-        Log.e(TAG, SearchDataStore.getInstance().getPackageName());
         //auto one
         initAdapterData = new ArrayList<AutocompletePrediction>();
         recyclerAutoAdapter = new PlaceAutoRecyAda(this, initAdapterData, mGoogleApiClient) {
@@ -436,16 +435,27 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
             currentSavedPlace.setIdentify("set_location");
             currentSavedPlace.setSecondaryText("");
             currentSavedPlace.setLocation(null);
+            hackSetLocationOnMap.setVisibility(View.GONE);
             newMenualData.add(currentSavedPlace);
+        }else if(Objects.requireNonNull(retrivedAction).startsWith("from")){
+            hackSetLocationOnMap.setVisibility(View.VISIBLE);
         }
-
-        if (newMenualData.size() > 0) {
-            searchFoundRecyAda.update(newMenualData);
-            menualCompleteRecyView.setVisibility(View.GONE);
-            searchFoundRecycleView.setVisibility(View.VISIBLE);
-        } else {
-            menualCompleteRecyView.setVisibility(View.VISIBLE);
-            searchFoundRecycleView.setVisibility(View.GONE);
+        if (Objects.requireNonNull(retrivedAction).startsWith("from")) {
+            if (newMenualData.size() > 0) {
+                searchFoundRecyAda.update(newMenualData);
+                searchFoundRecycleView.setVisibility(View.VISIBLE);
+            } else {
+                searchFoundRecycleView.setVisibility(View.GONE);
+            }
+        }else{
+            if (newMenualData.size() > 0) {
+                searchFoundRecyAda.update(newMenualData);
+                menualCompleteRecyView.setVisibility(View.GONE);
+                searchFoundRecycleView.setVisibility(View.VISIBLE);
+            } else {
+                menualCompleteRecyView.setVisibility(View.VISIBLE);
+                searchFoundRecycleView.setVisibility(View.GONE);
+            }
         }
     }
 
@@ -994,6 +1004,9 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
         if (Objects.requireNonNull(retrivedAction).startsWith("from")) {
             menualCompleteRecyView.setVisibility(View.GONE);
             hackSetLocationOnMap.setVisibility(View.VISIBLE);
+        }else{
+            menualCompleteRecyView.setVisibility(View.VISIBLE);
+            hackSetLocationOnMap.setVisibility(View.GONE);
         }
     }
 

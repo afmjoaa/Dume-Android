@@ -16,41 +16,103 @@ public class AcademicPresenter implements AcademicContract.Presenter, AcademicCo
 
     @Override
     public void enqueue() {
-        view.configView();
+        view.findView();
+        view.configActivity();
         view.getBundle();
-        view.setListener();
     }
 
     @Override
     public void onViewIntracted(View element) {
         switch (element.getId()) {
             case R.id.fabEdit:
-               if (view.getAction().equals("edit")||view.getAction().equals("add")) {
-                    if (validateInput()) {
-                        model.syncWithDatabase( view.getInstitution(), view.getDegree(), view.getStartYear(), view.getEndYear(), view.getDescription(),view.getRestult(),view.getResultType());
+                view.enableLoad();
+                if (view.getAction().equals("edit") || view.getAction().equals("add")) {
+                    if (validateInput(view.getRestult())) {
+                        model.syncWithDatabase(view.getLevel(), view.getInstitution(), view.getDegree(), view.getStartYear(), view.getEndYear(), view.getRestult());
+                    } else {
+                        view.toast("Required fields are empty");
+                        view.disableLoad();
                     }
-                    else view.toast("Required fields are empty");
                 } else view.toast("Internal Error");
                 break;
-            case R.id.deleteButtonHeader:
-
+            case R.id.input_level:
+                view.selectLevelClicked();
+                break;
+            case R.id.institutionET:
+                break;
+            case R.id.degreeTV:
+                break;
+            case R.id.fromET:
+                view.selectFromClicked();
+                break;
+            case R.id.toET:
+                view.selectToClicked();
+                break;
+            case R.id.resultET:
+                view.selectResultClicked();
                 break;
             default:
+                break;
         }
     }
 
-    private boolean validateInput() {
+    private boolean validateInput(String identify) {
         boolean validate = false;
-        if (!view.getInstitution().equals("") && !view.getStartYear().equals("From") && !view.getEndYear().equals("To")) {
-            validate = true;
+        if(identify.equals("Studying")){
+            if (!view.getLevel().equals("") && !view.getInstitution().equals("") && !view.getDegree().equals("") && !view.getStartYear().equals("") && !view.getEndYear().equals("") && !view.getRestult().equals("")) {
+                validate = true;
+            }else{
+                if (view.getLevel().equals("")) {
+                    view.inValidFound("level");
+                }
+                if (view.getInstitution().equals("")) {
+                    view.inValidFound("institution");
+                }
+                if (view.getDegree().equals("")) {
+                    view.inValidFound("degree");
+                }
+                if (view.getStartYear().equals("")) {
+                    view.inValidFound("from");
+                }
+                if (view.getEndYear().equals("")) {
+                    view.inValidFound("to");
+                }
+                if (view.getRestult().equals("")) {
+                    view.inValidFound("result");
+                }
+            }
+        }else{
+            if (!view.getLevel().equals("") && !view.getInstitution().equals("") && !view.getDegree().equals("") && !view.getStartYear().equals("") && !view.getRestult().equals("")) {
+                validate = true;
+            }else{
+                if (view.getLevel().equals("")) {
+                    view.inValidFound("level");
+                }
+                if (view.getInstitution().equals("")) {
+                    view.inValidFound("institution");
+                }
+                if (view.getDegree().equals("")) {
+                    view.inValidFound("degree");
+                }
+                if (view.getStartYear().equals("")) {
+                    view.inValidFound("from");
+                }
+                if (view.getEndYear().equals("")) {
+                    view.inValidFound("to");
+                }
+                if (view.getRestult().equals("")) {
+                    view.inValidFound("result");
+                }
+            }
         }
+
         return validate;
 
     }
 
     @Override
     public void onStart() {
-        view.enableLoad();
+
     }
 
     @Override
@@ -58,19 +120,16 @@ public class AcademicPresenter implements AcademicContract.Presenter, AcademicCo
         if (view.getAction().equals("add")) {
             view.disableLoad();
             view.snak("Education Added Successfully");
-
         }
         if (view.getAction().equals("edit")) {
             view.disableLoad();
             view.snak("Education Edited Successfully");
         }
-
-
     }
 
     @Override
     public void onFail(String error) {
-        view.disableLoad();
         view.toast(error);
+        view.disableLoad();
     }
 }

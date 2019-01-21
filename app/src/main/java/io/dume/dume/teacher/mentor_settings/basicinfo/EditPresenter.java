@@ -102,14 +102,15 @@ public class EditPresenter implements EditContract.Presenter, EditContract.onDat
                     if (view.getLocation().equals("")) {
                         view.invalidFound("location");
                     }
-                    view.toast("Mandatory can't be kept empty.");
+                    view.toast("Mandatory fields can't be kept empty.");
                     view.disableLoad();
                 } else {
                     view.generatePercent();
                     if (view.getProfileComPercent().equals("100")) {
                         view.toast("Profile completed");
                     }
-                    model.synWithDataBase(view.firstName(), view.lastName(), view.getAvatarUrl(), view.gmail(), view.gender(), view.phone(), view.religion(), view.maritalStatus(), view.getBirthDate(), view.getCurrentAddress(), view.getCurrentStatus());
+                    model.synWithDataBase(view.firstName(), view.lastName(), view.getAvatarUrl(), view.gmail(), view.gender(), view.phone(), view.religion(), view.maritalStatus(), view.getBirthDate(), view.getCurrentAddress(), view.getCurrentStatus(), view.getProfileComPercent());
+                    view.disableLoad();
                 }
                 break;
             case R.id.profileImage:

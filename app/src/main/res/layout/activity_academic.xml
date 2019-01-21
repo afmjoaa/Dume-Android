@@ -7,16 +7,21 @@
     android:background="@color/colorWhite"
     tools:context=".teacher.mentor_settings.academic.AcademicActivity">
 
-    <include layout="@layout/activity_header" />
+    <include layout="@layout/activity_header"
+        android:id="@+id/included_appber"/>
 
     <io.dume.dume.customView.HorizontalLoadView
         android:id="@+id/academicLoad"
-        android:layout_width="10dp"
-        android:layout_height="5dp"
-        android:translationY="5dp"
+        android:layout_width="20dp"
+        android:layout_height="3dp"
+        android:background="@drawable/bg_black_bottom_less_round"
+        android:elevation="8dp"
+        android:translationY="2dp"
         android:visibility="gone"
-        app:layout_anchor="@id/academicScroll"
-        app:layout_anchorGravity="top" />
+        app:layout_anchor="@id/included_appber"
+        app:layout_anchorGravity="bottom"
+        app:rect_color="@color/transparent" />
+
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fabEdit"
@@ -26,6 +31,7 @@
         android:layout_margin="@dimen/fab_margin"
         android:clickable="true"
         android:focusable="true"
+        android:onClick="onAcademicClick"
         android:src="@drawable/ic_action_save"
         app:backgroundTint="@color/colorBlack"
         app:rippleColor="@color/colorDarkAzure" />
@@ -33,231 +39,336 @@
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/academicScroll"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
             android:orientation="vertical">
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="School/College/University"
-                    android:textSize="14sp"
-                    android:visibility="gone" />
+                android:layout_marginStart="18dp"
+                android:layout_marginLeft="18dp"
+                android:layout_marginEnd="18dp"
+                android:layout_marginRight="18dp"
+                android:layout_marginBottom="10dp">
 
                 <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_level"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginEnd="20dp"
-                    android:layout_marginRight="20dp"
-                    android:layout_marginBottom="10dp">
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/input_level"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/level"
+                        android:onClick="onAcademicClick"
+                        android:focusable="false"
+                        android:inputType="textNoSuggestions"
+                        app:fontFamily="@font/cairo_regular" />
+
+                </android.support.design.widget.TextInputLayout>
+
+                <carbon.widget.ImageView
+                    android:id="@+id/empty_level_found"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginRight="10dp"
+                    android:contentDescription="@string/search_icon"
+                    android:translationY="5dp"
+                    android:visibility="gone"
+                    app:carbon_cornerRadius="8dp"
+                    app:carbon_elevation="1dp"
+                    app:srcCompat="@drawable/ic_empty_field" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="18dp"
+                android:layout_marginLeft="18dp"
+                android:layout_marginEnd="18dp"
+                android:layout_marginRight="18dp"
+                android:layout_marginBottom="10dp">
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_institution"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
                     <EditText
                         android:id="@+id/institutionET"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@color/colorWhite"
-                        android:hint="Ex. University of Dhaka"
-                        android:textColor="@color/colorBlack"
-                        android:textSize="20sp" />
-                </android.support.design.widget.TextInputLayout>
-            </LinearLayout>
+                        android:hint="@string/institution_"
+                        android:onClick="onAcademicClick"
+                        android:inputType="textNoSuggestions"
+                        app:fontFamily="@font/cairo_regular" />
 
-            <LinearLayout
+                </android.support.design.widget.TextInputLayout>
+
+                <carbon.widget.ImageView
+                    android:id="@+id/empty_institution_found"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginRight="10dp"
+                    android:contentDescription="@string/search_icon"
+                    android:translationY="5dp"
+                    android:visibility="gone"
+                    app:carbon_cornerRadius="8dp"
+                    app:carbon_elevation="1dp"
+                    app:srcCompat="@drawable/ic_empty_field" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-
-                android:orientation="horizontal">
-
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginEnd="20dp"
-                    android:layout_marginRight="20dp"
-                    android:layout_marginBottom="10dp"
-                    android:layout_weight="1">
-
-                    <EditText
-                        android:id="@+id/fromET"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:focusable="false"
-                        android:hint="From" />
-                </android.support.design.widget.TextInputLayout>
+                android:layout_marginStart="18dp"
+                android:layout_marginLeft="18dp"
+                android:layout_marginEnd="18dp"
+                android:layout_marginRight="18dp"
+                android:layout_marginBottom="10dp">
 
                 <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_degree"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginEnd="20dp"
-                    android:layout_marginRight="20dp"
-                    android:layout_marginBottom="10dp"
-                    android:layout_weight="1">
-
-                    <EditText
-                        android:id="@+id/toET"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:focusable="false"
-                        android:hint="To" />
-                </android.support.design.widget.TextInputLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Degree (Optional)"
-                    android:textSize="14sp"
-                    android:visibility="gone" />
-
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginEnd="20dp"
-                    android:layout_marginRight="20dp"
-                    android:layout_marginBottom="10dp">
+                    android:layout_height="wrap_content">
 
                     <EditText
                         android:id="@+id/degreeTV"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@color/colorWhite"
-                        android:hint="Degre Title"
-                        android:textColor="@color/colorBlack" />
+                        android:hint="@string/degree_tittle"
+                        android:onClick="onAcademicClick"
+                        android:inputType="textNoSuggestions"
+                        app:fontFamily="@font/cairo_regular" />
+
                 </android.support.design.widget.TextInputLayout>
 
-                <LinearLayout
+                <carbon.widget.ImageView
+                    android:id="@+id/empty_degree_found"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginRight="10dp"
+                    android:contentDescription="@string/search_icon"
+                    android:translationY="5dp"
+                    android:visibility="gone"
+                    app:carbon_cornerRadius="8dp"
+                    app:carbon_elevation="1dp"
+                    app:srcCompat="@drawable/ic_empty_field" />
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/user_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="10dp"
+                android:baselineAligned="false"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:id="@+id/from_relative"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:layout_weight="1">
 
                     <android.support.design.widget.TextInputLayout
-                        android:id="@+id/input_layout_p_result"
+                        android:id="@+id/input_layout_form"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="20dp"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginEnd="20dp"
-                        android:layout_marginRight="20dp"
-                        android:layout_marginBottom="10dp">
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginRight="10dp">
 
                         <EditText
-                            android:id="@+id/resultET"
+                            android:id="@+id/fromET"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:autofillHints="Starting Date"
+                            android:hint="From"
+                            android:onClick="onAcademicClick"
                             android:focusable="false"
-                            android:hint="@string/previous_result"
-                            android:inputType="text"
-
-                            android:onClick="onClick" />
+                            android:inputType="textPersonName"
+                            app:fontFamily="@font/cairo_regular" />
 
                     </android.support.design.widget.TextInputLayout>
 
-                    <LinearLayout
+                    <carbon.widget.ImageView
+                        android:id="@+id/empty_from_found"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="20dp"
+                        android:layout_marginRight="20dp"
+                        android:contentDescription="@string/search_icon"
+                        android:translationY="5dp"
+                        android:visibility="gone"
+                        app:carbon_cornerRadius="8dp"
+                        app:carbon_elevation="1dp"
+                        app:srcCompat="@drawable/ic_empty_field" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/to_relative"
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/input_layout_to"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="end"
-                        android:layout_marginStart="20dp"
-                        android:layout_marginEnd="20dp"
-                        android:layout_marginBottom="10dp"
-                        android:gravity="end"
-                        android:translationY="-4dp">
+                        android:layout_marginStart="10dp"
+                        android:layout_marginLeft="10dp">
 
-
-                        <android.support.v7.widget.AppCompatCheckBox
-                            android:id="@+id/study_checkbox"
-                            android:layout_width="wrap_content"
+                        <EditText
+                            android:id="@+id/toET"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentEnd="true"
-                            android:layout_alignParentRight="true"
-                            android:layout_marginEnd="4dp"
-                            android:layout_marginRight="4dp"
-                            android:checked="false"
-                            android:text="Studing" />
+                            android:hint="To"
+                            android:onClick="onAcademicClick"
+                            android:focusable="false"
+                            android:inputType="textPersonName"
+                            app:fontFamily="@font/cairo_regular"
+                            android:autofillHints="Finishing Date" />
+                    </android.support.design.widget.TextInputLayout>
 
-                        <android.support.v7.widget.AppCompatCheckBox
-                            android:id="@+id/cgpa_checkbox"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentEnd="true"
-                            android:layout_alignParentRight="true"
-                            android:layout_marginEnd="4dp"
-                            android:layout_marginRight="4dp"
-                            android:checked="false"
-                            android:text="CGPA" />
+                    <carbon.widget.ImageView
+                        android:id="@+id/empty_to_found"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginRight="10dp"
+                        android:contentDescription="@string/search_icon"
+                        android:translationY="5dp"
+                        android:visibility="gone"
+                        app:carbon_cornerRadius="8dp"
+                        app:carbon_elevation="1dp"
+                        app:srcCompat="@drawable/ic_empty_field" />
 
-                        <android.support.v7.widget.AppCompatCheckBox
-                            android:id="@+id/gpa_checkbox"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="16dp"
-                            android:layout_marginRight="16dp"
-                            android:layout_toStartOf="@+id/cgpa_checkbox"
-                            android:layout_toLeftOf="@+id/cgpa_checkbox"
-                            android:checked="true"
-                            android:text="GPA" />
+                </RelativeLayout>
 
-                    </LinearLayout>
-                </LinearLayout>
             </LinearLayout>
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginEnd="20dp"
-                    android:layout_marginRight="20dp"
-                    android:text="Description (Optional)"
-                    android:textSize="14sp"
-                    android:visibility="gone" />
+                android:layout_height="wrap_content"
+                android:layout_marginStart="18dp"
+                android:layout_marginLeft="18dp"
+                android:layout_marginEnd="18dp"
+                android:layout_marginRight="18dp">
 
                 <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_status"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginEnd="20dp"
-                    android:layout_marginRight="20dp">
+                    android:layout_height="wrap_content">
 
                     <EditText
-                        android:id="@+id/descriptionET"
+                        android:id="@+id/resultET"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/status_achievement"
+                        android:onClick="onAcademicClick"
+                        android:focusable="false"
+                        android:inputType="textNoSuggestions"
+                        app:fontFamily="@font/cairo_regular"
+                        android:autofillHints="Status" />
 
-                        android:hint="Write Something About This Journey"
-                        android:minLines="3"
-                        android:padding="5dp"
-                        android:textColor="@color/colorBlack" />
                 </android.support.design.widget.TextInputLayout>
-            </LinearLayout>
+
+                <carbon.widget.ImageView
+                    android:id="@+id/empty_status_found"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginRight="10dp"
+                    android:contentDescription="@string/search_icon"
+                    android:translationY="5dp"
+                    android:visibility="gone"
+                    app:carbon_cornerRadius="8dp"
+                    app:carbon_elevation="1dp"
+                    app:srcCompat="@drawable/ic_empty_field" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="18dp"
+                android:layout_marginRight="18dp"
+                android:layout_marginLeft="18dp"
+                android:layout_marginEnd="18dp"
+                android:translationY="-4dp">
+
+                <android.support.v7.widget.AppCompatCheckBox
+                    android:id="@+id/cgpa_checkbox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginEnd="4dp"
+                    android:layout_marginRight="4dp"
+                    android:checked="false"
+                    android:text="CGPA" />
+
+                <android.support.v7.widget.AppCompatCheckBox
+                    android:id="@+id/gpa_checkbox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_toStartOf="@+id/cgpa_checkbox"
+                    android:layout_toLeftOf="@+id/cgpa_checkbox"
+                    android:checked="false"
+                    android:text="GPA" />
+
+                <android.support.v7.widget.AppCompatCheckBox
+                    android:id="@+id/study_checkbox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_toStartOf="@+id/gpa_checkbox"
+                    android:layout_toLeftOf="@+id/gpa_checkbox"
+                    android:checked="true"
+                    android:text="Studying" />
+
+            </RelativeLayout>
+
         </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>

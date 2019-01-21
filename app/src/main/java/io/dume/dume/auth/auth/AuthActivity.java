@@ -38,6 +38,7 @@ import io.dume.dume.auth.auth_final.AuthRegisterActivity;
 import io.dume.dume.auth.code_verification.PhoneVerificationActivity;
 import io.dume.dume.auth.social_init.SocialInitActivity;
 import io.dume.dume.customView.HorizontalLoadView;
+import io.dume.dume.obligation.foreignObli.PayActivity;
 import io.dume.dume.splash.FeaturedSliderAdapter;
 import io.dume.dume.student.homePage.StudentActivity;
 import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
@@ -66,6 +67,9 @@ public class AuthActivity extends CustomStuAppCompatActivity implements AuthCont
     private Context context;
     private Typeface cairoRegular;
     private HorizontalLoadView loadView;
+    private Intent fromIntent;
+    private String fromIntentAction;
+
 
 
     @Override
@@ -88,6 +92,12 @@ public class AuthActivity extends CustomStuAppCompatActivity implements AuthCont
                     phoneEditText.setText(mPhoneNumber);
                 }
             }
+        }
+        fromIntent = getIntent();
+        fromIntentAction = fromIntent.getAction();
+        String phone_number = fromIntent.getStringExtra("phone_number");
+        if(phone_number!= null){
+            phoneEditText.setText(phone_number);
         }
     }
 
@@ -250,6 +260,7 @@ public class AuthActivity extends CustomStuAppCompatActivity implements AuthCont
                 break;
         }
         dataStore.setAccountManjor(accountMajor);
+        dataStore.setBottomNavAccountMajor(true);
         intent.putExtra("datastore", dataStore);
         startActivity(intent);
         finish();
@@ -352,6 +363,12 @@ public class AuthActivity extends CustomStuAppCompatActivity implements AuthCont
     @Override
     public void gotoStudentActivity() {
         startActivity(new Intent(this, StudentActivity.class));
+        finish();
+    }
+
+    @Override
+    public void gotoForeignObligation() {
+        startActivity(new Intent(this, PayActivity.class));
         finish();
     }
 }

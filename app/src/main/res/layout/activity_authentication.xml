@@ -140,7 +140,7 @@
         style="@style/Widget.BottomNavigationView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
+        android:layout_gravity="bottom|end"
         android:background="?android:attr/windowBackground"
         app:itemIconTint="@drawable/color_state_list"
         app:itemTextColor="@drawable/color_state_list"

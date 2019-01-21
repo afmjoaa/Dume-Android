@@ -78,6 +78,7 @@ import io.dume.dume.R;
 import io.dume.dume.common.aboutUs.AboutUsActivity;
 import io.dume.dume.common.inboxActivity.InboxActivity;
 import io.dume.dume.common.privacyPolicy.PrivacyPolicyActivity;
+import io.dume.dume.obligation.foreignObli.PayActivity;
 import io.dume.dume.service.LocationServiceHandler;
 import io.dume.dume.service.MyLocationService;
 import io.dume.dume.student.freeCashBack.FreeCashBackActivity;
@@ -1026,7 +1027,7 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
 
     @Override
     public void gotoStudentProfile() {
-        //startActivity(new Intent(this, HomePageActivity.class));
+        startActivity(new Intent(this, PayActivity.class));
     }
 
     @Override

@@ -292,6 +292,7 @@ public class CustomStuAppCompatActivity extends AppCompatActivity implements MyC
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
             FirebaseAuth.getInstance().signOut();
             startActivity(new Intent(this, AuthActivity.class));
+            finish();
         }
     }
 

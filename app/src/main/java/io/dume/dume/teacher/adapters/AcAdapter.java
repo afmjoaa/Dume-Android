@@ -1,7 +1,9 @@
 package io.dume.dume.teacher.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
@@ -26,24 +28,51 @@ import io.dume.dume.teacher.mentor_settings.basicinfo.EditModel;
 import io.dume.dume.teacher.pojo.Academic;
 
 public class AcAdapter extends RecyclerView.Adapter<AcAdapter.AcademicVH> {
+    private Activity activity;
     private List<Academic> list;
     private Context context;
+    int[] imageIcons = {
+            R.drawable.academic_school,
+            R.drawable.academic_college,
+            R.drawable.academic_undergraduate,
+            R.drawable.academic_postgraduate
+    };
 
-    public AcAdapter(List<Academic> list) {
+    public AcAdapter(Context context, List<Academic> list) {
         this.list = list;
+        this.context = context;
+        this.activity = (Activity) context;
     }
 
     @NonNull
     @Override
     public AcademicVH onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        context = viewGroup.getContext();
-        return new AcademicVH(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.custom_saved_places_row, viewGroup, false));
+        return new AcademicVH(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.custom_ac_adaper_row, viewGroup, false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull AcademicVH academicVH, int i) {
-        academicVH.title.setText("Degree Title Goes Here");
+        Academic current = list.get(i);
+
         academicVH.menu.setImageResource(R.drawable.ic_more_vert_black_24dp);
+        //testing my code here
+        switch (current.getLevel()){
+            case "School/O Level":
+                academicVH.levelImage.setImageResource(imageIcons[0]);
+                break;
+            case "College/A Level":
+                academicVH.levelImage.setImageResource(imageIcons[1]);
+                break;
+            case "Under Graduation":
+                academicVH.levelImage.setImageResource(imageIcons[2]);
+                break;
+            case "Post Graduation":
+                academicVH.levelImage.setImageResource(imageIcons[3]);
+                break;
+        }
+        academicVH.title.setText(current.getInstitute());
+        academicVH.subTitle.setText(current.getDegree());
+
         academicVH.menu.setOnClickListener(view -> {
             PopupMenu popup = new PopupMenu(context, view);
             popup.getMenuInflater().inflate(R.menu.menu_edit_remove, popup.getMenu());
@@ -51,7 +80,7 @@ public class AcAdapter extends RecyclerView.Adapter<AcAdapter.AcademicVH> {
                 int id = item.getItemId();
                 switch (id) {
                     case R.id.action_remove:
-                         AcademicModel model = AcademicModel.getInstance();
+                        AcademicModel model = AcademicModel.getInstance();
                         model.removeFromDatabase(list.get(i).getDegree(), new AcademicContract.Model.ModelCallback() {
                             @Override
                             public void onStart() {
@@ -60,7 +89,7 @@ public class AcAdapter extends RecyclerView.Adapter<AcAdapter.AcademicVH> {
 
                             @Override
                             public void onSuccess() {
-                                AcademicActivity.isDeleted = true;
+                                //AcademicActivity.isDeleted = true;
                             }
 
                             @Override
@@ -72,6 +101,16 @@ public class AcAdapter extends RecyclerView.Adapter<AcAdapter.AcademicVH> {
                     case R.id.action_edit:
                         final Intent intent = new Intent(context, AcademicActivity.class);
                         intent.setAction("edit");
+                        Bundle bundle = new Bundle();
+                        Academic hereCurrent = list.get(i);
+                        bundle.putString("level", hereCurrent.getLevel());
+                        bundle.putString("institution",hereCurrent.getInstitute());
+                        bundle.putString("degree", hereCurrent.getDegree());
+                        bundle.putString("from_year", hereCurrent.getFrom());
+                        bundle.putString("to_year", hereCurrent.getTo());
+                        bundle.putString("result", hereCurrent.getResult());
+                        bundle.putInt("resultType", hereCurrent.getResultType());
+                        intent.putExtra("academic_data", bundle);
                         context.startActivity(intent);
                         break;
                 }
@@ -80,9 +119,11 @@ public class AcAdapter extends RecyclerView.Adapter<AcAdapter.AcademicVH> {
             popup.show();
 
         });
-        academicVH.title.setText(list.get(i).getDegree());
-        academicVH.subTitle.setText(list.get(i).getInstitute());
 
+    }
+
+    public int getRecyItemCount(){
+        return list.size();
     }
 
     @Override
@@ -97,6 +138,8 @@ public class AcAdapter extends RecyclerView.Adapter<AcAdapter.AcademicVH> {
         TextView subTitle;
         @BindView(R.id.more_vertical_icon)
         ImageView menu;
+        @BindView(R.id.auto_image_icon)
+        carbon.widget.ImageView levelImage;
 
         public AcademicVH(@NonNull View itemView) {
             super(itemView);

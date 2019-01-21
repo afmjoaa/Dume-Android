@@ -49,8 +49,8 @@ public abstract class PlaceMenualRecyAda extends RecyclerView.Adapter<PlaceMenua
         this.favorite = favorite;
         this.saved = saved;
         this.recent = recent;
-        this.context = context;
         this.start = start;
+        this.context = context;
         this.activity = (Activity) context;
     }
 

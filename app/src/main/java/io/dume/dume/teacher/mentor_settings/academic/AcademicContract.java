@@ -6,44 +6,43 @@ public interface AcademicContract {
 
         void snak(String msg);
 
+        void getBundle();
+
+        void configActivity();
+
+        String getDegree();
+
+        String getRestult();
+
         String getInstitution();
 
         String getStartYear();
 
         String getEndYear();
 
-        String getDescription();
-
-        void getBundle();
-
-        boolean isGraduate();
-
-        void configView();
-
-        void setListener();
-
-
-        String getDegree();
+        String getLevel();
 
         void enableLoad();
 
         void disableLoad();
 
-        void goBack();
-
-        String getItemUid();
-
         String getAction();
 
-        String getResultType();
+        void selectLevelClicked();
 
-        String getRestult();
+        void selectFromClicked();
+
+        void selectToClicked();
+
+        void selectResultClicked();
+
+        void findView();
+
+        void inValidFound(String identify);
     }
 
     interface Model {
-        void syncWithDatabase( String school, String degree, String from, String to, String description, String result, String resultType);
-
-
+        void syncWithDatabase( String level, String institution, String degree, String from, String to, String result);
 
         void attachCallback(ModelCallback listener);
 
