@@ -39,6 +39,8 @@ public interface AcademicContract {
         void findView();
 
         void inValidFound(String identify);
+
+        void clearAllField();
     }
 
     interface Model {

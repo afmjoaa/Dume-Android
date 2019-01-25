@@ -15,6 +15,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -134,6 +135,7 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
     private RecyclerView searchFoundRecycleView;
     private SearchFoundRecyAda searchFoundRecyAda;
     private DocumentSnapshot documentSnapshot;
+    private NestedScrollView bottomSheetNSV;
 
 
     //queriedLocation for text to geopoint
@@ -151,7 +153,7 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         getLocationPermission(mapFragment);
-        mModel = new GrabingLocationModel(this, this);
+        mModel = new GrabingLocationModel(this);
         mPresenter = new GrabingLocationPresenter(this, mModel);
         fromIntent = getIntent();
         retrivedAction = fromIntent.getAction();
@@ -298,7 +300,7 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
         hackHeight = findViewById(R.id.hack_height);
         hackSetLocationOnMap = findViewById(R.id.hack_set_location_on_map);
         searchFoundRecycleView = findViewById(R.id.recycle_view_search_found);
-
+        bottomSheetNSV = findViewById(R.id.bottom_sheet_scroll_view);
     }
 
     @Override
@@ -437,7 +439,7 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
             currentSavedPlace.setLocation(null);
             hackSetLocationOnMap.setVisibility(View.GONE);
             newMenualData.add(currentSavedPlace);
-        }else if(Objects.requireNonNull(retrivedAction).startsWith("from")){
+        } else if (Objects.requireNonNull(retrivedAction).startsWith("from")) {
             hackSetLocationOnMap.setVisibility(View.VISIBLE);
         }
         if (Objects.requireNonNull(retrivedAction).startsWith("from")) {
@@ -447,7 +449,7 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
             } else {
                 searchFoundRecycleView.setVisibility(View.GONE);
             }
-        }else{
+        } else {
             if (newMenualData.size() > 0) {
                 searchFoundRecyAda.update(newMenualData);
                 menualCompleteRecyView.setVisibility(View.GONE);
@@ -478,7 +480,13 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
         }
         if (recently_used != null && recently_used.size() > 0) {
             for (Map.Entry<String, Map<String, Object>> entry : recently_used.entrySet()) {
+                String targetAddress = getAddress(geoPoint.getLatitude(), geoPoint.getLongitude());
+                String[] targetAddressParts = targetAddress.split("\\s*,\\s*", 2);
+                String primary = targetAddressParts[0];
                 if (entry.getValue().get("location").equals(geoPoint)) {
+                    found = true;
+                }
+                if (entry.getValue().get("primary_text").equals(primary)) {
                     found = true;
                 }
             }
@@ -508,6 +516,14 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
                     hackHeight.setVisibility(View.GONE);
                     inputSearch.clearFocus();
                     inputSearchContainer.requestFocus();
+                    bottomSheetNSV.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            bottomSheetNSV.fling(0);
+                            bottomSheetNSV.scrollTo(0, 0);
+                            bottomSheetNSV.fling(-10000);
+                        }
+                    });
                 } else if (BottomSheetBehavior.STATE_EXPANDED == newState) {
                     showKeyboard(GrabingLocationActivity.this);
                     hackHeight.setVisibility(View.VISIBLE);
@@ -1004,7 +1020,7 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
         if (Objects.requireNonNull(retrivedAction).startsWith("from")) {
             menualCompleteRecyView.setVisibility(View.GONE);
             hackSetLocationOnMap.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             menualCompleteRecyView.setVisibility(View.VISIBLE);
             hackSetLocationOnMap.setVisibility(View.GONE);
         }

@@ -187,6 +187,7 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
     private Bitmap contactBitmap;
     private String contactName;
     private boolean forMySelf = true;
+    private Bitmap photo = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -608,7 +609,6 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                 switch (retrivedAction) {
                     case DumeUtils.TEACHER:
                     case DumeUtils.BOOTCAMP:
-
                         HashMap<String, Object> queryMap = new HashMap<>();
                         for (int i = 0; i < queryList.size(); i++) {
                             queryMap.put(queryListName.get(i), queryList.get(i));
@@ -637,13 +637,14 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                         showProgress();
                         fab.setBackgroundTintList(ColorStateList.valueOf(Color.GRAY));
                         fab.setEnabled(false);
-                        if(forMySelf){
-                            searchDataStore.genSetRetForWhom(searchDataStore.getUserName(),searchDataStore.getUserNumber(),searchDataStore.getUserUid(), forMySelf);
-                        }else{
+                        if (forMySelf) {
+                            searchDataStore.genSetRetForWhom(searchDataStore.getUserName(), searchDataStore.getUserNumber(), searchDataStore.getUserUid(), null, forMySelf);
+                        } else {
                             String name = secondContactPerson.getText().toString();
                             String phoneNum = secondContactPersonNum.getText().toString();
-                            searchDataStore.genSetRetForWhom(name, phoneNum, searchDataStore.getUserUid(), forMySelf);
+                            searchDataStore.genSetRetForWhom(name, phoneNum, searchDataStore.getUserUid(), photo, forMySelf);
                         }
+                        searchDataStore.genSetRetJizz(queryList, queryListName);
                         gotoGrabingPackage();
                         break;
                 }
@@ -656,7 +657,7 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
 
 
     private void gotoGrabingPackage() {
-        fab.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(this,R.color.colorAccent)));
+        fab.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorAccent)));
         fab.setEnabled(true);
         hideProgress();
         startActivity(new Intent(this, GrabingPackageActivity.class));
@@ -1078,7 +1079,7 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
     }
 
     private Bitmap retrieveContactPhoto() {
-        Bitmap photo = null;
+        photo = null;
         try {
             InputStream inputStream = ContactsContract.Contacts.openContactPhotoInputStream(getContentResolver(),
                     ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, new Long(contactID)));
@@ -1215,4 +1216,5 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
         String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
         return Uri.parse(path);
     }
+
 }

@@ -200,9 +200,7 @@
                     <android.support.design.widget.TextInputLayout
                         android:id="@+id/input_layout_form"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="10dp"
-                        android:layout_marginRight="10dp">
+                        android:layout_height="wrap_content">
 
                         <EditText
                             android:id="@+id/fromET"
@@ -240,14 +238,14 @@
                     android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginStart="20dp"
                     android:layout_weight="1">
 
                     <android.support.design.widget.TextInputLayout
                         android:id="@+id/input_layout_to"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginLeft="10dp">
+                        android:layout_height="wrap_content">
 
                         <EditText
                             android:id="@+id/toET"

@@ -278,6 +278,16 @@ public class AcademicActivity extends AppCompatActivity implements AcademicContr
     }
 
     @Override
+    public void clearAllField() {
+        levelET.setText("");
+        instiEdt.setText("");
+        degreeEdt.setText("");
+        toET.setText("");
+        fromET.setText("");
+        resultET.setText("");
+    }
+
+    @Override
     public void configActivity() {
         gpaCB.setOnCheckedChangeListener(this);
         cgpaCB.setOnCheckedChangeListener(this);
@@ -295,7 +305,7 @@ public class AcademicActivity extends AppCompatActivity implements AcademicContr
         instiEdt.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
-                    instiEdt.setHint("Military Ins. of Sc. and Tech. (MIST)");
+                    instiEdt.setHint("MIST-Military Ins. of Sc. and Tech.");
                     showKeyboard(AcademicActivity.this);
                 } else {
                     instiEdt.setHint("");
@@ -461,21 +471,25 @@ public class AcademicActivity extends AppCompatActivity implements AcademicContr
             if (compoundButton.isChecked()) {
                 gpaCB.setChecked(false);
                 studyCB.setChecked(false);
+                toRelative.setVisibility(View.VISIBLE);
             }
         } else if (id == R.id.gpa_checkbox) {
             if (compoundButton.isChecked()) {
                 cgpaCB.setChecked(false);
                 studyCB.setChecked(false);
+                toRelative.setVisibility(View.VISIBLE);
             }
         } else if (id == R.id.study_checkbox) {
             if (compoundButton.isChecked()) {
                 cgpaCB.setChecked(false);
                 gpaCB.setChecked(false);
+                toRelative.setVisibility(View.GONE);
             }
         }
 
         if (!studyCB.isChecked() && !gpaCB.isChecked() && !cgpaCB.isChecked()) {
             studyCB.setChecked(true);
+            toRelative.setVisibility(View.GONE);
         }
         //selectResultClicked();
     }
@@ -556,7 +570,6 @@ public class AcademicActivity extends AppCompatActivity implements AcademicContr
             });
             previousResultDialogue.setArguments(args);
             previousResultDialogue.show(getSupportFragmentManager(), "result_dialogue");
-            toRelative.setVisibility(View.VISIBLE);
         } else if (cgpaCB.isChecked()) {
             resultET.setText(String.format("%s (CGPA)", cgpaOptionsArr[0]));
             args.putString("title", "Select your CGPA");
@@ -569,10 +582,8 @@ public class AcademicActivity extends AppCompatActivity implements AcademicContr
             });
             previousResultDialogue.setArguments(args);
             previousResultDialogue.show(getSupportFragmentManager(), "result_dialogue");
-            toRelative.setVisibility(View.VISIBLE);
         } else {
             resultET.setText("Studying");
-            toRelative.setVisibility(View.GONE);
         }
     }
 

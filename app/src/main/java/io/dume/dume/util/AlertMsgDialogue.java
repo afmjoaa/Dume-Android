@@ -17,6 +17,12 @@ public class AlertMsgDialogue extends DialogFragment {
     String msg;
 
     DialogInterface.OnClickListener myListener;
+    private String positiveText = "Ok";
+
+    public void setItemChoiceListener(DialogInterface.OnClickListener myListener, String positiveText) {
+        this.myListener = myListener;
+        this.positiveText = positiveText;
+    }
 
     public void setItemChoiceListener(DialogInterface.OnClickListener myListener) {
         this.myListener = myListener;
@@ -34,7 +40,7 @@ public class AlertMsgDialogue extends DialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(getActivity()), R.style.RadioDialogTheme);
         builder.setMessage(msg)
-                .setPositiveButton("Ok", myListener)
+                .setPositiveButton(positiveText, myListener)
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {

@@ -19,8 +19,8 @@ import io.dume.dume.teacher.homepage.TeacherContract;
 
 public class GrabingLocationModel extends StuBaseModel implements GrabingLocaitonContract.Model {
 
-    public GrabingLocationModel(Activity activity, Context context) {
-        super(activity, context);
+    public GrabingLocationModel(Context context) {
+        super(context);
     }
 
     @Override

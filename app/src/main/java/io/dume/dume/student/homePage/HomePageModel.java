@@ -14,7 +14,7 @@ public class HomePageModel extends StuBaseModel implements HomePageContract.Mode
     private static final String TAG = "HomePageModel";
 
     public HomePageModel(Activity activity, Context context) {
-        super(activity, context);
+        super(context);
         this.context = context;
         this.activity = activity;
     }

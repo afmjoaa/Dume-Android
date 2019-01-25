@@ -50,34 +50,7 @@ public class HomePagePresenter implements HomePageContract.Presenter {
         mView.init();
         mView.makingCallbackInterfaces();
         mView.configHomePage();
-
-        mModel.addShapShotListener((documentSnapshot, e) -> {
-            if (documentSnapshot != null) {
-                final String avatar = documentSnapshot.getString("avatar");
-                if (avatar != null && !avatar.equals("")) {
-                    mView.setAvatar(avatar);
-                }
-                String o = documentSnapshot.getString("last_name");
-                String o1 = documentSnapshot.getString("first_name");
-                mView.setUserName(o1, o);
-                mView.setMsgName(mView.generateMsgName(o1, o));
-                mView.setRating((Map<String, Object>) documentSnapshot.get("self_rating"));
-
-                mView.setUnreadMsg(documentSnapshot.getString("unread_msg"));
-                mView.setUnreadNoti(documentSnapshot.getString("unread_noti"));
-                mView.setUnreadRecords((Map<String, Object>) documentSnapshot.get("unread_records"));
-
-                if (Objects.requireNonNull(documentSnapshot.getString("pro_com_%")).equals("100")) {
-                    mView.setProfileComPercent(documentSnapshot.getString("pro_com_%"));
-                } else {
-                    mView.setProfileComPercent(documentSnapshot.getString("pro_com_%"));
-                    mView.showSnackBar(documentSnapshot.getString("pro_com_%"));
-                }
-                mView.setDocumentSnapshot(documentSnapshot);
-            } else {
-                mView.flush("Does not found any user");
-            }
-        });
+        getDataFromDB();
     }
 
     @Override
@@ -127,42 +100,27 @@ public class HomePagePresenter implements HomePageContract.Presenter {
 
         switch (id) {
             case R.id.student:
-                //Toast.makeText(context, "texting toast", Toast.LENGTH_SHORT).show();
                 mView.gotoStudentProfile();
                 break;
             case R.id.mentor:
-                mView.flush("Please Wait...");
-                new DumeModel().switchAcount(DumeUtils.TEACHER, new TeacherContract.Model.Listener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        mView.gotoMentorProfile();
-                    }
-
-                    @Override
-                    public void onError(String msg) {
-                        mView.flush("Error : " + msg);
-                    }
-                });
-
+                mView.switchProfileDialog(DumeUtils.TEACHER);
                 break;
             case R.id.boot_camp:
-
+                //add boot camp here
+                //mView.switchProfileDialog(DumeUtils.BOOTCAMP);
+                mView.gotoTestingActivity();
                 break;
             case R.id.al_display_pic:
-                //mView.updateProfileBadge(mProfileChar);
                 mView.gotoProfilePage();
                 break;
             case R.id.al_records:
-                //mView.updateRecordsBadge(++mRecPendingCount, ++mRecAcceptedCount, ++mRecCurrentCount);
                 mView.gotoRecordsPage();
                 break;
             case R.id.al_messages:
                 mView.gotoInboxActivity();
-                //mView.updateChatBadge(++mChatCount);
                 break;
             case R.id.al_notifications:
                 mView.gotoNotificationTab();
-                //mView.updateNotificationsBadge(++mNotificationsCount);
                 break;
             case R.id.heat_map:
                 mView.gotoHeatMapActivity();
@@ -258,6 +216,40 @@ public class HomePagePresenter implements HomePageContract.Presenter {
             } else {
                 mView.flush("Does not found any user");
                 Log.w(TAG, "onAccountTypeFound: document is not null");
+            }
+        });
+    }
+
+    @Override
+    public void getDataFromDB() {
+        mModel.addShapShotListener((documentSnapshot, e) -> {
+            if (documentSnapshot != null) {
+                if (mView.checkNull()) {
+                    final String avatar = documentSnapshot.getString("avatar");
+                    if (avatar != null && !avatar.equals("")) {
+                        mView.setAvatar(avatar);
+                    }
+                    String o = documentSnapshot.getString("last_name");
+                    String o1 = documentSnapshot.getString("first_name");
+                    mView.setUserName(o1, o);
+                    mView.setMsgName(mView.generateMsgName(o1, o));
+
+                    mView.setDocumentSnapshot(documentSnapshot);
+
+                    mView.setRating((Map<String, Object>) documentSnapshot.get("self_rating"));
+                    mView.setUnreadMsg(documentSnapshot.getString("unread_msg"));
+                    mView.setUnreadNoti(documentSnapshot.getString("unread_noti"));
+                    mView.setUnreadRecords((Map<String, Object>) documentSnapshot.get("unread_records"));
+
+                    if (Objects.requireNonNull(documentSnapshot.getString("pro_com_%")).equals("100")) {
+                        mView.setProfileComPercent(documentSnapshot.getString("pro_com_%"));
+                    } else {
+                        mView.setProfileComPercent(documentSnapshot.getString("pro_com_%"));
+                        mView.showSnackBar(documentSnapshot.getString("pro_com_%"));
+                    }
+                }
+            } else {
+                mView.flush("Does not found any user");
             }
         });
     }

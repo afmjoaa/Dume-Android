@@ -335,8 +335,8 @@
     </string-array>
 
     <string-array name="GrabingPackageTabtext">
-        <item>Days/Week</item>
         <item>Preferred Days</item>
+        <item>Start Date</item>
         <item>Start Time</item>
     </string-array>
 
@@ -667,5 +667,10 @@ provided.Tap salary for details.  </string>
         <item>Select which category suite you best and build your profile.You can switch profile anytime as you wish.</item>
         <item>In simple and short Dume Gang is couching center whereas Regular Dume is monthly tuition and Instant Dume is weekly.</item>
     </string-array>
+    <string name="title_activity_boot_camp_add">Start Boot Camp</string>
+    <string name="title_activity_student_addvertise">Enhance your skill</string>
+    <string name="gang_salary_detail">Dume Gang final salary will be the price presented based on your given salary range &amp; it will be shown to you before your confirmation. Tap help for details.</string>
+    <string name="regular_salary_detail">Regular Dume final salary will be the price presented based on your given salary range &amp; it will be shown to you before your confirmation. Tap help for details.</string>
+    <string name="instant_salary_detail">Instant Dume final salary will be the price presented based on your given salary range &amp; it will be shown to you before your confirmation. Tap help for details.</string>
 
 </resources>

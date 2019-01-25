@@ -78,16 +78,16 @@
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 
-    <io.dume.dume.customView.HorizontalLoadView
-        android:id="@+id/loadView"
+    <io.dume.dume.customView.HorizontalLoadViewTwo
+        android:id="@+id/loadViewTwo"
         android:layout_width="20dp"
         android:layout_height="3dp"
-        android:background="@drawable/bg_black_bottom_less_round"
-        android:elevation="8dp"
-        android:translationY="2dp"
+        android:background="@drawable/bg_black_top_less_round"
+        android:elevation="2dp"
+        android:translationY="-2dp"
         android:visibility="gone"
-        app:layout_anchor="@id/secondary_Appbar"
-        app:layout_anchorGravity="bottom"
+        app:layout_anchor="@id/homeBottomSheet"
+        app:layout_anchorGravity="top"
         app:rect_color="@color/transparent" />
 
     <include
@@ -108,11 +108,13 @@
         app:layout_behavior="@string/bottom_sheet_behavior">
         <!--75dp-->
         <android.support.v4.widget.NestedScrollView
+            android:id="@+id/bottom_sheet_scroll_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <carbon.widget.LinearLayout
+                android:descendantFocusability="blocksDescendants"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">

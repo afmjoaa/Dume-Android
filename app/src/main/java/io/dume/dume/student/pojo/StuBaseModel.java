@@ -29,9 +29,9 @@ public class StuBaseModel {
     protected final DocumentReference mini_users;
     protected final DocumentReference userStudentProInfo;
 
-    public StuBaseModel(Activity activity, Context context) {
+    public StuBaseModel(Context context) {
         this.context = context;
-        this.activity = activity;
+        this.activity = (Activity) context;
         mAuth = FirebaseAuth.getInstance();
         firestore = FirebaseFirestore.getInstance();
         FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()

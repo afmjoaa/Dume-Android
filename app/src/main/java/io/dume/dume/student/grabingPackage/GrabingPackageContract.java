@@ -16,6 +16,8 @@ public interface GrabingPackageContract {
         void regularDumeSelected();
 
         void dumeGangSelected();
+
+        void flush(String msg);
     }
 
     interface Presenter {

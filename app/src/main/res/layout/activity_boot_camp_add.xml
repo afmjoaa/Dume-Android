@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:id="@+id/parent_coor_layout"
+    tools:context=".teacher.boot_camp_addvertise.BootCampAdd">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/appbarLayoutHeightLow"
+        android:background="@color/colorBlack"
+        android:theme="@style/Base.ThemeOverlay.AppCompat.Dark">
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/accountCollapsing"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorBlack"
+            app:collapsedTitleGravity="start"
+            app:collapsedTitleTextAppearance="@style/MyTextApprncCol.darkBg"
+            app:contentScrim="?attr/colorPrimary"
+            app:expandedTitleGravity="start"
+            app:expandedTitleMarginBottom="@dimen/expTittleMarginBottom"
+            app:expandedTitleMarginStart="@dimen/expTittleMarginStart"
+            app:expandedTitleMarginTop="@dimen/expTittleMarginTop"
+            app:expandedTitleTextAppearance="@style/MyTextApprncExp.darkBg"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:scrimVisibleHeightTrigger="@dimen/scrimVisibleHeightTrigger"
+            app:title="Start mentoring"
+            app:titleEnabled="true"
+            app:toolbarId="@+id/accountToolbar">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/accountToolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:theme="@style/AccountToolbarStyle"
+                app:buttonGravity="bottom"
+                app:layout_collapseMode="pin"
+                app:navigationIcon="@drawable/ic_arrow_back_white_24dp"
+                app:popupTheme="@style/Base.ThemeOverlay.AppCompat.Dark"
+                app:theme="@style/ThemeToolbar.default"
+                app:titleMarginBottom="@dimen/titleMarginBottom"
+                app:titleMarginStart="@dimen/titleMarginStart"
+                app:titleMarginTop="@dimen/titleMarginTop" />
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+    </android.support.design.widget.AppBarLayout>
+
+    <io.dume.dume.customView.HorizontalLoadView
+        android:id="@+id/loadView"
+        android:layout_width="20dp"
+        android:layout_height="3dp"
+        android:background="@drawable/bg_black_bottom_less_round"
+        android:elevation="8dp"
+        android:translationY="2dp"
+        android:visibility="gone"
+        app:layout_anchor="@id/app_bar"
+        app:layout_anchorGravity="bottom"
+        app:rect_color="@color/transparent" />
+
+    <include layout="@layout/content_boot_camp_add" />
+
+</android.support.design.widget.CoordinatorLayout>

@@ -43,6 +43,7 @@
                 android:layout_height="120dp"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
                 android:contentDescription="@string/refer_mentor"
                 android:onClick="onMentorAdvertiseViewClicked"
                 app:srcCompat="@drawable/bs_start_mentoring_image" />

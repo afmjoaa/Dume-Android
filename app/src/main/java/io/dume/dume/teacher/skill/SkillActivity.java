@@ -50,6 +50,7 @@ public class SkillActivity extends AppCompatActivity implements SkillContract.Vi
     private FrameLayout viewMusk;
     private NestedScrollView nestedScrollView;
     private com.getbase.floatingactionbutton.FloatingActionButton fabInstant;
+    private SkillAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +78,9 @@ public class SkillActivity extends AppCompatActivity implements SkillContract.Vi
         fabRegular.setVisibility(View.GONE);
         fabGang.setVisibility(View.GONE);
         fabInstant.setVisibility(View.GONE);
-
+        adapter = new SkillAdapter(SkillAdapter.ACTIVITY);
+        skillRV.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        skillRV.setAdapter(adapter);
         TransitionSet set1 = new TransitionSet()
                 .addTransition(new Fade())
                 .setInterpolator(new LinearOutSlowInInterpolator());
@@ -143,8 +146,7 @@ public class SkillActivity extends AppCompatActivity implements SkillContract.Vi
 
     @Override
     public void loadSkillRV(ArrayList<Skill> list) {
-        skillRV.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        skillRV.setAdapter(new SkillAdapter(SkillAdapter.ACTIVITY, list));
+        adapter.update(list);
         if (list.size() == 0) {
             noDataBlock.setVisibility(View.VISIBLE);
         } else {

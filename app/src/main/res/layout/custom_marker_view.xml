@@ -10,6 +10,7 @@
         android:id="@+id/profile_image"
         android:layout_width="28dp"
         android:layout_height="28dp"
+        android:scaleType="centerCrop"
         android:layout_gravity="center_horizontal"
         android:contentDescription="@null"
         app:carbon_cornerRadius="14dp" />

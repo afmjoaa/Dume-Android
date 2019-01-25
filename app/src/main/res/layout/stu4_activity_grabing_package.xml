@@ -25,13 +25,13 @@
 
     </io.dume.dume.customView.WindowInsetsFrameLayout>
 
-    <io.dume.dume.customView.HorizontalLoadView
-        android:id="@+id/loadView"
+    <io.dume.dume.customView.HorizontalLoadViewTwo
+        android:id="@+id/loadViewTwo"
         android:layout_width="20dp"
         android:layout_height="3dp"
-        android:background="@drawable/bg_black_bottom_less_round"
-        android:elevation="8dp"
-        android:translationY="-2dp"
+        android:background="@drawable/bg_black_top_less_round"
+        android:elevation="3dp"
+        android:translationY="3dp"
         android:visibility="gone"
         app:layout_anchor="@id/packageBottomSheet"
         app:layout_anchorGravity="top"
@@ -68,7 +68,6 @@
                 android:textSize="14sp"
                 android:visibility="gone"
                 app:fontFamily="@font/cairo_regular" />
-
 
             <TextView
                 android:id="@+id/specific_promo_text"
@@ -198,7 +197,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/regular_dume_text"
                         android:layout_centerHorizontal="true"
-                        android:text="BDT 3k-10k"
+                        android:text="BDT 3k-12k"
                         android:textAlignment="center"
                         android:textColor="@color/textColorSecondary"
                         android:textSize="12sp"
@@ -254,12 +253,11 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/instant_dume_text"
                         android:layout_centerHorizontal="true"
-                        android:text="BDT 3k-6k"
+                        android:text="BDT 5k-10k"
                         android:textAlignment="center"
                         android:textColor="@color/textColorSecondary"
                         android:textSize="12sp"
                         app:fontFamily="@font/cairo_regular" />
-
 
                 </RelativeLayout>
 
@@ -327,9 +325,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/salary_text_value"
-                    android:layout_centerHorizontal="true"
                     android:layout_marginTop="8dp"
                     android:gravity="start"
+                    android:textAlignment="viewStart"
                     android:text="@string/salary_details_text"
                     android:textColor="@color/textColorSecondary"
                     android:textSize="12sp"
@@ -354,21 +352,21 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:icon="@drawable/ic_seven_days"
-                    android:text="Days/Week" />
+                    android:text="Preferred Days" />
 
                 <android.support.design.widget.TabItem
                     android:id="@+id/tabItem2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:icon="@drawable/ic_preffered_day"
-                    android:text="Preferred Days" />
+                    android:text="Start Date" />
 
                 <android.support.design.widget.TabItem
                     android:id="@+id/tabItem3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:icon="@drawable/ic_time"
-                    android:text="Time" />
+                    android:text="Start Time" />
 
             </android.support.design.widget.TabLayout>
 
@@ -387,7 +385,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="Ex.3 days"
+                    android:text="Mo, We, Fr"
                     android:textSize="12sp"
                     android:textStyle="normal" />
 
@@ -397,7 +395,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="Ex.Sun, Mon, Tue"
+                    android:text="Ex.Apr 13, 2019"
                     android:textSize="12sp"
                     android:textStyle="normal" />
 
@@ -407,7 +405,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="Ex.Apr 13, 5:00 PM"
+                    android:text="Ex.5:00 PM"
                     android:textSize="12sp"
                     android:textStyle="normal" />
 

@@ -71,13 +71,12 @@ public class AuthActivity extends CustomStuAppCompatActivity implements AuthCont
     private String fromIntentAction;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_authentication);
         setActivityContext(this, fromFlag);
-        presenter = new AuthPresenter(this, new AuthModel(this, this));
+        presenter = new AuthPresenter(this, this, new AuthModel(this, this));
         presenter.enqueue();
         socialConnect.setOnClickListener(view -> startActivity(new Intent(AuthActivity.this, SocialInitActivity.class)));
         presenter.setBundle();
@@ -88,7 +87,7 @@ public class AuthActivity extends CustomStuAppCompatActivity implements AuthCont
                 ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
             if (tMgr != null) {
                 String mPhoneNumber = tMgr.getLine1Number();
-                if(mPhoneNumber!= null || !mPhoneNumber.equals("")){
+                if (mPhoneNumber != null || !mPhoneNumber.equals("")) {
                     phoneEditText.setText(mPhoneNumber);
                 }
             }
@@ -96,7 +95,7 @@ public class AuthActivity extends CustomStuAppCompatActivity implements AuthCont
         fromIntent = getIntent();
         fromIntentAction = fromIntent.getAction();
         String phone_number = fromIntent.getStringExtra("phone_number");
-        if(phone_number!= null){
+        if (phone_number != null) {
             phoneEditText.setText(phone_number);
         }
     }
@@ -248,7 +247,7 @@ public class AuthActivity extends CustomStuAppCompatActivity implements AuthCont
         Intent intent = new Intent(this, AuthRegisterActivity.class);
         //J
         String accountMajor = null;
-        switch (bottomNavigationView.getSelectedItemId()){
+        switch (bottomNavigationView.getSelectedItemId()) {
             case R.id.student_nav:
                 accountMajor = DumeUtils.STUDENT;
                 break;

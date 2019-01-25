@@ -43,7 +43,7 @@ public class PayAdapter extends RecyclerView.Adapter<PayAdapter.PayVH> {
         }else {
             viewHolder.title.setText(payArrayList.get(i).getBuckTitle());
             viewHolder.afterDis.setText("$"+payArrayList.get(i).getBucks());
-        }
+       }
 
 
     }

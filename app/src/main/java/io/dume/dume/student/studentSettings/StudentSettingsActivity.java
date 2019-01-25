@@ -102,7 +102,7 @@ public class StudentSettingsActivity extends CustomStuAppCompatActivity
         setContentView(R.layout.stunav_activity4_settings);
         setActivityContext(this, fromFlag);
         findLoadView();
-        mModel = new StudentSettingsModel(this, this);
+        mModel = new StudentSettingsModel(this);
         mPresenter = new StudentSettingsPresenter(this, mModel);
         mPresenter.studentSettingsEnqueue();
         configureAppbar(this, "Settings");
@@ -294,6 +294,12 @@ public class StudentSettingsActivity extends CustomStuAppCompatActivity
             if (!addressName.equals("")) {
                 nameTextView.setText(addressName);
                 nameTextView.setFocusable(false);
+                nameTextView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        flush("Sorry !! This field can't be edited");
+                    }
+                });
             }
         }
 

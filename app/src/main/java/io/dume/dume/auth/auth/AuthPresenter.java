@@ -1,5 +1,7 @@
 package io.dume.dume.auth.auth;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -13,15 +15,21 @@ import io.dume.dume.auth.AuthGlobalContract;
 import io.dume.dume.auth.DataStore;
 import io.dume.dume.util.DumeUtils;
 
+import static io.dume.dume.util.DumeUtils.hideKeyboard;
+
 public class AuthPresenter implements AuthContract.Presenter {
 
+    private Activity activity;
+    private Context context;
     AuthContract.View view;
     AuthContract.Model model;
     private Bundle mBundle;
     private final DataStore dataStore;
     private static final String TAG = "AuthPresenter";
 
-    public AuthPresenter(AuthContract.View view, @Nullable AuthContract.Model model) {
+    public AuthPresenter(Context context, AuthContract.View view, @Nullable AuthContract.Model model) {
+        this.context = context;
+        this.activity = (Activity) context;
         this.view = view;
         this.model = model;
         mBundle = new Bundle();
@@ -65,7 +73,7 @@ public class AuthPresenter implements AuthContract.Presenter {
 
     @Override
     public void onPhoneValidation(String phoneNumber) {
-
+        view.showProgress();
         if (phoneNumber.isEmpty()) {
             view.onValidationFailed("Should not be empty");
             return;
@@ -87,7 +95,7 @@ public class AuthPresenter implements AuthContract.Presenter {
             @Override
             public void onUserFound() {
                 Log.w(TAG, "onUserFound: hiding dialog");
-                view.hideProgress();
+                //view.hideProgress();
                 model.sendMessage("+88" + phoneNumber, new AuthContract.Model.Callback() {
                     @Override
                     public void onStart() {
@@ -107,6 +115,7 @@ public class AuthPresenter implements AuthContract.Presenter {
                     @Override
                     public void onSuccess(String s, PhoneAuthProvider.ForceResendingToken forceResendingToken) {
                         Log.w(TAG, "onSuccess: hiding dialog");
+                        hideKeyboard(activity);
                         view.hideProgress();
                         dataStore.setVerificationId(s);
                         DataStore.resendingToken = forceResendingToken;
@@ -117,7 +126,8 @@ public class AuthPresenter implements AuthContract.Presenter {
                     @Override
                     public void onAutoSuccess(AuthResult authResult) {
                         Log.w(TAG, "onAutoSuccess: hiding dialog");
-                        view.hideProgress();
+                        hideKeyboard(activity);
+                        //view.hideProgress();
                         model.onAccountTypeFound(authResult.getUser(), new AuthGlobalContract.AccountTypeFoundListener() {
                             @Override
                             public void onStart() {
@@ -167,12 +177,11 @@ public class AuthPresenter implements AuthContract.Presenter {
 
             @Override
             public void onNewUserFound() {
-                Log.w(TAG, "onNewUserFound: hiding dialog");
+                hideKeyboard(activity);
                 view.hideProgress();
                 Log.w(TAG, "onNewUserFound: ");
                 dataStore.setPhoneNumber(phoneNumber);
                 view.goToRegesterActivity(dataStore);
-
             }
 
             @Override

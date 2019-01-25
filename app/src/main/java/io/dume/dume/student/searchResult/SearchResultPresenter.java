@@ -25,6 +25,7 @@ public class SearchResultPresenter implements SearchResultContract.Presenter {
         mView.findView();
         mView.initSearchResult();
         mView.configSearchResult();
+
     }
 
     @Override

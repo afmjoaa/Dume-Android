@@ -25,6 +25,7 @@ public class SearchLoadingPresenter implements SearchLoadingContract.Presenter {
         mView.findView();
         mView.initSearchLoading();
         mView.configSearchLoading();
+        mView.saveToDB();
     }
 
     @Override

@@ -125,6 +125,7 @@ public class AcademicPresenter implements AcademicContract.Presenter, AcademicCo
             view.disableLoad();
             view.snak("Education Edited Successfully");
         }
+        view.clearAllField();
     }
 
     @Override

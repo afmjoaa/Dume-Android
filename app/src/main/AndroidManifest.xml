@@ -259,6 +259,14 @@
         <activity
             android:name=".obligation.foreignObli.PayActivity"
             android:theme="@style/AppTheme.NoActionBar.transparent.black" />
+        <activity
+            android:name=".teacher.boot_camp_addvertise.BootCampAdd"
+            android:label="@string/title_activity_boot_camp_add"
+            android:theme="@style/AppTheme.NoActionBar.transparent.black" />
+        <activity
+            android:name=".bootCamp.student_addvertise.StudentAddvertise"
+            android:label="@string/title_activity_student_addvertise"
+            android:theme="@style/AppTheme.NoActionBar.transparent.black" />
     </application>
 
 </manifest>

@@ -34,7 +34,7 @@ public interface TeacherContract {
 
         void testingCustomDialogue();
 
-         void showSnackBar(String messages, String actionName) ;
+        void showSnackBar(String messages, String actionName);
 
         void setDocumentSnapshot(DocumentSnapshot documentSnapshot);
 
@@ -85,6 +85,12 @@ public interface TeacherContract {
         void setAvatarForMenu(String avatar);
 
         void showPercentSnackBar(String string);
+
+        void gotoBootCampAddvertise();
+
+        void gotoStudentHomePage();
+
+        void gotoBootCamPHomePage();
     }
 
 

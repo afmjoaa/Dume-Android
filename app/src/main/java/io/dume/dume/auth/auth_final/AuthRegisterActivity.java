@@ -46,6 +46,7 @@ import io.dume.dume.teacher.homepage.TeacherActivtiy;
 import io.dume.dume.util.DumeUtils;
 
 import static io.dume.dume.util.DumeUtils.configureAppbar;
+import static io.dume.dume.util.DumeUtils.hideKeyboard;
 
 public class AuthRegisterActivity extends AppCompatActivity {
     EditText firstname, lastName, phoneNumber;
@@ -173,6 +174,7 @@ public class AuthRegisterActivity extends AppCompatActivity {
 
                                             @Override
                                             public void onTeacherFound() {
+                                                hideKeyboard(AuthRegisterActivity.this);
                                                 hideDialog();
                                                 startActivity(new Intent(AuthRegisterActivity.this, TeacherActivtiy.class));
                                                 finish();
@@ -180,6 +182,7 @@ public class AuthRegisterActivity extends AppCompatActivity {
 
                                             @Override
                                             public void onStudentFound() {
+                                                hideKeyboard(AuthRegisterActivity.this);
                                                 hideDialog();
                                                 startActivity(new Intent(AuthRegisterActivity.this, StudentActivity.class));
                                                 finish();
@@ -187,6 +190,7 @@ public class AuthRegisterActivity extends AppCompatActivity {
 
                                             @Override
                                             public void onBootcamp() {
+                                                hideKeyboard(AuthRegisterActivity.this);
                                                 hideDialog();
                                                 startActivity(new Intent(AuthRegisterActivity.this, TeacherActivtiy.class));
                                                 finish();
@@ -194,6 +198,7 @@ public class AuthRegisterActivity extends AppCompatActivity {
 
                                             @Override
                                             public void onForeignObligation() {
+                                                hideKeyboard(AuthRegisterActivity.this);
                                                 hideDialog();
                                                 startActivity(new Intent(AuthRegisterActivity.this, PayActivity.class));
                                                 finish();
@@ -223,6 +228,7 @@ public class AuthRegisterActivity extends AppCompatActivity {
                             @Override
                             public void onCodeSent(String verificationId, PhoneAuthProvider.ForceResendingToken forceResendingToken) {
                                 super.onCodeSent(verificationId, forceResendingToken);
+                                hideKeyboard(AuthRegisterActivity.this);
                                 hideDialog();
                                 Intent intent = new Intent(getApplicationContext(), PhoneVerificationActivity.class);
                                 datastore.setFirstName(firstname.getText().toString());
@@ -234,7 +240,6 @@ public class AuthRegisterActivity extends AppCompatActivity {
                                 intent.putExtra("datastore", datastore);
                                 startActivity(intent);
                                 finish();
-
                             }
                         });
 
@@ -243,7 +248,7 @@ public class AuthRegisterActivity extends AppCompatActivity {
 
                     @Override
                     public void onNewUserFound() {
-                        Log.w(TAG, "onNewUserFound: " );
+                        Log.w(TAG, "onNewUserFound: ");
                         showDialog();
                         PhoneAuthProvider.getInstance().verifyPhoneNumber("+88" + phoneStr, 60, TimeUnit.SECONDS, activity, new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
                             @Override
@@ -279,11 +284,12 @@ public class AuthRegisterActivity extends AppCompatActivity {
                                                 new AuthModel(AuthRegisterActivity.this, getApplicationContext()).onAccountTypeFound(authResultTask.getResult().getUser(), new AuthGlobalContract.AccountTypeFoundListener() {
                                                     @Override
                                                     public void onStart() {
-
+                                                        showDialog();
                                                     }
 
                                                     @Override
                                                     public void onTeacherFound() {
+                                                        hideKeyboard(AuthRegisterActivity.this);
                                                         hideDialog();
                                                         startActivity(new Intent(AuthRegisterActivity.this, TeacherActivtiy.class));
                                                         finish();
@@ -291,6 +297,7 @@ public class AuthRegisterActivity extends AppCompatActivity {
 
                                                     @Override
                                                     public void onStudentFound() {
+                                                        hideKeyboard(AuthRegisterActivity.this);
                                                         hideDialog();
                                                         startActivity(new Intent(AuthRegisterActivity.this, StudentActivity.class));
                                                         finish();
@@ -298,6 +305,7 @@ public class AuthRegisterActivity extends AppCompatActivity {
 
                                                     @Override
                                                     public void onBootcamp() {
+                                                        hideKeyboard(AuthRegisterActivity.this);
                                                         hideDialog();
                                                         startActivity(new Intent(AuthRegisterActivity.this, TeacherActivtiy.class));
                                                         finish();
@@ -305,6 +313,7 @@ public class AuthRegisterActivity extends AppCompatActivity {
 
                                                     @Override
                                                     public void onForeignObligation() {
+                                                        hideKeyboard(AuthRegisterActivity.this);
                                                         hideDialog();
                                                         startActivity(new Intent(AuthRegisterActivity.this, PayActivity.class));
                                                         finish();
@@ -341,6 +350,7 @@ public class AuthRegisterActivity extends AppCompatActivity {
                             @Override
                             public void onCodeSent(String verificationId, PhoneAuthProvider.ForceResendingToken forceResendingToken) {
                                 super.onCodeSent(verificationId, forceResendingToken);
+                                hideKeyboard(AuthRegisterActivity.this);
                                 hideDialog();
                                 Intent intent = new Intent(getApplicationContext(), PhoneVerificationActivity.class);
                                 datastore.setFirstName(firstname.getText().toString());

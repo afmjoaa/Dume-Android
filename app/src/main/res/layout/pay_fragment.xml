@@ -8,6 +8,7 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/payRV"
+        android:layout_margin="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
@@ -29,7 +30,7 @@
                 android:layout_height="wrap_content"
                 android:padding="10dp"
                 android:src="@android:color/transparent"
-                app:fabCustomSize="80dp"
+                app:fabCustomSize="60dp"
                 app:fabSize="normal" />
 
             <carbon.widget.LinearLayout
@@ -41,12 +42,13 @@
 
 
                 <carbon.widget.ImageView
-                    android:layout_width="30dp"
+                    android:layout_width="match_parent"
                     android:layout_height="30dp"
                     android:layout_gravity="center"
                     android:tint="@color/white"
                     app:carbon_elevation="1dp"
-                    app:srcCompat="@drawable/pay" />
+                    app:srcCompat="@drawable/pay"
+                    android:translationY="5dp"/>
 
                 <carbon.widget.TextView
                     android:layout_width="wrap_content"
@@ -54,7 +56,7 @@
                     android:layout_gravity="center"
                     android:gravity="center"
                     android:text="Pay"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
+
                     android:textColor="@android:color/white"
                     android:textStyle="bold"
 
@@ -69,7 +71,7 @@
             android:layout_margin="10dp"
             android:text="Supported Payment System"
             android:textSize="16sp"
-            android:textStyle="bold" />
+        />
 
         <carbon.widget.LinearLayout
             android:layout_width="match_parent"
@@ -84,7 +86,7 @@
                 android:layout_gravity="center"
                 android:layout_margin="5dp"
                 android:background="@color/white"
-                app:carbon_cornerRadius="20dp"
+                app:carbon_cornerRadius="6dp"
                 app:srcCompat="@drawable/ic_cash_pay_icon" />
 
             <carbon.widget.ImageView
@@ -93,7 +95,7 @@
                 android:layout_gravity="center"
                 android:layout_margin="5dp"
                 android:background="@color/white"
-                app:carbon_cornerRadius="20dp"
+                app:carbon_cornerRadius="6dp"
                 app:srcCompat="@drawable/ic_bkash_icon" />
 
             <carbon.widget.ImageView
@@ -102,7 +104,7 @@
                 android:layout_gravity="center"
                 android:layout_margin="5dp"
                 android:background="@color/white"
-                app:carbon_cornerRadius="20dp"
+                app:carbon_cornerRadius="6dp"
                 app:srcCompat="@drawable/ic_due_amount" />
         </carbon.widget.LinearLayout>
     </LinearLayout>

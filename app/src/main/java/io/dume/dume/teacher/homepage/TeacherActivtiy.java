@@ -32,6 +32,7 @@ import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.animation.FastOutLinearInInterpolator;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -82,9 +83,11 @@ import butterknife.ButterKnife;
 import fr.castorflex.android.verticalviewpager.VerticalViewPager;
 import info.hoang8f.android.segmented.SegmentedGroup;
 import io.dume.dume.R;
+import io.dume.dume.bootCamp.bootCampHomePage.BootCampHomePageActivity;
 import io.dume.dume.common.aboutUs.AboutUsActivity;
 import io.dume.dume.common.inboxActivity.InboxActivity;
 import io.dume.dume.common.privacyPolicy.PrivacyPolicyActivity;
+import io.dume.dume.customView.HorizontalLoadViewTwo;
 import io.dume.dume.inter_face.UserQueryListener;
 import io.dume.dume.model.DumeModel;
 import io.dume.dume.student.freeCashBack.FreeCashBackActivity;
@@ -94,11 +97,13 @@ import io.dume.dume.student.homePage.adapter.HomePageRatingAdapter;
 import io.dume.dume.student.homePage.adapter.HomePageRatingData;
 import io.dume.dume.student.homePage.adapter.HomePageRecyclerAdapter;
 import io.dume.dume.student.homePage.adapter.HomePageRecyclerData;
+import io.dume.dume.student.mentorAddvertise.MentorAddvertiseActivity;
 import io.dume.dume.student.pojo.CusStuAppComMapActivity;
 import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
 import io.dume.dume.student.recordsPage.RecordsPageActivity;
 import io.dume.dume.student.studentHelp.StudentHelpActivity;
 import io.dume.dume.student.studentPayment.StudentPaymentActivity;
+import io.dume.dume.teacher.boot_camp_addvertise.BootCampAdd;
 import io.dume.dume.teacher.homepage.fragments.AcademicFragment;
 import io.dume.dume.teacher.homepage.fragments.InboxFragment;
 import io.dume.dume.teacher.homepage.fragments.PayFragment;
@@ -106,7 +111,6 @@ import io.dume.dume.teacher.homepage.fragments.PerformanceFragment;
 import io.dume.dume.teacher.homepage.fragments.SkillFragment;
 import io.dume.dume.teacher.homepage.fragments.StatisticsFragment;
 import io.dume.dume.teacher.mentor_settings.AccountSettings;
-import io.dume.dume.teacher.mentor_settings.AccountSettingsModel;
 import io.dume.dume.teacher.mentor_settings.basicinfo.EditAccount;
 import io.dume.dume.teacher.pojo.TabModel;
 import io.dume.dume.teacher.skill.SkillActivity;
@@ -126,7 +130,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback, MyGpsLocationChangeListener,
         RadioGroup.OnCheckedChangeListener {
     public TeacherContract.Presenter presenter;
-    public TeacherDataStore teacherDataStore=null;
+    public TeacherDataStore teacherDataStore = null;
     private TextView textView;
     private Toolbar toolbar;
     private ActionBar actionBar;
@@ -195,6 +199,8 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
     private MenuItem alProfile;
     private LayerDrawable alProfileIcon;
     private Snackbar enamSnackbar;
+    private HorizontalLoadViewTwo loadView;
+    private NestedScrollView bottomSheetNSV;
 
 
     @Override
@@ -203,7 +209,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         setActivityContextMap(this, 1604);
-        teacherDataStore=TeacherDataStore.getInstance();
+        teacherDataStore = TeacherDataStore.getInstance();
         presenter = new TeacherPresenter(this, new TeacherModel());
         presenter.init();
         settingStatusBarTransparent();
@@ -246,8 +252,9 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         bootCampProfile = menu.findItem(R.id.boot_camp);
         less = this.getResources().getDrawable(R.drawable.less_icon);
         more = this.getResources().getDrawable(R.drawable.more_icon);
+        leftDrawable = this.getResources().getDrawable(R.drawable.mentor_account_icon);
         switchAcountBtn = findViewById(R.id.switch_account_btn);
-        leftDrawable = switchAcountBtn.getCompoundDrawables()[0];
+        switchAcountBtn.setCompoundDrawablesWithIntrinsicBounds(leftDrawable, null, more, null);
         bottomSheet = findViewById(R.id.amBottomSheet);
         coordinatorLayout = findViewById(R.id.parent_coor_layout);
         listView = findViewById(R.id.messagesRV);
@@ -273,11 +280,14 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         userDP = findViewById(R.id.user_dp);
         doMoreTextView = findViewById(R.id.do_more);
         doMoreDetailTextView = findViewById(R.id.make_money_mentoring);
+        loadView = findViewById(R.id.loadViewTwo);
+        bottomSheetNSV = findViewById(R.id.bottom_sheet_scroll_view);
 
     }
 
     @Override
     public void configView() {
+        mentorProfile.setVisible(false);
         fab.setAlpha(0.90f);
         enamSnackbar = Snackbar.make(coordinatorLayout, "Replace with your own action", Snackbar.LENGTH_LONG);
         // Toolbar :: Transparent
@@ -314,6 +324,8 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         HomePageRecyclerAdapter hPageBSRcyclerAdapter = new HomePageRecyclerAdapter(this, promoData);
         hPageBSRecycler.setAdapter(hPageBSRcyclerAdapter);
         hPageBSRecycler.setLayoutManager(new LinearLayoutManager(this));
+        //setting do more
+        doMoreDetailTextView.setText("Start a couching center");
     }
 
     @Override
@@ -399,6 +411,20 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
                         optionMenu = R.menu.stu_homepage;
                         invalidateOptionsMenu();
                     }
+                    bottomSheetNSV.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            bottomSheetNSV.fling(0);
+                            bottomSheetNSV.smoothScrollTo(0, 0);
+                        }
+                    });
+                    bottomSheetNSV.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            bottomSheetNSV.fling(0);
+                            bottomSheetNSV.scrollTo(0, 0);
+                        }
+                    },200L);
                 } else if (BottomSheetBehavior.STATE_EXPANDED == newState) {
                     setLightStatusBarIcon();
                     viewMusk.setVisibility(View.VISIBLE);
@@ -585,9 +611,48 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
 
             MenuItem alRecords = menu.findItem(R.id.al_records);
             LayerDrawable alRecordsIcon = (LayerDrawable) alRecords.getIcon();
-            DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badgeTwo, 0xfff56161, Color.BLACK, mRecCurrentCount, 3.0f, 3.0f);
-            DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badgeOne, 0xfff4f094, Color.BLACK, mRecAcceptedCount, 8.0f, -3.4f);
-            DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badge, 0xfface0ac, Color.BLACK, mRecPendingCount, 12.0f, 3.0f);
+            if (mRecPendingCount != 0 && mRecAcceptedCount == 0 && mRecCurrentCount == 0) {
+                DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badgeTwo, 0xfff56161, Color.BLACK, mRecPendingCount, 3.0f, 3.0f);
+                DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badgeOne, 0xfff4f094, Color.BLACK, mRecAcceptedCount, 8.0f, -3.4f);
+                DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badge, 0xfface0ac, Color.BLACK, mRecCurrentCount, 12.0f, 3.0f);
+            } else if (mRecPendingCount == 0 && mRecAcceptedCount != 0 && mRecCurrentCount == 0) {
+                DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badgeTwo, 0xfff56161, Color.BLACK, mRecPendingCount, 8.0f, -3.4f);
+                DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badgeOne, 0xfff4f094, Color.BLACK, mRecAcceptedCount, 3.0f, 3.0f);
+                DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badge, 0xfface0ac, Color.BLACK, mRecCurrentCount, 12.0f, 3.0f);
+            } else if (mRecPendingCount == 0 && mRecAcceptedCount == 0 && mRecCurrentCount != 0) {
+                DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badgeTwo, 0xfff56161, Color.BLACK, mRecPendingCount, 12.0f, 3.0f);
+                DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badgeOne, 0xfff4f094, Color.BLACK, mRecAcceptedCount, 8.0f, -3.4f);
+                DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badge, 0xfface0ac, Color.BLACK, mRecCurrentCount, 3.0f, 3.0f);
+            } else if (mRecPendingCount != 0 && mRecAcceptedCount != 0 && mRecCurrentCount == 0) {
+                DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badgeTwo, 0xfff56161, Color.BLACK, mRecPendingCount, 3.0f, 3.0f);
+                DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badgeOne, 0xfff4f094, Color.BLACK, mRecAcceptedCount, 8.0f, -3.4f);
+                DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badge, 0xfface0ac, Color.BLACK, mRecCurrentCount, 12.0f, 3.0f);
+            } else if (mRecPendingCount != 0 && mRecAcceptedCount == 0 && mRecCurrentCount != 0) {
+                DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badgeTwo, 0xfff56161, Color.BLACK, mRecPendingCount, 3.0f, 3.0f);
+                DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badgeOne, 0xfff4f094, Color.BLACK, mRecAcceptedCount, 12.0f, 3.0f);
+                DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badge, 0xfface0ac, Color.BLACK, mRecCurrentCount, 8.0f, -3.4f);
+            } else if (mRecPendingCount == 0 && mRecAcceptedCount != 0 && mRecCurrentCount != 0) {
+                DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badgeTwo, 0xfff56161, Color.BLACK, mRecPendingCount, 12.0f, 3.0f);
+                DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badgeOne, 0xfff4f094, Color.BLACK, mRecAcceptedCount, 3.0f, 3.0f);
+                DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badge, 0xfface0ac, Color.BLACK, mRecCurrentCount, 8.0f, -3.4f);
+            } else {
+                DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badgeTwo, 0xfff56161, Color.BLACK, mRecPendingCount, 3.0f, 3.0f);
+                DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badgeOne, 0xfff4f094, Color.BLACK, mRecAcceptedCount, 8.0f, -3.4f);
+                DumeUtils.setBadgeCount(this, alRecordsIcon, R.id.ic_badge, 0xfface0ac, Color.BLACK, mRecCurrentCount, 12.0f, 3.0f);
+            }
+
+            if (teacherDataStore.gettAvatarString() != null) {
+                setAvatarForMenu(teacherDataStore.gettAvatarString());
+            } else {
+                viewMusk.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (teacherDataStore.gettAvatarString() != null) {
+                            setAvatarForMenu(teacherDataStore.gettAvatarString());
+                        }
+                    }
+                }, 1000L);
+            }
         } else if (optionMenu == R.menu.menu_only_help) {
 
         }
@@ -598,36 +663,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.al_display_pic:
-
-                new AccountSettingsModel().queryUserData(new UserQueryListener() {
-                    @Override
-                    public void onSuccess(Map<String, Object> data) {
-
-                        Bundle bundle = new Bundle();
-                        bundle.putString("avatar", data.get("avatar") == null ? "" : data.get("avatar").toString());
-                        bundle.putString("religion", data.get("religion").toString());
-                        bundle.putString("first_name", data.get("first_name").toString());
-                        bundle.putString("last_name", data.get("last_name").toString());
-                        bundle.putString("marital", data.get("marital").toString());
-                        bundle.putString("gender", data.get("gender").toString());
-                        bundle.putString("phone_number", data.get("phone_number").toString());
-                        bundle.putString("email", data.get("email").toString());
-                        bundle.putString("birth_date", data.get("birth_date").toString());
-                        startActivity(new Intent(getApplicationContext(), EditAccount.class).putExtra("user_data", bundle));
-                    }
-
-                    @Override
-                    public void onFailure(String error) {
-                        flush(error);
-                    }
-
-                    @Override
-                    public void onStart() {
-                        flush("Please Wait.....");
-                    }
-                });
-
-
+                startActivity(new Intent(getApplicationContext(), EditAccount.class));
                 break;
             case R.id.al_records:
                 updateRecordsBadge(++mRecPendingCount, ++mRecAcceptedCount, ++mRecCurrentCount);
@@ -703,22 +739,38 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
                 startActivity(new Intent(this, HeatMapActivity.class));
                 break;
             case R.id.student:
-                flush("Please wait...");
+                showProgress();
+                flush("Switching to student profile");
                 new DumeModel().switchAcount(DumeUtils.STUDENT, new TeacherContract.Model.Listener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        startActivity(new Intent(getApplicationContext(), HomePageActivity.class));
+                        gotoStudentHomePage();
                     }
 
                     @Override
                     public void onError(String msg) {
-                        flush("Error : " + msg);
+                        flush("Network error !!");
+                        hideProgress();
                     }
                 });
                 break;
             case R.id.mentor:
                 break;
             case R.id.boot_camp:
+                showProgress();
+                flush("Switching to boot camp profile");
+                new DumeModel().switchAcount(DumeUtils.BOOTCAMP, new TeacherContract.Model.Listener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        gotoBootCamPHomePage();
+                    }
+
+                    @Override
+                    public void onError(String msg) {
+                        flush("Network error !!");
+                        hideProgress();
+                    }
+                });
                 break;
 
         }
@@ -842,6 +894,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
                 break;
             default:
                 // Nothing to do
+                break;
         }
     }
 
@@ -995,6 +1048,11 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
     @Override
     public void setDocumentSnapshot(DocumentSnapshot documentSnapshot) {
         this.documentSnapshot = documentSnapshot;
+        teacherDataStore.settUserName(getUserName());
+        teacherDataStore.settUserNumber(documentSnapshot.getString("phone_number"));
+        teacherDataStore.settUserMail(documentSnapshot.getString("email"));
+        teacherDataStore.settUserUid(documentSnapshot.getId());
+        teacherDataStore.settAvatarString(getAvatarString());
     }
 
     @Override
@@ -1058,13 +1116,13 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
 
     @Override
     public void setAvatar(String avatarString) {
-        Glide.with(this).load(avatarString).apply(new RequestOptions().override(100, 100)).into(userDP);
+        Glide.with(this).load(avatarString).apply(new RequestOptions().override(100, 100).placeholder(R.drawable.demo_alias_dp)).into(userDP);
     }
 
     @Override
     public void setAvatarForMenu(String avatar) {
         Glide.with(this).asBitmap().load(avatar)
-                .apply(new RequestOptions().override((int) (20 * (getResources().getDisplayMetrics().density)), (int) (20 * (getResources().getDisplayMetrics().density))).centerCrop())
+                .apply(new RequestOptions().override((int) (20 * (getResources().getDisplayMetrics().density)), (int) (20 * (getResources().getDisplayMetrics().density))).centerCrop().placeholder(R.drawable.alias_profile_icon))
                 .into(new SimpleTarget<Bitmap>() {
                     @Override
                     public void onResourceReady(@NonNull Bitmap resource, @Nullable com.bumptech.glide.request.transition.Transition<? super Bitmap> transition) {
@@ -1156,6 +1214,44 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         int status = NetworkUtil.getConnectivityStatusString(context);
         if (snackbar != null && !snackbar.isShown() && status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED && enamSnackbar != null && !enamSnackbar.isShown()) {
             mySnackbar.show();
+        }
+    }
+
+    @Override
+    public void gotoBootCampAddvertise() {
+        startActivity(new Intent(this, BootCampAdd.class));
+
+    }
+
+    @Override
+    public void gotoStudentHomePage() {
+        startActivity(new Intent(getApplicationContext(), HomePageActivity.class));
+        finish();
+    }
+
+    @Override
+    public void gotoBootCamPHomePage() {
+        startActivity(new Intent(getApplicationContext(), BootCampHomePageActivity.class));
+        finish();
+    }
+
+    @Override
+    public void showProgress() {
+        if (loadView.getVisibility() == View.INVISIBLE || loadView.getVisibility() == View.GONE) {
+            loadView.setVisibility(View.VISIBLE);
+        }
+        if (!loadView.isRunningAnimation()) {
+            loadView.startLoading();
+        }
+    }
+
+    @Override
+    public void hideProgress() {
+        if (loadView.isRunningAnimation()) {
+            loadView.stopLoading();
+        }
+        if (loadView.getVisibility() == View.VISIBLE) {
+            loadView.setVisibility(View.INVISIBLE);
         }
     }
 }

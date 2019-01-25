@@ -27,10 +27,10 @@ public class ProfilePageModel extends StuBaseModel implements ProfilePageContrac
     private final FirebaseStorage storage;
 
 
-    public ProfilePageModel(Activity activity, Context context) {
-        super(activity, context);
+    public ProfilePageModel(Context context) {
+        super(context);
         this.context = context;
-        this.activity = activity;
+        this.activity = (Activity) context;
         map = new HashMap<>();
         storage = FirebaseStorage.getInstance();
     }

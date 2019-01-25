@@ -1,6 +1,5 @@
 package io.dume.dume.student.grabingPackage;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -18,19 +17,20 @@ import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v4.view.animation.FastOutLinearInInterpolator;
 import android.support.v4.view.animation.LinearOutSlowInInterpolator;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.text.format.DateFormat;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -40,6 +40,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -47,44 +48,37 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.touchboarder.weekdaysbuttons.WeekdaysDataItem;
 import com.touchboarder.weekdaysbuttons.WeekdaysDataSource;
 import com.transitionseverywhere.Fade;
 import com.transitionseverywhere.Slide;
-import com.transitionseverywhere.Transition;
 import com.transitionseverywhere.TransitionManager;
 import com.transitionseverywhere.TransitionSet;
 import com.warkiz.widget.IndicatorSeekBar;
-import com.warkiz.widget.OnSeekChangeListener;
-import com.warkiz.widget.SeekParams;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import biz.laenger.android.vpbs.BottomSheetUtils;
 import biz.laenger.android.vpbs.ViewPagerBottomSheetBehavior;
-import carbon.widget.Button;
 import io.dume.dume.R;
-import io.dume.dume.customView.HorizontalLoadView;
+import io.dume.dume.customView.HorizontalLoadViewTwo;
 import io.dume.dume.student.pojo.CusStuAppComMapActivity;
 import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
+import io.dume.dume.student.pojo.SearchDataStore;
 import io.dume.dume.student.searchLoading.SearchLoadingActivity;
 import io.dume.dume.util.DatePickerFragment;
 import io.dume.dume.util.DumeUtils;
 import io.dume.dume.util.TimePickerFragment;
-import io.dume.dume.util.VisibleToggleClickListener;
 
-import static com.facebook.FacebookSdk.getApplicationContext;
 import static io.dume.dume.util.DumeUtils.firstThree;
 import static io.dume.dume.util.DumeUtils.firstTwo;
 import static io.dume.dume.util.DumeUtils.getScreenSize;
@@ -95,10 +89,9 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
     private static final String TAG = "GrabingPackageActivity";
     private GrabingPackageContract.Presenter mPresenter;
     private SectionsPagerAdapter mSectionsPagerAdapter;
-    private ViewPager mViewPager;
+    public ViewPager mViewPager;
     private static final int fromFlag = 4;
     private ViewPagerBottomSheetBehavior bottomSheetBehavior;
-    private HorizontalLoadView loadView;
     private carbon.widget.LinearLayout llBottomSheet;
     private CoordinatorLayout coordinatorLayout;
     private AppBarLayout myAppBarLayout;
@@ -106,13 +99,19 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
     private Toolbar toolbar;
     private GoogleMap mMap;
     private SupportMapFragment mapFragment;
+    public int checkPackage = -1;
+    public Map<String, Object> preferredDays = null;
+    public Map<String, Object> startTime = null;
+    public Map<String, Object> startDate = null;
+    public boolean executeClicked = false;
+    public boolean executeClickedTwo = false;
 
     private int[] navIcons = {
             R.drawable.ic_seven_days,
             R.drawable.ic_preffered_day,
             R.drawable.ic_time
     };
-    private android.widget.Button packageSearchBtn;
+    public android.widget.Button packageSearchBtn;
     private RelativeLayout dumeGangContainer;
     private RelativeLayout regularDumeContainer;
     private RelativeLayout instantDumeContainer;
@@ -142,6 +141,8 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
     private LayerDrawable dumeGangBadgeOffLayDraw;
     private LayerDrawable regularDumeBadgeOffLayDraw;
     private LayerDrawable instantDumeBadgeOffLayDraw;
+    private HorizontalLoadViewTwo loadView;
+    private TextView salaryDetailText;
 
 
     @Override
@@ -149,7 +150,6 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
         super.onCreate(savedInstanceState);
         setContentView(R.layout.stu4_activity_grabing_package);
         setActivityContextMap(this, fromFlag);
-        findLoadView();
         mPresenter = new GrabingPackagePresenter(this, new GrabingPackageModel());
         mPresenter.grabingPackagePageEnqueue();
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
@@ -161,7 +161,7 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
         BottomSheetUtils.setupViewPager(mViewPager);
         //making the custom tab here
         int[] wh = DumeUtils.getScreenSize(this);
-        int tabMinWidth = ((wh[0] / 3)-(int) (24 * (getResources().getDisplayMetrics().density)));
+        int tabMinWidth = ((wh[0] / 3) - (int) (24 * (getResources().getDisplayMetrics().density)));
         LinearLayout.LayoutParams textParam = new LinearLayout.LayoutParams
                 (tabMinWidth, LinearLayout.LayoutParams.WRAP_CONTENT);
         // loop through all navigation tabs
@@ -185,12 +185,13 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
 
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
-
+        //selecting regular dume as default
+        regularDumeSelected();
     }
 
     @Override
     public void findView() {
-        loadView = findViewById(R.id.loadView);
+        loadView = findViewById(R.id.loadViewTwo);
         llBottomSheet = findViewById(R.id.packageBottomSheet);
         coordinatorLayout = (CoordinatorLayout) findViewById(R.id.my_main_container);
         myAppBarLayout = findViewById(R.id.my_appbarLayout);
@@ -217,6 +218,7 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
         salaryTextValue = findViewById(R.id.salary_text_value);
         capacityText = findViewById(R.id.capacity_text);
         capacityTextValue = findViewById(R.id.capacity_text_value);
+        salaryDetailText = findViewById(R.id.individual_promo_body);
         hintIdOne = findViewById(R.id.hint_id_1);
         hintIdTwo = findViewById(R.id.hint_id_2);
         hintIdThree = findViewById(R.id.hint_id_3);
@@ -297,8 +299,12 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
         });
 
         //initializing the search data store
-        searchDataStore.setDaysPerWeek("3");
-
+        List<Integer> mySelectedDaysInt = new ArrayList<>();
+        String mySelectedDays = "Monday, Wednesday, Friday";
+        mySelectedDaysInt.add(2);
+        mySelectedDaysInt.add(4);
+        mySelectedDaysInt.add(6);
+        preferredDays = searchDataStore.genSetRetPreferredDays(mySelectedDays, mySelectedDaysInt);
     }
 
     @Override
@@ -514,11 +520,39 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
 
     @Override
     public void executeSearchActivity() {
-        startActivity(new Intent(this, SearchLoadingActivity.class));
+        if (preferredDays != null && startDate != null && startTime != null) {
+            switch (checkPackage) {
+                case 0:
+                    searchDataStore.setPackageName(SearchDataStore.DUME_GANG);
+                    break;
+                case 1:
+                    searchDataStore.setPackageName(SearchDataStore.REGULAR_DUME);
+                    break;
+                case 2:
+                    searchDataStore.setPackageName(SearchDataStore.INSTANT_DUME);
+                    break;
+            }
+            Intent intent = new Intent(this, SearchLoadingActivity.class);
+            //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+            finish();
+            //ActivityCompat.finishAffinity(this);
+        } else if (preferredDays == null) {
+            flush("Internal error !!");
+        } else if (startDate == null) {
+            executeClicked = true;
+            flush("please select start date ..");
+            mViewPager.setCurrentItem(1, true);
+        } else {
+            executeClickedTwo = true;
+            flush("please select start time ..");
+            mViewPager.setCurrentItem(2, true);
+        }
     }
 
     @Override
     public void dumeGangSelected() {
+        checkPackage = 0;
         if (specificPromoText.getText() == specificPromoTextArr[0]
                 && bottomSheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED) {
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
@@ -542,6 +576,11 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
         } else {
             specificPromoText.setText(specificPromoTextArr[0]);
             individualPromoTitle.setText(primaryPromoTextArr[0]);
+
+            //testing
+            capacityTextValue.setText("10 Person");
+            salaryTextValue.setText("BDT 1k-3k");
+            salaryDetailText.setText(getResources().getString(R.string.gang_salary_detail));
             dumeGangPriceText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
             regularDumePriceText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
             instantDumePriceText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
@@ -583,7 +622,16 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
     }
 
     @Override
+    public void flush(String msg) {
+        Toast toast = Toast.makeText(this, msg, Toast.LENGTH_SHORT);
+        TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
+        if (v != null) v.setGravity(Gravity.CENTER);
+        toast.show();
+    }
+
+    @Override
     public void regularDumeSelected() {
+        checkPackage = 1;
         if (specificPromoText.getText() == specificPromoTextArr[1]
                 && bottomSheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED) {
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
@@ -607,6 +655,10 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
         } else {
             specificPromoText.setText(specificPromoTextArr[1]);
             individualPromoTitle.setText(primaryPromoTextArr[1]);
+
+            capacityTextValue.setText("1-2 Person");
+            salaryTextValue.setText("BDT 3k-12k");
+            salaryDetailText.setText(getResources().getString(R.string.regular_salary_detail));
             dumeGangImage.setImageResource(R.drawable.dume_gang_grayscale_image);
             regularDumeImage.setImageResource(R.drawable.dume_regular_image);
             instantDumeImage.setImageResource(R.drawable.dume_instant_grayscale_image);
@@ -646,6 +698,7 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
 
     @Override
     public void instantDumeSelected() {
+        checkPackage = 2;
         if (specificPromoText.getText() == specificPromoTextArr[2]
                 && bottomSheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED) {
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
@@ -669,6 +722,10 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
         } else {
             specificPromoText.setText(specificPromoTextArr[2]);
             individualPromoTitle.setText(primaryPromoTextArr[2]);
+
+            capacityTextValue.setText("1 Person");
+            salaryTextValue.setText("BDT 5k-15k");
+            salaryDetailText.setText(getResources().getString(R.string.instant_salary_detail));
             dumeGangImage.setImageResource(R.drawable.dume_gang_grayscale_image);
             regularDumeImage.setImageResource(R.drawable.dume_regular_grayscale_image);
             instantDumeImage.setImageResource(R.drawable.dume_instant_image);
@@ -745,7 +802,7 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
             } else {
                 super.onBackPressed();
             }
-        }else if (id == R.id.action_help){
+        } else if (id == R.id.action_help) {
             //add function here
         }
         return super.onOptionsItemSelected(item);
@@ -754,6 +811,24 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+    }
+
+    public void showProgress() {
+        if (loadView.getVisibility() == View.INVISIBLE || loadView.getVisibility() == View.GONE) {
+            loadView.setVisibility(View.VISIBLE);
+        }
+        if (!loadView.isRunningAnimation()) {
+            loadView.startLoading();
+        }
+    }
+
+    public void hideProgress() {
+        if (loadView.isRunningAnimation()) {
+            loadView.stopLoading();
+        }
+        if (loadView.getVisibility() == View.VISIBLE) {
+            loadView.setVisibility(View.INVISIBLE);
+        }
     }
 
     /**
@@ -773,12 +848,13 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
         private CoordinatorLayout coordinatorLayout;
         private String myTime;
         private TimePickerFragment thisTimePicker;
-        private android.widget.Button timePickerBtn;
-        private android.widget.Button datePickerBtn;
         private DatePickerFragment thisDatePicker;
-        private IndicatorSeekBar numberOfDaysSeekbar;
         private String currentDateStr;
         private String finalWeekOfDays;
+        private EditText timePickerEt;
+        private carbon.widget.ImageView emptyTPF;
+        private EditText datePickerEt;
+        private carbon.widget.ImageView emptyDPF;
 
         public PlaceholderFragment() {
         }
@@ -801,68 +877,7 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
             int fragmentPosition = getArguments().getInt(ARG_SECTION_NUMBER);
             switch (fragmentPosition) {
                 case 1:
-                    rootView = inflater.inflate(R.layout.stu4_fragment_seven_days, container, false);
-                    numberOfDaysSeekbar = rootView.findViewById(R.id.complete_seekbar);
-
-                    numberOfDaysSeekbar.setOnSeekChangeListener(new OnSeekChangeListener() {
-                        @Override
-                        public void onSeeking(SeekParams seekParams) {
-                            myMainActivity.hintIdOne.setText(String.format("%s days", Integer.toString(seekParams.progress)));
-                            myMainActivity.searchDataStore.setDaysPerWeek(Integer.toString(seekParams.progress));
-                        }
-
-                        @Override
-                        public void onStartTrackingTouch(IndicatorSeekBar seekBar) {
-                        }
-
-                        @Override
-                        public void onStopTrackingTouch(IndicatorSeekBar seekBar) {
-                            if(seekBar.getProgress()== 7){
-                                Toast.makeText(myMainActivity, "Max 6 days/week allowed", Toast.LENGTH_SHORT).show();
-                                seekBar.setProgress(6f);
-                                myMainActivity.hintIdOne.setText(String.format("%s days", Integer.toString(seekBar.getProgress())));
-                                myMainActivity.searchDataStore.setDaysPerWeek(Integer.toString(seekBar.getProgress()));
-                            }
-                        }
-                    });
-                    break;
-                case 2:
                     rootView = inflater.inflate(R.layout.stu4_fragment_preferred_days, container, false);
-                    WeekdaysDataSource.Callback callback3 = new WeekdaysDataSource.Callback() {
-                        @Override
-                        public void onWeekdaysItemClicked(int i, WeekdaysDataItem weekdaysDataItem) {
-                            Toast.makeText(myMainActivity, i, Toast.LENGTH_SHORT).show();
-                        }
-
-                        @Override
-                        public void onWeekdaysSelected(int i, ArrayList<WeekdaysDataItem> items) {
-                            String selectedDays = getSelectedDaysFromWeekdaysData(items);
-
-                            List<String> myWeekOfDays = Arrays.asList(selectedDays.split(","));
-                            for (int fuck = 0; fuck < myWeekOfDays.size(); fuck++) {
-                                if (fuck == 0) {
-                                    finalWeekOfDays = firstTwo(myWeekOfDays.get(fuck));
-
-                                } else {
-                                    finalWeekOfDays = finalWeekOfDays + "," + firstThree(myWeekOfDays.get(fuck));
-                                }
-                            }
-
-                            myMainActivity.hintIdTwo.setText(finalWeekOfDays);
-                            if( weekdaysDataSource3.isAllDaysSelected()){
-
-                            }
-                            if(weekdaysDataSource3.getWeekdaysCount()!= Integer.parseInt(myMainActivity.searchDataStore.getDaysPerWeek())){
-
-                            }
-
-                            if (!TextUtils.isEmpty(selectedDays))
-                                showSnackbarShort(selectedDays);
-                            weekdaysDataSource3.getWeekdaysCount();
-                            weekdaysDataSource3.isAllDaysSelected();
-
-                        }
-                    };
                     weekdaysDataSource3 = new WeekdaysDataSource(myMainActivity, R.id.weekdays_sample_3, rootView)
                             .setFirstDayOfWeek(Calendar.SUNDAY)
                             .setSelectedDays(Calendar.MONDAY, Calendar.WEDNESDAY, Calendar.FRIDAY)
@@ -872,14 +887,101 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
                             .setUnselectedColor(Color.TRANSPARENT)
                             .setWeekdayItemLayoutRes(R.layout.custom_weekdays_image_view)
                             .setNumberOfLetters(1)
-                            .start(callback3);
+                            .start(new WeekdaysDataSource.Callback() {
+                                @Override
+                                public void onWeekdaysItemClicked(int i, WeekdaysDataItem weekdaysDataItem) {
+                                }
 
+                                @Override
+                                public void onWeekdaysSelected(int i, ArrayList<WeekdaysDataItem> items) {
+                                    String selectedDays = getSelectedDaysFromWeekdaysData(items);
+                                    List<String> myWeekOfDays = Arrays.asList(selectedDays.split(","));
+                                    List<Integer> selectedDaysInt = new ArrayList<>();
+                                    for (int fuck = 0; fuck < myWeekOfDays.size(); fuck++) {
+                                        if (fuck == 0) {
+                                            finalWeekOfDays = firstTwo(myWeekOfDays.get(fuck));
 
+                                        } else {
+                                            finalWeekOfDays = finalWeekOfDays + "," + firstThree(myWeekOfDays.get(fuck));
+                                        }
+                                    }
+                                    myMainActivity.hintIdOne.setText(finalWeekOfDays);
+                                    //depends on which
+                                    if (myMainActivity.checkPackage == 0 || myMainActivity.checkPackage == 1) {
+                                        if (weekdaysDataSource3.isAllDaysSelected()) {
+                                            weekdaysDataSource3.selectAll(false);
+                                            weekdaysDataSource3.setSelectedDays(Calendar.SUNDAY, Calendar.MONDAY, Calendar.TUESDAY, Calendar.WEDNESDAY, Calendar.THURSDAY, Calendar.FRIDAY, Calendar.SATURDAY);
+                                            myMainActivity.flush("Max 6 days/week allowed for Regular Dume");
+                                        }
+                                    }
+                                    for (WeekdaysDataItem dataItem : items) {
+                                        if (dataItem.isSelected()) {
+                                            selectedDaysInt.add(dataItem.getCalendarDayId());
+                                        }
+                                    }
+                                    Toast.makeText(myMainActivity, selectedDaysInt.toString(), Toast.LENGTH_SHORT).show();
+                                    myMainActivity.preferredDays = myMainActivity.searchDataStore.genSetRetPreferredDays(selectedDays, selectedDaysInt);
+                                    if (!TextUtils.isEmpty(selectedDays)) {
+                                        showSnackbarShort(selectedDays);
+                                    }
+                                }
+                            });
+
+                    break;
+                case 2:
+                    rootView = inflater.inflate(R.layout.stu4_fragment_date_picker, container, false);
+                    RelativeLayout hostingRelativeDP = rootView.findViewById(R.id.date_picker_relative);
+                    datePickerEt = rootView.findViewById(R.id.date_picker_Et);
+                    emptyDPF = rootView.findViewById(R.id.empty_startDate_found);
+                    //testing the date picker here
+                    thisDatePicker = new DatePickerFragment();
+                    thisDatePicker.setOnDateSetListener(new DatePickerDialog.OnDateSetListener() {
+                        @Override
+                        public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                            Calendar c = Calendar.getInstance();
+                            c.set(Calendar.YEAR, year);
+                            c.set(Calendar.MONTH, month);
+                            c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                            currentDateStr = java.text.DateFormat.getDateInstance(java.text.DateFormat.MEDIUM).format(c.getTime());
+                            datePickerEt.setText(currentDateStr);
+                            myMainActivity.hintIdTwo.setText(String.format("%s", currentDateStr));
+                            myMainActivity.startDate = myMainActivity.searchDataStore.genSetRetStartDate(year, month, dayOfMonth, currentDateStr);
+                            //myMainActivity.mViewPager.setCurrentItem(myMainActivity.mViewPager.getCurrentItem() + 1, true);
+                        }
+                    });
+                    datePickerEt.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            thisDatePicker.show(getChildFragmentManager(), "Package_date_picker");
+                        }
+                    });
+                    datePickerEt.addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                        }
+
+                        @Override
+                        public void onTextChanged(CharSequence s, int start, int before, int count) {
+                            if (!s.equals("")) {
+                                emptyDPF.setVisibility(View.GONE);
+                            } else {
+                                emptyDPF.setVisibility(View.VISIBLE);
+                            }
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable s) {
+                            if (s.toString().equals("")) {
+                                emptyDPF.setVisibility(View.VISIBLE);
+                            }
+                        }
+                    });
                     break;
                 case 3:
                     rootView = inflater.inflate(R.layout.stu4_fragment_time, container, false);
-                    datePickerBtn = rootView.findViewById(R.id.date_picker_btn);
-                    timePickerBtn = rootView.findViewById(R.id.time_picker_btn);
+                    RelativeLayout hostingRelativeTP = rootView.findViewById(R.id.time_picker_relative);
+                    timePickerEt = rootView.findViewById(R.id.time_picker_Et);
+                    emptyTPF = rootView.findViewById(R.id.empty_startTime_found);
 
                     //testting the time picker here
                     thisTimePicker = new TimePickerFragment();
@@ -887,7 +989,11 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
                         @Override
                         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                             if (DateFormat.is24HourFormat(getActivity())) {
-                                myTime = "" + hourOfDay + ":" + minute;
+                                if (minute < 10) {
+                                    myTime = "" + hourOfDay + ":0" + minute;
+                                } else {
+                                    myTime = "" + hourOfDay + ":" + minute;
+                                }
                             } else {
                                 String AM_PM;
                                 int myHourOfDay = hourOfDay;
@@ -901,45 +1007,45 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
                                 } else if (hourOfDay == 0) {
                                     myHourOfDay = 12;
                                 }
-                                myTime = "" + myHourOfDay + ":" + minute + " " + AM_PM;
+                                if (minute < 10) {
+                                    myTime = "" + myHourOfDay + ":0" + minute + " " + AM_PM;
+                                } else {
+                                    myTime = "" + myHourOfDay + ":" + minute + " " + AM_PM;
+                                }
                             }
-                            timePickerBtn.setText(myTime);
-                            myMainActivity.hintIdThree.setText(String.format("%s, %s", currentDateStr, myTime));
-
+                            timePickerEt.setText(myTime);
+                            myMainActivity.hintIdThree.setText(String.format("%s", myTime));
+                            myMainActivity.startTime = myMainActivity.searchDataStore.genSetRetStartTime(hourOfDay, minute, myTime);
                         }
                     });
 
-                    timePickerBtn.setOnClickListener(new View.OnClickListener() {
+                    timePickerEt.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             thisTimePicker.show(getChildFragmentManager(), "package_time_picker");
                         }
                     });
-
-                    //testing the date picker here
-                    thisDatePicker = new DatePickerFragment();
-                    thisDatePicker.setOnDateSetListener(new DatePickerDialog.OnDateSetListener() {
+                    timePickerEt.addTextChangedListener(new TextWatcher() {
                         @Override
-                        public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                        }
 
-                            Calendar c = Calendar.getInstance();
-                            c.set(Calendar.YEAR, year);
-                            c.set(Calendar.MONTH, month);
-                            c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                            currentDateStr = java.text.DateFormat.getDateInstance(java.text.DateFormat.MEDIUM).format(c.getTime());
-                            datePickerBtn.setText(currentDateStr);
-                            myMainActivity.hintIdThree.setText(String.format("%s, %s", currentDateStr, myTime));
+                        @Override
+                        public void onTextChanged(CharSequence s, int start, int before, int count) {
+                            if (!s.equals("")) {
+                                emptyTPF.setVisibility(View.GONE);
+                            } else {
+                                emptyTPF.setVisibility(View.VISIBLE);
+                            }
+                        }
 
+                        @Override
+                        public void afterTextChanged(Editable s) {
+                            if (s.toString().equals("")) {
+                                emptyTPF.setVisibility(View.VISIBLE);
+                            }
                         }
                     });
-
-                    datePickerBtn.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            thisDatePicker.show(getChildFragmentManager(), "Package_date_picker");
-                        }
-                    });
-
                     break;
             }
             return rootView;
@@ -949,7 +1055,32 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
         public void setUserVisibleHint(boolean isVisibleToUser) {
             super.setUserVisibleHint(isVisibleToUser);
             if (isVisibleToUser) {
-
+                if (getArguments() != null) {
+                    myMainActivity = (GrabingPackageActivity) getActivity();
+                    int fragmentPosition = getArguments().getInt(ARG_SECTION_NUMBER);
+                    switch (fragmentPosition) {
+                        case 1:
+                            break;
+                        case 2:
+                            if (myMainActivity.executeClicked) {
+                                if (datePickerEt.getText().toString().equals("")) {
+                                    emptyDPF.setVisibility(View.VISIBLE);
+                                }
+                                myMainActivity.executeClicked = false;
+                            }
+                            break;
+                        case 3:
+                            if (myMainActivity.executeClickedTwo) {
+                                if (timePickerEt.getText().toString().equals("")) {
+                                    emptyTPF.setVisibility(View.VISIBLE);
+                                }
+                                myMainActivity.executeClickedTwo = false;
+                            }
+                            break;
+                    }
+                }
+            } else {
+                //not visible here
             }
         }
 

@@ -21,8 +21,8 @@ import io.dume.dume.teacher.homepage.TeacherContract;
 public class StudentSettingsModel extends StuBaseModel implements StudentSettingsContract.Model {
     private static final String TAG = "StudentSettingsModel";
 
-    public StudentSettingsModel(Activity activity, Context context) {
-        super(activity, context);
+    public StudentSettingsModel(Context context) {
+        super(context);
     }
 
     @Override

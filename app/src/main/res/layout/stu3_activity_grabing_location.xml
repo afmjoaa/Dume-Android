@@ -52,10 +52,12 @@
         tools:ignore="MissingPrefix">
 
         <android.support.v4.widget.NestedScrollView
+            android:id="@+id/bottom_sheet_scroll_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <carbon.widget.LinearLayout
+                android:descendantFocusability="blocksDescendants"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
@@ -160,7 +162,6 @@
             </carbon.widget.LinearLayout>
 
         </android.support.v4.widget.NestedScrollView>
-
 
     </LinearLayout>
 

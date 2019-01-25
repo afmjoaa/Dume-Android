@@ -11,8 +11,10 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import io.dume.dume.R;
@@ -83,7 +85,7 @@ public class AfterSplashActivity extends AppCompatActivity implements DemoCardFr
                             startActivity(new Intent(getApplicationContext(), AuthActivity.class));
                             AfterSplashActivity.this.finish();
                         } else {
-                            Toast.makeText(AfterSplashActivity.this, "Please grant the permission", Toast.LENGTH_SHORT).show();
+                            flush("Please grant the permissions");
                             //getLocationPermission();
                             mPager.setCurrentItem(2, true);
                         }
@@ -112,7 +114,7 @@ public class AfterSplashActivity extends AppCompatActivity implements DemoCardFr
                 ContextCompat.checkSelfPermission(this.getApplicationContext(), WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED &&
                 ContextCompat.checkSelfPermission(this.getApplicationContext(), RECEIVE_SMS) == PackageManager.PERMISSION_GRANTED) {
             MLOCATIONPERMISSIONGRANTED = true;
-            Toast.makeText(this, "permission granted", Toast.LENGTH_SHORT).show();
+            flush("permission granted");
             mPager.setCurrentItem(mPager.getCurrentItem() + 1, true);
         } else {
             ActivityCompat.requestPermissions(AfterSplashActivity.this, permissions, LOCATION_PERMISSION_REQUEST_CODE);
@@ -131,7 +133,7 @@ public class AfterSplashActivity extends AppCompatActivity implements DemoCardFr
                         mPager.setCurrentItem(mPager.getCurrentItem() + 1, true);
                     }
                 } else {
-                    Toast.makeText(this, "Please accept the permission to proceed", Toast.LENGTH_SHORT).show();
+                    flush("Please accept the permission to proceed");
                 }
             }
             break;
@@ -155,6 +157,13 @@ public class AfterSplashActivity extends AppCompatActivity implements DemoCardFr
                 && resRead == PackageManager.PERMISSION_GRANTED);
         //this is flexible
         //&& resSms == PackageManager.PERMISSION_GRANTED
+    }
+
+    public void flush(String msg){
+        Toast toast = Toast.makeText(this, msg, Toast.LENGTH_SHORT);
+        TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
+        if( v != null) v.setGravity(Gravity.CENTER);
+        toast.show();
     }
 
     /*@SuppressLint("HardwareIds")

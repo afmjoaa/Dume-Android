@@ -325,6 +325,10 @@ public class DumeUtils {
         return str.length() < 3 ? str : str.substring(0, 3);
     }
 
+    public static String firstFour(String str) {
+        return str.length() < 4 ? str : str.substring(0, 4);
+    }
+
     public static void setMargins(View v, int l, int t, int r, int b) {
         if (v.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
             ViewGroup.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) v.getLayoutParams();
@@ -482,6 +486,51 @@ public class DumeUtils {
         final View decorView = activity.getWindow().getDecorView();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+        }
+    }
+
+    public static int giveIconOnName(String TabName) {
+        switch (TabName) {
+            case "Level":
+                return 0;
+            case "Medium":
+                return 1;
+            case "Class":
+                return 2;
+            case "Subject":
+                return 3;
+            case "Field":
+                return 4;
+            case "Division":
+                return 5;
+            case "Language":
+                return 6;
+            case " Language ":
+                return 7;
+            case "Software":
+                return 8;
+            case "Music":
+                return 9;
+            case "Item":
+                return 10;
+            case "Flavour":
+                return 11;
+            case "Degree":
+                return 12;
+            case "Branch":
+                return 5;
+            case "Type":
+                return 11;
+            case "Gender":
+                return 14;
+            case "Salary":
+                return 15;
+            case "Cross Check":
+                return 13;
+            case "Capacity":
+                return 16;
+            default:
+                return 5;
         }
     }
 }

@@ -119,7 +119,8 @@ public class ProfilePageActivity extends CustomStuAppCompatActivity implements P
         setActivityContext(this, fromFlag);
         action = getIntent().getAction();
         settingStatusBarTransparent();
-        mPresenter = new ProfilePagePresenter(this, this, new ProfilePageModel(this, this));
+        ProfilePageModel mModel = new ProfilePageModel(this);
+        mPresenter = new ProfilePagePresenter(this, this, mModel);
         mPresenter.profilePageEnqueue();
 
     }
@@ -662,7 +663,7 @@ public class ProfilePageActivity extends CustomStuAppCompatActivity implements P
 
     @Override
     public void discardChangesClicked() {
-        startActivity(new Intent(this, HomePageActivity.class));
+        super.onBackPressed();
     }
 
     @Override

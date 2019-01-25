@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    tools:showIn="@layout/stu4_activity_grabing_package">
+    android:orientation="vertical">
 
-    <LinearLayout
-        android:id="@+id/done_discard_btn_layout"
+    <RelativeLayout
+        android:id="@+id/time_picker_relative"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
@@ -16,39 +14,42 @@
         android:layout_marginLeft="22dp"
         android:layout_marginRight="22dp"
         android:layout_marginStart="22dp"
-        android:layout_marginTop="16dp"
-        android:baselineAligned="false"
-        android:orientation="horizontal">
+        android:layout_marginTop="10dp">
 
-        <Button
-            android:id="@+id/date_picker_btn"
-            style="@style/myButtonStyleAccent"
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/input_layout_startTime_picker"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_weight="1"
-            android:text="Date Picker"
-            android:textAllCaps="false"
-            android:textColor="@color/carbon_white"
-            android:textSize="16sp"
-            app:fontFamily="@font/cairo_regular" />
+            android:layout_height="wrap_content">
 
-        <Button
-            android:id="@+id/time_picker_btn"
-            style="@style/myButtonStyleAccent"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginStart="10dp"
-            android:layout_weight="1"
-            android:text="Time Picker"
-            android:textAllCaps="false"
-            android:textColor="@color/carbon_white"
-            android:textSize="16sp"
-            app:fontFamily="@font/cairo_regular" />
+            <EditText
+                android:id="@+id/time_picker_Et"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autofillHints="Starting Time"
+                android:focusable="false"
+                android:hint="Starting Time"
+                android:inputType="time"
+                android:onClick="onAcademicClick"
+                app:fontFamily="@font/cairo_regular" />
 
-    </LinearLayout>
+        </android.support.design.widget.TextInputLayout>
+
+        <carbon.widget.ImageView
+            android:id="@+id/empty_startTime_found"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="20dp"
+            android:layout_marginRight="20dp"
+            android:contentDescription="@string/search_icon"
+            android:translationY="5dp"
+            android:visibility="gone"
+            app:carbon_cornerRadius="8dp"
+            app:carbon_elevation="1dp"
+            app:srcCompat="@drawable/ic_empty_field" />
+
+    </RelativeLayout>
 
 </LinearLayout>
-

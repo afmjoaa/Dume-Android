@@ -1,5 +1,9 @@
 package io.dume.dume.student.searchLoading;
 
+import java.util.Map;
+
+import io.dume.dume.teacher.homepage.TeacherContract;
+
 public interface SearchLoadingContract {
     interface View {
 
@@ -12,6 +16,10 @@ public interface SearchLoadingContract {
         void gotoSearchResult();
 
         void cancelBtnClicked();
+
+        void saveToDB();
+
+        boolean checkIfInDB(Map<String, Object> jizz);
     }
 
     interface Presenter {
@@ -25,5 +33,8 @@ public interface SearchLoadingContract {
     interface Model {
 
         void searchLoadingHawwa();
+
+        void updateRecentSearch(String identify, Map<String, Object> mainMap, TeacherContract.Model.Listener<Void> listener);
+
     }
 }

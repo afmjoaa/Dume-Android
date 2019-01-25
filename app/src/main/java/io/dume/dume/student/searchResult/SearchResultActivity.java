@@ -25,6 +25,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.animation.FastOutLinearInInterpolator;
 import android.support.v4.view.animation.LinearOutSlowInInterpolator;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -79,6 +80,7 @@ import java.util.Objects;
 import carbon.widget.ImageView;
 import io.dume.dume.R;
 import io.dume.dume.customView.HorizontalLoadView;
+import io.dume.dume.customView.HorizontalLoadViewTwo;
 import io.dume.dume.student.common.QualificationAdapter;
 import io.dume.dume.student.common.QualificationData;
 import io.dume.dume.student.common.ReviewAdapter;
@@ -167,6 +169,8 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
     private LinearLayout locationHostLayout;
     private Button locationInfoBtn;
     private LinearLayout locationHideable;
+    private NestedScrollView bottomSheetNSV;
+    private HorizontalLoadViewTwo loadViewBS;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -174,7 +178,8 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
         setContentView(R.layout.stu6_activity_search_result);
         setActivityContextMap(this, fromFlag);
         findLoadView();
-        mPresenter = new SearchResultPresenter(this, new SearchResultModel());
+        SearchResultModel mModel = new SearchResultModel(this);
+        mPresenter = new SearchResultPresenter(this, mModel);
         mPresenter.searchResultEnqueue();
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
@@ -269,9 +274,8 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
         locationHostLayout = findViewById(R.id.location_host_linearlayout);
         locationInfoBtn = findViewById(R.id.show_location_btn);
         locationHideable = findViewById(R.id.location_layout_vertical);
-
-
-
+        bottomSheetNSV = findViewById(R.id.bottom_sheet_scroll_view);
+        loadViewBS = findViewById(R.id.loadViewTwo);
 
     }
 
@@ -319,9 +323,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
         bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
-                if (BottomSheetBehavior.STATE_HIDDEN == newState) {
-
-                } else if (BottomSheetBehavior.STATE_COLLAPSED == newState) {
+                if (BottomSheetBehavior.STATE_COLLAPSED == newState) {
                     dragFirst = true;
                     setDarkStatusBarIcon();
                     viewMusk.setVisibility(View.GONE);
@@ -352,7 +354,22 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                         optionMenu = R.menu.menu_search_result;
                         invalidateOptionsMenu();
                     }
+                    bottomSheetNSV.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            bottomSheetNSV.fling(0);
+                            bottomSheetNSV.smoothScrollTo(0, 0);
+                        }
+                    });
+                    bottomSheetNSV.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            bottomSheetNSV.fling(0);
+                            bottomSheetNSV.scrollTo(0, 0);
+                        }
+                    },200L);
                     hideProgress();
+
                 } else if (BottomSheetBehavior.STATE_EXPANDED == newState) {
                     setLightStatusBarIcon();
                     viewMusk.setVisibility(View.VISIBLE);
@@ -837,9 +854,9 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(optionMenu, menu);
-        if(optionMenu == R.menu.menu_search_result){
+        if (optionMenu == R.menu.menu_search_result) {
 
-        }else if(optionMenu == R.menu.menu_only_help){
+        } else if (optionMenu == R.menu.menu_only_help) {
 
         }
         //getMenuInflater().inflate(R.menu.menu_search_result, menu);
@@ -1009,5 +1026,23 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
     @Override
     public void onRoutingCancelled() {
 
+    }
+
+    public void showProgressBS() {
+        if (loadViewBS.getVisibility() == View.INVISIBLE || loadViewBS.getVisibility() == View.GONE) {
+            loadViewBS.setVisibility(View.VISIBLE);
+        }
+        if (!loadViewBS.isRunningAnimation()) {
+            loadViewBS.startLoading();
+        }
+    }
+
+    public void hideProgressBS() {
+        if (loadViewBS.isRunningAnimation()) {
+            loadViewBS.stopLoading();
+        }
+        if (loadViewBS.getVisibility() == View.VISIBLE) {
+            loadViewBS.setVisibility(View.INVISIBLE);
+        }
     }
 }

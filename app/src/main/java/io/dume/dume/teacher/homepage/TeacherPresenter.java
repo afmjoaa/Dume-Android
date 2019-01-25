@@ -99,8 +99,6 @@ public class TeacherPresenter implements TeacherContract.Presenter {
         model.getMendatory(new TeacherContract.Model.Listener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
-
-                view.setDocumentSnapshot(documentSnapshot);
                 GeoPoint location = (GeoPoint) documentSnapshot.get("location");
                 if (location == null) {
                     view.showSnackBar("Point Your Location", "Settings > Location");
@@ -114,9 +112,9 @@ public class TeacherPresenter implements TeacherContract.Presenter {
                 String o1 = documentSnapshot.getString("first_name");
                 view.setUserName(o1, o);
                 view.setMsgName(view.generateMsgName(o1, o));
+                view.setDocumentSnapshot(documentSnapshot);
+
                 view.setRating((Map<String, Object>) documentSnapshot.get("self_rating"));
-
-
                 /*Enams Code Goes Here*/
                 final Map<String, Object> selfRating = (Map<String, Object>) documentSnapshot.get("self_rating");
                 teachearDataStore.setSelfRating(selfRating);
@@ -168,6 +166,8 @@ public class TeacherPresenter implements TeacherContract.Presenter {
             case R.id.fab:
                 view.onCenterCurrentLocation();
                 break;
+            case R.id.mentor_add_layout:
+                view.gotoBootCampAddvertise();
 
         }
     }

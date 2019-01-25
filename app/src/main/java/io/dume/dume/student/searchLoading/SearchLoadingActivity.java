@@ -1,12 +1,17 @@
 package io.dume.dume.student.searchLoading;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialog;
@@ -14,39 +19,59 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.FrameLayout;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.maps.android.ui.IconGenerator;
 import com.varunest.loader.TheGlowingLoader;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 import carbon.widget.ImageView;
 import io.dume.dume.R;
 import io.dume.dume.student.pojo.CusStuAppComMapActivity;
 import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
+import io.dume.dume.student.pojo.SearchDataStore;
 import io.dume.dume.student.searchResult.SearchResultActivity;
+import io.dume.dume.teacher.homepage.TeacherContract;
 
 import static io.dume.dume.util.DumeUtils.configureAppbarWithoutColloapsing;
+import static io.dume.dume.util.DumeUtils.firstFour;
+import static io.dume.dume.util.DumeUtils.firstThree;
+import static io.dume.dume.util.ImageHelper.getRoundedCornerBitmap;
+import static io.dume.dume.util.ImageHelper.getRoundedCornerBitmapSquare;
 
 public class SearchLoadingActivity extends CusStuAppComMapActivity implements OnMapReadyCallback,
         SearchLoadingContract.View, MyGpsLocationChangeListener {
 
+    private static final String TAG = "SearchLoadingActivity";
+    private CameraPosition cameraPosition;
     private GoogleMap mMap;
     private SearchLoadingContract.Presenter mPresenter;
     private static final int fromFlag = 5;
@@ -67,10 +92,17 @@ public class SearchLoadingActivity extends CusStuAppComMapActivity implements On
     private RecyclerView searchDetailRecycler;
     private SearchDetailAdapter searchDetailRecyclerAdapter;
     private RecyclerView packageRecyclerView;
-    private SearchDetailAdapter packageRecyclerAdapter;
+    private SearchPackageAdapter packageRecyclerAdapter;
     private ImageView searchImageView;
     private BottomSheetDialog mCancelBottomSheetDialog;
     private View cancelsheetRootView;
+    private NestedScrollView bottomSheetNSV;
+    private FrameLayout alwaysViewMusk;
+    private View mCustomMarkerView;
+    private ImageView mMarkerImageView;
+    private IconGenerator iconFactory;
+    private SearchLoadingModel mModel;
+    private Boolean saveDone = false;
 
 
     @Override
@@ -78,7 +110,8 @@ public class SearchLoadingActivity extends CusStuAppComMapActivity implements On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.stu7_activity_search_loading);
         setActivityContextMap(this, fromFlag);
-        mPresenter = new SearchLoadingPresenter(this, new SearchLoadingModel());
+        mModel = new SearchLoadingModel(this);
+        mPresenter = new SearchLoadingPresenter(this, mModel);
         mPresenter.searchLoadingEnqueue();
         settingStatusBarTransparent();
         setDarkStatusBarIcon();
@@ -87,20 +120,74 @@ public class SearchLoadingActivity extends CusStuAppComMapActivity implements On
         getLocationPermission(mapFragment);
 
         //adding the search recycler adapter
-        List<SearchDetailData> reviewData = new ArrayList<>();
-        searchDetailRecyclerAdapter = new SearchDetailAdapter(this, reviewData);
+        searchDetailRecyclerAdapter = new SearchDetailAdapter(this, getSearchDetailData());
         searchDetailRecycler.setAdapter(searchDetailRecyclerAdapter);
         searchDetailRecycler.setLayoutManager(new LinearLayoutManager(this));
+
         //add the package recycler adapter
-        packageRecyclerAdapter = new SearchDetailAdapter(this, reviewData);
+        packageRecyclerAdapter = new SearchPackageAdapter(this, getSearchPackageData());
         packageRecyclerView.setAdapter(packageRecyclerAdapter);
         packageRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+    }
 
+    @NonNull
+    private List<SearchDetailData> getSearchDetailData() {
+        List<SearchDetailData> grabingInfoData = new ArrayList<>();
+        SearchDetailData current = new SearchDetailData();
+        current.setItemName((String) searchDataStore.getForWhom().get("name"));
+        current.setItemInfo("Student name");
+        if((Boolean) searchDataStore.getForWhom().get("is_self")){
+            current.setItemChange(searchDataStore.getAvatarString());
+            current.setImageSrc(null);
+        }else{
+            current.setImageSrc((Bitmap) searchDataStore.getForWhom().get("photo"));
+            current.setItemChange(null);
+        }
+        grabingInfoData.add(current);
+        for (int i = 0; i < searchDataStore.getQueryList().size(); i++) {
+            SearchDetailData myCurrent = new SearchDetailData();
+            myCurrent.setItemName((String) searchDataStore.getQueryList().get(i));
+            myCurrent.setItemInfo( (String)searchDataStore.getQueryListName().get(i));
+            grabingInfoData.add(myCurrent);
+        }
+        return grabingInfoData;
+    }
+
+    @NonNull
+    private List<SearchDetailData> getSearchPackageData() {
+        List<SearchDetailData> reviewData = new ArrayList<>();
+        SearchDetailData packageCurrent = new SearchDetailData();
+        packageCurrent.setItemName((String) searchDataStore.getPackageName());
+        packageCurrent.setItemInfo("Package name");
+        reviewData.add(packageCurrent);
+        packageCurrent = new SearchDetailData();
+        String selectedDays = (String) searchDataStore.getPreferredDays().get("selected_days");
+        String finalWeekOfDays = "";
+        List<String> myWeekOfDays = Arrays.asList(selectedDays.split(","));
+        for (int fuck = 0; fuck < myWeekOfDays.size(); fuck++) {
+            if (fuck == 0) {
+                finalWeekOfDays = firstThree(myWeekOfDays.get(fuck));
+
+            } else {
+                finalWeekOfDays = finalWeekOfDays + "," + firstFour(myWeekOfDays.get(fuck));
+            }
+        }
+        packageCurrent.setItemName(finalWeekOfDays);
+        packageCurrent.setItemInfo("Preferred days");
+        reviewData.add(packageCurrent);
+        packageCurrent = new SearchDetailData();
+        packageCurrent.setItemName((String) searchDataStore.getStartDate().get("date_string"));
+        packageCurrent.setItemInfo("Start date");
+        reviewData.add(packageCurrent);
+        packageCurrent = new SearchDetailData();
+        packageCurrent.setItemName((String) searchDataStore.getStartTime().get("time_string"));
+        packageCurrent.setItemInfo("Start time");
+        reviewData.add(packageCurrent);
+        return reviewData;
     }
 
     @Override
     public void findView() {
-
         loaderView = findViewById(R.id.loading_view);
         coordinatorLayout = findViewById(R.id.my_main_container);
         llBottomSheet = findViewById(R.id.searchBottomSheet);
@@ -114,6 +201,11 @@ public class SearchLoadingActivity extends CusStuAppComMapActivity implements On
         searchDetailRecycler = findViewById(R.id.search_details_recycler);
         packageRecyclerView = findViewById(R.id.package_detail_recycler);
         searchImageView = findViewById(R.id.searching_imageView);
+        bottomSheetNSV = findViewById(R.id.bottom_sheet_scroll_view);
+        alwaysViewMusk = findViewById(R.id.view_musk);
+        mCustomMarkerView = ((LayoutInflater) Objects.requireNonNull(getSystemService(LAYOUT_INFLATER_SERVICE))).inflate(R.layout.custom_marker_view, null);
+        mMarkerImageView = mCustomMarkerView.findViewById(R.id.profile_image);
+        iconFactory = new IconGenerator(this);
     }
 
     @Override
@@ -147,7 +239,8 @@ public class SearchLoadingActivity extends CusStuAppComMapActivity implements On
             }
 
         });
-
+        bottomSheetNSV.setNestedScrollingEnabled(true);
+        bottomSheetNSV.setSmoothScrollingEnabled(true);
     }
 
     @Override
@@ -155,9 +248,7 @@ public class SearchLoadingActivity extends CusStuAppComMapActivity implements On
         bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
-                if (BottomSheetBehavior.STATE_HIDDEN == newState) {
-
-                } else if (BottomSheetBehavior.STATE_COLLAPSED == newState) {
+                if (BottomSheetBehavior.STATE_COLLAPSED == newState) {
                     setDarkStatusBarIcon();
                     viewMuskOne.setVisibility(View.GONE);
                     loaderView.setVisibility(View.VISIBLE);
@@ -171,7 +262,14 @@ public class SearchLoadingActivity extends CusStuAppComMapActivity implements On
                         supportActionBarMain.setDisplayHomeAsUpEnabled(true);
                         supportActionBarMain.setDisplayShowHomeEnabled(true);
                     }
-
+                    bottomSheetNSV.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            bottomSheetNSV.fling(0);
+                            bottomSheetNSV.scrollTo(0, 0);
+                            bottomSheetNSV.fling(-10000);
+                        }
+                    });
                 } else if (BottomSheetBehavior.STATE_EXPANDED == newState) {
                     setLightStatusBarIcon();
                     viewMuskOne.setVisibility(View.VISIBLE);
@@ -190,10 +288,7 @@ public class SearchLoadingActivity extends CusStuAppComMapActivity implements On
                     viewMuskOne.setVisibility(View.VISIBLE);
                     secondaryAppbarLayout.setVisibility(View.VISIBLE);
                     defaultAppbarLayout.setVisibility(View.INVISIBLE);
-
-                } /*else if (BottomSheetBehavior.STATE_SETTLING == newState) {
-                    loaderView.setVisibility(View.VISIBLE);
-                }*/
+                }
             }
 
             @Override
@@ -205,15 +300,22 @@ public class SearchLoadingActivity extends CusStuAppComMapActivity implements On
 
             }
         });
+        //gathering the touch event here
+        alwaysViewMusk.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                return true;
+            }
+        });
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
-            if(bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED){
+            if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
                 bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-            }else{
+            } else {
                 super.onBackPressed();
             }
             return true;
@@ -225,21 +327,30 @@ public class SearchLoadingActivity extends CusStuAppComMapActivity implements On
     @Override
     public void onMapReady(GoogleMap googleMap) {
         MapStyleOptions style = MapStyleOptions.loadRawResourceStyle(
-                this, R.raw.map_style_default_no_landmarks);
+                this, R.raw.map_style_default_json);
         googleMap.setMapStyle(style);
 
         mMap = googleMap;
+        onMapReadyListener(mMap);
+        onMapReadyGeneralConfig();
         mMap.setPadding((int) (10 * (getResources().getDisplayMetrics().density)), 0, 0, (int) (72 * (getResources().getDisplayMetrics().density)));
-
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        mMap.getUiSettings().setCompassEnabled(false);
+        addCustomMarkerFromURL(searchDataStore.getAvatarString(), searchDataStore.getAnchorPoint());
+        viewMuskOne.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                //give anchor point here
+                //getDeviceLocation(mMap);
+                moveSearchLoadingCamera(searchDataStore.getAnchorPoint(), DEFAULT_ZOOM, "Device Location", mMap);
+            }
+        }, 100L);
     }
 
     @Override
     public void onMyGpsLocationChanged(Location location) {
-
+        //testing
+        //getDeviceLocation(mMap);
+        //nothing to do where as the location will be the anchor point
     }
 
     @Override
@@ -259,34 +370,83 @@ public class SearchLoadingActivity extends CusStuAppComMapActivity implements On
         mPresenter.onSearchLoadingIntracted(view);
     }
 
-    public List<SearchDetailData> getFinalData() {
-        List<SearchDetailData> data = new ArrayList<>();
-        String[] searchTextMain = getResources().getStringArray(R.array.SearchDetailMain);
-        String[] searchTextSub = getResources().getStringArray(R.array.SearchDetailSub);
-        String[] searchTextChange = getResources().getStringArray(R.array.SearchDetailSub);
-        int[] imageIcons = {
-                R.drawable.ic_set_location_on_map,
-                R.drawable.ic_arrow_forward_black_24dp,
-                R.drawable.ic_category,
-                R.drawable.ic_medium,
-                R.drawable.ic_class,
-                R.drawable.ic_subject,
-                R.drawable.ic_payment,
-                R.drawable.ic_gender_preference,
-                R.drawable.dume_gang_image,
-                R.drawable.ic_seven_days,
-                R.drawable.ic_preffered_day,
-                R.drawable.ic_time
+    private void addCustomMarkerFromURL(String url, LatLng lattitudeLongitude) {
+        if (mMap == null) {
+            return;
+        }
+        Glide.with(getApplicationContext())
+                .asBitmap()
+                .load(url)
+                .apply(new RequestOptions().override((int) (28 * (getResources().getDisplayMetrics().density)), (int) (28 * (getResources().getDisplayMetrics().density))).centerCrop().placeholder(R.drawable.alias_profile_icon))
+                .into(new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(@NonNull Bitmap resource, @Nullable com.bumptech.glide.request.transition.Transition<? super Bitmap> transition) {
+                        final Bitmap roundedCornerBitmap = getRoundedCornerBitmapSquare(resource, (int) (14 * (getResources().getDisplayMetrics().density)), (int) (28 * (getResources().getDisplayMetrics().density)));
+                        mMap.addMarker(new MarkerOptions().position(lattitudeLongitude)
+                                .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(mCustomMarkerView, resource))));
+                        //mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(lattitudeLongitude, 15f));
+                    }
+                });
 
-        };
-
-   /*     for (int i = 0; i < primaryText.length && i < secondaryText.length && i < imageIcons.length; i++) {
-            SearchDetailData current = new SearchDetailData();
-            current.primaryText = primaryText[i];
-            current.secondaryText = secondaryText[i];
-            current.imageSrc = imageIcons[i];
-            data.add(current);
-        }*/
-        return data;
+        iconFactory.setStyle(IconGenerator.STYLE_DEFAULT);
+        iconFactory.setTextAppearance(this, R.style.MyCustomInfoWindowTextApp);
+        iconFactory.setBackground(getDrawable(R.drawable.custom_info_window_vector));
+        iconFactory.setContentPadding((int) (27 * (getResources().getDisplayMetrics().density)), (int) (2 * (getResources().getDisplayMetrics().density)), 0, (int) (6 * (getResources().getDisplayMetrics().density)));
+        addCustomInfoWindow(iconFactory, makeCharSequence("Radius", Integer.toString(SearchDataStore.SHORTRADIUS))+" m", lattitudeLongitude);
     }
+
+    //testing custom marker code here
+    private Bitmap getMarkerBitmapFromView(View view, Bitmap bitmap) {
+
+        mMarkerImageView.setImageBitmap(getRoundedCornerBitmap(bitmap, (int) (28 * (getResources().getDisplayMetrics().density))));
+        view.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+        view.layout(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
+        view.buildDrawingCache();
+        Bitmap returnedBitmap = Bitmap.createBitmap(view.getMeasuredWidth(), view.getMeasuredHeight(),
+                Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(returnedBitmap);
+        canvas.drawColor(Color.WHITE, PorterDuff.Mode.SRC_IN);
+        Drawable drawable = view.getBackground();
+        if (drawable != null)
+            drawable.draw(canvas);
+        view.draw(canvas);
+        return returnedBitmap;
+
+    }
+
+    @Override
+    public void saveToDB() {
+        if (!checkIfInDB(searchDataStore.getJizz())) {
+            String preIdentify = (String) searchDataStore.getDocumentSnapshot().get("next_sp_write");
+            String identify = "rs_";
+            identify = identify + preIdentify;
+            mModel.updateRecentSearch(identify, searchDataStore.genRetMainMap(), new TeacherContract.Model.Listener<Void>() {
+                @Override
+                public void onSuccess(Void list) {
+                    saveDone = true;
+                }
+
+                @Override
+                public void onError(String msg) {
+                    Log.e(TAG, msg);
+                    saveDone = true;
+                }
+            });
+        }
+    }
+
+    @Override
+    public boolean checkIfInDB(Map<String, Object> jizz) {
+        boolean found = false;
+        Map<String, Map<String, Object>> beforeSearched = (Map<String, Map<String, Object>>) searchDataStore.getDocumentSnapshot().get("recent_search");
+        if (beforeSearched != null && beforeSearched.size() > 0) {
+            for (Map.Entry<String, Map<String, Object>> entry : beforeSearched.entrySet()) {
+                if (entry.getValue().get("jizz").equals(jizz)) {
+                    found = true;
+                }
+            }
+        }
+        return found;
+    }
+
 }

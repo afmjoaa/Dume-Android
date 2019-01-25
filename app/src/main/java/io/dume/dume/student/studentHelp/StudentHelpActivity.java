@@ -130,7 +130,7 @@ public class StudentHelpActivity extends CustomStuAppCompatActivity implements S
             public void onClick(DialogInterface dialogInterface, int i) {
                 //Toast.makeText(StudentHelpActivity.this, "Ok", Toast.LENGTH_SHORT).show();
             }
-        });
+        }, "Ok");
         updateAlertDialogue.setArguments(Uargs);
         updateAlertDialogue.show(getSupportFragmentManager(), "updateAlertDialogue");
     }

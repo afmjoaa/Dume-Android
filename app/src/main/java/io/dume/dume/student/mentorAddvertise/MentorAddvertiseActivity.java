@@ -30,7 +30,8 @@ public class MentorAddvertiseActivity extends CustomStuAppCompatActivity impleme
         setActivityContext(this, fromFlag);
         mPresenter = new MentorAddvertisePresenter(this, new MentorAddvertiseModel());
         mPresenter.mentorAddvertiseEnqueue();
-        configureAppbar(this, "Start mentoring");
+        findLoadView();
+        configureAppbar(this, "Start mentoring", true);
 
     }
 

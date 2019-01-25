@@ -83,11 +83,11 @@ public class DumeModel implements TeacherModel {
     public void getSkill(TeacherContract.Model.Listener<ArrayList<Skill>> listener) {
         CollectionReference skillCollection = firebaseFirestore.collection("users").document("mentors").collection("skills");
         skillCollection.addSnapshotListener(new EventListener<QuerySnapshot>() {
-            private ArrayList<Skill> skillList = new ArrayList<>();
+
 
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-
+                 ArrayList<Skill> skillList = new ArrayList<>();
                 List<DocumentSnapshot> documents = queryDocumentSnapshots.getDocuments();
                 for (DocumentSnapshot document : documents) {
                     Skill skill = document.toObject(Skill.class);

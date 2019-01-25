@@ -1,5 +1,9 @@
 package io.dume.dume.student.searchResult;
 
+import java.util.Map;
+
+import io.dume.dume.teacher.homepage.TeacherContract;
+
 public interface SearchResultContract {
     interface View {
 
@@ -10,6 +14,7 @@ public interface SearchResultContract {
         void findView();
 
         void centerTheMapCamera();
+
     }
 
     interface Presenter {
@@ -23,5 +28,6 @@ public interface SearchResultContract {
     interface Model {
 
         void searchResultHawwa();
+
     }
 }

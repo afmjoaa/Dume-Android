@@ -26,6 +26,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -40,12 +41,15 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResponse;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -60,6 +64,8 @@ import android.support.design.widget.FloatingActionButton;
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import io.dume.dume.R;
 import io.dume.dume.customView.TouchableWrapper;
@@ -96,10 +102,10 @@ public class CusStuAppComMapActivity extends CustomStuAppCompatActivity implemen
     protected Task<LocationSettingsResponse> result;
     protected FusedLocationProviderClient mFusedLocationProviderClient;
     protected GoogleApiClient mGoogleApiClient;
-    protected boolean touchedFirstTime = false;
+    protected boolean grabingLocationFirstLoad = true;
 
     //public variable
-    public static final float DEFAULT_ZOOM = 15f;
+    public static final float DEFAULT_ZOOM = 16f;
     public static Boolean MLOCATIONPERMISSIONGRANTED = false;
     private ImageView myImageMarker;
     private MyGpsLocationChangeListener myGpsLocationChangeListener;
@@ -108,6 +114,10 @@ public class CusStuAppComMapActivity extends CustomStuAppCompatActivity implemen
     private carbon.widget.RelativeLayout inputSearchContainer;
     private FloatingActionButton fab;
     private EditText inputSearch;
+    private CameraPosition cameraPosition;
+    private int time;
+    private long delayTime = 100L;
+    private static final LatLngBounds LAT_LNG_BOUNDS = new LatLngBounds(new LatLng(19, 87), new LatLng(27, 93));
 
 
     public void setActivityContextMap(Context context, int i) {
@@ -269,10 +279,6 @@ public class CusStuAppComMapActivity extends CustomStuAppCompatActivity implemen
             inputSearchContainer.requestFocus();
             searchBottomSheet.setVisibility(View.INVISIBLE);
             locationDoneBtn.setVisibility(View.VISIBLE);
-            /*if(touchedFirstTime){
-                fab.animate().translationYBy((float) (2.0f * (getResources().getDisplayMetrics().density))).enqueue();
-                touchedFirstTime = false;
-            }*/
         }
 
     }
@@ -320,10 +326,154 @@ public class CusStuAppComMapActivity extends CustomStuAppCompatActivity implemen
         mapFragment.getMapAsync((OnMapReadyCallback) context);
     }
 
+    protected void moveSearchLoadingCamera(LatLng latLng, float zoom, String title, GoogleMap mMap) {
+        cameraPosition = new CameraPosition.Builder()
+                .target(latLng)
+                .zoom(14)
+                .bearing(0)
+                .tilt(40)
+                .build();
+        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 50, new GoogleMap.CancelableCallback() {
+            @Override
+            public void onFinish() {
+                Timer timer = new Timer();
+                timer.scheduleAtFixedRate(new TimerTask() {
+                    @Override
+                    public void run() {
+                        // ... Calculating and sending new location, in an infinite loop with sleeps for timing
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                cameraPosition = new CameraPosition.Builder()
+                                        .target(latLng)
+                                        .zoom(15f)
+                                        .bearing(mMap.getCameraPosition().bearing + 120)
+                                        .tilt(45)
+                                        .build();
+                                mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 9000, new GoogleMap.CancelableCallback() {
+                                    @Override
+                                    public void onFinish() {
+                                        cameraPosition = new CameraPosition.Builder()
+                                                .target(latLng)
+                                                .zoom(16f)
+                                                .bearing(mMap.getCameraPosition().bearing + 120)
+                                                .tilt(50)
+                                                .build();
+                                        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 9000, new GoogleMap.CancelableCallback() {
+                                            @Override
+                                            public void onFinish() {
+                                                cameraPosition = new CameraPosition.Builder()
+                                                        .target(latLng)
+                                                        .zoom(17f)
+                                                        .bearing(mMap.getCameraPosition().bearing + 120)
+                                                        .tilt(55)
+                                                        .build();
+                                                mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 9000, new GoogleMap.CancelableCallback() {
+                                                    @Override
+                                                    public void onFinish() {
+                                                        cameraPosition = new CameraPosition.Builder()
+                                                                .target(latLng)
+                                                                .zoom(17f)
+                                                                .bearing(mMap.getCameraPosition().bearing)
+                                                                .tilt(55)
+                                                                .build();
+                                                        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 2000, new GoogleMap.CancelableCallback() {
+                                                            @Override
+                                                            public void onFinish() {
+                                                                //nothing to do
+                                                            }
+
+                                                            @Override
+                                                            public void onCancel() {
+
+                                                            }
+                                                        });
+                                                    }
+
+                                                    @Override
+                                                    public void onCancel() {
+
+                                                    }
+                                                });
+                                            }
+
+                                            @Override
+                                            public void onCancel() {
+
+                                            }
+                                        });
+                                    }
+
+                                    @Override
+                                    public void onCancel() {
+
+                                    }
+                                });
+                            }
+                        });
+                    }
+                }, 2000, 300000);
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+        });
+    }
+
     protected void moveCamera(LatLng latLng, float zoom, String title, GoogleMap mMap) {
         Log.d(TAG, "moveCamera: moving the camera to: lat: " + latLng.latitude + ", lng: " + latLng.longitude);
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
+        time = 1000;
+        if (fromFlag == 2) {
+            //grabingLocationFirstLoad
+            cameraPosition = new CameraPosition.Builder()
+                    .target(latLng)
+                    .zoom(DEFAULT_ZOOM)
+                    .tilt(0)
+                    .build();
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, DEFAULT_ZOOM));
+            /*MAP.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    delayTime = 0L;
+                }
+            }, delayTime);*/
+        } else if (fromFlag == 1) {
+            cameraPosition = new CameraPosition.Builder()
+                    .target(latLng)
+                    .zoom(15f)
+                    .tilt(42)
+                    .build();
+            time = 2000;
+            MAP.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), time, new GoogleMap.CancelableCallback() {
+                        @Override
+                        public void onFinish() {
+                        }
 
+                        @Override
+                        public void onCancel() {
+                        }
+                    });
+                }
+            }, 1000L);
+        } else {
+            cameraPosition = new CameraPosition.Builder()
+                    .target(latLng)
+                    .zoom(15f)
+                    .tilt(0)
+                    .build();
+            MAP.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f));
+                }
+            }, 700L);
+        }
+        //mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
         // dropping pin here which will be customized later on
         if (!title.equals("Device Location")) {
             MarkerOptions options = new MarkerOptions()
@@ -344,8 +494,14 @@ public class CusStuAppComMapActivity extends CustomStuAppCompatActivity implemen
                             public void onSuccess(Location location) {
                                 // GPS location can be null if GPS is switched off
                                 if (location != null) {
-                                    moveCamera(new LatLng(location.getLatitude(), location.getLongitude()), DEFAULT_ZOOM
-                                            , "Device Location", mMap);
+                                    if (fromFlag != 5) {
+                                        if (mMap.getCameraPosition().zoom < 4) {
+                                            mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(LAT_LNG_BOUNDS, 1));
+                                            moveCamera(new LatLng(location.getLatitude(), location.getLongitude()), DEFAULT_ZOOM, "Device Location", mMap);
+                                        }else{
+                                            moveCamera(new LatLng(location.getLatitude(), location.getLongitude()), DEFAULT_ZOOM, "Device Location", mMap);
+                                        }
+                                    }
                                 }
                             }
                         })
@@ -427,7 +583,10 @@ public class CusStuAppComMapActivity extends CustomStuAppCompatActivity implemen
                     public void onSuccess(Location location) {
                         // GPS location can be null if GPS is switched off
                         if (location != null) {
-                            moveCamera(new LatLng(location.getLatitude(), location.getLongitude()), DEFAULT_ZOOM, "Device Location", mMap);
+                            if (fromFlag != 5) {
+                                mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(LAT_LNG_BOUNDS, 1));
+                                moveCamera(new LatLng(location.getLatitude(), location.getLongitude()), DEFAULT_ZOOM, "Device Location", mMap);
+                            }
                             //TODO do camera change here
                         }
                     }
@@ -437,6 +596,9 @@ public class CusStuAppComMapActivity extends CustomStuAppCompatActivity implemen
                     public void onFailure(@NonNull Exception e) {
                         Log.d("MapDemoActivity", "Error trying to get last GPS location");
                         e.printStackTrace();
+                        if (fromFlag != 5) {
+                            mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(LAT_LNG_BOUNDS, 1));
+                        }
                     }
                 });
         try {
@@ -512,13 +674,13 @@ public class CusStuAppComMapActivity extends CustomStuAppCompatActivity implemen
 
     //for making custom info window
     protected void addCustomInfoWindow(IconGenerator iconFactory, CharSequence text, LatLng position) {
-        if(mMap == null){
+        if (mMap == null) {
             return;
         }
         MarkerOptions markerOptions = new MarkerOptions().
                 icon(BitmapDescriptorFactory.fromBitmap(iconFactory.makeIcon(text))).
                 position(position).
-                anchor(0,  1f);
+                anchor(0, 1f);
         mMap.addMarker(markerOptions);
     }
 

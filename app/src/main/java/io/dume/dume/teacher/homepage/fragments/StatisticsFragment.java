@@ -63,8 +63,8 @@ public class StatisticsFragment extends Fragment {
                         lineDataSet = new LineDataSet(entrieslist.get(i), "Views");
                         lineDataSet.setDrawFilled(true);
                         lineDataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
-                        lineDataSet.setFillColor(Color.MAGENTA);
-                        lineDataSet.setColor(Color.MAGENTA);
+                        lineDataSet.setFillColor(Color.BLUE);
+                        lineDataSet.setColor(Color.BLUE);
                     }
                     lineDataSet.setLineWidth(0.0f);
                     lineDataSet.setDrawValues(false);

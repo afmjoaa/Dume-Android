@@ -48,7 +48,7 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
 
     public PhoneVerficationPresenter(Context context, PhoneVerificationContract.View view, PhoneVerificationContract.Model authModel) {
         this.context = context;
-        this.activity =(Activity) context;
+        this.activity = (Activity) context;
         this.view = view;
         this.model = authModel;
         fireStore = FirebaseFirestore.getInstance();
@@ -311,9 +311,19 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
         selfRating.put("dl_expertise", "0");
         selfRating.put("l_experience", "1");
         selfRating.put("dl_experience", "0");
-        selfRating.put("response_time","90");
-        selfRating.put("student_guided","5");
+        selfRating.put("response_time", "90");
+        selfRating.put("student_guided", "5");
         mentorFeild.put("self_rating", selfRating);
+
+
+
+        /* Payment Section */
+        Map<String, Object> paymentMap = new HashMap<>();
+        paymentMap.put("obligation_amount", "0");
+        paymentMap.put("obligation_currency", "BDT");
+        paymentMap.put("total_paid", "0");
+        mentorFeild.put("payments", paymentMap);
+
 
         List<String> appliedPromoList = new ArrayList<>();
         mentorFeild.put("applied_promo", appliedPromoList);
@@ -388,8 +398,8 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
         selfRating.put("dl_expertise", "0");
         selfRating.put("l_experience", "1");
         selfRating.put("dl_experience", "0");
-        selfRating.put("response_time","90");
-        selfRating.put("student_guided","5");
+        selfRating.put("response_time", "90");
+        selfRating.put("student_guided", "5");
         bootCampField.put("self_rating", selfRating);
 
         List<String> appliedPromoList = new ArrayList<>();
@@ -434,6 +444,7 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
         stuProInfo.put("unread_msg", "0");
         stuProInfo.put("unread_noti", "0");
         stuProInfo.put("next_rp_write", "1");
+        stuProInfo.put("next_sp_write", "1");
 
         GeoPoint current_address = new GeoPoint(84.9, -180);
         stuProInfo.put("current_address", current_address);
@@ -467,6 +478,8 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
         stuProInfo.put("saved_places", savedPlaces);
         Map<String, Map<String, Object>> recentlyUsedPlaces = new HashMap<>();
         stuProInfo.put("recent_places", recentlyUsedPlaces);
+        Map<String, Map<String, Object>> recentlySearched = new HashMap<>();
+        stuProInfo.put("recent_search", recentlySearched);
 
         stuProInfo.put("referred", false);
         stuProInfo.put("referer_id", "");

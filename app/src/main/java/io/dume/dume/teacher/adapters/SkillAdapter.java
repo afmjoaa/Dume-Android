@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v4.view.animation.FastOutLinearInInterpolator;
 import android.support.v4.view.animation.LinearOutSlowInInterpolator;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
@@ -30,11 +31,13 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import carbon.widget.RelativeLayout;
 import io.dume.dume.R;
+import io.dume.dume.teacher.model.KeyMap;
 import io.dume.dume.teacher.pojo.Skill;
 import io.dume.dume.teacher.skill.SkillActivity;
 import io.dume.dume.util.VisibleToggleClickListener;
@@ -42,15 +45,27 @@ import io.dume.dume.util.VisibleToggleClickListener;
 public class SkillAdapter extends RecyclerView.Adapter<SkillAdapter.SkillVH> {
     public static int FRAGMENT = 1;
     public static int ACTIVITY = 2;
-    private final ArrayList<String> endOfNest;
+    private ArrayList<String> endOfNest = null;
     private int layoutSize;
     private ArrayList<Skill> skillList;
     private View inflate;
     private Context context;
     private String TAG = "SkillAdapter";
 
-    public SkillAdapter(int layoutSize, ArrayList<Skill> skillList) {
+    public void update(ArrayList<Skill> skillList) {
+        this.skillList.clear();
+        this.skillList.addAll(skillList);
+        this.notifyDataSetChanged();
+    }
 
+    public SkillAdapter(int layoutSize) {
+        this.layoutSize = layoutSize;
+        this.skillList = new ArrayList<>();
+        endOfNest = new ArrayList<>(Arrays.asList("Subject", "Field", "Software", "Language", "Flavour", "Type", "Course", " Language "));
+
+    }
+
+    public SkillAdapter(int layoutSize, ArrayList<Skill> skillList) {
         this.layoutSize = layoutSize;
         this.skillList = skillList;
         endOfNest = new ArrayList<>(Arrays.asList("Subject", "Field", "Software", "Language", "Flavour", "Type", "Course", " Language "));
@@ -85,7 +100,20 @@ public class SkillAdapter extends RecyclerView.Adapter<SkillAdapter.SkillVH> {
     @Override
     public void onBindViewHolder(@NonNull SkillVH skillVH, int i) {
         if (layoutSize == ACTIVITY) {
-            SkillDetailsAdapter skillDetailsAdapter = new SkillDetailsAdapter(null);
+
+            ArrayList<KeyMap> detailList = new ArrayList<>();
+            Skill skill = skillList.get(i);
+
+            detailList.add(new KeyMap("Enrolled Students", skill.getEnrolled()));
+            detailList.add(new KeyMap("Package Name", "Regular Dume"));
+            detailList.add(new KeyMap("Salary", skill.getSalary() + "k BDT"));
+            detailList.add(new KeyMap("Skill Visibility", skill.isStatus() ? "Public" : "Private (Inactive)"));
+            detailList.add(new KeyMap("Rating", ((int) skill.getRating()) + "/ 옷" + skill.getTotalRating()));
+            detailList.add(new KeyMap("Skill Type", skill.getJizz().get("Category")));
+            detailList.add(new KeyMap("Gender Filter", skill.getJizz().get("Gender").equals("Any") ? "None" : skill.getJizz().get("Gender")));
+            detailList.add(new KeyMap("Feedback", skill.getFeedback()));
+            SkillDetailsAdapter skillDetailsAdapter = new SkillDetailsAdapter(detailList);
+            skillVH.detailsRV.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
             skillVH.detailsRV.setAdapter(skillDetailsAdapter);
             skillVH.itemView.setOnClickListener(new VisibleToggleClickListener() {
 
@@ -124,7 +152,7 @@ public class SkillAdapter extends RecyclerView.Adapter<SkillAdapter.SkillVH> {
 
                                 }
                             });
-                   TransitionManager.beginDelayedTransition(skillVH.recycleHostingLinear, set);
+                    TransitionManager.beginDelayedTransition(skillVH.recycleHostingLinear, set);
                     if (visible) {
                         skillVH.recycleHostingLinear.setVisibility(View.VISIBLE);
                     } else {

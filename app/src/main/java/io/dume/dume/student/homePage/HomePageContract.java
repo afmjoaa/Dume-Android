@@ -57,6 +57,8 @@ public interface HomePageContract {
 
         void gotoMentorAddvertise();
 
+        void gotoBootCampHomePage();
+
         void gotoNotificationTab();
 
         void referMentorImageViewClicked();
@@ -122,6 +124,12 @@ public interface HomePageContract {
         void setAvatarForMenu(String avatar);
 
         void showSnackBar(String completePercent);
+
+        void switchProfileDialog(String identify);
+
+        void gotoTestingActivity();
+
+        boolean checkNull();
     }
 
     interface Presenter {
@@ -135,6 +143,8 @@ public interface HomePageContract {
         void checkNetworkAndGps();
 
         void defaultOptionMenuCreated();
+
+        void getDataFromDB();
     }
 
     interface Model {

@@ -43,7 +43,7 @@
     <color name="progressBarColor">#00796B</color>
     <color name="black_overlay">#66000000</color>
     <color name="light_black_overlay">#3c000000</color>
-    <color name="dark_black_overlay">#b0000000</color>
+    <color name="dark_black_overlay">#aa000000</color>
     <color name="loader_color_one">#29b6f6</color>
     <color name="tab_overlay">#50000000</color>
     <color name="myToolbarIconColor">#2D354A</color>
