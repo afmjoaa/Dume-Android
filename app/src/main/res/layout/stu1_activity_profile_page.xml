@@ -94,7 +94,7 @@
                 android:thicknessRatio="1.9"
                 app:cardCornerRadius="45dp">
 
-                <ImageView
+                <carbon.widget.ImageView
                     android:id="@+id/imageView1"
                     android:layout_width="match_parent"
                     android:layout_height="90dp"
@@ -103,9 +103,11 @@
                     android:adjustViewBounds="true"
                     android:contentDescription="@string/display_pic"
                     android:scaleType="centerCrop"
-                    app:srcCompat="@drawable/alias_profile_icon" />
+                    app:carbon_cornerRadius="45dp"
+                    app:carbon_elevation="3dp"
+                    app:srcCompat="@drawable/avatar" />
 
-                <TextView
+                <carbon.widget.TextView
                     android:id="@+id/label"
                     android:layout_width="120dp"
                     android:layout_height="26dp"
@@ -116,6 +118,7 @@
                     android:maxLines="1"
                     android:rotation="45"
                     android:singleLine="true"
+                    app:carbon_elevation="3dp"
                     android:text="Change"
                     android:textAppearance="?android:textAppearanceLargeInverse"
                     android:textSize="10sp"

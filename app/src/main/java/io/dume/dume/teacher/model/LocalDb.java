@@ -269,7 +269,7 @@ public class LocalDb {
     }
 
     public LocalDb() {
-        categories = new ArrayList<String>(Arrays.asList("Education", "Software", "Programming", "Language", "Dance", "Art", "Cooking", "Music", "Sewing")) {
+        categories = new ArrayList<String>(Arrays.asList("Education", "Software", "Programming", "Language", "Dance", "Art", "Cooking", "Music", "Others")) {
             @Override
             public String toString() {
                 return "Categories";
@@ -776,7 +776,7 @@ public class LocalDb {
             case "Music":
                 list = musicMap.get(selected);
                 break;
-            case "Sewing":
+            case "Others":
                 list = null;
                 break;
             default:
@@ -844,7 +844,7 @@ public class LocalDb {
             case "Music":
                 list = musicMap.get(selected);
                 break;
-            case "Sewing":
+            case "Others":
                 list = null;
                 break;
             default:
@@ -881,7 +881,7 @@ public class LocalDb {
             case "Music":
                 list = musicMap.get(selected);
                 break;
-            case "Sewing":
+            case "Others":
                 list = null;
                 break;
             default:
@@ -889,5 +889,6 @@ public class LocalDb {
         }
         return list;
     }
+    //4 sewing changed
 
 }

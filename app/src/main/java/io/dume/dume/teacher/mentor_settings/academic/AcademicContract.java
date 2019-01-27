@@ -40,7 +40,11 @@ public interface AcademicContract {
 
         void inValidFound(String identify);
 
-        void clearAllField();
+        boolean getValidationCheck();
+
+        void gotoBackActivity();
+
+        void onBackPressed();
     }
 
     interface Model {

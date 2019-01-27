@@ -7,12 +7,17 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
+
+import org.imperiumlabs.geofirestore.GeoFirestore;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,6 +26,7 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import io.dume.dume.teacher.homepage.TeacherContract;
+import io.dume.dume.teacher.homepage.TeacherDataStore;
 import io.dume.dume.teacher.pojo.Skill;
 
 public class DumeModel implements TeacherModel {
@@ -28,10 +34,14 @@ public class DumeModel implements TeacherModel {
     private static final String TAG = "DumeModel";
     private final FirebaseFirestore firebaseFirestore;
     private final FirebaseAuth firebaseAuth;
+    private CollectionReference skillCollection;
+    private final GeoFirestore geoFirestore;
 
     public DumeModel() {
         firebaseFirestore = FirebaseFirestore.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
+        skillCollection = firebaseFirestore.collection("users").document("mentors").collection("skills");
+        geoFirestore = new GeoFirestore(skillCollection);
     }
 
     public void switchAcount(String to, TeacherContract.Model.Listener<Void> listener) {
@@ -57,21 +67,22 @@ public class DumeModel implements TeacherModel {
         dataMap.put("jizz", skill.getJizz());
         dataMap.put("rating", skill.getRating());
         dataMap.put("totalRating", skill.getTotalRating());
+        GeoPoint location = (GeoPoint) TeacherDataStore.getInstance().getDocumentSnapshot().get("location");
+        dataMap.put("location", location);
         dataMap.put("query_string", skill.getQuery_string());
         dataMap.put("mentor_uid", firebaseAuth.getCurrentUser().getUid());
         dataMap.put("enrolled", skill.getEnrolled());
-        HashMap<String, Object> stringObjectHashMap = new HashMap<>();
-        stringObjectHashMap.put(firebaseAuth.getCurrentUser().getUid(), "Baler Teacher");
-        stringObjectHashMap.put(firebaseAuth.getCurrentUser().getUid() + "K", "Wow Vala Sir");
-        dataMap.put("feedback", stringObjectHashMap);
-        CollectionReference skillCollection = firebaseFirestore.collection("users").document("mentors").collection("skills");
+        dataMap.put("sp_info", TeacherDataStore.getInstance().getDocumentSnapshot());
 
-        skillCollection.document().set(dataMap).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
+
+        final DocumentReference document = skillCollection.document();
+        String id = document.getId();
+
+        document.set(dataMap).addOnSuccessListener(aVoid -> geoFirestore.setLocation(id, location, e -> {
+            if (e == null) {
                 listener.onSuccess(aVoid);
             }
-        }).addOnFailureListener(new OnFailureListener() {
+        })).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
                 listener.onError(e.getLocalizedMessage());
@@ -82,12 +93,13 @@ public class DumeModel implements TeacherModel {
     @Override
     public void getSkill(TeacherContract.Model.Listener<ArrayList<Skill>> listener) {
         CollectionReference skillCollection = firebaseFirestore.collection("users").document("mentors").collection("skills");
-        skillCollection.addSnapshotListener(new EventListener<QuerySnapshot>() {
+        Query query = skillCollection.whereEqualTo("mentor_uid", FirebaseAuth.getInstance().getCurrentUser().getUid());
+        query.addSnapshotListener(new EventListener<QuerySnapshot>() {
 
 
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                 ArrayList<Skill> skillList = new ArrayList<>();
+                ArrayList<Skill> skillList = new ArrayList<>();
                 List<DocumentSnapshot> documents = queryDocumentSnapshots.getDocuments();
                 for (DocumentSnapshot document : documents) {
                     Skill skill = document.toObject(Skill.class);

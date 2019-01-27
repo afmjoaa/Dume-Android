@@ -3,6 +3,7 @@ package io.dume.dume.teacher.mentor_settings.basicinfo;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -33,10 +34,13 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 import static io.dume.dume.util.DumeUtils.getUserUID;
+import static io.dume.dume.util.DumeUtils.hideKeyboard;
 
 public class EditPresenter implements EditContract.Presenter, EditContract.onDataUpdate {
     private EditContract.View view;
     private EditContract.Model model;
+    private final Context context;
+    private final Activity activity;
     private Uri imageUri;
     private static final String TAG = "EditPresenter";
     private File compressedImage;
@@ -44,9 +48,11 @@ public class EditPresenter implements EditContract.Presenter, EditContract.onDat
     private Uri outputFileUri;
     private File actualImage;
 
-    public EditPresenter(EditContract.View view, EditContract.Model model) {
+    public EditPresenter(Context context, EditContract.View view, EditContract.Model model) {
         this.view = view;
         this.model = model;
+        this.context = context;
+        this.activity = (Activity)context;
         model.setListener(this);
     }
 
@@ -64,6 +70,10 @@ public class EditPresenter implements EditContract.Presenter, EditContract.onDat
                     view.setCurrentAddress(geoPoint);
                 }
                 String profileComPercent = list.getString("pro_com_%");
+                String generatePercent = view.generatePercent();
+                if(!generatePercent.equals(profileComPercent)){
+                    model.updatePercentage(generatePercent);
+                }
                 if (profileComPercent != null) {
                     if (profileComPercent.equals("100")) {
                         view.initProfileCompleteView();
@@ -73,6 +83,7 @@ public class EditPresenter implements EditContract.Presenter, EditContract.onDat
                     }
                 }
                 Log.w(TAG, "onSuccess: Fucked Location");
+                view.someThingChanged(false);
                 view.disableLoad();
             }
 
@@ -82,6 +93,8 @@ public class EditPresenter implements EditContract.Presenter, EditContract.onDat
             }
         });
     }
+
+
 
 
     @Override
@@ -216,7 +229,6 @@ public class EditPresenter implements EditContract.Presenter, EditContract.onDat
         switch (requestCode) {
             case 1:
                 if (resultCode == EditAccount.RESULT_OK) {
-
                     view.enableLoad();
 
                     final boolean isCamera;
@@ -249,13 +261,41 @@ public class EditPresenter implements EditContract.Presenter, EditContract.onDat
 
                 break;
             case 2:
-
                 if (resultCode == EditAccount.RESULT_OK) {
                     LatLng selectedLocation = data.getParcelableExtra("selected_location");
                     if (selectedLocation != null) {
                         GeoPoint retrivedLocation = new GeoPoint(selectedLocation.latitude, selectedLocation.longitude);
                         view.setCurrentAddress(retrivedLocation);
                     }
+                }
+                break;
+            case 1234:
+                if (resultCode == EditAccount.RESULT_OK) {
+                    model.getDocumentSnapShot(new TeacherContract.Model.Listener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot list) {
+                            view.updateAcademics(list);
+                            String profileComPercent = list.getString("pro_com_%");
+                            String generatePercent = view.generatePercent();
+                            if(!generatePercent.equals(profileComPercent)){
+                                model.updatePercentage(generatePercent);
+                            }
+                            if (profileComPercent != null) {
+                                if (profileComPercent.equals("100")) {
+                                    view.initProfileCompleteView();
+                                    view.setProfileComPercent(profileComPercent);
+                                } else {
+                                    view.setProfileComPercent(profileComPercent);
+                                }
+                            }
+                            view.disableLoad();
+                        }
+
+                        @Override
+                        public void onError(String msg) {
+                            view.toast(msg);
+                        }
+                    });
                 }
                 break;
         }
@@ -281,6 +321,7 @@ public class EditPresenter implements EditContract.Presenter, EditContract.onDat
 
     @Override
     public void onUpdateSuccess() {
+        hideKeyboard(activity);
         view.disableLoad();
         view.snakbar("Profile Updated Successfully");
     }

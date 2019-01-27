@@ -64,14 +64,11 @@ public class ProfilePagePresenter implements ProfilePageContract.Presenter {
                 if (Objects.requireNonNull(documentSnapshot.getString("pro_com_%")).equals("100")) {
                     mView.initProfileCompleteView();
                     mView.setProfileComPercent(documentSnapshot.getString("pro_com_%"));
-                }else{
+                } else {
                     mView.setProfileComPercent(documentSnapshot.getString("pro_com_%"));
                 }
-
                 final String avatar = documentSnapshot.getString("avatar");
-                if (avatar != null && !avatar.equals("")) {
-                    mView.setAvatar(avatar);
-                }
+                mView.setAvatar(avatar);
             } else {
                 mView.flush("Does not found any user");
                 Log.w(TAG, "onAccountTypeFound: document is not null");
@@ -102,7 +99,7 @@ public class ProfilePagePresenter implements ProfilePageContract.Presenter {
             case R.id.profile_update_btn:
             case R.id.done_imageview:
                 mView.showSpiner();
-                if(mView.checkIfValidUpdate()){
+                if (mView.checkIfValidUpdate()) {
                     if (mView.getAvatarUri() != null) {
                         mModel.uploadImage(mView.getAvatarUri(), new usefulListeners.uploadToSTGListererMin() {
                             @Override
@@ -131,6 +128,7 @@ public class ProfilePagePresenter implements ProfilePageContract.Presenter {
                                             }
                                         });
                             }
+
                             @Override
                             public void onFailSTG(Object obj) {
                                 mView.flush((String) obj);
@@ -160,7 +158,7 @@ public class ProfilePagePresenter implements ProfilePageContract.Presenter {
                                     }
                                 });
                     }
-                }else{
+                } else {
                     //show toast and error empty fill
                     mView.showInvalideInfo();
                     mView.hideSpiner();

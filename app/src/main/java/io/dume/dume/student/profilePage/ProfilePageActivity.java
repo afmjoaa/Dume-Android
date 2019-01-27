@@ -82,7 +82,7 @@ public class ProfilePageActivity extends CustomStuAppCompatActivity implements P
     private Button discardBtn;
     private TextView profileUserName;
     private TextView profileUserNumber;
-    private android.widget.ImageView profileUserDP;
+    private carbon.widget.ImageView profileUserDP;
     private ProgressBar loadingSpiner;
     private Uri outputFileUri = null;
     private int LOCATION_REQUEST_CODE = 2222;
@@ -283,7 +283,7 @@ public class ProfilePageActivity extends CustomStuAppCompatActivity implements P
                             case R.id.action_remove:
                                 avatarString = null;
                                 selectedImageUri = null;
-                                profileUserDP.setImageDrawable(getResources().getDrawable(R.drawable.alias_profile_icon));
+                                profileUserDP.setImageDrawable(getResources().getDrawable(R.drawable.avatar));
                                 flush("Display pic Removed");
                                 break;
                         }
@@ -517,7 +517,7 @@ public class ProfilePageActivity extends CustomStuAppCompatActivity implements P
                     @Override
                     public void accept(File file) {
                         compressedImage = file;
-                        Glide.with(ProfilePageActivity.this).load(compressedImage).apply(new RequestOptions().override(100, 100)).into(profileUserDP);
+                        Glide.with(ProfilePageActivity.this).load(compressedImage).apply(new RequestOptions().override(100, 100).placeholder(R.drawable.avatar)).into(profileUserDP);
                         hideSpiner();
                         updateChangesClicked();
                     }
@@ -644,7 +644,12 @@ public class ProfilePageActivity extends CustomStuAppCompatActivity implements P
     @Override
     public void setAvatar(String uri) {
         avatarString = uri;
-        Glide.with(this).load(uri).apply(new RequestOptions().override(100, 100)).into(profileUserDP);
+        String gender = selectGenderTextView.getText().toString();
+        if(gender.equals("Male") || gender.equals("")){
+            Glide.with(this).load(uri).apply(new RequestOptions().override(100, 100).placeholder(R.drawable.avatar)).into(profileUserDP);
+        }else{
+            Glide.with(this).load(uri).apply(new RequestOptions().override(100, 100).placeholder(R.drawable.avatar_female)).into(profileUserDP);
+        }
     }
 
     @Override

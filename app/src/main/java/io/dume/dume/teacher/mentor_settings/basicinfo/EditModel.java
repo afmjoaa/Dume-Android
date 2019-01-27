@@ -4,23 +4,21 @@ package io.dume.dume.teacher.mentor_settings.basicinfo;
 import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.GeoPoint;
-import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.util.HashMap;
 import java.util.Objects;
-
-import javax.annotation.Nullable;
 
 import io.dume.dume.teacher.homepage.TeacherContract;
 
@@ -33,7 +31,6 @@ public class EditModel implements EditContract.Model {
     private static final String TAG = "Enam";
     private HashMap<String, Object> map;
     private final FirebaseStorage storage;
-    private ListenerRegistration listenerRegistration;
 
     private EditModel(Context context) {
         database = FirebaseFirestore.getInstance();
@@ -41,7 +38,6 @@ public class EditModel implements EditContract.Model {
         map = new HashMap<>();
         Log.w(TAG, "EditModel: " + database.hashCode());
         storage = FirebaseStorage.getInstance();
-
         this.activity = (Activity) context;
     }
 
@@ -67,11 +63,14 @@ public class EditModel implements EditContract.Model {
             map.put("current_status", currentStatus);
             map.put("pro_com_%", comPercent);
             /*users/mentors/mentor_profile/*/
-            database.collection("users/mentors/mentor_profile").document(Objects.requireNonNull(auth.getUid())).update(map).addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    listener.onUpdateSuccess();
-                } else if (task.isCanceled()) {
-                    listener.onFail("Update Cancelled");
+            database.collection("users/mentors/mentor_profile").document(Objects.requireNonNull(auth.getUid())).update(map).addOnCompleteListener(activity, new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if (task.isSuccessful()) {
+                        listener.onUpdateSuccess();
+                    } else if (task.isCanceled()) {
+                        listener.onFail("Update Cancelled");
+                    }
                 }
             }).addOnFailureListener(e ->
                     listener.onFail(e.toString())
@@ -80,6 +79,11 @@ public class EditModel implements EditContract.Model {
         } else {
             Log.e(TAG, "synWithDataBase: Set Listener First");
         }
+    }
+
+    @Override
+    public void updatePercentage(String percent) {
+        database.collection("users/mentors/mentor_profile").document(Objects.requireNonNull(auth.getUid())).update("pro_com_%", percent);
     }
 
     @Override
@@ -110,14 +114,13 @@ public class EditModel implements EditContract.Model {
 
     @Override
     public void getDocumentSnapShot(TeacherContract.Model.Listener<DocumentSnapshot> listener) {
-        listenerRegistration = database.document("users/mentors/mentor_profile/" + FirebaseAuth.getInstance().getUid()).addSnapshotListener(activity, (documentSnapshot, e) -> {
+        database.document("users/mentors/mentor_profile/" + FirebaseAuth.getInstance().getUid()).addSnapshotListener(activity, (documentSnapshot, e) -> {
             if (documentSnapshot != null) {
                 listener.onSuccess(documentSnapshot);
             } else {
                 listener.onError("Got Nothing From Dume Database");
 
             }
-
         });
     }
 

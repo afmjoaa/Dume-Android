@@ -1,5 +1,10 @@
 package io.dume.dume.student.searchLoading;
 
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+
+import java.util.List;
 import java.util.Map;
 
 import io.dume.dume.teacher.homepage.TeacherContract;
@@ -31,6 +36,8 @@ public interface SearchLoadingContract {
     }
 
     interface Model {
+
+        void search(double lat, double lon, double radius, String queryString, TeacherContract.Model.Listener<List<DocumentSnapshot>> callbackResult);
 
         void searchLoadingHawwa();
 

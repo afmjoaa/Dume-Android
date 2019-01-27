@@ -3,15 +3,22 @@ package io.dume.dume.teacher.mentor_settings.basicinfo;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.GeoPoint;
 
+import java.util.List;
+
 import io.dume.dume.teacher.homepage.TeacherContract;
+import io.dume.dume.teacher.pojo.Academic;
 
 public class EditContract {
     interface View {
         void configureView();
+
+        @NonNull
+        List<Academic> getAcademics(DocumentSnapshot documentSnapshot);
 
         void configureCallback();
 
@@ -57,6 +64,8 @@ public class EditContract {
 
         void setAvatarUrl(String url);
 
+        void discardDialogue();
+
         void onGenderClicked();
 
         void onMaritalStatusClicked();
@@ -67,7 +76,7 @@ public class EditContract {
 
         void invalidFound(String Name);
 
-        void generatePercent();
+        String generatePercent();
 
         void setProfileComPercent(String num);
 
@@ -81,7 +90,9 @@ public class EditContract {
 
         void onDataLoad(DocumentSnapshot documentSnapshot);
 
+        void someThingChanged(boolean b);
 
+        void updateAcademics(DocumentSnapshot documentSnapshot);
     }
 
     interface Presenter {
@@ -94,6 +105,8 @@ public class EditContract {
 
     interface Model {
         void synWithDataBase(String first, String last, String avaterUrl, String email, String gender, String phone, String religion, String marital, String birth_date, GeoPoint location, String currentStatus, String comPercent);
+
+        void updatePercentage(String percent);
 
         void setListener(onDataUpdate listener);
 

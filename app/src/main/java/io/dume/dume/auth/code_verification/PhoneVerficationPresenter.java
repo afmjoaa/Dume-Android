@@ -444,7 +444,7 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
         stuProInfo.put("unread_msg", "0");
         stuProInfo.put("unread_noti", "0");
         stuProInfo.put("next_rp_write", "1");
-        stuProInfo.put("next_sp_write", "1");
+        stuProInfo.put("next_rs_write", "1");
 
         GeoPoint current_address = new GeoPoint(84.9, -180);
         stuProInfo.put("current_address", current_address);

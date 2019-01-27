@@ -62,8 +62,10 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.GeoPoint;
 import com.transitionseverywhere.Fade;
 import com.transitionseverywhere.Slide;
 import com.transitionseverywhere.TransitionManager;
@@ -88,17 +90,21 @@ import io.dume.dume.service.MyLocationService;
 import io.dume.dume.student.freeCashBack.FreeCashBackActivity;
 import io.dume.dume.student.grabingInfo.GrabingInfoActivity;
 import io.dume.dume.student.grabingLocation.GrabingLocationActivity;
+import io.dume.dume.student.grabingLocation.MenualRecyclerData;
 import io.dume.dume.student.heatMap.HeatMapActivity;
 import io.dume.dume.student.homePage.adapter.HomePageRatingAdapter;
 import io.dume.dume.student.homePage.adapter.HomePageRatingData;
 import io.dume.dume.student.homePage.adapter.HomePageRecyclerAdapter;
 import io.dume.dume.student.homePage.adapter.HomePageRecyclerData;
+import io.dume.dume.student.homePage.adapter.RecentSearchAdapter;
+import io.dume.dume.student.homePage.adapter.RecentSearchData;
 import io.dume.dume.student.mentorAddvertise.MentorAddvertiseActivity;
 import io.dume.dume.student.pojo.CusStuAppComMapActivity;
 import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
 import io.dume.dume.student.pojo.SearchDataStore;
 import io.dume.dume.student.profilePage.ProfilePageActivity;
 import io.dume.dume.student.recordsPage.RecordsPageActivity;
+import io.dume.dume.student.searchLoading.SearchLoadingActivity;
 import io.dume.dume.student.searchResult.SearchResultActivity;
 import io.dume.dume.student.studentHelp.StudentHelpActivity;
 import io.dume.dume.student.studentPayment.StudentPaymentActivity;
@@ -111,12 +117,14 @@ import io.dume.dume.util.NetworkUtil;
 import me.zhanghai.android.materialratingbar.MaterialRatingBar;
 
 import static io.dume.dume.util.DumeUtils.animateImage;
+import static io.dume.dume.util.DumeUtils.getEndOFNest;
 import static io.dume.dume.util.ImageHelper.getRoundedCornerBitmapSquare;
 
 public class HomePageActivity extends CusStuAppComMapActivity implements HomePageContract.View,
         NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback, MyGpsLocationChangeListener {
 
     private static final String TAG = "HomePageActivity";
+    private static final int RC_RECENT_SEARCH = 8989;
     HomePageContract.Presenter mPresenter;
     private Menu menu;
     private MenuItem home, records, payments, messages, notifications, heat_map, free_cashback, settings, forum, help, selectAccount, infoItem, studentProfile, mentorProfile, bootCampProfile;
@@ -186,7 +194,9 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
     private CoordinatorLayout coordiHackFab;
     private HorizontalLoadViewTwo loadView;
     private NestedScrollView bottomSheetNSV;
-
+    private RecyclerView recentSearchRV;
+    private RecentSearchAdapter recentSearchAdapter;
+    private static Map<String, Map<String, Object>> recently_searched;
 
     @Override
     protected void onDestroy() {
@@ -321,11 +331,12 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
         userDP = findViewById(R.id.user_dp);
         doMoreTextView = findViewById(R.id.do_more);
         doMoreDetailTextView = findViewById(R.id.make_money_mentoring);
-
         promotionTextView = findViewById(R.id.promotion_text);
         promotionValidityTextView = findViewById(R.id.promotion_validity_text);
         loadView = findViewById(R.id.loadViewTwo);
         bottomSheetNSV = findViewById(R.id.bottom_sheet_scroll_view);
+
+        recentSearchRV = findViewById(R.id.recent_search_recycler);
 
     }
 
@@ -461,7 +472,64 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
         HomePageRecyclerAdapter hPageBSRcyclerAdapter = new HomePageRecyclerAdapter(this, promoData);
         hPageBSRecycler.setAdapter(hPageBSRcyclerAdapter);
         hPageBSRecycler.setLayoutManager(new LinearLayoutManager(this));
+    }
 
+    @Override
+    public void initRecentSearchRecycler(DocumentSnapshot documentSnapshot) {
+        List<RecentSearchData> recentSearchData = new ArrayList<>();
+        String preIdentifyOne = documentSnapshot.getString("next_rs_write");
+        recently_searched = (Map<String, Map<String, Object>>) documentSnapshot.get("recent_search");
+        if (recently_searched != null && recently_searched.size() > 0) {
+            for (Map.Entry<String, Map<String, Object>> entry : recently_searched.entrySet()) {
+                RecentSearchData recentSearchDataCurrent = new RecentSearchData();
+                String primaryText = "";
+                String secondaryText = "";
+                String temp = "";
+                List<String> queryListName = (List<String>) entry.getValue().get("query_list_name");
+                List<String> queryList = (List<String>) entry.getValue().get("query_list");
+                recentSearchDataCurrent.setCategoryName(queryList.get(0));
+                for (int i = 0; i < queryListName.size(); i++) {
+                    if (getEndOFNest().contains(queryListName.get(i))) {
+                        primaryText = primaryText + queryListName.get(i);
+                        break;
+                    }
+                }
+                Map<String, Object> jizz = (Map<String, Object>) entry.getValue().get("jizz");
+                temp = (String) jizz.get(primaryText);
+                primaryText = primaryText + ": " + temp + " / ";
+                temp = (String) entry.getValue().get("package_name");
+                primaryText = primaryText + temp;
+                recentSearchDataCurrent.setPrimaryText(primaryText);
+                temp = (String) jizz.get("Gender");
+                secondaryText = secondaryText + temp;
+                temp = (String) jizz.get("Salary");
+                secondaryText = secondaryText + " / " + temp;
+                recentSearchDataCurrent.setSecondaryText(secondaryText);
+                recentSearchDataCurrent.setIdentify(entry.getKey());
+                recentSearchData.add(recentSearchDataCurrent);
+            }
+        }
+        recentSearchAdapter = new RecentSearchAdapter(this, recentSearchData, preIdentifyOne) {
+            @Override
+            public void OnItemClicked(View v, int position, String identify) {
+                Map<String, Object> clickedSearchData = recently_searched.get(identify);
+                GeoPoint anchorPoint = (GeoPoint) clickedSearchData.get("anchor_point");
+                searchDataStore.setAnchorPoint(new LatLng(anchorPoint.getLatitude(), anchorPoint.getLongitude()));
+                searchDataStore.setPackageName((String) clickedSearchData.get("package_name"));
+                searchDataStore.setJizz((Map<String, Object>) clickedSearchData.get("jizz"));
+                searchDataStore.setQueryList((List<String>) clickedSearchData.get("query_list"));
+                searchDataStore.setQueryListName((List<String>) clickedSearchData.get("query_list_name"));
+                searchDataStore.setForWhom((Map<String, Object>) clickedSearchData.get("for_whom"));
+                searchDataStore.setPreferredDays((Map<String, Object>) clickedSearchData.get("preferred_days"));
+                searchDataStore.setStartDate((Map<String, Object>) clickedSearchData.get("start_date"));
+                searchDataStore.setStartTime((Map<String, Object>) clickedSearchData.get("start_time"));
+                Intent intent = new Intent(HomePageActivity.this, SearchLoadingActivity.class);
+                intent.setAction("recent_search");
+                startActivityForResult(intent, RC_RECENT_SEARCH);
+            }
+        };
+        recentSearchRV.setAdapter(recentSearchAdapter);
+        recentSearchRV.setLayoutManager(new LinearLayoutManager(this));
     }
 
 
@@ -1096,6 +1164,7 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
         searchDataStore.setUserMail(documentSnapshot.getString("email"));
         searchDataStore.setUserUid(documentSnapshot.getId());
         searchDataStore.setAvatarString(getAvatarString());
+        searchDataStore.setGender(documentSnapshot.getString("gender"));
     }
 
     @Override
@@ -1159,14 +1228,14 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
 
     @Override
     public void setAvatar(String avatarString) {
-        if(avatarString!= null && !avatarString.equals("")){
+        if (avatarString != null && !avatarString.equals("")) {
             Glide.with(this).load(avatarString).apply(new RequestOptions().override(100, 100).placeholder(R.drawable.demo_alias_dp)).into(userDP);
         }
     }
 
     @Override
     public void setAvatarForMenu(String avatar) {
-        if(avatar!= null && !avatar.equals("")) {
+        if (avatar != null && !avatar.equals("")) {
             Glide.with(this).asBitmap().load(avatar)
                     .apply(new RequestOptions().override((int) (20 * (getResources().getDisplayMetrics().density)), (int) (20 * (getResources().getDisplayMetrics().density))).centerCrop().placeholder(R.drawable.alias_profile_icon))
                     .into(new SimpleTarget<Bitmap>() {
@@ -1264,7 +1333,6 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
         }
     }
 
-
     /*for animation of the rating bar
      * mDecimalRatingBars.startAnimation(new RatingAnimation(mDecimalRatingBars));
      * */
@@ -1349,7 +1417,7 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
 
     @Override
     public void gotoTestingActivity() {
-        startActivity(new Intent(this, SearchResultActivity.class));
+        startActivity(new Intent(this, PayActivity.class));
     }
 
     @Override

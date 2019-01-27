@@ -13,6 +13,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import io.dume.dume.util.DumeUtils;
+
 import static io.dume.dume.student.grabingPackage.GrabingPackageActivity.PlaceholderFragment.getSelectedDaysFromWeekdaysData;
 
 public class SearchDataStore implements Serializable {
@@ -29,6 +31,7 @@ public class SearchDataStore implements Serializable {
     private String userNumber;
     private String userMail;
     private String avatarString = null;
+    private String gender = "Male";
     private Map<String, Object> documentSnapshot;
 
     private String userUid;
@@ -53,6 +56,18 @@ public class SearchDataStore implements Serializable {
         return instance;
     }
 
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public String getQueryString() {
+
+        return DumeUtils.generateQueryString(packageName, queryList, queryListName);
+    }
 
     public SearchDataStore() {
     }
@@ -197,6 +212,7 @@ public class SearchDataStore implements Serializable {
         generatedforWhom.put("request_uid", uid);
         generatedforWhom.put("photo", photo);
         generatedforWhom.put("is_self", self);
+        generatedforWhom.put("email", getUserMail());
         setForWhom(generatedforWhom);
         return generatedforWhom;
     }

@@ -223,6 +223,8 @@ public class PayActivity extends CustomStuAppCompatActivity implements PayContac
 
         //all find view here
         Button dismissBtn = dialog.findViewById(R.id.dismiss_btn);
+        TextView dialogText = dialog.findViewById(R.id.dialog_text);
+        dialogText.setGravity(Gravity.CENTER);
         dismissBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

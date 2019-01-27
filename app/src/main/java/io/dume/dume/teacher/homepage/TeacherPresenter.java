@@ -118,7 +118,7 @@ public class TeacherPresenter implements TeacherContract.Presenter {
                 /*Enams Code Goes Here*/
                 final Map<String, Object> selfRating = (Map<String, Object>) documentSnapshot.get("self_rating");
                 teachearDataStore.setSelfRating(selfRating);
-                teachearDataStore.setDocumentSnapshot(documentSnapshot);
+                teachearDataStore.setDocumentSnapshot(documentSnapshot.getData());
 
                 view.setUnreadMsg(documentSnapshot.getString("unread_msg"));
                 view.setUnreadNoti(documentSnapshot.getString("unread_noti"));

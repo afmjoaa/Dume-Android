@@ -22,20 +22,6 @@
         app:layout_anchorGravity="bottom"
         app:rect_color="@color/transparent" />
 
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fabEdit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        android:clickable="true"
-        android:focusable="true"
-        android:onClick="onAcademicClick"
-        android:src="@drawable/ic_action_save"
-        app:backgroundTint="@color/colorBlack"
-        app:rippleColor="@color/colorDarkAzure" />
-
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/academicScroll"
         android:layout_width="match_parent"
@@ -370,5 +356,18 @@
         </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fabEdit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        android:clickable="true"
+        android:focusable="true"
+        android:onClick="onAcademicClick"
+        android:src="@drawable/ic_action_save"
+        app:backgroundTint="@color/colorBlack"
+        app:rippleColor="@color/colorDarkAzure" />
 
 </android.support.design.widget.CoordinatorLayout>

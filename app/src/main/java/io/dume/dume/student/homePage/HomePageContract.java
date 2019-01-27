@@ -130,6 +130,8 @@ public interface HomePageContract {
         void gotoTestingActivity();
 
         boolean checkNull();
+
+        void initRecentSearchRecycler(DocumentSnapshot documentSnapshot);
     }
 
     interface Presenter {

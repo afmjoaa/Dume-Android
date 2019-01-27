@@ -11,6 +11,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -28,6 +29,7 @@ public class StuBaseModel {
     protected final FirebaseFirestore firestore;
     protected final DocumentReference mini_users;
     protected final DocumentReference userStudentProInfo;
+    public final CollectionReference skillRef;
 
     public StuBaseModel(Context context) {
         this.context = context;
@@ -41,6 +43,8 @@ public class StuBaseModel {
         Log.w(TAG, "StuBaseModel: " + firestore.hashCode());
         //initializing
         mini_users = firestore.collection("mini_users").document(getUser().getUid());
+        skillRef = firestore.collection("users/mentors/skills");
+
         userStudentProInfo = firestore.collection("/users/students/stu_pro_info").document(getUser().getUid());
     }
 

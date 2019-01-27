@@ -33,6 +33,7 @@ import io.dume.dume.R;
 import io.dume.dume.customView.HorizontalLoadView;
 import io.dume.dume.teacher.adapters.SkillAdapter;
 import io.dume.dume.teacher.crudskill.CrudSkillActivity;
+import io.dume.dume.teacher.homepage.TeacherDataStore;
 import io.dume.dume.teacher.pojo.Skill;
 import io.dume.dume.util.DumeUtils;
 import io.dume.dume.util.VisibleToggleClickListener;
@@ -146,6 +147,9 @@ public class SkillActivity extends AppCompatActivity implements SkillContract.Vi
 
     @Override
     public void loadSkillRV(ArrayList<Skill> list) {
+
+        TeacherDataStore.getInstance().setSkillArrayList(list);
+
         adapter.update(list);
         if (list.size() == 0) {
             noDataBlock.setVisibility(View.VISIBLE);

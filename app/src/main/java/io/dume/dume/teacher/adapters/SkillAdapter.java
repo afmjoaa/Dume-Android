@@ -10,7 +10,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -31,13 +30,13 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import carbon.widget.RelativeLayout;
 import io.dume.dume.R;
 import io.dume.dume.teacher.model.KeyMap;
+import io.dume.dume.teacher.model.LocalDb;
 import io.dume.dume.teacher.pojo.Skill;
 import io.dume.dume.teacher.skill.SkillActivity;
 import io.dume.dume.util.VisibleToggleClickListener;
@@ -51,24 +50,48 @@ public class SkillAdapter extends RecyclerView.Adapter<SkillAdapter.SkillVH> {
     private View inflate;
     private Context context;
     private String TAG = "SkillAdapter";
+    private HashMap<String, Integer> iconList;
+    private LocalDb localDb;
 
     public void update(ArrayList<Skill> skillList) {
         this.skillList.clear();
         this.skillList.addAll(skillList);
         this.notifyDataSetChanged();
+
     }
 
     public SkillAdapter(int layoutSize) {
-        this.layoutSize = layoutSize;
         this.skillList = new ArrayList<>();
+        this.layoutSize = layoutSize;
+        localDb = new LocalDb();
         endOfNest = new ArrayList<>(Arrays.asList("Subject", "Field", "Software", "Language", "Flavour", "Type", "Course", " Language "));
-
+        iconList = new HashMap<>();
+        iconList.put(localDb.getCategories().get(0), R.drawable.education);
+        iconList.put(localDb.getCategories().get(0 + 1), R.drawable.software);
+        iconList.put(localDb.getCategories().get(1 + 1), R.drawable.programming);
+        iconList.put(localDb.getCategories().get(2 + 1), R.drawable.language);
+        iconList.put(localDb.getCategories().get(3 + 1), R.drawable.dance);
+        iconList.put(localDb.getCategories().get(4 + 1), R.drawable.art);
+        iconList.put(localDb.getCategories().get(5 + 1), R.drawable.cooking);
+        iconList.put(localDb.getCategories().get(6 + 1), R.drawable.music);
+        iconList.put(localDb.getCategories().get(7 + 1), R.drawable.others);
     }
 
     public SkillAdapter(int layoutSize, ArrayList<Skill> skillList) {
         this.layoutSize = layoutSize;
         this.skillList = skillList;
+        localDb = new LocalDb();
         endOfNest = new ArrayList<>(Arrays.asList("Subject", "Field", "Software", "Language", "Flavour", "Type", "Course", " Language "));
+        iconList = new HashMap<>();
+        iconList.put(localDb.getCategories().get(0), R.drawable.education);
+        iconList.put(localDb.getCategories().get(0 + 1), R.drawable.software);
+        iconList.put(localDb.getCategories().get(1 + 1), R.drawable.programming);
+        iconList.put(localDb.getCategories().get(2 + 1), R.drawable.language);
+        iconList.put(localDb.getCategories().get(3 + 1), R.drawable.dance);
+        iconList.put(localDb.getCategories().get(4 + 1), R.drawable.art);
+        iconList.put(localDb.getCategories().get(5 + 1), R.drawable.cooking);
+        iconList.put(localDb.getCategories().get(6 + 1), R.drawable.music);
+        iconList.put(localDb.getCategories().get(7 + 1), R.drawable.others);
 
     }
 
@@ -111,7 +134,7 @@ public class SkillAdapter extends RecyclerView.Adapter<SkillAdapter.SkillVH> {
             detailList.add(new KeyMap("Rating", ((int) skill.getRating()) + "/ 옷" + skill.getTotalRating()));
             detailList.add(new KeyMap("Skill Type", skill.getJizz().get("Category")));
             detailList.add(new KeyMap("Gender Filter", skill.getJizz().get("Gender").equals("Any") ? "None" : skill.getJizz().get("Gender")));
-            detailList.add(new KeyMap("Feedback", skill.getFeedback()));
+
             SkillDetailsAdapter skillDetailsAdapter = new SkillDetailsAdapter(detailList);
             skillVH.detailsRV.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
             skillVH.detailsRV.setAdapter(skillDetailsAdapter);
@@ -160,6 +183,8 @@ public class SkillAdapter extends RecyclerView.Adapter<SkillAdapter.SkillVH> {
                     }
                 }
             });
+
+
         } else {
             skillVH.itemView.setOnClickListener(view -> {
                 context.startActivity(new Intent(context, SkillActivity.class));
@@ -169,6 +194,7 @@ public class SkillAdapter extends RecyclerView.Adapter<SkillAdapter.SkillVH> {
         if (getLast(i) != null) {
             final Object o = jizz.get(getLast(i));
             skillVH.skillTitleTV.setText(o.toString() + " | " + jizz.get("Category"));
+            skillVH.categoryAvatar.setImageResource(iconList.get(jizz.get("Category")));
         }
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         String dateString = format.format(skillList.get(i).getCreation());
@@ -218,6 +244,7 @@ public class SkillAdapter extends RecyclerView.Adapter<SkillAdapter.SkillVH> {
     }
 
     class SkillVH extends RecyclerView.ViewHolder {
+
         @BindView(R.id.skillDetailsRV)
         RecyclerView detailsRV;
         @BindView(R.id.skillSalaryTV)
@@ -238,6 +265,8 @@ public class SkillAdapter extends RecyclerView.Adapter<SkillAdapter.SkillVH> {
         RelativeLayout hostingRelativeLayout;
         @BindView(R.id.recycle_hosting_linear)
         LinearLayout recycleHostingLinear;
+        @BindView(R.id.categoryAvaterIV)
+        ImageView categoryAvatar;
 
         public SkillVH(@NonNull View itemView) {
             super(itemView);

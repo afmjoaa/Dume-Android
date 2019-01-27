@@ -64,6 +64,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
+import com.google.firebase.firestore.GeoPoint;
 import com.transitionseverywhere.Fade;
 import com.transitionseverywhere.Slide;
 import com.transitionseverywhere.Transition;
@@ -90,7 +91,9 @@ import io.dume.dume.student.homePage.HomePageActivity;
 import io.dume.dume.student.homePage.adapter.HomePageRatingAdapter;
 import io.dume.dume.student.pojo.CusStuAppComMapActivity;
 import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
+import io.dume.dume.student.pojo.SearchDataStore;
 import io.dume.dume.teacher.homepage.TeacherContract;
+import io.dume.dume.teacher.homepage.TeacherDataStore;
 import io.dume.dume.teacher.model.LocalDb;
 import io.dume.dume.teacher.pojo.Skill;
 import io.dume.dume.teacher.skill.SkillActivity;
@@ -616,7 +619,20 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                         showProgress();
                         fab.setBackgroundTintList(ColorStateList.valueOf(Color.GRAY));
                         fab.setEnabled(false);
-                        Skill skill = new Skill(true, queryMap.get("Gender").toString(), Float.parseFloat(queryMap.get("Salary").toString().replace("k", "")), new Date(), queryMap, "SFKJYEKF", new LatLng(84.9, 180), 5, 10, "", 4.6f);
+                        String queryString = DumeUtils.generateQueryString(SearchDataStore.REGULAR_DUME, queryList, queryListName);
+                        ArrayList<Skill> skillArrayList = TeacherDataStore.getInstance().getSkillArrayList();
+
+                        for (Skill item : skillArrayList) {
+                            if (item.getQuery_string().equals(queryString)) {
+                                flush("Skill Already Exists");
+                                hideProgress();
+                                startActivity(new Intent(GrabingInfoActivity.this, SkillActivity.class));
+                                return;
+                            }
+                        }
+
+                        Skill skill = new Skill(true, queryMap.get("Gender").toString(), Float.parseFloat(queryMap.get("Salary").toString().replace("k", "")), new Date(), queryMap, queryString
+                                , new GeoPoint(84.9, 180), 5, 10, "", 4.6f);
                         teacherModel.saveSkill(skill, new TeacherContract.Model.Listener<Void>() {
                             @Override
                             public void onSuccess(Void list) {

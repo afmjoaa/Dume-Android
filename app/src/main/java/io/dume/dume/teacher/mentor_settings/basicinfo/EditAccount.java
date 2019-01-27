@@ -8,6 +8,7 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -23,7 +24,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -46,10 +46,11 @@ import butterknife.ButterKnife;
 import io.dume.dume.R;
 import io.dume.dume.customView.HorizontalLoadView;
 import io.dume.dume.student.grabingLocation.GrabingLocationActivity;
-import io.dume.dume.student.grabingLocation.MenualRecyclerData;
 import io.dume.dume.teacher.adapters.AcAdapter;
+import io.dume.dume.teacher.homepage.TeacherActivtiy;
 import io.dume.dume.teacher.mentor_settings.academic.AcademicActivity;
 import io.dume.dume.teacher.pojo.Academic;
+import io.dume.dume.util.AlertMsgDialogue;
 import io.dume.dume.util.DatePickerFragment;
 import io.dume.dume.util.DumeUtils;
 import io.dume.dume.util.RadioBtnDialogue;
@@ -91,6 +92,8 @@ public class EditAccount extends AppCompatActivity implements EditContract.View,
     @BindView(R.id.add_saved_place_layout)
     RelativeLayout addAcademicBtn;
     private AcAdapter acAdapter;
+    private String databaseComPercent;
+    private boolean isChanged = false;
 
 
     @Override
@@ -99,7 +102,7 @@ public class EditAccount extends AppCompatActivity implements EditContract.View,
         setContentView(R.layout.activity_edit_account);
         ButterKnife.bind(this);
         DumeUtils.configureAppbar(this, "Edit Account");
-        presenter = new EditPresenter(this, EditModel.getModelInstance(this));
+        presenter = new EditPresenter(this, this, EditModel.getModelInstance(this));
         presenter.enqueue();
     }
 
@@ -149,9 +152,17 @@ public class EditAccount extends AppCompatActivity implements EditContract.View,
 
     @Override
     public void onDataLoad(DocumentSnapshot documentSnapshot) {
+        databaseComPercent = documentSnapshot.getString("pro_com_%");
         final RequestOptions requestOptions = new RequestOptions();
-        requestOptions.placeholder(R.drawable.avatar);
-        Glide.with(this).load(documentSnapshot.getString("avatar")).apply(requestOptions.override(100, 100)).into(avatar);
+        String gender = documentSnapshot.getString("gender");
+        if (gender != null) {
+            if(gender.equals("Male") || gender.equals("")){
+                requestOptions.placeholder(R.drawable.avatar);
+            }else{
+                requestOptions.placeholder(R.drawable.avatar_female);
+            }
+        }
+        Glide.with(getApplicationContext()).load(documentSnapshot.getString("avatar")).apply(requestOptions.override(100, 100)).into(avatar);
         first.setText(documentSnapshot.getString("first_name") == null ? "" : documentSnapshot.getString("first_name"));
         last.setText(documentSnapshot.getString("last_name") == null ? "" : documentSnapshot.getString("last_name"));
         phone.setText(documentSnapshot.getString("phone_number") == null ? "" : documentSnapshot.getString("phone_number"));
@@ -160,8 +171,18 @@ public class EditAccount extends AppCompatActivity implements EditContract.View,
         selectGenderEditText.setText(documentSnapshot.getString("gender") == null ? "" : documentSnapshot.getString("gender"));
         selectMaritalStatusET.setText(documentSnapshot.getString("marital") == null ? "" : documentSnapshot.getString("marital"));
         pickLocationET.setText(documentSnapshot.getGeoPoint("location") == null ? "" : documentSnapshot.getGeoPoint("location").toString());
+        currentStatusET.setText(documentSnapshot.getString("current_status") == null ? "" : documentSnapshot.getString("current_status"));
         Log.e(TAG, "loadCarryData: " + documentSnapshot.toString());
         avatarUrl = documentSnapshot.getString("avatar") == null ? "" : documentSnapshot.getString("avatar");
+        List<Academic> arrayList = getAcademics(documentSnapshot);
+        acAdapter = new AcAdapter(this, arrayList);
+        academicRV.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        academicRV.setAdapter(acAdapter);
+    }
+
+    @NonNull
+    @Override
+    public List<Academic> getAcademics(DocumentSnapshot documentSnapshot) {
         List<Academic> arrayList = new ArrayList<>();
         Map<String, Map<String, Object>> academicMap = (Map<String, Map<String, Object>>) documentSnapshot.get("academic");
         if (academicMap != null && academicMap.size() > 0) {
@@ -175,12 +196,8 @@ public class EditAccount extends AppCompatActivity implements EditContract.View,
                 Academic academic = new Academic(level, institution, degree, from_year, to_year, result);
                 arrayList.add(academic);
             }
-            generatePercent();
         }
-        acAdapter = new AcAdapter(this, arrayList);
-        academicRV.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        academicRV.setAdapter(acAdapter);
-
+        return arrayList;
     }
 
     @Override
@@ -210,6 +227,7 @@ public class EditAccount extends AppCompatActivity implements EditContract.View,
                 } else {
                     emptyFirstNameFound.setVisibility(View.VISIBLE);
                 }
+                someThingChanged(true);
             }
 
             @Override
@@ -231,6 +249,7 @@ public class EditAccount extends AppCompatActivity implements EditContract.View,
                 } else {
                     emptyLastNameFound.setVisibility(View.VISIBLE);
                 }
+                someThingChanged(true);
             }
 
             @Override
@@ -273,6 +292,7 @@ public class EditAccount extends AppCompatActivity implements EditContract.View,
                 } else {
                     emptyLocationFound.setVisibility(View.VISIBLE);
                 }
+                someThingChanged(true);
             }
 
             @Override
@@ -291,6 +311,7 @@ public class EditAccount extends AppCompatActivity implements EditContract.View,
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                someThingChanged(true);
             }
 
             @Override
@@ -305,6 +326,7 @@ public class EditAccount extends AppCompatActivity implements EditContract.View,
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                someThingChanged(true);
             }
 
             @Override
@@ -319,6 +341,7 @@ public class EditAccount extends AppCompatActivity implements EditContract.View,
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                someThingChanged(true);
             }
 
             @Override
@@ -333,6 +356,7 @@ public class EditAccount extends AppCompatActivity implements EditContract.View,
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                someThingChanged(true);
             }
 
             @Override
@@ -347,6 +371,7 @@ public class EditAccount extends AppCompatActivity implements EditContract.View,
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                someThingChanged(true);
             }
 
             @Override
@@ -359,8 +384,8 @@ public class EditAccount extends AppCompatActivity implements EditContract.View,
 
     @Override
     public void snakbar(String msg) {
-        Snackbar snak = Snackbar.make(fb, msg, Snackbar.LENGTH_SHORT);
-        snak.setAction("Go Back", view -> EditAccount.super.onBackPressed());
+        Snackbar snak = Snackbar.make(fb, msg, Snackbar.LENGTH_LONG);
+        snak.setAction("Go Back", view -> onBackPressed());
         snak.getView().setBackgroundColor(ContextCompat.getColor(this, R.color.colorBlack));
         snak.show();
     }
@@ -477,14 +502,37 @@ public class EditAccount extends AppCompatActivity implements EditContract.View,
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
-            super.onBackPressed();
+            onBackPressed();
         }
         return super.onOptionsItemSelected(item);
     }
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        if (isChanged) {
+            discardDialogue();
+        } else {
+            //show dialogue of discard changes
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    public void discardDialogue() {
+        Bundle Uargs = new Bundle();
+        Uargs.putString("msg", "Discard changes and go back ?");
+        AlertMsgDialogue updateAlertDialogue = new AlertMsgDialogue();
+        updateAlertDialogue.setItemChoiceListener(new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                // this is the positive btn click listener name wrong
+                someThingChanged(false);
+                updateAlertDialogue.dismiss();
+                onBackPressed();
+            }
+        }, "Discard");
+        updateAlertDialogue.setArguments(Uargs);
+        updateAlertDialogue.show(getSupportFragmentManager(), "discard_dialogue");
     }
 
     @Override
@@ -581,7 +629,7 @@ public class EditAccount extends AppCompatActivity implements EditContract.View,
     }
 
     @Override
-    public void generatePercent() {
+    public String generatePercent() {
         setProfileComPercent("40");
         if (getAvatarUrl() != null && !getAvatarUrl().equals("")) {
             Float profileComPercent = Float.parseFloat(getProfileComPercent()) + 10;
@@ -616,13 +664,17 @@ public class EditAccount extends AppCompatActivity implements EditContract.View,
             setProfileComPercent(profileComPercent.toString());
         }
 
+        if (databaseComPercent.equals(getProfileComPercent())) {
+            someThingChanged(true);
+        }
+        return getProfileComPercent();
         //to be continued
     }
 
     @Override
     public void setProfileComPercent(String num) {
         if (num.equals("")) {
-            seekbar.setProgress(60);
+            seekbar.setProgress(40);
         } else {
             seekbar.setProgress(Float.parseFloat(num));
         }
@@ -655,13 +707,24 @@ public class EditAccount extends AppCompatActivity implements EditContract.View,
     public void addQualifiaction() {
         final Intent intent = new Intent(this, AcademicActivity.class);
         intent.setAction("add");
-        this.startActivity(intent);
+        startActivityForResult(intent, 1234);
+        //this.startActivity(intent);
 
     }
 
     @Override
     public void modifyQualification() {
 
+    }
+
+    @Override
+    public void someThingChanged(boolean b){
+        isChanged = b;
+    }
+
+    @Override
+    public void updateAcademics(DocumentSnapshot documentSnapshot) {
+        acAdapter.update(getAcademics(documentSnapshot));
     }
 
 }

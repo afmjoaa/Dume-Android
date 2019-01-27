@@ -29,7 +29,7 @@ public class CrudPresent implements CrudContract.Presenter {
         iconList.add(R.drawable.art);
         iconList.add(R.drawable.cooking);
         iconList.add(R.drawable.music);
-        iconList.add(R.drawable.sewing);
+        iconList.add(R.drawable.others);
         view.setUpRecyclerView(model.getCategories(), iconList);
 
 

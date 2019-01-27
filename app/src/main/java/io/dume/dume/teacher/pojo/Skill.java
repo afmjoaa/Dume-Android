@@ -1,6 +1,7 @@
 package io.dume.dume.teacher.pojo;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.PropertyName;
 
 import java.io.Serializable;
@@ -21,7 +22,7 @@ public class Skill implements Serializable {
     @PropertyName("query_string")
     String query_string;
     @PropertyName("location")
-    LatLng location;
+    GeoPoint location;
     @PropertyName("totalRating")
     int totalRating;
     @PropertyName("enrolled")
@@ -44,7 +45,7 @@ public class Skill implements Serializable {
 
     }
 
-    public Skill(boolean status, String gender, float salary, Date creationDate, HashMap<String, Object> map, String queryString, LatLng location, int totalRating, int enrolledStudent, String mentor_uid, float rating) {
+    public Skill(boolean status, String gender, float salary, Date creationDate, HashMap<String, Object> map, String queryString, GeoPoint location, int totalRating, int enrolledStudent, String mentor_uid, float rating) {
         this.status = status;
         this.gender = gender;
         this.salary = salary;
@@ -138,11 +139,11 @@ public class Skill implements Serializable {
         this.query_string = query_string;
     }
 
-    public LatLng getLocation() {
+    public GeoPoint getLocation() {
         return location;
     }
 
-    public void setLocation(LatLng location) {
+    public void setLocation(GeoPoint location) {
         this.location = location;
     }
 }

@@ -103,6 +103,7 @@ public class SearchLoadingActivity extends CusStuAppComMapActivity implements On
     private IconGenerator iconFactory;
     private SearchLoadingModel mModel;
     private Boolean saveDone = false;
+    private String defaultUrl;
 
 
     @Override
@@ -136,10 +137,10 @@ public class SearchLoadingActivity extends CusStuAppComMapActivity implements On
         SearchDetailData current = new SearchDetailData();
         current.setItemName((String) searchDataStore.getForWhom().get("name"));
         current.setItemInfo("Student name");
-        if((Boolean) searchDataStore.getForWhom().get("is_self")){
+        if ((Boolean) searchDataStore.getForWhom().get("is_self")) {
             current.setItemChange(searchDataStore.getAvatarString());
             current.setImageSrc(null);
-        }else{
+        } else {
             current.setImageSrc((Bitmap) searchDataStore.getForWhom().get("photo"));
             current.setItemChange(null);
         }
@@ -147,7 +148,7 @@ public class SearchLoadingActivity extends CusStuAppComMapActivity implements On
         for (int i = 0; i < searchDataStore.getQueryList().size(); i++) {
             SearchDetailData myCurrent = new SearchDetailData();
             myCurrent.setItemName((String) searchDataStore.getQueryList().get(i));
-            myCurrent.setItemInfo( (String)searchDataStore.getQueryListName().get(i));
+            myCurrent.setItemInfo((String) searchDataStore.getQueryListName().get(i));
             grabingInfoData.add(myCurrent);
         }
         return grabingInfoData;
@@ -327,9 +328,8 @@ public class SearchLoadingActivity extends CusStuAppComMapActivity implements On
     @Override
     public void onMapReady(GoogleMap googleMap) {
         MapStyleOptions style = MapStyleOptions.loadRawResourceStyle(
-                this, R.raw.map_style_default_json);
+                this, R.raw.loading_map_style);
         googleMap.setMapStyle(style);
-
         mMap = googleMap;
         onMapReadyListener(mMap);
         onMapReadyGeneralConfig();
@@ -340,7 +340,6 @@ public class SearchLoadingActivity extends CusStuAppComMapActivity implements On
             @Override
             public void run() {
                 //give anchor point here
-                //getDeviceLocation(mMap);
                 moveSearchLoadingCamera(searchDataStore.getAnchorPoint(), DEFAULT_ZOOM, "Device Location", mMap);
             }
         }, 100L);
@@ -374,25 +373,45 @@ public class SearchLoadingActivity extends CusStuAppComMapActivity implements On
         if (mMap == null) {
             return;
         }
-        Glide.with(getApplicationContext())
-                .asBitmap()
-                .load(url)
-                .apply(new RequestOptions().override((int) (28 * (getResources().getDisplayMetrics().density)), (int) (28 * (getResources().getDisplayMetrics().density))).centerCrop().placeholder(R.drawable.alias_profile_icon))
-                .into(new SimpleTarget<Bitmap>() {
-                    @Override
-                    public void onResourceReady(@NonNull Bitmap resource, @Nullable com.bumptech.glide.request.transition.Transition<? super Bitmap> transition) {
-                        final Bitmap roundedCornerBitmap = getRoundedCornerBitmapSquare(resource, (int) (14 * (getResources().getDisplayMetrics().density)), (int) (28 * (getResources().getDisplayMetrics().density)));
-                        mMap.addMarker(new MarkerOptions().position(lattitudeLongitude)
-                                .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(mCustomMarkerView, resource))));
-                        //mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(lattitudeLongitude, 15f));
-                    }
-                });
+        if (url != null && !url.equals("")) {
+            Glide.with(getApplicationContext())
+                    .asBitmap()
+                    .load(url)
+                    .apply(new RequestOptions().override((int) (28 * (getResources().getDisplayMetrics().density)), (int) (28 * (getResources().getDisplayMetrics().density))).centerCrop().placeholder(R.drawable.alias_profile_icon))
+                    .into(new SimpleTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(@NonNull Bitmap resource, @Nullable com.bumptech.glide.request.transition.Transition<? super Bitmap> transition) {
+                            mMap.addMarker(new MarkerOptions().position(lattitudeLongitude)
+                                    .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(mCustomMarkerView, resource))));
+                            //mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(lattitudeLongitude, 15f));
+                        }
+                    });
+        } else {
+            if(searchDataStore.getGender().equals("Male") || searchDataStore.getGender().equals("")){
+                defaultUrl = "https://firebasestorage.googleapis.com/v0/b/dume-2d063.appspot.com/o/avatar.png?alt=media&token=801c75b7-59fe-4a13-9191-186ef50de707";
+            }else {
+                defaultUrl = "https://firebasestorage.googleapis.com/v0/b/dume-2d063.appspot.com/o/avatar_female.png?alt=media&token=7202ea91-4f0d-4bd6-838e-8b73d0db13eb";
+            }
+            Glide.with(getApplicationContext())
+                    .asBitmap()
+                    .load(defaultUrl)
+                    .apply(new RequestOptions().override((int) (28 * (getResources().getDisplayMetrics().density)), (int) (28 * (getResources().getDisplayMetrics().density))).centerCrop().placeholder(R.drawable.alias_profile_icon))
+                    .into(new SimpleTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(@NonNull Bitmap resource, @Nullable com.bumptech.glide.request.transition.Transition<? super Bitmap> transition) {
+                            mMap.addMarker(new MarkerOptions().position(lattitudeLongitude)
+                                    .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(mCustomMarkerView, resource))));
+                            //mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(lattitudeLongitude, 15f));
+                        }
+                    });
+        }
+
 
         iconFactory.setStyle(IconGenerator.STYLE_DEFAULT);
         iconFactory.setTextAppearance(this, R.style.MyCustomInfoWindowTextApp);
         iconFactory.setBackground(getDrawable(R.drawable.custom_info_window_vector));
         iconFactory.setContentPadding((int) (27 * (getResources().getDisplayMetrics().density)), (int) (2 * (getResources().getDisplayMetrics().density)), 0, (int) (6 * (getResources().getDisplayMetrics().density)));
-        addCustomInfoWindow(iconFactory, makeCharSequence("Radius", Integer.toString(SearchDataStore.SHORTRADIUS))+" m", lattitudeLongitude);
+        addCustomInfoWindow(iconFactory, makeCharSequence("Radius", Integer.toString(SearchDataStore.SHORTRADIUS)) + " m", lattitudeLongitude);
     }
 
     //testing custom marker code here
@@ -417,7 +436,7 @@ public class SearchLoadingActivity extends CusStuAppComMapActivity implements On
     @Override
     public void saveToDB() {
         if (!checkIfInDB(searchDataStore.getJizz())) {
-            String preIdentify = (String) searchDataStore.getDocumentSnapshot().get("next_sp_write");
+            String preIdentify = (String) searchDataStore.getDocumentSnapshot().get("next_rs_write");
             String identify = "rs_";
             identify = identify + preIdentify;
             mModel.updateRecentSearch(identify, searchDataStore.genRetMainMap(), new TeacherContract.Model.Listener<Void>() {

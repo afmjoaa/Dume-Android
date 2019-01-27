@@ -118,7 +118,8 @@
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".teacher.mentor_settings.academic.AcademicActivity"
-            android:theme="@style/AppTheme.NoActionBar.transparent.black" />
+            android:theme="@style/AppTheme.NoActionBar.transparent.black"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".teacher.mentor_settings.LocationPicker"
             android:label="@string/title_activity_location_picker" />
@@ -152,7 +153,11 @@
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>
         </receiver>
-
+        <service android:name=".service.MyNotification">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
         <service
             android:name=".service.MyLocationService"
             android:enabled="true"

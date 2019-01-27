@@ -15,6 +15,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.location.places.AutocompletePrediction;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -84,17 +87,17 @@ public class AcAdapter extends RecyclerView.Adapter<AcAdapter.AcademicVH> {
                         model.removeFromDatabase(list.get(i).getDegree(), new AcademicContract.Model.ModelCallback() {
                             @Override
                             public void onStart() {
-                                Toast.makeText(context, "Item Removed", Toast.LENGTH_SHORT).show();
                             }
 
                             @Override
                             public void onSuccess() {
+                                Toast.makeText(context, "Item Removed", Toast.LENGTH_SHORT).show();
                                 //AcademicActivity.isDeleted = true;
                             }
 
                             @Override
                             public void onFail(String error) {
-                              
+                                Toast.makeText(context, "Network error 101!", Toast.LENGTH_SHORT).show();
                             }
                         });
                         break;
@@ -111,7 +114,7 @@ public class AcAdapter extends RecyclerView.Adapter<AcAdapter.AcademicVH> {
                         bundle.putString("result", hereCurrent.getResult());
                         bundle.putInt("resultType", hereCurrent.getResultType());
                         intent.putExtra("academic_data", bundle);
-                        context.startActivity(intent);
+                        activity.startActivityForResult(intent, 1234);
                         break;
                 }
                 return true;
@@ -124,6 +127,12 @@ public class AcAdapter extends RecyclerView.Adapter<AcAdapter.AcademicVH> {
 
     public int getRecyItemCount(){
         return list.size();
+    }
+
+    public void update(List<Academic> newlist){
+        list.clear();
+        list.addAll(newlist);
+        this.notifyDataSetChanged();
     }
 
     @Override

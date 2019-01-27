@@ -1,17 +1,25 @@
 package io.dume.dume.teacher.mentor_settings.academic;
 
+import android.app.Activity;
+import android.content.Context;
 import android.view.View;
 
 import io.dume.dume.R;
 
+import static io.dume.dume.util.DumeUtils.hideKeyboard;
+
 public class AcademicPresenter implements AcademicContract.Presenter, AcademicContract.Model.ModelCallback {
+    private final Context context;
+    private final Activity activity;
     AcademicContract.View view;
     AcademicContract.Model model;
 
-    AcademicPresenter(AcademicContract.View view, AcademicContract.Model model) {
+    AcademicPresenter(Context context, AcademicContract.View view, AcademicContract.Model model) {
         this.view = view;
         this.model = model;
         this.model.attachCallback(this);
+        this.context = context;
+        this.activity = (Activity)context;
     }
 
     @Override
@@ -27,7 +35,7 @@ public class AcademicPresenter implements AcademicContract.Presenter, AcademicCo
             case R.id.fabEdit:
                 view.enableLoad();
                 if (view.getAction().equals("edit") || view.getAction().equals("add")) {
-                    if (validateInput(view.getRestult())) {
+                    if (validateInput(view.getValidationCheck())) {
                         model.syncWithDatabase(view.getLevel(), view.getInstitution(), view.getDegree(), view.getStartYear(), view.getEndYear(), view.getRestult());
                     } else {
                         view.toast("Required fields are empty");
@@ -56,9 +64,9 @@ public class AcademicPresenter implements AcademicContract.Presenter, AcademicCo
         }
     }
 
-    private boolean validateInput(String identify) {
+    private boolean validateInput(boolean identify) {
         boolean validate = false;
-        if(identify.equals("Studying")){
+        if(identify){
             if (!view.getLevel().equals("") && !view.getInstitution().equals("") && !view.getDegree().equals("") && !view.getStartYear().equals("") && !view.getEndYear().equals("") && !view.getRestult().equals("")) {
                 validate = true;
             }else{
@@ -97,9 +105,6 @@ public class AcademicPresenter implements AcademicContract.Presenter, AcademicCo
                 if (view.getStartYear().equals("")) {
                     view.inValidFound("from");
                 }
-                if (view.getEndYear().equals("")) {
-                    view.inValidFound("to");
-                }
                 if (view.getRestult().equals("")) {
                     view.inValidFound("result");
                 }
@@ -118,14 +123,17 @@ public class AcademicPresenter implements AcademicContract.Presenter, AcademicCo
     @Override
     public void onSuccess() {
         if (view.getAction().equals("add")) {
-            view.disableLoad();
-            view.snak("Education Added Successfully");
+            hideKeyboard(activity);
+            view.toast("Qualification Added Successfully");
+            view.gotoBackActivity();
+            //view.disableLoad();
         }
         if (view.getAction().equals("edit")) {
-            view.disableLoad();
-            view.snak("Education Edited Successfully");
+            hideKeyboard(activity);
+            view.toast("Qualification Edited Successfully");
+            view.gotoBackActivity();
+            //view.disableLoad();
         }
-        view.clearAllField();
     }
 
     @Override

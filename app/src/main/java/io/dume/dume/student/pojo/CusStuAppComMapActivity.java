@@ -412,7 +412,7 @@ public class CusStuAppComMapActivity extends CustomStuAppCompatActivity implemen
                             }
                         });
                     }
-                }, 2000, 300000);
+                }, 3000, 300000);
             }
 
             @Override

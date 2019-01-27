@@ -3,12 +3,25 @@ package io.dume.dume.teacher.homepage;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Map;
+
+import io.dume.dume.teacher.pojo.Skill;
 
 public class TeacherDataStore implements Serializable {
     private Map<String, Object> selfRating = null;
-    private DocumentSnapshot documentSnapshot;
+    private Map<String, Object> documentSnapshot;
     private static TeacherDataStore teacherDataStore = null;
+    private String packName;
+    private ArrayList<Skill> skillArrayList = null;
+
+    public ArrayList<Skill> getSkillArrayList() {
+        return skillArrayList;
+    }
+
+    public void setSkillArrayList(ArrayList<Skill> skillArrayList) {
+        this.skillArrayList = skillArrayList;
+    }
 
     private String tUserName;
     private String tUserNumber;
@@ -31,11 +44,11 @@ public class TeacherDataStore implements Serializable {
         this.selfRating = selfRating;
     }
 
-    public DocumentSnapshot getDocumentSnapshot() {
+    public Map<String, Object> getDocumentSnapshot() {
         return documentSnapshot;
     }
 
-    public void setDocumentSnapshot(DocumentSnapshot documentSnapshot) {
+    public void setDocumentSnapshot(Map<String, Object> documentSnapshot) {
         this.documentSnapshot = documentSnapshot;
     }
 
@@ -73,6 +86,22 @@ public class TeacherDataStore implements Serializable {
 
     public String gettUserUid() {
         return tUserUid;
+    }
+
+    public static TeacherDataStore getTeacherDataStore() {
+        return teacherDataStore;
+    }
+
+    public static void setTeacherDataStore(TeacherDataStore teacherDataStore) {
+        TeacherDataStore.teacherDataStore = teacherDataStore;
+    }
+
+    public String getPackName() {
+        return packName;
+    }
+
+    public void setPackName(String packName) {
+        this.packName = packName;
     }
 
     public void settUserUid(String tUserUid) {

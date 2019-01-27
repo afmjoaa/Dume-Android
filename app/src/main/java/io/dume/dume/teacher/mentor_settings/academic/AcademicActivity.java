@@ -90,7 +90,7 @@ public class AcademicActivity extends AppCompatActivity implements AcademicContr
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_academic);
-        presenter = new AcademicPresenter(this, AcademicModel.getInstance());
+        presenter = new AcademicPresenter(this, this, AcademicModel.getInstance());
         presenter.enqueue();
         if (getIntent().getAction() == ACTION_EDIT) {
             ACTION = ACTION_EDIT;
@@ -126,7 +126,7 @@ public class AcademicActivity extends AppCompatActivity implements AcademicContr
 
                     @Override
                     public void onTransitionEnd(@NonNull Transition transition) {
-                        if(toRelative.getVisibility()== View.INVISIBLE){
+                        if (toRelative.getVisibility() == View.INVISIBLE) {
                             toRelative.setVisibility(View.GONE);
                         }
                     }
@@ -159,7 +159,9 @@ public class AcademicActivity extends AppCompatActivity implements AcademicContr
     @Override
     public void snak(String msg) {
         Snackbar snakbar = Snackbar.make(fb, msg, Snackbar.LENGTH_LONG);
-        snakbar.setAction("Go Back", view -> startActivity(new Intent(getApplicationContext(), EditAccount.class)));
+        snakbar.setAction("Go Back", view -> {
+            super.onBackPressed();
+        });
         snakbar.show();
     }
 
@@ -208,7 +210,7 @@ public class AcademicActivity extends AppCompatActivity implements AcademicContr
                 toET.setText(bundle.getString("to_year"));
                 resultET.setText(bundle.getString("result"));
                 int resultType = bundle.getInt("resultType", 0);
-                switch (resultType){
+                switch (resultType) {
                     case 1:
                         studyCB.setChecked(true);
                         break;
@@ -249,7 +251,7 @@ public class AcademicActivity extends AppCompatActivity implements AcademicContr
         emptyFromF = findViewById(R.id.empty_from_found);
         emptyToF = findViewById(R.id.empty_to_found);
         emptyResultF = findViewById(R.id.empty_status_found);
-
+        resultET.setText("Studying");
 
     }
 
@@ -277,15 +279,6 @@ public class AcademicActivity extends AppCompatActivity implements AcademicContr
         }
     }
 
-    @Override
-    public void clearAllField() {
-        levelET.setText("");
-        instiEdt.setText("");
-        degreeEdt.setText("");
-        toET.setText("");
-        fromET.setText("");
-        resultET.setText("");
-    }
 
     @Override
     public void configActivity() {
@@ -441,7 +434,6 @@ public class AcademicActivity extends AppCompatActivity implements AcademicContr
                 }
             }
         });
-
     }
 
     @Override
@@ -472,26 +464,42 @@ public class AcademicActivity extends AppCompatActivity implements AcademicContr
                 gpaCB.setChecked(false);
                 studyCB.setChecked(false);
                 toRelative.setVisibility(View.VISIBLE);
+                resultET.setText("A+ (CGPA)");
             }
         } else if (id == R.id.gpa_checkbox) {
             if (compoundButton.isChecked()) {
                 cgpaCB.setChecked(false);
                 studyCB.setChecked(false);
                 toRelative.setVisibility(View.VISIBLE);
+                resultET.setText("Golden A+ (GPA)");
             }
         } else if (id == R.id.study_checkbox) {
             if (compoundButton.isChecked()) {
                 cgpaCB.setChecked(false);
                 gpaCB.setChecked(false);
                 toRelative.setVisibility(View.GONE);
+                resultET.setText("Studying");
             }
         }
 
         if (!studyCB.isChecked() && !gpaCB.isChecked() && !cgpaCB.isChecked()) {
             studyCB.setChecked(true);
             toRelative.setVisibility(View.GONE);
+            resultET.setText("Studying");
         }
         //selectResultClicked();
+    }
+
+    @Override
+    public boolean getValidationCheck() {
+        return !studyCB.isChecked();
+    }
+
+    @Override
+    public void gotoBackActivity() {
+        Intent goBackIntent = new Intent(this, EditAccount.class);
+        setResult(RESULT_OK, goBackIntent);
+        finish();
     }
 
     public void onAcademicClick(View view) {
@@ -608,7 +616,11 @@ public class AcademicActivity extends AppCompatActivity implements AcademicContr
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        if(loadView.isRunningAnimation()){
+            toast("Please wait ...");
+        }else {
+            super.onBackPressed();
+        }
     }
 
     public void testingCustomDialogue() {

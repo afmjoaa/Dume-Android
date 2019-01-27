@@ -235,6 +235,7 @@ public class HomePagePresenter implements HomePageContract.Presenter {
                     mView.setMsgName(mView.generateMsgName(o1, o));
 
                     mView.setDocumentSnapshot(documentSnapshot);
+                    mView.initRecentSearchRecycler(documentSnapshot);
 
                     mView.setRating((Map<String, Object>) documentSnapshot.get("self_rating"));
                     mView.setUnreadMsg(documentSnapshot.getString("unread_msg"));

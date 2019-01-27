@@ -41,6 +41,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -50,6 +51,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import io.dume.dume.R;
+import io.dume.dume.student.pojo.SearchDataStore;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
@@ -64,6 +66,7 @@ public class DumeUtils {
     public static int CAMERA_IMAGE = 2;
     private static final int WIDTH_INDEX = 0;
     private static final int HEIGHT_INDEX = 1;
+    private static ArrayList<String> endOfNest;
 
 
     public static String getApplicationName() {
@@ -402,11 +405,11 @@ public class DumeUtils {
         return imeiList;
     }
 
-    public static String getUserUID(){
+    public static String getUserUID() {
         return Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
     }
 
-    public static String getAddress(Context context ,double lat, double lng) {
+    public static String getAddress(Context context, double lat, double lng) {
         Geocoder geocoder = new Geocoder(context, Locale.getDefault());
         try {
             List<Address> addresses = geocoder.getFromLocation(lat, lng, 1);
@@ -435,7 +438,7 @@ public class DumeUtils {
         }
     }
 
-    public void onPopupButtonClick(Context context,View button) {
+    public void onPopupButtonClick(Context context, View button) {
         PopupMenu popup = new PopupMenu(context, button);
         popup.getMenuInflater().inflate(R.menu.menu_edit_remove, popup.getMenu());
 
@@ -449,7 +452,7 @@ public class DumeUtils {
     }
 
 
-    public static void settingStatusBarTransparent( Activity activity) {
+    public static void settingStatusBarTransparent(Activity activity) {
 
         if (Build.VERSION.SDK_INT >= 19 && Build.VERSION.SDK_INT < 21) {
             setWindowFlag(activity, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, true);
@@ -488,6 +491,38 @@ public class DumeUtils {
             decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         }
     }
+
+
+    public static String generateQueryString(String packageName, List<String> queryList, List<String> queryListName) {
+        StringBuilder mQuery = new StringBuilder();
+        endOfNest = new ArrayList<>(Arrays.asList("Subject", "Field", "Software", "Language", "Flavour", "Type", "Course", " Language "));
+        mQuery.append(firstTwo(packageName));
+
+
+        int ignoredElement = 2;
+        if (packageName.equals(SearchDataStore.DUME_GANG)) {
+            ignoredElement++;
+        }
+        for (int i = 0; i < queryList.size() - ignoredElement; i++) {
+            if (!endOfNest.contains(queryListName.get(i))) {
+                mQuery.append(firstTwo(queryList.get(i)));
+            } else {
+                String s = queryList.get(i);
+                String trim = s.replaceAll("\\s", "");
+                String[] split = trim.split(",");
+                for (String aSplit : split) {
+                    mQuery.append(firstTwo(aSplit));
+                }
+            }
+        }
+        return mQuery.toString();
+    }
+
+    public static List<String> getEndOFNest() {
+        endOfNest = new ArrayList<>(Arrays.asList("Subject", "Field", "Software", "Language", "Flavour", "Type", "Course", " Language "));
+        return endOfNest;
+    }
+
 
     public static int giveIconOnName(String TabName) {
         switch (TabName) {
@@ -533,5 +568,31 @@ public class DumeUtils {
                 return 5;
         }
     }
+
+    public static int giveIconOnCategoryName(String TabName) {
+        switch (TabName) {
+            case "Education":
+                return 0;
+            case "Software":
+                return 1;
+            case "Programming":
+                return 2;
+            case "Language":
+                return 3;
+            case "Dance":
+                return 4;
+            case "Art":
+                return 5;
+            case "Cooking":
+                return 6;
+            case "Music":
+                return 7;
+            case "Others":
+                return 8;
+            default:
+                return 0;
+        }
+    }
+
 }
 
