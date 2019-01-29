@@ -282,8 +282,10 @@ public class ProfilePageActivity extends CustomStuAppCompatActivity implements P
                                 break;
                             case R.id.action_remove:
                                 avatarString = null;
-                                selectedImageUri = null;
-                                profileUserDP.setImageDrawable(getResources().getDrawable(R.drawable.avatar));
+                                compressedImage = null;
+                                setAvatar(null);
+                                //profileUserDP.setImageDrawable(getResources().getDrawable(R.drawable.avatar));
+                                updateChangesClicked();
                                 flush("Display pic Removed");
                                 break;
                         }
@@ -517,7 +519,7 @@ public class ProfilePageActivity extends CustomStuAppCompatActivity implements P
                     @Override
                     public void accept(File file) {
                         compressedImage = file;
-                        Glide.with(ProfilePageActivity.this).load(compressedImage).apply(new RequestOptions().override(100, 100).placeholder(R.drawable.avatar)).into(profileUserDP);
+                        //Glide.with(ProfilePageActivity.this).load(compressedImage).apply(new RequestOptions().override(100, 100).placeholder(R.drawable.avatar)).into(profileUserDP);
                         hideSpiner();
                         updateChangesClicked();
                     }
@@ -747,7 +749,8 @@ public class ProfilePageActivity extends CustomStuAppCompatActivity implements P
 
     @Override
     public void goBack() {
-        startActivity(new Intent(ProfilePageActivity.this, HomePageActivity.class));
+        searchDataStore.setProfileChanged(true);
+        super.onBackPressed();
     }
 
     @Override

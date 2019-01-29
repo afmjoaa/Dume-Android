@@ -3,7 +3,6 @@ package io.dume.dume.student.homePage;
 import android.app.Dialog;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.graphics.Bitmap;
@@ -21,6 +20,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -62,6 +62,7 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -90,7 +91,6 @@ import io.dume.dume.service.MyLocationService;
 import io.dume.dume.student.freeCashBack.FreeCashBackActivity;
 import io.dume.dume.student.grabingInfo.GrabingInfoActivity;
 import io.dume.dume.student.grabingLocation.GrabingLocationActivity;
-import io.dume.dume.student.grabingLocation.MenualRecyclerData;
 import io.dume.dume.student.heatMap.HeatMapActivity;
 import io.dume.dume.student.homePage.adapter.HomePageRatingAdapter;
 import io.dume.dume.student.homePage.adapter.HomePageRatingData;
@@ -111,7 +111,6 @@ import io.dume.dume.student.studentPayment.StudentPaymentActivity;
 import io.dume.dume.student.studentSettings.StudentSettingsActivity;
 import io.dume.dume.teacher.homepage.TeacherActivtiy;
 import io.dume.dume.teacher.homepage.TeacherContract;
-import io.dume.dume.util.AlertMsgDialogue;
 import io.dume.dume.util.DumeUtils;
 import io.dume.dume.util.NetworkUtil;
 import me.zhanghai.android.materialratingbar.MaterialRatingBar;
@@ -197,6 +196,8 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
     private RecyclerView recentSearchRV;
     private RecentSearchAdapter recentSearchAdapter;
     private static Map<String, Map<String, Object>> recently_searched;
+    private BottomSheetDialog mCancelBottomSheetDialog;
+    private View cancelsheetRootView;
 
     @Override
     protected void onDestroy() {
@@ -223,7 +224,10 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
     @Override
     protected void onResume() {
         super.onResume();
-        //mPresenter.getDataFromDB();
+        if (searchDataStore.getProfileChanged()) {
+            mPresenter.getDataFromDB();
+            searchDataStore.setProfileChanged(false);
+        }
     }
 
     @Override
@@ -335,7 +339,6 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
         promotionValidityTextView = findViewById(R.id.promotion_validity_text);
         loadView = findViewById(R.id.loadViewTwo);
         bottomSheetNSV = findViewById(R.id.bottom_sheet_scroll_view);
-
         recentSearchRV = findViewById(R.id.recent_search_recycler);
 
     }
@@ -466,6 +469,10 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
             primaryNavContainer.setVisibility(View.GONE);
             secondaryNavContainer.setVisibility(View.VISIBLE);
         }
+        //initializing the bottomSheet dialogue
+        mCancelBottomSheetDialog = new BottomSheetDialog(this);
+        cancelsheetRootView = this.getLayoutInflater().inflate(R.layout.custom_bottom_sheet_dialogue_cancel, null);
+        mCancelBottomSheetDialog.setContentView(cancelsheetRootView);
 
         //initializing the recycler
         List<HomePageRecyclerData> promoData = new ArrayList<>();
@@ -917,7 +924,7 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
         onMapReadyListener(mMap);
         onMapReadyGeneralConfig();
         mMap.setPadding((int) (10 * (getResources().getDisplayMetrics().density)), 0, 0, (int) (72 * (getResources().getDisplayMetrics().density)));
-
+        getDeviceLocation(mMap);
     }
 
     public void navigationTogglerConfig() {
@@ -1350,49 +1357,63 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
 
     @Override
     public void switchProfileDialog(String identify) {
-        Bundle Uargs = new Bundle();
-        if (identify.equals(DumeUtils.TEACHER)) {
-            Uargs.putString("msg", "Switch from student to mentor profile ?");
-        } else {
-            Uargs.putString("msg", "Switch from student to boot camp profile ?");
-        }
-        AlertMsgDialogue updateAlertDialogue = new AlertMsgDialogue();
-        updateAlertDialogue.setItemChoiceListener(new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                // this is the positive btn click listener name wrong
-                showProgress();
-                if (identify.equals(DumeUtils.TEACHER)) {
-                    new DumeModel().switchAcount(DumeUtils.TEACHER, new TeacherContract.Model.Listener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            gotoMentorProfile();
-                        }
-
-                        @Override
-                        public void onError(String msg) {
-                            hideProgress();
-                            flush("Network error 101 !!");
-                        }
-                    });
-                } else {
-                    new DumeModel().switchAcount(DumeUtils.BOOTCAMP, new TeacherContract.Model.Listener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            gotoBootCampHomePage();
-                        }
-
-                        @Override
-                        public void onError(String msg) {
-                            hideProgress();
-                            flush("Network error 101 !!");
-                        }
-                    });
-                }
+        TextView mainText = mCancelBottomSheetDialog.findViewById(R.id.main_text);
+        TextView subText = mCancelBottomSheetDialog.findViewById(R.id.sub_text);
+        Button cancelYesBtn = mCancelBottomSheetDialog.findViewById(R.id.cancel_yes_btn);
+        Button cancelNoBtn = mCancelBottomSheetDialog.findViewById(R.id.cancel_no_btn);
+        if (mainText != null && subText != null && cancelYesBtn != null && cancelNoBtn != null) {
+            mainText.setText("Switch Profile ?");
+            cancelYesBtn.setText("Yes, Switch");
+            cancelNoBtn.setText("No");
+            if (identify.equals(DumeUtils.TEACHER)) {
+                subText.setText("Switch from student to mentor profile ...");
+            } else {
+                subText.setText("Switch from student to boot camp profile ...");
             }
-        }, "Switch");
-        updateAlertDialogue.setArguments(Uargs);
-        updateAlertDialogue.show(getSupportFragmentManager(), "switch_account_dialog");
+
+            cancelNoBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mCancelBottomSheetDialog.dismiss();
+                }
+            });
+
+            cancelYesBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mCancelBottomSheetDialog.dismiss();
+                    showProgress();
+                    if (identify.equals(DumeUtils.TEACHER)) {
+                        new DumeModel().switchAcount(DumeUtils.TEACHER, new TeacherContract.Model.Listener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                gotoMentorProfile();
+                            }
+
+                            @Override
+                            public void onError(String msg) {
+                                hideProgress();
+                                flush("Network error 101 !!");
+                            }
+                        });
+                    } else {
+                        new DumeModel().switchAcount(DumeUtils.BOOTCAMP, new TeacherContract.Model.Listener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                gotoBootCampHomePage();
+                            }
+
+                            @Override
+                            public void onError(String msg) {
+                                hideProgress();
+                                flush("Network error 101 !!");
+                            }
+                        });
+                    }
+                }
+            });
+        }
+        mCancelBottomSheetDialog.show();
     }
 
     @Override
@@ -1417,7 +1438,7 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
 
     @Override
     public void gotoTestingActivity() {
-        startActivity(new Intent(this, PayActivity.class));
+        startActivity(new Intent(this, SearchResultActivity.class));
     }
 
     @Override

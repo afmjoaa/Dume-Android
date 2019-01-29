@@ -32,6 +32,7 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -41,6 +42,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -335,7 +337,15 @@ public class SearchLoadingActivity extends CusStuAppComMapActivity implements On
         onMapReadyGeneralConfig();
         mMap.setPadding((int) (10 * (getResources().getDisplayMetrics().density)), 0, 0, (int) (72 * (getResources().getDisplayMetrics().density)));
         mMap.getUiSettings().setCompassEnabled(false);
+        mMap.setMyLocationEnabled(false);
         addCustomMarkerFromURL(searchDataStore.getAvatarString(), searchDataStore.getAnchorPoint());
+        mMap.addCircle(new CircleOptions()
+                .center(searchDataStore.getAnchorPoint())
+                .radius(1600)//meter radius
+                .strokeColor(0xFF0277bd)
+                .fillColor(0x0f64b5f6)
+                .strokeWidth(1.5f)
+        );
         viewMuskOne.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -362,6 +372,10 @@ public class SearchLoadingActivity extends CusStuAppComMapActivity implements On
         mCancelBottomSheetDialog = new BottomSheetDialog(this);
         cancelsheetRootView = this.getLayoutInflater().inflate(R.layout.custom_bottom_sheet_dialogue_cancel, null);
         mCancelBottomSheetDialog.setContentView(cancelsheetRootView);
+        TextView mainText = mCancelBottomSheetDialog.findViewById(R.id.main_text);
+        TextView subText = mCancelBottomSheetDialog.findViewById(R.id.sub_text);
+        Button cancelYesBtn = mCancelBottomSheetDialog.findViewById(R.id.cancel_yes_btn);
+        Button cancelNoBtn = mCancelBottomSheetDialog.findViewById(R.id.cancel_no_btn);
         mCancelBottomSheetDialog.show();
     }
 
@@ -409,7 +423,7 @@ public class SearchLoadingActivity extends CusStuAppComMapActivity implements On
 
         iconFactory.setStyle(IconGenerator.STYLE_DEFAULT);
         iconFactory.setTextAppearance(this, R.style.MyCustomInfoWindowTextApp);
-        iconFactory.setBackground(getDrawable(R.drawable.custom_info_window_vector));
+        iconFactory.setBackground(getResources().getDrawable(R.drawable.custom_info_window_vector));
         iconFactory.setContentPadding((int) (27 * (getResources().getDisplayMetrics().density)), (int) (2 * (getResources().getDisplayMetrics().density)), 0, (int) (6 * (getResources().getDisplayMetrics().density)));
         addCustomInfoWindow(iconFactory, makeCharSequence("Radius", Integer.toString(SearchDataStore.SHORTRADIUS)) + " m", lattitudeLongitude);
     }

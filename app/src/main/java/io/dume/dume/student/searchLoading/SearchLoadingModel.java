@@ -7,7 +7,6 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.GeoPoint;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import org.imperiumlabs.geofirestore.GeoFirestore;
 import org.imperiumlabs.geofirestore.GeoQuery;
@@ -17,7 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import io.dume.dume.student.pojo.SearchDataStore;
 import io.dume.dume.student.pojo.StuBaseModel;
 import io.dume.dume.teacher.homepage.TeacherContract;
 
@@ -31,9 +29,6 @@ public class SearchLoadingModel extends StuBaseModel implements SearchLoadingCon
 
     @Override
     public void search(double lat, double lon, double radius, String queryString, TeacherContract.Model.Listener<List<DocumentSnapshot>> listener) {
-        //CollectionReference geoFirestoreRef = FirebaseFirestore.getInstance().collection("my-collection");
-
-
         GeoFirestore geoFirestore = new GeoFirestore(skillRef);
         GeoQuery geoQuery = geoFirestore.queryAtLocation(new GeoPoint(lat, lon), radius);
         geoQuery.removeAllListeners();

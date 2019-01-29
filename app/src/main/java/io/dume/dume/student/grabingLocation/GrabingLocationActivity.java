@@ -617,7 +617,6 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
                             } else {
                                 startActivityForResult(new Intent(context, GrabingLocationActivity.class).setAction("fromGLAP"), ADD_PARMANENT_ADDRESS);
                             }
-
                         } else if (position == 1) {
                             //home block
                             if (identify.equals("Home")) {
@@ -757,7 +756,7 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
         onMapReadyListener(mMap);
         onMapReadyGeneralConfig();
         mMap.setPadding((int) (10 * (getResources().getDisplayMetrics().density)), 0, 0, (int) (72 * (getResources().getDisplayMetrics().density)));
-
+        getDeviceLocation(mMap);
 
         mMap.setOnCameraMoveStartedListener(new GoogleMap.OnCameraMoveStartedListener() {
             @Override

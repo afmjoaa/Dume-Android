@@ -1,7 +1,6 @@
 package io.dume.dume.student.searchResult;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -12,14 +11,14 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.location.Location;
 import android.os.Build;
-import android.support.annotation.DrawableRes;
+import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
-import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
@@ -35,7 +34,6 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.animation.LinearInterpolator;
@@ -46,6 +44,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.directions.route.AbstractRouting;
 import com.directions.route.Route;
@@ -55,14 +54,15 @@ import com.directions.route.RoutingListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.maps.android.SphericalUtil;
 import com.google.maps.android.ui.IconGenerator;
 import com.hadiidbouk.charts.BarData;
 import com.hadiidbouk.charts.ChartProgressBar;
@@ -79,8 +79,9 @@ import java.util.Objects;
 
 import carbon.widget.ImageView;
 import io.dume.dume.R;
-import io.dume.dume.customView.HorizontalLoadView;
 import io.dume.dume.customView.HorizontalLoadViewTwo;
+import io.dume.dume.library.RouteOverlayView;
+import io.dume.dume.library.TrailSupportMapFragment;
 import io.dume.dume.student.common.QualificationAdapter;
 import io.dume.dume.student.common.QualificationData;
 import io.dume.dume.student.common.ReviewAdapter;
@@ -102,7 +103,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
     private SearchResultContract.Presenter mPresenter;
     private static final int fromFlag = 6;
     private Toolbar toolbar;
-    private SupportMapFragment mapFragment;
+    private TrailSupportMapFragment mapFragment;
     private FrameLayout viewMusk;
     private Toolbar secondaryToolbar;
     private AppBarLayout defaultAppbarLayout;
@@ -139,7 +140,6 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
     private LinearLayout achievementHidable;
     private LinearLayout achievementHost;
     private Button achievementInfoBtn;
-    boolean scrollFirstTime = true;
     private Button swipeRight;
     private Button swipeLeft;
     private LinearLayout basicInfo;
@@ -151,7 +151,6 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
     private LatLng mDummyLatLng;
     double latitude = Double.parseDouble("23.788632");
     double longitude = Double.parseDouble("90.419437");
-
     double latitude1 = Double.parseDouble("23.847440");
     double longitude1 = Double.parseDouble("90.415854");
     private IconGenerator iconFactory;
@@ -171,6 +170,9 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
     private LinearLayout locationHideable;
     private NestedScrollView bottomSheetNSV;
     private HorizontalLoadViewTwo loadViewBS;
+    private List<LatLng> route;
+    private Marker mMarkerA;
+    private String defaultUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -182,8 +184,12 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
         mPresenter = new SearchResultPresenter(this, mModel);
         mPresenter.searchResultEnqueue();
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-        getLocationPermission(mapFragment);
+        //mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        //getLocationPermission(mapFragment);
+
+        mapFragment = (TrailSupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        assert mapFragment != null;
+        mapFragment.getMapAsync(this);
 
         //setting the qualification recycler view
         qualificaitonRecyAda = new QualificationAdapter(this, getQualificationData());
@@ -195,24 +201,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
         reviewRecyAda = new ReviewAdapter(this, reviewData);
         reviewRecyView.setAdapter(reviewRecyAda);
         reviewRecyView.setLayoutManager(new LinearLayoutManager(this));
-        reviewRecyView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-            }
-
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                if (!recyclerView.canScrollVertically(1) && scrollFirstTime) {
-                    Toast.makeText(SearchResultActivity.this, "Last", Toast.LENGTH_SHORT).show();
-                    scrollFirstTime = false;
-                }
-            }
-        });
-
         polylines = new ArrayList<>();
-
     }
 
     @Override
@@ -277,6 +266,9 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
         bottomSheetNSV = findViewById(R.id.bottom_sheet_scroll_view);
         loadViewBS = findViewById(R.id.loadViewTwo);
 
+        route = new ArrayList<>();
+        route.add(mDummyLatLng);
+        route.add(mDummyLatLngOne);
     }
 
     @Override
@@ -296,19 +288,16 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
         vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-
                 llBottomSheet.getLayoutParams().height = (llBottomSheet.getHeight() - secondaryAppbarLayout.getHeight() - (int) (8 * (getResources().getDisplayMetrics().density)));
                 llBottomSheet.requestLayout();
                 bottomSheetBehavior.onLayoutChild(coordinatorLayout, llBottomSheet, ViewCompat.LAYOUT_DIRECTION_LTR);
                 ViewTreeObserver obs = llBottomSheet.getViewTreeObserver();
-
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                     obs.removeOnGlobalLayoutListener(this);
                 } else {
                     obs.removeGlobalOnLayoutListener(this);
                 }
             }
-
         });
     }
 
@@ -319,7 +308,6 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                 .addTransition(new Slide(Gravity.TOP))
                 .setInterpolator(new LinearInterpolator());
         TransitionManager.beginDelayedTransition(basicInfo, setBasicInfo);
-
         bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
@@ -367,7 +355,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                             bottomSheetNSV.fling(0);
                             bottomSheetNSV.scrollTo(0, 0);
                         }
-                    },200L);
+                    }, 200L);
                     hideProgress();
 
                 } else if (BottomSheetBehavior.STATE_EXPANDED == newState) {
@@ -413,10 +401,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                     swipeRight.setVisibility(View.VISIBLE);
                     basicInfoInsiderLayoutParams.height = (int) (100 * (getResources().getDisplayMetrics().density));
                     basicInfoInsider.setLayoutParams(basicInfoInsiderLayoutParams);
-
-                } /*else if (BottomSheetBehavior.STATE_SETTLING == newState) {
-                    loaderView.setVisibility(View.VISIBLE);
-                }*/
+                }
             }
 
             @Override
@@ -436,7 +421,6 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                 if (COMPASSBTN != null) {
                     COMPASSBTN.animate().scaleX(1 - slideOffset).scaleY(1 - slideOffset).setDuration(0).start();
                 }
-
             }
         });
 
@@ -468,7 +452,6 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
 
         mChart.setDataList(dataList);
         mChart.build();
-
 
         //setting the animation for the btn
         showAdditionalRatingBtn.setOnClickListener(new VisibleToggleClickListener() {
@@ -563,7 +546,6 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                 } else {
                     moreInfoHidable.setVisibility(View.VISIBLE);
                 }
-
             }
 
         });
@@ -765,80 +747,70 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
         });
 
 
-        //testing the swipe here
-        onSwipeTouchListener = new OnSwipeTouchListener(this) {
-            @Override
-            protected void onSwipeRight() {
-                Toast.makeText(SearchResultActivity.this, "Right Swipe", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            protected void onSwipeLeft() {
-                Toast.makeText(SearchResultActivity.this, "Left Swipe", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            protected void onSwipeTop() {
-            }
-
-            @Override
-            protected void onSwipeBottom() {
-            }
-        };
-        basicInfo.setOnTouchListener(onSwipeTouchListener);
-
     }
 
-
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent ev) {
-        onSwipeTouchListener.getGestureDetector().onTouchEvent(ev);
-        return super.dispatchTouchEvent(ev);
-    }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         MapStyleOptions style = MapStyleOptions.loadRawResourceStyle(
-                this, R.raw.map_style_default_json);
+                this, R.raw.loading_map_style);
         googleMap.setMapStyle(style);
         mMap = googleMap;
         //config the map here
         onMapReadyListener(mMap);
         onMapReadyGeneralConfig();
-        //config finish here
         mMap.setPadding((int) (6 * (getResources().getDisplayMetrics().density)), 0, 0, (int) (150 * (getResources().getDisplayMetrics().density)));
         mMap.setOnMarkerClickListener(this);
         mMap.setOnInfoWindowClickListener(this);
-        /*LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));*/
+        //mMap.getUiSettings().setZoomGesturesEnabled(false);
+        mMap.setMyLocationEnabled(false);
 
-        //testing my custom marker code here
-        //addCustomMarkerFromDrawable();
-        addCustomMarkerFromURL("http://i.imgur.com/ROz4Jgh.png", mDummyLatLng);
-        addCustomMarkerFromURL("http://i.imgur.com/Qn9UesZ.png", mDummyLatLngOne);
-        mMap.animateCamera(CameraUpdateFactory.newLatLng(mDummyLatLng));
 
-        getRouteBetweenMarker(mDummyLatLng, mDummyLatLngOne);
+        // sob kaj sesh a ai duita lagate hobe
+        //mMap.setMaxZoomPreference(13f);
+        //mMap.setMinZoomPreference(10f);
+        zoomRoute(route);
+        mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+            @Override
+            public void onMapLoaded() {
+                mMap.setOnCameraMoveListener(new GoogleMap.OnCameraMoveListener() {
+                    @Override
+                    public void onCameraMove() {
+                        mapFragment.onCameraMove(mMap);
+                    }
+                });
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mapFragment.setUpPath(route, mMap, RouteOverlayView.AnimType.ARC);
+                        //testing my custom marker code here
+                        addCustomMarkerFromURL("http://i.imgur.com/ROz4Jgh.png", mDummyLatLng);
+                        addCustomMarkerFromURL("http://i.imgur.com/Qn9UesZ.png", mDummyLatLngOne);
+                    }
+                }, 600);
+            }
+        });
+
 
     }
 
-    private void getRouteBetweenMarker(LatLng One, LatLng Two) {
-        Routing routing = new Routing.Builder()
-                .travelMode(AbstractRouting.TravelMode.DRIVING)
-                .withListener(this)
-                .alternativeRoutes(false)
-                .waypoints(One, Two)
-                .key(getResources().getString(R.string.google_direction_key))
+    public void zoomRoute(List<LatLng> lstLatLngRoute) {
+        if (mMap == null || lstLatLngRoute == null || lstLatLngRoute.isEmpty()) return;
+        LatLngBounds.Builder boundsBuilder = new LatLngBounds.Builder();
+        for (LatLng latLngPoint : lstLatLngRoute)
+            boundsBuilder.include(latLngPoint);
+
+        int routePadding = 100;
+        LatLngBounds latLngBounds = boundsBuilder.build();
+
+        mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, routePadding));
+        /*CameraPosition cameraPosition = new CameraPosition.Builder()
+                .target(mMap.getCameraPosition().target)
+                .zoom(mMap.getCameraPosition().zoom)
+                .tilt(45)
                 .build();
-        routing.execute();
-    }
-
-    private void erasePolylines() {
-        for (Polyline line : polylines) {
-            line.remove();
-        }
-        polylines.clear();
+        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));*/
     }
 
     @Override
@@ -852,14 +824,12 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(optionMenu, menu);
         if (optionMenu == R.menu.menu_search_result) {
 
         } else if (optionMenu == R.menu.menu_only_help) {
 
         }
-        //getMenuInflater().inflate(R.menu.menu_search_result, menu);
         return true;
     }
 
@@ -908,7 +878,6 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
         String[] sessionTextArr = getResources().getStringArray(R.array.QualificationSessionText);
         String[] resultTextArr = getResources().getStringArray(R.array.QualificationResultText);
 
-
         for (int i = 0; i < institutionTextArr.length
                 && i < examTextArr.length
                 && i < sessionTextArr.length
@@ -942,29 +911,49 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
 
     }
 
-    private void addCustomMarkerFromURL(String url, LatLng lattitudeLongitude) {
+    private Marker addCustomMarkerFromURL(String url, LatLng lattitudeLongitude) {
         if (mMap == null) {
-            return;
+            return null;
         }
-        // adding a marker with image from URL using glide image loading library
-        //"http://i.imgur.com/ROz4Jgh.png"
-        Glide.with(getApplicationContext())
-                .asBitmap()
-                .load(url)
-                .into(new SimpleTarget<Bitmap>() {
-                    @Override
-                    public void onResourceReady(@NonNull Bitmap resource, @Nullable com.bumptech.glide.request.transition.Transition<? super Bitmap> transition) {
-                        mMap.addMarker(new MarkerOptions().position(lattitudeLongitude)
-                                .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(mCustomMarkerView, resource))));
-                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(lattitudeLongitude, 15f));
-                    }
-                });
+        if (url != null && !url.equals("")) {
+            Glide.with(getApplicationContext())
+                    .asBitmap()
+                    .load(url)
+                    .apply(new RequestOptions().override((int) (28 * (getResources().getDisplayMetrics().density)), (int) (28 * (getResources().getDisplayMetrics().density))).centerCrop().placeholder(R.drawable.alias_profile_icon))
+                    .into(new SimpleTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(@NonNull Bitmap resource, @Nullable com.bumptech.glide.request.transition.Transition<? super Bitmap> transition) {
+                            mMap.addMarker(new MarkerOptions().position(lattitudeLongitude)
+                                    .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(mCustomMarkerView, resource))));
+                            //mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(lattitudeLongitude, 15f));
+                        }
+                    });
+        } else {
+            if(searchDataStore.getGender().equals("Male") || searchDataStore.getGender().equals("")){
+                defaultUrl = "https://firebasestorage.googleapis.com/v0/b/dume-2d063.appspot.com/o/avatar.png?alt=media&token=801c75b7-59fe-4a13-9191-186ef50de707";
+            }else {
+                defaultUrl = "https://firebasestorage.googleapis.com/v0/b/dume-2d063.appspot.com/o/avatar_female.png?alt=media&token=7202ea91-4f0d-4bd6-838e-8b73d0db13eb";
+            }
+            Glide.with(getApplicationContext())
+                    .asBitmap()
+                    .load(defaultUrl)
+                    .apply(new RequestOptions().override((int) (28 * (getResources().getDisplayMetrics().density)), (int) (28 * (getResources().getDisplayMetrics().density))).centerCrop().placeholder(R.drawable.alias_profile_icon))
+                    .into(new SimpleTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(@NonNull Bitmap resource, @Nullable com.bumptech.glide.request.transition.Transition<? super Bitmap> transition) {
+                            mMap.addMarker(new MarkerOptions().position(lattitudeLongitude)
+                                    .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(mCustomMarkerView, resource))));
+                            //mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(lattitudeLongitude, 15f));
+                        }
+                    });
+        }
 
         iconFactory.setStyle(IconGenerator.STYLE_DEFAULT);
         iconFactory.setTextAppearance(this, R.style.MyCustomInfoWindowTextApp);
         iconFactory.setBackground(getDrawable(R.drawable.custom_info_window_vector));
         iconFactory.setContentPadding((int) (27 * (getResources().getDisplayMetrics().density)), (int) (2 * (getResources().getDisplayMetrics().density)), 0, (int) (6 * (getResources().getDisplayMetrics().density)));
         addCustomInfoWindow(iconFactory, makeCharSequence("3 km", "12 min"), lattitudeLongitude);
+        return mMarkerA;
     }
 
 
@@ -982,6 +971,62 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
 
     public void onSearchResultViewClicked(View view) {
         mPresenter.onSearchResultIntracted(view);
+    }
+
+
+    private void showDistance() {
+        //double distance = SphericalUtil.computeDistanceBetween(mMarkerA.getPosition(), mMarkerB.getPosition());
+        // mTextView.setText("The markers are " + formatNumber(distance) + " apart.");
+    }
+
+    private String formatNumber(double distance) {
+        String unit = "m";
+        if (distance < 1) {
+            distance *= 1000;
+            unit = "mm";
+        } else if (distance > 1000) {
+            distance /= 1000;
+            unit = "km";
+        }
+
+        return "" + Math.round(distance) + " " + unit;
+    }
+
+    public void showProgressBS() {
+        if (loadViewBS.getVisibility() == View.INVISIBLE || loadViewBS.getVisibility() == View.GONE) {
+            loadViewBS.setVisibility(View.VISIBLE);
+        }
+        if (!loadViewBS.isRunningAnimation()) {
+            loadViewBS.startLoading();
+        }
+    }
+
+    public void hideProgressBS() {
+        if (loadViewBS.isRunningAnimation()) {
+            loadViewBS.stopLoading();
+        }
+        if (loadViewBS.getVisibility() == View.VISIBLE) {
+            loadViewBS.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    //not using direction code
+    private void getRouteBetweenMarker(LatLng One, LatLng Two) {
+        Routing routing = new Routing.Builder()
+                .travelMode(AbstractRouting.TravelMode.DRIVING)
+                .withListener(this)
+                .alternativeRoutes(false)
+                .waypoints(One, Two)
+                .key(getResources().getString(R.string.google_direction_key))
+                .build();
+        routing.execute();
+    }
+
+    private void erasePolylines() {
+        for (Polyline line : polylines) {
+            line.remove();
+        }
+        polylines.clear();
     }
 
     @Override
@@ -1027,22 +1072,57 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
     public void onRoutingCancelled() {
 
     }
-
-    public void showProgressBS() {
-        if (loadViewBS.getVisibility() == View.INVISIBLE || loadViewBS.getVisibility() == View.GONE) {
-            loadViewBS.setVisibility(View.VISIBLE);
-        }
-        if (!loadViewBS.isRunningAnimation()) {
-            loadViewBS.startLoading();
-        }
-    }
-
-    public void hideProgressBS() {
-        if (loadViewBS.isRunningAnimation()) {
-            loadViewBS.stopLoading();
-        }
-        if (loadViewBS.getVisibility() == View.VISIBLE) {
-            loadViewBS.setVisibility(View.INVISIBLE);
-        }
-    }
 }
+
+//testing the swipe here
+/* onSwipeTouchListener = new OnSwipeTouchListener(this) {
+    @Override
+    protected void onSwipeRight() {
+        Toast.makeText(SearchResultActivity.this, "Right Swipe", Toast.LENGTH_SHORT).show();
+    }
+    @Override
+    protected void onSwipeLeft() {
+        Toast.makeText(SearchResultActivity.this, "Left Swipe", Toast.LENGTH_SHORT).show();
+    }
+    @Override
+    protected void onSwipeTop() {
+    }
+    @Override
+    protected void onSwipeBottom() {
+    }
+};
+basicInfo.setOnTouchListener(onSwipeTouchListener);
+@Override
+public boolean dispatchTouchEvent(MotionEvent ev) {
+    onSwipeTouchListener.getGestureDetector().onTouchEvent(ev);
+    return super.dispatchTouchEvent(ev);
+}
+reviewRecyView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+            }
+
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (!recyclerView.canScrollVertically(1) && scrollFirstTime) {
+                    Toast.makeText(SearchResultActivity.this, "Last", Toast.LENGTH_SHORT).show();
+                    scrollFirstTime = false;
+                }
+            }
+        });
+
+  /* PolylineOptions line =
+        new PolylineOptions().add(mDummyLatLng, mDummyLatLngOne)
+                .width(5).color(Color.RED);
+Polyline polyline = mMap.addPolyline(line);
+polyline.remove();*/
+
+
+/*PolygonOptions area=
+        new PolygonOptions().add(mDummyLatLng, mDummyLatLngOne,
+                new LatLng(40.765136435316755, -73.97989511489868))
+                .strokeColor(Color.BLUE);
+mMap.addPolygon(area);*/
+//getRouteBetweenMarker(mDummyLatLng, mDummyLatLngOne);

@@ -17,6 +17,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -201,6 +202,9 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
     private Snackbar enamSnackbar;
     private HorizontalLoadViewTwo loadView;
     private NestedScrollView bottomSheetNSV;
+    private BottomSheetDialog mCancelBottomSheetDialog;
+    private View cancelsheetRootView;
+    private static final int fromFlag = 1604;
 
 
     @Override
@@ -208,7 +212,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        setActivityContextMap(this, 1604);
+        setActivityContextMap(this, fromFlag);
         teacherDataStore = TeacherDataStore.getInstance();
         presenter = new TeacherPresenter(this, new TeacherModel());
         presenter.init();
@@ -319,6 +323,10 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         navigationView.setNavigationItemSelectedListener(this);
         //listener for the active inactive radio btn
         radioSegmentGroup.setOnCheckedChangeListener(this);
+        //initializing the bottomSheet dialogue
+        mCancelBottomSheetDialog = new BottomSheetDialog(this);
+        cancelsheetRootView = this.getLayoutInflater().inflate(R.layout.custom_bottom_sheet_dialogue_cancel, null);
+        mCancelBottomSheetDialog.setContentView(cancelsheetRootView);
         //initializing the recycler
         List<HomePageRecyclerData> promoData = new ArrayList<>();
         HomePageRecyclerAdapter hPageBSRcyclerAdapter = new HomePageRecyclerAdapter(this, promoData);
@@ -424,7 +432,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
                             bottomSheetNSV.fling(0);
                             bottomSheetNSV.scrollTo(0, 0);
                         }
-                    },200L);
+                    }, 200L);
                 } else if (BottomSheetBehavior.STATE_EXPANDED == newState) {
                     setLightStatusBarIcon();
                     viewMusk.setVisibility(View.VISIBLE);
@@ -739,38 +747,12 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
                 startActivity(new Intent(this, HeatMapActivity.class));
                 break;
             case R.id.student:
-                showProgress();
-                flush("Switching to student profile");
-                new DumeModel().switchAcount(DumeUtils.STUDENT, new TeacherContract.Model.Listener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        gotoStudentHomePage();
-                    }
-
-                    @Override
-                    public void onError(String msg) {
-                        flush("Network error !!");
-                        hideProgress();
-                    }
-                });
+                switchProfileDialog(DumeUtils.STUDENT);
                 break;
             case R.id.mentor:
                 break;
             case R.id.boot_camp:
-                showProgress();
-                flush("Switching to boot camp profile");
-                new DumeModel().switchAcount(DumeUtils.BOOTCAMP, new TeacherContract.Model.Listener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        gotoBootCamPHomePage();
-                    }
-
-                    @Override
-                    public void onError(String msg) {
-                        flush("Network error !!");
-                        hideProgress();
-                    }
-                });
+                switchProfileDialog(DumeUtils.BOOTCAMP);
                 break;
 
         }
@@ -842,7 +824,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         onMapReadyListener(mMap);
         onMapReadyGeneralConfig();
         mMap.setPadding((int) (20 * (getResources().getDisplayMetrics().density)), 0, 0, (int) (72 * (getResources().getDisplayMetrics().density)));
-
+        getDeviceLocation(mMap);
     }
 
     @Override
@@ -1116,12 +1098,12 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
 
     @Override
     public void setAvatar(String avatarString) {
-        Glide.with(this).load(avatarString).apply(new RequestOptions().override(100, 100).placeholder(R.drawable.demo_alias_dp)).into(userDP);
+        Glide.with(getApplicationContext()).load(avatarString).apply(new RequestOptions().override(100, 100).placeholder(R.drawable.demo_alias_dp)).into(userDP);
     }
 
     @Override
     public void setAvatarForMenu(String avatar) {
-        Glide.with(this).asBitmap().load(avatar)
+        Glide.with(getApplicationContext()).asBitmap().load(avatar)
                 .apply(new RequestOptions().override((int) (20 * (getResources().getDisplayMetrics().density)), (int) (20 * (getResources().getDisplayMetrics().density))).centerCrop().placeholder(R.drawable.alias_profile_icon))
                 .into(new SimpleTarget<Bitmap>() {
                     @Override
@@ -1253,5 +1235,66 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         if (loadView.getVisibility() == View.VISIBLE) {
             loadView.setVisibility(View.INVISIBLE);
         }
+    }
+
+    @Override
+    public void switchProfileDialog(String identify) {
+        TextView mainText = mCancelBottomSheetDialog.findViewById(R.id.main_text);
+        TextView subText = mCancelBottomSheetDialog.findViewById(R.id.sub_text);
+        Button cancelYesBtn = mCancelBottomSheetDialog.findViewById(R.id.cancel_yes_btn);
+        Button cancelNoBtn = mCancelBottomSheetDialog.findViewById(R.id.cancel_no_btn);
+        if (mainText != null && subText != null && cancelYesBtn != null && cancelNoBtn != null) {
+            mainText.setText("Switch Profile ?");
+            cancelYesBtn.setText("Yes, Switch");
+            cancelNoBtn.setText("No");
+            if (identify.equals(DumeUtils.STUDENT)) {
+                subText.setText("Switch from mentor to student profile ...");
+            } else {
+                subText.setText("Switch from mentor to boot camp profile ...");
+            }
+
+            cancelNoBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mCancelBottomSheetDialog.dismiss();
+                }
+            });
+
+            cancelYesBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mCancelBottomSheetDialog.dismiss();
+                    showProgress();
+                    if (identify.equals(DumeUtils.STUDENT)) {
+                        new DumeModel().switchAcount(DumeUtils.STUDENT, new TeacherContract.Model.Listener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                gotoStudentHomePage();
+                            }
+
+                            @Override
+                            public void onError(String msg) {
+                                hideProgress();
+                                flush("Network error 101 !!");
+                            }
+                        });
+                    } else {
+                        new DumeModel().switchAcount(DumeUtils.BOOTCAMP, new TeacherContract.Model.Listener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                gotoBootCamPHomePage();
+                            }
+
+                            @Override
+                            public void onError(String msg) {
+                                hideProgress();
+                                flush("Network error 101 !!");
+                            }
+                        });
+                    }
+                }
+            });
+        }
+        mCancelBottomSheetDialog.show();
     }
 }

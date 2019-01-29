@@ -75,6 +75,7 @@
             </FrameLayout>
 
             <RelativeLayout
+                android:id="@+id/percent_host_relative"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"

@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -22,6 +23,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
@@ -45,9 +47,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.dume.dume.R;
 import io.dume.dume.customView.HorizontalLoadView;
+import io.dume.dume.model.DumeModel;
 import io.dume.dume.student.grabingLocation.GrabingLocationActivity;
 import io.dume.dume.teacher.adapters.AcAdapter;
-import io.dume.dume.teacher.homepage.TeacherActivtiy;
+import io.dume.dume.teacher.homepage.TeacherContract;
 import io.dume.dume.teacher.mentor_settings.academic.AcademicActivity;
 import io.dume.dume.teacher.pojo.Academic;
 import io.dume.dume.util.AlertMsgDialogue;
@@ -94,7 +97,9 @@ public class EditAccount extends AppCompatActivity implements EditContract.View,
     private AcAdapter acAdapter;
     private String databaseComPercent;
     private boolean isChanged = false;
-
+    private RelativeLayout pHostRelative;
+    private BottomSheetDialog mCancelBottomSheetDialog;
+    private View cancelsheetRootView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,6 +109,7 @@ public class EditAccount extends AppCompatActivity implements EditContract.View,
         DumeUtils.configureAppbar(this, "Edit Account");
         presenter = new EditPresenter(this, this, EditModel.getModelInstance(this));
         presenter.enqueue();
+        TransitionManager.beginDelayedTransition(pHostRelative);
     }
 
 
@@ -147,6 +153,7 @@ public class EditAccount extends AppCompatActivity implements EditContract.View,
         emptyLastNameFound = findViewById(R.id.empty_ln_found);
         emptyEmailFound = findViewById(R.id.empty_email_found);
         emptyLocationFound = findViewById(R.id.empty_address_found);
+        pHostRelative = findViewById(R.id.percent_host_relative);
         //loadCarryData();
     }
 
@@ -156,9 +163,9 @@ public class EditAccount extends AppCompatActivity implements EditContract.View,
         final RequestOptions requestOptions = new RequestOptions();
         String gender = documentSnapshot.getString("gender");
         if (gender != null) {
-            if(gender.equals("Male") || gender.equals("")){
+            if (gender.equals("Male") || gender.equals("")) {
                 requestOptions.placeholder(R.drawable.avatar);
-            }else{
+            } else {
                 requestOptions.placeholder(R.drawable.avatar_female);
             }
         }
@@ -172,6 +179,8 @@ public class EditAccount extends AppCompatActivity implements EditContract.View,
         selectMaritalStatusET.setText(documentSnapshot.getString("marital") == null ? "" : documentSnapshot.getString("marital"));
         pickLocationET.setText(documentSnapshot.getGeoPoint("location") == null ? "" : documentSnapshot.getGeoPoint("location").toString());
         currentStatusET.setText(documentSnapshot.getString("current_status") == null ? "" : documentSnapshot.getString("current_status"));
+        selectBirthDataET.setText(documentSnapshot.getString("birth_date") == null ? "" : documentSnapshot.getString("birth_date"));
+
         Log.e(TAG, "loadCarryData: " + documentSnapshot.toString());
         avatarUrl = documentSnapshot.getString("avatar") == null ? "" : documentSnapshot.getString("avatar");
         List<Academic> arrayList = getAcademics(documentSnapshot);
@@ -204,6 +213,11 @@ public class EditAccount extends AppCompatActivity implements EditContract.View,
     public void configureCallback() {
         fb.setOnClickListener(this);
         seekbar.setIndicatorTextFormat("${PROGRESS}%");
+
+        //initializing the bottomSheet dialogue
+        mCancelBottomSheetDialog = new BottomSheetDialog(this);
+        cancelsheetRootView = this.getLayoutInflater().inflate(R.layout.custom_bottom_sheet_dialogue_cancel, null);
+        mCancelBottomSheetDialog.setContentView(cancelsheetRootView);
         /*mScrollView.getViewTreeObserver().addOnScrollChangedListener(() -> {
             if (mScrollView.getScrollY() > oldScrollYPostion) {
                 fb.show();
@@ -457,7 +471,6 @@ public class EditAccount extends AppCompatActivity implements EditContract.View,
         fb.setEnabled(false);
         fb.setBackgroundTintList(ColorStateList.valueOf(Color.GRAY));
         if (!loadView.isRunningAnimation()) {
-            TransitionManager.beginDelayedTransition(wrapper);
             loadView.setVisibility(View.VISIBLE);
             loadView.startLoading();
         }
@@ -468,7 +481,6 @@ public class EditAccount extends AppCompatActivity implements EditContract.View,
         fb.setEnabled(true);
         fb.setBackgroundTintList(ColorStateList.valueOf(Color.BLACK));
         if (loadView.isRunningAnimation()) {
-            TransitionManager.beginDelayedTransition(wrapper);
             loadView.setVisibility(View.GONE);
             loadView.stopLoading();
         }
@@ -519,20 +531,33 @@ public class EditAccount extends AppCompatActivity implements EditContract.View,
 
     @Override
     public void discardDialogue() {
-        Bundle Uargs = new Bundle();
-        Uargs.putString("msg", "Discard changes and go back ?");
-        AlertMsgDialogue updateAlertDialogue = new AlertMsgDialogue();
-        updateAlertDialogue.setItemChoiceListener(new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                // this is the positive btn click listener name wrong
-                someThingChanged(false);
-                updateAlertDialogue.dismiss();
-                onBackPressed();
-            }
-        }, "Discard");
-        updateAlertDialogue.setArguments(Uargs);
-        updateAlertDialogue.show(getSupportFragmentManager(), "discard_dialogue");
+        TextView mainText = mCancelBottomSheetDialog.findViewById(R.id.main_text);
+        TextView subText = mCancelBottomSheetDialog.findViewById(R.id.sub_text);
+        Button cancelYesBtn = mCancelBottomSheetDialog.findViewById(R.id.cancel_yes_btn);
+        Button cancelNoBtn = mCancelBottomSheetDialog.findViewById(R.id.cancel_no_btn);
+        if (mainText != null && subText != null && cancelYesBtn != null && cancelNoBtn != null) {
+            mainText.setText("Discard Changes ?");
+            cancelYesBtn.setText("Yes, Discard");
+            cancelNoBtn.setText("No");
+            subText.setText("Discard local changes & go back ...");
+            cancelNoBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mCancelBottomSheetDialog.dismiss();
+                }
+            });
+
+            cancelYesBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    enableLoad();
+                    mCancelBottomSheetDialog.dismiss();
+                    someThingChanged(false);
+                    onBackPressed();
+                }
+            });
+        }
+        mCancelBottomSheetDialog.show();
     }
 
     @Override
@@ -664,7 +689,7 @@ public class EditAccount extends AppCompatActivity implements EditContract.View,
             setProfileComPercent(profileComPercent.toString());
         }
 
-        if (databaseComPercent.equals(getProfileComPercent())) {
+        if (!databaseComPercent.equals(getProfileComPercent())) {
             someThingChanged(true);
         }
         return getProfileComPercent();
@@ -718,7 +743,7 @@ public class EditAccount extends AppCompatActivity implements EditContract.View,
     }
 
     @Override
-    public void someThingChanged(boolean b){
+    public void someThingChanged(boolean b) {
         isChanged = b;
     }
 

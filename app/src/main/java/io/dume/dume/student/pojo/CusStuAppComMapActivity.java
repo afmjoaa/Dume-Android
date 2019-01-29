@@ -329,58 +329,83 @@ public class CusStuAppComMapActivity extends CustomStuAppCompatActivity implemen
     protected void moveSearchLoadingCamera(LatLng latLng, float zoom, String title, GoogleMap mMap) {
         cameraPosition = new CameraPosition.Builder()
                 .target(latLng)
-                .zoom(14)
+                .zoom(14f)
                 .bearing(0)
                 .tilt(40)
                 .build();
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 50, new GoogleMap.CancelableCallback() {
             @Override
             public void onFinish() {
-                Timer timer = new Timer();
-                timer.scheduleAtFixedRate(new TimerTask() {
+                mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
                     @Override
-                    public void run() {
-                        // ... Calculating and sending new location, in an infinite loop with sleeps for timing
-                        runOnUiThread(new Runnable() {
+                    public void onMapLoaded() {
+                        Timer timer = new Timer();
+                        timer.scheduleAtFixedRate(new TimerTask() {
                             @Override
                             public void run() {
-                                cameraPosition = new CameraPosition.Builder()
-                                        .target(latLng)
-                                        .zoom(15f)
-                                        .bearing(mMap.getCameraPosition().bearing + 120)
-                                        .tilt(45)
-                                        .build();
-                                mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 9000, new GoogleMap.CancelableCallback() {
+                                // ... Calculating and sending new location, in an infinite loop with sleeps for timing
+                                runOnUiThread(new Runnable() {
                                     @Override
-                                    public void onFinish() {
+                                    public void run() {
                                         cameraPosition = new CameraPosition.Builder()
                                                 .target(latLng)
-                                                .zoom(16f)
+                                                .zoom(15f)
                                                 .bearing(mMap.getCameraPosition().bearing + 120)
-                                                .tilt(50)
+                                                .tilt(45)
                                                 .build();
                                         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 9000, new GoogleMap.CancelableCallback() {
                                             @Override
                                             public void onFinish() {
                                                 cameraPosition = new CameraPosition.Builder()
                                                         .target(latLng)
-                                                        .zoom(17f)
+                                                        .zoom(16f)
                                                         .bearing(mMap.getCameraPosition().bearing + 120)
-                                                        .tilt(55)
+                                                        .tilt(50)
                                                         .build();
-                                                mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 9000, new GoogleMap.CancelableCallback() {
+                                                mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
                                                     @Override
-                                                    public void onFinish() {
-                                                        cameraPosition = new CameraPosition.Builder()
-                                                                .target(latLng)
-                                                                .zoom(17f)
-                                                                .bearing(mMap.getCameraPosition().bearing)
-                                                                .tilt(55)
-                                                                .build();
-                                                        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 2000, new GoogleMap.CancelableCallback() {
+                                                    public void onMapLoaded() {
+                                                        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 9000, new GoogleMap.CancelableCallback() {
                                                             @Override
                                                             public void onFinish() {
-                                                                //nothing to do
+                                                                cameraPosition = new CameraPosition.Builder()
+                                                                        .target(latLng)
+                                                                        .zoom(17f)
+                                                                        .bearing(mMap.getCameraPosition().bearing + 120)
+                                                                        .tilt(55)
+                                                                        .build();
+                                                                mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+                                                                    @Override
+                                                                    public void onMapLoaded() {
+                                                                        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 9000, new GoogleMap.CancelableCallback() {
+                                                                            @Override
+                                                                            public void onFinish() {
+                                                                                cameraPosition = new CameraPosition.Builder()
+                                                                                        .target(latLng)
+                                                                                        .zoom(17f)
+                                                                                        .bearing(mMap.getCameraPosition().bearing)
+                                                                                        .tilt(55)
+                                                                                        .build();
+                                                                                mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 2000, new GoogleMap.CancelableCallback() {
+                                                                                    @Override
+                                                                                    public void onFinish() {
+                                                                                        //nothing to do
+                                                                                    }
+
+                                                                                    @Override
+                                                                                    public void onCancel() {
+
+                                                                                    }
+                                                                                });
+                                                                            }
+
+                                                                            @Override
+                                                                            public void onCancel() {
+
+                                                                            }
+                                                                        });
+                                                                    }
+                                                                });
                                                             }
 
                                                             @Override
@@ -389,35 +414,28 @@ public class CusStuAppComMapActivity extends CustomStuAppCompatActivity implemen
                                                             }
                                                         });
                                                     }
-
-                                                    @Override
-                                                    public void onCancel() {
-
-                                                    }
                                                 });
                                             }
-
                                             @Override
                                             public void onCancel() {
 
                                             }
                                         });
                                     }
-
-                                    @Override
-                                    public void onCancel() {
-
-                                    }
                                 });
                             }
-                        });
+                        }, 1000, 300000);
                     }
-                }, 3000, 300000);
+                });
             }
-
             @Override
             public void onCancel() {
+                mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+                    @Override
+                    public void onMapLoaded() {
 
+                    }
+                });
             }
         });
     }
@@ -433,22 +451,16 @@ public class CusStuAppComMapActivity extends CustomStuAppCompatActivity implemen
                     .tilt(0)
                     .build();
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, DEFAULT_ZOOM));
-            /*MAP.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    delayTime = 0L;
-                }
-            }, delayTime);*/
         } else if (fromFlag == 1) {
             cameraPosition = new CameraPosition.Builder()
                     .target(latLng)
                     .zoom(15f)
                     .tilt(42)
                     .build();
-            time = 2000;
-            MAP.postDelayed(new Runnable() {
+            time = 1800;
+            mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
                 @Override
-                public void run() {
+                public void onMapLoaded() {
                     mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), time, new GoogleMap.CancelableCallback() {
                         @Override
                         public void onFinish() {
@@ -459,7 +471,7 @@ public class CusStuAppComMapActivity extends CustomStuAppCompatActivity implemen
                         }
                     });
                 }
-            }, 1000L);
+            });
         } else {
             cameraPosition = new CameraPosition.Builder()
                     .target(latLng)
@@ -472,6 +484,12 @@ public class CusStuAppComMapActivity extends CustomStuAppCompatActivity implemen
                     mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f));
                 }
             }, 700L);
+            /*mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+                @Override
+                public void onMapLoaded() {
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f));
+                }
+            });*/
         }
         //mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
         // dropping pin here which will be customized later on
@@ -496,9 +514,9 @@ public class CusStuAppComMapActivity extends CustomStuAppCompatActivity implemen
                                 if (location != null) {
                                     if (fromFlag != 5) {
                                         if (mMap.getCameraPosition().zoom < 4) {
-                                            mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(LAT_LNG_BOUNDS, 1));
+                                            mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(LAT_LNG_BOUNDS, 10));
                                             moveCamera(new LatLng(location.getLatitude(), location.getLongitude()), DEFAULT_ZOOM, "Device Location", mMap);
-                                        }else{
+                                        } else {
                                             moveCamera(new LatLng(location.getLatitude(), location.getLongitude()), DEFAULT_ZOOM, "Device Location", mMap);
                                         }
                                     }
@@ -522,8 +540,8 @@ public class CusStuAppComMapActivity extends CustomStuAppCompatActivity implemen
     protected void onMapReadyGeneralConfig() {
         //TODO: setting up the parent map activity
         if (MLOCATIONPERMISSIONGRANTED) {
-            //TODO: centering the current location
-            getDeviceLocation(mMap);
+            //TODO: centering the current location not default
+            mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(LAT_LNG_BOUNDS, 10));
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                     && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 // TODO: Consider calling
@@ -583,9 +601,11 @@ public class CusStuAppComMapActivity extends CustomStuAppCompatActivity implemen
                     public void onSuccess(Location location) {
                         // GPS location can be null if GPS is switched off
                         if (location != null) {
-                            if (fromFlag != 5) {
-                                mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(LAT_LNG_BOUNDS, 1));
+                            if (fromFlag == 1 || fromFlag == 1604) {
+                                mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(LAT_LNG_BOUNDS, 10));
                                 moveCamera(new LatLng(location.getLatitude(), location.getLongitude()), DEFAULT_ZOOM, "Device Location", mMap);
+                            } else if (fromFlag != 5) {
+                                mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(LAT_LNG_BOUNDS, 10));
                             }
                             //TODO do camera change here
                         }
@@ -597,7 +617,7 @@ public class CusStuAppComMapActivity extends CustomStuAppCompatActivity implemen
                         Log.d("MapDemoActivity", "Error trying to get last GPS location");
                         e.printStackTrace();
                         if (fromFlag != 5) {
-                            mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(LAT_LNG_BOUNDS, 1));
+                            mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(LAT_LNG_BOUNDS, 10));
                         }
                     }
                 });

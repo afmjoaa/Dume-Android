@@ -91,6 +91,8 @@ public interface TeacherContract {
         void gotoStudentHomePage();
 
         void gotoBootCamPHomePage();
+
+        void switchProfileDialog(String identify);
     }
 
 

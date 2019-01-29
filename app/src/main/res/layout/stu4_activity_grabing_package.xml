@@ -25,6 +25,16 @@
 
     </io.dume.dume.customView.WindowInsetsFrameLayout>
 
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/always_view_musk"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/transparent"
+        android:clickable="true"
+        android:fitsSystemWindows="true"
+        android:focusable="true"
+        android:orientation="vertical" />
+
     <io.dume.dume.customView.HorizontalLoadViewTwo
         android:id="@+id/loadViewTwo"
         android:layout_width="20dp"

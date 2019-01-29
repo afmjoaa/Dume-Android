@@ -24,8 +24,12 @@ public class SearchDataStore implements Serializable {
     public static String DUME_GANG = "Dume Gang";
     public static String REGULAR_DUME = "Regular Dume";
     public static String INSTANT_DUME = "Instant Dume";
-    public static int SHORTRADIUS = 300;
-    public static int LONGRADIUS = 600;
+    public static int SHORTRADIUS = 2000;
+    public static int MEDIUMSHORTRADIUS = 8000;
+    public static int MEDIUMLONGRADIUS = 16000;
+    public static int LONGRADIUS = 32000;
+
+    private Boolean profileChanged = false;
 
     private String userName;
     private String userNumber;
@@ -46,7 +50,6 @@ public class SearchDataStore implements Serializable {
     private Map<String, Object> startDate;
     private Map<String, Object> mainMap;
 
-
     private static SearchDataStore instance = null;
 
     public static SearchDataStore getInstance() {
@@ -54,6 +57,14 @@ public class SearchDataStore implements Serializable {
             instance = new SearchDataStore();
         }
         return instance;
+    }
+
+    public Boolean getProfileChanged() {
+        return profileChanged;
+    }
+
+    public void setProfileChanged(Boolean profileChanged) {
+        this.profileChanged = profileChanged;
     }
 
     public String getGender() {

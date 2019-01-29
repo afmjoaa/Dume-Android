@@ -11,7 +11,9 @@ import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.BitmapDrawable;
@@ -42,6 +44,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
@@ -62,9 +65,12 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.firestore.GeoPoint;
+import com.google.maps.android.ui.IconGenerator;
 import com.transitionseverywhere.Fade;
 import com.transitionseverywhere.Slide;
 import com.transitionseverywhere.Transition;
@@ -103,6 +109,7 @@ import io.dume.dume.util.RadioBtnDialogue;
 import io.dume.dume.util.VisibleToggleClickListener;
 import me.zhanghai.android.materialratingbar.MaterialRatingBar;
 
+import static io.dume.dume.util.ImageHelper.getRoundedCornerBitmap;
 import static io.dume.dume.util.ImageHelper.getRoundedCornerBitmapSquare;
 
 public class GrabingInfoActivity extends CusStuAppComMapActivity implements GrabingInfoContract.View,
@@ -191,6 +198,11 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
     private String contactName;
     private boolean forMySelf = true;
     private Bitmap photo = null;
+    private FrameLayout alwaysViewMusk;
+    private String defaultUrl;
+    private View mCustomMarkerView;
+    private carbon.widget.ImageView mMarkerImageView;
+    private IconGenerator iconFactory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -238,6 +250,7 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
         mAppBarLayout = findViewById(R.id.appbar);
         forMeBtn = findViewById(R.id.for_me_btn);
         viewMusk = findViewById(R.id.view_musk);
+        alwaysViewMusk = findViewById(R.id.always_view_musk);
         contractLayout = findViewById(R.id.contract_layout);
         tabHintLayout = findViewById(R.id.tab_hint_layout);
         forMeWrapper = findViewById(R.id.formeWrapper);
@@ -256,7 +269,7 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
         firstContactPersonNum = findViewById(R.id.account_type_textview_value);
         firstContactSelectImage = findViewById(R.id.account_selected_icon_container);
 
-        //testing code
+        //init code
         wh = DumeUtils.getScreenSize(this);
         tabMinWidthThree = ((wh[0] / 3) - (int) (24 * (getResources().getDisplayMetrics().density)));
         tabMinWidthTwo = ((wh[0] / 2) - (int) (24 * (getResources().getDisplayMetrics().density)));
@@ -266,7 +279,9 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
         textParamOne = new LinearLayout.LayoutParams(tabMinWidthOne, LinearLayout.LayoutParams.WRAP_CONTENT);
         imgKeyBoardDown = getResources().getDrawable(R.drawable.ic_keyboard_arrow_down_black_24dp);
         imgKeyBoardUp = getResources().getDrawable(R.drawable.ic_keyboard_arrow_down_black_24dp);
-
+        mCustomMarkerView = ((LayoutInflater) Objects.requireNonNull(getSystemService(LAYOUT_INFLATER_SERVICE))).inflate(R.layout.custom_marker_view, null);
+        mMarkerImageView = mCustomMarkerView.findViewById(R.id.profile_image);
+        iconFactory = new IconGenerator(this);
 
     }
 
@@ -583,7 +598,13 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
             }
 
         });
-
+        //gathering the touch event here
+        alwaysViewMusk.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                return true;
+            }
+        });
     }
 
     @Override
@@ -724,6 +745,79 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
         onMapReadyListener(mMap);
         onMapReadyGeneralConfig();
         mMap.setPadding((int) (10 * (getResources().getDisplayMetrics().density)), (int) (250 * (getResources().getDisplayMetrics().density)), 0, (int) (6 * (getResources().getDisplayMetrics().density)));
+        mMap.getUiSettings().setCompassEnabled(false);
+        mMap.setMyLocationEnabled(false);
+        addCustomMarkerFromURL(searchDataStore.getAvatarString(), searchDataStore.getAnchorPoint());
+        alwaysViewMusk.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                //give anchor point here
+                moveCamera(searchDataStore.getAnchorPoint(), DEFAULT_ZOOM, "Device Location", mMap);
+            }
+        }, 0L);
+    }
+
+    private void addCustomMarkerFromURL(String url, LatLng lattitudeLongitude) {
+        if (mMap == null) {
+            return;
+        }
+        if (url != null && !url.equals("")) {
+            Glide.with(getApplicationContext())
+                    .asBitmap()
+                    .load(url)
+                    .apply(new RequestOptions().override((int) (28 * (getResources().getDisplayMetrics().density)), (int) (28 * (getResources().getDisplayMetrics().density))).centerCrop().placeholder(R.drawable.alias_profile_icon))
+                    .into(new SimpleTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(@NonNull Bitmap resource, @Nullable com.bumptech.glide.request.transition.Transition<? super Bitmap> transition) {
+                            mMap.addMarker(new MarkerOptions().position(lattitudeLongitude)
+                                    .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(mCustomMarkerView, resource))));
+                            //mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(lattitudeLongitude, 15f));
+                        }
+                    });
+        } else {
+            if(searchDataStore.getGender().equals("Male") || searchDataStore.getGender().equals("")){
+                defaultUrl = "https://firebasestorage.googleapis.com/v0/b/dume-2d063.appspot.com/o/avatar.png?alt=media&token=801c75b7-59fe-4a13-9191-186ef50de707";
+            }else {
+                defaultUrl = "https://firebasestorage.googleapis.com/v0/b/dume-2d063.appspot.com/o/avatar_female.png?alt=media&token=7202ea91-4f0d-4bd6-838e-8b73d0db13eb";
+            }
+            Glide.with(getApplicationContext())
+                    .asBitmap()
+                    .load(defaultUrl)
+                    .apply(new RequestOptions().override((int) (28 * (getResources().getDisplayMetrics().density)), (int) (28 * (getResources().getDisplayMetrics().density))).centerCrop().placeholder(R.drawable.alias_profile_icon))
+                    .into(new SimpleTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(@NonNull Bitmap resource, @Nullable com.bumptech.glide.request.transition.Transition<? super Bitmap> transition) {
+                            mMap.addMarker(new MarkerOptions().position(lattitudeLongitude)
+                                    .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(mCustomMarkerView, resource))));
+                            //mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(lattitudeLongitude, 15f));
+                        }
+                    });
+        }
+
+
+        iconFactory.setStyle(IconGenerator.STYLE_DEFAULT);
+        iconFactory.setTextAppearance(this, R.style.MyCustomInfoWindowTextApp);
+        iconFactory.setBackground(getResources().getDrawable(R.drawable.custom_info_window_vector));
+        iconFactory.setContentPadding((int) (27 * (getResources().getDisplayMetrics().density)), (int) (2 * (getResources().getDisplayMetrics().density)), 0, (int) (6 * (getResources().getDisplayMetrics().density)));
+        addCustomInfoWindow(iconFactory, makeCharSequence("Radius", Integer.toString(SearchDataStore.SHORTRADIUS)) + " m", lattitudeLongitude);
+    }
+    //testing custom marker code here
+    private Bitmap getMarkerBitmapFromView(View view, Bitmap bitmap) {
+
+        mMarkerImageView.setImageBitmap(getRoundedCornerBitmap(bitmap, (int) (28 * (getResources().getDisplayMetrics().density))));
+        view.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+        view.layout(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
+        view.buildDrawingCache();
+        Bitmap returnedBitmap = Bitmap.createBitmap(view.getMeasuredWidth(), view.getMeasuredHeight(),
+                Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(returnedBitmap);
+        canvas.drawColor(Color.WHITE, PorterDuff.Mode.SRC_IN);
+        Drawable drawable = view.getBackground();
+        if (drawable != null)
+            drawable.draw(canvas);
+        view.draw(canvas);
+        return returnedBitmap;
+
     }
 
     @Override

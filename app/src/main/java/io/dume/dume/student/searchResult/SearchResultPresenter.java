@@ -32,7 +32,7 @@ public class SearchResultPresenter implements SearchResultContract.Presenter {
     public void onSearchResultIntracted(View view) {
         switch (view.getId()) {
             case R.id.fab:
-                mView.centerTheMapCamera();
+                //mView.centerTheMapCamera();
                 break;
 
         }

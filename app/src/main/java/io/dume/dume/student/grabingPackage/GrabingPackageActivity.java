@@ -4,7 +4,10 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
@@ -12,6 +15,7 @@ import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.CoordinatorLayout;
@@ -36,11 +40,13 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -48,10 +54,17 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.maps.android.ui.IconGenerator;
 import com.touchboarder.weekdaysbuttons.WeekdaysDataItem;
 import com.touchboarder.weekdaysbuttons.WeekdaysDataSource;
 import com.transitionseverywhere.Fade;
@@ -71,6 +84,7 @@ import biz.laenger.android.vpbs.BottomSheetUtils;
 import biz.laenger.android.vpbs.ViewPagerBottomSheetBehavior;
 import io.dume.dume.R;
 import io.dume.dume.customView.HorizontalLoadViewTwo;
+import io.dume.dume.student.grabingLocation.GrabingLocationActivity;
 import io.dume.dume.student.pojo.CusStuAppComMapActivity;
 import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
 import io.dume.dume.student.pojo.SearchDataStore;
@@ -82,6 +96,7 @@ import io.dume.dume.util.TimePickerFragment;
 import static io.dume.dume.util.DumeUtils.firstThree;
 import static io.dume.dume.util.DumeUtils.firstTwo;
 import static io.dume.dume.util.DumeUtils.getScreenSize;
+import static io.dume.dume.util.ImageHelper.getRoundedCornerBitmap;
 
 public class GrabingPackageActivity extends CusStuAppComMapActivity implements GrabingPackageContract.View,
         MyGpsLocationChangeListener, OnMapReadyCallback {
@@ -143,6 +158,12 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
     private LayerDrawable instantDumeBadgeOffLayDraw;
     private HorizontalLoadViewTwo loadView;
     private TextView salaryDetailText;
+    private FrameLayout alwaysViewMusk;
+    private String defaultUrl;
+    private View mCustomMarkerView;
+    private carbon.widget.ImageView mMarkerImageView;
+    private IconGenerator iconFactory;
+    private int SEARCH_REQUEST_CODE = 0101;
 
 
     @Override
@@ -222,6 +243,10 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
         hintIdOne = findViewById(R.id.hint_id_1);
         hintIdTwo = findViewById(R.id.hint_id_2);
         hintIdThree = findViewById(R.id.hint_id_3);
+        alwaysViewMusk = findViewById(R.id.always_view_musk);
+        mCustomMarkerView = ((LayoutInflater) Objects.requireNonNull(getSystemService(LAYOUT_INFLATER_SERVICE))).inflate(R.layout.custom_marker_view, null);
+        mMarkerImageView = mCustomMarkerView.findViewById(R.id.profile_image);
+        iconFactory = new IconGenerator(this);
 
         dumeGangPercentageOffImage = findViewById(R.id.dume_gang_percent_off_image);
         regularDumePercentageOffImage = findViewById(R.id.regular_dume_percent_off_image);
@@ -508,6 +533,14 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
             }
         });
 
+        //gathering the touch event here
+        alwaysViewMusk.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                return true;
+            }
+        });
+
         dumeGangBadgeOffLayDraw = (LayerDrawable) dumeGangPercentageOffImage.getDrawable();
         DumeUtils.setTextOverDrawable(this, dumeGangBadgeOffLayDraw, R.id.ic_badge, Color.WHITE, "-20%", 3);
 
@@ -533,19 +566,18 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
                     break;
             }
             Intent intent = new Intent(this, SearchLoadingActivity.class);
-            //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
-            finish();
+            intent.setAction("search");
+            startActivityForResult(intent, SEARCH_REQUEST_CODE);
             //ActivityCompat.finishAffinity(this);
         } else if (preferredDays == null) {
             flush("Internal error !!");
         } else if (startDate == null) {
             executeClicked = true;
-            flush("please select start date ..");
+            flush("please select start date...");
             mViewPager.setCurrentItem(1, true);
         } else {
             executeClickedTwo = true;
-            flush("please select start time ..");
+            flush("please select start time...");
             mViewPager.setCurrentItem(2, true);
         }
     }
@@ -786,6 +818,78 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
         onMapReadyListener(mMap);
         onMapReadyGeneralConfig();
         mMap.setPadding((int) (10 * (getResources().getDisplayMetrics().density)), 0, 0, (int) (400 * (getResources().getDisplayMetrics().density)));
+        mMap.getUiSettings().setCompassEnabled(false);
+        mMap.setMyLocationEnabled(false);
+        addCustomMarkerFromURL(searchDataStore.getAvatarString(), searchDataStore.getAnchorPoint());
+        alwaysViewMusk.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                //give anchor point here
+                moveCamera(searchDataStore.getAnchorPoint(), DEFAULT_ZOOM, "Device Location", mMap);
+            }
+        }, 0L);
+    }
+
+    private void addCustomMarkerFromURL(String url, LatLng lattitudeLongitude) {
+        if (mMap == null) {
+            return;
+        }
+        if (url != null && !url.equals("")) {
+            Glide.with(getApplicationContext())
+                    .asBitmap()
+                    .load(url)
+                    .apply(new RequestOptions().override((int) (28 * (getResources().getDisplayMetrics().density)), (int) (28 * (getResources().getDisplayMetrics().density))).centerCrop().placeholder(R.drawable.alias_profile_icon))
+                    .into(new SimpleTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(@NonNull Bitmap resource, @Nullable com.bumptech.glide.request.transition.Transition<? super Bitmap> transition) {
+                            mMap.addMarker(new MarkerOptions().position(lattitudeLongitude)
+                                    .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(mCustomMarkerView, resource))));
+                            //mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(lattitudeLongitude, 15f));
+                        }
+                    });
+        } else {
+            if(searchDataStore.getGender().equals("Male") || searchDataStore.getGender().equals("")){
+                defaultUrl = "https://firebasestorage.googleapis.com/v0/b/dume-2d063.appspot.com/o/avatar.png?alt=media&token=801c75b7-59fe-4a13-9191-186ef50de707";
+            }else {
+                defaultUrl = "https://firebasestorage.googleapis.com/v0/b/dume-2d063.appspot.com/o/avatar_female.png?alt=media&token=7202ea91-4f0d-4bd6-838e-8b73d0db13eb";
+            }
+            Glide.with(getApplicationContext())
+                    .asBitmap()
+                    .load(defaultUrl)
+                    .apply(new RequestOptions().override((int) (28 * (getResources().getDisplayMetrics().density)), (int) (28 * (getResources().getDisplayMetrics().density))).centerCrop().placeholder(R.drawable.alias_profile_icon))
+                    .into(new SimpleTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(@NonNull Bitmap resource, @Nullable com.bumptech.glide.request.transition.Transition<? super Bitmap> transition) {
+                            mMap.addMarker(new MarkerOptions().position(lattitudeLongitude)
+                                    .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(mCustomMarkerView, resource))));
+                            //mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(lattitudeLongitude, 15f));
+                        }
+                    });
+        }
+
+
+        iconFactory.setStyle(IconGenerator.STYLE_DEFAULT);
+        iconFactory.setTextAppearance(this, R.style.MyCustomInfoWindowTextApp);
+        iconFactory.setBackground(getResources().getDrawable(R.drawable.custom_info_window_vector));
+        iconFactory.setContentPadding((int) (27 * (getResources().getDisplayMetrics().density)), (int) (2 * (getResources().getDisplayMetrics().density)), 0, (int) (6 * (getResources().getDisplayMetrics().density)));
+        addCustomInfoWindow(iconFactory, makeCharSequence("Radius", Integer.toString(SearchDataStore.SHORTRADIUS)) + " m", lattitudeLongitude);
+    }
+    //testing custom marker code here
+    private Bitmap getMarkerBitmapFromView(View view, Bitmap bitmap) {
+
+        mMarkerImageView.setImageBitmap(getRoundedCornerBitmap(bitmap, (int) (28 * (getResources().getDisplayMetrics().density))));
+        view.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+        view.layout(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
+        view.buildDrawingCache();
+        Bitmap returnedBitmap = Bitmap.createBitmap(view.getMeasuredWidth(), view.getMeasuredHeight(),
+                Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(returnedBitmap);
+        canvas.drawColor(Color.WHITE, PorterDuff.Mode.SRC_IN);
+        Drawable drawable = view.getBackground();
+        if (drawable != null)
+            drawable.draw(canvas);
+        view.draw(canvas);
+        return returnedBitmap;
 
     }
 

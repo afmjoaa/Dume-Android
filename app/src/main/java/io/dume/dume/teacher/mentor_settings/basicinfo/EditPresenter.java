@@ -70,10 +70,6 @@ public class EditPresenter implements EditContract.Presenter, EditContract.onDat
                     view.setCurrentAddress(geoPoint);
                 }
                 String profileComPercent = list.getString("pro_com_%");
-                String generatePercent = view.generatePercent();
-                if(!generatePercent.equals(profileComPercent)){
-                    model.updatePercentage(generatePercent);
-                }
                 if (profileComPercent != null) {
                     if (profileComPercent.equals("100")) {
                         view.initProfileCompleteView();
@@ -169,6 +165,7 @@ public class EditPresenter implements EditContract.Presenter, EditContract.onDat
                                     //view.setImage(url);
                                     view.disableLoad();
                                     view.generatePercent();
+                                    view.someThingChanged(true);
                                 }
 
                                 @Override
@@ -277,7 +274,7 @@ public class EditPresenter implements EditContract.Presenter, EditContract.onDat
                             view.updateAcademics(list);
                             String profileComPercent = list.getString("pro_com_%");
                             String generatePercent = view.generatePercent();
-                            if(!generatePercent.equals(profileComPercent)){
+                            if (!generatePercent.equals(profileComPercent)) {
                                 model.updatePercentage(generatePercent);
                             }
                             if (profileComPercent != null) {
@@ -288,6 +285,7 @@ public class EditPresenter implements EditContract.Presenter, EditContract.onDat
                                     view.setProfileComPercent(profileComPercent);
                                 }
                             }
+                            view.generatePercent();
                             view.disableLoad();
                         }
 
@@ -324,6 +322,7 @@ public class EditPresenter implements EditContract.Presenter, EditContract.onDat
         hideKeyboard(activity);
         view.disableLoad();
         view.snakbar("Profile Updated Successfully");
+        view.someThingChanged(false);
     }
 
     @Override

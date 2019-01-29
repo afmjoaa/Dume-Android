@@ -161,4 +161,5 @@ dependencies {
     //implementation 'com.firebase:geofire-android:2.3.1'
     implementation 'com.github.imperiumlabs:GeoFirestore-Android:v1.1.1'
     implementation 'com.google.firebase:firebase-messaging:17.3.4'
+    implementation 'com.github.amalChandran:trail-android:v1.2'
 }

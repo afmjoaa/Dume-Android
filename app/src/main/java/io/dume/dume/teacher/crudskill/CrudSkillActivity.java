@@ -1,25 +1,47 @@
 package io.dume.dume.teacher.crudskill;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.maps.android.ui.IconGenerator;
 
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -29,11 +51,13 @@ import io.dume.dume.customView.HorizontalLoadView;
 import io.dume.dume.student.grabingInfo.GrabingInfoActivity;
 import io.dume.dume.student.pojo.CusStuAppComMapActivity;
 import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
+import io.dume.dume.student.pojo.SearchDataStore;
 import io.dume.dume.teacher.adapters.CategoryAdapter;
 import io.dume.dume.util.DumeUtils;
 import io.dume.dume.util.GridSpacingItemDecoration;
 
 import static io.dume.dume.util.DumeUtils.configureAppbar;
+import static io.dume.dume.util.ImageHelper.getRoundedCornerBitmap;
 
 public class CrudSkillActivity extends CusStuAppComMapActivity implements CrudContract.View,
         MyGpsLocationChangeListener, OnMapReadyCallback {
@@ -51,6 +75,11 @@ public class CrudSkillActivity extends CusStuAppComMapActivity implements CrudCo
     private NestedScrollView mainScrollingContainer;
     private AppBarLayout appBarLayout;
     private LinearLayout hackElevation;
+    private FrameLayout alwaysViewMusk;
+    private String defaultUrl;
+    private View mCustomMarkerView;
+    private carbon.widget.ImageView mMarkerImageView;
+    private IconGenerator iconFactory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +91,7 @@ public class CrudSkillActivity extends CusStuAppComMapActivity implements CrudCo
         presenter.enqueue();
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         getLocationPermission(mapFragment);
+
     }
 
     @Override
@@ -69,29 +99,20 @@ public class CrudSkillActivity extends CusStuAppComMapActivity implements CrudCo
         mainScrollingContainer = findViewById(R.id.crudScroll);
         appBarLayout = findViewById(R.id.settingsAppbar);
         hackElevation = findViewById(R.id.hack_elevation);
+        alwaysViewMusk = findViewById(R.id.always_view_musk);
+        mCustomMarkerView = ((LayoutInflater) Objects.requireNonNull(getSystemService(LAYOUT_INFLATER_SERVICE))).inflate(R.layout.custom_marker_view, null);
+        mMarkerImageView = mCustomMarkerView.findViewById(R.id.profile_image);
+        iconFactory = new IconGenerator(this);
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public void init() {
-        configureAppbar(this, "Add New Skill");
+        //configureAppbar(this, "Add New Skill");
         fromWhere = getIntent().getAction();
-        /*if (fromWhere != null) {
-            switch (fromWhere) {
-                case DumeUtils.STUDENT:
-                    flush("fucked it from student");
-                    break;
-                case DumeUtils.TEACHER:
-                    flush("fucked it from Teacher");
-                    break;
-                case (DumeUtils.BOOTCAMP):
-                    flush("fucked it from Boot-camp");
-                    break;
-            }
-        }*/
         //getting the width
         int[] wh = DumeUtils.getScreenSize(this);
         spacing = (int) ((wh[0] - ((330) * (getResources().getDisplayMetrics().density))) / 4);
-        Log.e(TAG, "init: " + spacing);
         //initializing the title
         configureAppbar(this, "Select category");
         mainScrollingContainer.getBackground().setAlpha(90);
@@ -105,6 +126,14 @@ public class CrudSkillActivity extends CusStuAppComMapActivity implements CrudCo
                 hackElevation.setVisibility(View.VISIBLE);
             }
         });
+        //gathering the touch event here
+        alwaysViewMusk.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                return true;
+            }
+        });
+
     }
 
     @Override
@@ -160,6 +189,93 @@ public class CrudSkillActivity extends CusStuAppComMapActivity implements CrudCo
         onMapReadyListener(mMap);
         onMapReadyGeneralConfig();
         mMap.setPadding((int) (10 * (getResources().getDisplayMetrics().density)), (int) (250 * (getResources().getDisplayMetrics().density)), 0, (int) (6 * (getResources().getDisplayMetrics().density)));
+        mMap.getUiSettings().setCompassEnabled(false);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            mMap.setMyLocationEnabled(false);
+        }
+        if (fromWhere != null) {
+            switch (fromWhere) {
+                case DumeUtils.STUDENT:
+                    //addCustomMarkerFromURL(searchDataStore.getAvatarString(), searchDataStore.getAnchorPoint());
+                    alwaysViewMusk.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            //give anchor point here
+                            moveCamera(searchDataStore.getAnchorPoint(), DEFAULT_ZOOM, "Device Location", mMap);
+                        }
+                    }, 0L);
+                    break;
+                case DumeUtils.TEACHER:
+                    getDeviceLocation(mMap);
+                    break;
+                case (DumeUtils.BOOTCAMP):
+                    getDeviceLocation(mMap);
+                    break;
+            }
+        }
+    }
+
+    private void addCustomMarkerFromURL(String url, LatLng lattitudeLongitude) {
+        if (mMap == null) {
+            return;
+        }
+        if (url != null && !url.equals("")) {
+            Glide.with(getApplicationContext())
+                    .asBitmap()
+                    .load(url)
+                    .apply(new RequestOptions().override((int) (28 * (getResources().getDisplayMetrics().density)), (int) (28 * (getResources().getDisplayMetrics().density))).centerCrop().placeholder(R.drawable.alias_profile_icon))
+                    .into(new SimpleTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(@NonNull Bitmap resource, @Nullable com.bumptech.glide.request.transition.Transition<? super Bitmap> transition) {
+                            mMap.addMarker(new MarkerOptions().position(lattitudeLongitude)
+                                    .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(mCustomMarkerView, resource))));
+                            //mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(lattitudeLongitude, 15f));
+                        }
+                    });
+        } else {
+            if(searchDataStore.getGender().equals("Male") || searchDataStore.getGender().equals("")){
+                defaultUrl = "https://firebasestorage.googleapis.com/v0/b/dume-2d063.appspot.com/o/avatar.png?alt=media&token=801c75b7-59fe-4a13-9191-186ef50de707";
+            }else {
+                defaultUrl = "https://firebasestorage.googleapis.com/v0/b/dume-2d063.appspot.com/o/avatar_female.png?alt=media&token=7202ea91-4f0d-4bd6-838e-8b73d0db13eb";
+            }
+            Glide.with(getApplicationContext())
+                    .asBitmap()
+                    .load(defaultUrl)
+                    .apply(new RequestOptions().override((int) (28 * (getResources().getDisplayMetrics().density)), (int) (28 * (getResources().getDisplayMetrics().density))).centerCrop().placeholder(R.drawable.alias_profile_icon))
+                    .into(new SimpleTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(@NonNull Bitmap resource, @Nullable com.bumptech.glide.request.transition.Transition<? super Bitmap> transition) {
+                            mMap.addMarker(new MarkerOptions().position(lattitudeLongitude)
+                                    .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(mCustomMarkerView, resource))));
+                            //mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(lattitudeLongitude, 15f));
+                        }
+                    });
+        }
+
+
+        iconFactory.setStyle(IconGenerator.STYLE_DEFAULT);
+        iconFactory.setTextAppearance(this, R.style.MyCustomInfoWindowTextApp);
+        iconFactory.setBackground(getResources().getDrawable(R.drawable.custom_info_window_vector));
+        iconFactory.setContentPadding((int) (27 * (getResources().getDisplayMetrics().density)), (int) (2 * (getResources().getDisplayMetrics().density)), 0, (int) (6 * (getResources().getDisplayMetrics().density)));
+        addCustomInfoWindow(iconFactory, makeCharSequence("Radius", Integer.toString(SearchDataStore.SHORTRADIUS)) + " m", lattitudeLongitude);
+    }
+    //testing custom marker code here
+    private Bitmap getMarkerBitmapFromView(View view, Bitmap bitmap) {
+
+        mMarkerImageView.setImageBitmap(getRoundedCornerBitmap(bitmap, (int) (28 * (getResources().getDisplayMetrics().density))));
+        view.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+        view.layout(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
+        view.buildDrawingCache();
+        Bitmap returnedBitmap = Bitmap.createBitmap(view.getMeasuredWidth(), view.getMeasuredHeight(),
+                Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(returnedBitmap);
+        canvas.drawColor(Color.WHITE, PorterDuff.Mode.SRC_IN);
+        Drawable drawable = view.getBackground();
+        if (drawable != null)
+            drawable.draw(canvas);
+        view.draw(canvas);
+        return returnedBitmap;
+
     }
 
     @Override
