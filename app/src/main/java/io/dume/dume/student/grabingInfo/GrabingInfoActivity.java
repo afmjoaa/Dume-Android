@@ -1,6 +1,7 @@
 package io.dume.dume.student.grabingInfo;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.ContentUris;
 import android.content.Context;
@@ -78,6 +79,7 @@ import com.transitionseverywhere.TransitionManager;
 import com.transitionseverywhere.TransitionSet;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -88,8 +90,10 @@ import java.util.List;
 import java.util.Objects;
 
 import carbon.widget.RelativeLayout;
+import id.zelory.compressor.Compressor;
 import io.dume.dume.R;
 import io.dume.dume.inter_face.OnTabModificationListener;
+import io.dume.dume.inter_face.usefulListeners;
 import io.dume.dume.model.DumeModel;
 import io.dume.dume.model.TeacherModel;
 import io.dume.dume.student.grabingPackage.GrabingPackageActivity;
@@ -104,9 +108,13 @@ import io.dume.dume.teacher.model.LocalDb;
 import io.dume.dume.teacher.pojo.Skill;
 import io.dume.dume.teacher.skill.SkillActivity;
 import io.dume.dume.util.DumeUtils;
+import io.dume.dume.util.FileUtil;
 import io.dume.dume.util.OnViewClick;
 import io.dume.dume.util.RadioBtnDialogue;
 import io.dume.dume.util.VisibleToggleClickListener;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 import me.zhanghai.android.materialratingbar.MaterialRatingBar;
 
 import static io.dume.dume.util.ImageHelper.getRoundedCornerBitmap;
@@ -194,7 +202,7 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
     private ImageView firstContactSelectImage;
     private Drawable imgKeyBoardDown;
     private Drawable imgKeyBoardUp;
-    private Bitmap contactBitmap;
+    private Bitmap contactBitmap = null;
     private String contactName;
     private boolean forMySelf = true;
     private Bitmap photo = null;
@@ -203,6 +211,9 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
     private View mCustomMarkerView;
     private carbon.widget.ImageView mMarkerImageView;
     private IconGenerator iconFactory;
+    private GrabingInfoModel mModel;
+    private String contactAvatarString;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -210,7 +221,8 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
         setContentView(R.layout.stu2_activity_grabing_info);
         setActivityContextMap(this, fromFlag);
         findLoadView();
-        mPresenter = new GrabingInfoPresenter(this, new GrabingInfoModel());
+        final GrabingInfoModel mModel = new GrabingInfoModel(this);
+        mPresenter = new GrabingInfoPresenter(this, mModel);
         teacherModel = new DumeModel();
         mPresenter.grabingInfoPageEnqueue();
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
@@ -278,7 +290,7 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
         textParamTwo = new LinearLayout.LayoutParams(tabMinWidthTwo, LinearLayout.LayoutParams.WRAP_CONTENT);
         textParamOne = new LinearLayout.LayoutParams(tabMinWidthOne, LinearLayout.LayoutParams.WRAP_CONTENT);
         imgKeyBoardDown = getResources().getDrawable(R.drawable.ic_keyboard_arrow_down_black_24dp);
-        imgKeyBoardUp = getResources().getDrawable(R.drawable.ic_keyboard_arrow_down_black_24dp);
+        imgKeyBoardUp = getResources().getDrawable(R.drawable.ic_keyboard_arrow_up_black_24dp);
         mCustomMarkerView = ((LayoutInflater) Objects.requireNonNull(getSystemService(LAYOUT_INFLATER_SERVICE))).inflate(R.layout.custom_marker_view, null);
         mMarkerImageView = mCustomMarkerView.findViewById(R.id.profile_image);
         iconFactory = new IconGenerator(this);
@@ -566,32 +578,78 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                     tabHintLayout.setVisibility(View.VISIBLE);
                     tabLayout.setVisibility(View.VISIBLE);
                     if (!forMySelf) {
-                        Glide.with(context).asBitmap().load(contactBitmap)
-                                .apply(new RequestOptions().override((int) (20 * (getResources().getDisplayMetrics().density)), (int) (20 * (getResources().getDisplayMetrics().density))).centerCrop().placeholder(R.drawable.alias_profile_icon))
-                                .into(new SimpleTarget<Bitmap>() {
-                                    @Override
-                                    public void onResourceReady(@NonNull Bitmap resource, @Nullable com.bumptech.glide.request.transition.Transition<? super Bitmap> transition) {
-                                        final Bitmap roundedCornerBitmap = getRoundedCornerBitmapSquare(resource, (int) (10 * (getResources().getDisplayMetrics().density)), (int) (20 * (getResources().getDisplayMetrics().density)));
-                                        Drawable drawable = new BitmapDrawable(getResources(), roundedCornerBitmap);
-                                        if (drawable != null) {
-                                            forMeBtn.setCompoundDrawablesWithIntrinsicBounds(drawable, null, imgKeyBoardDown, null);
+                        if (contactBitmap != null) {
+                            Glide.with(context).asBitmap().load(contactBitmap)
+                                    .apply(new RequestOptions().override((int) (20 * (getResources().getDisplayMetrics().density)), (int) (20 * (getResources().getDisplayMetrics().density))).centerCrop().placeholder(R.drawable.alias_profile_icon))
+                                    .into(new SimpleTarget<Bitmap>() {
+                                        @Override
+                                        public void onResourceReady(@NonNull Bitmap resource, @Nullable com.bumptech.glide.request.transition.Transition<? super Bitmap> transition) {
+                                            final Bitmap roundedCornerBitmap = getRoundedCornerBitmapSquare(resource, (int) (10 * (getResources().getDisplayMetrics().density)), (int) (20 * (getResources().getDisplayMetrics().density)));
+                                            Drawable drawable = new BitmapDrawable(getResources(), roundedCornerBitmap);
+                                            if (drawable != null) {
+                                                forMeBtn.setCompoundDrawablesWithIntrinsicBounds(drawable, null, imgKeyBoardDown, null);
+                                            }
                                         }
-                                    }
-                                });
+                                    });
+                        } else {
+                            Glide.with(context).asBitmap().load(SearchDataStore.DEFAULTUSERAVATER)
+                                    .apply(new RequestOptions().override((int) (20 * (getResources().getDisplayMetrics().density)), (int) (20 * (getResources().getDisplayMetrics().density))).centerCrop().placeholder(R.drawable.alias_profile_icon))
+                                    .into(new SimpleTarget<Bitmap>() {
+                                        @Override
+                                        public void onResourceReady(@NonNull Bitmap resource, @Nullable com.bumptech.glide.request.transition.Transition<? super Bitmap> transition) {
+                                            final Bitmap roundedCornerBitmap = getRoundedCornerBitmapSquare(resource, (int) (10 * (getResources().getDisplayMetrics().density)), (int) (20 * (getResources().getDisplayMetrics().density)));
+                                            Drawable drawable = new BitmapDrawable(getResources(), roundedCornerBitmap);
+                                            if (drawable != null) {
+                                                forMeBtn.setCompoundDrawablesWithIntrinsicBounds(drawable, null, imgKeyBoardDown, null);
+                                            }
+                                        }
+                                    });
+                        }
                         forMeBtn.setText("For " + secondContactPerson.getText());
                     } else {
-                        Glide.with(context).asBitmap().load(searchDataStore.getAvatarString())
-                                .apply(new RequestOptions().override((int) (20 * (getResources().getDisplayMetrics().density)), (int) (20 * (getResources().getDisplayMetrics().density))).centerCrop().placeholder(R.drawable.alias_profile_icon))
-                                .into(new SimpleTarget<Bitmap>() {
-                                    @Override
-                                    public void onResourceReady(@NonNull Bitmap resource, @Nullable com.bumptech.glide.request.transition.Transition<? super Bitmap> transition) {
-                                        final Bitmap roundedCornerBitmap = getRoundedCornerBitmapSquare(resource, (int) (10 * (getResources().getDisplayMetrics().density)), (int) (20 * (getResources().getDisplayMetrics().density)));
-                                        Drawable drawable = new BitmapDrawable(getResources(), roundedCornerBitmap);
-                                        if (drawable != null) {
-                                            forMeBtn.setCompoundDrawablesWithIntrinsicBounds(drawable, null, imgKeyBoardDown, null);
+                        if (searchDataStore.getAvatarString() == null || searchDataStore.getAvatarString().equals("")) {
+                            String gender = searchDataStore.getGender();
+                            if (gender == null || gender.equals("") || gender.equals("Male")) {
+                                Glide.with(getApplicationContext()).asBitmap().load(SearchDataStore.DEFAULTMALEAVATER)
+                                        .apply(new RequestOptions().override((int) (20 * (getResources().getDisplayMetrics().density)), (int) (20 * (getResources().getDisplayMetrics().density))).centerCrop().placeholder(R.drawable.alias_profile_icon))
+                                        .into(new SimpleTarget<Bitmap>() {
+                                            @Override
+                                            public void onResourceReady(@NonNull Bitmap resource, @Nullable com.bumptech.glide.request.transition.Transition<? super Bitmap> transition) {
+                                                final Bitmap roundedCornerBitmap = getRoundedCornerBitmapSquare(resource, (int) (10 * (getResources().getDisplayMetrics().density)), (int) (20 * (getResources().getDisplayMetrics().density)));
+                                                Drawable drawable = new BitmapDrawable(getResources(), roundedCornerBitmap);
+                                                if (drawable != null) {
+                                                    forMeBtn.setCompoundDrawablesWithIntrinsicBounds(drawable, null, imgKeyBoardDown, null);
+                                                }
+                                            }
+                                        });
+                            } else {
+                                Glide.with(getApplicationContext()).asBitmap().load(SearchDataStore.DEFAULTFEMALEAVATER)
+                                        .apply(new RequestOptions().override((int) (20 * (getResources().getDisplayMetrics().density)), (int) (20 * (getResources().getDisplayMetrics().density))).centerCrop().placeholder(R.drawable.alias_profile_icon))
+                                        .into(new SimpleTarget<Bitmap>() {
+                                            @Override
+                                            public void onResourceReady(@NonNull Bitmap resource, @Nullable com.bumptech.glide.request.transition.Transition<? super Bitmap> transition) {
+                                                final Bitmap roundedCornerBitmap = getRoundedCornerBitmapSquare(resource, (int) (10 * (getResources().getDisplayMetrics().density)), (int) (20 * (getResources().getDisplayMetrics().density)));
+                                                Drawable drawable = new BitmapDrawable(getResources(), roundedCornerBitmap);
+                                                if (drawable != null) {
+                                                    forMeBtn.setCompoundDrawablesWithIntrinsicBounds(drawable, null, imgKeyBoardDown, null);
+                                                }
+                                            }
+                                        });
+                            }
+                        } else {
+                            Glide.with(getApplicationContext()).asBitmap().load(searchDataStore.getAvatarString())
+                                    .apply(new RequestOptions().override((int) (20 * (getResources().getDisplayMetrics().density)), (int) (20 * (getResources().getDisplayMetrics().density))).centerCrop().placeholder(R.drawable.alias_profile_icon))
+                                    .into(new SimpleTarget<Bitmap>() {
+                                        @Override
+                                        public void onResourceReady(@NonNull Bitmap resource, @Nullable com.bumptech.glide.request.transition.Transition<? super Bitmap> transition) {
+                                            final Bitmap roundedCornerBitmap = getRoundedCornerBitmapSquare(resource, (int) (10 * (getResources().getDisplayMetrics().density)), (int) (20 * (getResources().getDisplayMetrics().density)));
+                                            Drawable drawable = new BitmapDrawable(getResources(), roundedCornerBitmap);
+                                            if (drawable != null) {
+                                                forMeBtn.setCompoundDrawablesWithIntrinsicBounds(drawable, null, imgKeyBoardDown, null);
+                                            }
                                         }
-                                    }
-                                });
+                                    });
+                        }
                         forMeBtn.setText(R.string.for_me);
                     }
                 }
@@ -665,7 +723,7 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                             public void onError(String msg) {
                                 flush(msg);
                                 hideProgress();
-                                fab.setBackgroundTintList(ColorStateList.valueOf(Color.RED));
+                                fab.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent)));
                                 fab.setEnabled(true);
                             }
                         });
@@ -674,14 +732,14 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                         showProgress();
                         fab.setBackgroundTintList(ColorStateList.valueOf(Color.GRAY));
                         fab.setEnabled(false);
+                        searchDataStore.genSetRetJizz(queryList, queryListName);
                         if (forMySelf) {
-                            searchDataStore.genSetRetForWhom(searchDataStore.getUserName(), searchDataStore.getUserNumber(), searchDataStore.getUserUid(), null, forMySelf);
+                            searchDataStore.genSetRetForWhom(searchDataStore.getUserName(), searchDataStore.getUserNumber(), searchDataStore.getUserUid(), searchDataStore.getAvatarString(), forMySelf);
                         } else {
                             String name = secondContactPerson.getText().toString();
                             String phoneNum = secondContactPersonNum.getText().toString();
-                            searchDataStore.genSetRetForWhom(name, phoneNum, searchDataStore.getUserUid(), photo, forMySelf);
+                            searchDataStore.genSetRetForWhom(name, phoneNum, searchDataStore.getUserUid(), getContactAvatarUri(), forMySelf);
                         }
-                        searchDataStore.genSetRetJizz(queryList, queryListName);
                         gotoGrabingPackage();
                         break;
                 }
@@ -692,9 +750,23 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
         }
     }
 
+    @Override
+    public String getContactAvatarUri() {
+        if (contactAvatarString != null) {
+            return contactAvatarString;
+        } else {
+            return SearchDataStore.BOYSTUDENT;
+        }
+        //no way to determine female or male student
+    }
+
+    @Override
+    public void setContactAvatar(String uri) {
+        contactAvatarString = uri;
+    }
 
     private void gotoGrabingPackage() {
-        fab.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorAccent)));
+        fab.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent)));
         fab.setEnabled(true);
         hideProgress();
         startActivity(new Intent(this, GrabingPackageActivity.class));
@@ -747,14 +819,20 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
         mMap.setPadding((int) (10 * (getResources().getDisplayMetrics().density)), (int) (250 * (getResources().getDisplayMetrics().density)), 0, (int) (6 * (getResources().getDisplayMetrics().density)));
         mMap.getUiSettings().setCompassEnabled(false);
         mMap.setMyLocationEnabled(false);
-        addCustomMarkerFromURL(searchDataStore.getAvatarString(), searchDataStore.getAnchorPoint());
-        alwaysViewMusk.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                //give anchor point here
+
+        switch (Objects.requireNonNull(getIntent().getAction())) {
+            case DumeUtils.STUDENT:
+                addCustomMarkerFromURL(searchDataStore.getAvatarString(), searchDataStore.getAnchorPoint());
                 moveCamera(searchDataStore.getAnchorPoint(), DEFAULT_ZOOM, "Device Location", mMap);
-            }
-        }, 0L);
+                break;
+            case DumeUtils.TEACHER:
+            case DumeUtils.BOOTCAMP:
+                GeoPoint geoPointTeacher = (GeoPoint) TeacherDataStore.getInstance().getDocumentSnapshot().get("location");
+                LatLng teacherLatLng = new LatLng(geoPointTeacher.getLatitude(), geoPointTeacher.getLongitude());
+                addCustomMarkerFromURL(searchDataStore.getAvatarString(), teacherLatLng);
+                moveCamera(teacherLatLng, DEFAULT_ZOOM, "Device Location", mMap);
+                break;
+        }
     }
 
     private void addCustomMarkerFromURL(String url, LatLng lattitudeLongitude) {
@@ -775,9 +853,9 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                         }
                     });
         } else {
-            if(searchDataStore.getGender().equals("Male") || searchDataStore.getGender().equals("")){
+            if (searchDataStore.getGender().equals("Male") || searchDataStore.getGender().equals("")) {
                 defaultUrl = "https://firebasestorage.googleapis.com/v0/b/dume-2d063.appspot.com/o/avatar.png?alt=media&token=801c75b7-59fe-4a13-9191-186ef50de707";
-            }else {
+            } else {
                 defaultUrl = "https://firebasestorage.googleapis.com/v0/b/dume-2d063.appspot.com/o/avatar_female.png?alt=media&token=7202ea91-4f0d-4bd6-838e-8b73d0db13eb";
             }
             Glide.with(getApplicationContext())
@@ -801,6 +879,7 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
         iconFactory.setContentPadding((int) (27 * (getResources().getDisplayMetrics().density)), (int) (2 * (getResources().getDisplayMetrics().density)), 0, (int) (6 * (getResources().getDisplayMetrics().density)));
         addCustomInfoWindow(iconFactory, makeCharSequence("Radius", Integer.toString(SearchDataStore.SHORTRADIUS)) + " m", lattitudeLongitude);
     }
+
     //testing custom marker code here
     private Bitmap getMarkerBitmapFromView(View view, Bitmap bitmap) {
 

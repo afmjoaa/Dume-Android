@@ -416,6 +416,7 @@ public class CusStuAppComMapActivity extends CustomStuAppCompatActivity implemen
                                                     }
                                                 });
                                             }
+
                                             @Override
                                             public void onCancel() {
 
@@ -428,6 +429,7 @@ public class CusStuAppComMapActivity extends CustomStuAppCompatActivity implemen
                     }
                 });
             }
+
             @Override
             public void onCancel() {
                 mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
@@ -706,6 +708,14 @@ public class CusStuAppComMapActivity extends CustomStuAppCompatActivity implemen
 
     protected CharSequence makeCharSequence(String distance, String time) {
         String sequence = distance + " \n" + time;
+        SpannableStringBuilder ssb = new SpannableStringBuilder(sequence);
+        ssb.setSpan(new StyleSpan(ITALIC), 0, distance.length(), SPAN_EXCLUSIVE_EXCLUSIVE);
+        ssb.setSpan(new StyleSpan(NORMAL), distance.length(), sequence.length(), SPAN_EXCLUSIVE_EXCLUSIVE);
+        return ssb;
+    }
+
+    protected CharSequence makeCharSequence(String distance) {
+        String sequence = distance;
         SpannableStringBuilder ssb = new SpannableStringBuilder(sequence);
         ssb.setSpan(new StyleSpan(ITALIC), 0, distance.length(), SPAN_EXCLUSIVE_EXCLUSIVE);
         ssb.setSpan(new StyleSpan(NORMAL), distance.length(), sequence.length(), SPAN_EXCLUSIVE_EXCLUSIVE);

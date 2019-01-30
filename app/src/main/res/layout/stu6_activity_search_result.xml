@@ -165,8 +165,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
                                 android:layout_marginTop="4dp"
-                                android:text="Mohoshina Tajim Joyti"
-                                android:textAlignment="center"
+                                android:text="Demo Mentor"
                                 android:textAppearance="?android:attr/textAppearanceListItem"
                                 android:textSize="16sp"
                                 app:fontFamily="@font/cairo_regular" />
@@ -192,13 +191,15 @@
                         android:background="#3ca7a7a7" />
 
                     <Button
+                        android:id="@+id/requestBTN"
                         style="@style/myButtonStyle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="2dp"
                         android:layout_marginTop="2dp"
-                        android:text="Confirm Request"
+                        android:text="Make Request"
                         android:textAllCaps="false"
+                        android:onClick="onSearchResultViewClicked"
                         android:textColor="@color/white"
                         android:textSize="16sp"
                         app:fontFamily="@font/cairo_regular" />

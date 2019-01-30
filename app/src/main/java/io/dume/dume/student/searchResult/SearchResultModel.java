@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
 
 import java.util.Map;
 
@@ -22,6 +23,20 @@ public class SearchResultModel extends StuBaseModel implements SearchResultContr
     @Override
     public void searchResultHawwa() {
 
+
     }
+
+    @Override
+    public void riseNewRecords(Map<String, Object> data, TeacherContract.Model.Listener<DocumentReference> listener) {
+
+        firestore.collection("records").add(data).addOnSuccessListener(documentReference -> {
+            listener.onSuccess(documentReference);
+        }).addOnFailureListener(e -> {
+            listener.onError(e.getLocalizedMessage());
+        });
+
+
+    }
+
 
 }

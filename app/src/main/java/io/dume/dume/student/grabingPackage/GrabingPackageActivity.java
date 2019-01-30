@@ -566,8 +566,9 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
                     break;
             }
             Intent intent = new Intent(this, SearchLoadingActivity.class);
-            intent.setAction("search");
-            startActivityForResult(intent, SEARCH_REQUEST_CODE);
+            intent.setAction("from_GPA");
+            startActivity(intent);
+            finish();
             //ActivityCompat.finishAffinity(this);
         } else if (preferredDays == null) {
             flush("Internal error !!");

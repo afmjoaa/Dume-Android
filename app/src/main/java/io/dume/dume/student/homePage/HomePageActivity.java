@@ -531,8 +531,8 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
                 searchDataStore.setStartDate((Map<String, Object>) clickedSearchData.get("start_date"));
                 searchDataStore.setStartTime((Map<String, Object>) clickedSearchData.get("start_time"));
                 Intent intent = new Intent(HomePageActivity.this, SearchLoadingActivity.class);
-                intent.setAction("recent_search");
-                startActivityForResult(intent, RC_RECENT_SEARCH);
+                intent.setAction("from_HPA");
+                startActivity(intent);
             }
         };
         recentSearchRV.setAdapter(recentSearchAdapter);

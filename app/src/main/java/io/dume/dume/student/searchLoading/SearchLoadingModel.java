@@ -22,7 +22,7 @@ import io.dume.dume.teacher.homepage.TeacherContract;
 public class SearchLoadingModel extends StuBaseModel implements SearchLoadingContract.Model {
     ArrayList<DocumentSnapshot> instructorList = null;
 
-    public SearchLoadingModel(Context context) {
+    SearchLoadingModel(Context context) {
         super(context);
         instructorList = new ArrayList<>();
     }
@@ -62,11 +62,9 @@ public class SearchLoadingModel extends StuBaseModel implements SearchLoadingCon
 
             @Override
             public void onGeoQueryReady() {
-                if (instructorList.size() > 0) {
-                    listener.onSuccess(instructorList);
-                } else {
-                    listener.onError("Not Found Any Data");
-                }
+
+                listener.onSuccess(instructorList);
+
             }
 
             @Override

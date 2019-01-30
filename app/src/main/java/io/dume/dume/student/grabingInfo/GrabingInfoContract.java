@@ -1,5 +1,11 @@
 package io.dume.dume.student.grabingInfo;
 
+import android.net.Uri;
+
+import java.io.InputStream;
+
+import io.dume.dume.inter_face.usefulListeners;
+
 public interface GrabingInfoContract {
     interface View {
 
@@ -12,6 +18,10 @@ public interface GrabingInfoContract {
         void viewMuskClicked();
 
         void fabClicked(android.view.View view);
+
+        String getContactAvatarUri();
+
+        void setContactAvatar(String uri);
 
         void selectFromContactClicked();
 
@@ -31,5 +41,7 @@ public interface GrabingInfoContract {
     interface Model {
 
         void grabingInfoPagehawwa();
+
+        void uploadImage(InputStream uri, usefulListeners.uploadToSTGListererMin progressListener, String ref);
     }
 }

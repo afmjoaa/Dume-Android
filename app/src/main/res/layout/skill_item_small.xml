@@ -212,7 +212,13 @@
         android:id="@+id/hosting_relative_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone"
-       />
+        android:visibility="gone" />
 
+    <ImageView
+        android:id="@+id/categoryAvaterIV"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        app:srcCompat="@drawable/education" />
 </carbon.widget.FrameLayout>

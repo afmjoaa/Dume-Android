@@ -55,6 +55,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
@@ -62,6 +63,8 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.GeoPoint;
 import com.google.maps.android.SphericalUtil;
 import com.google.maps.android.ui.IconGenerator;
 import com.hadiidbouk.charts.BarData;
@@ -74,7 +77,9 @@ import com.transitionseverywhere.TransitionManager;
 import com.transitionseverywhere.TransitionSet;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import carbon.widget.ImageView;
@@ -86,8 +91,10 @@ import io.dume.dume.student.common.QualificationAdapter;
 import io.dume.dume.student.common.QualificationData;
 import io.dume.dume.student.common.ReviewAdapter;
 import io.dume.dume.student.common.ReviewHighlightData;
+import io.dume.dume.student.homePage.HomePageActivity;
 import io.dume.dume.student.pojo.CusStuAppComMapActivity;
 import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
+import io.dume.dume.student.pojo.SearchDataStore;
 import io.dume.dume.student.searchResultTabview.SearchResultTabviewActivity;
 import io.dume.dume.util.DumeUtils;
 import io.dume.dume.util.OnSwipeTouchListener;
@@ -173,6 +180,10 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
     private List<LatLng> route;
     private Marker mMarkerA;
     private String defaultUrl;
+    private String TAG = "foo";
+    private DocumentSnapshot selectedMentor;
+    private Button requestBTN;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -183,9 +194,6 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
         SearchResultModel mModel = new SearchResultModel(this);
         mPresenter = new SearchResultPresenter(this, mModel);
         mPresenter.searchResultEnqueue();
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        //mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-        //getLocationPermission(mapFragment);
 
         mapFragment = (TrailSupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         assert mapFragment != null;
@@ -202,6 +210,11 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
         reviewRecyView.setAdapter(reviewRecyAda);
         reviewRecyView.setLayoutManager(new LinearLayoutManager(this));
         polylines = new ArrayList<>();
+    }
+
+    @Override
+    public DocumentSnapshot getSelectedMentor() {
+        return selectedMentor;
     }
 
     @Override
@@ -230,7 +243,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
         onlyRatingContainer = findViewById(R.id.rating_layout_vertical);
         qualificationRecyView = findViewById(R.id.recycler_view_qualifications);
         reviewRecyView = findViewById(R.id.recycler_view_reviews);
-
+        requestBTN = findViewById(R.id.requestBTN);
         moreInfoBtn = findViewById(R.id.show_more_info_btn);
         moreInfoHost = findViewById(R.id.more_info_host_linearlayout);
         moreInfoHidable = findViewById(R.id.more_info_layout_vertical);
@@ -267,8 +280,14 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
         loadViewBS = findViewById(R.id.loadViewTwo);
 
         route = new ArrayList<>();
-        route.add(mDummyLatLng);
-        route.add(mDummyLatLngOne);
+    }
+
+    @Override
+    public void goHome() {
+        final Intent intent = new Intent(getApplicationContext(), HomePageActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        finish();
     }
 
     @Override
@@ -280,6 +299,8 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
         secondaryCollapsingToolbarLayout.setCollapsedTitleTypeface(Typeface.createFromAsset(activity.getAssets(), "fonts/Cairo-Light.ttf"));
         secondaryCollapsingToolbarLayout.setExpandedTitleTypeface(Typeface.createFromAsset(activity.getAssets(), "fonts/Cairo-Light.ttf"));
         secondaryCollapsingToolbarLayout.setTitle("Details");
+        Drawable drawableWhite = ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_more_vert_white_24dp);
+        secondaryToolbar.setOverflowIcon(drawableWhite);
         settingStatusBarTransparent();
         setDarkStatusBarIcon();
 
@@ -320,7 +341,8 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                     changingOrientationContainer.setOrientation(LinearLayout.HORIZONTAL);
                     changingOrientationParams.height = LinearLayout.LayoutParams.WRAP_CONTENT;
                     changingOrientationContainer.setLayoutParams(changingOrientationParams);
-                    ageText.setGravity(Gravity.CENTER_VERTICAL | Gravity.START);
+                    ageText.setGravity(Gravity.START);
+                    mentorNameText.setGravity(Gravity.START);
                     verticalTextViewContainer.animate()
                             .translationYBy((float) (-0.0f * (getResources().getDisplayMetrics().density)))
                             .setDuration(60)
@@ -385,6 +407,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                     changingOrientationParams.height = (int) (150 * (getResources().getDisplayMetrics().density));
                     changingOrientationContainer.setLayoutParams(changingOrientationParams);
                     ageText.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
+                    mentorNameText.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
                     if (dragFirst) {
                         dragFirst = false;
                         verticalTextViewContainer.animate()
@@ -749,6 +772,116 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
 
     }
 
+    @Override
+    public void pushProfile(DocumentSnapshot singleSkill) {
+        Map<String, Object> sp_info = (Map<String, Object>) singleSkill.get("sp_info");
+        Map<String, Object> selfRating = (Map<String, Object>) sp_info.get("self_rating");
+        String avatar = (String) sp_info.get("avatar");
+        String gender = (String) sp_info.get("gender");
+        GeoPoint location = singleSkill.getGeoPoint("location");
+        String starRating = (String) selfRating.get("star_rating");
+        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+        route.add(latLng);
+        final Marker marker = addCustomMarkerFromURL(avatar, latLng, gender, starRating);
+    }
+
+    public void onMentorSelect(DocumentSnapshot selectedMentor) {
+        this.selectedMentor = selectedMentor;
+        Map<String, Object> sp_info = (Map<String, Object>) selectedMentor.get("sp_info");
+        final String name = String.format("%s %s", sp_info.get("first_name"), sp_info.get("last_name"));
+        mentorNameText.setText(name);
+        String birthDate = (String) sp_info.get("birth_date");
+        if (birthDate == null || birthDate.equals("")) {
+            ageText.setText("Age - unknown");
+        }else {
+            String[] splited = birthDate.split("\\s+");
+            final String age = getAge(Integer.parseInt(splited[2]), Integer.parseInt(splited[1].replace(",", "")), splited[0]);
+            ageText.setText(age + " year old");
+        }
+        GeoPoint location = selectedMentor.getGeoPoint("location");
+        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+        final String avatar = (String) sp_info.get("avatar");
+        if (avatar != null && !avatar.equals("")) {
+            Glide.with(getApplicationContext()).load(avatar).into(mentorDisplayPic);
+        }
+        List<LatLng> pathRoute = new ArrayList<>();
+        pathRoute.add(searchDataStore.getAnchorPoint());
+        pathRoute.add(latLng);
+        mapFragment.setUpPath(pathRoute, mMap, RouteOverlayView.AnimType.ARC);
+       /* Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                    }
+                });
+            }
+        }, 1000);*/
+    }
+
+    private String getAge(int year, int day, String sMonth) {
+        int month;
+        switch (sMonth) {
+            case "Jan":
+                month = 1;
+                break;
+            case "Feb":
+                month = 2;
+                break;
+            case "Mar":
+                month = 3;
+                break;
+            case "Apr":
+                month = 4;
+                break;
+            case "May":
+                month = 5;
+                break;
+            case "Jun":
+                month = 6;
+                break;
+            case "Jul":
+                month = 7;
+                break;
+            case "Aug":
+                month = 8;
+                break;
+            case "Sep":
+                month = 9;
+                break;
+            case "Oct":
+                month = 10;
+                break;
+            case "Nov":
+                month = 11;
+                break;
+            case "Dec":
+                month = 12;
+                break;
+            default:
+                month = 6;
+                break;
+        }
+
+        Calendar dob = Calendar.getInstance();
+        Calendar today = Calendar.getInstance();
+
+        dob.set(year, month, day);
+
+        int age = today.get(Calendar.YEAR) - dob.get(Calendar.YEAR);
+
+        if (today.get(Calendar.DAY_OF_YEAR) < dob.get(Calendar.DAY_OF_YEAR)) {
+            age--;
+        }
+
+        Integer ageInt = new Integer(age);
+        String ageS = ageInt.toString();
+
+        return ageS;
+    }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -764,35 +897,22 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
         mMap.setOnInfoWindowClickListener(this);
         //mMap.getUiSettings().setZoomGesturesEnabled(false);
         mMap.setMyLocationEnabled(false);
-
-
         // sob kaj sesh a ai duita lagate hobe
-        //mMap.setMaxZoomPreference(13f);
-        //mMap.setMinZoomPreference(10f);
-        zoomRoute(route);
+
         mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
             @Override
             public void onMapLoaded() {
+                addCustomMarkerFromURL(searchDataStore.getAvatarString(), searchDataStore.getAnchorPoint(), searchDataStore.getGender(), null);
                 mMap.setOnCameraMoveListener(new GoogleMap.OnCameraMoveListener() {
                     @Override
                     public void onCameraMove() {
                         mapFragment.onCameraMove(mMap);
                     }
                 });
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        mapFragment.setUpPath(route, mMap, RouteOverlayView.AnimType.ARC);
-                        //testing my custom marker code here
-                        addCustomMarkerFromURL("http://i.imgur.com/ROz4Jgh.png", mDummyLatLng);
-                        addCustomMarkerFromURL("http://i.imgur.com/Qn9UesZ.png", mDummyLatLngOne);
-                    }
-                }, 600);
+                mPresenter.onMapLoaded();
+                zoomRoute(route);
             }
         });
-
-
     }
 
     public void zoomRoute(List<LatLng> lstLatLngRoute) {
@@ -801,17 +921,35 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
         for (LatLng latLngPoint : lstLatLngRoute)
             boundsBuilder.include(latLngPoint);
 
-        int routePadding = 100;
+        int routePadding = 60;
         LatLngBounds latLngBounds = boundsBuilder.build();
+        mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, routePadding), 2000, new GoogleMap.CancelableCallback() {
+            @Override
+            public void onFinish() {
+                mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+                    @Override
+                    public void onMapLoaded() {
+                        final float thisZoom = mMap.getCameraPosition().zoom;
+                        mMap.setMaxZoomPreference((thisZoom + 0.5f));
+                        mMap.setMinZoomPreference((thisZoom - 0.6f));
 
-        mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, routePadding));
-        /*CameraPosition cameraPosition = new CameraPosition.Builder()
-                .target(mMap.getCameraPosition().target)
-                .zoom(mMap.getCameraPosition().zoom)
-                .tilt(45)
-                .build();
+                        List<LatLng> pathRoute = new ArrayList<>();
+                        pathRoute.add(searchDataStore.getAnchorPoint());
+                        pathRoute.add(route.get(0));
+                        mapFragment.setUpPath(pathRoute, mMap, RouteOverlayView.AnimType.ARC);
+                    }
+                });
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+        });
+        /*
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));*/
     }
+
 
     @Override
     public void centerTheMapCamera() {
@@ -867,6 +1005,11 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
 
 
     @Override
+    public void flush(String msg) {
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
     public void onMyGpsLocationChanged(Location location) {
 
     }
@@ -911,7 +1054,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
 
     }
 
-    private Marker addCustomMarkerFromURL(String url, LatLng lattitudeLongitude) {
+    private Marker addCustomMarkerFromURL(String url, LatLng lattitudeLongitude, String gender, String stars) {
         if (mMap == null) {
             return null;
         }
@@ -929,9 +1072,9 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                         }
                     });
         } else {
-            if(searchDataStore.getGender().equals("Male") || searchDataStore.getGender().equals("")){
+            if (gender.equals("Male") || gender.equals("")) {
                 defaultUrl = "https://firebasestorage.googleapis.com/v0/b/dume-2d063.appspot.com/o/avatar.png?alt=media&token=801c75b7-59fe-4a13-9191-186ef50de707";
-            }else {
+            } else {
                 defaultUrl = "https://firebasestorage.googleapis.com/v0/b/dume-2d063.appspot.com/o/avatar_female.png?alt=media&token=7202ea91-4f0d-4bd6-838e-8b73d0db13eb";
             }
             Glide.with(getApplicationContext())
@@ -943,7 +1086,6 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                         public void onResourceReady(@NonNull Bitmap resource, @Nullable com.bumptech.glide.request.transition.Transition<? super Bitmap> transition) {
                             mMap.addMarker(new MarkerOptions().position(lattitudeLongitude)
                                     .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(mCustomMarkerView, resource))));
-                            //mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(lattitudeLongitude, 15f));
                         }
                     });
         }
@@ -952,21 +1094,36 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
         iconFactory.setTextAppearance(this, R.style.MyCustomInfoWindowTextApp);
         iconFactory.setBackground(getDrawable(R.drawable.custom_info_window_vector));
         iconFactory.setContentPadding((int) (27 * (getResources().getDisplayMetrics().density)), (int) (2 * (getResources().getDisplayMetrics().density)), 0, (int) (6 * (getResources().getDisplayMetrics().density)));
-        addCustomInfoWindow(iconFactory, makeCharSequence("3 km", "12 min"), lattitudeLongitude);
+
+        double v = SphericalUtil.computeDistanceBetween(searchDataStore.getAnchorPoint(), lattitudeLongitude);
+        if (searchDataStore.getAnchorPoint() != lattitudeLongitude) {
+            addCustomInfoWindow(iconFactory, makeCharSequence(stars + " ★", formatNumber(v)), lattitudeLongitude);
+        }
         return mMarkerA;
     }
 
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-        Toast.makeText(this, "marker clicked", Toast.LENGTH_SHORT).show();
+
+        for (DocumentSnapshot item : searchDataStore.getResultList()) {
+            GeoPoint location = item.getGeoPoint("location");
+            LatLng itemLoc = new LatLng(location.getLatitude(), location.getLongitude());
+            if (marker.getPosition().equals(itemLoc)) {
+                onMentorSelect(item);
+                Log.w(TAG, "onMarkerClick: " + item.toString());
+                break;
+            } else {
+                Log.w(TAG, "onMarkerClick: Not Matching with any loc Marker : " + marker.getPosition() + " --" + itemLoc.toString());
+            }
+        }
         return false;
         //true means no default behaviour
     }
 
     @Override
     public void onInfoWindowClick(Marker marker) {
-        Toast.makeText(this, "info window clicked", Toast.LENGTH_SHORT).show();
+        onMarkerClick(marker);
     }
 
     public void onSearchResultViewClicked(View view) {
@@ -974,9 +1131,9 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
     }
 
 
-    private void showDistance() {
-        //double distance = SphericalUtil.computeDistanceBetween(mMarkerA.getPosition(), mMarkerB.getPosition());
-        // mTextView.setText("The markers are " + formatNumber(distance) + " apart.");
+    private void showDistance(LatLng anchor, LatLng skillAnchor) {
+       /*double distance = SphericalUtil.computeDistanceBetween(mMarkerA.getPosition(), mMarkerB.getPosition());
+      mTextView.setText("The markers are " + formatNumber(distance) + " apart.");*/
     }
 
     private String formatNumber(double distance) {

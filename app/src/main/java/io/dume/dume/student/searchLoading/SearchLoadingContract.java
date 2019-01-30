@@ -22,9 +22,16 @@ public interface SearchLoadingContract {
 
         void cancelBtnClicked();
 
+        void showResultActivty();
+
         void saveToDB();
+        void notifyRadious(int radius);
+
+        void flush(String msg);
 
         boolean checkIfInDB(Map<String, Object> jizz);
+
+        void noResultDialogue();
     }
 
     interface Presenter {

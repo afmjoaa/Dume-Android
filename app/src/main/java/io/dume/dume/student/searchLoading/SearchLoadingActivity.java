@@ -10,6 +10,7 @@ import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
@@ -33,6 +34,7 @@ import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -54,9 +56,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import carbon.widget.ImageView;
 import io.dume.dume.R;
+import io.dume.dume.student.homePage.HomePageActivity;
 import io.dume.dume.student.pojo.CusStuAppComMapActivity;
 import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
 import io.dume.dume.student.pojo.SearchDataStore;
@@ -106,7 +111,19 @@ public class SearchLoadingActivity extends CusStuAppComMapActivity implements On
     private SearchLoadingModel mModel;
     private Boolean saveDone = false;
     private String defaultUrl;
+    private long tStart;
+    private BottomSheetDialog mNoResultBSD;
+    private View mNoResultRootView;
+    private TextView noResultMainText;
+    private TextView noResultSubText;
+    private Button goBackEditBtn;
+    private Button homePageBtn;
+    private String retrivedAction;
 
+    @Override
+    public void flush(String msg) {
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,6 +132,7 @@ public class SearchLoadingActivity extends CusStuAppComMapActivity implements On
         setActivityContextMap(this, fromFlag);
         mModel = new SearchLoadingModel(this);
         mPresenter = new SearchLoadingPresenter(this, mModel);
+        tStart = System.currentTimeMillis();
         mPresenter.searchLoadingEnqueue();
         settingStatusBarTransparent();
         setDarkStatusBarIcon();
@@ -244,6 +262,65 @@ public class SearchLoadingActivity extends CusStuAppComMapActivity implements On
         });
         bottomSheetNSV.setNestedScrollingEnabled(true);
         bottomSheetNSV.setSmoothScrollingEnabled(true);
+        retrivedAction = getIntent().getAction();
+        //init the bottom sheet cancel
+        mCancelBottomSheetDialog = new BottomSheetDialog(this);
+        cancelsheetRootView = this.getLayoutInflater().inflate(R.layout.custom_bottom_sheet_dialogue_cancel, null);
+        mCancelBottomSheetDialog.setContentView(cancelsheetRootView);
+
+        //init no result
+        mNoResultBSD = new BottomSheetDialog(this);
+        mNoResultRootView = this.getLayoutInflater().inflate(R.layout.custom_bottom_sheet_dialogue_cancel, null);
+        mNoResultBSD.setContentView(mNoResultRootView);
+        noResultMainText = mNoResultBSD.findViewById(R.id.main_text);
+        noResultSubText = mNoResultBSD.findViewById(R.id.sub_text);
+        goBackEditBtn = mNoResultBSD.findViewById(R.id.cancel_yes_btn);
+        homePageBtn = mNoResultBSD.findViewById(R.id.cancel_no_btn);
+        mNoResultBSD.setCancelable(false);
+        mNoResultBSD.setCanceledOnTouchOutside(false);
+        if (goBackEditBtn != null && homePageBtn != null && noResultMainText != null  && noResultSubText != null) {
+            noResultMainText.setText("Sorry !!!");
+            noResultSubText.setText("No mentor available for your specific query...");
+            homePageBtn.setText("Goto, Homepage");
+            goBackEditBtn.setText("Edit, Query");
+
+            if (retrivedAction != null) {
+                switch (retrivedAction){
+                    case "from_HPA":
+                        homePageBtn.setVisibility(View.VISIBLE);
+                        goBackEditBtn.setVisibility(View.GONE);
+                        break;
+                    case "from_GPA":
+                        homePageBtn.setVisibility(View.VISIBLE);
+                        goBackEditBtn.setVisibility(View.VISIBLE);
+                        break;
+                }
+            }
+            homePageBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(retrivedAction.equals("from_HPA")){
+                        searchDataStore.setFirstTime(false);
+                        onBackPressed();
+                        mNoResultBSD.dismiss();
+                    }else{
+                        Intent intent = new Intent(SearchLoadingActivity.this, HomePageActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                        mNoResultBSD.dismiss();
+                    }
+                }
+            });
+
+            goBackEditBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    searchDataStore.setFirstTime(false);
+                    onBackPressed();
+                    mNoResultBSD.dismiss();
+                }
+            });
+        }
     }
 
     @Override
@@ -312,20 +389,6 @@ public class SearchLoadingActivity extends CusStuAppComMapActivity implements On
         });
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == android.R.id.home) {
-            if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
-                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-            } else {
-                super.onBackPressed();
-            }
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -341,9 +404,9 @@ public class SearchLoadingActivity extends CusStuAppComMapActivity implements On
         addCustomMarkerFromURL(searchDataStore.getAvatarString(), searchDataStore.getAnchorPoint());
         mMap.addCircle(new CircleOptions()
                 .center(searchDataStore.getAnchorPoint())
-                .radius(1600)//meter radius
+                .radius(1400)//meter radius
                 .strokeColor(0xFF0277bd)
-                .fillColor(0x0f64b5f6)
+                .fillColor(0x0c64b5f6)
                 .strokeWidth(1.5f)
         );
         viewMuskOne.postDelayed(new Runnable() {
@@ -352,7 +415,7 @@ public class SearchLoadingActivity extends CusStuAppComMapActivity implements On
                 //give anchor point here
                 moveSearchLoadingCamera(searchDataStore.getAnchorPoint(), DEFAULT_ZOOM, "Device Location", mMap);
             }
-        }, 100L);
+        }, 50L);
     }
 
     @Override
@@ -367,16 +430,79 @@ public class SearchLoadingActivity extends CusStuAppComMapActivity implements On
         startActivity(new Intent(this, SearchResultActivity.class));
     }
 
+
+    @Override
+    public void noResultDialogue() {
+        long tEnd = System.currentTimeMillis();
+        long tDelta = tEnd - tStart;
+        long elseDelta = 3000 - tDelta;
+        if (tDelta >= 3000) {
+            mNoResultBSD.show();
+        } else {
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    activity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mNoResultBSD.show();
+                        }
+                    });
+                }
+            }, elseDelta);
+        }
+    }
+
     @Override
     public void cancelBtnClicked() {
-        mCancelBottomSheetDialog = new BottomSheetDialog(this);
-        cancelsheetRootView = this.getLayoutInflater().inflate(R.layout.custom_bottom_sheet_dialogue_cancel, null);
-        mCancelBottomSheetDialog.setContentView(cancelsheetRootView);
         TextView mainText = mCancelBottomSheetDialog.findViewById(R.id.main_text);
         TextView subText = mCancelBottomSheetDialog.findViewById(R.id.sub_text);
         Button cancelYesBtn = mCancelBottomSheetDialog.findViewById(R.id.cancel_yes_btn);
         Button cancelNoBtn = mCancelBottomSheetDialog.findViewById(R.id.cancel_no_btn);
+        if (cancelNoBtn != null && cancelYesBtn != null) {
+            cancelNoBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mCancelBottomSheetDialog.dismiss();
+                }
+            });
+
+            cancelYesBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mCancelBottomSheetDialog.dismiss();
+                    searchDataStore.setFirstTime(false);
+                    onBackPressed();
+                }
+            });
+        }
         mCancelBottomSheetDialog.show();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            } else {
+                onBackPressed();
+            }
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (searchDataStore.getFirstTime()) {
+            cancelBtnClicked();
+        } else {
+            //show dialogue of discard changes
+            super.onBackPressed();
+            searchDataStore.setFirstTime(true);
+        }
     }
 
     public void onSearchLoadingViewCLicked(View view) {
@@ -401,9 +527,9 @@ public class SearchLoadingActivity extends CusStuAppComMapActivity implements On
                         }
                     });
         } else {
-            if(searchDataStore.getGender().equals("Male") || searchDataStore.getGender().equals("")){
+            if (searchDataStore.getGender().equals("Male") || searchDataStore.getGender().equals("")) {
                 defaultUrl = "https://firebasestorage.googleapis.com/v0/b/dume-2d063.appspot.com/o/avatar.png?alt=media&token=801c75b7-59fe-4a13-9191-186ef50de707";
-            }else {
+            } else {
                 defaultUrl = "https://firebasestorage.googleapis.com/v0/b/dume-2d063.appspot.com/o/avatar_female.png?alt=media&token=7202ea91-4f0d-4bd6-838e-8b73d0db13eb";
             }
             Glide.with(getApplicationContext())
@@ -425,7 +551,46 @@ public class SearchLoadingActivity extends CusStuAppComMapActivity implements On
         iconFactory.setTextAppearance(this, R.style.MyCustomInfoWindowTextApp);
         iconFactory.setBackground(getResources().getDrawable(R.drawable.custom_info_window_vector));
         iconFactory.setContentPadding((int) (27 * (getResources().getDisplayMetrics().density)), (int) (2 * (getResources().getDisplayMetrics().density)), 0, (int) (6 * (getResources().getDisplayMetrics().density)));
-        addCustomInfoWindow(iconFactory, makeCharSequence("Radius", Integer.toString(SearchDataStore.SHORTRADIUS)) + " m", lattitudeLongitude);
+        addCustomInfoWindow(iconFactory, makeCharSequence("Radius",   "2 km") , lattitudeLongitude);
+    }
+
+    @Override
+    public void notifyRadious(int radius) {
+        addCustomInfoWindow(iconFactory, makeCharSequence("Radius", Integer.toString(radius) + " km"), searchDataStore.getAnchorPoint());
+    }
+
+    @Override
+    public void showResultActivty() {
+        long tEnd = System.currentTimeMillis();
+        long tDelta = tEnd - tStart;
+        long elseDelta = 3000 - tDelta;
+        if (tDelta >= 3000) {
+            Intent intent = new Intent(SearchLoadingActivity.this, SearchResultActivity.class);
+            startActivity(intent);
+            finish();
+        } else {
+            /*Timer timer = new Timer();
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+
+                }
+            }, elseDelta);*/
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    activity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Intent intent = new Intent(SearchLoadingActivity.this, SearchResultActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }
+                    });
+                }
+            }, elseDelta);
+        }
     }
 
     //testing custom marker code here
@@ -481,5 +646,6 @@ public class SearchLoadingActivity extends CusStuAppComMapActivity implements On
         }
         return found;
     }
+
 
 }

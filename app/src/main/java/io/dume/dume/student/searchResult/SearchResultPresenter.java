@@ -2,13 +2,23 @@ package io.dume.dume.student.searchResult;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import io.dume.dume.R;
+import io.dume.dume.student.pojo.SearchDataStore;
+import io.dume.dume.teacher.homepage.TeacherContract;
 
 public class SearchResultPresenter implements SearchResultContract.Presenter {
 
-    private SearchResultContract.View mView;
+    private SearchResultContract.View view;
     private SearchResultContract.Model mModel;
     private Context context;
     private Activity activity;
@@ -16,23 +26,62 @@ public class SearchResultPresenter implements SearchResultContract.Presenter {
     public SearchResultPresenter(Context context, SearchResultContract.Model mModel) {
         this.context = context;
         this.activity = (Activity) context;
-        this.mView = (SearchResultContract.View) context;
+        this.view = (SearchResultContract.View) context;
         this.mModel = mModel;
     }
 
     @Override
+    public void onMapLoaded() {
+        List<DocumentSnapshot> resultList = SearchDataStore.getInstance().getResultList();
+        if (resultList != null) {
+            for (DocumentSnapshot profile : resultList) {
+                view.pushProfile(profile);
+                Log.w("foo", resultList.size() + "/searchResultEnqueue: " + profile.toString());
+            }
+        } else {
+            Log.w("foo", "searchResultEnqueue: " + "Result is Null");
+        }
+    }
+
+    @Override
     public void searchResultEnqueue() {
-        mView.findView();
-        mView.initSearchResult();
-        mView.configSearchResult();
+        view.findView();
+        view.initSearchResult();
+        view.configSearchResult();
+
 
     }
 
     @Override
-    public void onSearchResultIntracted(View view) {
-        switch (view.getId()) {
+    public void onSearchResultIntracted(View element) {
+        switch (element.getId()) {
             case R.id.fab:
-                //mView.centerTheMapCamera();
+                //view.centerTheMapCamera();
+                break;
+            case R.id.requestBTN:
+                DocumentSnapshot selectedMentor = view.getSelectedMentor();
+                Map<String, Object> recordsData = new HashMap<>();
+                Map<String, Object> skillMap = selectedMentor.getData();
+                Map<String, Object> searchMap = SearchDataStore.getInstance().genRetMainMap();
+
+                if (skillMap == null || searchMap == null) {
+                    view.flush("Null Found");
+                    return;
+                }
+                recordsData.putAll(searchMap);
+                recordsData.putAll(skillMap);
+                mModel.riseNewRecords(recordsData, new TeacherContract.Model.Listener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference list) {
+                        view.goHome();
+                        Log.w("foo", "onSuccess: " + list.toString());
+                    }
+
+                    @Override
+                    public void onError(String msg) {
+                        view.flush(msg);
+                    }
+                });
                 break;
 
         }

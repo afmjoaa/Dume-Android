@@ -24,12 +24,23 @@ public class SearchDataStore implements Serializable {
     public static String DUME_GANG = "Dume Gang";
     public static String REGULAR_DUME = "Regular Dume";
     public static String INSTANT_DUME = "Instant Dume";
+
+    public static String DEFAULTMALEAVATER = "https://firebasestorage.googleapis.com/v0/b/dume-2d063.appspot.com/o/avatar.png?alt=media&token=801c75b7-59fe-4a13-9191-186ef50de707";
+    public static String DEFAULTFEMALEAVATER = "https://firebasestorage.googleapis.com/v0/b/dume-2d063.appspot.com/o/avatar_female.png?alt=media&token=7202ea91-4f0d-4bd6-838e-8b73d0db13eb";
+    public static String DEFAULTUSERAVATER = "https://firebasestorage.googleapis.com/v0/b/dume-2d063.appspot.com/o/user.png?alt=media&token=36cf9d33-7b4a-413a-9434-864fcd9e1559";
+    public static String BOYSTUDENT = "https://firebasestorage.googleapis.com/v0/b/dume-2d063.appspot.com/o/boy.png?alt=media&token=5d3c72fe-d546-4089-b2bb-bf433c457fc3";
+    public static String GIRLSTUDENT = "https://firebasestorage.googleapis.com/v0/b/dume-2d063.appspot.com/o/girl.png?alt=media&token=bfc9872c-5833-459d-96f8-4395f6aa776c";
+
     public static int SHORTRADIUS = 2000;
     public static int MEDIUMSHORTRADIUS = 8000;
     public static int MEDIUMLONGRADIUS = 16000;
     public static int LONGRADIUS = 32000;
 
+    private List<DocumentSnapshot> resultList;
+    private Integer levelNum = 1;
+
     private Boolean profileChanged = false;
+    private Boolean isFirstTime = true;
 
     private String userName;
     private String userNumber;
@@ -50,6 +61,15 @@ public class SearchDataStore implements Serializable {
     private Map<String, Object> startDate;
     private Map<String, Object> mainMap;
 
+    public List<DocumentSnapshot> getResultList() {
+        return resultList;
+    }
+
+    public void setResultList(List<DocumentSnapshot> resultList) {
+
+        this.resultList = resultList;
+    }
+
     private static SearchDataStore instance = null;
 
     public static SearchDataStore getInstance() {
@@ -57,6 +77,22 @@ public class SearchDataStore implements Serializable {
             instance = new SearchDataStore();
         }
         return instance;
+    }
+
+    public Integer getLevelNum() {
+        return levelNum;
+    }
+
+    public void setLevelNum(Integer levelNum) {
+        this.levelNum = levelNum;
+    }
+
+    public Boolean getFirstTime() {
+        return isFirstTime;
+    }
+
+    public void setFirstTime(Boolean firstTime) {
+        isFirstTime = firstTime;
     }
 
     public Boolean getProfileChanged() {
@@ -77,10 +113,11 @@ public class SearchDataStore implements Serializable {
 
     public String getQueryString() {
 
-        return DumeUtils.generateQueryString(packageName, queryList, queryListName);
+        return DumeUtils.generateQueryString(packageName, getQueryList(), getQueryListName());
     }
 
     public SearchDataStore() {
+
     }
 
     public Map<String, Object> getDocumentSnapshot() {
@@ -216,14 +253,25 @@ public class SearchDataStore implements Serializable {
         this.mainMap = mainMap;
     }
 
-    public Map<String, Object> genSetRetForWhom(String name, String number, String uid, Bitmap photo, Boolean self) {
+    public Map<String, Object> genSetRetForWhom(String name, String number, String uid, String photo, Boolean self) {
         Map<String, Object> generatedforWhom = new HashMap<>();
-        generatedforWhom.put("name", name);
-        generatedforWhom.put("phone_number", number);
-        generatedforWhom.put("request_uid", uid);
-        generatedforWhom.put("photo", photo);
+        generatedforWhom.put("stu_name", name);
+        generatedforWhom.put("stu_phone_number", number);
+        generatedforWhom.put("stu_photo", photo);
         generatedforWhom.put("is_self", self);
-        generatedforWhom.put("email", getUserMail());
+
+        String o = (String) documentSnapshot.get("last_name");
+        String o1 = (String) documentSnapshot.get("first_name");
+        String request_user_name = o1 + " " + o;
+        generatedforWhom.put("request_email", getUserMail());
+        generatedforWhom.put("request_uid", uid);
+        generatedforWhom.put("request_user_name", request_user_name);
+        generatedforWhom.put("request_phone_number", documentSnapshot.get("phone_number"));
+        generatedforWhom.put("request_avatar", documentSnapshot.get("avatar"));
+        generatedforWhom.put("request_cs", documentSnapshot.get("current_status"));
+        generatedforWhom.put("request_gender", documentSnapshot.get("gender"));
+        generatedforWhom.put("request_pr", documentSnapshot.get("previous_result"));
+        generatedforWhom.put("request_sr", documentSnapshot.get("self_rating"));
         setForWhom(generatedforWhom);
         return generatedforWhom;
     }
