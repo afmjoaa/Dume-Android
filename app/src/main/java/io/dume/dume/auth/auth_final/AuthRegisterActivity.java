@@ -21,6 +21,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseException;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
@@ -38,6 +39,7 @@ import io.dume.dume.auth.AuthGlobalContract;
 import io.dume.dume.auth.AuthModel;
 import io.dume.dume.auth.DataStore;
 import io.dume.dume.auth.auth.AuthActivity;
+import io.dume.dume.auth.auth.AuthContract;
 import io.dume.dume.auth.code_verification.PhoneVerificationActivity;
 import io.dume.dume.customView.HorizontalLoadView;
 import io.dume.dume.obligation.foreignObli.PayActivity;
@@ -148,7 +150,7 @@ public class AuthRegisterActivity extends AppCompatActivity {
                     return;
                 }
 
-                new AuthModel(this, this).isExistingUser(phoneStr, new AuthGlobalContract.OnExistingUserCallback() {
+               /* new AuthModel(this, this).isExistingUser(phoneStr, new AuthGlobalContract.OnExistingUserCallback() {
                     @Override
                     public void onStart() {
                         showDialog();
@@ -375,6 +377,92 @@ public class AuthRegisterActivity extends AppCompatActivity {
                         toast(err);
                     }
                 });
+*/
+               AuthModel model = new AuthModel(this, this);
+               model.sendMessage("+88" + phoneStr, new AuthContract.Model.Callback() {
+                    @Override
+                    public void onStart() {
+                        showDialog();
+                        toast("Sending Code..");
+                        Log.w(TAG, "onStart: showing dialog");
+                    }
+
+                    @Override
+                    public void onFail(String error) {
+                        Log.w(TAG, "onFail: hiding dialog");
+                        showDialog();
+                        toast(error);
+
+                    }
+
+                    @Override
+                    public void onSuccess(String s, PhoneAuthProvider.ForceResendingToken forceResendingToken) {
+                        Log.w(TAG, "onSuccess: hiding dialog");
+                        hideKeyboard(AuthRegisterActivity.this);
+                        hideDialog();
+                        Intent intent = new Intent(getApplicationContext(), PhoneVerificationActivity.class);
+                        datastore.setFirstName(firstname.getText().toString());
+                        datastore.setLastName(lastName.getText().toString());
+                        datastore.setEmail(email.getText().toString());
+                        datastore.setPhoneNumber(phoneNumber.getText().toString());
+                        DataStore.resendingToken = forceResendingToken;
+                        datastore.setVerificationId(s);
+                        DataStore.setSTATION(2);
+                        intent.putExtra("datastore", datastore);
+                        startActivity(intent);
+                        finish();
+                    }
+
+                    @Override
+                    public void onAutoSuccess(AuthResult authResult) {
+                        Log.w(TAG, "onAutoSuccess: hiding dialog");
+                        hideKeyboard(activity);
+                        //view.hideProgress();
+                        model.onAccountTypeFound(authResult.getUser(), new AuthGlobalContract.AccountTypeFoundListener() {
+                            @Override
+                            public void onStart() {
+                                Log.w(TAG, "onStart: auto success-showing dialog");
+                                showDialog();
+                            }
+
+                            @Override
+                            public void onTeacherFound() {
+                                Log.w(TAG, "onTeacherFound: hiding dialog");
+                                hideDialog();
+                                gotoTeacherActivity();
+                            }
+
+                            @Override
+                            public void onStudentFound() {
+                                Log.w(TAG, "onStudentFound: hiding dialog");
+                                hideDialog();
+                                gotoStudentActivity();
+                            }
+
+                            @Override
+                            public void onBootcamp() {
+                                Log.w(TAG, "onBootcampFound: hiding dialog");
+                                hideDialog();
+                                gotoTeacherActivity();
+                            }
+
+                            @Override
+                            public void onForeignObligation() {
+                                Log.w(TAG, "onForeignObligation: hiding dialog");
+                                hideDialog();
+                                gotoForeignObligation();
+                            }
+
+                            @Override
+                            public void onFail(String exeption) {
+                                Log.w(TAG, "onFail: hiding dialog");
+                                showDialog();
+                                toast(exeption);
+                            }
+                        });
+
+                    }
+                });
                 break;
             case R.id.hiperlink_privacy_text:
 
@@ -385,6 +473,22 @@ public class AuthRegisterActivity extends AppCompatActivity {
         }
     }
 
+    public void gotoTeacherActivity() {
+        startActivity(new Intent(this, TeacherActivtiy.class));
+        finish();
+    }
+
+
+    public void gotoStudentActivity() {
+        startActivity(new Intent(this, StudentActivity.class));
+        finish();
+    }
+
+
+    public void gotoForeignObligation() {
+        startActivity(new Intent(this, PayActivity.class));
+        finish();
+    }
 
     public void showDialog() {
         if (loadView.getVisibility() == View.INVISIBLE || loadView.getVisibility() == View.GONE) {

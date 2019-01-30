@@ -158,6 +158,7 @@
             android:layout_marginEnd="20dp"
             android:layout_marginStart="20dp"
             android:orientation="vertical"
+
             app:layout_anchor="@id/linear_email">
 
 
@@ -195,12 +196,16 @@
                         android:id="@+id/phoneNumberEditText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:clickable="false"
+                        android:textColor="@color/disable_color"
                         android:descendantFocusability="beforeDescendants"
+                        android:enabled="false"
+                        android:focusable="false"
                         android:focusableInTouchMode="true"
                         android:fontFamily="@font/cairo_regular"
                         android:hint="Mobile Number"
                         android:imeOptions="actionDone"
-                        android:inputType="phone"
+                        android:inputType="none"
                         android:nextFocusLeft="@id/phoneNumberEditText"
                         android:nextFocusUp="@id/phoneNumberEditText"
                         android:singleLine="true"
@@ -318,8 +323,8 @@
             android:clickable="true"
             android:focusable="true"
             android:onClick="onViewClick"
-            app:srcCompat="@drawable/ic_arrow_forward_white_24dp"
-            app:rippleColor="@color/colorDarkAzure" />
+            app:rippleColor="@color/colorDarkAzure"
+            app:srcCompat="@drawable/ic_arrow_forward_white_24dp" />
 
 
     </LinearLayout>
