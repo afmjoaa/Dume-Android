@@ -119,6 +119,10 @@ public class SearchLoadingActivity extends CusStuAppComMapActivity implements On
     private Button goBackEditBtn;
     private Button homePageBtn;
     private String retrivedAction;
+    private TextView mainText;
+    private TextView subText;
+    private Button cancelYesBtn;
+    private Button cancelNoBtn;
 
     @Override
     public void flush(String msg) {
@@ -231,9 +235,9 @@ public class SearchLoadingActivity extends CusStuAppComMapActivity implements On
 
     @Override
     public void initSearchLoading() {
+        retrivedAction = getIntent().getAction();
         //bottom sheet height fix
         configureAppbarWithoutColloapsing(this, "");
-
         secondaryCollapsableLayout.setCollapsedTitleTypeface(Typeface.createFromAsset(activity.getAssets(), "fonts/Cairo-Light.ttf"));
         secondaryCollapsableLayout.setExpandedTitleTypeface(Typeface.createFromAsset(activity.getAssets(), "fonts/Cairo-Light.ttf"));
         secondaryCollapsableLayout.setTitle("Requesting");
@@ -262,11 +266,31 @@ public class SearchLoadingActivity extends CusStuAppComMapActivity implements On
         });
         bottomSheetNSV.setNestedScrollingEnabled(true);
         bottomSheetNSV.setSmoothScrollingEnabled(true);
-        retrivedAction = getIntent().getAction();
         //init the bottom sheet cancel
         mCancelBottomSheetDialog = new BottomSheetDialog(this);
         cancelsheetRootView = this.getLayoutInflater().inflate(R.layout.custom_bottom_sheet_dialogue_cancel, null);
         mCancelBottomSheetDialog.setContentView(cancelsheetRootView);
+        mainText = mCancelBottomSheetDialog.findViewById(R.id.main_text);
+        subText = mCancelBottomSheetDialog.findViewById(R.id.sub_text);
+        cancelYesBtn = mCancelBottomSheetDialog.findViewById(R.id.cancel_yes_btn);
+        cancelNoBtn = mCancelBottomSheetDialog.findViewById(R.id.cancel_no_btn);
+        if (cancelNoBtn != null && cancelYesBtn != null) {
+            cancelNoBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mCancelBottomSheetDialog.dismiss();
+                }
+            });
+
+            cancelYesBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mCancelBottomSheetDialog.dismiss();
+                    searchDataStore.setFirstTime(false);
+                    onBackPressed();
+                }
+            });
+        }
 
         //init no result
         mNoResultBSD = new BottomSheetDialog(this);
@@ -456,27 +480,6 @@ public class SearchLoadingActivity extends CusStuAppComMapActivity implements On
 
     @Override
     public void cancelBtnClicked() {
-        TextView mainText = mCancelBottomSheetDialog.findViewById(R.id.main_text);
-        TextView subText = mCancelBottomSheetDialog.findViewById(R.id.sub_text);
-        Button cancelYesBtn = mCancelBottomSheetDialog.findViewById(R.id.cancel_yes_btn);
-        Button cancelNoBtn = mCancelBottomSheetDialog.findViewById(R.id.cancel_no_btn);
-        if (cancelNoBtn != null && cancelYesBtn != null) {
-            cancelNoBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    mCancelBottomSheetDialog.dismiss();
-                }
-            });
-
-            cancelYesBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    mCancelBottomSheetDialog.dismiss();
-                    searchDataStore.setFirstTime(false);
-                    onBackPressed();
-                }
-            });
-        }
         mCancelBottomSheetDialog.show();
     }
 
@@ -566,6 +569,9 @@ public class SearchLoadingActivity extends CusStuAppComMapActivity implements On
         long elseDelta = 3000 - tDelta;
         if (tDelta >= 3000) {
             Intent intent = new Intent(SearchLoadingActivity.this, SearchResultActivity.class);
+            if (retrivedAction != null) {
+                intent.setAction(retrivedAction);
+            }
             startActivity(intent);
             finish();
         } else {
@@ -573,7 +579,6 @@ public class SearchLoadingActivity extends CusStuAppComMapActivity implements On
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
-
                 }
             }, elseDelta);*/
             Handler handler = new Handler();
@@ -584,6 +589,9 @@ public class SearchLoadingActivity extends CusStuAppComMapActivity implements On
                         @Override
                         public void run() {
                             Intent intent = new Intent(SearchLoadingActivity.this, SearchResultActivity.class);
+                            if (retrivedAction != null) {
+                                intent.setAction(retrivedAction);
+                            }
                             startActivity(intent);
                             finish();
                         }

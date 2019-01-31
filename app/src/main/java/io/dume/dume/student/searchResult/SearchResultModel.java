@@ -38,5 +38,16 @@ public class SearchResultModel extends StuBaseModel implements SearchResultContr
 
     }
 
+    @Override
+    public void riseNewPushNoti(Map<String, Object> data, TeacherContract.Model.Listener<DocumentReference> listener) {
+        firestore.collection("push_notifications").add(data).addOnSuccessListener(documentReference -> {
+            listener.onSuccess(documentReference);
+        }).addOnFailureListener(e -> {
+            listener.onError(e.getLocalizedMessage());
+        });
+
+
+    }
+
 
 }
