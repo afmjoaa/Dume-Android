@@ -36,6 +36,13 @@ public class SearchDataStore implements Serializable {
     public static int MEDIUMLONGRADIUS = 16000;
     public static int LONGRADIUS = 32000;
 
+    public static String STATUSPENDING = "Pending";
+    public static String STATUSACCEPTED = "Accepted";
+    public static String STATUSCURRENT = "Current";
+    public static String STATUSCOMPLETED = "Completed";
+    public static String STATUSREJECTED = "Rejected";
+
+
     private List<DocumentSnapshot> resultList;
     private Integer levelNum = 1;
 

@@ -23,12 +23,15 @@ public interface SearchResultContract {
 
         DocumentSnapshot getSelectedMentor();
 
+        void cancelBtnClicked();
+
         void flush(String msg);
 
         void findView();
 
         void centerTheMapCamera();
 
+        void showRequestDialogue();
     }
 
     interface Presenter {
@@ -46,5 +49,6 @@ public interface SearchResultContract {
 
         void riseNewRecords(Map<String, Object> data, TeacherContract.Model.Listener<DocumentReference> listener);
 
+        void riseNewPushNoti(Map<String, Object> data, TeacherContract.Model.Listener<DocumentReference> listener);
     }
 }

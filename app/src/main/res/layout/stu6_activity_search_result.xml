@@ -124,7 +124,7 @@
                                 android:layout_margin="8dp"
                                 app:carbon_cornerRadius="25dp"
                                 app:carbon_elevation="6dp"
-                                app:srcCompat="@drawable/image_loading_search" />
+                                app:srcCompat="@drawable/ic_general_user" />
 
                             <Button
                                 android:id="@+id/swipe_right"
@@ -165,7 +165,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
                                 android:layout_marginTop="4dp"
-                                android:text="Demo Mentor"
+                                android:text="Mentor name"
                                 android:textAppearance="?android:attr/textAppearanceListItem"
                                 android:textSize="16sp"
                                 app:fontFamily="@font/cairo_regular" />
@@ -175,7 +175,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
-                                android:text="21 year old"
+                                android:text="Mentor age"
                                 android:textAppearance="?android:attr/textAppearanceSmall"
                                 android:textSize="12sp"
                                 app:fontFamily="@font/cairo_regular" />

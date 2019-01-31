@@ -12,11 +12,11 @@ import android.graphics.drawable.LayerDrawable;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -55,7 +55,6 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
@@ -63,6 +62,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.maps.android.SphericalUtil;
@@ -78,6 +78,7 @@ import com.transitionseverywhere.TransitionSet;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -96,6 +97,7 @@ import io.dume.dume.student.pojo.CusStuAppComMapActivity;
 import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
 import io.dume.dume.student.pojo.SearchDataStore;
 import io.dume.dume.student.searchResultTabview.SearchResultTabviewActivity;
+import io.dume.dume.teacher.homepage.TeacherContract;
 import io.dume.dume.util.DumeUtils;
 import io.dume.dume.util.OnSwipeTouchListener;
 import io.dume.dume.util.VisibleToggleClickListener;
@@ -183,6 +185,22 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
     private String TAG = "foo";
     private DocumentSnapshot selectedMentor;
     private Button requestBTN;
+    private BottomSheetDialog mMakeRequestBSD;
+    private View cancelsheetRootView;
+    private BottomSheetDialog mBackBSD;
+    private View backsheetRootView;
+    private TextView confirmMainText;
+    private TextView confirmSubText;
+    private Button comfirmYesBtn;
+    private Button confirmNoBtn;
+    private SearchResultModel mModel;
+    private TextView backMainText;
+    private TextView backSubText;
+    private Button backYesBtn;
+    private Button backNoBtn;
+    private String retrivedAction;
+    private boolean isConfirmedOrCanceled = false;
+    private Map<String, Object> pushNotiData;
 
 
     @Override
@@ -191,7 +209,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
         setContentView(R.layout.stu6_activity_search_result);
         setActivityContextMap(this, fromFlag);
         findLoadView();
-        SearchResultModel mModel = new SearchResultModel(this);
+        mModel = new SearchResultModel(this);
         mPresenter = new SearchResultPresenter(this, mModel);
         mPresenter.searchResultEnqueue();
 
@@ -292,6 +310,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
 
     @Override
     public void initSearchResult() {
+        retrivedAction = getIntent().getAction();
         setSupportActionBar(toolbar);
         Drawable drawable = ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_more_vert_black_24dp);
         toolbar.setOverflowIcon(drawable);
@@ -320,6 +339,210 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                 }
             }
         });
+
+        //init the confirm dialogue
+        mMakeRequestBSD = new BottomSheetDialog(this);
+        cancelsheetRootView = this.getLayoutInflater().inflate(R.layout.custom_bottom_sheet_dialogue_cancel, null);
+        mMakeRequestBSD.setContentView(cancelsheetRootView);
+        confirmMainText = mMakeRequestBSD.findViewById(R.id.main_text);
+        confirmSubText = mMakeRequestBSD.findViewById(R.id.sub_text);
+        comfirmYesBtn = mMakeRequestBSD.findViewById(R.id.cancel_yes_btn);
+        confirmNoBtn = mMakeRequestBSD.findViewById(R.id.cancel_no_btn);
+        if (confirmMainText != null && confirmSubText != null && comfirmYesBtn != null && confirmNoBtn != null) {
+            confirmMainText.setText("Confirm Request");
+            confirmSubText.setText("By confirming request will be sent to ____...");
+            comfirmYesBtn.setText("Yes, Confirm");
+            confirmNoBtn.setText("No");
+
+            comfirmYesBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    comfirmYesBtn.setEnabled(false);
+                    comfirmYesBtn.setBackgroundColor(getResources().getColor(R.color.disable_color));
+                    showProgressBS();
+                    setConfirmedOrCanceled(true);
+                    mMakeRequestBSD.dismiss();
+                    DocumentSnapshot selectedMentor = getSelectedMentor();
+                    Map<String, Object> recordsData = new HashMap<>();
+                    Map<String, Object> skillMap = selectedMentor.getData();
+                    String spUid = "T_" + skillMap.get("mentor_uid");
+
+                    Map<String, Object> searchMap = searchDataStore.genRetMainMap();
+                    String shUid = "S_" + searchDataStore.getUserUid();
+                    if (skillMap == null || searchMap == null) {
+                        return;
+                    }
+                    recordsData.putAll(searchMap);
+                    recordsData.putAll(skillMap);
+                    recordsData.put("record_status", SearchDataStore.STATUSPENDING);
+                    recordsData.put("sp_uid", spUid);
+                    recordsData.put("sh_uid", shUid);
+                    mModel.riseNewRecords(recordsData, new TeacherContract.Model.Listener<DocumentReference>() {
+                        @Override
+                        public void onSuccess(DocumentReference list) {
+                            goHome();
+                            Log.w("foo", "onSuccess: " + list.toString());
+                            hideProgressBS();
+                            comfirmYesBtn.setBackgroundColor(getResources().getColor(R.color.colorBlack));
+                            comfirmYesBtn.setEnabled(true);
+                        }
+
+                        @Override
+                        public void onError(String msg) {
+                            flush(msg);
+                            comfirmYesBtn.setEnabled(true);
+                            comfirmYesBtn.setBackgroundColor(getResources().getColor(R.color.colorBlack));
+                            hideProgressBS();
+                        }
+                    });
+                }
+            });
+
+            confirmNoBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mMakeRequestBSD.dismiss();
+                }
+            });
+        }
+
+        pushNotiData = new HashMap<>();
+        pushNotiData.put("uid", searchDataStore.getUserUid());
+        pushNotiData.put("reason", "not_confirming");
+        //init the back dialog
+        mBackBSD = new BottomSheetDialog(this);
+        backsheetRootView = this.getLayoutInflater().inflate(R.layout.custom_bottom_sheet_dialogue_cancel, null);
+        mBackBSD.setContentView(backsheetRootView);
+        backMainText = mBackBSD.findViewById(R.id.main_text);
+        backSubText = mBackBSD.findViewById(R.id.sub_text);
+        backYesBtn = mBackBSD.findViewById(R.id.cancel_yes_btn);
+        backNoBtn = mBackBSD.findViewById(R.id.cancel_no_btn);
+        if (backMainText != null && backSubText != null && backYesBtn != null && backNoBtn != null) {
+            backMainText.setText("Going back !!");
+            backSubText.setText("Going back without making request to any mentor...");
+            if (retrivedAction != null) {
+                switch (retrivedAction) {
+                    case "from_HPA":
+                        backYesBtn.setText("Yes, Homepage");
+                        backNoBtn.setText("No");
+                        break;
+                    case "from_GPA":
+                        backYesBtn.setText("Yes, Homepage");
+                        backNoBtn.setText("Edit, Query");
+                        break;
+                }
+            }
+            backYesBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    showProgressBS();
+                    if (getIntent().getAction().equals("from_HPA")) {
+                        backYesBtn.setBackgroundColor(getResources().getColor(R.color.disable_color));
+                        backYesBtn.setEnabled(false);
+                    } else if (getIntent().getAction().equals("from_GPA")) {
+                        backYesBtn.setBackgroundColor(getResources().getColor(R.color.disable_color));
+                        backYesBtn.setEnabled(false);
+                        backNoBtn.setBackgroundColor(getResources().getColor(R.color.disable_color));
+                        backNoBtn.setEnabled(false);
+                    }
+                    mBackBSD.dismiss();
+                    mModel.riseNewPushNoti(pushNotiData, new TeacherContract.Model.Listener<DocumentReference>() {
+                        @Override
+                        public void onSuccess(DocumentReference list) {
+                            setConfirmedOrCanceled(true);
+                            if (getIntent().getAction().equals("from_HPA")) {
+                                searchDataStore.setFirstTime(false);
+                                onBackPressed();
+                            } else if (getIntent().getAction().equals("from_GPA")) {
+                                Intent intent = new Intent(SearchResultActivity.this, HomePageActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(intent);
+                            }
+                            hideProgressBS();
+                            comfirmYesBtn.setBackgroundColor(getResources().getColor(R.color.colorBlack));
+                            comfirmYesBtn.setEnabled(true);
+                        }
+
+                        @Override
+                        public void onError(String msg) {
+                            Log.e(TAG, "onError: " + msg);
+                            if (getIntent().getAction().equals("from_HPA")) {
+                                searchDataStore.setFirstTime(false);
+                                onBackPressed();
+                            } else if (getIntent().getAction().equals("from_GPA")) {
+                                Intent intent = new Intent(SearchResultActivity.this, HomePageActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(intent);
+                            }
+                            hideProgressBS();
+                            comfirmYesBtn.setBackgroundColor(getResources().getColor(R.color.colorBlack));
+                            comfirmYesBtn.setEnabled(true);
+                        }
+                    });
+
+                }
+            });
+
+            backNoBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (getIntent().getAction().equals("from_HPA")) {
+                        mBackBSD.dismiss();
+                    } else if (getIntent().getAction().equals("from_GPA")) {
+                        showProgressBS();
+                        backNoBtn.setBackgroundColor(getResources().getColor(R.color.disable_color));
+                        backNoBtn.setEnabled(false);
+                        backYesBtn.setBackgroundColor(getResources().getColor(R.color.disable_color));
+                        backYesBtn.setEnabled(false);
+                        mBackBSD.dismiss();
+                        mModel.riseNewPushNoti(pushNotiData, new TeacherContract.Model.Listener<DocumentReference>() {
+                            @Override
+                            public void onSuccess(DocumentReference list) {
+                                setConfirmedOrCanceled(true);
+                                searchDataStore.setFirstTime(false);
+                                onBackPressed();
+                                hideProgressBS();
+                                backYesBtn.setBackgroundColor(getResources().getColor(R.color.colorBlack));
+                                backYesBtn.setEnabled(true);
+                                backNoBtn.setBackgroundColor(getResources().getColor(R.color.colorBlack));
+                                backNoBtn.setEnabled(true);
+                            }
+
+                            @Override
+                            public void onError(String msg) {
+                                Log.e(TAG, "onError: " + msg);
+                                searchDataStore.setFirstTime(false);
+                                onBackPressed();
+                                hideProgressBS();
+                                backYesBtn.setBackgroundColor(getResources().getColor(R.color.colorBlack));
+                                backYesBtn.setEnabled(true);
+                                backNoBtn.setBackgroundColor(getResources().getColor(R.color.colorBlack));
+                                backNoBtn.setEnabled(true);
+                            }
+                        });
+                    }
+                }
+            });
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (!isConfirmedOrCanceled()) {
+            mModel.riseNewPushNoti(pushNotiData, new TeacherContract.Model.Listener<DocumentReference>() {
+                @Override
+                public void onSuccess(DocumentReference list) {
+                    setConfirmedOrCanceled(true);
+                }
+
+                @Override
+                public void onError(String msg) {
+                    Log.e(TAG, "onError: " + msg);
+                }
+            });
+
+        }
     }
 
     @Override
@@ -793,7 +1016,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
         String birthDate = (String) sp_info.get("birth_date");
         if (birthDate == null || birthDate.equals("")) {
             ageText.setText("Age - unknown");
-        }else {
+        } else {
             String[] splited = birthDate.split("\\s+");
             final String age = getAge(Integer.parseInt(splited[2]), Integer.parseInt(splited[1].replace(",", "")), splited[0]);
             ageText.setText(age + " year old");
@@ -820,67 +1043,6 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                 });
             }
         }, 1000);*/
-    }
-
-    private String getAge(int year, int day, String sMonth) {
-        int month;
-        switch (sMonth) {
-            case "Jan":
-                month = 1;
-                break;
-            case "Feb":
-                month = 2;
-                break;
-            case "Mar":
-                month = 3;
-                break;
-            case "Apr":
-                month = 4;
-                break;
-            case "May":
-                month = 5;
-                break;
-            case "Jun":
-                month = 6;
-                break;
-            case "Jul":
-                month = 7;
-                break;
-            case "Aug":
-                month = 8;
-                break;
-            case "Sep":
-                month = 9;
-                break;
-            case "Oct":
-                month = 10;
-                break;
-            case "Nov":
-                month = 11;
-                break;
-            case "Dec":
-                month = 12;
-                break;
-            default:
-                month = 6;
-                break;
-        }
-
-        Calendar dob = Calendar.getInstance();
-        Calendar today = Calendar.getInstance();
-
-        dob.set(year, month, day);
-
-        int age = today.get(Calendar.YEAR) - dob.get(Calendar.YEAR);
-
-        if (today.get(Calendar.DAY_OF_YEAR) < dob.get(Calendar.DAY_OF_YEAR)) {
-            age--;
-        }
-
-        Integer ageInt = new Integer(age);
-        String ageS = ageInt.toString();
-
-        return ageS;
     }
 
     @Override
@@ -916,12 +1078,13 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
     }
 
     public void zoomRoute(List<LatLng> lstLatLngRoute) {
+        lstLatLngRoute.add(searchDataStore.getAnchorPoint());
         if (mMap == null || lstLatLngRoute == null || lstLatLngRoute.isEmpty()) return;
         LatLngBounds.Builder boundsBuilder = new LatLngBounds.Builder();
         for (LatLng latLngPoint : lstLatLngRoute)
             boundsBuilder.include(latLngPoint);
 
-        int routePadding = 60;
+        int routePadding = 70;
         LatLngBounds latLngBounds = boundsBuilder.build();
         mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, routePadding), 2000, new GoogleMap.CancelableCallback() {
             @Override
@@ -933,10 +1096,12 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                         mMap.setMaxZoomPreference((thisZoom + 0.5f));
                         mMap.setMinZoomPreference((thisZoom - 0.6f));
 
+                        //init the first item click
                         List<LatLng> pathRoute = new ArrayList<>();
                         pathRoute.add(searchDataStore.getAnchorPoint());
                         pathRoute.add(route.get(0));
                         mapFragment.setUpPath(pathRoute, mMap, RouteOverlayView.AnimType.ARC);
+                        onMentorSelect(searchDataStore.getResultList().get(0));
                     }
                 });
             }
@@ -953,11 +1118,33 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
 
     @Override
     public void centerTheMapCamera() {
-        if (mMap == null) {
-            return;
-        }
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mDummyLatLng, 10f));
+        List<LatLng> lstLatLngRoute = route;
+        lstLatLngRoute.add(searchDataStore.getAnchorPoint());
+        if (mMap == null || lstLatLngRoute == null || lstLatLngRoute.isEmpty()) return;
+        LatLngBounds.Builder boundsBuilder = new LatLngBounds.Builder();
+        for (LatLng latLngPoint : lstLatLngRoute)
+            boundsBuilder.include(latLngPoint);
 
+        int routePadding = 70;
+        LatLngBounds latLngBounds = boundsBuilder.build();
+        mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, routePadding), 2000, new GoogleMap.CancelableCallback() {
+            @Override
+            public void onFinish() {
+                mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+                    @Override
+                    public void onMapLoaded() {
+                        final float thisZoom = mMap.getCameraPosition().zoom;
+                        mMap.setMaxZoomPreference((thisZoom + 0.5f));
+                        mMap.setMinZoomPreference((thisZoom - 0.6f));
+                    }
+                });
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+        });
     }
 
     @Override
@@ -990,7 +1177,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                 if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
                     bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 } else {
-                    super.onBackPressed();
+                    onBackPressed();
                 }
                 break;
         }
@@ -1000,7 +1187,18 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        if (searchDataStore.getFirstTime()) {
+            cancelBtnClicked();
+        } else {
+            //show dialogue of discard changes
+            super.onBackPressed();
+            searchDataStore.setFirstTime(true);
+        }
+    }
+
+    @Override
+    public void cancelBtnClicked() {
+        mBackBSD.show();
     }
 
 
@@ -1122,18 +1320,21 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
     }
 
     @Override
+    public void showRequestDialogue() {
+        confirmSubText = mMakeRequestBSD.findViewById(R.id.sub_text);
+        Map<String, Object> sp_info = (Map<String, Object>) selectedMentor.get("sp_info");
+        String name = String.format("%s %s", sp_info.get("first_name"), sp_info.get("last_name"));
+        confirmSubText.setText("By confirming request will be sent to " + name + "...");
+        mMakeRequestBSD.show();
+    }
+
+    @Override
     public void onInfoWindowClick(Marker marker) {
         onMarkerClick(marker);
     }
 
     public void onSearchResultViewClicked(View view) {
         mPresenter.onSearchResultIntracted(view);
-    }
-
-
-    private void showDistance(LatLng anchor, LatLng skillAnchor) {
-       /*double distance = SphericalUtil.computeDistanceBetween(mMarkerA.getPosition(), mMarkerB.getPosition());
-      mTextView.setText("The markers are " + formatNumber(distance) + " apart.");*/
     }
 
     private String formatNumber(double distance) {
@@ -1167,7 +1368,81 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
         }
     }
 
+    private String getAge(int year, int day, String sMonth) {
+        int month;
+        switch (sMonth) {
+            case "Jan":
+                month = 1;
+                break;
+            case "Feb":
+                month = 2;
+                break;
+            case "Mar":
+                month = 3;
+                break;
+            case "Apr":
+                month = 4;
+                break;
+            case "May":
+                month = 5;
+                break;
+            case "Jun":
+                month = 6;
+                break;
+            case "Jul":
+                month = 7;
+                break;
+            case "Aug":
+                month = 8;
+                break;
+            case "Sep":
+                month = 9;
+                break;
+            case "Oct":
+                month = 10;
+                break;
+            case "Nov":
+                month = 11;
+                break;
+            case "Dec":
+                month = 12;
+                break;
+            default:
+                month = 6;
+                break;
+        }
+
+        Calendar dob = Calendar.getInstance();
+        Calendar today = Calendar.getInstance();
+
+        dob.set(year, month, day);
+
+        int age = today.get(Calendar.YEAR) - dob.get(Calendar.YEAR);
+
+        if (today.get(Calendar.DAY_OF_YEAR) < dob.get(Calendar.DAY_OF_YEAR)) {
+            age--;
+        }
+
+        Integer ageInt = new Integer(age);
+        String ageS = ageInt.toString();
+
+        return ageS;
+    }
+
+    public boolean isConfirmedOrCanceled() {
+        return isConfirmedOrCanceled;
+    }
+
+    public void setConfirmedOrCanceled(boolean confirmedOrCanceled) {
+        isConfirmedOrCanceled = confirmedOrCanceled;
+    }
+
     //not using direction code
+    /*private void showDistance(LatLng anchor, LatLng skillAnchor) {
+       double distance = SphericalUtil.computeDistanceBetween(mMarkerA.getPosition(), mMarkerB.getPosition());
+      mTextView.setText("The markers are " + formatNumber(distance) + " apart.");
+    }*/
+
     private void getRouteBetweenMarker(LatLng One, LatLng Two) {
         Routing routing = new Routing.Builder()
                 .travelMode(AbstractRouting.TravelMode.DRIVING)

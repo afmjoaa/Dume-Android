@@ -56,32 +56,10 @@ public class SearchResultPresenter implements SearchResultContract.Presenter {
     public void onSearchResultIntracted(View element) {
         switch (element.getId()) {
             case R.id.fab:
-                //view.centerTheMapCamera();
+                view.centerTheMapCamera();
                 break;
             case R.id.requestBTN:
-                DocumentSnapshot selectedMentor = view.getSelectedMentor();
-                Map<String, Object> recordsData = new HashMap<>();
-                Map<String, Object> skillMap = selectedMentor.getData();
-                Map<String, Object> searchMap = SearchDataStore.getInstance().genRetMainMap();
-
-                if (skillMap == null || searchMap == null) {
-                    view.flush("Null Found");
-                    return;
-                }
-                recordsData.putAll(searchMap);
-                recordsData.putAll(skillMap);
-                mModel.riseNewRecords(recordsData, new TeacherContract.Model.Listener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference list) {
-                        view.goHome();
-                        Log.w("foo", "onSuccess: " + list.toString());
-                    }
-
-                    @Override
-                    public void onError(String msg) {
-                        view.flush(msg);
-                    }
-                });
+                view.showRequestDialogue();
                 break;
 
         }
