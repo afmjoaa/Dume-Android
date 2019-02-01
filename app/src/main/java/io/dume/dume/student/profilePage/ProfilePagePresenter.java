@@ -104,7 +104,7 @@ public class ProfilePagePresenter implements ProfilePageContract.Presenter {
                         mModel.uploadImage(mView.getAvatarUri(), new usefulListeners.uploadToSTGListererMin() {
                             @Override
                             public void onSuccessSTG(Object obj) {
-                                mView.setAvatar((String) obj);
+                                //mView.setAvatar((String) obj);
                                 mView.flush("Display pic uploaded");
                                 mView.updateChangesClicked();
                                 if (mView.getProfileComPercent().equals("100")) {

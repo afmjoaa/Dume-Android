@@ -56,7 +56,7 @@ public class AcademicPresenter implements AcademicContract.Presenter, AcademicCo
             case R.id.toET:
                 view.selectToClicked();
                 break;
-            case R.id.resultET:
+            case R.id.levelET:
                 view.selectResultClicked();
                 break;
             default:

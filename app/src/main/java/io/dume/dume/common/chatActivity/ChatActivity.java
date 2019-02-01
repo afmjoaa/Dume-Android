@@ -12,7 +12,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.stfalcon.chatkit.messages.MessageHolders;
 import com.stfalcon.chatkit.messages.MessageInput;
 import com.stfalcon.chatkit.messages.MessagesList;
@@ -23,6 +26,9 @@ import com.transitionseverywhere.Transition;
 import com.transitionseverywhere.TransitionManager;
 import com.transitionseverywhere.TransitionSet;
 
+import java.util.Date;
+import java.util.List;
+
 import carbon.widget.ImageView;
 import io.dume.dume.R;
 import io.dume.dume.common.chatActivity.Used_Classes.DemoMessagesActivity;
@@ -30,6 +36,12 @@ import io.dume.dume.common.chatActivity.Holders.IncomingVoiceMessageViewHolder;
 import io.dume.dume.common.chatActivity.Used_Classes.Message;
 import io.dume.dume.common.chatActivity.Used_Classes.MessagesFixtures;
 import io.dume.dume.common.chatActivity.Holders.OutcomingVoiceMessageViewHolder;
+import io.dume.dume.common.chatActivity.Used_Classes.User;
+import io.dume.dume.student.pojo.SearchDataStore;
+import io.dume.dume.teacher.homepage.TeacherContract;
+import io.dume.dume.teacher.mentor_settings.basicinfo.EditAccount;
+import io.dume.dume.teacher.pojo.Letter;
+import retrofit2.http.PUT;
 
 import static io.dume.dume.util.DumeUtils.configureAppbarWithoutColloapsing;
 
@@ -47,6 +59,11 @@ public class ChatActivity extends DemoMessagesActivity implements ChatActivityCo
     private LinearLayout attachmentDocument;
     private ImageView attachemtDocumentImage;
     private FrameLayout viewMusk;
+    private ChatActivityModel mModel;
+    public static int SENDER = 0, RECIVER = 1;
+    public static int TYPE;
+    private MessageInput input;
+    private TextView typeingTV;
 
     public static void open(Context context) {
         context.startActivity(new Intent(context, ChatActivity.class));
@@ -58,7 +75,8 @@ public class ChatActivity extends DemoMessagesActivity implements ChatActivityCo
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.common4_chat_activity);
-        mPresenter = new ChatActivityPresenter(this, new ChatActivityModel());
+        mModel = new ChatActivityModel(this);
+        mPresenter = new ChatActivityPresenter(this, mModel);
         mPresenter.chatEnqueue();
         configureAppbarWithoutColloapsing(this, " ");
         //findLoadView
@@ -68,6 +86,96 @@ public class ChatActivity extends DemoMessagesActivity implements ChatActivityCo
         MessageInput input = (MessageInput) findViewById(R.id.input);
         input.setInputListener(this);
         input.setAttachmentsListener(this);
+
+        mModel.readLastThirty(new TeacherContract.Model.Listener<List<Letter>>() {
+            @Override
+            public void onSuccess(List<Letter> list) {
+                for (int i = 0; i < list.size() - 1; i++) {
+
+
+                    if (list.get(i).getUid().equals(FirebaseAuth.getInstance().getUid())) {
+                        TYPE = SENDER;
+                    } else {
+                        TYPE = RECIVER;
+                    }
+                    ChatActivity.super.messagesAdapter.addToStart(new Message(list.get(i).getUid(), new User(TYPE + "", "Enam", SearchDataStore.DEFAULTMALEAVATER, true), list.get(i).getBody(), list.get(i).getTimestamp()), true);
+                }
+            }
+
+            @Override
+            public void onError(String msg) {
+                flush(msg);
+            }
+        });
+
+
+        mModel.onInboxChange(new TeacherContract.Model.Listener<List<Letter>>() {
+            @Override
+            public void onSuccess(List<Letter> list) {
+
+                for (int i = 0; i < list.size(); i++) {
+                    if (list.get(i).getUid().equals(FirebaseAuth.getInstance().getUid())) {
+                        TYPE = SENDER;
+                    } else {
+                        TYPE = RECIVER;
+                    }
+                    ChatActivity.super.messagesAdapter.addToStart(new Message(list.get(i).getUid(), new User("" + TYPE, "Enam", SearchDataStore.DEFAULTMALEAVATER, true), list.get(i).getBody(), list.get(i).getTimestamp()), true);
+                }
+            }
+
+            @Override
+            public void onError(String msg) {
+
+            }
+        });
+        input.setTypingListener(new MessageInput.TypingListener() {
+            @Override
+            public void onStartTyping() {
+                mModel.onType(true, new TeacherContract.Model.Listener<Void>() {
+                    @Override
+                    public void onSuccess(Void list) {
+
+                    }
+
+                    @Override
+                    public void onError(String msg) {
+
+                    }
+                });
+            }
+
+            @Override
+            public void onStopTyping() {
+                mModel.onType(false, new TeacherContract.Model.Listener<Void>() {
+                    @Override
+                    public void onSuccess(Void list) {
+
+                    }
+
+                    @Override
+                    public void onError(String msg) {
+
+                    }
+                });
+            }
+        });
+
+        mModel.onTypeStateChange(new TeacherContract.Model.Listener<Boolean>() {
+            @Override
+            public void onSuccess(Boolean list) {
+                if (list) {
+                    typeingTV.setVisibility(View.VISIBLE);
+                    typeingTV.setText("Foo is Typing...");
+                } else {
+                    typeingTV.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onError(String msg) {
+
+            }
+        });
 
     }
 
@@ -79,6 +187,8 @@ public class ChatActivity extends DemoMessagesActivity implements ChatActivityCo
         attachmentDocument = findViewById(R.id.attachment_document);
         attachemtDocumentImage = findViewById(R.id.attachment_document_image);
         viewMusk = findViewById(R.id.view_musk);
+        input = findViewById(R.id.input);
+        typeingTV = findViewById(R.id.isTypingTV);
     }
 
     @Override
@@ -93,11 +203,33 @@ public class ChatActivity extends DemoMessagesActivity implements ChatActivityCo
 
     @Override
     public boolean onSubmit(CharSequence input) {
-        super.messagesAdapter.addToStart(
-                MessagesFixtures.getTextMessage(input.toString()), true);
+        if (FirebaseAuth.getInstance().getCurrentUser() != null && !FirebaseAuth.getInstance().getCurrentUser().getUid().equals("")) {
+            Letter letter = new Letter(FirebaseAuth.getInstance().getUid(), input.toString(), new Date());
+            mModel.addMessage(letter, new TeacherContract.Model.Listener<Void>() {
+                @Override
+                public void onSuccess(Void list) {
+                    flush("Sent");
+                    /*ChatActivity.super.messagesAdapter.addToStart(
+                            MessagesFixtures.getTextMessage(input.toString()), true);*/
+                }
+
+                @Override
+                public void onError(String msg) {
+
+                }
+            });
+
+
+        } else {
+            flush("Session Expired. Please Login Again");
+        }
+
         return true;
     }
 
+    public void flush(String toFlush) {
+        Toast.makeText(this, toFlush, Toast.LENGTH_SHORT).show();
+    }
 
     @Override
     public void onAddAttachments() {
@@ -105,7 +237,7 @@ public class ChatActivity extends DemoMessagesActivity implements ChatActivityCo
         TransitionSet set = new TransitionSet()
                 .addTransition(new Fade())
                 .addTransition(new Slide(Gravity.BOTTOM))
-                .setInterpolator( new LinearOutSlowInInterpolator())
+                .setInterpolator(new LinearOutSlowInInterpolator())
                 .addListener(new Transition.TransitionListener() {
                     @Override
                     public void onTransitionStart(@NonNull Transition transition) {
@@ -145,6 +277,7 @@ public class ChatActivity extends DemoMessagesActivity implements ChatActivityCo
             inbetweenDivider.setVisibility(View.GONE);
         }
     }
+
     @Override
     public void showDialogue() {
         new AlertDialog.Builder(this)

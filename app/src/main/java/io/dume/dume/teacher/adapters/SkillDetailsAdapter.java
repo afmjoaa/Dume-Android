@@ -29,6 +29,11 @@ public class SkillDetailsAdapter extends RecyclerView.Adapter<SkillDetailsAdapte
         Log.w("foo", "SkillDetailsAdapter: Detail Adpater Called With List size of : " + this.list.size());
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        return super.getItemViewType(position);
+    }
+
     @NonNull
     @Override
     public SDVH onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
@@ -51,8 +56,6 @@ public class SkillDetailsAdapter extends RecyclerView.Adapter<SkillDetailsAdapte
             sdvh.valueTV.setText(mString.toString());
             sdvh.valueTV.setTypeface(sdvh.valueTV.getTypeface(), Typeface.ITALIC);
         }
-
-
     }
 
     @Override

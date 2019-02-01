@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.RecyclerView;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,11 +22,19 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
     private LayoutInflater inflater;
     private Context context;
     private List<ReviewHighlightData> data;
+    private boolean isSmall = false;
 
     public ReviewAdapter(Context context, List<ReviewHighlightData> data) {
         inflater = LayoutInflater.from(context);
         this.data = data;
         this.context = context;
+    }
+
+    public ReviewAdapter(Context context, List<ReviewHighlightData> data, boolean isSmall) {
+        inflater = LayoutInflater.from(context);
+        this.data = data;
+        this.context = context;
+        this.isSmall= isSmall;
     }
 
     @NonNull
@@ -39,6 +48,13 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         //ReviewHighlightData current = data.get(position);
+        if(isSmall){
+            holder.reviewProducerTime.setTextSize(TypedValue.COMPLEX_UNIT_SP,11 );
+            holder.reviewProducerTime.setText("2 hours");
+        }else {
+            holder.reviewProducerTime.setTextSize(TypedValue.COMPLEX_UNIT_SP,13 );
+            holder.reviewProducerTime.setText("2 hours ago");
+        }
 
     }
 
@@ -49,7 +65,6 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
-
 
         private final ImageView reviewProducerDP;
         private final TextView reviewProducerTime;

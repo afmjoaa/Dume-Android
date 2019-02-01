@@ -113,10 +113,10 @@
                         android:maxWidth="160dp"
                         android:maxLines="1"
                         android:singleLine="true"
-                        android:transitionName="tnFive"
                         android:text="A.F.M.Mohimenul Joaa"
                         android:textAppearance="?android:attr/textAppearanceListItem"
                         android:textSize="14sp"
+                        android:transitionName="tnFive"
                         app:fontFamily="@font/cairo_regular" />
 
 
@@ -156,6 +156,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white">
+
 
         <com.stfalcon.chatkit.messages.MessagesList
             android:id="@+id/messagesList"
@@ -405,6 +406,16 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:background="#5aa7a7a7" />
+
+            <TextView
+                android:id="@+id/isTypingTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:paddingStart="20dp"
+                android:paddingLeft="20dp"
+                android:text="typing......"
+                android:visibility="gone" />
 
             <com.stfalcon.chatkit.messages.MessageInput
                 android:id="@+id/input"

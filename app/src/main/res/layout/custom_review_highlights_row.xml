@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/row_parent_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -59,8 +60,10 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:text="2 hours ago"
+            android:textSize="13sp"
             android:textColor="@color/textColorSecondaryDark"
-            app:fontFamily="@font/cairo_regular" />
+            app:fontFamily="@font/cairo_regular"
+            tools:ignore="SmallSp" />
 
     </RelativeLayout>
 

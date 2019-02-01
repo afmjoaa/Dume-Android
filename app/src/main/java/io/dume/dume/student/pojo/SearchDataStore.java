@@ -49,6 +49,16 @@ public class SearchDataStore implements Serializable {
     private Boolean profileChanged = false;
     private Boolean isFirstTime = true;
 
+    private Boolean isFirstTimeEnam = true;
+
+    public Boolean getFirstTimeEnam() {
+        return isFirstTimeEnam;
+    }
+
+    public void setFirstTimeEnam(Boolean firstTimeEnam) {
+        isFirstTimeEnam = firstTimeEnam;
+    }
+
     private String userName;
     private String userNumber;
     private String userMail;

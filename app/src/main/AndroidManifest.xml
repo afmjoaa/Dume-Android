@@ -74,7 +74,7 @@
             android:name=".auth.auth_final.AuthRegisterActivity"
             android:label="@string/title_activity_auth_final"
             android:theme="@style/MyStyle"
-            android:windowSoftInputMode="stateHidden|adjustResize" />
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".auth.social_init.SocialInitActivity"
             android:label="@string/title_activity_social_init"

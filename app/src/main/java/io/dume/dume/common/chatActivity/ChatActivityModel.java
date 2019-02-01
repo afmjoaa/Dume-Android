@@ -1,6 +1,14 @@
 package io.dume.dume.common.chatActivity;
 
-public class ChatActivityModel implements ChatActivityContact.Model {
+import android.content.Context;
+
+public class ChatActivityModel extends DemoModel implements ChatActivityContact.Model {
+
+
+    public ChatActivityModel(Context context) {
+        super(context);
+    }
+
     @Override
     public void chatHawwa() {
 

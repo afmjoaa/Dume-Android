@@ -1024,11 +1024,10 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
                                             selectedDaysInt.add(dataItem.getCalendarDayId());
                                         }
                                     }
-                                    Toast.makeText(myMainActivity, selectedDaysInt.toString(), Toast.LENGTH_SHORT).show();
                                     myMainActivity.preferredDays = myMainActivity.searchDataStore.genSetRetPreferredDays(selectedDays, selectedDaysInt);
-                                    if (!TextUtils.isEmpty(selectedDays)) {
+                                   /* if (!TextUtils.isEmpty(selectedDays)) {
                                         showSnackbarShort(selectedDays);
-                                    }
+                                    }*/
                                 }
                             });
 

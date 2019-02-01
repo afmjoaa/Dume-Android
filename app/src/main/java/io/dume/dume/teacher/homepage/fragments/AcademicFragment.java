@@ -11,10 +11,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.dume.dume.R;
 import io.dume.dume.teacher.adapters.AcademicAdapter;
+import io.dume.dume.teacher.pojo.Academic;
 
 public class AcademicFragment extends Fragment {
 
@@ -27,13 +31,15 @@ public class AcademicFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
         View root = inflater.inflate(R.layout.academic_fragment, container, false);
         ButterKnife.bind(this, root);
 
+        List<Academic> aData = new ArrayList<>();
+        AcademicAdapter academicAdapter = new AcademicAdapter(getContext(), aData);
         academicRV.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-        academicRV.setAdapter(new AcademicAdapter());
+        academicRV.setAdapter(academicAdapter);
         return root;
     }
 

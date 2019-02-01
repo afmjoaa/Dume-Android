@@ -8,7 +8,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -46,7 +45,6 @@ import carbon.widget.ImageView;
 import id.zelory.compressor.Compressor;
 import io.dume.dume.R;
 import io.dume.dume.student.grabingLocation.GrabingLocationActivity;
-import io.dume.dume.student.homePage.HomePageActivity;
 import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
 import io.dume.dume.util.DumeUtils;
 import io.dume.dume.util.FileUtil;
@@ -519,7 +517,7 @@ public class ProfilePageActivity extends CustomStuAppCompatActivity implements P
                     @Override
                     public void accept(File file) {
                         compressedImage = file;
-                        //Glide.with(ProfilePageActivity.this).load(compressedImage).apply(new RequestOptions().override(100, 100).placeholder(R.drawable.avatar)).into(profileUserDP);
+                        Glide.with(ProfilePageActivity.this).load(compressedImage).apply(new RequestOptions().override(100, 100).placeholder(R.drawable.avatar)).into(profileUserDP);
                         hideSpiner();
                         updateChangesClicked();
                     }
@@ -648,9 +646,9 @@ public class ProfilePageActivity extends CustomStuAppCompatActivity implements P
         avatarString = uri;
         String gender = selectGenderTextView.getText().toString();
         if(gender.equals("Male") || gender.equals("")){
-            Glide.with(this).load(uri).apply(new RequestOptions().override(100, 100).placeholder(R.drawable.avatar)).into(profileUserDP);
+            Glide.with(getApplicationContext()).load(uri).apply(new RequestOptions().override(100, 100).placeholder(R.drawable.avatar)).into(profileUserDP);
         }else{
-            Glide.with(this).load(uri).apply(new RequestOptions().override(100, 100).placeholder(R.drawable.avatar_female)).into(profileUserDP);
+            Glide.with(getApplicationContext()).load(uri).apply(new RequestOptions().override(100, 100).placeholder(R.drawable.avatar_female)).into(profileUserDP);
         }
     }
 

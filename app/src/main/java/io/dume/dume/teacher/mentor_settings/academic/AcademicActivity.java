@@ -8,14 +8,11 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.BaseTransientBottomBar;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.view.animation.FastOutLinearInInterpolator;
 import android.support.v4.view.animation.LinearOutSlowInInterpolator;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatCheckBox;
-import android.support.v7.widget.AppCompatSpinner;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Gravity;
@@ -26,10 +23,8 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,14 +34,10 @@ import com.transitionseverywhere.Transition;
 import com.transitionseverywhere.TransitionManager;
 import com.transitionseverywhere.TransitionSet;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.List;
 
 import io.dume.dume.R;
 import io.dume.dume.customView.HorizontalLoadView;
-import io.dume.dume.teacher.adapters.MentorSpinnerAdapter;
 import io.dume.dume.teacher.mentor_settings.basicinfo.EditAccount;
 import io.dume.dume.util.DatePickerFragment;
 import io.dume.dume.util.DumeUtils;
@@ -96,19 +87,19 @@ public class AcademicActivity extends AppCompatActivity implements AcademicContr
             ACTION = ACTION_EDIT;
             DumeUtils.configureAppbar(this, "Edit Qualification", true);
             degreeEdt.setFocusable(false);
-            levelET.setFocusable(false);
+            //levelET.setFocusable(false);
             degreeEdt.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     toast("Degree can't be edited, once added.");
                 }
             });
-            levelET.setOnClickListener(new View.OnClickListener() {
+           /* levelET.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     toast("Level can't be edited, once added.");
                 }
-            });
+            });*/
         } else {
             ACTION = ACTION_ADD;
             DumeUtils.configureAppbar(this, "Add Qualification", true);
@@ -231,7 +222,7 @@ public class AcademicActivity extends AppCompatActivity implements AcademicContr
         fb = findViewById(R.id.fabEdit);
         instiEdt = findViewById(R.id.institutionET);
         degreeEdt = findViewById(R.id.degreeTV);
-        resultET = findViewById(R.id.resultET);
+        resultET = findViewById(R.id.levelET);
         fromET = findViewById(R.id.fromET);
         toET = findViewById(R.id.toET);
         levelET = findViewById(R.id.input_level);
