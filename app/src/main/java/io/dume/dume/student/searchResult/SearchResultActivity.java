@@ -377,6 +377,10 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                     recordsData.put("record_status", SearchDataStore.STATUSPENDING);
                     recordsData.put("sp_uid", spUid);
                     recordsData.put("sh_uid", shUid);
+                    List<String> participants = new ArrayList<>();
+                    participants.add((String) skillMap.get("mentor_uid"));
+                    participants.add((String) searchDataStore.getUserUid());
+                    recordsData.put("participants", participants);
                     mModel.riseNewRecords(recordsData, new TeacherContract.Model.Listener<DocumentReference>() {
                         @Override
                         public void onSuccess(DocumentReference list) {

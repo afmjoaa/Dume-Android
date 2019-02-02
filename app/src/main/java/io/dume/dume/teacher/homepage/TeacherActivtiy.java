@@ -104,6 +104,7 @@ import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
 import io.dume.dume.student.recordsPage.RecordsPageActivity;
 import io.dume.dume.student.studentHelp.StudentHelpActivity;
 import io.dume.dume.student.studentPayment.StudentPaymentActivity;
+import io.dume.dume.teacher.adapters.AcademicAdapter;
 import io.dume.dume.teacher.boot_camp_addvertise.BootCampAdd;
 import io.dume.dume.teacher.homepage.fragments.AcademicFragment;
 import io.dume.dume.teacher.homepage.fragments.InboxFragment;
@@ -674,15 +675,12 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
                 startActivity(new Intent(getApplicationContext(), EditAccount.class));
                 break;
             case R.id.al_records:
-                updateRecordsBadge(++mRecPendingCount, ++mRecAcceptedCount, ++mRecCurrentCount);
                 startActivity(new Intent(this, RecordsPageActivity.class));
                 break;
             case R.id.al_messages:
-                updateChatBadge(++mChatCount);
                 startActivity(new Intent(this, InboxActivity.class));
                 break;
             case R.id.al_notifications:
-                updateNotificationsBadge(++mNotificationsCount);
                 Intent notificationTabIntent = new Intent(this, InboxActivity.class);
                 notificationTabIntent.putExtra("notiTab", 1);
                 startActivity(notificationTabIntent);
@@ -904,7 +902,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
             } else if (i == 4) {
                 fragment = new SkillFragment();
             } else if (i == 5) {
-                fragment = new AcademicFragment();
+                fragment = AcademicFragment.getInstance();
             }
             return fragment;
         }
@@ -1296,5 +1294,33 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
             });
         }
         mCancelBottomSheetDialog.show();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (requestCode) {
+            case 1234:
+                if (resultCode == EditAccount.RESULT_OK) {
+                    presenter.loadProfile(new TeacherContract.Model.Listener<Void>() {
+                        @Override
+                        public void onSuccess(Void list) {
+                            final AcademicFragment academicFragment = AcademicFragment.getInstance();
+                            if (academicFragment.academicRV.getAdapter() != null) {
+                                academicFragment.loadData();
+                            } else {
+                                academicFragment.academicAdapter = new AcademicAdapter(TeacherActivtiy.this, academicFragment.getAcademics(teacherDataStore.getDocumentSnapshot()));
+                                academicFragment.academicRV.setAdapter(academicFragment.academicAdapter );
+                            }
+                        }
+                        @Override
+                        public void onError(String msg) {
+                            flush(msg);
+                        }
+                    });
+                }
+                break;
+        }
     }
 }

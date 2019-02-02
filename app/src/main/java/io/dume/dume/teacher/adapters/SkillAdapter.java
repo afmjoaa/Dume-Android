@@ -48,6 +48,7 @@ import io.dume.dume.util.VisibleToggleClickListener;
 public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public static int FRAGMENT = 1;
     public static int ACTIVITY = 2;
+    private int itemWidth;
     private ArrayList<String> endOfNest = null;
     private int layoutSize;
     private ArrayList<Skill> skillList;
@@ -56,6 +57,7 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private String TAG = "SkillAdapter";
     private HashMap<String, Integer> iconList;
     private LocalDb localDb;
+    private float mDensity;
 
 
     @Override
@@ -83,6 +85,26 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public SkillAdapter(int layoutSize, ArrayList<Skill> skillList) {
         this.layoutSize = layoutSize;
         this.skillList = skillList;
+        localDb = new LocalDb();
+        endOfNest = new ArrayList<>(Arrays.asList("Subject", "Field", "Software", "Language", "Flavour", "Type", "Course", " Language "));
+        iconList = new HashMap<>();
+        iconList.put(localDb.getCategories().get(0), R.drawable.education);
+        iconList.put(localDb.getCategories().get(0 + 1), R.drawable.software);
+        iconList.put(localDb.getCategories().get(1 + 1), R.drawable.programming);
+        iconList.put(localDb.getCategories().get(2 + 1), R.drawable.language);
+        iconList.put(localDb.getCategories().get(3 + 1), R.drawable.dance);
+        iconList.put(localDb.getCategories().get(4 + 1), R.drawable.art);
+        iconList.put(localDb.getCategories().get(5 + 1), R.drawable.cooking);
+        iconList.put(localDb.getCategories().get(6 + 1), R.drawable.music);
+        iconList.put(localDb.getCategories().get(7 + 1), R.drawable.others);
+    }
+
+    public SkillAdapter(Context context, int layoutSize, int itemWidth, ArrayList<Skill> skillList) {
+        this.layoutSize = layoutSize;
+        this.skillList = skillList;
+        this.itemWidth = itemWidth;
+        this.context=context;
+        mDensity = context.getResources().getDisplayMetrics().density;
         localDb = new LocalDb();
         endOfNest = new ArrayList<>(Arrays.asList("Subject", "Field", "Software", "Language", "Flavour", "Type", "Course", " Language "));
         iconList = new HashMap<>();
@@ -266,6 +288,10 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 context.startActivity(new Intent(context, SkillActivity.class));
             });
 
+
+            ViewGroup.LayoutParams layoutParams = myFragmentHolder.hostingRelative.getLayoutParams();
+            layoutParams.width = (itemWidth);
+            myFragmentHolder.hostingRelative.setLayoutParams(layoutParams);
             //common code here
             /*HashMap<String, Object> jizz = skillList.get(i).getJizz();
             if (getLast(i) != null) {
@@ -275,10 +301,8 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             }*/
 
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-            String dateString = format.format(skillList.get(i).getCreation());
-            myFragmentHolder.salaryTV.setText((int) skillList.get(i).getSalary() + " tk");
+            //myFragmentHolder.salaryTV.setText((int) skillList.get(i).getSalary() + " tk");
             myFragmentHolder.switchCompat.setChecked(skillList.get(i).isStatus());
-            myFragmentHolder.publishDate.setText(dateString);
             myFragmentHolder.likeTV.setText((int) (skillList.get(i).getRating() * 100) / 5 + " likes");
         }
     }
@@ -356,16 +380,16 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     class SkillFVH extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.skillSalaryTV)
-        TextView salaryTV;
-        @BindView(R.id.skillAddDateTV)
-        TextView publishDate;
         @BindView(R.id.skillTitleTV)
         TextView skillTitleTV;
         @BindView(R.id.skillStatus)
         SwitchCompat switchCompat;
         @BindView(R.id.likeTV)
         TextView likeTV;
+        @BindView(R.id.package_name)
+        TextView packageName;
+        @BindView(R.id.hosting_relative_layout)
+        RelativeLayout hostingRelative;
 
         public SkillFVH(@NonNull View itemView) {
             super(itemView);

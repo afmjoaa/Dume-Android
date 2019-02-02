@@ -15,14 +15,6 @@ public class TeacherDataStore implements Serializable {
     private String packName;
     private ArrayList<Skill> skillArrayList = null;
 
-    public ArrayList<Skill> getSkillArrayList() {
-        return skillArrayList;
-    }
-
-    public void setSkillArrayList(ArrayList<Skill> skillArrayList) {
-        this.skillArrayList = skillArrayList;
-    }
-
     private String tUserName;
     private String tUserNumber;
     private String tUserMail;
@@ -34,6 +26,14 @@ public class TeacherDataStore implements Serializable {
             teacherDataStore = new TeacherDataStore();
         }
         return teacherDataStore;
+    }
+
+    public ArrayList<Skill> getSkillArrayList() {
+        return skillArrayList;
+    }
+
+    public void setSkillArrayList(ArrayList<Skill> skillArrayList) {
+        this.skillArrayList = skillArrayList;
     }
 
     public Map<String, Object> getSelfRating() {

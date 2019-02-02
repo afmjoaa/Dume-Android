@@ -69,15 +69,10 @@ public class TeacherModel implements TeacherContract.Model {
 
     @Override
     public void getMendatory(Listener<DocumentSnapshot> listener) {
-
-
-
         firestore.document("/users/mentors/mentor_profile/" + FirebaseAuth.getInstance().getUid()).addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
                 if(documentSnapshot != null){
-
-
                     listener.onSuccess(documentSnapshot);
                 }else{
                     if (e != null) {

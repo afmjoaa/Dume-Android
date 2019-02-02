@@ -44,6 +44,25 @@ public class DemoModel {
 
     }
 
+
+    public void addRoom(Map<String, Object> map, TeacherContract.Model.Listener<Void> listener) {
+
+
+        DocumentReference messages = firestore.collection("messages").document();
+        messages.set(map);
+        messages.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    listener.onError(e.getMessage());
+                } else {
+                    listener.onSuccess(null);
+                }
+            }
+        });
+
+    }
+
     public void onTypeStateChange(TeacherContract.Model.Listener<Boolean> listener) {
         firestore.collection("messages").document("C0u7RSY2NItOqh2gaYag").addSnapshotListener(new EventListener<DocumentSnapshot>() {
 

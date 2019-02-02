@@ -10,11 +10,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import io.dume.dume.R;
+import io.dume.dume.customView.HorizontalLoadView;
 import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
 import io.dume.dume.util.DumeUtils;
 
@@ -23,6 +25,7 @@ public class ContactActivity extends CustomStuAppCompatActivity implements Conta
     private ContactActivityContact.Presenter mPresenter;
     private static final int fromFlag = 31;
     private RecyclerView contactRecyclerView;
+    private HorizontalLoadView loadView;
 
 
     @Override
@@ -30,21 +33,19 @@ public class ContactActivity extends CustomStuAppCompatActivity implements Conta
         super.onCreate(savedInstanceState);
         setContentView(R.layout.common5_activity_contact);
         setActivityContext(this, fromFlag);
-        mPresenter = new ContactActivityPresenter(this, new ContactActivityModel());
+        mPresenter = new ContactActivityPresenter(this, new ContactActivityModel(this));
         mPresenter.contactActivityEnqueue();
         DumeUtils.configureAppbar(this, "Select contact", true);
-
         findLoadView();
         //testing the adapter here
-        List<ContactData> contactDialogueData = new ArrayList<>();
-        ContactDataAdapter contactRecyAda = new ContactDataAdapter(this, contactDialogueData);
-        contactRecyclerView.setAdapter(contactRecyAda);
         contactRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
     }
 
     @Override
     public void findView() {
         contactRecyclerView = findViewById(R.id.contact_recycler_view);
+        loadView = findViewById(R.id.loadView);
     }
 
     @Override
@@ -56,6 +57,19 @@ public class ContactActivity extends CustomStuAppCompatActivity implements Conta
     public void configContactActivity() {
 
     }
+
+
+    @Override
+    public void flush(String toFlush) {
+        Toast.makeText(context, toFlush, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void loadRV(List<ContactData> dataList) {
+        ContactDataAdapter contactRecyAda = new ContactDataAdapter(this, dataList);
+        contactRecyclerView.setAdapter(contactRecyAda);
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

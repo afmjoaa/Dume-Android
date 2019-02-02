@@ -10,10 +10,17 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.google.common.hash.HashingOutputStream;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import carbon.widget.ImageView;
 import io.dume.dume.R;
+import io.dume.dume.common.chatActivity.DemoModel;
+import io.dume.dume.teacher.homepage.TeacherContract;
 
 public class ContactDataAdapter extends RecyclerView.Adapter<ContactDataAdapter.MyViewHolder> {
 
@@ -47,18 +54,51 @@ public class ContactDataAdapter extends RecyclerView.Adapter<ContactDataAdapter.
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
-        switch (position){
+
+        ContactData single = this.data.get(position);
+        Glide.with(context).load(single.getContactUserDP()).into(holder.contactUserDP);
+        holder.contactUserName.setText(single.getContactUserName());
+        holder.statusText.setText(single.getStatus());
+        holder.itemView.setOnClickListener(view -> {
+            if (!single.getStatus().equals("Pending")) {
+            } else {
+                Toast.makeText(context, "Your request is not accepted yet.", Toast.LENGTH_SHORT).show();
+            }
+            Map<String, Object> map = new HashMap<>();
+            String sp_uid = (String) data.get(position).getRecord().get("sp_uid");
+            String sh_uid = (String) data.get(position).getRecord().get("sh_uid");
+            Map<String, Object> sp_info = (Map<String, Object>) data.get(position).getRecord().get("sp_info");
+            Map<String, Object> sh_info = (Map<String, Object>) data.get(position).getRecord().get("for_whom");
+            Map<String, Object> stringHashMap = new HashMap<String, Object>();
+            stringHashMap.put("name", sp_info.get("first_name") + " " + sp_info.get("last_name"));
+            Map<String, Object> stringHashMap1 = new HashMap<String, Object>();
+            stringHashMap1.put("name", sh_info.get("stu_name"));
+            map.put(sp_uid.substring(2), stringHashMap);
+            map.put(sh_uid.substring(2), stringHashMap1);
+            new DemoModel(context).addRoom(map, new TeacherContract.Model.Listener<Void>() {
+                @Override
+                public void onSuccess(Void list) {
+                    Toast.makeText(context, "Room Created Succesully.", Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onError(String msg) {
+                    Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+
+                }
+            });
+
+
+        });
+
+
+        /*switch (position) {
             case 1:
                 //pending test
                 holder.statusIndicatorImage.setImageResource(statusIcon[0]);
                 holder.statusText.setText(statusText[0]);
                 holder.hostRelativeLayout.setBackgroundColor(context.getResources().getColor(R.color.status_viewed));
-                holder.hostRelativeLayout.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Toast.makeText(context, "Request not accepted yet", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                holder.hostRelativeLayout.setOnClickListener(v -> Toast.makeText(context, "Request not accepted yet", Toast.LENGTH_SHORT).show());
                 break;
             case 2:
                 //accepted test
@@ -72,15 +112,15 @@ public class ContactDataAdapter extends RecyclerView.Adapter<ContactDataAdapter.
                 break;
             case 9:
                 //testing selected item
-                holder.contactUserDP.setHeight((int) (44*context.getResources().getDisplayMetrics().density));
-                holder.contactUserDP.setWidth((int) (44*context.getResources().getDisplayMetrics().density));
+                holder.contactUserDP.setHeight((int) (44 * context.getResources().getDisplayMetrics().density));
+                holder.contactUserDP.setWidth((int) (44 * context.getResources().getDisplayMetrics().density));
                 break;
-        }
+        }*/
     }
 
     @Override
     public int getItemCount() {
-        return 10;
+        return data.size();
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {

@@ -6,8 +6,12 @@
     android:layout_marginLeft="10dp"
     android:layout_marginTop="10dp"
     android:layout_marginRight="10dp"
+    android:id="@+id/hosting_relative_layout"
     android:background="@color/white"
     android:padding="10dp"
+    android:clickable="true"
+    android:focusable="true"
+    app:carbon_rippleColor="@color/colorRippleDefault"
     app:carbon_cornerRadius="6dp">
 
     <RelativeLayout
@@ -74,7 +78,7 @@
 
     <TextView
         android:id="@+id/sessionTV"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/institutionET"
         android:layout_toEndOf="@+id/vertical_divider"
@@ -87,7 +91,7 @@
 
     <TextView
         android:id="@+id/resultTV"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/sessionTV"
         android:layout_toEndOf="@+id/vertical_divider"

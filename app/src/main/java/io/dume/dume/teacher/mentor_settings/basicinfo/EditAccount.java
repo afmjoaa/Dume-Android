@@ -110,6 +110,18 @@ public class EditAccount extends AppCompatActivity implements EditContract.View,
         presenter = new EditPresenter(this, this, EditModel.getModelInstance(this));
         presenter.enqueue();
         TransitionManager.beginDelayedTransition(pHostRelative);
+        if(getIntent().getAction()!= null){
+            if(getIntent().getAction().equals("scroll_down")){
+                mScrollView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mScrollView.fling(0);
+                        //mScrollView.smoothScrollTo(0, mScrollView.getBottom());
+                        mScrollView.fullScroll(View.FOCUS_DOWN);
+                    }
+                });
+            }
+        }
     }
 
 
@@ -218,6 +230,33 @@ public class EditAccount extends AppCompatActivity implements EditContract.View,
         mCancelBottomSheetDialog = new BottomSheetDialog(this);
         cancelsheetRootView = this.getLayoutInflater().inflate(R.layout.custom_bottom_sheet_dialogue_cancel, null);
         mCancelBottomSheetDialog.setContentView(cancelsheetRootView);
+        TextView mainText = mCancelBottomSheetDialog.findViewById(R.id.main_text);
+        TextView subText = mCancelBottomSheetDialog.findViewById(R.id.sub_text);
+        Button cancelYesBtn = mCancelBottomSheetDialog.findViewById(R.id.cancel_yes_btn);
+        Button cancelNoBtn = mCancelBottomSheetDialog.findViewById(R.id.cancel_no_btn);
+        if (mainText != null && subText != null && cancelYesBtn != null && cancelNoBtn != null) {
+            mainText.setText("Discard Changes ?");
+            cancelYesBtn.setText("Yes, Discard");
+            cancelNoBtn.setText("No");
+            subText.setText("Discard local changes & go back ...");
+            cancelNoBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mCancelBottomSheetDialog.dismiss();
+                }
+            });
+
+            cancelYesBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    enableLoad();
+                    mCancelBottomSheetDialog.dismiss();
+                    someThingChanged(false);
+                    onBackPressed();
+                }
+            });
+        }
+
         /*mScrollView.getViewTreeObserver().addOnScrollChangedListener(() -> {
             if (mScrollView.getScrollY() > oldScrollYPostion) {
                 fb.show();
@@ -531,32 +570,6 @@ public class EditAccount extends AppCompatActivity implements EditContract.View,
 
     @Override
     public void discardDialogue() {
-        TextView mainText = mCancelBottomSheetDialog.findViewById(R.id.main_text);
-        TextView subText = mCancelBottomSheetDialog.findViewById(R.id.sub_text);
-        Button cancelYesBtn = mCancelBottomSheetDialog.findViewById(R.id.cancel_yes_btn);
-        Button cancelNoBtn = mCancelBottomSheetDialog.findViewById(R.id.cancel_no_btn);
-        if (mainText != null && subText != null && cancelYesBtn != null && cancelNoBtn != null) {
-            mainText.setText("Discard Changes ?");
-            cancelYesBtn.setText("Yes, Discard");
-            cancelNoBtn.setText("No");
-            subText.setText("Discard local changes & go back ...");
-            cancelNoBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    mCancelBottomSheetDialog.dismiss();
-                }
-            });
-
-            cancelYesBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    enableLoad();
-                    mCancelBottomSheetDialog.dismiss();
-                    someThingChanged(false);
-                    onBackPressed();
-                }
-            });
-        }
         mCancelBottomSheetDialog.show();
     }
 

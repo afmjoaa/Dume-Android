@@ -66,6 +66,6 @@ public class AcademicModel implements AcademicContract.Model {
     public void removeFromDatabase(String itemUid, ModelCallback listener) {
         listener.onStart();
         firestore.collection("users").document("mentors").collection("mentor_profile").
-                document(Objects.requireNonNull(mAuth.getUid())).update("academic." + itemUid.replace(".", " "), FieldValue.delete()).addOnSuccessListener(aVoid -> listener.onSuccess()).addOnFailureListener(e -> listener.onFail(e.toString()));
+                document(Objects.requireNonNull(mAuth.getUid())).update("academic." + itemUid.replace(".", ""), FieldValue.delete()).addOnSuccessListener(aVoid -> listener.onSuccess()).addOnFailureListener(e -> listener.onFail(e.toString()));
     }
 }
