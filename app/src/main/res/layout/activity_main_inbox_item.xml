@@ -1,44 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<carbon.widget.LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<carbon.widget.RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/hosting_relative_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginEnd="20dp"
-    android:layout_marginRight="20dp"
-    android:layout_marginStart="20dp"
+    android:layout_marginLeft="12dp"
+    android:layout_marginTop="12dp"
+    android:layout_marginRight="12dp"
     android:background="@color/white"
-    android:layout_marginLeft="15dp"
-    android:layout_marginBottom="5dp"
-    android:layout_marginTop="5dp"
+    android:clickable="true"
+    android:focusable="true"
     android:orientation="vertical"
-    app:carbon_cornerRadius="10dp"
-    app:elevation="5dp">
+    android:padding="10dp"
+    app:carbon_cornerRadius="6dp"
+    app:carbon_elevation="1dp"
+    app:carbon_rippleColor="@color/colorRippleDefault">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+
+    <TextView
+        android:id="@+id/inboxTitleTV"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="8dp"
-        android:background="@drawable/white_border_background">
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:text="Title"
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:textSize="14sp" />
 
-        <TextView
-            android:id="@+id/inboxTitleTV"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:text="Title"
-            android:paddingStart="20dp"
-            android:textSize="14sp"
-            android:paddingLeft="20dp" />
+    <TextView
+        android:id="@+id/inboxValueTV"
+        android:layout_width="46dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/white_border_background"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:text="5"
+        android:textAllCaps="false"
+        android:textAlignment="center"
+        android:textSize="14sp" />
 
-        <TextView
-            android:id="@+id/inboxValueTV"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/white_border_background"
-            android:gravity="center"
-            android:text="5"
-            android:textSize="14sp" />
-    </LinearLayout>
-
-</carbon.widget.LinearLayout>
+</carbon.widget.RelativeLayout>

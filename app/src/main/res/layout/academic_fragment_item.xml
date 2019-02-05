@@ -11,6 +11,7 @@
     android:padding="10dp"
     android:clickable="true"
     android:focusable="true"
+    app:carbon_elevation="1dp"
     app:carbon_rippleColor="@color/colorRippleDefault"
     app:carbon_cornerRadius="6dp">
 
@@ -40,10 +41,13 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/search_detail_icon"
             android:ellipsize="end"
-            android:maxWidth="80dp"
+            android:maxWidth="76dp"
             android:maxLines="1"
+            android:layout_centerHorizontal="true"
             android:singleLine="true"
             android:text="BSc in CSE"
+            android:minWidth="36dp"
+            android:textAlignment="center"
             android:textColor="@color/textColorPrimary"
             android:textSize="11sp" />
     </RelativeLayout>

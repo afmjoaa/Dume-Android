@@ -24,6 +24,8 @@ import io.dume.dume.teacher.adapters.InboxAdapter;
 import io.dume.dume.teacher.homepage.TeacherActivtiy;
 import io.dume.dume.teacher.homepage.TeacherContract;
 import io.dume.dume.teacher.pojo.Inbox;
+import io.dume.dume.util.DumeUtils;
+import io.dume.dume.util.GridSpacingItemDecoration;
 
 public class InboxFragment extends Fragment {
 
@@ -31,16 +33,27 @@ public class InboxFragment extends Fragment {
     @BindView(R.id.inboxRV)
     RecyclerView inboxRv;
     private TeacherActivtiy teacherActivtiy;
+    private static InboxFragment inboxFragment = null;
+    private Context context;
+
+
+    public static InboxFragment getInstance() {
+        if (inboxFragment == null) {
+            inboxFragment = new InboxFragment();
+        }
+        return inboxFragment;
+    }
 
     public static InboxFragment newInstance() {
         return new InboxFragment();
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.inbox_fragment, container, false);
         ButterKnife.bind(this, root);
+        context = getContext();
+        inboxRv.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         mViewModel = new InboxViewModel();
         if (teacherActivtiy.teacherDataStore.getDocumentSnapshot() == null) {
             teacherActivtiy.presenter.loadProfile(new TeacherContract.Model.Listener<Void>() {
@@ -63,14 +76,17 @@ public class InboxFragment extends Fragment {
 
     private void explodeData() {
         String unreadMsg = (String) teacherActivtiy.teacherDataStore.getDocumentSnapshot().get("unread_msg");
+        String unreadNoti = (String) teacherActivtiy.teacherDataStore.getDocumentSnapshot().get("unread_noti");
         Map<String, Object> unreadRecords = (Map<String, Object>) teacherActivtiy.teacherDataStore.getDocumentSnapshot().get("unread_records");
         String pendingCount = (String) unreadRecords.get("pending_count");
+        String acceptedCount = (String) unreadRecords.get("accepted_count");
         String currentCount = (String) unreadRecords.get("current_count");
         ArrayList<Inbox> arrayList = new ArrayList<>();
         arrayList.add(new Inbox(false, "Unread Messages", Integer.parseInt(unreadMsg)));
+        arrayList.add(new Inbox(false, "Unread Notification", Integer.parseInt(unreadNoti)));
         arrayList.add(new Inbox(true, "Pending Request", Integer.parseInt(pendingCount)));
-        arrayList.add(new Inbox(true, "Accepted Request", Integer.parseInt(pendingCount)));
-        arrayList.add(new Inbox(false, "Ongoing Dume", Integer.parseInt(currentCount)));
+        arrayList.add(new Inbox(true, "Accepted Request", Integer.parseInt(acceptedCount)));
+        arrayList.add(new Inbox(true, "Ongoing Dume", Integer.parseInt(currentCount)));
         showInbox(arrayList);
 
     }
@@ -85,8 +101,7 @@ public class InboxFragment extends Fragment {
 
     public void showInbox(ArrayList<Inbox> list) {
         // feedBackRV.setLayoutManager(new GridLayoutManager(this, 3));
-        inboxRv.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-        inboxRv.setAdapter(new InboxAdapter(list));
+        inboxRv.setAdapter(new InboxAdapter(context,list));
     }
 
     @Override

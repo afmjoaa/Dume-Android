@@ -1,6 +1,7 @@
 package io.dume.dume.teacher.homepage.fragments;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,7 +15,10 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.hanks.htextview.scale.ScaleTextView;
+
 import java.util.ArrayList;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -45,6 +49,8 @@ public class SkillFragment extends Fragment {
     ImageView addInstantDBtn;
     @BindView(R.id.no_data_block)
     LinearLayout noDataBlock;
+    @BindView(R.id.tipsTV)
+    ScaleTextView scaleTextView;
     private TeacherActivtiy fragmentActivity;
     private TeacherDataStore teacherDataStore;
     private static SkillFragment skillFragment = null;
@@ -198,5 +204,14 @@ public class SkillFragment extends Fragment {
         mViewModel = ViewModelProviders.of(this).get(SkillViewModel.class);
         // TODO: Use the ViewModel
     }
+
+    public void tips(CharSequence sequence) {
+        scaleTextView.animateText(sequence);
+        scaleTextView.setTypeface(Typeface.createFromAsset(Objects.requireNonNull(getContext()).getAssets(), "fonts/Cairo_Regular.ttf"));
+        scaleTextView.setAnimationListener(hTextView -> {
+
+        });
+        scaleTextView.setSelected(true);
+    }//  tips("Every person is a new door to a different world.");
 
 }

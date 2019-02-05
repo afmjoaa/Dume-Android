@@ -113,6 +113,7 @@ public class CrudSkillActivity extends CusStuAppComMapActivity implements CrudCo
         //getting the width
         int[] wh = DumeUtils.getScreenSize(this);
         spacing = (int) ((wh[0] - ((330) * (getResources().getDisplayMetrics().density))) / 4);
+        float mDensity = getResources().getDisplayMetrics().density;
         //initializing the title
         configureAppbar(this, "Select category");
         mainScrollingContainer.getBackground().setAlpha(90);

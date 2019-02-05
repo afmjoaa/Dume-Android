@@ -1,10 +1,12 @@
 package io.dume.dume.teacher.adapters;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -15,10 +17,14 @@ import io.dume.dume.R;
 import io.dume.dume.teacher.model.KeyValueModel;
 
 public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ReportVH> {
+    private final Context context;
+    private final int itemWidth;
     private ArrayList<KeyValueModel> arrayList=null;
 
-    public ReportAdapter(ArrayList<KeyValueModel> arrayList) {
+    public ReportAdapter(Context context, int itemWidth, ArrayList<KeyValueModel> arrayList) {
         this.arrayList = arrayList;
+        this.context = context;
+        this.itemWidth = itemWidth;
     }
 
     @NonNull
@@ -30,6 +36,11 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ReportVH> 
 
     @Override
     public void onBindViewHolder(@NonNull ReportVH reportVH, int i) {
+        ViewGroup.LayoutParams layoutParams = reportVH.hostingRelativeLayout.getLayoutParams();
+        layoutParams.width = (itemWidth);
+        reportVH.hostingRelativeLayout.setLayoutParams(layoutParams);
+
+
         reportVH.reportTitle.setText(arrayList.get(i).getTitle());
         reportVH.reportValue.setText(arrayList.get(i).getValue());
     }
@@ -44,6 +55,8 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ReportVH> 
         TextView reportTitle;
         @BindView(R.id.reportValue)
         TextView reportValue;
+        @BindView(R.id.hosting_relative_layout)
+        RelativeLayout hostingRelativeLayout;
 
         public ReportVH(@NonNull View itemView) {
             super(itemView);

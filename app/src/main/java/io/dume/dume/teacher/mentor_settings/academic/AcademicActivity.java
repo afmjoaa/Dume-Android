@@ -54,7 +54,7 @@ public class AcademicActivity extends AppCompatActivity implements AcademicContr
     private EditText instiEdt, degreeEdt;
     AppCompatCheckBox studyCB, gpaCB, cgpaCB;
     EditText fromET, toET, resultET;
-    private static String ACTION_EDIT = "edit", ACTION_ADD = "add";
+    private static String ACTION_EDIT = "edit", ACTION_ADD = "add", ACTION_CADD = "c_add";
     public static String ACTION = null;
     private String[] cgpaOptionsArr;
     private String[] gpaOptionsArr;
@@ -100,7 +100,11 @@ public class AcademicActivity extends AppCompatActivity implements AcademicContr
                     toast("Level can't be edited, once added.");
                 }
             });*/
-        } else {
+        } else if(getIntent().getAction().equals(ACTION_CADD)){
+            ACTION = ACTION_CADD;
+            DumeUtils.configureAppbar(this, "Add Qualification", true);
+            degreeEdt.setFocusable(true);
+        }else {
             ACTION = ACTION_ADD;
             DumeUtils.configureAppbar(this, "Add Qualification", true);
             degreeEdt.setFocusable(true);
@@ -488,9 +492,15 @@ public class AcademicActivity extends AppCompatActivity implements AcademicContr
 
     @Override
     public void gotoBackActivity() {
-        Intent goBackIntent = new Intent(this, EditAccount.class);
-        setResult(RESULT_OK, goBackIntent);
-        finish();
+        if(ACTION.equals("c_add")){
+            Intent goBackIntent = new Intent(this, EditAccount.class);
+            setResult(RESULT_OK, goBackIntent.setAction("c_add"));
+            finish();
+        }else{
+            Intent goBackIntent = new Intent(this, EditAccount.class);
+            setResult(RESULT_OK, goBackIntent);
+            finish();
+        }
     }
 
     public void onAcademicClick(View view) {

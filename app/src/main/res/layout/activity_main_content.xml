@@ -88,6 +88,7 @@
         app:layout_anchorGravity="top"
         app:rect_color="@color/transparent" />
 
+
     <android.support.design.widget.CoordinatorLayout
         android:id="@+id/main_interface"
         android:layout_width="match_parent"
@@ -95,11 +96,56 @@
         android:layout_gravity="center"
         android:layout_marginTop="56dp">
 
+        <carbon.widget.LinearLayout
+            android:id="@+id/percent_off_block"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:background="@drawable/bg_green_top_round_6"
+            android:orientation="horizontal"
+            android:paddingBottom="2dp"
+            app:carbon_elevation="3dp"
+            android:paddingTop="2dp">
+
+            <TextView
+                android:id="@+id/promotion_text"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_weight="9"
+                android:text="45% off Instant Dume"
+                android:textColor="@color/carbon_white"
+                android:textSize="13sp"
+                app:fontFamily="@font/cairo_regular" />
+
+            <TextView
+                android:id="@+id/promotion_validity_text"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_weight="1"
+                android:text="5 days"
+                android:textColor="#d8c1ebf0"
+                android:onClick="onHomePageViewClicked"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                app:fontFamily="@font/cairo_regular" />
+
+        </carbon.widget.LinearLayout>
+
         <LinearLayout
             android:id="@+id/quickContainer"
             android:layout_width="match_parent"
-            android:layout_height="352dp"
-            android:layout_margin="16dp"
+            android:layout_height="354dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="24dp"
             android:gravity="center"
             android:orientation="vertical">
 
@@ -107,12 +153,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_gravity="center"
-                android:background="@color/white"
+                android:background="@drawable/bg_white_bottom_round_6"
                 android:gravity="center"
-                app:carbon_cornerRadius="10dp"
                 app:carbon_elevation="3dp"
                 app:layout_anchor="@id/quickContainer"
                 app:layout_anchorGravity="center">
+                <!--bg_white_round_6-->
 
                 <com.hanks.htextview.scale.ScaleTextView
                     android:id="@+id/fragmentTitle"
@@ -137,7 +183,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    app:carbon_cornerRadius="10dp"
+                    app:carbon_cornerRadius="6dp"
+                    android:layout_marginBottom="2dp"
                     app:carbon_elevation="2dp">
 
                     <q.rorbin.verticaltablayout.VerticalTabLayout
@@ -161,51 +208,7 @@
                         android:id="@+id/mViewPager"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                         />
-
-                    <carbon.widget.LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="bottom"
-                        android:layout_margin="5dp"
-                        android:background="@color/white"
-                        android:gravity="bottom"
-                        android:visibility="gone"
-                        app:carbon_cornerRadius="6dp">
-
-                        <LinearLayout
-                            android:layout_width="50dp"
-                            android:layout_height="40dp"
-                            android:background="#340143"
-                            android:gravity="center">
-
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:layout_gravity="center"
-                                app:srcCompat="@drawable/ic_tips" />
-                        </LinearLayout>
-
-                        <com.hanks.htextview.scale.ScaleTextView
-                            android:id="@+id/tipsTV"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginEnd="5dp"
-                            android:layout_marginRight="5dp"
-                            android:ellipsize="marquee"
-                            android:focusable="true"
-                            android:focusableInTouchMode="true"
-                            android:freezesText="true"
-                            android:gravity="center"
-                            android:marqueeRepeatLimit="marquee_forever"
-                            android:maxWidth="150dp"
-                            android:padding="5dp"
-                            android:scrollHorizontally="true"
-                            android:singleLine="true"
-                            android:text="@string/lorem_para"
-                            android:textSize="12sp" />
-                    </carbon.widget.LinearLayout>
+                        android:layout_marginBottom="2dp"/>
 
                 </FrameLayout>
 

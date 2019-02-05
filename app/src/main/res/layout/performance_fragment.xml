@@ -1,137 +1,169 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/teacherActivitySV"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <LinearLayout
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/performanceRV"
         android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <TextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/performanceRV"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:layout_marginLeft="10dp"
+        android:layout_above="@+id/achievement_layout_horizontal"
+        android:layout_marginStart="12dp"
+        android:layout_marginLeft="11dp"
+        android:layout_marginEnd="10dp"
         android:layout_marginRight="10dp"
-        android:orientation="vertical">
+        android:paddingTop="8dp"
+        android:text="Unlocked Badges"
+        android:textAllCaps="false"
+        android:textSize="14sp" />
 
-        <TextView
-            android:layout_width="wrap_content"
+
+    <RelativeLayout
+        android:id="@+id/achievement_layout_horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="7dp"
+        android:layout_marginRight="7dp"
+        android:paddingBottom="2dp">
+
+        <RelativeLayout
+            android:id="@+id/joined_host"
+            android:layout_width="58dp"
             android:layout_height="wrap_content"
-            android:text="Badge Unlocked" />
+            android:layout_toStartOf="@+id/inaugural_host"
+            android:layout_toLeftOf="@+id/inaugural_host">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+            <carbon.widget.ImageView
+                android:id="@+id/achievement_joined_image"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
+                app:srcCompat="@drawable/ic_badge_joined" />
+
+            <TextView
+                android:id="@+id/achievement_joined_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/achievement_joined_image"
+                android:layout_centerHorizontal="true"
+                android:singleLine="true"
+                android:text="Joined"
+                android:textAlignment="center"
+                android:textSize="13sp"
+                app:fontFamily="@font/cairo_regular" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/inaugural_host"
+            android:layout_width="58dp"
             android:layout_height="wrap_content"
-            android:gravity="end"
-            android:orientation="horizontal">
+            android:layout_toStartOf="@+id/leading_host"
+            android:layout_toLeftOf="@+id/leading_host">
 
-            <LinearLayout
+
+            <carbon.widget.ImageView
+                android:id="@+id/achievement_inaugural_image"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
+                app:srcCompat="@drawable/ic_badge_disable" />
+
+            <TextView
+                android:id="@+id/achievement_inaugural_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="2dp"
-                android:layout_marginLeft="2dp"
-                android:layout_marginRight="2dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical">
+                android:layout_below="@+id/achievement_inaugural_image"
+                android:layout_centerHorizontal="true"
+                android:singleLine="true"
+                android:text="Inaugural"
+                android:textAlignment="center"
+                android:textSize="13sp"
+                app:fontFamily="@font/cairo_regular" />
 
-                <ImageView
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    app:srcCompat="@drawable/ic_badge_joined" />
+        </RelativeLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:text="Joined" />
-            </LinearLayout>
+        <RelativeLayout
+            android:id="@+id/leading_host"
+            android:layout_width="58dp"
+            android:layout_height="wrap_content"
+            android:layout_toStartOf="@+id/premier_host"
+            android:layout_toLeftOf="@+id/premier_host">
 
-            <LinearLayout
+
+            <carbon.widget.ImageView
+                android:id="@+id/achievement_leading_image"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
+                app:srcCompat="@drawable/ic_badge_disable" />
+
+            <TextView
+                android:id="@+id/achievement_leading_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="2dp"
-                android:layout_marginLeft="2dp"
-                android:layout_marginRight="2dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical">
+                android:layout_below="@+id/achievement_leading_image"
+                android:layout_centerHorizontal="true"
+                android:singleLine="true"
+                android:text="Leading"
+                android:textAlignment="center"
+                android:textSize="13sp"
+                app:fontFamily="@font/cairo_regular" />
 
-                <ImageView
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:contentDescription="TODO"
-                    app:srcCompat="@drawable/ic_badge_disable" />
+        </RelativeLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:text="Inaugural" />
-            </LinearLayout>
+        <RelativeLayout
+            android:id="@+id/premier_host"
+            android:layout_width="58dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true">
 
-            <LinearLayout
+
+            <carbon.widget.ImageView
+                android:id="@+id/achievement_premier_image"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
+                app:srcCompat="@drawable/ic_badge_disable" />
+
+            <TextView
+                android:id="@+id/achievement_premier_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="2dp"
-                android:layout_marginLeft="2dp"
-                android:layout_marginRight="2dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical">
+                android:layout_below="@+id/achievement_premier_image"
+                android:layout_centerHorizontal="true"
+                android:singleLine="true"
+                android:text="Premier"
+                android:textAlignment="center"
+                android:textSize="13sp"
+                app:fontFamily="@font/cairo_regular" />
 
-                <ImageView
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    app:srcCompat="@drawable/ic_badge_disable" />
+        </RelativeLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:text="Joined" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="2dp"
-                android:layout_marginLeft="2dp"
-                android:layout_marginRight="2dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    app:srcCompat="@drawable/ic_badge_disable" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:text="Joined" />
-            </LinearLayout>
+    </RelativeLayout>
 
 
-        </LinearLayout>
-    </LinearLayout>
-</FrameLayout>
+</RelativeLayout>

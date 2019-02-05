@@ -12,15 +12,20 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import carbon.widget.RelativeLayout;
 import io.dume.dume.R;
 import io.dume.dume.teacher.pojo.Inbox;
 
+import static io.dume.dume.util.DumeUtils.setMargins;
+
 public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.InboxVH> {
+    private final float mDensity;
     private ArrayList<Inbox> list;
     private Context context;
 
-    public InboxAdapter(ArrayList<Inbox> list) {
+    public InboxAdapter(Context context, ArrayList<Inbox> list) {
         this.list = list;
+        mDensity = context.getResources().getDisplayMetrics().density;
     }
 
     @NonNull
@@ -34,27 +39,32 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.InboxVH> {
     @Override
     public void onBindViewHolder(@NonNull InboxVH holder, int position) {
         holder.title.setText(list.get(position).getTitle());
-        holder.value.setText(""+list.get(position).getUnreadNumber());
+        holder.value.setText("" + list.get(position).getUnreadNumber());
         if (list.get(position).isUnread()) {
             holder.value.setBackground(context.getResources().getDrawable(R.drawable.border_background));
             holder.value.setTextColor(context.getResources().getColor(R.color.colorAccent));
+        }
+
+        if (position == (list.size() - 1)) {
+            setMargins(holder.hostingRelative, 12,12,12,12);
         }
     }
 
     @Override
     public int getItemCount() {
-        Log.w("BAL", "getItemCount: "+list.size() );
+        Log.w("BAL", "getItemCount: " + list.size());
         return list.size();
     }
 
     class InboxVH extends RecyclerView.ViewHolder {
         TextView title, value;
+        private final RelativeLayout hostingRelative;
 
         public InboxVH(View itemView) {
             super(itemView);
+            hostingRelative = itemView.findViewById(R.id.hosting_relative_layout);
             title = itemView.findViewById(R.id.inboxTitleTV);
             value = itemView.findViewById(R.id.inboxValueTV);
-
         }
     }
 }

@@ -28,7 +28,6 @@ import static io.dume.dume.util.DumeUtils.settingStatusBarTransparent;
 
 public class AfterSplashActivity extends AppCompatActivity implements DemoCardFragment.OnActionListener {
 
-
     private static final String TAG = "Bal";
     private ParallaxViewPager mPager;
     private ViewPager pager;
