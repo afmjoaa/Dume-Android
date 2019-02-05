@@ -19,6 +19,8 @@ import io.dume.dume.R;
 import io.dume.dume.teacher.mentor_settings.academic.AcademicActivity;
 import io.dume.dume.teacher.pojo.Academic;
 
+import static io.dume.dume.util.DumeUtils.setMargins;
+
 public class AcademicAdapter extends RecyclerView.Adapter<AcademicAdapter.AcademicVH> {
 
     private static final String TAG = "AcademicAdapter";
@@ -31,13 +33,14 @@ public class AcademicAdapter extends RecyclerView.Adapter<AcademicAdapter.Academ
             R.drawable.academic_undergraduate,
             R.drawable.academic_postgraduate
     };
+    private final float mDensity;
 
     public AcademicAdapter(Context context, List<Academic> data) {
         this.context = context;
         this.activity = (Activity) context;
         this.data = data;
+        mDensity = context.getResources().getDisplayMetrics().density;
     }
-
 
     @NonNull
     @Override
@@ -91,6 +94,10 @@ public class AcademicAdapter extends RecyclerView.Adapter<AcademicAdapter.Academ
                 activity.startActivityForResult(intent, 1234);
             }
         });
+
+        if(position==(data.size()-1)){
+            setMargins( academicVH.hostRelativeLayout,10,10,10,4);
+        }
 
     }
 

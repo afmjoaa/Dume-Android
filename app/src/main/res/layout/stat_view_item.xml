@@ -1,74 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-<carbon.widget.LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<carbon.widget.RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="120dp"
-    android:layout_height="70dp"
-    android:layout_margin="5dp"
-    android:background="@drawable/bg_white_round_corner"
-    android:gravity="center_vertical"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/hosting_relative_layout"
+    android:layout_width="121dp"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
     android:orientation="vertical"
-    android:padding="5dp"
-    app:carbon_elevation="2dp">
+    android:padding="10dp"
+    android:clickable="true"
+    android:focusable="true"
+    app:carbon_cornerRadius="6dp"
+    app:carbon_elevation="2dp"
+    app:carbon_rippleColor="@color/colorRippleDefault">
+    <!--app:carbon_elevation="2dp"-->
 
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <TextView
+        android:id="@+id/reportTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxWidth="140dp"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:text="Profile Impression"
+        android:textAllCaps="false"
+        android:textColor="@color/textColorPrimary"
+        android:textSize="13sp" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/reportTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="This Week"
-                android:textAllCaps="false"
-                android:textSize="12sp" />
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center"
-                >
-
-                <TextView
-                    android:id="@+id/reportValue"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="760"
-                    android:layout_marginRight="5dp"
-                    android:textColor="@color/black"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                   />
-
-                <TextView
-                    android:id="@+id/valueStatTV"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="(+10.00%)"
-                    android:textColor="@color/colorLink"
-                    android:textSize="14sp"
-
-                    />
-            </LinearLayout>
-        </LinearLayout>
+    <LinearLayout
+        android:id="@+id/hosting_linear_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/reportTitle"
+        android:gravity="center">
 
         <TextView
+            android:id="@+id/reportValue"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:text="Today"
+            android:layout_gravity="center"
+            android:ellipsize="end"
+            android:maxWidth="60dp"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:text="760"
+            android:textColor="@color/black"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/valueStatTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:ellipsize="end"
+            android:maxWidth="60dp"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:text="  (+10.00%)"
             android:textColor="@color/colorLink"
-            android:textSize="8sp" />
-    </FrameLayout>
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:text="Today"
+        android:layout_below="@+id/hosting_linear_layout"
+        android:textColor="@color/textColorSecondaryDark"
+        android:textSize="10sp"
+        tools:ignore="SmallSp" />
 
 
-</carbon.widget.LinearLayout>
+</carbon.widget.RelativeLayout>

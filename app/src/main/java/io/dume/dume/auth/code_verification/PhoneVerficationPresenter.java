@@ -296,7 +296,7 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
         unreadRecords.put("pending_count", "0");
         unreadRecords.put("accepted_count", "0");
         unreadRecords.put("current_count", "0");
-        unreadRecords.put("completed_count", "1");
+        unreadRecords.put("completed_count", "0");
         unreadRecords.put("rejected_count", "0");
         mentorFeild.put("unread_records", unreadRecords);
 
@@ -383,7 +383,7 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
         unreadRecords.put("pending_count", "0");
         unreadRecords.put("accepted_count", "0");
         unreadRecords.put("current_count", "0");
-        unreadRecords.put("completed_count", "1");
+        unreadRecords.put("completed_count", "0");
         unreadRecords.put("rejected_count", "0");
         bootCampField.put("unread_records", unreadRecords);
 

@@ -1,5 +1,6 @@
 package io.dume.dume.teacher.homepage.fragments;
 
+import android.app.Activity;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
@@ -103,14 +104,15 @@ public class AcademicFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 final Intent intent = new Intent(getContext(), AcademicActivity.class);
-                intent.setAction("add");
-                startActivityForResult(intent, 1234);
+                intent.setAction("c_add");
+                Activity activity = (Activity) getContext();
+                activity.startActivityForResult(intent, 1234);
             }
         });
         openQualificationBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getContext(), EditAccount.class).setAction("scroll_down"));
+                startActivity(new Intent(getContext(), EditAccount.class).setAction("c_scroll_down"));
             }
         });
         academicRV.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));

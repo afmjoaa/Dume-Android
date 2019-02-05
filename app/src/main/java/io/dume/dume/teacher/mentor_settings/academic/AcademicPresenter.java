@@ -19,7 +19,7 @@ public class AcademicPresenter implements AcademicContract.Presenter, AcademicCo
         this.model = model;
         this.model.attachCallback(this);
         this.context = context;
-        this.activity = (Activity)context;
+        this.activity = (Activity) context;
     }
 
     @Override
@@ -34,7 +34,7 @@ public class AcademicPresenter implements AcademicContract.Presenter, AcademicCo
         switch (element.getId()) {
             case R.id.fabEdit:
                 view.enableLoad();
-                if (view.getAction().equals("edit") || view.getAction().equals("add")) {
+                if (view.getAction().equals("edit") || view.getAction().equals("add") || view.getAction().equals("c_add")) {
                     if (validateInput(view.getValidationCheck())) {
                         model.syncWithDatabase(view.getLevel(), view.getInstitution(), view.getDegree(), view.getStartYear(), view.getEndYear(), view.getRestult());
                     } else {
@@ -66,10 +66,10 @@ public class AcademicPresenter implements AcademicContract.Presenter, AcademicCo
 
     private boolean validateInput(boolean identify) {
         boolean validate = false;
-        if(identify){
+        if (identify) {
             if (!view.getLevel().equals("") && !view.getInstitution().equals("") && !view.getDegree().equals("") && !view.getStartYear().equals("") && !view.getEndYear().equals("") && !view.getRestult().equals("")) {
                 validate = true;
-            }else{
+            } else {
                 if (view.getLevel().equals("")) {
                     view.inValidFound("level");
                 }
@@ -89,10 +89,10 @@ public class AcademicPresenter implements AcademicContract.Presenter, AcademicCo
                     view.inValidFound("result");
                 }
             }
-        }else{
+        } else {
             if (!view.getLevel().equals("") && !view.getInstitution().equals("") && !view.getDegree().equals("") && !view.getStartYear().equals("") && !view.getRestult().equals("")) {
                 validate = true;
-            }else{
+            } else {
                 if (view.getLevel().equals("")) {
                     view.inValidFound("level");
                 }
@@ -122,13 +122,12 @@ public class AcademicPresenter implements AcademicContract.Presenter, AcademicCo
 
     @Override
     public void onSuccess() {
-        if (view.getAction().equals("add")) {
+        if (view.getAction().equals("add") || view.getAction().equals("c_add")) {
             hideKeyboard(activity);
             view.toast("Qualification Added Successfully");
             view.gotoBackActivity();
             //view.disableLoad();
-        }
-        if (view.getAction().equals("edit")) {
+        } else {
             hideKeyboard(activity);
             view.toast("Qualification Edited Successfully");
             view.gotoBackActivity();

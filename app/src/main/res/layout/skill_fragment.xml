@@ -35,13 +35,77 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:text="Sorry, no qualification to show right now..."
+            android:text="Sorry, no skills to show right now..."
             android:textAlignment="center"
             android:textAllCaps="false"
             android:textColor="@color/textColorSecondaryDark"
             android:textSize="15sp" />
 
     </LinearLayout>
+
+    <carbon.widget.RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/more_btn"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="6dp"
+        android:background="@color/white"
+        android:visibility="visible"
+        app:carbon_cornerRadius="6dp"
+        app:carbon_elevation="1dp">
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="36dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_gravity="center"
+            android:background="#e0f7fa"
+            android:contentDescription="tips"
+            android:gravity="center"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            app:srcCompat="@drawable/ic_tips" />
+
+        <com.hanks.htextview.scale.ScaleTextView
+            android:id="@+id/tipsTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:layout_marginStart="6dp"
+            android:layout_marginLeft="6dp"
+            android:layout_marginEnd="6dp"
+            android:layout_marginRight="6dp"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxWidth="120dp"
+            android:maxLines="1"
+            android:textColor="@color/textColorPrimary"
+            android:scrollHorizontally="true"
+            android:singleLine="true"
+            android:text="Tips"
+            android:textSize="12sp" />
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="36dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="center"
+            android:background="#e0f7fa"
+            android:contentDescription="tips"
+            android:gravity="center"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            app:srcCompat="@drawable/ic_tips" />
+
+    </carbon.widget.RelativeLayout>
 
     <Button
         android:id="@+id/more_btn"

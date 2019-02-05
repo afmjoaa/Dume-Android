@@ -1,6 +1,7 @@
 package io.dume.dume.teacher.homepage.fragments;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
@@ -38,13 +39,21 @@ public class PerformanceFragment extends Fragment {
     RecyclerView performanceRV;
     private PerformanceViewModel mViewModel;
     private static ReportAdapter reportAdapter;
-    private int spacing;
     private TeacherDataStore teacherDataStore;
     private TeacherActivtiy fragmentActivity;
+    private static PerformanceFragment performanceFragment = null;
+    private int itemWidth;
+    private Context context;
+
+
+    public static PerformanceFragment getInstance() {
+        if (performanceFragment == null) {
+            performanceFragment = new PerformanceFragment();
+        }
+        return performanceFragment;
+    }
 
     public static PerformanceFragment newInstance() {
-
-
         return new PerformanceFragment();
     }
 
@@ -54,12 +63,17 @@ public class PerformanceFragment extends Fragment {
         ButterKnife.bind(root);
         performanceRV = root.findViewById(R.id.performanceRV);
         //testing my code here
+        assert container != null;
         int[] wh = DumeUtils.getScreenSize(container.getContext());
-        spacing = (int) ((wh[0] - ((336) * (getResources().getDisplayMetrics().density))) / 4);
-        performanceRV.setLayoutManager(new GridLayoutManager(getContext(), 3));
-        performanceRV.addItemDecoration(new GridSpacingItemDecoration(3, spacing, true));
+        float mDensity = getResources().getDisplayMetrics().density;
+        int availableWidth = (int) (wh[0] - (93 * mDensity));
+        itemWidth = (int) ((availableWidth - (30 * mDensity)) / 2);
+        //spacing = (int) ((wh[0] - ((336) * (getResources().getDisplayMetrics().density))) / 4);
+        performanceRV.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        performanceRV.addItemDecoration(new GridSpacingItemDecoration(2, (int) (10 * mDensity), true));
 
         fragmentActivity = (TeacherActivtiy) getActivity();
+        context = getContext();
         teacherDataStore = fragmentActivity != null ? fragmentActivity.teacherDataStore : null;
         if (teacherDataStore != null) {
             if (teacherDataStore.getDocumentSnapshot() == null) {
@@ -110,15 +124,13 @@ public class PerformanceFragment extends Fragment {
             final String completedCount = (String) unread_records.get("completed_count");
             final String currentCount = (String) unread_records.get("current_count");
             final String pendingCount = (String) unread_records.get("pending_count");
-
             final String rejectedCount = (String) unread_records.get("rejected_count");
 
-            arrayList.add(new KeyValueModel("Accept Ratio", ((Integer.parseInt(acceptedCount) + Integer.parseInt(completedCount) + Integer.parseInt(currentCount) + Integer.parseInt(pendingCount)) /
-
-                    (Integer.parseInt(acceptedCount) + Integer.parseInt(completedCount) + Integer.parseInt(currentCount) + Integer.parseInt(pendingCount) + Integer.parseInt(rejectedCount))) * 100 + "%"
+            arrayList.add(new KeyValueModel("Accept Ratio", ((Integer.parseInt(acceptedCount) + Integer.parseInt(completedCount) + Integer.parseInt(currentCount) + Integer.parseInt(pendingCount) +1) /
+                    (Integer.parseInt(acceptedCount) + Integer.parseInt(completedCount) + Integer.parseInt(currentCount) + Integer.parseInt(pendingCount) + Integer.parseInt(rejectedCount) +1)) * 100 + "%"
             ));
 
-            performanceRV.setAdapter(new ReportAdapter(arrayList));
+            performanceRV.setAdapter(new ReportAdapter(context, itemWidth, arrayList));
         }
     }
 

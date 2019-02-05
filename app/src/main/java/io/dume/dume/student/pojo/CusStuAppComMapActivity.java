@@ -584,6 +584,13 @@ public class CusStuAppComMapActivity extends CustomStuAppCompatActivity implemen
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     COMPASSBTN.setElevation((int) (6 * (getResources().getDisplayMetrics().density)));
                 }
+
+                if(fromFlag == 1604){
+                    rlp.topMargin = (int) (20 * (getResources().getDisplayMetrics().density));
+                    rlp.leftMargin = (int) (16 * (getResources().getDisplayMetrics().density));
+                    rlp.bottomMargin = (int) (10 * (getResources().getDisplayMetrics().density));
+                    rlp.rightMargin = (int) (66 * (getResources().getDisplayMetrics().density));
+                }
             }
         }
     }

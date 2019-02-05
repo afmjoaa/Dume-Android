@@ -177,8 +177,6 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
     VerticalViewPager viewPager;
     @BindView(R.id.fragmentTitle)
     ScaleTextView fragmentTitle;
-    @BindView(R.id.tipsTV)
-    ScaleTextView scaleTextView;
     private CoordinatorLayout mainInterface;
     private ImageView referMentorImageView;
     private ImageView enhanceSkillImageView;
@@ -206,6 +204,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
     private BottomSheetDialog mCancelBottomSheetDialog;
     private View cancelsheetRootView;
     private static final int fromFlag = 1604;
+    private carbon.widget.LinearLayout percentOffBlock;
 
 
     @Override
@@ -269,6 +268,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         viewMusk = findViewById(R.id.view_musk);
         mainAppbar = findViewById(R.id.my_appbarLayout);
         mainInterface = findViewById(R.id.main_interface);
+        percentOffBlock = findViewById(R.id.percent_off_block);
         referMentorImageView = findViewById(R.id.refer_mentor_imageView);
         enhanceSkillImageView = findViewById(R.id.enhance_skill_imageview);
         freeCashBackImageView = findViewById(R.id.free_cashback_imageView);
@@ -340,7 +340,6 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
     @Override
     public void showSnackBar(String messages, String actionName) {
         Snackbar.SnackbarLayout layout = (Snackbar.SnackbarLayout) enamSnackbar.getView();
-
         TextView textView = (TextView) layout.findViewById(android.support.design.R.id.snackbar_text);
         textView.setVisibility(View.INVISIBLE);
         LayoutInflater inflater = LayoutInflater.from(context);
@@ -467,6 +466,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
                     bottomSheet.animate().scaleX(1 + (slideOffset * 0.058f)).setDuration(0).start();
                     viewMusk.animate().alpha(2 * slideOffset).setDuration(0).start();
                     mainInterface.animate().scaleX(1 - slideOffset).scaleY(1 - slideOffset).setDuration(0).start();
+                    //percentOffBlock.animate().scaleX(1 - slideOffset).scaleY(1 - slideOffset).setDuration(0).start();
                     secondaryAppBarLayout.animate().alpha(slideOffset).scaleX(slideOffset).scaleY(slideOffset).setDuration(0).start();
                 }
             }
@@ -557,12 +557,12 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
             public void onTabSelected(TabView tab, int position) {
                 viewPager.setCurrentItem(position);
                 fragmentTitle.animateText(tabModelArrayList.get(position).getTabName());
-                scaleTextView.animateText(tabModelArrayList.get(position).getTabName());
+
             }
 
             @Override
             public void onTabReselected(TabView tab, int position) {
-                tips("Every person is a new door to a different world.");
+
             }
         });
         viewPager.setAdapter(new pager(getSupportFragmentManager()));
@@ -586,15 +586,6 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         fragmentTitle.animateText(tabModelArrayList.get(tabLayout.getSelectedTabPosition()).getTabName());
 
 
-    }
-
-    public void tips(CharSequence sequence) {
-        scaleTextView.animateText(sequence);
-        scaleTextView.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Cairo_Regular.ttf"));
-        scaleTextView.setAnimationListener(hTextView -> {
-
-        });
-        scaleTextView.setSelected(true);
     }
 
     public void toggle(android.view.View view) {
@@ -892,15 +883,15 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         public Fragment getItem(int i) {
             Fragment fragment = null;
             if (i == 0) {
-                fragment = new PerformanceFragment();
+                fragment = PerformanceFragment.getInstance();
             } else if (i == 1) {
-                fragment = new InboxFragment();
+                fragment = InboxFragment.getInstance();
             } else if (i == 2) {
-                fragment = new PayFragment();
+                fragment = PayFragment.getInstance();
             } else if (i == 3) {
-                fragment = new StatisticsFragment();
+                fragment = StatisticsFragment.getInstance();
             } else if (i == 4) {
-                fragment = new SkillFragment();
+                fragment = SkillFragment.getInstance();
             } else if (i == 5) {
                 fragment = AcademicFragment.getInstance();
             }
@@ -920,7 +911,6 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         final Dialog dialog = new Dialog(context);
         dialog.setContentView(R.layout.custom_rating_dialogue);
         dialog.setCanceledOnTouchOutside(false);
-
         //all find view here
         MaterialRatingBar mDecimalRatingBars = dialog.findViewById(R.id.rated_mentor_rating_bar);
         RecyclerView itemRatingRecycleView = dialog.findViewById(R.id.rating_item_recycler);
@@ -1311,14 +1301,16 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
                                 academicFragment.loadData();
                             } else {
                                 academicFragment.academicAdapter = new AcademicAdapter(TeacherActivtiy.this, academicFragment.getAcademics(teacherDataStore.getDocumentSnapshot()));
-                                academicFragment.academicRV.setAdapter(academicFragment.academicAdapter );
+                                academicFragment.academicRV.setAdapter(academicFragment.academicAdapter);
                             }
                         }
+
                         @Override
                         public void onError(String msg) {
                             flush(msg);
                         }
                     });
+                    //viewPager.setCurrentItem(3);
                 }
                 break;
         }

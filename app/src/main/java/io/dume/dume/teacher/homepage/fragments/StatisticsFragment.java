@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
@@ -30,6 +31,8 @@ import io.dume.dume.R;
 import io.dume.dume.teacher.adapters.StatAdapter;
 import io.dume.dume.teacher.homepage.TeacherContract;
 import io.dume.dume.teacher.pojo.Stat;
+import io.dume.dume.util.DumeUtils;
+import io.dume.dume.util.GridSpacingItemDecoration;
 
 public class StatisticsFragment extends Fragment {
     @BindView(R.id.statChart)
@@ -37,14 +40,23 @@ public class StatisticsFragment extends Fragment {
     private StatisticsViewModel mViewModel;
     @BindView(R.id.statRV)
     RecyclerView recyclerView;
+    private static StatisticsFragment statisticsFragment = null;
+    private int itemWidth;
+
 
     public static StatisticsFragment newInstance() {
         return new StatisticsFragment();
     }
 
+    public static StatisticsFragment getInstance() {
+        if (statisticsFragment == null) {
+            statisticsFragment = new StatisticsFragment();
+        }
+        return statisticsFragment;
+    }
+
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.statistics_fragment, container, false);
         ButterKnife.bind(this, root);
         mViewModel = new StatisticsViewModel();
@@ -80,8 +92,17 @@ public class StatisticsFragment extends Fragment {
 
             }
         });
+
+        //testing
+        assert container != null;
+        int[] wh = DumeUtils.getScreenSize(container.getContext());
+        float mDensity = getResources().getDisplayMetrics().density;
+        int availableWidth = (int) (wh[0] - (93 * mDensity));
+        itemWidth = (int) ((availableWidth - (30 * mDensity)) / 2);
+
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
-        recyclerView.setAdapter(new StatAdapter(new Stat(123, 3, 1, null)) {
+        recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, (int) (10 * mDensity), true));
+        recyclerView.setAdapter(new StatAdapter(getContext(),itemWidth ,new Stat(123, 3, 1, null)) {
             @Override
             public void onItemClick(int position, View view) {
                 Toast.makeText(getContext(), "", Toast.LENGTH_SHORT).show();
@@ -110,7 +131,7 @@ public class StatisticsFragment extends Fragment {
         lineChart.setTouchEnabled(false);
         lineChart.enableScroll();
         lineChart.invalidate();
-
+        lineChart.animateY(3000, Easing.EasingOption.EaseInOutElastic);
     }
 
 }

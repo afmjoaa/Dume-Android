@@ -1,39 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<carbon.widget.LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<carbon.widget.RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="81dp"
-    android:layout_height="70dp"
-    android:background="@drawable/bg_white_round_corner"
-    android:gravity="center"
-    android:orientation="vertical"
-    android:padding="5dp"
-    app:carbon_elevation="2dp">
-    <!---->
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:clickable="true"
+    android:focusable="true"
+    android:id="@+id/hosting_relative_layout"
+    android:padding="10dp"
+    app:carbon_cornerRadius="6dp"
+    app:carbon_elevation="2dp"
+    app:carbon_rippleColor="@color/colorRippleDefault">
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/reportTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_gravity="center">
+        android:layout_centerHorizontal="true"
+        android:text="This Week"
+        android:singleLine="true"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textAllCaps="false"
+        android:textSize="13sp" />
 
-        <TextView
-            android:id="@+id/reportTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="This Week"
-            android:textAlignment="center"
-            android:textAllCaps="false"
-            android:textSize="10sp" />
+    <TextView
+        android:id="@+id/reportValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/reportTitle"
+        android:layout_centerHorizontal="true"
+        android:text="$760.00"
+        android:singleLine="true"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textAlignment="center"
+        android:textColor="@color/colorLink"
+        android:textSize="13sp" />
 
-        <TextView
-            android:id="@+id/reportValue"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="$760.00"
-            android:textAlignment="center"
-            android:textColor="@color/black"
-            android:textSize="12sp"
-            android:textStyle="bold" />
-    </LinearLayout>
-
-</carbon.widget.LinearLayout>
+</carbon.widget.RelativeLayout>
