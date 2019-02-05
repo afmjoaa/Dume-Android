@@ -1,8 +1,12 @@
 package io.dume.dume.common.contactActivity;
 
+import android.app.Activity;
+import android.app.ActivityOptions;
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,14 +15,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.google.common.hash.HashingOutputStream;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import carbon.widget.ImageView;
+import io.dume.dume.Google;
 import io.dume.dume.R;
+import io.dume.dume.common.chatActivity.ChatActivity;
 import io.dume.dume.common.chatActivity.DemoModel;
 import io.dume.dume.teacher.homepage.TeacherContract;
 
@@ -71,14 +79,66 @@ public class ContactDataAdapter extends RecyclerView.Adapter<ContactDataAdapter.
             Map<String, Object> sh_info = (Map<String, Object>) data.get(position).getRecord().get("for_whom");
             Map<String, Object> stringHashMap = new HashMap<String, Object>();
             stringHashMap.put("name", sp_info.get("first_name") + " " + sp_info.get("last_name"));
+            stringHashMap.put("active", true);
             Map<String, Object> stringHashMap1 = new HashMap<String, Object>();
             stringHashMap1.put("name", sh_info.get("stu_name"));
+            stringHashMap1.put("active", true);
+
             map.put(sp_uid.substring(2), stringHashMap);
             map.put(sh_uid.substring(2), stringHashMap1);
-            new DemoModel(context).addRoom(map, new TeacherContract.Model.Listener<Void>() {
+
+            List<String> participants = new ArrayList<>();
+            participants.add(sp_uid.substring(2));
+            participants.add(sh_uid.substring(2));
+            map.put("participants", participants);
+            Map<String, Object> typing = new HashMap<>();
+            typing.put(sp_uid.substring(2), false);
+            typing.put(sh_uid.substring(2), false);
+            map.put("typing", typing);
+            map.put("expire_date", new Date());
+            map.put("expired", false);
+            map.put("spam", false);
+            List<String> foo = new ArrayList<>((List<String>) map.get("participants"));
+            Collections.sort(foo);
+
+            List<String> roomIdList = Google.getInstance().getRoomIdList();
+            if (roomIdList != null && roomIdList.contains(foo.get(0).concat(foo.get(1)))) {
+                Log.w(TAG, "onBindViewHolder: Already Have Room");
+                Google.getInstance().setCurrentRoom(foo.get(0).concat(foo.get(1)));
+                android.util.Pair[] pairsPending = new android.util.Pair[3];
+                pairsPending[0] = new android.util.Pair<View, String>(holder.statusIndicatorImage, "tn0ne");
+                pairsPending[1] = new android.util.Pair<View, String>(holder.contactUserDP, "tnTwo");
+                pairsPending[2] = new android.util.Pair<View, String>(holder.contactUserName, "tnFive");
+                ActivityOptions optionsPending = null;
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                    optionsPending = ActivityOptions.makeSceneTransitionAnimation((Activity) context, pairsPending);
+                }
+                if (optionsPending != null) {
+                    context.startActivity(new Intent(context, ChatActivity.class).setAction("testing"), optionsPending.toBundle());
+                } else {
+                    context.startActivity(new Intent(context, ChatActivity.class).setAction("testing"));
+
+                }
+
+            } else new DemoModel(context).addRoom(map, new TeacherContract.Model.Listener<Void>() {
                 @Override
                 public void onSuccess(Void list) {
-                    Toast.makeText(context, "Room Created Succesully.", Toast.LENGTH_SHORT).show();
+                    Google.getInstance().setCurrentRoom(foo.get(0).concat(foo.get(1)));
+                    android.util.Pair[] pairsPending = new android.util.Pair[3];
+                    pairsPending[0] = new android.util.Pair<View, String>(holder.statusIndicatorImage, "tn0ne");
+                    pairsPending[1] = new android.util.Pair<View, String>(holder.contactUserDP, "tnTwo");
+                    pairsPending[2] = new android.util.Pair<View, String>(holder.contactUserName, "tnFive");
+                    ActivityOptions optionsPending = null;
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                        optionsPending = ActivityOptions.makeSceneTransitionAnimation((Activity) context, pairsPending);
+                    }
+                    if (optionsPending != null) {
+                        context.startActivity(new Intent(context, ChatActivity.class).setAction("testing"), optionsPending.toBundle());
+                    } else {
+                        context.startActivity(new Intent(context, ChatActivity.class).setAction("testing"));
+
+                    }
+
                 }
 
                 @Override

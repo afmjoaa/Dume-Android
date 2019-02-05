@@ -15,6 +15,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.stfalcon.chatkit.messages.MessageHolders;
 import com.stfalcon.chatkit.messages.MessageInput;
@@ -30,18 +32,17 @@ import java.util.Date;
 import java.util.List;
 
 import carbon.widget.ImageView;
+import io.dume.dume.Google;
 import io.dume.dume.R;
-import io.dume.dume.common.chatActivity.Used_Classes.DemoMessagesActivity;
 import io.dume.dume.common.chatActivity.Holders.IncomingVoiceMessageViewHolder;
+import io.dume.dume.common.chatActivity.Holders.OutcomingVoiceMessageViewHolder;
+import io.dume.dume.common.chatActivity.Used_Classes.DemoMessagesActivity;
 import io.dume.dume.common.chatActivity.Used_Classes.Message;
 import io.dume.dume.common.chatActivity.Used_Classes.MessagesFixtures;
-import io.dume.dume.common.chatActivity.Holders.OutcomingVoiceMessageViewHolder;
 import io.dume.dume.common.chatActivity.Used_Classes.User;
 import io.dume.dume.student.pojo.SearchDataStore;
 import io.dume.dume.teacher.homepage.TeacherContract;
-import io.dume.dume.teacher.mentor_settings.basicinfo.EditAccount;
 import io.dume.dume.teacher.pojo.Letter;
-import retrofit2.http.PUT;
 
 import static io.dume.dume.util.DumeUtils.configureAppbarWithoutColloapsing;
 
@@ -64,6 +65,8 @@ public class ChatActivity extends DemoMessagesActivity implements ChatActivityCo
     public static int TYPE;
     private MessageInput input;
     private TextView typeingTV;
+    private TextView title;
+    private ImageView dp;
 
     public static void open(Context context) {
         context.startActivity(new Intent(context, ChatActivity.class));
@@ -86,13 +89,15 @@ public class ChatActivity extends DemoMessagesActivity implements ChatActivityCo
         MessageInput input = (MessageInput) findViewById(R.id.input);
         input.setInputListener(this);
         input.setAttachmentsListener(this);
+        Google google = Google.getInstance();
+        int i = google.getRoomIdList().indexOf(google.getCurrentRoom());
+        title.setText(google.getRooms().get(i).getOpponentName());
+        Glide.with(this).load(google.getRooms().get(i).getOpponentDP()).apply(new RequestOptions().placeholder(R.drawable.dp)).into(dp);
 
         mModel.readLastThirty(new TeacherContract.Model.Listener<List<Letter>>() {
             @Override
             public void onSuccess(List<Letter> list) {
                 for (int i = 0; i < list.size() - 1; i++) {
-
-
                     if (list.get(i).getUid().equals(FirebaseAuth.getInstance().getUid())) {
                         TYPE = SENDER;
                     } else {
@@ -187,6 +192,8 @@ public class ChatActivity extends DemoMessagesActivity implements ChatActivityCo
         attachmentDocument = findViewById(R.id.attachment_document);
         attachemtDocumentImage = findViewById(R.id.attachment_document_image);
         viewMusk = findViewById(R.id.view_musk);
+        dp = findViewById(R.id.noti_user_dp);
+        title = findViewById(R.id.noti_user_name);
         input = findViewById(R.id.input);
         typeingTV = findViewById(R.id.isTypingTV);
     }
@@ -205,7 +212,7 @@ public class ChatActivity extends DemoMessagesActivity implements ChatActivityCo
     public boolean onSubmit(CharSequence input) {
         if (FirebaseAuth.getInstance().getCurrentUser() != null && !FirebaseAuth.getInstance().getCurrentUser().getUid().equals("")) {
             Letter letter = new Letter(FirebaseAuth.getInstance().getUid(), input.toString(), new Date());
-            mModel.addMessage(letter, new TeacherContract.Model.Listener<Void>() {
+            mModel.addMessage(Google.getInstance().getCurrentRoom(), letter, new TeacherContract.Model.Listener<Void>() {
                 @Override
                 public void onSuccess(Void list) {
                     flush("Sent");

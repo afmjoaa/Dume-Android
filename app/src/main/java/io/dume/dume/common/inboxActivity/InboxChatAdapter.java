@@ -9,21 +9,24 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.jackandphantom.circularprogressbar.CircleProgressbar;
 
 import java.util.List;
 
 import carbon.widget.ImageView;
 import io.dume.dume.R;
+import io.dume.dume.common.chatActivity.Room;
 
 public abstract class InboxChatAdapter extends RecyclerView.Adapter<InboxChatAdapter.MyViewHolder> {
 
     private static final String TAG = "InboxChatAdapter";
     private LayoutInflater inflater;
     private Context context;
-    private List<InboxChatData> data;
+    private List<Room> data;
 
-    public InboxChatAdapter(Context context, List<InboxChatData> data) {
+    public InboxChatAdapter(Context context, List<Room> data) {
         inflater = LayoutInflater.from(context);
         this.data = data;
         this.context = context;
@@ -39,6 +42,8 @@ public abstract class InboxChatAdapter extends RecyclerView.Adapter<InboxChatAda
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+        holder.chatUserName.setText(data.get(position).getOpponentName());
+        Glide.with(context).load(data.get(position)).apply(new RequestOptions().placeholder(R.drawable.avatar)).into(holder.chatUserDP);
 
         switch (position) {
             case 1:
@@ -73,14 +78,14 @@ public abstract class InboxChatAdapter extends RecyclerView.Adapter<InboxChatAda
 
     @Override
     public int getItemCount() {
-        return 3;
+        return data.size();
     }
 
     abstract void OnItemClicked(View v, int position);
 
     abstract void OnItemLongClicked(View v, int position);
 
-    public void updateInboxChatData(List<InboxChatData> newData) {
+    public void updateInboxChatData(List<Room> newData) {
         data.clear();
         data.addAll(newData);
         this.notifyDataSetChanged();

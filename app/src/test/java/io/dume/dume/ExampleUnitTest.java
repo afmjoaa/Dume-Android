@@ -1,12 +1,10 @@
 package io.dume.dume;
 
+import android.util.Log;
+
 import org.junit.Test;
 
-import io.dume.dume.teacher.homepage.TeacherContract;
-import io.dume.dume.teacher.homepage.TeacherPresenter;
-import io.dume.dume.teacher.model.ModelSource;
-
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -32,9 +30,6 @@ public class ExampleUnitTest {
     }
 
 
-    interface MockContract extends TeacherContract {
-
-    }
 
 
 
