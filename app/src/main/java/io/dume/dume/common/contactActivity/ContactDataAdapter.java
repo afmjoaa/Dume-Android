@@ -68,9 +68,9 @@ public class ContactDataAdapter extends RecyclerView.Adapter<ContactDataAdapter.
         holder.contactUserName.setText(single.getContactUserName());
         holder.statusText.setText(single.getStatus());
         holder.itemView.setOnClickListener(view -> {
-            if (!single.getStatus().equals("Pending")) {
-            } else {
+            if (single.getStatus().equals("Pending")) {
                 Toast.makeText(context, "Your request is not accepted yet.", Toast.LENGTH_SHORT).show();
+                return;
             }
             Map<String, Object> map = new HashMap<>();
             String sp_uid = (String) data.get(position).getRecord().get("sp_uid");

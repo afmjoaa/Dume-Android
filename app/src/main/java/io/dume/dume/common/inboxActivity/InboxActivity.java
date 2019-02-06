@@ -1,6 +1,7 @@
 package io.dume.dume.common.inboxActivity;
 
 import android.app.ActivityOptions;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
@@ -65,6 +66,7 @@ public class InboxActivity extends CustomStuAppCompatActivity implements InboxAc
     private Intent contactFromIntent;
     private Toolbar myToolbar;
     private static InboxChatAdapter recordsRecyAda;
+    public Context context;
 
 
     @Override
@@ -72,6 +74,7 @@ public class InboxActivity extends CustomStuAppCompatActivity implements InboxAc
         super.onCreate(savedInstanceState);
         setContentView(R.layout.common1_activity_inbox);
         setActivityContext(this, fromFlag);
+        context = this;
         mPresenter = new InboxActivityPresenter(this, new InboxActivityModel(this));
         mPresenter.inboxEnqueue();
         configureAppbarWithoutColloapsing(this, "Inbox");
@@ -270,10 +273,18 @@ public class InboxActivity extends CustomStuAppCompatActivity implements InboxAc
         private TextView chatUserName;
         private carbon.widget.ImageView chatUserDP1;
         private DemoModel demoModel;
+        private Context context;
 
 
         public PlaceholderFragment() {
-            demoModel = new DemoModel(getActivity());
+
+        }
+
+        @Override
+        public void onAttach(Context context) {
+            this.context = context;
+            super.onAttach(context);
+            demoModel = new DemoModel(context);
         }
 
         public static PlaceholderFragment newInstance(int sectionNumber) {
@@ -289,7 +300,7 @@ public class InboxActivity extends CustomStuAppCompatActivity implements InboxAc
 
             myThisActivity = (InboxActivity) getActivity();
             position = Objects.requireNonNull(getArguments()).getInt(ARG_SECTION_NUMBER);
-            Log.w(TAG, "onCreateView: " + position);
+            Log.w(TAG, "onCreateView: " + context == null ? "NullFucker" : "Not Null Dear");
 
             switch (position) {
                 case 1:
