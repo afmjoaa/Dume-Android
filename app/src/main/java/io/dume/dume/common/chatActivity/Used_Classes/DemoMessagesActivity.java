@@ -19,12 +19,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 import io.dume.dume.R;
+import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
+
 import static io.dume.dume.util.DumeUtils.showToast;
 
 /*
  * Created by troy379 on 04.04.17.
  */
-public abstract class DemoMessagesActivity extends AppCompatActivity
+public abstract class DemoMessagesActivity extends CustomStuAppCompatActivity
         implements MessagesListAdapter.SelectionListener,
         MessagesListAdapter.OnLoadMoreListener {
 

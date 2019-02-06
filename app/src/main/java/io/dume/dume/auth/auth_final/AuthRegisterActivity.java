@@ -6,8 +6,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,22 +15,11 @@ import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.concurrent.TimeUnit;
 
 import io.dume.dume.R;
 import io.dume.dume.auth.AuthGlobalContract;
@@ -43,14 +30,15 @@ import io.dume.dume.auth.auth.AuthContract;
 import io.dume.dume.auth.code_verification.PhoneVerificationActivity;
 import io.dume.dume.customView.HorizontalLoadView;
 import io.dume.dume.obligation.foreignObli.PayActivity;
-import io.dume.dume.student.homePage.StudentActivity;
+import io.dume.dume.student.homePage.HomePageActivity;
+import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
 import io.dume.dume.teacher.homepage.TeacherActivtiy;
 import io.dume.dume.util.DumeUtils;
 
 import static io.dume.dume.util.DumeUtils.configureAppbar;
 import static io.dume.dume.util.DumeUtils.hideKeyboard;
 
-public class AuthRegisterActivity extends AppCompatActivity {
+public class AuthRegisterActivity extends CustomStuAppCompatActivity {
     EditText firstname, lastName, phoneNumber;
     AutoCompleteTextView email;
     private DataStore datastore = null;
@@ -65,6 +53,7 @@ public class AuthRegisterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_auth_final);
+        setActivityContext(this, fromFlag);
         init();
         if (getIntent().getSerializableExtra("datastore") != null) {
             datastore = (DataStore) getIntent().getSerializableExtra("datastore");
@@ -378,8 +367,8 @@ public class AuthRegisterActivity extends AppCompatActivity {
                     }
                 });
 */
-               AuthModel model = new AuthModel(this, this);
-               model.sendMessage("+88" + phoneStr, new AuthContract.Model.Callback() {
+                AuthModel model = new AuthModel(this, this);
+                model.sendMessage("+88" + phoneStr, new AuthContract.Model.Callback() {
                     @Override
                     public void onStart() {
                         showDialog();
@@ -480,7 +469,7 @@ public class AuthRegisterActivity extends AppCompatActivity {
 
 
     public void gotoStudentActivity() {
-        startActivity(new Intent(this, StudentActivity.class));
+        startActivity(new Intent(this, HomePageActivity.class));
         finish();
     }
 

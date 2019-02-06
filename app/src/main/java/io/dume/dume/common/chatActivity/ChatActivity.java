@@ -78,6 +78,7 @@ public class ChatActivity extends DemoMessagesActivity implements ChatActivityCo
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.common4_chat_activity);
+        setActivityContext(this, fromFlag);
         mModel = new ChatActivityModel(this);
         mPresenter = new ChatActivityPresenter(this, mModel);
         mPresenter.chatEnqueue();

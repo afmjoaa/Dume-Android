@@ -2,13 +2,15 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/parent_coor_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorWhite"
     tools:context=".teacher.mentor_settings.academic.AcademicActivity">
 
-    <include layout="@layout/activity_header"
-        android:id="@+id/included_appber"/>
+    <include
+        android:id="@+id/included_appber"
+        layout="@layout/activity_header" />
 
     <io.dume.dume.customView.HorizontalLoadView
         android:id="@+id/academicLoad"
@@ -53,10 +55,10 @@
                         android:id="@+id/input_level"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/level"
-                        android:onClick="onAcademicClick"
                         android:focusable="false"
+                        android:hint="@string/level"
                         android:inputType="textNoSuggestions"
+                        android:onClick="onAcademicClick"
                         app:fontFamily="@font/cairo_regular" />
 
                 </android.support.design.widget.TextInputLayout>
@@ -98,8 +100,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/institution_"
-                        android:onClick="onAcademicClick"
                         android:inputType="textNoSuggestions"
+                        android:onClick="onAcademicClick"
                         app:fontFamily="@font/cairo_regular" />
 
                 </android.support.design.widget.TextInputLayout>
@@ -141,8 +143,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/degree_tittle"
-                        android:onClick="onAcademicClick"
                         android:inputType="textNoSuggestions"
+                        android:onClick="onAcademicClick"
                         app:fontFamily="@font/cairo_regular" />
 
                 </android.support.design.widget.TextInputLayout>
@@ -193,10 +195,10 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:autofillHints="Starting Date"
-                            android:hint="From"
-                            android:onClick="onAcademicClick"
                             android:focusable="false"
+                            android:hint="From"
                             android:inputType="textPersonName"
+                            android:onClick="onAcademicClick"
                             app:fontFamily="@font/cairo_regular" />
 
                     </android.support.design.widget.TextInputLayout>
@@ -221,12 +223,12 @@
 
                 <RelativeLayout
                     android:id="@+id/to_relative"
-                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
                     android:layout_marginStart="20dp"
-                    android:layout_weight="1">
+                    android:layout_marginLeft="20dp"
+                    android:layout_weight="1"
+                    android:visibility="gone">
 
                     <android.support.design.widget.TextInputLayout
                         android:id="@+id/input_layout_to"
@@ -237,12 +239,12 @@
                             android:id="@+id/toET"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="To"
-                            android:onClick="onAcademicClick"
+                            android:autofillHints="Finishing Date"
                             android:focusable="false"
+                            android:hint="To"
                             android:inputType="textPersonName"
-                            app:fontFamily="@font/cairo_regular"
-                            android:autofillHints="Finishing Date" />
+                            android:onClick="onAcademicClick"
+                            app:fontFamily="@font/cairo_regular" />
                     </android.support.design.widget.TextInputLayout>
 
                     <carbon.widget.ImageView
@@ -282,12 +284,12 @@
                         android:id="@+id/levelET"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/status_achievement"
-                        android:onClick="onAcademicClick"
+                        android:autofillHints="Status"
                         android:focusable="false"
+                        android:hint="@string/status_achievement"
                         android:inputType="textNoSuggestions"
-                        app:fontFamily="@font/cairo_regular"
-                        android:autofillHints="Status" />
+                        android:onClick="onAcademicClick"
+                        app:fontFamily="@font/cairo_regular" />
 
                 </android.support.design.widget.TextInputLayout>
 
@@ -313,9 +315,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="18dp"
-                android:layout_marginRight="18dp"
                 android:layout_marginLeft="18dp"
                 android:layout_marginEnd="18dp"
+                android:layout_marginRight="18dp"
                 android:translationY="-4dp">
 
                 <android.support.v7.widget.AppCompatCheckBox

@@ -5,19 +5,17 @@ import android.view.View;
 
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.ListenerRegistration;
 
 import java.util.ArrayList;
-import java.util.Objects;
+import java.util.Map;
 
 import io.dume.dume.R;
-import io.dume.dume.auth.AuthModel;
 import io.dume.dume.model.DumeModel;
 import io.dume.dume.teacher.homepage.TeacherContract;
 
+import io.dume.dume.teacher.homepage.TeacherDataStore;
 import io.dume.dume.teacher.pojo.Skill;
 import io.dume.dume.util.DumeUtils;
 
@@ -32,6 +30,8 @@ public class SkillPresenter implements SkillContract.Presenter {
     private static final String TAG = "SkillPresenter";
 
     private io.dume.dume.model.TeacherModel teacherModel;
+    private Map<String, Object> documentSnapshot;
+    private int percentage;
 
     public SkillPresenter(SkillContract.Model model, SkillContract.View view) {
         this.model = model;
@@ -56,26 +56,59 @@ public class SkillPresenter implements SkillContract.Presenter {
         });
 
         firestore = FirebaseFirestore.getInstance();
-        FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
+      /*  FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
                 .setTimestampsInSnapshotsEnabled(true)
                 .build();
-        firestore.setFirestoreSettings(settings);
+        firestore.setFirestoreSettings(settings);*/
         Log.w(TAG, "AuthModel: " + firestore.hashCode());
         mAuth = FirebaseAuth.getInstance();
+    }
+
+
+    protected boolean isProfileOK() {
+        documentSnapshot = TeacherDataStore.getInstance().getDocumentSnapshot();
+
+
+        if (documentSnapshot != null) {
+            String beh = (String) documentSnapshot.get("pro_com_%");
+            percentage = Integer.parseInt(beh);
+            if (percentage >= 95) {
+                return true;
+            }
+
+        }
+        view.flush("Profile should be at least 95% completed");
+        String snackString = "Profile only " + percentage + "% complete";
+        view.showSnack(snackString, "GO TO PROFILE");
+        return false;
+
     }
 
     @Override
     public void onViewInteracted(View element) {
         switch (element.getId()) {
             case R.id.fab_regular:
-                view.goToCrudActivity(DumeUtils.TEACHER);
+                if (isProfileOK()) {
+                    view.goToCrudActivity(DumeUtils.TEACHER);
+                }
+
+
                 break;
             case R.id.fab_gang:
-                view.goToCrudActivity(DumeUtils.BOOTCAMP);
+                if (isProfileOK()) {
+                    view.goToCrudActivity(DumeUtils.BOOTCAMP);
+                }
                 break;
             case R.id.fab_instant:
-                //do something
-                view.flush("Unlock the Premier badge");
+                if (isProfileOK()) {
+                    final Map<String, Boolean> achievements = (Map<String, Boolean>) documentSnapshot.get("achievements");
+                    Boolean premier = achievements.get("premier");
+                    if (premier) {
+                        view.goToCrudActivity(DumeUtils.TEACHER);
+                    } else
+                        view.flush("You can't create instant dume without unlocking Premier Badge.");
+                }
+
                 break;
             case R.id.view_musk:
                 view.performMultiFabClick();

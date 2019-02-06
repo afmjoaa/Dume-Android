@@ -12,6 +12,10 @@ public interface SkillContract {
         void loadSkillRV(ArrayList<Skill> list);
 
         void performMultiFabClick();
+
+        void showSnack(String message, String actionName);
+        void defaultSnak(String message, String actionName);
+
     }
 
     interface Model extends MyBaseContract.Model{

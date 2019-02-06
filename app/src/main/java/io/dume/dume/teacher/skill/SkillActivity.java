@@ -2,9 +2,15 @@ package io.dume.dume.teacher.skill;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.animation.FastOutLinearInInterpolator;
 import android.support.v4.view.animation.LinearOutSlowInInterpolator;
 import android.support.v4.widget.NestedScrollView;
@@ -12,10 +18,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
@@ -31,14 +39,17 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.dume.dume.R;
 import io.dume.dume.customView.HorizontalLoadView;
+import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
 import io.dume.dume.teacher.adapters.SkillAdapter;
 import io.dume.dume.teacher.crudskill.CrudSkillActivity;
 import io.dume.dume.teacher.homepage.TeacherDataStore;
+import io.dume.dume.teacher.mentor_settings.basicinfo.EditAccount;
 import io.dume.dume.teacher.pojo.Skill;
 import io.dume.dume.util.DumeUtils;
+import io.dume.dume.util.NetworkUtil;
 import io.dume.dume.util.VisibleToggleClickListener;
 
-public class SkillActivity extends AppCompatActivity implements SkillContract.View, View.OnClickListener {
+public class SkillActivity extends CustomStuAppCompatActivity implements SkillContract.View, View.OnClickListener {
     @BindView(R.id.loadView)
     HorizontalLoadView loadView;
     @BindView(R.id.skillRV)
@@ -52,14 +63,42 @@ public class SkillActivity extends AppCompatActivity implements SkillContract.Vi
     private NestedScrollView nestedScrollView;
     private com.getbase.floatingactionbutton.FloatingActionButton fabInstant;
     private SkillAdapter adapter;
+    private CoordinatorLayout coordinatorLayout;
+    private Snackbar enamSnackbar;
+    private int ADD_PARMANENT_ADDRESS = 1005;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_skill);
+        setActivityContext(this, fromFlag);
         ButterKnife.bind(this);
         presenter = new SkillPresenter(new SkillModel(), this);
         presenter.enqueue();
+
+        //setting my snackbar callback
+        snackbar.addCallback(new Snackbar.Callback() {
+            @Override
+            public void onDismissed(Snackbar snackbar, int event) {
+                multiFab.setTranslationY(0);
+                multiFab.setEnabled(true);
+                //floatingButoon.setClickable(true);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    multiFab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorAccent)));
+                }
+            }
+
+            @Override
+            public void onShown(Snackbar snackbar) {
+                multiFab.setTranslationY(-30*mDensity);
+                multiFab.setEnabled(false);
+
+                //floatingButoon.setClickable(false);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    multiFab.setBackgroundTintList(ColorStateList.valueOf(Color.GRAY));
+                }
+            }
+        });
     }
 
     @Override
@@ -72,8 +111,9 @@ public class SkillActivity extends AppCompatActivity implements SkillContract.Vi
         fabInstant = findViewById(R.id.fab_instant);
         viewMusk = findViewById(R.id.view_musk);
         nestedScrollView = findViewById(R.id.hosting_nestedScroll_layout);
-        fabInstant.setEnabled(false);
 
+        coordinatorLayout = findViewById(R.id.parent_coor_layout);
+        enamSnackbar = Snackbar.make(coordinatorLayout, "Replace with your own action", Snackbar.LENGTH_LONG);
         //initial error fix
         multiFab.collapse();
         fabRegular.setVisibility(View.GONE);
@@ -130,7 +170,11 @@ public class SkillActivity extends AppCompatActivity implements SkillContract.Vi
 
     @Override
     public void flush(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        Toast toast = Toast.makeText(this, message, Toast.LENGTH_SHORT);
+        TextView v = toast.getView().findViewById(android.R.id.message);
+        if (v != null) v.setGravity(Gravity.CENTER);
+        toast.show();
+
     }
 
 
@@ -163,6 +207,51 @@ public class SkillActivity extends AppCompatActivity implements SkillContract.Vi
         multiFab.collapse();
     }
 
+    @Override
+    public void defaultSnak(String message, String actionName) {
+
+    }
+
+    @Override
+    public void showSnack(String message, String actionName) {
+        Snackbar.SnackbarLayout layout = (Snackbar.SnackbarLayout) enamSnackbar.getView();
+        TextView textView = (TextView) layout.findViewById(android.support.design.R.id.snackbar_text);
+        textView.setVisibility(View.INVISIBLE);
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View snackView = inflater.inflate(R.layout.teachers_snakbar_layout, null);
+        // layout.setBackgroundColor(R.color.red);
+        TextView textViewStart = snackView.findViewById(R.id.custom_snackbar_text);
+        textViewStart.setText(message);
+        TextView actionTV = snackView.findViewById(R.id.actionTV);
+        actionTV.setTextColor(getResources().getColor(R.color.frag_icon_active));
+        actionTV.setOnClickListener(view -> {
+            startActivity(new Intent(getApplicationContext(), EditAccount.class));
+        });
+        actionTV.setText(actionName);
+        layout.setPadding(0, 0, 0, 0);
+        CoordinatorLayout.LayoutParams parentParams = (CoordinatorLayout.LayoutParams) layout.getLayoutParams();
+        parentParams.height = (int) (30 * (getResources().getDisplayMetrics().density));
+       /* parentParams.setAnchorId(R.id.Secondary_toolbar);
+        parentParams.anchorGravity = Gravity.BOTTOM;*/
+        layout.setLayoutParams(parentParams);
+        layout.addView(snackView, 0);
+        int status = NetworkUtil.getConnectivityStatusString(this);
+        enamSnackbar.show();
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == ADD_PARMANENT_ADDRESS) {
+
+            }
+        }
+
+
+    }
+
     public void showProgress() {
         if (loadView.getVisibility() == View.INVISIBLE || loadView.getVisibility() == View.GONE) {
             loadView.setVisibility(View.VISIBLE);
@@ -179,7 +268,10 @@ public class SkillActivity extends AppCompatActivity implements SkillContract.Vi
         if (loadView.getVisibility() == View.VISIBLE) {
             loadView.setVisibility(View.INVISIBLE);
         }
+
     }
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

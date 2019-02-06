@@ -85,7 +85,6 @@
                     android:clickable="true"
                     android:focusable="true"
                     android:visibility="gone"
-                    android:onClick="onGrabingLocationViewClicked"
                     android:foreground="?android:attr/selectableItemBackground"
                     android:orientation="vertical"
                     android:paddingLeft="16dp"

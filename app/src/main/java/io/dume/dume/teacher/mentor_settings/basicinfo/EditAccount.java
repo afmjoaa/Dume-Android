@@ -15,7 +15,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.NestedScrollView;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -47,20 +46,18 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.dume.dume.R;
 import io.dume.dume.customView.HorizontalLoadView;
-import io.dume.dume.model.DumeModel;
 import io.dume.dume.student.grabingLocation.GrabingLocationActivity;
+import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
 import io.dume.dume.teacher.adapters.AcAdapter;
-import io.dume.dume.teacher.homepage.TeacherContract;
 import io.dume.dume.teacher.mentor_settings.academic.AcademicActivity;
 import io.dume.dume.teacher.pojo.Academic;
-import io.dume.dume.util.AlertMsgDialogue;
 import io.dume.dume.util.DatePickerFragment;
 import io.dume.dume.util.DumeUtils;
 import io.dume.dume.util.RadioBtnDialogue;
 
 import static io.dume.dume.util.DumeUtils.getAddress;
 
-public class EditAccount extends AppCompatActivity implements EditContract.View, View.OnClickListener {
+public class EditAccount extends CustomStuAppCompatActivity implements EditContract.View, View.OnClickListener {
     private FloatingActionButton fb;
     private EditContract.Presenter presenter;
     private NestedScrollView mScrollView;
@@ -105,6 +102,7 @@ public class EditAccount extends AppCompatActivity implements EditContract.View,
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_account);
+        setActivityContext(this, fromFlag);
         ButterKnife.bind(this);
         DumeUtils.configureAppbar(this, "Edit Account");
         presenter = new EditPresenter(this, this, EditModel.getModelInstance(this));
@@ -146,7 +144,7 @@ public class EditAccount extends AppCompatActivity implements EditContract.View,
         mScrollView = findViewById(R.id.editAccountScrolling);
         avatar = findViewById(R.id.profileImage);
         loadView = findViewById(R.id.loadView);
-        wrapper = findViewById(R.id.wrapperAccountEdit);
+        wrapper = findViewById(R.id.parent_coor_layout);
 
         pickLocationET = findViewById(R.id.pickAddressET);
         pickLocationET.setOnClickListener(view -> {

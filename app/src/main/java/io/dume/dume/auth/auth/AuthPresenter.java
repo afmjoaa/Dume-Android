@@ -76,12 +76,15 @@ public class AuthPresenter implements AuthContract.Presenter {
         view.showProgress();
         if (phoneNumber.isEmpty()) {
             view.onValidationFailed("Should not be empty");
+            view.hideProgress();
             return;
         } else if (!DumeUtils.isInteger(phoneNumber)) {
             view.onValidationFailed("Only Digits Allowed (0-9)");
+            view.hideProgress();
             return;
         } else if (phoneNumber.length() != 11) {
             view.onValidationFailed("Should be 11 Digits");
+            view.hideProgress();
             return;
         }
 

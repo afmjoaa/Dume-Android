@@ -155,6 +155,7 @@
 
     <style name="Widget.BottomNavigationView" parent="Widget.Design.BottomNavigationView">
         <item name="fontFamily">@font/cairo_regular</item>
+        <item name="elevation">2dp</item>
     </style>
 
     <style name="CollapsingToolBarStyle" parent="ThemeOverlay.AppCompat.Light">

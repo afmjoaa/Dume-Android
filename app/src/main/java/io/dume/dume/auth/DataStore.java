@@ -16,13 +16,6 @@ public class DataStore implements Serializable {
     private String lastName = null;
     private String accountManjor = "student";
 
-    public boolean isBottomNavAccountMajor() {
-        return isBottomNavAccountMajor;
-    }
-
-    public void setBottomNavAccountMajor(boolean bottomNavAccountMajor) {
-        isBottomNavAccountMajor = bottomNavAccountMajor;
-    }
 
     private boolean isBottomNavAccountMajor = false;
     private String phoneNumber = null;
@@ -34,6 +27,14 @@ public class DataStore implements Serializable {
     private Map<String, Object> documentSnapshot;
     private boolean obligation = false;
     private Map<String, Map<String, Object>> obligatedUser;
+
+    public boolean isBottomNavAccountMajor() {
+        return isBottomNavAccountMajor;
+    }
+
+    public void setBottomNavAccountMajor(boolean bottomNavAccountMajor) {
+        isBottomNavAccountMajor = bottomNavAccountMajor;
+    }
 
     public Map<String, Map<String, Object>> getObligatedUser() {
         return obligatedUser;

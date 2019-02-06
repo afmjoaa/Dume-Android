@@ -6,6 +6,10 @@ import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
 
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.Socket;
+
 import io.dume.dume.util.DumeUtils;
 import io.dume.dume.util.MyApplication;
 import io.dume.dume.util.NetworkUtil;
@@ -41,6 +45,23 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
                         //Toast.makeText(context, "Pause", Toast.LENGTH_SHORT).show();
                     } else {
                         myConnectivityHandler.resume();
+
+                        new Thread(() -> {
+                            try {
+                                Socket socket = new Socket();
+                                socket.connect(new InetSocketAddress("8.8.8.8", 53), 2000);
+
+                                // socket.connect(new InetSocketAddress("114.114.114.114", 53), 3000);
+                                myConnectivityHandler.resume();
+
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                                myConnectivityHandler.pause();
+
+                            }
+                        }).start();
+
+
                         //Toast.makeText(context, "Resume", Toast.LENGTH_SHORT).show();
                     }
                 }

@@ -97,15 +97,12 @@
         app:layout_anchorGravity="bottom"
         app:rect_color="@color/transparent" />
 
-
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        app:layout_anchor="@+id/scroll_view"
-        app:layout_anchorGravity="top|center"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
@@ -120,7 +117,6 @@
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 
-
     <TextView
         android:id="@+id/socialConnect"
         android:layout_width="match_parent"
@@ -132,20 +128,31 @@
         android:paddingBottom="10dp"
         android:text="@string/socialConnect"
         android:textSize="15sp"
-        app:layout_anchor="@id/bottomNav"
+        app:layout_anchor="@id/divider2"
         app:layout_anchorGravity="top|start" />
 
-    <android.support.design.widget.BottomNavigationView
+    <View
+        android:id="@+id/divider2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        app:layout_anchor="@id/bottomNav"
+        app:layout_anchorGravity="top|start"
+        android:layout_below="@+id/vertical_textview_container"
+        android:background="#41a7a7a7" />
+
+    <io.dume.dume.customView.MoveableBottomNav
         android:id="@+id/bottomNav"
         style="@style/Widget.BottomNavigationView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
+        android:layout_alignParentBottom="true"
         android:background="?android:attr/windowBackground"
         app:itemIconTint="@drawable/color_state_list"
         app:itemTextColor="@drawable/color_state_list"
+        android:visibility="visible"
         app:menu="@menu/bottom_nav_menu">
 
-    </android.support.design.widget.BottomNavigationView>
+    </io.dume.dume.customView.MoveableBottomNav>
 
 </android.support.design.widget.CoordinatorLayout>

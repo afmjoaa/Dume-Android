@@ -38,6 +38,7 @@ import java.util.Calendar;
 
 import io.dume.dume.R;
 import io.dume.dume.customView.HorizontalLoadView;
+import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
 import io.dume.dume.teacher.mentor_settings.basicinfo.EditAccount;
 import io.dume.dume.util.DatePickerFragment;
 import io.dume.dume.util.DumeUtils;
@@ -45,7 +46,7 @@ import io.dume.dume.util.RadioBtnDialogue;
 
 import static io.dume.dume.util.DumeUtils.showKeyboard;
 
-public class AcademicActivity extends AppCompatActivity implements AcademicContract.View,
+public class AcademicActivity extends CustomStuAppCompatActivity implements AcademicContract.View,
         CompoundButton.OnCheckedChangeListener {
 
     private HorizontalLoadView loadView;
@@ -81,6 +82,7 @@ public class AcademicActivity extends AppCompatActivity implements AcademicContr
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_academic);
+        setActivityContext(this, fromFlag);
         presenter = new AcademicPresenter(this, this, AcademicModel.getInstance());
         presenter.enqueue();
         if (getIntent().getAction() == ACTION_EDIT) {

@@ -87,7 +87,6 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
             @Override
             public void onStart() {
                 view.showProgress();
-
             }
 
             @Override
@@ -97,11 +96,13 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
                 //view.hideProgress();
                 if (DataStore.STATION == 1) {//user exist
                     mergeImei();
+
                 } else if (DataStore.STATION == 2) {//register user now
                     saveUserToDb(model.getData());
                 } else {
                     nextActivity();
                 }
+                Log.w("foo", "onSuccess: Station: " + DataStore.STATION);
             }
 
             @Override
@@ -113,7 +114,6 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
     }
 
     private void mergeImei() {
-
         boolean isImeiMatched = false;
         Map<String, Object> data = dataStore.getDocumentSnapshot();
         List<String> imeiDbList = (List<String>) data.get("imei");
@@ -124,20 +124,20 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
                 break;
             }
         }
-        fireStore.document("mini_users/" + FirebaseAuth.getInstance().getUid()).update("imei", FieldValue.arrayUnion(imeiList.get(0)), "imei", FieldValue.arrayUnion(imeiList.get(1))).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                nextActivity();
-                //view.showToast("Imei Merged");
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                view.showToast("Network error !!");
-            }
-        });
-
-
+        if(!isImeiMatched){
+            fireStore.document("mini_users/" + FirebaseAuth.getInstance().getUid()).update("imei", FieldValue.arrayUnion(imeiList.get(0)), "imei", FieldValue.arrayUnion(imeiList.get(1))).addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    nextActivity();
+                    //view.showToast("Imei Merged");
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    view.showToast("Network error !!");
+                }
+            });
+        }
     }
 
     @Override

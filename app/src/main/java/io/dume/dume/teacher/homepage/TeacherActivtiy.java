@@ -349,6 +349,9 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         textViewStart.setText(messages);
         TextView actionTV = snackView.findViewById(R.id.actionTV);
         actionTV.setText(actionName);
+        actionTV.setOnClickListener(view -> {
+            startActivity(new Intent(getApplicationContext(), EditAccount.class));
+        });
         layout.setPadding(0, 0, 0, 0);
         CoordinatorLayout.LayoutParams parentParams = (CoordinatorLayout.LayoutParams) layout.getLayoutParams();
         parentParams.height = (int) (30 * (getResources().getDisplayMetrics().density));

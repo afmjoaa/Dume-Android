@@ -29,6 +29,9 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.Socket;
 import java.util.Calendar;
 
 import io.dume.dume.R;
@@ -56,6 +59,7 @@ public class CustomStuAppCompatActivity extends AppCompatActivity implements MyC
     private CoordinatorLayout v;
     private HorizontalLoadView loadView;
     protected SearchDataStore searchDataStore;
+    protected float mDensity;
 
     public void setActivityContext(Context context, int i) {
         this.context = context;
@@ -64,6 +68,7 @@ public class CustomStuAppCompatActivity extends AppCompatActivity implements MyC
         rootView = ((Activity) context).getWindow().getDecorView().findViewById(android.R.id.content);
         createNetworkCheckSnackbar();
         searchDataStore = SearchDataStore.getInstance();
+        mDensity = getResources().getDisplayMetrics().density;
     }
 
     public void setParentCallback(HomePageContract.ParentCallback parentCallback) {
@@ -80,6 +85,8 @@ public class CustomStuAppCompatActivity extends AppCompatActivity implements MyC
     protected void onStart() {
         super.onStart();
         int status = NetworkUtil.getConnectivityStatusString(context);
+
+
         if (status == NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
             if (snackbar != null) {
                 snackbar.show();
@@ -88,6 +95,26 @@ public class CustomStuAppCompatActivity extends AppCompatActivity implements MyC
             if (snackbar != null) {
                 snackbar.dismiss();
             }
+            new Thread(() -> {
+                try {
+                    Socket socket = new Socket();
+                    socket.connect(new InetSocketAddress("8.8.8.8", 53), 2000);
+
+                    // socket.connect(new InetSocketAddress("114.114.114.114", 53), 3000);
+                    if (snackbar != null) {
+                        snackbar.dismiss();
+                    }
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    if (snackbar != null) {
+                        snackbar.show();
+                    }
+
+                }
+            }).start();
+
+
         }
     }
 
@@ -178,6 +205,24 @@ public class CustomStuAppCompatActivity extends AppCompatActivity implements MyC
                     if (snackbar != null) {
                         snackbar.dismiss();
                     }
+                    new Thread(() -> {
+                        try {
+                            Socket socket = new Socket();
+                            socket.connect(new InetSocketAddress("8.8.8.8", 53), 2500);
+
+                            // socket.connect(new InetSocketAddress("114.114.114.114", 53), 3000);
+                            if (snackbar != null) {
+                                snackbar.dismiss();
+                            }
+
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                            if (snackbar != null) {
+                                snackbar.show();
+                            }
+
+                        }
+                    }).start();
                     //setTimeout(() -> imageView.setVisibility(View.INVISIBLE), 1250);
                 }
             }
@@ -269,6 +314,7 @@ public class CustomStuAppCompatActivity extends AppCompatActivity implements MyC
         if (snackbar != null) {
             snackbar.dismiss();
         }
+
     }
 
     @Override
@@ -287,6 +333,7 @@ public class CustomStuAppCompatActivity extends AppCompatActivity implements MyC
         int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
         decorView.setSystemUiVisibility(uiOptions);
     }
+
     //sign_out function
     public void onSignOut() {
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
@@ -296,7 +343,7 @@ public class CustomStuAppCompatActivity extends AppCompatActivity implements MyC
         }
     }
 
-    public void findLoadView(){
+    public void findLoadView() {
         loadView = rootView.findViewById(R.id.loadView);
     }
 

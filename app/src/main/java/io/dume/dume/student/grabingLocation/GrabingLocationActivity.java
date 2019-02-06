@@ -86,7 +86,7 @@ import static io.dume.dume.util.DumeUtils.hideKeyboard;
 import static io.dume.dume.util.DumeUtils.showKeyboard;
 
 public class GrabingLocationActivity extends CusStuAppComMapActivity implements OnMapReadyCallback,
-        GrabingLocaitonContract.View, MyGpsLocationChangeListener {
+        GrabingLocaitonContract.View, MyGpsLocationChangeListener, View.OnClickListener {
 
     private GrabingLocaitonContract.Presenter mPresenter;
     private static final CharacterStyle STYLE_NORMAL = new StyleSpan(Typeface.NORMAL);
@@ -301,6 +301,10 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
         hackSetLocationOnMap = findViewById(R.id.hack_set_location_on_map);
         searchFoundRecycleView = findViewById(R.id.recycle_view_search_found);
         bottomSheetNSV = findViewById(R.id.bottom_sheet_scroll_view);
+        hackSetLocationOnMap.setOnClickListener(this);
+        discardImage.setOnClickListener(this);
+        locationDoneBtn.setOnClickListener(this);
+        fab.setOnClickListener(this);
     }
 
     @Override
@@ -835,6 +839,11 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
             goBackToGLAIntent.putExtra("selected_location", mCenterLatLong);
             setResult(RESULT_OK, goBackToGLAIntent);
             finish();
+        } else if (Objects.requireNonNull(retrivedAction).startsWith("fromSA")) {
+            Intent intent = new Intent();
+            intent.putExtra("selected_location", mCenterLatLong);
+            setResult(RESULT_OK, intent);
+            finish();
         } else {
             showProgress();
             locationDoneBtn.setEnabled(false);
@@ -889,9 +898,9 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
     }
 
 
-    public void onGrabingLocationViewClicked(View view) {
+    /*public void onGrabingLocationViewClicked(View view) {
         mPresenter.onGrabingLocationViewIntracted(view);
-    }
+    }*/
 
     protected synchronized void buildGoogleApiClient() {
         mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -989,6 +998,7 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
             case "fromPPA":
             case "fromMPA":
             case "fromGLAP":
+            case "fromSA":
                 configToolbarTittle(this, "Select permanent address");
                 break;
             case "fromSPAH":
@@ -1107,5 +1117,10 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
     @Override
     public void setDocumentSnapshot(DocumentSnapshot documentSnapshot) {
         this.documentSnapshot = documentSnapshot;
+    }
+
+    @Override
+    public void onClick(View view) {
+        mPresenter.onGrabingLocationViewIntracted(view);
     }
 }
