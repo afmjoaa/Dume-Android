@@ -1293,7 +1293,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
                     mCancelBottomSheetDialog.dismiss();
                     showProgress();
                     if (identify.equals(DumeUtils.STUDENT)) {
-                        new DumeModel(getApplicationContext()).switchAcount(DumeUtils.STUDENT, new TeacherContract.Model.Listener<Void>() {
+                        new DumeModel(context).switchAcount(DumeUtils.STUDENT, new TeacherContract.Model.Listener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
                                 gotoStudentHomePage();
@@ -1306,7 +1306,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
                             }
                         });
                     } else {
-                        new DumeModel(getApplicationContext()).switchAcount(DumeUtils.BOOTCAMP, new TeacherContract.Model.Listener<Void>() {
+                        new DumeModel(context).switchAcount(DumeUtils.BOOTCAMP, new TeacherContract.Model.Listener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
                                 gotoBootCamPHomePage();
