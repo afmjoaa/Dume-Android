@@ -67,7 +67,7 @@ public class SkillActivity extends CustomStuAppCompatActivity implements SkillCo
         setContentView(R.layout.activity_skill);
         setActivityContext(this, fromFlag);
         ButterKnife.bind(this);
-        presenter = new SkillPresenter(new SkillModel(), this);
+        presenter = new SkillPresenter(new SkillModel(this), this, this);
         presenter.enqueue();
         documentSnapshot = TeacherDataStore.getInstance().getDocumentSnapshot();
         //setting my snackbar callback
@@ -84,7 +84,7 @@ public class SkillActivity extends CustomStuAppCompatActivity implements SkillCo
 
             @Override
             public void onShown(Snackbar snackbar) {
-                multiFab.setTranslationY(-30*mDensity);
+                multiFab.setTranslationY(-30 * mDensity);
                 multiFab.setEnabled(false);
 
                 //floatingButoon.setClickable(false);
@@ -103,13 +103,13 @@ public class SkillActivity extends CustomStuAppCompatActivity implements SkillCo
         changeAddSkillBtnColor();
     }
 
-    private void changeAddSkillBtnColor(){
+    private void changeAddSkillBtnColor() {
         final Map<String, Boolean> achievements = (Map<String, Boolean>) documentSnapshot.get("achievements");
         Boolean premier = achievements.get("premier");
         if (premier) {
             fabInstant.setColorNormalResId(R.color.colorBlack);
             fabInstant.setIconDrawable(getResources().getDrawable(R.drawable.dume_instant_image));
-        } else{
+        } else {
             fabInstant.setColorNormalResId(R.color.recordsBgColor);
             fabInstant.setIconDrawable(getResources().getDrawable(R.drawable.dume_instant_grayscale_image));
 
@@ -121,7 +121,7 @@ public class SkillActivity extends CustomStuAppCompatActivity implements SkillCo
             fabRegular.setIconDrawable(getResources().getDrawable(R.drawable.dume_regular_image));
             fabGang.setColorNormalResId(R.color.colorBlack);
             fabGang.setIconDrawable(getResources().getDrawable(R.drawable.dume_gang_image));
-        }else {
+        } else {
             fabRegular.setColorNormalResId(R.color.recordsBgColor);
             fabRegular.setIconDrawable(getResources().getDrawable(R.drawable.dume_regular_grayscale_image));
             fabGang.setColorNormalResId(R.color.recordsBgColor);
@@ -299,7 +299,6 @@ public class SkillActivity extends CustomStuAppCompatActivity implements SkillCo
         }
 
     }
-
 
 
     @Override

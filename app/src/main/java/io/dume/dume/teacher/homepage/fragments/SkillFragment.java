@@ -81,7 +81,7 @@ public class SkillFragment extends Fragment {
         if (isVisibleToUser) {
             if (fragmentActivity != null && teacherDataStore != null) {
                 if (teacherDataStore.getSkillArrayList() == null) {
-                    new DumeModel().getSkill(new TeacherContract.Model.Listener<ArrayList<Skill>>() {
+                    new DumeModel(getContext()).getSkill(new TeacherContract.Model.Listener<ArrayList<Skill>>() {
                         @Override
                         public void onSuccess(ArrayList<Skill> list) {
                             teacherDataStore.setSkillArrayList(list);
@@ -205,7 +205,7 @@ public class SkillFragment extends Fragment {
         teacherDataStore = fragmentActivity != null ? fragmentActivity.teacherDataStore : null;
         if (teacherDataStore != null) {
             if (teacherDataStore.getSkillArrayList() == null) {
-                new DumeModel().getSkill(new TeacherContract.Model.Listener<ArrayList<Skill>>() {
+                new DumeModel(getContext()).getSkill(new TeacherContract.Model.Listener<ArrayList<Skill>>() {
                     @Override
                     public void onSuccess(ArrayList<Skill> list) {
                         teacherDataStore.setSkillArrayList(list);
@@ -232,7 +232,7 @@ public class SkillFragment extends Fragment {
                 //loadData();
             }
         } else {
-            new DumeModel().getSkill(new TeacherContract.Model.Listener<ArrayList<Skill>>() {
+            new DumeModel(getContext()).getSkill(new TeacherContract.Model.Listener<ArrayList<Skill>>() {
                 @Override
                 public void onSuccess(ArrayList<Skill> list) {
                     teacherDataStore.setSkillArrayList(list);

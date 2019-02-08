@@ -1,5 +1,6 @@
 package io.dume.dume.teacher.skill;
 
+import android.content.Context;
 import android.util.Log;
 import android.view.View;
 
@@ -31,11 +32,13 @@ public class SkillPresenter implements SkillContract.Presenter {
     private io.dume.dume.model.TeacherModel teacherModel;
     private Map<String, Object> documentSnapshot;
     private int percentage;
+    Context context;
 
-    public SkillPresenter(SkillContract.Model model, SkillContract.View view) {
+    public SkillPresenter(SkillContract.Model model, SkillContract.View view, Context context) {
         this.model = model;
         this.view = view;
-        teacherModel = new DumeModel();
+        this.context = context;
+        teacherModel = new DumeModel(context);
     }
 
     @Override

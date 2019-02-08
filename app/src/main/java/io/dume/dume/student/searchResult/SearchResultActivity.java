@@ -88,6 +88,7 @@ import io.dume.dume.R;
 import io.dume.dume.customView.HorizontalLoadViewTwo;
 import io.dume.dume.library.RouteOverlayView;
 import io.dume.dume.library.TrailSupportMapFragment;
+import io.dume.dume.service.MyNotification;
 import io.dume.dume.student.common.QualificationAdapter;
 import io.dume.dume.student.common.QualificationData;
 import io.dume.dume.student.common.ReviewAdapter;
@@ -412,7 +413,9 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
 
         pushNotiData = new HashMap<>();
         pushNotiData.put("uid", searchDataStore.getUserUid());
+        pushNotiData.put("name", searchDataStore.getUserName() == null ? "" : searchDataStore.getUserName());
         pushNotiData.put("reason", "not_confirming");
+        pushNotiData.put("token", MyNotification.getToken(this));
         //init the back dialog
         mBackBSD = new BottomSheetDialog(this);
         backsheetRootView = this.getLayoutInflater().inflate(R.layout.custom_bottom_sheet_dialogue_cancel, null);

@@ -52,7 +52,7 @@ public class PayFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.pay_fragment, container, false);
         ButterKnife.bind(this, root);
-        mViewModel = new PayViewModel();
+        mViewModel = new PayViewModel(getContext());
 
         assert container != null;
         int[] wh = DumeUtils.getScreenSize(container.getContext());

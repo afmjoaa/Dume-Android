@@ -1384,7 +1384,7 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
                     mCancelBottomSheetDialog.dismiss();
                     showProgress();
                     if (identify.equals(DumeUtils.TEACHER)) {
-                        new DumeModel().switchAcount(DumeUtils.TEACHER, new TeacherContract.Model.Listener<Void>() {
+                        new DumeModel(getApplicationContext()).switchAcount(DumeUtils.TEACHER, new TeacherContract.Model.Listener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
                                 gotoMentorProfile();
@@ -1397,7 +1397,7 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
                             }
                         });
                     } else {
-                        new DumeModel().switchAcount(DumeUtils.BOOTCAMP, new TeacherContract.Model.Listener<Void>() {
+                        new DumeModel(getApplicationContext()).switchAcount(DumeUtils.BOOTCAMP, new TeacherContract.Model.Listener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
                                 gotoBootCampHomePage();
