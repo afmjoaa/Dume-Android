@@ -1,6 +1,7 @@
 package io.dume.dume.teacher.homepage.fragments;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -18,6 +19,7 @@ import android.widget.Toast;
 import com.hanks.htextview.scale.ScaleTextView;
 
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Objects;
 
 import butterknife.BindView;
@@ -27,10 +29,13 @@ import io.dume.dume.R;
 import io.dume.dume.model.DumeModel;
 import io.dume.dume.teacher.adapters.AcademicAdapter;
 import io.dume.dume.teacher.adapters.SkillAdapter;
+import io.dume.dume.teacher.crudskill.CrudSkillActivity;
 import io.dume.dume.teacher.homepage.TeacherActivtiy;
 import io.dume.dume.teacher.homepage.TeacherContract;
 import io.dume.dume.teacher.homepage.TeacherDataStore;
+import io.dume.dume.teacher.mentor_settings.basicinfo.EditAccount;
 import io.dume.dume.teacher.pojo.Skill;
+import io.dume.dume.teacher.skill.SkillActivity;
 import io.dume.dume.util.DumeUtils;
 import io.dume.dume.util.GridSpacingItemDecoration;
 
@@ -55,6 +60,9 @@ public class SkillFragment extends Fragment {
     private TeacherDataStore teacherDataStore;
     private static SkillFragment skillFragment = null;
     private int itemWidth;
+    private Map<String, Object> documentSnapshot;
+    private int percentage;
+
 
     public static SkillFragment getInstance() {
         if (skillFragment == null) {
@@ -98,6 +106,7 @@ public class SkillFragment extends Fragment {
                         noDataBlock.setVisibility(View.GONE);
                     }
                 }
+                changeAddSkillBtnColor();
             }
         } else {
             //not visible here
@@ -144,6 +153,47 @@ public class SkillFragment extends Fragment {
         layoutParamsInstant.width = (bottomBtnWidth);
         addInstantDBtn.setLayoutParams(layoutParamsInstant);
         addInstantDBtn.setPadding(paddingDefault, 0, paddingDefault, 0);
+
+        openSkillBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getContext(), SkillActivity.class).setAction("fromFrag"));
+            }
+        });
+
+        addRegularDBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (isProfileOK()) {
+                    goToCrudActivity(DumeUtils.TEACHER);
+                }
+            }
+        });
+
+        addDumeGangBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (isProfileOK()) {
+                    goToCrudActivity(DumeUtils.BOOTCAMP);
+                }
+            }
+        });
+
+        addInstantDBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (isProfileOK()) {
+                    final Map<String, Boolean> achievements = (Map<String, Boolean>) documentSnapshot.get("achievements");
+                    Boolean premier = achievements.get("premier");
+                    if (premier) {
+                        goToCrudActivity(DumeUtils.TEACHER);
+                    } else{
+                        tips("Unlocking Premier Badge is must");
+                    }
+                }
+            }
+        });
+        changeAddSkillBtnColor();
 
         fragmentActivity = (TeacherActivtiy) getActivity();
         teacherDataStore = fragmentActivity != null ? fragmentActivity.teacherDataStore : null;
@@ -194,7 +244,7 @@ public class SkillFragment extends Fragment {
                 }
             });
         }
-
+        documentSnapshot = TeacherDataStore.getInstance().getDocumentSnapshot();
         return root;
     }
 
@@ -214,4 +264,45 @@ public class SkillFragment extends Fragment {
         scaleTextView.setSelected(true);
     }//  tips("Every person is a new door to a different world.");
 
+
+    protected boolean isProfileOK() {
+        documentSnapshot = TeacherDataStore.getInstance().getDocumentSnapshot();
+
+        if (documentSnapshot != null) {
+            String beh = (String) documentSnapshot.get("pro_com_%");
+            percentage = Integer.parseInt(beh);
+            if (percentage >= 95) {
+                return true;
+            }
+        }
+        tips("Profile should be 95% completed");
+        return false;
+
+    }
+
+    public void goToCrudActivity(String action) {
+        Intent intent = new Intent(getContext(), CrudSkillActivity.class).setAction(action);
+        startActivity(intent);
+    }
+
+    private void changeAddSkillBtnColor(){
+        final Map<String, Boolean> achievements = (Map<String, Boolean>) documentSnapshot.get("achievements");
+        Boolean premier = achievements.get("premier");
+        if (premier) {
+            addInstantDBtn.setImageDrawable(getResources().getDrawable(R.drawable.dume_instant_image));
+        } else{
+            addInstantDBtn.setImageDrawable(getResources().getDrawable(R.drawable.dume_instant_grayscale_image));
+
+        }
+        String beh = (String) documentSnapshot.get("pro_com_%");
+        int percentage = Integer.parseInt(beh);
+        if (percentage >= 95) {
+            addRegularDBtn.setImageDrawable(getResources().getDrawable(R.drawable.dume_regular_image));
+            addDumeGangBtn.setImageDrawable(getResources().getDrawable(R.drawable.dume_gang_image));
+        }else {
+            addRegularDBtn.setImageDrawable(getResources().getDrawable(R.drawable.dume_regular_grayscale_image));
+            addDumeGangBtn.setImageDrawable(getResources().getDrawable(R.drawable.dume_gang_grayscale_image));
+
+        }
+    }
 }

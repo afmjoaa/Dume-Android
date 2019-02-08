@@ -44,6 +44,10 @@
                 android:layout_marginBottom="-13dp"
                 android:includeFontPadding="false"
                 android:text="UserName"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:maxWidth="170dp"
                 android:textAppearance="@style/EnamTextAppearanceNormal"
                 android:textColor="@color/colorBlack" />
 
@@ -54,6 +58,10 @@
                 android:layout_marginBottom="-13dp"
                 android:includeFontPadding="false"
                 android:text="+880 0000000000"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:maxWidth="170dp"
                 android:textAppearance="@style/EnamTextAppearanceNormal"
                 android:textColor="@color/colorBlack" />
 
@@ -63,6 +71,10 @@
                 android:layout_height="wrap_content"
                 android:includeFontPadding="false"
                 android:text="usermail@website.com"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:maxWidth="170dp"
                 android:textAppearance="@style/EnamTextAppearanceNormal"
                 android:textColor="@color/colorBlack" />
         </LinearLayout>
@@ -85,7 +97,5 @@
                 android:textColor="@color/colorLink" />
 
         </LinearLayout>
-
-
     </LinearLayout>
 </LinearLayout>
