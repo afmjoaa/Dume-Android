@@ -32,6 +32,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Nullable;
 
+import io.dume.dume.Google;
 import io.dume.dume.auth.auth.AuthContract;
 import io.dume.dume.auth.code_verification.PhoneVerificationContract;
 import io.dume.dume.splash.SplashContract;
@@ -301,9 +302,12 @@ public class AuthModel implements AuthContract.Model, SplashContract.Model, Phon
                             assert account_major != null;
                             if (!foreignObligation) {
                                 if (account_major.equals("student")) {
+                                    Google.getInstance().setAccountMajor(DumeUtils.STUDENT);
                                     listener.onStudentFound();
                                 } else {
+                                    Google.getInstance().setAccountMajor(DumeUtils.TEACHER);
                                     listener.onTeacherFound();
+
                                 }
                             } else {
                                 listener.onForeignObligation();
@@ -321,8 +325,11 @@ public class AuthModel implements AuthContract.Model, SplashContract.Model, Phon
                     assert account_major != null;
                     if (!foreignObligation) {
                         if (account_major.equals("student")) {
+                            Google.getInstance().setAccountMajor(DumeUtils.STUDENT);
+
                             listener.onStudentFound();
                         } else {
+                            Google.getInstance().setAccountMajor(DumeUtils.TEACHER);
                             listener.onTeacherFound();
                         }
                     } else {

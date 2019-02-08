@@ -44,7 +44,7 @@
 
         <View
             android:id="@+id/red_cut"
-            android:layout_width="54dp"
+            android:layout_width="48dp"
             android:layout_height="1dp"
             android:layout_gravity="center"
             android:background="@color/red"

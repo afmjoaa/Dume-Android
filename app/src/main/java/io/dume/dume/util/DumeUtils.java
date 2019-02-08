@@ -43,8 +43,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
 import java.util.TimeZone;
 import java.util.regex.Matcher;
@@ -517,7 +519,15 @@ public class DumeUtils {
         }
         return mQuery.toString();
     }
-
+    public static String getLast(Map<String, Object> jizz) {
+        endOfNest = new ArrayList<>(Arrays.asList("Subject", "Field", "Software", "Language", "Flavour", "Type", "Course", " Language "));
+        for (int j = 0; j < endOfNest.size(); j++) {
+            if (jizz.containsKey(endOfNest.get(j))) {
+                return endOfNest.get(j);
+            }
+        }
+        return "undefined";
+    }
     public static List<String> getEndOFNest() {
         endOfNest = new ArrayList<>(Arrays.asList("Subject", "Field", "Software", "Language", "Flavour", "Type", "Course", " Language "));
         return endOfNest;

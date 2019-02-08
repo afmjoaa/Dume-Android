@@ -1,6 +1,5 @@
 package io.dume.dume.student.recordsPage;
 
-import android.app.ActivityOptions;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.graphics.drawable.Animatable;
@@ -13,7 +12,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.util.Pair;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -31,7 +29,11 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import io.dume.dume.Google;
 import io.dume.dume.R;
 import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
 import io.dume.dume.student.recordsAccepted.RecordsAcceptedActivity;
@@ -67,16 +69,13 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
         setContentView(R.layout.stu8_activity_records_page);
         setActivityContext(this, fromFlag);
         findLoadView();
-        mPresenter = new RecordsPagePresenter(this, new RecordsPageModel());
+        mPresenter = new RecordsPagePresenter(this, new RecordsPageModel(this));
         mPresenter.recordsPageEnqueue();
-        configureAppbarWithoutColloapsing(this, "Records");
+        configureAppbarWithoutColloapsing(this, "Record");
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
-        // Set up the ViewPager with the sections adapter.
-        mViewPager.setAdapter(mSectionsPagerAdapter);
 
         //making the custom tab here
         int[] wh = DumeUtils.getScreenSize(this);
@@ -91,8 +90,8 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
             String navLabels[] = getResources().getStringArray(R.array.RecordsPageTabtext);
 
             // get child TextView and ImageView from this layout for the icon and label
-            TextView tab_label = (TextView) tab.findViewById(R.id.nav_label);
-            ImageView tab_icon = (ImageView) tab.findViewById(R.id.nav_icon);
+            TextView tab_label = tab.findViewById(R.id.nav_label);
+            ImageView tab_icon = tab.findViewById(R.id.nav_icon);
             tab_label.setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/Cairo-Light.ttf"));
             /*tab_label.setTextColor(getResources().getColorStateList(R.color.tab_colorstate_light));
              */
@@ -113,11 +112,33 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
 
     @Override
     public void findView() {
-        tabLayout = (TabLayout) findViewById(R.id.tabs);
-        mViewPager = (ViewPager) findViewById(R.id.container);
+        tabLayout = findViewById(R.id.tabs);
+        mViewPager = findViewById(R.id.container);
 
 
     }
+
+    @Override
+    public void onDataLoadFinsh() {
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        mViewPager.setAdapter(mSectionsPagerAdapter);
+    }
+
+    @Override
+    public void load() {
+        super.showProgress();
+    }
+
+    @Override
+    public void stopLoad() {
+        super.hideProgress();
+    }
+
+    @Override
+    public void flush(String msg) {
+        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+    }
+
 
     @Override
     public void initRecordsPage() {
@@ -132,8 +153,8 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
                 View tabView = tab.getCustomView();
                 // get inflated children Views the icon and the label by their id
                 if (tabView != null) {
-                    TextView tab_label = (TextView) tabView.findViewById(R.id.nav_label);
-                    ImageView tab_icon = (ImageView) tabView.findViewById(R.id.nav_icon);
+                    TextView tab_label = tabView.findViewById(R.id.nav_label);
+                    ImageView tab_icon = tabView.findViewById(R.id.nav_icon);
                     Drawable drawableIcon = tab_icon.getDrawable();
 
                     if (drawableIcon instanceof Animatable) {
@@ -161,7 +182,7 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
                 View tabView = tab.getCustomView();
                 // get inflated children Views the icon and the label by their id
                 if (tabView != null) {
-                    TextView tab_label = (TextView) tabView.findViewById(R.id.nav_label);
+                    TextView tab_label = tabView.findViewById(R.id.nav_label);
                 }
             }
 
@@ -170,7 +191,7 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
                 View tabView = tab.getCustomView();
                 // get inflated children Views the icon and the label by their id
                 if (tabView != null) {
-                    ImageView tab_icon = (ImageView) tabView.findViewById(R.id.nav_icon);
+                    ImageView tab_icon = tabView.findViewById(R.id.nav_icon);
                     Drawable drawableIcon = tab_icon.getDrawable();
 
                     if (drawableIcon instanceof Animatable) {
@@ -204,7 +225,7 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        switch (id){
+        switch (id) {
             case R.id.action_help:
                 break;
             case R.id.action_sync_now:
@@ -280,8 +301,17 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
             //setting the recycler view
             switch (fragmentPosition) {
                 case 1:
-                    List<RecordsRecyData> recordDataPending = new ArrayList<>();
-                    RecordsRecyAdapter recordsRecyAdapending = new RecordsRecyAdapter(myThisActivity, recordDataPending) {
+                    List<Record> recordDataPending;
+                    List<Record> recordList = new ArrayList<>();
+                    recordList = Google.getInstance().getRecordList();
+                    recordList = recordList.stream().filter(new Predicate<Record>() {
+                        @Override
+                        public boolean test(Record record) {
+                            return record.getStatus().equals("Pending");
+                        }
+                    }).collect(Collectors.toList());
+
+                    RecordsRecyAdapter recordsRecyAdapending = new RecordsRecyAdapter(myThisActivity, recordList) {
                         @Override
                         void OnItemClicked(View v, int position) {
                             /*leftTransitionLayout = v.findViewById(R.id.left_vertical_host_layout);
@@ -299,14 +329,22 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
 
                         @Override
                         void OnItemLongClicked(View v, int position) {
-                            Toast.makeText(myThisActivity, "Pending Records aren't deletable", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(myThisActivity, "Pending Record aren't deletable", Toast.LENGTH_SHORT).show();
                         }
                     };
                     recordRecyclerView.setAdapter(recordsRecyAdapending);
                     recordRecyclerView.setLayoutManager(new LinearLayoutManager(myThisActivity));
                     break;
                 case 2:
-                    List<RecordsRecyData> recordDataAccepted = new ArrayList<>();
+
+                    List<Record> recordDataAccepted = new ArrayList<>();
+                    recordDataAccepted = Google.getInstance().getRecordList();
+                    recordDataAccepted = recordDataAccepted.stream().filter(new Predicate<Record>() {
+                        @Override
+                        public boolean test(Record record) {
+                            return record.getStatus().equals("Accepted");
+                        }
+                    }).collect(Collectors.toList());
                     RecordsRecyAdapter recordsRecyAdaAccepted = new RecordsRecyAdapter(myThisActivity, recordDataAccepted) {
                         @Override
                         void OnItemClicked(View v, int position) {
@@ -315,14 +353,21 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
 
                         @Override
                         void OnItemLongClicked(View v, int position) {
-                            Toast.makeText(myThisActivity, "Accepted Records aren't deletable", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(myThisActivity, "Accepted Record aren't deletable", Toast.LENGTH_SHORT).show();
                         }
                     };
                     recordRecyclerView.setAdapter(recordsRecyAdaAccepted);
                     recordRecyclerView.setLayoutManager(new LinearLayoutManager(myThisActivity));
                     break;
                 case 3:
-                    List<RecordsRecyData> recordDataCurrent = new ArrayList<>();
+                    List<Record> recordDataCurrent = new ArrayList<>();
+                    recordDataCurrent = Google.getInstance().getRecordList();
+                    recordDataCurrent = recordDataCurrent.stream().filter(new Predicate<Record>() {
+                        @Override
+                        public boolean test(Record record) {
+                            return record.getStatus().equals("OnGoing");
+                        }
+                    }).collect(Collectors.toList());
                     RecordsRecyAdapter recordsRecyAdaCurrent = new RecordsRecyAdapter(myThisActivity, recordDataCurrent) {
                         @Override
                         void OnItemClicked(View v, int position) {
@@ -331,14 +376,21 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
 
                         @Override
                         void OnItemLongClicked(View v, int position) {
-                            Toast.makeText(myThisActivity, "Current Records aren't deletable", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(myThisActivity, "Current Record aren't deletable", Toast.LENGTH_SHORT).show();
                         }
                     };
                     recordRecyclerView.setAdapter(recordsRecyAdaCurrent);
                     recordRecyclerView.setLayoutManager(new LinearLayoutManager(myThisActivity));
                     break;
                 case 4:
-                    List<RecordsRecyData> recordDataCompletded = new ArrayList<>();
+                    List<Record> recordDataCompletded = new ArrayList<>();
+                    recordDataCompletded = Google.getInstance().getRecordList();
+                    recordDataCompletded = recordDataCompletded.stream().filter(new Predicate<Record>() {
+                        @Override
+                        public boolean test(Record record) {
+                            return record.getStatus().equals("Completed");
+                        }
+                    }).collect(Collectors.toList());
                     RecordsRecyAdapter recordsRecyAdaCompleted = new RecordsRecyAdapter(myThisActivity, recordDataCompletded) {
                         @Override
                         void OnItemClicked(View v, int position) {
@@ -347,7 +399,7 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
 
                         @Override
                         void OnItemLongClicked(View v, int position) {
-                            Toast.makeText(myThisActivity, "Completed Records aren't deletable", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(myThisActivity, "Completed Record aren't deletable", Toast.LENGTH_SHORT).show();
                         }
                     };
                     recordRecyclerView.setAdapter(recordsRecyAdaCompleted);
@@ -355,7 +407,14 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
                     break;
 
                 case 5:
-                    List<RecordsRecyData> recordDataRejected = new ArrayList<>();
+                    List<Record> recordDataRejected = new ArrayList<>();
+                    recordDataRejected = Google.getInstance().getRecordList();
+                    recordDataRejected = recordDataRejected.stream().filter(new Predicate<Record>() {
+                        @Override
+                        public boolean test(Record record) {
+                            return record.getStatus().equals("Rejected");
+                        }
+                    }).collect(Collectors.toList());
                     RecordsRecyAdapter recordsRecyAdaRejected = new RecordsRecyAdapter(myThisActivity, recordDataRejected) {
                         @Override
                         void OnItemClicked(View v, int position) {

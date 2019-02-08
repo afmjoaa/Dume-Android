@@ -14,11 +14,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/achievement_layout_horizontal"
-        android:layout_marginStart="12dp"
+        android:layout_marginStart="11dp"
         android:layout_marginLeft="11dp"
         android:layout_marginEnd="10dp"
         android:layout_marginRight="10dp"
-        android:paddingTop="8dp"
         android:text="Unlocked Badges"
         android:textAllCaps="false"
         android:textSize="14sp" />
@@ -31,10 +30,8 @@
         android:layout_alignParentBottom="true"
         android:layout_marginStart="10dp"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="4dp"
         android:layout_marginEnd="7dp"
-        android:layout_marginRight="7dp"
-        android:paddingBottom="2dp">
+        android:layout_marginRight="7dp">
 
         <RelativeLayout
             android:id="@+id/joined_host"

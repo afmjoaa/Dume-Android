@@ -21,9 +21,9 @@ public abstract class RecordsRecyAdapter extends RecyclerView.Adapter<RecordsRec
     private static final String TAG = "InboxChatAdapter";
     private LayoutInflater inflater;
     private Context context;
-    private List<RecordsRecyData> data;
+    private List<Record> data;
 
-    public RecordsRecyAdapter(Context context, List<RecordsRecyData> data) {
+    public RecordsRecyAdapter(Context context, List<Record> data) {
         inflater = LayoutInflater.from(context);
         this.data = data;
         this.context = context;
@@ -40,13 +40,16 @@ public abstract class RecordsRecyAdapter extends RecyclerView.Adapter<RecordsRec
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        if(position % 2 == 0){
+        if (position % 2 == 0) {
             holder.relativeHostLayout.setBackgroundColor(context.getResources().getColor(R.color.tabFirstItem));
             //holder.relativeHostLayout.setBackgroundResource(R.drawable.bg_tab_first_color);
-        }else {
+        } else {
             holder.relativeHostLayout.setBackgroundColor(context.getResources().getColor(R.color.tabSecondItem));
             //holder.relativeHostLayout.setBackgroundResource(R.drawable.bg_tab_first_color);
         }
+        holder.mentorName.setText(data.get(position).getMentorName());
+        holder.studentName.setText(data.get(position).getStudentName());
+        holder.salaryInDemand.setText(data.get(position).getSalaryInDemand());
 
         holder.relativeHostLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,10 +71,11 @@ public abstract class RecordsRecyAdapter extends RecyclerView.Adapter<RecordsRec
     @Override
     public int getItemCount() {
         //testing purpose
-        return 2;
+        return data.size();
     }
 
     abstract void OnItemClicked(View v, int position);
+
     abstract void OnItemLongClicked(View v, int position);
 
     class MyViewHolder extends RecyclerView.ViewHolder {

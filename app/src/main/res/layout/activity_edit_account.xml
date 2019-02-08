@@ -61,6 +61,7 @@
                     android:scaleType="centerCrop"
                     android:src="@drawable/avatar"
                     app:carbon_cornerRadius="50dp"
+                    android:layout_marginBottom="5dp"
                     app:carbon_elevation="3dp" />
 
                 <carbon.widget.ImageView
@@ -69,6 +70,7 @@
                     android:layout_gravity="bottom|end"
                     android:background="@drawable/cirecle_background_white"
                     android:padding="5dp"
+                    android:layout_marginBottom="5dp"
                     android:src="@drawable/ic_action_photo_edit"
                     app:carbon_elevation="4dp" />
 
@@ -81,7 +83,7 @@
                 android:layout_gravity="center"
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="5dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginBottom="8dp"

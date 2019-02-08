@@ -7,7 +7,7 @@
     android:clickable="true"
     android:focusable="true"
     android:id="@+id/hosting_relative_layout"
-    android:padding="10dp"
+    android:padding="9.4dp"
     app:carbon_cornerRadius="6dp"
     app:carbon_elevation="2dp"
     app:carbon_rippleColor="@color/colorRippleDefault">

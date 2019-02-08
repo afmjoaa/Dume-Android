@@ -103,7 +103,7 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         this.layoutSize = layoutSize;
         this.skillList = skillList;
         this.itemWidth = itemWidth;
-        this.context=context;
+        this.context = context;
         mDensity = context.getResources().getDisplayMetrics().density;
         localDb = new LocalDb();
         endOfNest = new ArrayList<>(Arrays.asList("Subject", "Field", "Software", "Language", "Flavour", "Type", "Course", " Language "));
@@ -316,6 +316,8 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         }
         return null;
     }
+
+
 
 
     public void update(ArrayList<Skill> skillList) {

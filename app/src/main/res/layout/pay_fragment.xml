@@ -21,7 +21,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|right"
-            android:padding="10dp">
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="4dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginStart="10dp">
 
             <android.support.design.widget.FloatingActionButton
                 android:layout_width="wrap_content"
@@ -29,6 +34,7 @@
                 android:padding="10dp"
                 android:src="@android:color/transparent"
                 app:fabCustomSize="60dp"
+                android:layout_marginBottom="6dp"
                 app:fabSize="normal" />
 
             <carbon.widget.LinearLayout
@@ -63,14 +69,22 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="2dp"
             android:text="Supported Payment System"
             android:textSize="16sp" />
 
         <carbon.widget.LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginEnd="7dp"
+            android:layout_marginRight="7dp"
+            android:layout_marginLeft="7dp"
+            android:layout_marginStart="7dp"
             android:baselineAligned="true"
             android:gravity="end">
 
@@ -81,7 +95,11 @@
                 android:layout_gravity="center"
                 android:layout_margin="5dp"
                 android:background="@color/white"
+                app:carbon_elevation="1dp"
                 app:carbon_cornerRadius="6dp"
+                android:clickable="true"
+                android:focusable="true"
+                app:carbon_rippleColor="@color/colorRippleDefault"
                 app:srcCompat="@drawable/ic_cash_pay_icon" />
 
             <carbon.widget.ImageView
@@ -89,18 +107,26 @@
                 android:layout_height="30dp"
                 android:layout_gravity="center"
                 android:layout_margin="5dp"
+                app:carbon_elevation="1dp"
+                android:clickable="true"
+                app:carbon_rippleColor="@color/colorRippleDefault"
                 android:background="@color/white"
                 app:carbon_cornerRadius="6dp"
-                app:srcCompat="@drawable/ic_bkash_icon" />
+                app:srcCompat="@drawable/ic_bkash_icon"
+                android:focusable="true" />
 
             <carbon.widget.ImageView
+                android:clickable="true"
+                android:focusable="true"
+                app:carbon_rippleColor="@color/colorRippleDefault"
                 android:layout_width="40dp"
                 android:layout_height="30dp"
                 android:layout_gravity="center"
                 android:layout_margin="5dp"
                 android:background="@color/white"
                 app:carbon_cornerRadius="6dp"
-                app:srcCompat="@drawable/ic_due_amount" />
+                app:carbon_elevation="1dp"
+                app:srcCompat="@drawable/ic_nexus_pay_icon" />
         </carbon.widget.LinearLayout>
     </LinearLayout>
 </RelativeLayout>

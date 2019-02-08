@@ -15,14 +15,13 @@
         android:id="@+id/no_data_block"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
+        android:layout_marginTop="32dp"
         android:gravity="center"
         android:orientation="vertical"
         android:paddingStart="0dp"
         android:paddingLeft="0dp"
         android:paddingEnd="8dp"
         android:paddingRight="8dp"
-        android:paddingBottom="36dp"
         android:visibility="gone">
 
         <carbon.widget.ImageView

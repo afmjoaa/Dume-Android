@@ -124,4 +124,7 @@
     <color name="indicator_color">#26A69A</color>
     <color name="testing_transparent">#eaf4f4</color>
 
+    <color name="impression">#7b1fa2</color>
+    <color name="view">#0288d1</color>
+
 </resources>

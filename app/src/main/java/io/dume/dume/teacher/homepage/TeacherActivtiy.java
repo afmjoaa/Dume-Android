@@ -816,6 +816,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         onMapReadyListener(mMap);
         onMapReadyGeneralConfig();
         mMap.setPadding((int) (20 * (getResources().getDisplayMetrics().density)), 0, 0, (int) (72 * (getResources().getDisplayMetrics().density)));
+        mMap.setMyLocationEnabled(false);
         getDeviceLocation(mMap);
     }
 
