@@ -10,4 +10,6 @@ public interface TeacherModel {
 
     void getSkill(TeacherContract.Model.Listener<ArrayList<Skill>> listener);
 
+    void switchAccountStatus(boolean status, TeacherContract.Model.Listener<Void> listener);
+
 }

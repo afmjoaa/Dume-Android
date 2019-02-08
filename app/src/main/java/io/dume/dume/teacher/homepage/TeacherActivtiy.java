@@ -858,17 +858,21 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         String o1 = documentSnapshot.getString("first_name");
         switch (checkedId) {
             case R.id.buttonActive:
-                Toast.makeText(this, "You are active on Dume network now", Toast.LENGTH_SHORT).show();
+               // Toast.makeText(this, "You are active on Dume network now", Toast.LENGTH_SHORT).show();
                 userNameTextView.setText(String.format("%s %s", o1, o));
-                userNameTextView.setText(o1+ " " + o + "-Active");
+                userNameTextView.setText(o1 + " " + o + "- Active");
                 buttonActive.setCompoundDrawablesWithIntrinsicBounds(R.drawable.state_active_active, 0, 0, 0);
                 buttonInActive.setCompoundDrawablesWithIntrinsicBounds(R.drawable.state_inactive_inactive, 0, 0, 0);
+                switchStatus(true);
+
                 break;
             case R.id.buttonInActive:
-                Toast.makeText(this, "You are inactive on Dume network now", Toast.LENGTH_SHORT).show();
-                userName.setText(o1+ " " + o + "-Inactive");
+                //Toast.makeText(this, "You are inactive on Dume network now", Toast.LENGTH_SHORT).show();
+                userName.setText(o1 + " " + o + "- Inactive");
                 buttonActive.setCompoundDrawablesWithIntrinsicBounds(R.drawable.state_active_inactive, 0, 0, 0);
                 buttonInActive.setCompoundDrawablesWithIntrinsicBounds(R.drawable.state_inactive_active, 0, 0, 0);
+                switchStatus(false);
+
                 break;
             default:
                 // Nothing to do
@@ -1030,6 +1034,33 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         teacherDataStore.settUserMail(documentSnapshot.getString("email"));
         teacherDataStore.settUserUid(documentSnapshot.getId());
         teacherDataStore.settAvatarString(getAvatarString());
+    }
+
+    @Override
+    public void switchStatus(boolean active) {
+        if (drawerLayout.isDrawerOpen(Gravity.LEFT)) {
+            drawerLayout.closeDrawer(Gravity.LEFT);
+        }
+        radioSegmentGroup.setEnabled(false);
+        showProgress();
+        new DumeModel(this).switchAccountStatus(active, new TeacherContract.Model.Listener<Void>() {
+            @Override
+            public void onSuccess(Void list) {
+                radioSegmentGroup.setEnabled(true);
+                hideProgress();
+                String foo = active ? "Active" : "Inactive";
+                flush("Account Status Changed To : " + foo);
+            }
+
+            @Override
+            public void onError(String msg) {
+                radioSegmentGroup.setEnabled(true);
+                hideProgress();
+                flush(msg);
+            }
+        });
+
+
     }
 
     @Override
@@ -1232,6 +1263,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         }
     }
 
+
     @Override
     public void switchProfileDialog(String identify) {
         TextView mainText = mCancelBottomSheetDialog.findViewById(R.id.main_text);
@@ -1261,7 +1293,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
                     mCancelBottomSheetDialog.dismiss();
                     showProgress();
                     if (identify.equals(DumeUtils.STUDENT)) {
-                        new DumeModel().switchAcount(DumeUtils.STUDENT, new TeacherContract.Model.Listener<Void>() {
+                        new DumeModel(context).switchAcount(DumeUtils.STUDENT, new TeacherContract.Model.Listener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
                                 gotoStudentHomePage();
@@ -1274,7 +1306,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
                             }
                         });
                     } else {
-                        new DumeModel().switchAcount(DumeUtils.BOOTCAMP, new TeacherContract.Model.Listener<Void>() {
+                        new DumeModel(context).switchAcount(DumeUtils.BOOTCAMP, new TeacherContract.Model.Listener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
                                 gotoBootCamPHomePage();

@@ -223,7 +223,7 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
         findLoadView();
         final GrabingInfoModel mModel = new GrabingInfoModel(this);
         mPresenter = new GrabingInfoPresenter(this, mModel);
-        teacherModel = new DumeModel();
+        teacherModel = new DumeModel(this);
         mPresenter.grabingInfoPageEnqueue();
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         getLocationPermission(mapFragment);

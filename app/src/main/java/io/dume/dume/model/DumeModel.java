@@ -1,5 +1,7 @@
 package io.dume.dume.model;
 
+import android.app.Activity;
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -25,19 +27,23 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import io.dume.dume.Google;
 import io.dume.dume.teacher.homepage.TeacherContract;
 import io.dume.dume.teacher.homepage.TeacherDataStore;
 import io.dume.dume.teacher.pojo.Skill;
+import io.dume.dume.util.DumeUtils;
 
 public class DumeModel implements TeacherModel {
 
     private static final String TAG = "DumeModel";
     private final FirebaseFirestore firebaseFirestore;
     private final FirebaseAuth firebaseAuth;
+    private final Context context;
     private CollectionReference skillCollection;
     private final GeoFirestore geoFirestore;
 
-    public DumeModel() {
+    public DumeModel(Context context) {
+        this.context = context;
         firebaseFirestore = FirebaseFirestore.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
         skillCollection = firebaseFirestore.collection("users").document("mentors").collection("skills");
@@ -45,9 +51,10 @@ public class DumeModel implements TeacherModel {
     }
 
     public void switchAcount(String to, TeacherContract.Model.Listener<Void> listener) {
-        firebaseFirestore.document("mini_users/" + firebaseAuth.getUid()).update("account_major", to).addOnSuccessListener(new OnSuccessListener<Void>() {
+        firebaseFirestore.document("mini_users/" + firebaseAuth.getUid()).update("account_major", to).addOnSuccessListener((Activity)context,new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
+                Google.getInstance().setAccountMajor(to);
                 listener.onSuccess(aVoid);
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -78,7 +85,7 @@ public class DumeModel implements TeacherModel {
         final DocumentReference document = skillCollection.document();
         String id = document.getId();
 
-        document.set(dataMap).addOnSuccessListener(aVoid -> geoFirestore.setLocation(id, location, e -> {
+        document.set(dataMap).addOnSuccessListener((Activity)context,aVoid -> geoFirestore.setLocation(id, location, e -> {
             if (e == null) {
                 listener.onSuccess(aVoid);
             }
@@ -94,7 +101,7 @@ public class DumeModel implements TeacherModel {
     public void getSkill(TeacherContract.Model.Listener<ArrayList<Skill>> listener) {
         CollectionReference skillCollection = firebaseFirestore.collection("users").document("mentors").collection("skills");
         Query query = skillCollection.whereEqualTo("mentor_uid", FirebaseAuth.getInstance().getCurrentUser().getUid());
-        query.addSnapshotListener(new EventListener<QuerySnapshot>() {
+        query.addSnapshotListener((Activity)context,new EventListener<QuerySnapshot>() {
 
 
             @Override
@@ -114,5 +121,18 @@ public class DumeModel implements TeacherModel {
         });
     }
 
-
+    @Override
+    public void switchAccountStatus(boolean status, TeacherContract.Model.Listener<Void> listener) {
+        firebaseFirestore.document("users/mentors/mentor_profile/" + FirebaseAuth.getInstance().getUid()).update("account_active", status).addOnSuccessListener((Activity)context,new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                listener.onSuccess(aVoid);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                listener.onError(e.getLocalizedMessage());
+            }
+        });
+    }
 }

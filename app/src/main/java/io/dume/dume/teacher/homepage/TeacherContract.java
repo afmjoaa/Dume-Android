@@ -38,6 +38,8 @@ public interface TeacherContract {
 
         void setDocumentSnapshot(DocumentSnapshot documentSnapshot);
 
+        void switchStatus(boolean active);
+
         //getters
 
         String getAvatarString();

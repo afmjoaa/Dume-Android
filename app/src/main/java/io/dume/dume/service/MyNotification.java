@@ -13,6 +13,7 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -22,7 +23,7 @@ import io.dume.dume.student.homePage.HomePageActivity;
 public class MyNotification extends FirebaseMessagingService {
 
 
-
+    private static String token;
 
     public MyNotification() {
         super();
@@ -95,8 +96,17 @@ public class MyNotification extends FirebaseMessagingService {
         super.onSendError(s, e);
     }
 
+
     @Override
     public void onNewToken(String s) {
         super.onNewToken(s);
+        Log.e("newToken", s);
+        getSharedPreferences("dume", MODE_PRIVATE).edit().putString("fcm_token", s).apply();
+    }
+
+    public static String getToken(Context context) {
+        token = context.getSharedPreferences("dume", MODE_PRIVATE).getString("fcm_token", "undefined").equals("undefined") ? FirebaseInstanceId.getInstance().getToken()
+                == null ? "Hudai" : FirebaseInstanceId.getInstance().getToken() : context.getSharedPreferences("dume", MODE_PRIVATE).getString("fcm_token", "undefined");
+        return token;
     }
 }
