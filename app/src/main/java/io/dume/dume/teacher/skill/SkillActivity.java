@@ -1,20 +1,15 @@
 package io.dume.dume.teacher.skill;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.view.animation.FastOutLinearInInterpolator;
 import android.support.v4.view.animation.LinearOutSlowInInterpolator;
 import android.support.v4.widget.NestedScrollView;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
@@ -28,12 +23,11 @@ import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.transitionseverywhere.Fade;
-import com.transitionseverywhere.Slide;
-import com.transitionseverywhere.Transition;
 import com.transitionseverywhere.TransitionManager;
 import com.transitionseverywhere.TransitionSet;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -47,7 +41,6 @@ import io.dume.dume.teacher.mentor_settings.basicinfo.EditAccount;
 import io.dume.dume.teacher.pojo.Skill;
 import io.dume.dume.util.DumeUtils;
 import io.dume.dume.util.NetworkUtil;
-import io.dume.dume.util.VisibleToggleClickListener;
 
 public class SkillActivity extends CustomStuAppCompatActivity implements SkillContract.View, View.OnClickListener {
     @BindView(R.id.loadView)
@@ -66,6 +59,7 @@ public class SkillActivity extends CustomStuAppCompatActivity implements SkillCo
     private CoordinatorLayout coordinatorLayout;
     private Snackbar enamSnackbar;
     private int ADD_PARMANENT_ADDRESS = 1005;
+    private Map<String, Object> documentSnapshot;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +69,7 @@ public class SkillActivity extends CustomStuAppCompatActivity implements SkillCo
         ButterKnife.bind(this);
         presenter = new SkillPresenter(new SkillModel(), this);
         presenter.enqueue();
-
+        documentSnapshot = TeacherDataStore.getInstance().getDocumentSnapshot();
         //setting my snackbar callback
         snackbar.addCallback(new Snackbar.Callback() {
             @Override
@@ -99,6 +93,41 @@ public class SkillActivity extends CustomStuAppCompatActivity implements SkillCo
                 }
             }
         });
+
+        changeAddSkillBtnColor();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        changeAddSkillBtnColor();
+    }
+
+    private void changeAddSkillBtnColor(){
+        final Map<String, Boolean> achievements = (Map<String, Boolean>) documentSnapshot.get("achievements");
+        Boolean premier = achievements.get("premier");
+        if (premier) {
+            fabInstant.setColorNormalResId(R.color.colorBlack);
+            fabInstant.setIconDrawable(getResources().getDrawable(R.drawable.dume_instant_image));
+        } else{
+            fabInstant.setColorNormalResId(R.color.recordsBgColor);
+            fabInstant.setIconDrawable(getResources().getDrawable(R.drawable.dume_instant_grayscale_image));
+
+        }
+        String beh = (String) documentSnapshot.get("pro_com_%");
+        int percentage = Integer.parseInt(beh);
+        if (percentage >= 95) {
+            fabRegular.setColorNormalResId(R.color.colorBlack);
+            fabRegular.setIconDrawable(getResources().getDrawable(R.drawable.dume_regular_image));
+            fabGang.setColorNormalResId(R.color.colorBlack);
+            fabGang.setIconDrawable(getResources().getDrawable(R.drawable.dume_gang_image));
+        }else {
+            fabRegular.setColorNormalResId(R.color.recordsBgColor);
+            fabRegular.setIconDrawable(getResources().getDrawable(R.drawable.dume_regular_grayscale_image));
+            fabGang.setColorNormalResId(R.color.recordsBgColor);
+            fabGang.setIconDrawable(getResources().getDrawable(R.drawable.dume_gang_grayscale_image));
+
+        }
     }
 
     @Override

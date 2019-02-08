@@ -853,16 +853,19 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
 
     @Override
     public void onCheckedChanged(RadioGroup radioGroup, int checkedId) {
+        String o = documentSnapshot.getString("last_name");
+        String o1 = documentSnapshot.getString("first_name");
         switch (checkedId) {
             case R.id.buttonActive:
                 Toast.makeText(this, "You are active on Dume network now", Toast.LENGTH_SHORT).show();
-                userName.setText("Demo User(Active)");
+                userNameTextView.setText(String.format("%s %s", o1, o));
+                userNameTextView.setText(o1+ " " + o + "-Active");
                 buttonActive.setCompoundDrawablesWithIntrinsicBounds(R.drawable.state_active_active, 0, 0, 0);
                 buttonInActive.setCompoundDrawablesWithIntrinsicBounds(R.drawable.state_inactive_inactive, 0, 0, 0);
                 break;
             case R.id.buttonInActive:
                 Toast.makeText(this, "You are inactive on Dume network now", Toast.LENGTH_SHORT).show();
-                userName.setText("Demo User(Inactive)");
+                userName.setText(o1+ " " + o + "-Inactive");
                 buttonActive.setCompoundDrawablesWithIntrinsicBounds(R.drawable.state_active_inactive, 0, 0, 0);
                 buttonInActive.setCompoundDrawablesWithIntrinsicBounds(R.drawable.state_inactive_active, 0, 0, 0);
                 break;

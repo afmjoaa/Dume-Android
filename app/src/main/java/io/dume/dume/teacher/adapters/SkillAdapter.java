@@ -282,6 +282,13 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 }
             });
 
+            HashMap<String, Object> jizz = skillList.get(i).getJizz();
+            if (getLast(i) != null) {
+                final Object o = jizz.get(getLast(i));
+                myViewHolder.skillTitleTV.setText(o.toString() + " / " + jizz.get("Category"));
+                myViewHolder.categoryAvatar.setImageResource(iconList.get(jizz.get("Category")));
+            }
+
         } else {//fragment start here
             SkillFVH myFragmentHolder = (SkillFVH) holder;
             myFragmentHolder.itemView.setOnClickListener(view -> {
@@ -293,12 +300,12 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             layoutParams.width = (itemWidth);
             myFragmentHolder.hostingRelative.setLayoutParams(layoutParams);
             //common code here
-            /*HashMap<String, Object> jizz = skillList.get(i).getJizz();
+            HashMap<String, Object> jizz = skillList.get(i).getJizz();
             if (getLast(i) != null) {
                 final Object o = jizz.get(getLast(i));
-                myFragmentHolder.skillTitleTV.setText(o.toString() + " | " + jizz.get("Category"));
-                myFragmentHolder.categoryAvatar.setImageResource(iconList.get(jizz.get("Category")));
-            }*/
+                myFragmentHolder.skillTitleTV.setText(o.toString() + " / " + jizz.get("Category"));
+                //myFragmentHolder.categoryAvatar.setImageResource(iconList.get(jizz.get("Category")));
+            }
 
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             //myFragmentHolder.salaryTV.setText((int) skillList.get(i).getSalary() + " tk");
