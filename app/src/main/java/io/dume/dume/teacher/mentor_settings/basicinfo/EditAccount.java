@@ -49,6 +49,7 @@ import io.dume.dume.customView.HorizontalLoadView;
 import io.dume.dume.student.grabingLocation.GrabingLocationActivity;
 import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
 import io.dume.dume.teacher.adapters.AcAdapter;
+import io.dume.dume.teacher.homepage.TeacherDataStore;
 import io.dume.dume.teacher.mentor_settings.academic.AcademicActivity;
 import io.dume.dume.teacher.pojo.Academic;
 import io.dume.dume.util.DatePickerFragment;
@@ -169,6 +170,7 @@ public class EditAccount extends CustomStuAppCompatActivity implements EditContr
 
     @Override
     public void onDataLoad(DocumentSnapshot documentSnapshot) {
+        TeacherDataStore.getInstance().setDocumentSnapshot(documentSnapshot.getData());
         databaseComPercent = documentSnapshot.getString("pro_com_%");
         final RequestOptions requestOptions = new RequestOptions();
         String gender = documentSnapshot.getString("gender");

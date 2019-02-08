@@ -28,7 +28,6 @@ public class SkillPresenter implements SkillContract.Presenter {
 
 
     private static final String TAG = "SkillPresenter";
-
     private io.dume.dume.model.TeacherModel teacherModel;
     private Map<String, Object> documentSnapshot;
     private int percentage;
@@ -67,7 +66,6 @@ public class SkillPresenter implements SkillContract.Presenter {
 
     protected boolean isProfileOK() {
         documentSnapshot = TeacherDataStore.getInstance().getDocumentSnapshot();
-
 
         if (documentSnapshot != null) {
             String beh = (String) documentSnapshot.get("pro_com_%");
