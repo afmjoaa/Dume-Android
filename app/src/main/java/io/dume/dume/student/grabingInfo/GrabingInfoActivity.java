@@ -829,7 +829,7 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
             case DumeUtils.BOOTCAMP:
                 GeoPoint geoPointTeacher = (GeoPoint) TeacherDataStore.getInstance().getDocumentSnapshot().get("location");
                 LatLng teacherLatLng = new LatLng(geoPointTeacher.getLatitude(), geoPointTeacher.getLongitude());
-                addCustomMarkerFromURL(searchDataStore.getAvatarString(), teacherLatLng);
+                addCustomMarkerFromURL(TeacherDataStore.getInstance().gettAvatarString(), teacherLatLng);
                 moveCamera(teacherLatLng, DEFAULT_ZOOM, "Device Location", mMap);
                 break;
         }

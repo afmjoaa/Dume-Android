@@ -49,6 +49,7 @@ import io.dume.dume.customView.HorizontalLoadView;
 import io.dume.dume.student.grabingLocation.GrabingLocationActivity;
 import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
 import io.dume.dume.teacher.adapters.AcAdapter;
+import io.dume.dume.teacher.homepage.TeacherContract;
 import io.dume.dume.teacher.homepage.TeacherDataStore;
 import io.dume.dume.teacher.mentor_settings.academic.AcademicActivity;
 import io.dume.dume.teacher.pojo.Academic;
@@ -743,11 +744,26 @@ public class EditAccount extends CustomStuAppCompatActivity implements EditContr
 
     @Override
     public void addQualifiaction() {
-        final Intent intent = new Intent(this, AcademicActivity.class);
-        intent.setAction("add");
-        startActivityForResult(intent, 1234);
+        if (isChanged) {
+            presenter.fabClicked(new TeacherContract.Model.Listener<Void>() {
+                @Override
+                public void onSuccess(Void list) {
+                    hideProgress();
+                    final Intent intent = new Intent(EditAccount.this, AcademicActivity.class);
+                    intent.setAction("add");
+                    startActivityForResult(intent, 1234);
+                }
+                @Override
+                public void onError(String msg) {
+                    toast(msg);
+                }
+            });
+        }else {
+            final Intent intent = new Intent(this, AcademicActivity.class);
+            intent.setAction("add");
+            startActivityForResult(intent, 1234);
+        }
         //this.startActivity(intent);
-
     }
 
     @Override

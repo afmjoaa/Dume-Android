@@ -100,11 +100,15 @@ public class EditContract {
 
         void onClick(android.view.View view);
 
+        void fabClicked(TeacherContract.Model.Listener<Void> listener);
+
         void onActivityResult(int requestCode, int resultCode, Intent data);
     }
 
     interface Model {
         void synWithDataBase(String first, String last, String avaterUrl, String email, String gender, String phone, String religion, String marital, String birth_date, GeoPoint location, String currentStatus, String comPercent);
+
+        void synWithDataBase(String first, String last, String avatarUrl, String email, String gender, String phone, String religion, String marital, String birth_date, GeoPoint geoPoint, String currentStatus, String comPercent, TeacherContract.Model.Listener<Void> listener);
 
         void updatePercentage(String percent);
 

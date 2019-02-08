@@ -82,6 +82,39 @@ public class EditModel implements EditContract.Model {
     }
 
     @Override
+    public void synWithDataBase(String first, String last, String avatarUrl, String email, String gender, String phone, String religion, String marital, String birth_date, GeoPoint geoPoint, String currentStatus, String comPercent, TeacherContract.Model.Listener<Void> listener)  {
+        if (this.listener != null) {
+            map.put("avatar", avatarUrl);
+            map.put("first_name", first);
+            map.put("last_name", last);
+            map.put("email", email);
+            map.put("gender", gender);
+            map.put("religion", religion);
+            map.put("birth_date", birth_date);
+            map.put("marital", marital);
+            map.put("location", geoPoint);
+            map.put("current_status", currentStatus);
+            map.put("pro_com_%", comPercent);
+            /*users/mentors/mentor_profile/*/
+            database.collection("users/mentors/mentor_profile").document(Objects.requireNonNull(auth.getUid())).update(map).addOnCompleteListener(activity, new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if (task.isSuccessful()) {
+                        listener.onSuccess(null);
+                    } else if (task.isCanceled()) {
+                        listener.onError("Update Cancelled");
+                    }
+                }
+            }).addOnFailureListener(e ->
+                    listener.onError(e.getLocalizedMessage())
+            );
+
+        } else {
+            Log.e(TAG, "synWithDataBase: Set Listener First");
+        }
+    }
+
+    @Override
     public void updatePercentage(String percent) {
         database.collection("users/mentors/mentor_profile").document(Objects.requireNonNull(auth.getUid())).update("pro_com_%", percent);
     }
