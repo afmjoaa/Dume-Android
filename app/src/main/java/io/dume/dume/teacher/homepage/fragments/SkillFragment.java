@@ -114,6 +114,12 @@ public class SkillFragment extends Fragment {
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        documentSnapshot = TeacherDataStore.getInstance().getDocumentSnapshot();
+    }
+
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.skill_fragment, container, false);
@@ -193,8 +199,8 @@ public class SkillFragment extends Fragment {
                 }
             }
         });
-        changeAddSkillBtnColor();
 
+        changeAddSkillBtnColor();
         fragmentActivity = (TeacherActivtiy) getActivity();
         teacherDataStore = fragmentActivity != null ? fragmentActivity.teacherDataStore : null;
         if (teacherDataStore != null) {
@@ -244,7 +250,6 @@ public class SkillFragment extends Fragment {
                 }
             });
         }
-        documentSnapshot = TeacherDataStore.getInstance().getDocumentSnapshot();
         return root;
     }
 
