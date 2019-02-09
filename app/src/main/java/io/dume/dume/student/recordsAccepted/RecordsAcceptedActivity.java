@@ -34,6 +34,7 @@ import io.dume.dume.student.common.QualificationData;
 import io.dume.dume.student.common.ReviewAdapter;
 import io.dume.dume.student.common.ReviewHighlightData;
 import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
+import io.dume.dume.teacher.pojo.Academic;
 import io.dume.dume.util.DumeUtils;
 
 public class RecordsAcceptedActivity extends CustomStuAppCompatActivity implements RecordsAcceptedContract.View {
@@ -208,7 +209,8 @@ public class RecordsAcceptedActivity extends CustomStuAppCompatActivity implemen
 
 
             //setting the qualification recycler view
-            qualificaitonRecyAda = new QualificationAdapter(myThisActivity, getQualificationData());
+            List<Academic> academicList = new ArrayList<>();
+            qualificaitonRecyAda = new QualificationAdapter(myThisActivity, academicList);
             qualificationRecyView.setAdapter(qualificaitonRecyAda);
             qualificationRecyView.setLayoutManager(new LinearLayoutManager(myThisActivity));
 

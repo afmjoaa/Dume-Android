@@ -9,12 +9,47 @@
     tools:context=".student.recordsPage.RecordsPageActivity$PlaceholderFragment"
     tools:showIn="@layout/stu8_activity_records_page">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/records_page_recycle_view"
+    <RelativeLayout
+        android:id="@+id/host_linearlayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    </android.support.v7.widget.RecyclerView>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/records_page_recycle_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp" />
+
+        <LinearLayout
+            android:id="@+id/no_data_block"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <carbon.widget.ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:carbon_elevation="3dp"
+                app:srcCompat="@drawable/no_data_wallpaper" />
+
+            <TextView
+                android:id="@+id/no_item_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Sorry, no records to show right now ..."
+                android:textAlignment="center"
+                android:textAllCaps="false"
+                android:textColor="@color/textColorSecondary"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
 
 </android.support.v4.widget.SwipeRefreshLayout>

@@ -48,22 +48,30 @@ public class TeacherModel implements TeacherContract.Model {
     public void getChartEntry(Listener t) {
         List<Entry> entries = new ArrayList<>();
         entries.add(new Entry(1.0f, 2.0f));
-        entries.add(new Entry(2.0f, 5.0f));
+        entries.add(new Entry(2.0f, 2.0f));
         entries.add(new Entry(3.0f, 4.0f));
         entries.add(new Entry(4.0f, 6.0f));
-        entries.add(new Entry(6.0f, 1.0f));
+        entries.add(new Entry(5.0f, 1.0f));
+        entries.add(new Entry(6.0f, 6.0f));
         entries.add(new Entry(7.0f, 2.0f));
+        entries.add(new Entry(8.0f, 1.0f));
+        entries.add(new Entry(9.0f, 6.0f));
+        entries.add(new Entry(10.0f, 2.0f));
         List<Entry> entries1 = new ArrayList<>();
         entries1.add(new Entry(1.0f, 5.0f));
-        entries1.add(new Entry(2.0f, 0.0f));
-        entries1.add(new Entry(3.0f, 4.0f));
+        entries1.add(new Entry(2.0f, 2.0f));
+        entries1.add(new Entry(3.0f, 6.0f));
         entries1.add(new Entry(4.0f, 15.0f));
-        entries1.add(new Entry(6.0f, 6.0f));
+        entries1.add(new Entry(5.0f, 6.0f));
+        entries1.add(new Entry(6.0f, 15.0f));
         entries1.add(new Entry(7.0f, 10.0f));
+        entries1.add(new Entry(8.0f, 6.0f));
+        entries1.add(new Entry(9.0f, 15.0f));
+        entries1.add(new Entry(10.0f, 10.0f));
 
         ArrayList<List<Entry>> lists = new ArrayList<>();
-        lists.add(entries);
         lists.add(entries1);
+        lists.add(entries);
         t.onSuccess(lists);
     }
 

@@ -32,6 +32,7 @@ import io.dume.dume.student.common.ReviewAdapter;
 import io.dume.dume.student.common.ReviewHighlightData;
 import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
 import io.dume.dume.student.searchResult.SearchResultActivity;
+import io.dume.dume.teacher.pojo.Academic;
 import io.dume.dume.util.DumeUtils;
 import io.dume.dume.util.OnSwipeTouchListener;
 
@@ -182,7 +183,8 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
 
 
             //setting the qualification recycler view
-            qualificaitonRecyAda = new QualificationAdapter(myThisActivity, getQualificationData());
+            List<Academic> academicList = new ArrayList<>();
+            qualificaitonRecyAda = new QualificationAdapter(myThisActivity, academicList);
             qualificationRecyView.setAdapter(qualificaitonRecyAda);
             qualificationRecyView.setLayoutManager(new LinearLayoutManager(myThisActivity));
 

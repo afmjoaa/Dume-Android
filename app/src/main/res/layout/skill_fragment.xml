@@ -83,7 +83,7 @@
             android:layout_marginRight="6dp"
             android:ellipsize="end"
             android:gravity="center"
-            android:maxWidth="120dp"
+            android:maxWidth="200dp"
             android:maxLines="1"
             android:textColor="@color/textColorPrimary"
             android:scrollHorizontally="true"

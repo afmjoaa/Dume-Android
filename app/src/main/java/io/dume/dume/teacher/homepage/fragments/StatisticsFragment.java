@@ -127,6 +127,11 @@ public class StatisticsFragment extends Fragment {
 
     public void showChart(LineData data) {
         lineChart.setData(data);
+        lineChart.setVisibleXRangeMaximum(7f);
+        lineChart.setVisibleXRangeMinimum(7f);
+        lineChart.setDragDecelerationEnabled(true);
+        lineChart.setDragDecelerationFrictionCoef(0.5f);
+
         Description desc = new Description();
         desc.setText("Impression, view / week");
         desc.setPosition(-5f, -5f);
@@ -135,13 +140,15 @@ public class StatisticsFragment extends Fragment {
         lineChart.setDescription(desc);
 
         XAxis xAxis = lineChart.getXAxis();
+        xAxis.setDrawAxisLine(false);
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setEnabled(false);
         xAxis.setDrawGridLines(false);
         YAxis axisLeft = lineChart.getAxisLeft();
         axisLeft.setDrawGridLines(false);
         axisLeft.setDrawZeroLine(true);
         axisLeft.setTypeface(Typeface.createFromAsset(fragmentActivity.getAssets(), "fonts/Cairo-Light.ttf")); // set a different font
-        axisLeft.setTextSize(10f); // set the text size
+        axisLeft.setTextSize(10f);
         //axisLeft.setAxisMinimum(0f); // start at zero
         //axisLeft.setAxisMaximum(100f); // the axis maximum is 100
         axisLeft.setTextColor(getResources().getColor(R.color.textColorPrimary));
@@ -159,7 +166,10 @@ public class StatisticsFragment extends Fragment {
         legend.setXEntrySpace(5f); // set the space between the legend entries on the x-axis
         legend.setYEntrySpace(5f); // set the space between the legend entries on the y-axis
         legend.setTypeface(Typeface.createFromAsset(fragmentActivity.getAssets(), "fonts/Cairo_Regular.ttf"));
-        lineChart.setTouchEnabled(false);
+        lineChart.setTouchEnabled(true);
+        lineChart.setDragEnabled(true);
+        lineChart.setDoubleTapToZoomEnabled(true);
+        lineChart.setPinchZoom(true);
         lineChart.enableScroll();
         lineChart.invalidate();
         lineChart.animateY(3000, Easing.EasingOption.EaseInOutElastic);

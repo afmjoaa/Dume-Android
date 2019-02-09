@@ -55,6 +55,7 @@ import io.reactivex.schedulers.Schedulers;
 
 import static io.dume.dume.util.DumeUtils.getAddress;
 import static io.dume.dume.util.DumeUtils.getUserUID;
+import static io.dume.dume.util.DumeUtils.hideKeyboard;
 import static io.dume.dume.util.DumeUtils.showKeyboard;
 
 public class ProfilePageActivity extends CustomStuAppCompatActivity implements ProfilePageContract.View,
@@ -653,6 +654,11 @@ public class ProfilePageActivity extends CustomStuAppCompatActivity implements P
     }
 
     @Override
+    public void setAvatarString(String uri) {
+        avatarString = uri;
+    }
+
+    @Override
     public void setProfileComPercent(String num) {
         if (num.equals("")) {
             seekbar.setProgress(60);
@@ -748,6 +754,7 @@ public class ProfilePageActivity extends CustomStuAppCompatActivity implements P
     @Override
     public void goBack() {
         searchDataStore.setProfileChanged(true);
+        hideKeyboard(activity);
         super.onBackPressed();
     }
 

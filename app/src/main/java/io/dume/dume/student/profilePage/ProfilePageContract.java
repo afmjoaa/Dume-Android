@@ -66,6 +66,8 @@ public interface ProfilePageContract {
 
         void setAvatar(String uri);
 
+        void setAvatarString(String uri);
+
         void setProfileComPercent(String num);
 
         void flush(String msg);

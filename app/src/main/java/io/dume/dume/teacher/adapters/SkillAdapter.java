@@ -310,7 +310,7 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             //myFragmentHolder.salaryTV.setText((int) skillList.get(i).getSalary() + " tk");
             myFragmentHolder.switchCompat.setChecked(skillList.get(i).isStatus());
-            myFragmentHolder.likeTV.setText((int) (skillList.get(i).getRating() * 100) / 5 + " likes");
+            myFragmentHolder.likeTV.setText((int) (skillList.get(i).getRating() * 100) / 5 + "% liked");
         }
     }
 

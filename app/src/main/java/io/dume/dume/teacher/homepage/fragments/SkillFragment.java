@@ -188,13 +188,13 @@ public class SkillFragment extends Fragment {
         addInstantDBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                final Map<String, Boolean> achievements = (Map<String, Boolean>) documentSnapshot.get("achievements");
+                Boolean premier = achievements.get("premier");
                 if (isProfileOK()) {
-                    final Map<String, Boolean> achievements = (Map<String, Boolean>) documentSnapshot.get("achievements");
-                    Boolean premier = achievements.get("premier");
                     if (premier) {
                         goToCrudActivity(DumeUtils.TEACHER);
                     } else{
-                        tips("Unlocking Premier Badge is must");
+                        tips("Unlocking Premier Badge is must...");
                     }
                 }
             }
@@ -243,7 +243,6 @@ public class SkillFragment extends Fragment {
                         noDataBlock.setVisibility(View.GONE);
                     }
                 }
-
                 @Override
                 public void onError(String msg) {
                     Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
@@ -263,11 +262,10 @@ public class SkillFragment extends Fragment {
     public void tips(CharSequence sequence) {
         scaleTextView.animateText(sequence);
         scaleTextView.setTypeface(Typeface.createFromAsset(Objects.requireNonNull(getContext()).getAssets(), "fonts/Cairo_Regular.ttf"));
-        scaleTextView.setAnimationListener(hTextView -> {
-
-        });
+        /*scaleTextView.setAnimationListener(hTextView -> {
+        });*/
         scaleTextView.setSelected(true);
-    }//  tips("Every person is a new door to a different world.");
+    }
 
 
     protected boolean isProfileOK() {
@@ -280,7 +278,7 @@ public class SkillFragment extends Fragment {
                 return true;
             }
         }
-        tips("Profile should be 95% completed");
+        tips("Profile should be 95% completed...");
         return false;
 
     }

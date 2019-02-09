@@ -886,8 +886,7 @@
                         <android.support.v7.widget.RecyclerView
                             android:id="@+id/recycler_view_qualifications"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp">
+                            android:layout_height="wrap_content">
 
                         </android.support.v7.widget.RecyclerView>
 
@@ -1004,7 +1003,7 @@
                 </LinearLayout>
 
                 <!--location layout-->
-                <LinearLayout
+                <!--<LinearLayout
                     android:id="@+id/location_host_linearlayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -1036,14 +1035,6 @@
 
                     </carbon.widget.LinearLayout>
 
-                    <!-- agreementHostLayout = findViewById(R.id.agreement_term_host_linearlayout);
-        agreementInfoBtn = findViewById(R.id.show_agreement_terms_btn);
-        agreementHideable = findViewById(R.id.agreement_term_layout_vertical);
-
-        locationHostLayout = findViewById(R.id.location_host_linearlayout);
-        locationInfoBtn = findViewById(R.id.show_location_btn);
-        locationHideable = findViewById(R.id.location_layout_vertical);-->
-
                     <LinearLayout
                         android:id="@+id/location_layout_vertical"
                         android:layout_width="match_parent"
@@ -1070,7 +1061,7 @@
 
                     </LinearLayout>
 
-                </LinearLayout>
+                </LinearLayout>-->
 
                 <!--review layout-->
                 <LinearLayout

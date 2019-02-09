@@ -58,6 +58,7 @@ import io.dume.dume.student.recordsCurrent.calenderDecorator.EventDecorator;
 import io.dume.dume.student.recordsCurrent.calenderDecorator.HighlightWeekendsDecorator;
 import io.dume.dume.student.recordsCurrent.calenderDecorator.MySelectorDecorator;
 import io.dume.dume.student.recordsCurrent.calenderDecorator.OneDayDecorator;
+import io.dume.dume.teacher.pojo.Academic;
 import io.dume.dume.util.DumeUtils;
 import io.dume.dume.util.TimePickerFragment;
 
@@ -330,7 +331,8 @@ public class RecordsCurrentActivity extends CustomStuAppCompatActivity implement
 
 
             //setting the qualification recycler view
-            qualificaitonRecyAda = new QualificationAdapter(myThisActivity, getQualificationData());
+            List<Academic> academicList = new ArrayList<>();
+            qualificaitonRecyAda = new QualificationAdapter(myThisActivity,academicList);
             qualificationRecyView.setAdapter(qualificaitonRecyAda);
             qualificationRecyView.setLayoutManager(new LinearLayoutManager(myThisActivity));
 

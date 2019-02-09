@@ -249,10 +249,8 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
         private RecordsPageActivity myThisActivity;
         private SwipeRefreshLayout swipeRefreshLayout;
         private FragmentActivity activity;
-        private LinearLayout leftTransitionLayout;
-        private LinearLayout centerTransitionLayoutOne;
-        private LinearLayout centerTransitionLayoutTwo;
-        private LinearLayout rightTransitionLayout;
+        private TextView noItemText;
+        private LinearLayout noDataBlock;
 
         @Override
         public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -283,6 +281,8 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
             View rootView = inflater.inflate(R.layout.stu8_fragment_records_page, container, false);
             recordRecyclerView = rootView.findViewById(R.id.records_page_recycle_view);
             swipeRefreshLayout = rootView.findViewById(R.id.swipeToRefreshRecords);
+            noItemText = rootView.findViewById(R.id.no_item_text);
+            noDataBlock = rootView.findViewById(R.id.no_data_block);
 
             swipeRefreshLayout.setColorSchemeResources(android.R.color.holo_orange_light, android.R.color.holo_green_light,
                     android.R.color.holo_red_light, android.R.color.holo_blue_light);
@@ -294,7 +294,7 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
                         public void run() {
                             swipeRefreshLayout.setRefreshing(false);
                         }
-                    }, 5000);
+                    }, 4000);
                 }
             });
 
@@ -314,16 +314,6 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
                     RecordsRecyAdapter recordsRecyAdapending = new RecordsRecyAdapter(myThisActivity, recordList) {
                         @Override
                         void OnItemClicked(View v, int position) {
-                            /*leftTransitionLayout = v.findViewById(R.id.left_vertical_host_layout);
-                            centerTransitionLayoutOne = v.findViewById(R.id.center_vertical_host_layout);
-                            rightTransitionLayout = v.findViewById(R.id.right_vertical_host_layout);
-                            android.util.Pair[] pairsPending = new android.util.Pair[3];
-                            pairsPending[0] = new android.util.Pair<View, String>(leftTransitionLayout, "leftTransistion");
-                            pairsPending[1] = new android.util.Pair<View, String>(centerTransitionLayoutOne, "centerTransistionOne");
-                            pairsPending[2] = new android.util.Pair<View, String>(rightTransitionLayout, "rightTransition");
-                            ActivityOptions optionsPending = ActivityOptions.makeSceneTransitionAnimation(getActivity(), pairsPending);
-                            startActivity(new Intent(myThisActivity, RecordsPendingActivity.class).setAction("student"), optionsPending.toBundle());*/
-
                             startActivity(new Intent(myThisActivity, RecordsPendingActivity.class).setAction("student"));
                         }
 
@@ -332,11 +322,16 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
                             Toast.makeText(myThisActivity, "Pending Record aren't deletable", Toast.LENGTH_SHORT).show();
                         }
                     };
+                    noItemText.setText("Sorry, no pending records to show right now...");
+                    if(recordList.size() > 0){
+                       noDataBlock.setVisibility(View.GONE);
+                    }else {
+                        noDataBlock.setVisibility(View.VISIBLE);
+                    }
                     recordRecyclerView.setAdapter(recordsRecyAdapending);
                     recordRecyclerView.setLayoutManager(new LinearLayoutManager(myThisActivity));
                     break;
                 case 2:
-
                     List<Record> recordDataAccepted = new ArrayList<>();
                     recordDataAccepted = Google.getInstance().getRecordList();
                     recordDataAccepted = recordDataAccepted.stream().filter(new Predicate<Record>() {
@@ -356,6 +351,12 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
                             Toast.makeText(myThisActivity, "Accepted Record aren't deletable", Toast.LENGTH_SHORT).show();
                         }
                     };
+                    noItemText.setText("Sorry, no accepted records to show right now...");
+                    if(recordDataAccepted.size() > 0){
+                        noDataBlock.setVisibility(View.GONE);
+                    }else {
+                        noDataBlock.setVisibility(View.VISIBLE);
+                    }
                     recordRecyclerView.setAdapter(recordsRecyAdaAccepted);
                     recordRecyclerView.setLayoutManager(new LinearLayoutManager(myThisActivity));
                     break;
@@ -379,6 +380,12 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
                             Toast.makeText(myThisActivity, "Current Record aren't deletable", Toast.LENGTH_SHORT).show();
                         }
                     };
+                    noItemText.setText("Sorry, no current records to show right now...");
+                    if(recordDataCurrent.size() > 0){
+                        noDataBlock.setVisibility(View.GONE);
+                    }else {
+                        noDataBlock.setVisibility(View.VISIBLE);
+                    }
                     recordRecyclerView.setAdapter(recordsRecyAdaCurrent);
                     recordRecyclerView.setLayoutManager(new LinearLayoutManager(myThisActivity));
                     break;
@@ -402,6 +409,12 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
                             Toast.makeText(myThisActivity, "Completed Record aren't deletable", Toast.LENGTH_SHORT).show();
                         }
                     };
+                    noItemText.setText("Sorry, no completed records to show right now...");
+                    if(recordDataCompletded.size() > 0){
+                        noDataBlock.setVisibility(View.GONE);
+                    }else {
+                        noDataBlock.setVisibility(View.VISIBLE);
+                    }
                     recordRecyclerView.setAdapter(recordsRecyAdaCompleted);
                     recordRecyclerView.setLayoutManager(new LinearLayoutManager(myThisActivity));
                     break;
@@ -420,16 +433,20 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
                         void OnItemClicked(View v, int position) {
                             startActivity(new Intent(myThisActivity, RecordsRejectedActivity.class).setAction("student"));
                         }
-
                         @Override
                         void OnItemLongClicked(View v, int position) {
                             Toast.makeText(myThisActivity, "from Rejected longClick", Toast.LENGTH_SHORT).show();
                         }
                     };
+                    noItemText.setText("Sorry, no rejected records to show right now...");
+                    if(recordDataRejected.size() > 0){
+                        noDataBlock.setVisibility(View.GONE);
+                    }else {
+                        noDataBlock.setVisibility(View.VISIBLE);
+                    }
                     recordRecyclerView.setAdapter(recordsRecyAdaRejected);
                     recordRecyclerView.setLayoutManager(new LinearLayoutManager(myThisActivity));
                     break;
-
                 default:
                     break;
 

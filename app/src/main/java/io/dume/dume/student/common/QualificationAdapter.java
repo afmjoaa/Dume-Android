@@ -1,53 +1,102 @@
 package io.dume.dume.student.common;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.List;
 
+import carbon.widget.ImageView;
 import io.dume.dume.R;
+import io.dume.dume.teacher.adapters.AcademicAdapter;
+import io.dume.dume.teacher.mentor_settings.academic.AcademicActivity;
+import io.dume.dume.teacher.pojo.Academic;
 
-public class QualificationAdapter extends RecyclerView.Adapter<QualificationAdapter.MyViewHolder> {
+import static io.dume.dume.util.DumeUtils.setMargins;
 
-    private static final String TAG = "QualificationAdapter";
-    private LayoutInflater inflater;
+public class QualificationAdapter extends RecyclerView.Adapter<QualificationAdapter.AcademicVH> {
+
+    private final Activity activity;
+    private final List<Academic> data;
     private Context context;
-    private List<QualificationData> data;
+    int[] imageIcons = {
+            R.drawable.academic_school,
+            R.drawable.academic_college,
+            R.drawable.academic_undergraduate,
+            R.drawable.academic_postgraduate
+    };
+    private final float mDensity;
 
-
-    public QualificationAdapter(Context context , List<QualificationData> data){
-        inflater = LayoutInflater.from(context);
-        this.data = data;
+    public QualificationAdapter(Context context, List<Academic> data) {
         this.context = context;
+        this.activity = (Activity) context;
+        this.data = data;
+        mDensity = context.getResources().getDisplayMetrics().density;
     }
 
     @NonNull
     @Override
-    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = inflater.inflate(R.layout.custom_qualification_row, parent, false);
-        QualificationAdapter.MyViewHolder holder = new QualificationAdapter.MyViewHolder(view);
-        return holder;
+    public QualificationAdapter.AcademicVH onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
+        return new QualificationAdapter.AcademicVH(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.academic_fragment_item, viewGroup, false));
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        QualificationData current = data.get(position);
-        holder.institutionText.setText(current.institution);
-        holder.examText.setText(current.exam);
-        holder.sessionText.setText(current.session);
-        holder.resultText.setText(current.result);
-        if(position == 0){
-            holder.institutionText.setBackgroundResource(R.drawable.bg_rating_tittle);
-            holder.examText.setBackgroundResource(R.drawable.bg_rating_tittle);
-            holder.sessionText.setBackgroundResource(R.drawable.bg_rating_tittle);
-            holder.resultText.setBackgroundResource(R.drawable.bg_rating_tittle);
+    public void onBindViewHolder(@NonNull QualificationAdapter.AcademicVH academicVH, int position) {
+
+        Academic current = data.get(position);
+        switch (current.getLevel()) {
+            case "School/O Level":
+                academicVH.levelImage.setImageResource(imageIcons[0]);
+                break;
+            case "College/A Level":
+                academicVH.levelImage.setImageResource(imageIcons[1]);
+                break;
+            case "Under Graduation":
+                academicVH.levelImage.setImageResource(imageIcons[2]);
+                break;
+            case "Post Graduation":
+                academicVH.levelImage.setImageResource(imageIcons[3]);
+                break;
         }
 
+        academicVH.institutionTV.setText(current.getInstitute());
+        academicVH.degreeTV.setText(current.getDegree());
+        academicVH.resultTV.setText(current.getResult());
+        if (current.getResultType() == 1) {//studying
+            academicVH.sessionTV.setText(String.format("Initiated -%s", current.getFrom()));
+        } else {
+            academicVH.sessionTV.setText(String.format("Session %s-%s", current.getFrom(), current.getTo()));
+        }
+
+        academicVH.hostRelativeLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+        if (position == (data.size() - 1)) {
+            setMargins(academicVH.hostRelativeLayout, 10, 10, 10, 8);
+        }
+        academicVH.hostRelativeLayout.setBackgroundColor(context.getResources().getColor(R.color.skill_color));
+    }
+
+    public int getRecyItemCount() {
+        return data.size();
+    }
+
+    public void update(List<Academic> newData) {
+        data.clear();
+        data.addAll(newData);
+        this.notifyDataSetChanged();
     }
 
     @Override
@@ -55,19 +104,23 @@ public class QualificationAdapter extends RecyclerView.Adapter<QualificationAdap
         return data.size();
     }
 
-    class MyViewHolder extends RecyclerView.ViewHolder {
+    class AcademicVH extends RecyclerView.ViewHolder {
 
-        private final TextView institutionText;
-        private final TextView examText;
-        private final TextView sessionText;
-        private final TextView resultText;
+        private final TextView resultTV;
+        private final TextView sessionTV;
+        private final TextView institutionTV;
+        private final TextView degreeTV;
+        private final ImageView levelImage;
+        private final RelativeLayout hostRelativeLayout;
 
-        public MyViewHolder(View itemView) {
+        public AcademicVH(@NonNull View itemView) {
             super(itemView);
-            institutionText = itemView.findViewById(R.id.textview_institution);
-            examText = itemView.findViewById(R.id.textview_Exam);
-            sessionText = itemView.findViewById(R.id.textview_Session);
-            resultText = itemView.findViewById(R.id.textview_Result);
+            hostRelativeLayout = itemView.findViewById(R.id.hosting_relative_layout);
+            levelImage = itemView.findViewById(R.id.search_detail_icon);
+            degreeTV = itemView.findViewById(R.id.levelET);
+            institutionTV = itemView.findViewById(R.id.institutionET);
+            sessionTV = itemView.findViewById(R.id.sessionTV);
+            resultTV = itemView.findViewById(R.id.resultTV);
 
         }
     }

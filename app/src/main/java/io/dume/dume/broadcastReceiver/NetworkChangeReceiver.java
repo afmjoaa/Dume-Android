@@ -49,7 +49,7 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
                         new Thread(() -> {
                             try {
                                 Socket socket = new Socket();
-                                socket.connect(new InetSocketAddress("8.8.8.8", 53), 2000);
+                                socket.connect(new InetSocketAddress("8.8.8.8", 53), 2500);
 
                                 // socket.connect(new InetSocketAddress("114.114.114.114", 53), 3000);
                                 myConnectivityHandler.resume();

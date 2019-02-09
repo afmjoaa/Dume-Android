@@ -98,7 +98,9 @@ import io.dume.dume.student.pojo.CusStuAppComMapActivity;
 import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
 import io.dume.dume.student.pojo.SearchDataStore;
 import io.dume.dume.student.searchResultTabview.SearchResultTabviewActivity;
+import io.dume.dume.teacher.adapters.AcademicAdapter;
 import io.dume.dume.teacher.homepage.TeacherContract;
+import io.dume.dume.teacher.pojo.Academic;
 import io.dume.dume.util.DumeUtils;
 import io.dume.dume.util.OnSwipeTouchListener;
 import io.dume.dume.util.VisibleToggleClickListener;
@@ -219,16 +221,17 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
         mapFragment.getMapAsync(this);
 
         //setting the qualification recycler view
-        qualificaitonRecyAda = new QualificationAdapter(this, getQualificationData());
+        //qualificaitonRecyAda = new QualificationAdapter(this, getQualificationData());
+        List<Academic> academicList = new ArrayList<>();
+        qualificaitonRecyAda = new QualificationAdapter(this, academicList);
         qualificationRecyView.setAdapter(qualificaitonRecyAda);
-        qualificationRecyView.setLayoutManager(new LinearLayoutManager(this));
+        qualificationRecyView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
 
         //setting the review recycler view
         List<ReviewHighlightData> reviewData = new ArrayList<>();
         reviewRecyAda = new ReviewAdapter(this, reviewData);
         reviewRecyView.setAdapter(reviewRecyAda);
         reviewRecyView.setLayoutManager(new LinearLayoutManager(this));
-        polylines = new ArrayList<>();
     }
 
     @Override
@@ -536,6 +539,11 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
     @Override
     protected void onDestroy() {
         super.onDestroy();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
         if (!isConfirmedOrCanceled()) {
             mModel.riseNewPushNoti(pushNotiData, new TeacherContract.Model.Listener<DocumentReference>() {
                 @Override
@@ -628,7 +636,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                         optionMenu = R.menu.menu_only_help;
                         invalidateOptionsMenu();
                     }
-                    showProgress();
+                    //showProgress();
                 } else if (BottomSheetBehavior.STATE_DRAGGING == newState) {
                     viewMusk.setVisibility(View.VISIBLE);
                     secondaryAppbarLayout.setVisibility(View.VISIBLE);
@@ -1038,18 +1046,32 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
         pathRoute.add(searchDataStore.getAnchorPoint());
         pathRoute.add(latLng);
         mapFragment.setUpPath(pathRoute, mMap, RouteOverlayView.AnimType.ARC);
-       /* Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                activity.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
+        loadQualificationData(sp_info);
+    }
 
-                    }
-                });
+    public void loadQualificationData( Map<String, Object> sp_info) {
+        if (sp_info != null) {
+            List<Academic> academicList = new ArrayList<>();
+            Map<String, Map<String, Object>> academicMap = (Map<String, Map<String, Object>>) sp_info.get("academic");
+            if (academicMap != null && academicMap.size() > 0) {
+                for (Map.Entry<String, Map<String, Object>> entry : academicMap.entrySet()) {
+                    String level = (String) entry.getValue().get("level");
+                    String institution = (String) entry.getValue().get("institution");
+                    String degree = (String) entry.getValue().get("degree");
+                    String from_year = (String) entry.getValue().get("from_year");
+                    String to_year = (String) entry.getValue().get("to_year");
+                    String result = (String) entry.getValue().get("result");
+                    Academic academic = new Academic(level, institution, degree, from_year, to_year, result);
+                    academicList.add(academic);
+                }
             }
-        }, 1000);*/
+            qualificaitonRecyAda.update(academicList);
+            if (academicList.size() == 0) {
+                //noDataBlock.setVisibility(View.VISIBLE);
+            } else {
+                //noDataBlock.setVisibility(View.GONE);
+            }
+        }
     }
 
     @Override
@@ -1219,26 +1241,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
 
     }
 
-    public List<QualificationData> getQualificationData() {
-        List<QualificationData> data = new ArrayList<>();
-        String[] institutionTextArr = getResources().getStringArray(R.array.QualificationInstitutionText);
-        String[] examTextArr = getResources().getStringArray(R.array.QualificationExamText);
-        String[] sessionTextArr = getResources().getStringArray(R.array.QualificationSessionText);
-        String[] resultTextArr = getResources().getStringArray(R.array.QualificationResultText);
 
-        for (int i = 0; i < institutionTextArr.length
-                && i < examTextArr.length
-                && i < sessionTextArr.length
-                && i < resultTextArr.length; i++) {
-            QualificationData current = new QualificationData();
-            current.institution = institutionTextArr[i];
-            current.exam = examTextArr[i];
-            current.session = sessionTextArr[i];
-            current.result = resultTextArr[i];
-            data.add(current);
-        }
-        return data;
-    }
 
     //testing custom marker code here
     private Bitmap getMarkerBitmapFromView(View view, Bitmap bitmap) {
@@ -1444,12 +1447,6 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
         isConfirmedOrCanceled = confirmedOrCanceled;
     }
 
-    //not using direction code
-    /*private void showDistance(LatLng anchor, LatLng skillAnchor) {
-       double distance = SphericalUtil.computeDistanceBetween(mMarkerA.getPosition(), mMarkerB.getPosition());
-      mTextView.setText("The markers are " + formatNumber(distance) + " apart.");
-    }*/
-
     private void getRouteBetweenMarker(LatLng One, LatLng Two) {
         Routing routing = new Routing.Builder()
                 .travelMode(AbstractRouting.TravelMode.DRIVING)
@@ -1565,3 +1562,29 @@ polyline.remove();*/
                 .strokeColor(Color.BLUE);
 mMap.addPolygon(area);*/
 //getRouteBetweenMarker(mDummyLatLng, mDummyLatLngOne);
+/* Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                    }
+                });
+            }
+        }, 1000);*/
+/*<fragment xmlns:android="http://schemas.android.com/apk/res/android"
+                            xmlns:map="http://schemas.android.com/apk/res-auto"
+                            android:id="@+id/mapOne"
+                            android:name="com.google.android.gms.maps.MapFragment"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            map:cameraZoom="15"
+                            map:liteMode="true"
+                            map:mapType="normal" />*/
+
+ /*private void showDistance(LatLng anchor, LatLng skillAnchor) {
+       double distance = SphericalUtil.computeDistanceBetween(mMarkerA.getPosition(), mMarkerB.getPosition());
+      mTextView.setText("The markers are " + formatNumber(distance) + " apart.");
+    }*/
