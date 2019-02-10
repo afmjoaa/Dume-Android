@@ -103,7 +103,7 @@ public class PhoneVerificationActivity extends CustomStuAppCompatActivity implem
             resendButton.setEnabled(false);
             presenter.onResendCode();
         });
-        dataStore = (DataStore) this.getIntent().getSerializableExtra("datastore");
+        dataStore = DataStore.getInstance();
         detailsTextView.setText("Enter the 6 digit verification code sent to you at +88 " + dataStore.getPhoneNumber());
         detailsTextView.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Cairo-ExtraLight.ttf"));
     }

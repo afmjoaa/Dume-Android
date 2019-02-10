@@ -202,6 +202,8 @@ public class AuthModel implements AuthContract.Model, SplashContract.Model, Phon
     public void verifyCode(String code, PhoneVerificationContract.Model.CodeVerificationCallBack listener) {
         if (listener != null && datastore != null) {
             listener.onStart();
+
+
             PhoneAuthCredential credential = PhoneAuthProvider.getCredential(datastore.getVerificationId(), code);
             mAuth.signInWithCredential(credential).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {

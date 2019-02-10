@@ -57,7 +57,7 @@ import static io.dume.dume.util.DumeUtils.hideKeyboard;
 public class AuthRegisterActivity extends CustomStuAppCompatActivity {
     EditText firstname, lastName, phoneNumber;
     AutoCompleteTextView email;
-    private DataStore datastore = null;
+    private DataStore dataStore = null;
     private FirebaseFirestore fireStore;
     private Activity activity;
     private static final String TAG = "AuthRegisterActivity";
@@ -343,8 +343,13 @@ public class AuthRegisterActivity extends CustomStuAppCompatActivity {
             user.put("foreign_obligation", dataStore.isObligation());
             user.put("obligated_user", dataStore.getObligatedUser());
 
-            DocumentReference userStudentProInfo = fireStore.collection("/users/students/stu_pro_info").document(model.getUid());
-            fireStore.collection("mini_users").document(model.getUid()).set(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+            String uid = FirebaseAuth.getInstance().getUid();
+            if (uid == null) {
+
+                return;
+            }
+            DocumentReference userStudentProInfo = fireStore.collection("/users/students/stu_pro_info").document(uid);
+            fireStore.collection("mini_users").document(FirebaseAuth.getInstance().getUid()).set(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     configMentorProfile(dataStore);
@@ -373,14 +378,12 @@ public class AuthRegisterActivity extends CustomStuAppCompatActivity {
         setContentView(R.layout.activity_auth_final);
         setActivityContext(this, fromFlag);
         init();
-        if (getIntent().getSerializableExtra("datastore") != null) {
-            datastore = (DataStore) getIntent().getSerializableExtra("datastore");
-            restoreData(datastore);
-        }
+        dataStore = DataStore.getInstance();
+        restoreData();
         activity = this;
     }
 
-    private void restoreData(DataStore dataStore) {
+    private void restoreData() {
         firstname.setText(dataStore.getFirstName() == null ? "" : dataStore.getFirstName());
         lastName.setText(dataStore.getLastName() == null ? "" : dataStore.getLastName());
         email.setText(dataStore.getEmail() == null ? "" : dataStore.getEmail());
@@ -430,7 +433,7 @@ public class AuthRegisterActivity extends CustomStuAppCompatActivity {
         if (item.getItemId() == R.id.action_help) {
             Toast.makeText(this, "About", Toast.LENGTH_SHORT).show();
         } else {
-            this.startActivity(new Intent(this, AuthActivity.class).putExtra("datastore", datastore).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
+            this.startActivity(new Intent(this, AuthActivity.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
             this.finish();
         }
         return super.onOptionsItemSelected(item);
@@ -458,7 +461,7 @@ public class AuthRegisterActivity extends CustomStuAppCompatActivity {
                     return;
                 }
 
-                /*new AuthModel(this, this).isExistingUser(phoneStr, new AuthGlobalContract.OnExistingUserCallback() {
+                new AuthModel(this, this).isExistingUser(phoneStr, new AuthGlobalContract.OnExistingUserCallback() {
                     @Override
                     public void onStart() {
                         showDialog();
@@ -542,14 +545,13 @@ public class AuthRegisterActivity extends CustomStuAppCompatActivity {
                                 hideKeyboard(AuthRegisterActivity.this);
                                 hideDialog();
                                 Intent intent = new Intent(getApplicationContext(), PhoneVerificationActivity.class);
-                                datastore.setFirstName(firstname.getText().toString());
-                                datastore.setLastName(lastName.getText().toString());
-                                datastore.setEmail(email.getText().toString());
-                                datastore.setPhoneNumber(phoneNumber.getText().toString());
+                                dataStore.setFirstName(firstname.getText().toString());
+                                dataStore.setLastName(lastName.getText().toString());
+                                dataStore.setEmail(email.getText().toString());
+                                dataStore.setPhoneNumber(phoneNumber.getText().toString());
                                 DataStore.resendingToken = forceResendingToken;
-                                datastore.setVerificationId(verificationId);
+                                dataStore.setVerificationId(verificationId);
                                 DataStore.STATION = 1;
-                                intent.putExtra("datastore", datastore);
                                 startActivity(intent);
                                 finish();
                             }
@@ -569,11 +571,11 @@ public class AuthRegisterActivity extends CustomStuAppCompatActivity {
                                 Log.w(TAG, "onVerificationCompleted: OnNewUser");
                                 FirebaseAuth.getInstance().signInWithCredential(phoneAuthCredential).addOnCompleteListener(authResultTask -> {
                                     if (authResultTask.isSuccessful()) {
-                                        datastore.setFirstName(firstname.getText().toString());
-                                        datastore.setLastName(lastName.getText().toString());
-                                        datastore.setEmail(email.getText().toString());
-                                        datastore.setPhoneNumber(phoneNumber.getText().toString());
-                                        saveUserToDb(datastore);
+                                        dataStore.setFirstName(firstname.getText().toString());
+                                        dataStore.setLastName(lastName.getText().toString());
+                                        dataStore.setEmail(email.getText().toString());
+                                        dataStore.setPhoneNumber(phoneNumber.getText().toString());
+                                        saveUserToDb(dataStore);
 
                                     } else if (authResultTask.getException() != null) {
                                         hideDialog();
@@ -594,216 +596,20 @@ public class AuthRegisterActivity extends CustomStuAppCompatActivity {
                                 hideKeyboard(AuthRegisterActivity.this);
                                 hideDialog();
                                 Intent intent = new Intent(getApplicationContext(), PhoneVerificationActivity.class);
-                                datastore.setFirstName(firstname.getText().toString());
-                                datastore.setLastName(lastName.getText().toString());
-                                datastore.setEmail(email.getText().toString());
-                                datastore.setPhoneNumber(phoneNumber.getText().toString());
+                                dataStore.setFirstName(firstname.getText().toString());
+                                dataStore.setLastName(lastName.getText().toString());
+                                dataStore.setEmail(email.getText().toString());
+                                dataStore.setPhoneNumber(phoneNumber.getText().toString());
                                 DataStore.resendingToken = forceResendingToken;
-                                datastore.setVerificationId(verificationId);
+                                dataStore.setVerificationId(verificationId);
                                 DataStore.setSTATION(2);
-                                intent.putExtra("datastore", datastore);
+                                intent.putExtra("datastore", dataStore);
                                 startActivity(intent);
                                 finish();
 
                             }
                         });
 
-                    }
-
-                    @Override
-                    public void onError(String err) {
-                        hideDialog();
-                        toast(err);
-                    }
-                });*/
-                //testing my code here
-                AuthModel model = new AuthModel(this, this);
-                model.isExistingUser(phoneStr, new AuthGlobalContract.OnExistingUserCallback() {
-                    @Override
-                    public void onStart() {
-                        showDialog();
-                    }
-
-                    @Override
-                    public void onUserFound() {
-                        Log.w(TAG, "onUserFound: hiding dialog");
-                        //view.hideProgress();
-                        model.sendMessage("+88" + phoneStr, new AuthContract.Model.Callback() {
-                            @Override
-                            public void onStart() {
-                                showDialog();
-                                toast("Sending Code..");
-                                Log.w(TAG, "onStart: showing dialog");
-                            }
-
-                            @Override
-                            public void onFail(String error) {
-                                Log.w(TAG, "onFail: hiding dialog");
-                                hideDialog();
-                                phoneNumber.setError(error);
-                                //view.onValidationFailed(error);
-                                toast(error);
-                            }
-
-                            @Override
-                            public void onSuccess(String s, PhoneAuthProvider.ForceResendingToken forceResendingToken) {
-                                Log.w(TAG, "onSuccess: hiding dialog");
-                                hideKeyboard(activity);
-                                hideDialog();
-                                datastore.setVerificationId(s);
-                                DataStore.resendingToken = forceResendingToken;
-                                datastore.setPhoneNumber(phoneStr);
-                                DataStore.setSTATION(1);
-                                Intent intent = new Intent(AuthRegisterActivity.this, PhoneVerificationActivity.class);
-                                intent.putExtra("datastore", datastore);
-                                startActivity(intent);
-                                finish();
-                                //view.goToVerificationActivity(dataStore);
-                            }
-
-                            @Override
-                            public void onAutoSuccess(AuthResult authResult) {
-                                Log.w(TAG, "onAutoSuccess: hiding dialog");
-                                hideKeyboard(activity);
-                                //view.hideProgress();
-                                model.onAccountTypeFound(authResult.getUser(), new AuthGlobalContract.AccountTypeFoundListener() {
-                                    @Override
-                                    public void onStart() {
-                                        Log.w(TAG, "onStart: auto success-showing dialog");
-                                        showDialog();
-                                    }
-
-                                    @Override
-                                    public void onTeacherFound() {
-                                        Log.w(TAG, "onTeacherFound: hiding dialog");
-                                        hideDialog();
-                                        gotoTeacherActivity();
-                                    }
-
-                                    @Override
-                                    public void onStudentFound() {
-                                        Log.w(TAG, "onStudentFound: hiding dialog");
-                                        hideDialog();
-                                        gotoStudentActivity();
-                                    }
-
-                                    @Override
-                                    public void onBootcamp() {
-                                        Log.w(TAG, "onBootcampFound: hiding dialog");
-                                        hideDialog();
-                                        gotoTeacherActivity();
-                                    }
-
-                                    @Override
-                                    public void onForeignObligation() {
-                                        Log.w(TAG, "onForeignObligation: hiding dialog");
-                                        hideDialog();
-                                        gotoForeignObligation();
-                                    }
-
-                                    @Override
-                                    public void onFail(String exeption) {
-                                        Log.w(TAG, "onFail: hiding dialog");
-                                        hideDialog();
-                                        toast(exeption);
-                                        //view.showToast(exeption);
-                                    }
-                                });
-
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void onNewUserFound() {
-                        DataStore.STATION = 2;
-                        Log.w(TAG, "onNewUserFound: ");
-                        showDialog();
-                        //testing code
-                        model.sendMessage("+88" + phoneStr, new AuthContract.Model.Callback() {
-                            @Override
-                            public void onStart() {
-                                showDialog();
-                                toast("Sending Code..");
-                                Log.w(TAG, "onStart: showing dialog");
-                            }
-
-                            @Override
-                            public void onFail(String error) {
-                                Log.w(TAG, "onFail: hiding dialog");
-                                showDialog();
-                                toast(error);
-
-                            }
-
-                            @Override
-                            public void onSuccess(String s, PhoneAuthProvider.ForceResendingToken forceResendingToken) {
-                                Log.w(TAG, "onSuccess: hiding dialog");
-                                hideKeyboard(AuthRegisterActivity.this);
-                                hideDialog();
-                                Intent intent = new Intent(getApplicationContext(), PhoneVerificationActivity.class);
-                                datastore.setFirstName(firstname.getText().toString());
-                                datastore.setLastName(lastName.getText().toString());
-                                datastore.setEmail(email.getText().toString());
-                                datastore.setPhoneNumber(phoneNumber.getText().toString());
-                                DataStore.resendingToken = forceResendingToken;
-                                datastore.setVerificationId(s);
-                                DataStore.setSTATION(2);
-                                intent.putExtra("datastore", datastore);
-                                startActivity(intent);
-                                finish();
-                            }
-
-                            @Override
-                            public void onAutoSuccess(AuthResult authResult) {
-                                Log.w(TAG, "onAutoSuccess: hiding dialog");
-                                hideKeyboard(activity);
-                                //view.hideProgress();
-                                model.onAccountTypeFound(authResult.getUser(), new AuthGlobalContract.AccountTypeFoundListener() {
-                                    @Override
-                                    public void onStart() {
-                                        Log.w(TAG, "onStart: auto success-showing dialog");
-                                        showDialog();
-                                    }
-
-                                    @Override
-                                    public void onTeacherFound() {
-                                        Log.w(TAG, "onTeacherFound: hiding dialog");
-                                        hideDialog();
-                                        gotoTeacherActivity();
-                                    }
-
-                                    @Override
-                                    public void onStudentFound() {
-                                        Log.w(TAG, "onStudentFound: hiding dialog");
-                                        hideDialog();
-                                        gotoStudentActivity();
-                                    }
-
-                                    @Override
-                                    public void onBootcamp() {
-                                        Log.w(TAG, "onBootcampFound: hiding dialog");
-                                        hideDialog();
-                                        gotoTeacherActivity();
-                                    }
-
-                                    @Override
-                                    public void onForeignObligation() {
-                                        Log.w(TAG, "onForeignObligation: hiding dialog");
-                                        hideDialog();
-                                        gotoForeignObligation();
-                                    }
-
-                                    @Override
-                                    public void onFail(String exeption) {
-                                        Log.w(TAG, "onFail: hiding dialog");
-                                        showDialog();
-                                        toast(exeption);
-                                    }
-                                });
-
-                            }
-                        });
                     }
 
                     @Override
@@ -812,92 +618,6 @@ public class AuthRegisterActivity extends CustomStuAppCompatActivity {
                         toast(err);
                     }
                 });
-
-
-               /* AuthModel model = new AuthModel(this, this);
-                model.sendMessage("+88" + phoneStr, new AuthContract.Model.Callback() {
-                    @Override
-                    public void onStart() {
-                        showDialog();
-                        toast("Sending Code..");
-                        Log.w(TAG, "onStart: showing dialog");
-                    }
-
-                    @Override
-                    public void onFail(String error) {
-                        Log.w(TAG, "onFail: hiding dialog");
-                        showDialog();
-                        toast(error);
-
-                    }
-
-                    @Override
-                    public void onSuccess(String s, PhoneAuthProvider.ForceResendingToken forceResendingToken) {
-                        Log.w(TAG, "onSuccess: hiding dialog");
-                        hideKeyboard(AuthRegisterActivity.this);
-                        hideDialog();
-                        Intent intent = new Intent(getApplicationContext(), PhoneVerificationActivity.class);
-                        datastore.setFirstName(firstname.getText().toString());
-                        datastore.setLastName(lastName.getText().toString());
-                        datastore.setEmail(email.getText().toString());
-                        datastore.setPhoneNumber(phoneNumber.getText().toString());
-                        DataStore.resendingToken = forceResendingToken;
-                        datastore.setVerificationId(s);
-                        DataStore.setSTATION(2);
-                        intent.putExtra("datastore", datastore);
-                        startActivity(intent);
-                        finish();
-                    }
-
-                    @Override
-                    public void onAutoSuccess(AuthResult authResult) {
-                        Log.w(TAG, "onAutoSuccess: hiding dialog");
-                        hideKeyboard(activity);
-                        //view.hideProgress();
-                        model.onAccountTypeFound(authResult.getUser(), new AuthGlobalContract.AccountTypeFoundListener() {
-                            @Override
-                            public void onStart() {
-                                Log.w(TAG, "onStart: auto success-showing dialog");
-                                showDialog();
-                            }
-
-                            @Override
-                            public void onTeacherFound() {
-                                Log.w(TAG, "onTeacherFound: hiding dialog");
-                                hideDialog();
-                                gotoTeacherActivity();
-                            }
-
-                            @Override
-                            public void onStudentFound() {
-                                Log.w(TAG, "onStudentFound: hiding dialog");
-                                hideDialog();
-                                gotoStudentActivity();
-                            }
-
-                            @Override
-                            public void onBootcamp() {
-                                Log.w(TAG, "onBootcampFound: hiding dialog");
-                                hideDialog();
-                                gotoTeacherActivity();
-                            }
-
-                            @Override
-                            public void onForeignObligation() {
-                                Log.w(TAG, "onForeignObligation: hiding dialog");
-                                hideDialog();
-                                gotoForeignObligation();
-                            }
-
-                            @Override
-                            public void onFail(String exeption) {
-                                Log.w(TAG, "onFail: hiding dialog");
-                                showDialog();
-                                toast(exeption);
-                            }
-                        });
-                    }
-                });*/
                 break;
             case R.id.hiperlink_privacy_text:
 
@@ -956,3 +676,286 @@ public class AuthRegisterActivity extends CustomStuAppCompatActivity {
 
 
 }
+
+
+//testing my code here
+/* AuthModel model = new AuthModel(this, this);
+model.isExistingUser(phoneStr, new AuthGlobalContract.OnExistingUserCallback() {
+    @Override
+    public void onStart() {
+        showDialog();
+    }
+
+    @Override
+    public void onUserFound() {
+        Log.w(TAG, "onUserFound: hiding dialog");
+        //view.hideProgress();
+        model.sendMessage("+88" + phoneStr, new AuthContract.Model.Callback() {
+            @Override
+            public void onStart() {
+                showDialog();
+                toast("Sending Code..");
+                Log.w(TAG, "onStart: showing dialog");
+            }
+
+            @Override
+            public void onFail(String error) {
+                Log.w(TAG, "onFail: hiding dialog");
+                hideDialog();
+                phoneNumber.setError(error);
+                //view.onValidationFailed(error);
+                toast(error);
+            }
+
+            @Override
+            public void onSuccess(String s, PhoneAuthProvider.ForceResendingToken forceResendingToken) {
+                Log.w(TAG, "onSuccess: hiding dialog");
+                hideKeyboard(activity);
+                hideDialog();
+                datastore.setVerificationId(s);
+                DataStore.resendingToken = forceResendingToken;
+                datastore.setPhoneNumber(phoneStr);
+                DataStore.setSTATION(1);
+                Intent intent = new Intent(AuthRegisterActivity.this, PhoneVerificationActivity.class);
+                intent.putExtra("datastore", datastore);
+                startActivity(intent);
+                finish();
+                //view.goToVerificationActivity(dataStore);
+            }
+
+            @Override
+            public void onAutoSuccess(AuthResult authResult) {
+                Log.w(TAG, "onAutoSuccess: hiding dialog");
+                hideKeyboard(activity);
+                //view.hideProgress();
+                model.onAccountTypeFound(authResult.getUser(), new AuthGlobalContract.AccountTypeFoundListener() {
+                    @Override
+                    public void onStart() {
+                        Log.w(TAG, "onStart: auto success-showing dialog");
+                        showDialog();
+                    }
+
+                    @Override
+                    public void onTeacherFound() {
+                        Log.w(TAG, "onTeacherFound: hiding dialog");
+                        hideDialog();
+                        gotoTeacherActivity();
+                    }
+
+                    @Override
+                    public void onStudentFound() {
+                        Log.w(TAG, "onStudentFound: hiding dialog");
+                        hideDialog();
+                        gotoStudentActivity();
+                    }
+
+                    @Override
+                    public void onBootcamp() {
+                        Log.w(TAG, "onBootcampFound: hiding dialog");
+                        hideDialog();
+                        gotoTeacherActivity();
+                    }
+
+                    @Override
+                    public void onForeignObligation() {
+                        Log.w(TAG, "onForeignObligation: hiding dialog");
+                        hideDialog();
+                        gotoForeignObligation();
+                    }
+
+                    @Override
+                    public void onFail(String exeption) {
+                        Log.w(TAG, "onFail: hiding dialog");
+                        hideDialog();
+                        toast(exeption);
+                        //view.showToast(exeption);
+                    }
+                });
+
+            }
+        });
+    }
+
+    @Override
+    public void onNewUserFound() {
+        DataStore.STATION = 2;
+        Log.w(TAG, "onNewUserFound: ");
+        showDialog();
+        //testing code
+        model.sendMessage("+88" + phoneStr, new AuthContract.Model.Callback() {
+            @Override
+            public void onStart() {
+                showDialog();
+                toast("Sending Code..");
+                Log.w(TAG, "onStart: showing dialog");
+            }
+
+            @Override
+            public void onFail(String error) {
+                Log.w(TAG, "onFail: hiding dialog");
+                showDialog();
+                toast(error);
+
+            }
+
+            @Override
+            public void onSuccess(String s, PhoneAuthProvider.ForceResendingToken forceResendingToken) {
+                Log.w(TAG, "onSuccess: hiding dialog");
+                hideKeyboard(AuthRegisterActivity.this);
+                hideDialog();
+                Intent intent = new Intent(getApplicationContext(), PhoneVerificationActivity.class);
+                datastore.setFirstName(firstname.getText().toString());
+                datastore.setLastName(lastName.getText().toString());
+                datastore.setEmail(email.getText().toString());
+                datastore.setPhoneNumber(phoneNumber.getText().toString());
+                DataStore.resendingToken = forceResendingToken;
+                datastore.setVerificationId(s);
+                DataStore.setSTATION(2);
+                intent.putExtra("datastore", datastore);
+                startActivity(intent);
+                finish();
+            }
+
+            @Override
+            public void onAutoSuccess(AuthResult authResult) {
+                Log.w(TAG, "onAutoSuccess: hiding dialog");
+                hideKeyboard(activity);
+                //view.hideProgress();
+                model.onAccountTypeFound(authResult.getUser(), new AuthGlobalContract.AccountTypeFoundListener() {
+                    @Override
+                    public void onStart() {
+                        Log.w(TAG, "onStart: auto success-showing dialog");
+                        showDialog();
+                    }
+
+                    @Override
+                    public void onTeacherFound() {
+                        Log.w(TAG, "onTeacherFound: hiding dialog");
+                        hideDialog();
+                        gotoTeacherActivity();
+                    }
+
+                    @Override
+                    public void onStudentFound() {
+                        Log.w(TAG, "onStudentFound: hiding dialog");
+                        hideDialog();
+                        gotoStudentActivity();
+                    }
+
+                    @Override
+                    public void onBootcamp() {
+                        Log.w(TAG, "onBootcampFound: hiding dialog");
+                        hideDialog();
+                        gotoTeacherActivity();
+                    }
+
+                    @Override
+                    public void onForeignObligation() {
+                        Log.w(TAG, "onForeignObligation: hiding dialog");
+                        hideDialog();
+                        gotoForeignObligation();
+                    }
+
+                    @Override
+                    public void onFail(String exeption) {
+                        Log.w(TAG, "onFail: hiding dialog");
+                        showDialog();
+                        toast(exeption);
+                    }
+                });
+
+            }
+        });
+    }
+
+    @Override
+    public void onError(String err) {
+        hideDialog();
+        toast(err);
+    }
+});*/
+
+ /* AuthModel model = new AuthModel(this, this);
+model.sendMessage("+88" + phoneStr, new AuthContract.Model.Callback() {
+    @Override
+    public void onStart() {
+        showDialog();
+        toast("Sending Code..");
+        Log.w(TAG, "onStart: showing dialog");
+    }
+
+    @Override
+    public void onFail(String error) {
+        Log.w(TAG, "onFail: hiding dialog");
+        showDialog();
+        toast(error);
+
+    }
+
+    @Override
+    public void onSuccess(String s, PhoneAuthProvider.ForceResendingToken forceResendingToken) {
+        Log.w(TAG, "onSuccess: hiding dialog");
+        hideKeyboard(AuthRegisterActivity.this);
+        hideDialog();
+        Intent intent = new Intent(getApplicationContext(), PhoneVerificationActivity.class);
+        datastore.setFirstName(firstname.getText().toString());
+        datastore.setLastName(lastName.getText().toString());
+        datastore.setEmail(email.getText().toString());
+        datastore.setPhoneNumber(phoneNumber.getText().toString());
+        DataStore.resendingToken = forceResendingToken;
+        datastore.setVerificationId(s);
+        DataStore.setSTATION(2);
+        intent.putExtra("datastore", datastore);
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
+    public void onAutoSuccess(AuthResult authResult) {
+        Log.w(TAG, "onAutoSuccess: hiding dialog");
+        hideKeyboard(activity);
+        //view.hideProgress();
+        model.onAccountTypeFound(authResult.getUser(), new AuthGlobalContract.AccountTypeFoundListener() {
+            @Override
+            public void onStart() {
+                Log.w(TAG, "onStart: auto success-showing dialog");
+                showDialog();
+            }
+
+            @Override
+            public void onTeacherFound() {
+                Log.w(TAG, "onTeacherFound: hiding dialog");
+                hideDialog();
+                gotoTeacherActivity();
+            }
+
+            @Override
+            public void onStudentFound() {
+                Log.w(TAG, "onStudentFound: hiding dialog");
+                hideDialog();
+                gotoStudentActivity();
+            }
+
+            @Override
+            public void onBootcamp() {
+                Log.w(TAG, "onBootcampFound: hiding dialog");
+                hideDialog();
+                gotoTeacherActivity();
+            }
+
+            @Override
+            public void onForeignObligation() {
+                Log.w(TAG, "onForeignObligation: hiding dialog");
+                hideDialog();
+                gotoForeignObligation();
+            }
+
+            @Override
+            public void onFail(String exeption) {
+                Log.w(TAG, "onFail: hiding dialog");
+                showDialog();
+                toast(exeption);
+            }
+        });
+    }
+});*/

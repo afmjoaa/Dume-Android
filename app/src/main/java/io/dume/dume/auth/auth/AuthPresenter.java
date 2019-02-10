@@ -123,7 +123,7 @@ public class AuthPresenter implements AuthContract.Presenter {
                         dataStore.setVerificationId(s);
                         DataStore.resendingToken = forceResendingToken;
                         dataStore.setPhoneNumber(phoneNumber);
-                        view.goToVerificationActivity(dataStore);
+                        view.goToVerificationActivity();
                     }
 
                     @Override
@@ -184,7 +184,7 @@ public class AuthPresenter implements AuthContract.Presenter {
                 view.hideProgress();
                 Log.w(TAG, "onNewUserFound: ");
                 dataStore.setPhoneNumber(phoneNumber);
-                view.goToRegesterActivity(dataStore);
+                view.goToRegesterActivity();
             }
 
             @Override
@@ -210,8 +210,8 @@ public class AuthPresenter implements AuthContract.Presenter {
 
     @Override
     public void setBundle() {
-        if (model.getIntent().getSerializableExtra("datastore") != null) {
-            view.restoreData((DataStore) model.getIntent().getSerializableExtra("datastore"));
-        }
+       /* if (dataStore!=null) {
+            view.restoreData(dataStore);
+        }*/
     }
 }

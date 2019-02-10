@@ -72,16 +72,17 @@ public class AuthActivity extends CustomStuAppCompatActivity implements AuthCont
     private HorizontalLoadView loadView;
     private Intent fromIntent;
     private String fromIntentAction;
+    private DataStore dataStore;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_authentication);
-
         setActivityContext(this, 1605);
         presenter = new AuthPresenter(this, this, new AuthModel(this, this));
         presenter.enqueue();
+        dataStore = DataStore.getInstance();
         socialConnect.setOnClickListener(view -> startActivity(new Intent(AuthActivity.this, SocialInitActivity.class)));
         presenter.setBundle();
         TelephonyManager tMgr = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
@@ -255,16 +256,15 @@ public class AuthActivity extends CustomStuAppCompatActivity implements AuthCont
     }
 
     @Override
-    public void goToVerificationActivity(DataStore dataStore) {
+    public void goToVerificationActivity() {
         DataStore.setSTATION(1);
         Intent intent = new Intent(this, PhoneVerificationActivity.class);
-        intent.putExtra("datastore", dataStore);
         startActivity(intent);
         finish();
     }
 
     @Override
-    public void goToRegesterActivity(DataStore dataStore) {
+    public void goToRegesterActivity() {
         Intent intent = new Intent(this, AuthRegisterActivity.class);
         //J
         String accountMajor = null;
@@ -281,7 +281,7 @@ public class AuthActivity extends CustomStuAppCompatActivity implements AuthCont
         }
         dataStore.setAccountManjor(accountMajor);
         dataStore.setBottomNavAccountMajor(true);
-        intent.putExtra("datastore", dataStore);
+
         startActivity(intent);
         finish();
     }
@@ -312,7 +312,8 @@ public class AuthActivity extends CustomStuAppCompatActivity implements AuthCont
     }
 
     @Override
-    public void restoreData(DataStore dataStore) {
+    public void restoreData() {
+
         phoneEditText.setText(dataStore.getPhoneNumber());
     }
 

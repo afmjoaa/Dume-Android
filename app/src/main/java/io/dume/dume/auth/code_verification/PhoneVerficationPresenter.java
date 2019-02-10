@@ -162,7 +162,7 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
             public void onStart() {
                 view.showProgress();
                 Log.w(TAG, "onStart: ");
-                //"Resending Code"
+
             }
 
             @Override
