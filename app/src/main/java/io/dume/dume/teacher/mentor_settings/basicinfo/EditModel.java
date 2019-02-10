@@ -108,7 +108,6 @@ public class EditModel implements EditContract.Model {
             }).addOnFailureListener(e ->
                     listener.onError(e.getLocalizedMessage())
             );
-
         } else {
             Log.e(TAG, "synWithDataBase: Set Listener First");
         }
@@ -142,7 +141,6 @@ public class EditModel implements EditContract.Model {
                 .addOnCanceledListener(() ->
                         progressListener.onFail("Upload Cancelled")
                 );
-
     }
 
     @Override

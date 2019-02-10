@@ -90,7 +90,8 @@ public class RecordsPageModel implements RecordsPageContract.Model {
                                 studentDpUrl = (String) forMap.get("request_avatar");
                                 salaryInDemand = String.valueOf((Double) data.get("salary"));
                                 subjectExchange = DumeUtils.getLast((Map<String, Object>) data.get("jizz"));
-                                Timestamp creation = (Timestamp) data.get("creation");
+                                Date creation = (Date) data.get("creation");
+
                                 date = creation.toString();
                                 status = (String) data.get("record_status");
                                 Record record = new Record(mentorName, studentName, salaryInDemand, subjectExchange, date, mentorDpUrl, studentDpUrl, studentRating, mentorRating, status, Record.DELIVERED);

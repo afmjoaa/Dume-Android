@@ -199,13 +199,12 @@
                         android:clickable="false"
                         android:textColor="@color/disable_color"
                         android:descendantFocusability="beforeDescendants"
-                        android:enabled="false"
-                        android:focusable="false"
+
                         android:focusableInTouchMode="true"
                         android:fontFamily="@font/cairo_regular"
                         android:hint="Mobile Number"
                         android:imeOptions="actionDone"
-                        android:inputType="none"
+
                         android:nextFocusLeft="@id/phoneNumberEditText"
                         android:nextFocusUp="@id/phoneNumberEditText"
                         android:singleLine="true"
@@ -240,10 +239,24 @@
             android:layout_marginStart="20dp"
             android:orientation="vertical">
 
+            <CheckBox
+                android:id="@+id/privacyCB"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:layout_editor_absoluteX="0dp"
+                tools:layout_editor_absoluteY="0dp"
+                android:checked="true"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@id/plain_privacy_text1"
+                app:layout_constraintBottom_toTopOf="@+id/plain_privacy_text3"
+                />
+
             <TextView
                 android:id="@+id/plain_privacy_text1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginLeft="32dp"
                 android:fontFamily="@font/cairo_regular"
                 android:gravity="start"
                 android:text="@string/privacy_notice1"
@@ -258,6 +271,8 @@
                 android:id="@+id/plain_privacy_text2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginLeft="32dp"
                 android:fontFamily="@font/cairo_regular"
                 android:gravity="start"
                 android:text="@string/privacy_notice2"
@@ -265,7 +280,8 @@
                 android:textSize="14sp"
                 app:layout_constraintBottom_toTopOf="@+id/hiperlink_privacy_text"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/plain_privacy_text1" />
+                app:layout_constraintTop_toBottomOf="@id/plain_privacy_text1"
+                app:layout_constraintVertical_bias="0.0" />
 
             <TextView
                 android:id="@+id/hiperlink_terms_text"
@@ -300,6 +316,8 @@
                 android:id="@+id/hiperlink_privacy_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginLeft="32dp"
                 android:fontFamily="@font/cairo_regular"
                 android:gravity="start"
                 android:onClick="onViewClick"

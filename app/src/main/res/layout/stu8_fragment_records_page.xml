@@ -9,7 +9,7 @@
     tools:context=".student.recordsPage.RecordsPageActivity$PlaceholderFragment"
     tools:showIn="@layout/stu8_activity_records_page">
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/host_linearlayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -24,12 +24,10 @@
         <LinearLayout
             android:id="@+id/no_data_block"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
+            android:layout_height="320dp"
             android:gravity="center"
             android:orientation="vertical"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <carbon.widget.ImageView
                 android:layout_width="wrap_content"
@@ -50,6 +48,6 @@
 
         </LinearLayout>
 
-    </RelativeLayout>
+    </LinearLayout>
 
 </android.support.v4.widget.SwipeRefreshLayout>

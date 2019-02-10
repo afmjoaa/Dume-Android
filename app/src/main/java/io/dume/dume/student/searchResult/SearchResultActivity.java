@@ -177,9 +177,9 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
     private LinearLayout agreementHostLayout;
     private Button agreementInfoBtn;
     private LinearLayout agreementHideable;
-    private LinearLayout locationHostLayout;
+    /*private LinearLayout locationHostLayout;
     private Button locationInfoBtn;
-    private LinearLayout locationHideable;
+    private LinearLayout locationHideable;*/
     private NestedScrollView bottomSheetNSV;
     private HorizontalLoadViewTwo loadViewBS;
     private List<LatLng> route;
@@ -295,9 +295,9 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
         agreementInfoBtn = findViewById(R.id.show_agreement_terms_btn);
         agreementHideable = findViewById(R.id.agreement_term_layout_vertical);
 
-        locationHostLayout = findViewById(R.id.location_host_linearlayout);
-        locationInfoBtn = findViewById(R.id.show_location_btn);
-        locationHideable = findViewById(R.id.location_layout_vertical);
+        //locationHostLayout = findViewById(R.id.location_host_linearlayout);
+        //locationInfoBtn = findViewById(R.id.show_location_btn);
+        //locationHideable = findViewById(R.id.location_layout_vertical);
         bottomSheetNSV = findViewById(R.id.bottom_sheet_scroll_view);
         loadViewBS = findViewById(R.id.loadViewTwo);
 
@@ -909,7 +909,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
             }
         });
 
-        //setting the animation for the location btn
+       /* //setting the animation for the location btn
         locationInfoBtn.setOnClickListener(new VisibleToggleClickListener() {
 
             @SuppressLint("CheckResult")
@@ -956,7 +956,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                 }
             }
 
-        });
+        });*/
 
         //setting the animation for the achievement btn
         achievementInfoBtn.setOnClickListener(new VisibleToggleClickListener() {

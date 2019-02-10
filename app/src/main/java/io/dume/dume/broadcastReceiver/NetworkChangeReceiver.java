@@ -86,7 +86,10 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
             /*if ("android.location.PROVIDERS_CHANGED".equals(intent.getAction())) {
                 myGpsHandlerOne.onGpsError(e);
             }*/
-            myConnectivityHandler.onError(e);
+            if (myConnectivityHandler != null) {
+                myConnectivityHandler.onError(e);
+            }
+
 
         }
 

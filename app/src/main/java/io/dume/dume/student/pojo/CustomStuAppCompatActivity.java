@@ -144,11 +144,10 @@ public class CustomStuAppCompatActivity extends AppCompatActivity implements MyC
         intentFilter.setPriority(100);
         // Create a network change broadcast receiver.
         networkChangeReceiver = new NetworkChangeReceiver();
-        // Register the broadcast receiver with the intent filter object.
-        registerReceiver(networkChangeReceiver, intentFilter);
         //setting the listener for the network
         networkChangeReceiver.setNetworkListener(this);
-
+        // Register the broadcast receiver with the intent filter object.
+        registerReceiver(networkChangeReceiver, intentFilter);
     }
 
     private void init() {
