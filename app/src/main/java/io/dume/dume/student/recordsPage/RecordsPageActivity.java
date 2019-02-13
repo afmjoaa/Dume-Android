@@ -61,6 +61,8 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
             R.drawable.ic_task_rejected
     };
     private SwipeRefreshLayout swipeRefreshLayout;
+    private LinearLayout noDataBlockMain;
+    private List<Record> recordListMain = new ArrayList<>();
 
 
     @Override
@@ -114,6 +116,7 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
     public void findView() {
         tabLayout = findViewById(R.id.tabs);
         mViewPager = findViewById(R.id.container);
+        noDataBlockMain = findViewById(R.id.no_data_block);
 
 
     }
@@ -122,6 +125,13 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
     public void onDataLoadFinsh() {
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(mSectionsPagerAdapter);
+        recordListMain = Google.getInstance().getRecordList();
+        if (recordListMain.size() > 0) {
+            noDataBlockMain.setVisibility(View.GONE);
+        } else {
+            noDataBlockMain.bringToFront();
+            noDataBlockMain.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -138,7 +148,6 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
     public void flush(String msg) {
         Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
     }
-
 
     @Override
     public void initRecordsPage() {
@@ -251,6 +260,7 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
         private FragmentActivity activity;
         private TextView noItemText;
         private LinearLayout noDataBlock;
+        private List<Record> recordList;
 
         @Override
         public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -260,10 +270,6 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
         public PlaceholderFragment() {
         }
 
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
         public static PlaceholderFragment newInstance(int sectionNumber) {
             PlaceholderFragment fragment = new PlaceholderFragment();
             Bundle args = new Bundle();
@@ -276,7 +282,7 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             myThisActivity = (RecordsPageActivity) getActivity();
             activity = getActivity();
-
+            recordList = Google.getInstance().getRecordList();
             int fragmentPosition = getArguments().getInt(ARG_SECTION_NUMBER);
             View rootView = inflater.inflate(R.layout.stu8_fragment_records_page, container, false);
             recordRecyclerView = rootView.findViewById(R.id.records_page_recycle_view);
@@ -301,17 +307,16 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
             //setting the recycler view
             switch (fragmentPosition) {
                 case 1:
-                    List<Record> recordDataPending;
-                    List<Record> recordList = new ArrayList<>();
-                    recordList = Google.getInstance().getRecordList();
-                    recordList = recordList.stream().filter(new Predicate<Record>() {
+                    List<Record> recordDataPending = new ArrayList<>();
+                    recordDataPending = Google.getInstance().getRecordList();
+                    recordDataPending = recordDataPending.stream().filter(new Predicate<Record>() {
                         @Override
                         public boolean test(Record record) {
                             return record.getStatus().equals("Pending");
                         }
                     }).collect(Collectors.toList());
 
-                    RecordsRecyAdapter recordsRecyAdapending = new RecordsRecyAdapter(myThisActivity, recordList) {
+                    RecordsRecyAdapter recordsRecyAdapending = new RecordsRecyAdapter(myThisActivity, recordDataPending) {
                         @Override
                         void OnItemClicked(View v, int position) {
                             startActivity(new Intent(myThisActivity, RecordsPendingActivity.class).setAction("student"));
@@ -323,9 +328,9 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
                         }
                     };
                     noItemText.setText("Sorry, no pending records to show right now...");
-                    if(recordList.size() > 0){
-                       noDataBlock.setVisibility(View.GONE);
-                    }else {
+                    if (recordDataPending.size() > 0) {
+                        noDataBlock.setVisibility(View.GONE);
+                    } else {
                         noDataBlock.setVisibility(View.VISIBLE);
                     }
                     recordRecyclerView.setAdapter(recordsRecyAdapending);
@@ -352,9 +357,9 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
                         }
                     };
                     noItemText.setText("Sorry, no accepted records to show right now...");
-                    if(recordDataAccepted.size() > 0){
+                    if (recordDataAccepted.size() > 0) {
                         noDataBlock.setVisibility(View.GONE);
-                    }else {
+                    } else {
                         noDataBlock.setVisibility(View.VISIBLE);
                     }
                     recordRecyclerView.setAdapter(recordsRecyAdaAccepted);
@@ -381,9 +386,9 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
                         }
                     };
                     noItemText.setText("Sorry, no current records to show right now...");
-                    if(recordDataCurrent.size() > 0){
+                    if (recordDataCurrent.size() > 0) {
                         noDataBlock.setVisibility(View.GONE);
-                    }else {
+                    } else {
                         noDataBlock.setVisibility(View.VISIBLE);
                     }
                     recordRecyclerView.setAdapter(recordsRecyAdaCurrent);
@@ -410,9 +415,9 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
                         }
                     };
                     noItemText.setText("Sorry, no completed records to show right now...");
-                    if(recordDataCompletded.size() > 0){
+                    if (recordDataCompletded.size() > 0) {
                         noDataBlock.setVisibility(View.GONE);
-                    }else {
+                    } else {
                         noDataBlock.setVisibility(View.VISIBLE);
                     }
                     recordRecyclerView.setAdapter(recordsRecyAdaCompleted);
@@ -433,15 +438,16 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
                         void OnItemClicked(View v, int position) {
                             startActivity(new Intent(myThisActivity, RecordsRejectedActivity.class).setAction("student"));
                         }
+
                         @Override
                         void OnItemLongClicked(View v, int position) {
                             Toast.makeText(myThisActivity, "from Rejected longClick", Toast.LENGTH_SHORT).show();
                         }
                     };
                     noItemText.setText("Sorry, no rejected records to show right now...");
-                    if(recordDataRejected.size() > 0){
+                    if (recordDataRejected.size() > 0) {
                         noDataBlock.setVisibility(View.GONE);
-                    }else {
+                    } else {
                         noDataBlock.setVisibility(View.VISIBLE);
                     }
                     recordRecyclerView.setAdapter(recordsRecyAdaRejected);
@@ -449,9 +455,7 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
                     break;
                 default:
                     break;
-
             }
-
             return rootView;
         }
     }
@@ -469,7 +473,6 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
 
         @Override
         public int getCount() {
-            // Show 3 total pages.
             return 5;
         }
     }

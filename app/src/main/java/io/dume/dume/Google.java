@@ -18,6 +18,7 @@ public class Google {
     private String accountPrefix;
     private String accountMajor;
 
+
     public String getAccountPrefix() {
         return accountPrefix;
     }

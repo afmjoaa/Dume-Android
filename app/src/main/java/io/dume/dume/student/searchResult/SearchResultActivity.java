@@ -7,6 +7,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
+import android.graphics.drawable.Animatable;
+import android.graphics.drawable.Animatable2;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.location.Location;
@@ -76,10 +78,12 @@ import com.transitionseverywhere.Transition;
 import com.transitionseverywhere.TransitionManager;
 import com.transitionseverywhere.TransitionSet;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
@@ -100,6 +104,7 @@ import io.dume.dume.student.pojo.SearchDataStore;
 import io.dume.dume.student.searchResultTabview.SearchResultTabviewActivity;
 import io.dume.dume.teacher.adapters.AcademicAdapter;
 import io.dume.dume.teacher.homepage.TeacherContract;
+import io.dume.dume.teacher.model.KeyValueModel;
 import io.dume.dume.teacher.pojo.Academic;
 import io.dume.dume.util.DumeUtils;
 import io.dume.dume.util.OnSwipeTouchListener;
@@ -204,6 +209,24 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
     private String retrivedAction;
     private boolean isConfirmedOrCanceled = false;
     private Map<String, Object> pushNotiData;
+    private Button salaryBtn;
+    private ImageView joinedBadge;
+    private ImageView inauguralBadge;
+    private ImageView leadingBadge;
+    private ImageView premierBadge;
+    private TextView currentStatusTV;
+    private TextView currentlyMentoringTV;
+    private TextView maritalStatusTV;
+    private TextView religionTV;
+    private TextView genderTV;
+    private TextView timeTV;
+    private TextView dateTV;
+    private TextView preferredDayTV;
+    private TextView daysPerWeekTV;
+    private TextView performanceCount;
+    private TextView experienceCount;
+    private TextView aRatioCount;
+    private TextView expertiseCount;
 
 
     @Override
@@ -255,10 +278,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
         changingOrientationParams = (LinearLayout.LayoutParams) changingOrientationContainer.getLayoutParams();
         ageText = findViewById(R.id.text_two);
         mentorNameText = findViewById(R.id.text_one);
-        ratingPerformance = findViewById(R.id.main_rating_performance);
-        ratingExperience = findViewById(R.id.main_rating_experience);
-        circleProgressbarARatio = (CircleProgressbar) findViewById(R.id.rating_main_accept_ratio);
-        circleProgressbarExpertise = (CircleProgressbar) findViewById(R.id.rating_main_professionalism);
+
         mChart = (ChartProgressBar) findViewById(R.id.myChartProgressBar);
         ratingHostVertical = findViewById(R.id.rating_host_linearlayout);
         showAdditionalRatingBtn = findViewById(R.id.show_additional_rating_btn);
@@ -300,6 +320,35 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
         //locationHideable = findViewById(R.id.location_layout_vertical);
         bottomSheetNSV = findViewById(R.id.bottom_sheet_scroll_view);
         loadViewBS = findViewById(R.id.loadViewTwo);
+
+        salaryBtn = findViewById(R.id.show_salary_btn);
+        joinedBadge = findViewById(R.id.achievement_joined_image);
+        inauguralBadge = findViewById(R.id.achievement_inaugural_image);
+        leadingBadge = findViewById(R.id.achievement_leading_image);
+        premierBadge = findViewById(R.id.achievement_premier_image);
+
+        currentStatusTV = findViewById(R.id.textview_current_status);
+        currentlyMentoringTV = findViewById(R.id.textview_currently_mentoring);
+        maritalStatusTV = findViewById(R.id.textview_marital_status);
+        religionTV = findViewById(R.id.textview_religion);
+        genderTV = findViewById(R.id.textview_gender);
+
+        timeTV = findViewById(R.id.textview_starting_time);
+        dateTV = findViewById(R.id.textview_starting_date);
+        preferredDayTV = findViewById(R.id.textview_preferred_day);
+        daysPerWeekTV = findViewById(R.id.textview_days_week);
+
+        performanceCount = findViewById(R.id.txtStatus);
+        ratingPerformance = findViewById(R.id.main_rating_performance);
+
+        ratingExperience = findViewById(R.id.main_rating_experience);
+        experienceCount = findViewById(R.id.txtStatus_experience);
+
+        circleProgressbarARatio = (CircleProgressbar) findViewById(R.id.rating_main_accept_ratio);
+        aRatioCount = findViewById(R.id.txtStatus_accept_ratio);
+
+        circleProgressbarExpertise = (CircleProgressbar) findViewById(R.id.rating_main_professionalism);
+        expertiseCount = findViewById(R.id.txtStatus_professionalism);
 
         route = new ArrayList<>();
     }
@@ -378,6 +427,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                     }
                     recordsData.putAll(searchMap);
                     recordsData.putAll(skillMap);
+                    recordsData.put("skill_uid", selectedMentor.getId());
                     recordsData.put("record_status", SearchDataStore.STATUSPENDING);
                     recordsData.put("sp_uid", spUid);
                     recordsData.put("sh_uid", shUid);
@@ -623,8 +673,6 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                     viewMusk.setVisibility(View.VISIBLE);
                     secondaryAppbarLayout.setVisibility(View.VISIBLE);
                     defaultAppbarLayout.setVisibility(View.INVISIBLE);
-                    circleProgressbarARatio.setProgressWithAnimation(80, ANIMATIONDURATION);
-                    circleProgressbarExpertise.setProgressWithAnimation(50, ANIMATIONDURATION);
                     swipeLeft.setVisibility(View.VISIBLE);
                     swipeRight.setVisibility(View.VISIBLE);
                     //hack
@@ -695,7 +743,6 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
         //ratingExperience.setImageDrawable(experienceLayDraw);
 
         ArrayList<BarData> dataList = new ArrayList<>();
-
         BarData data = new BarData("Comm.", 3.4f, "3.4€");
         dataList.add(data);
 
@@ -753,12 +800,30 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                             }
                         });
                 TransitionManager.beginDelayedTransition(ratingHostVertical, set);
-                //onlyRatingContainer.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
+                showAdditionalRatingBtn.setEnabled(false);
                 if (visible) {
                     onlyRatingContainer.setVisibility(View.INVISIBLE);
+                    //showAdditionalRatingBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_down_arrow_small));
                 } else {
                     onlyRatingContainer.setVisibility(View.VISIBLE);
+                    //showAdditionalRatingBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_up_arrow_small));
                 }
+                Drawable[] compoundDrawables = showAdditionalRatingBtn.getCompoundDrawables();
+                Drawable d = compoundDrawables[3];
+                if (d instanceof Animatable2) {
+                    ((Animatable2) d).start();
+                }
+                ((Animatable2) d).registerAnimationCallback(new Animatable2.AnimationCallback() {
+                    public void onAnimationEnd(Drawable drawable) {
+                        //Do something
+                        if (visible) {
+                            showAdditionalRatingBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_down_arrow_small));
+                        } else {
+                            showAdditionalRatingBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_up_arrow_small));
+                        }
+                        showAdditionalRatingBtn.setEnabled(true);
+                    }
+                });
             }
         });
 
@@ -802,11 +867,28 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                         });
                 TransitionManager.beginDelayedTransition(moreInfoHost, set);
                 //onlyRatingContainer.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
+                moreInfoBtn.setEnabled(false);
                 if (visible) {
                     moreInfoHidable.setVisibility(View.INVISIBLE);
                 } else {
                     moreInfoHidable.setVisibility(View.VISIBLE);
                 }
+                Drawable[] compoundDrawables = moreInfoBtn.getCompoundDrawables();
+                Drawable d = compoundDrawables[3];
+                if (d instanceof Animatable) {
+                    ((Animatable) d).start();
+                }
+                ((Animatable2) d).registerAnimationCallback(new Animatable2.AnimationCallback() {
+                    public void onAnimationEnd(Drawable drawable) {
+                        //Do something
+                        if (visible) {
+                            moreInfoBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_down_arrow_small));
+                        } else {
+                            moreInfoBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_up_arrow_small));
+                        }
+                        moreInfoBtn.setEnabled(true);
+                    }
+                });
             }
 
         });
@@ -851,15 +933,29 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                             }
                         });
                 TransitionManager.beginDelayedTransition(reviewHost, set);
-                //onlyRatingContainer.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
+                reviewInfoBtn.setEnabled(false);
                 if (visible) {
                     reviewHidable.setVisibility(View.INVISIBLE);
                 } else {
                     reviewHidable.setVisibility(View.VISIBLE);
                 }
-
+                Drawable[] compoundDrawables = reviewInfoBtn.getCompoundDrawables();
+                Drawable d = compoundDrawables[3];
+                if (d instanceof Animatable) {
+                    ((Animatable) d).start();
+                }
+                ((Animatable2) d).registerAnimationCallback(new Animatable2.AnimationCallback() {
+                    public void onAnimationEnd(Drawable drawable) {
+                        //Do something
+                        if (visible) {
+                            reviewInfoBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_down_arrow_small));
+                        } else {
+                            reviewInfoBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_up_arrow_small));
+                        }
+                        reviewInfoBtn.setEnabled(true);
+                    }
+                });
             }
-
         });
 
         //setting the animation for the agreement btn
@@ -900,63 +996,31 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                             }
                         });
                 TransitionManager.beginDelayedTransition(agreementHostLayout, set);
+                agreementInfoBtn.setEnabled(false);
                 //onlyRatingContainer.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
                 if (visible) {
                     agreementHideable.setVisibility(View.INVISIBLE);
                 } else {
                     agreementHideable.setVisibility(View.VISIBLE);
                 }
+                Drawable[] compoundDrawables = agreementInfoBtn.getCompoundDrawables();
+                Drawable d = compoundDrawables[3];
+                if (d instanceof Animatable) {
+                    ((Animatable) d).start();
+                }
+                ((Animatable2) d).registerAnimationCallback(new Animatable2.AnimationCallback() {
+                    public void onAnimationEnd(Drawable drawable) {
+                        //Do something
+                        if (visible) {
+                            agreementInfoBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_down_arrow_small));
+                        } else {
+                            agreementInfoBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_up_arrow_small));
+                        }
+                        agreementInfoBtn.setEnabled(true);
+                    }
+                });
             }
         });
-
-       /* //setting the animation for the location btn
-        locationInfoBtn.setOnClickListener(new VisibleToggleClickListener() {
-
-            @SuppressLint("CheckResult")
-            @Override
-            protected void changeVisibility(boolean visible) {
-                TransitionSet set = new TransitionSet()
-                        .addTransition(new Fade())
-                        .addTransition(new Slide(Gravity.TOP))
-                        .setInterpolator(visible ? new LinearOutSlowInInterpolator() : new FastOutLinearInInterpolator())
-                        .addListener(new Transition.TransitionListener() {
-                            @Override
-                            public void onTransitionStart(@NonNull Transition transition) {
-
-                            }
-
-                            @Override
-                            public void onTransitionEnd(@NonNull Transition transition) {
-                                if (visible) {
-                                    locationHideable.setVisibility(View.GONE);
-                                }
-                            }
-
-                            @Override
-                            public void onTransitionCancel(@NonNull Transition transition) {
-
-                            }
-
-                            @Override
-                            public void onTransitionPause(@NonNull Transition transition) {
-
-                            }
-
-                            @Override
-                            public void onTransitionResume(@NonNull Transition transition) {
-
-                            }
-                        });
-                TransitionManager.beginDelayedTransition(locationHostLayout, set);
-                //onlyRatingContainer.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
-                if (visible) {
-                    locationHideable.setVisibility(View.INVISIBLE);
-                } else {
-                    locationHideable.setVisibility(View.VISIBLE);
-                }
-            }
-
-        });*/
 
         //setting the animation for the achievement btn
         achievementInfoBtn.setOnClickListener(new VisibleToggleClickListener() {
@@ -997,17 +1061,30 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                             }
                         });
                 TransitionManager.beginDelayedTransition(achievementHost, set);
-                //onlyRatingContainer.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
+                achievementInfoBtn.setEnabled(false);
                 if (visible) {
                     achievementHidable.setVisibility(View.INVISIBLE);
                 } else {
                     achievementHidable.setVisibility(View.VISIBLE);
                 }
+                Drawable[] compoundDrawables = achievementInfoBtn.getCompoundDrawables();
+                Drawable d = compoundDrawables[3];
+                if (d instanceof Animatable) {
+                    ((Animatable) d).start();
+                }
+                ((Animatable2) d).registerAnimationCallback(new Animatable2.AnimationCallback() {
+                    public void onAnimationEnd(Drawable drawable) {
+                        //Do something
+                        if (visible) {
+                            achievementInfoBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_down_arrow_small));
+                        } else {
+                            achievementInfoBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_up_arrow_small));
+                        }
+                        achievementInfoBtn.setEnabled(true);
+                    }
+                });
             }
-
         });
-
-
     }
 
     @Override
@@ -1047,9 +1124,111 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
         pathRoute.add(latLng);
         mapFragment.setUpPath(pathRoute, mMap, RouteOverlayView.AnimType.ARC);
         loadQualificationData(sp_info);
+
+        //fill up all info of the mentor TODO
+        NumberFormat currencyInstance = NumberFormat.getCurrencyInstance(Locale.US);
+        Double salary = (Double) selectedMentor.get("salary");
+        String format1 = currencyInstance.format(salary);
+        salaryBtn.setText("Salary : " + format1.substring(1, format1.length() - 3) + " BDT");
+        //setting the achievements badge
+        Map<String, Object> achievements = (Map<String, Object>) sp_info.get("achievements");
+        if ((boolean) achievements.get("joined")) {
+            joinedBadge.setImageResource(R.drawable.ic_badge_joined);
+        }
+        if ((boolean) achievements.get("inaugural")) {
+            inauguralBadge.setImageResource(R.drawable.ic_badge_inaugural);
+        }
+        if ((boolean) achievements.get("leading")) {
+            leadingBadge.setImageResource(R.drawable.ic_badge_leading);
+        }
+        if ((boolean) achievements.get("premier")) {
+            premierBadge.setImageResource(R.drawable.ic_badge_premier);
+        }
+
+        //fixing more info now
+        String Temp = (String) sp_info.get("current_status");
+        currentStatusTV.setText(currentStatusTV.getText() + Temp);
+        Map<String, Object> self_rating = (Map<String, Object>) sp_info.get("self_rating");
+        Temp = (String) self_rating.get("student_guided");
+        currentlyMentoringTV.setText(currentlyMentoringTV.getText() + Temp);
+        Temp = (String) sp_info.get("marital");
+        maritalStatusTV.setText(maritalStatusTV.getText() + Temp);
+        Temp = (String) sp_info.get("gender");
+        genderTV.setText(genderTV.getText() + Temp);
+        Temp = (String) sp_info.get("religion");
+        religionTV.setText(religionTV.getText() + Temp);
+
+        //fixing the agreement terms now
+        Temp = (String) searchDataStore.getStartTime().get("time_string");
+        timeTV.setText(timeTV.getText() + Temp);
+        Temp = (String) searchDataStore.getStartDate().get("date_string");
+        dateTV.setText(dateTV.getText() + Temp);
+        Temp = (String) searchDataStore.getPreferredDays().get("selected_days");
+        preferredDayTV.setText(preferredDayTV.getText() + Temp);
+        Temp = searchDataStore.getPreferredDays().get("days_per_week").toString();
+        daysPerWeekTV.setText(daysPerWeekTV.getText() + Temp + " days");
+
+        //fixing the rating now
+
+
+        performanceCount.setText(self_rating.get("star_count").toString());
+        LayerDrawable performanceLayDraw = (LayerDrawable) ratingPerformance.getDrawable();
+        DumeUtils.setTextOverDrawable(this, performanceLayDraw, R.id.ic_badge, Color.BLACK, self_rating.get("star_rating").toString());
+        ratingPerformance.setImageDrawable(performanceLayDraw);
+
+        Map<String, Object> unread_records = (Map<String, Object>) sp_info.get("unread_records");
+        Integer a_ratio_value = ((Integer.parseInt(unread_records.get("accepted_count").toString())
+                + Integer.parseInt(unread_records.get("completed_count").toString())
+                + Integer.parseInt(unread_records.get("current_count").toString())
+                + Integer.parseInt(unread_records.get("pending_count").toString()) + 1) /
+                (Integer.parseInt(unread_records.get("accepted_count").toString())
+                        + Integer.parseInt(unread_records.get("completed_count").toString())
+                        + Integer.parseInt(unread_records.get("current_count").toString())
+                        + Integer.parseInt(unread_records.get("pending_count").toString())
+                        + Integer.parseInt(unread_records.get("rejected_count").toString()) + 1)) * 100;
+        aRatioCount.setText(a_ratio_value + " %");
+        circleProgressbarARatio.setProgressWithAnimation(a_ratio_value, 600);
+
+        Integer expertise_value = (Integer.parseInt(self_rating.get("l_expertise").toString()) /
+                Integer.parseInt(self_rating.get("l_expertise").toString()) + Integer.parseInt(self_rating.get("dl_expertise").toString())) * 100;
+        expertiseCount.setText(expertise_value + " %");
+        circleProgressbarExpertise.setProgressWithAnimation(expertise_value, 600);
+
+        experienceCount.setText(self_rating.get("student_guided").toString());
+        Integer experience_value = (Integer.parseInt(self_rating.get("l_experience").toString()) /
+                Integer.parseInt(self_rating.get("l_experience").toString()) + Integer.parseInt(self_rating.get("dl_experience").toString())) * 100;
+        LayerDrawable experienceLayDraw = (LayerDrawable) ratingExperience.getDrawable();
+        DumeUtils.setTextOverDrawable(this, experienceLayDraw, R.id.ic_badge, Color.BLACK, experience_value.toString());
+        ratingExperience.setImageDrawable(experienceLayDraw);
+
+        //now the other rating
+        ArrayList<BarData> dataList = new ArrayList<>();
+
+        Float comm_value = (Float.parseFloat(self_rating.get("l_communication").toString()) /
+                Float.parseFloat(self_rating.get("l_communication").toString()) + Float.parseFloat(self_rating.get("dl_communication").toString())) * 10;
+        BarData data = new BarData("Comm.", comm_value, comm_value*10 +" %");
+        dataList.add(data);
+
+        Float beha_value = (Float.parseFloat(self_rating.get("l_communication").toString()) /
+                Float.parseFloat(self_rating.get("l_communication").toString()) + Float.parseFloat(self_rating.get("dl_communication").toString())) * 10;
+        data = new BarData("Behaviour", beha_value, beha_value*10 +" %");
+        dataList.add(data);
+
+        data = new BarData("Phy", 10f, "8€");
+        dataList.add(data);
+
+        data = new BarData("Chem", 6.2f, "6.2€");
+        dataList.add(data);
+
+        data = new BarData("Math", 3.3f, "3.3€");
+        dataList.add(data);
+
+        mChart.setDataList(dataList);
+        mChart.build();
+
     }
 
-    public void loadQualificationData( Map<String, Object> sp_info) {
+    public void loadQualificationData(Map<String, Object> sp_info) {
         if (sp_info != null) {
             List<Academic> academicList = new ArrayList<>();
             Map<String, Map<String, Object>> academicMap = (Map<String, Map<String, Object>>) sp_info.get("academic");
@@ -1066,11 +1245,6 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                 }
             }
             qualificaitonRecyAda.update(academicList);
-            if (academicList.size() == 0) {
-                //noDataBlock.setVisibility(View.VISIBLE);
-            } else {
-                //noDataBlock.setVisibility(View.GONE);
-            }
         }
     }
 
@@ -1240,7 +1414,6 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
     public void onMyGpsLocationChanged(Location location) {
 
     }
-
 
 
     //testing custom marker code here

@@ -124,6 +124,7 @@
                                 android:layout_margin="8dp"
                                 app:carbon_cornerRadius="25dp"
                                 app:carbon_elevation="6dp"
+                                android:scaleType="centerCrop"
                                 app:srcCompat="@drawable/ic_general_user" />
 
                             <Button
@@ -268,7 +269,7 @@
                             style="@style/Widget.AppCompat.Button.Borderless"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:drawableBottom="@drawable/ic_down_arrow_small"
+                            android:drawableBottom="@drawable/ic_up_arrow_small"
                             android:drawablePadding="2dp"
                             android:text="Feature Rating"
                             android:textAllCaps="false"
@@ -384,7 +385,6 @@
                                     app:cpb_clockwise="true"
                                     app:cpb_foregroundProgressColor="#00796B"
                                     app:cpb_foregroundProgressWidth="6"
-                                    app:cpb_progress="80"
                                     app:cpb_roundedCorner="true" />
 
                                 <TextView
@@ -494,7 +494,6 @@
                                     android:layout_marginTop="2dp"
                                     app:carbon_cornerRadius="28dp"
                                     app:srcCompat="@drawable/rating_experience_layer_list" />
-
 
                                 <TextView
                                     android:id="@+id/txtStatus_experience"
@@ -820,7 +819,7 @@
                             android:paddingBottom="2dp"
                             android:paddingTop="2dp"
                             android:singleLine="true"
-                            android:text="Current Status : EECE Student in MIST"
+                            android:text="Current Status : "
                             android:textAllCaps="false"
                             android:textColor="@color/textColorPrimary"
                             android:textSize="13sp"
@@ -839,7 +838,7 @@
                             android:paddingBottom="2dp"
                             android:paddingTop="2dp"
                             android:singleLine="true"
-                            android:text="Currently Mentoring : 3 Student"
+                            android:text="Student Guided : "
                             android:textAllCaps="false"
                             android:textColor="@color/textColorPrimary"
                             android:textSize="13sp"
@@ -858,12 +857,51 @@
                             android:paddingBottom="2dp"
                             android:paddingTop="2dp"
                             android:singleLine="true"
-                            android:text="Marital Status : Single"
+                            android:text="Marital Status : "
                             android:textAllCaps="false"
                             android:textColor="@color/textColorPrimary"
                             android:textSize="13sp"
                             android:textStyle="normal"
                             app:fontFamily="@font/cairo_regular" />
+
+                        <TextView
+                            android:id="@+id/textview_religion"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="0dp"
+                            android:drawableLeft="@drawable/ic_keyboard_arrow_right_black_24dp"
+                            android:drawablePadding="6dp"
+                            android:drawableStart="@drawable/ic_keyboard_arrow_right_black_24dp"
+                            android:gravity="center_vertical"
+                            android:paddingBottom="2dp"
+                            android:paddingTop="2dp"
+                            android:singleLine="true"
+                            android:text="Religion : "
+                            android:textAllCaps="false"
+                            android:textColor="@color/textColorPrimary"
+                            android:textSize="13sp"
+                            android:textStyle="normal"
+                            app:fontFamily="@font/cairo_regular" />
+
+                        <TextView
+                            android:id="@+id/textview_gender"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="0dp"
+                            android:drawableLeft="@drawable/ic_keyboard_arrow_right_black_24dp"
+                            android:drawablePadding="6dp"
+                            android:drawableStart="@drawable/ic_keyboard_arrow_right_black_24dp"
+                            android:gravity="center_vertical"
+                            android:paddingBottom="2dp"
+                            android:paddingTop="2dp"
+                            android:singleLine="true"
+                            android:text="Gender : "
+                            android:textAllCaps="false"
+                            android:textColor="@color/textColorPrimary"
+                            android:textSize="13sp"
+                            android:textStyle="normal"
+                            app:fontFamily="@font/cairo_regular" />
+
 
                         <TextView
                             android:id="@+id/textview_qualifications"
@@ -876,7 +914,7 @@
                             android:paddingBottom="5dp"
                             android:paddingTop="5dp"
                             android:singleLine="true"
-                            android:text="Qualifications :"
+                            android:text="Qualifications : "
                             android:textAllCaps="false"
                             android:textColor="@color/textColorPrimary"
                             android:textSize="13sp"
@@ -942,6 +980,26 @@
                         android:translationY="-2dp">
 
                         <TextView
+                            android:id="@+id/textview_starting_time"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="0dp"
+                            android:drawableLeft="@drawable/ic_keyboard_arrow_right_black_24dp"
+                            android:drawablePadding="6dp"
+                            android:drawableStart="@drawable/ic_keyboard_arrow_right_black_24dp"
+                            android:gravity="center_vertical"
+                            android:paddingBottom="2dp"
+                            android:paddingTop="2dp"
+                            android:singleLine="true"
+                            android:text="Starting Time : "
+                            android:textAllCaps="false"
+                            android:textColor="@color/textColorPrimary"
+                            android:textSize="13sp"
+                            android:textStyle="normal"
+                            app:fontFamily="@font/cairo_regular" />
+
+
+                        <TextView
                             android:id="@+id/textview_starting_date"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -953,7 +1011,7 @@
                             android:paddingBottom="2dp"
                             android:paddingTop="2dp"
                             android:singleLine="true"
-                            android:text="Starting Date &amp; Time : Tue, Apr 13, 5.00PM"
+                            android:text="Starting Date : "
                             android:textAllCaps="false"
                             android:textColor="@color/textColorPrimary"
                             android:textSize="13sp"
@@ -973,7 +1031,9 @@
                             android:paddingBottom="2dp"
                             android:paddingTop="2dp"
                             android:singleLine="true"
-                            android:text="Preferred Day : Sun, Mon, Tue"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:text="Preferred Day : "
                             android:textAllCaps="false"
                             android:textColor="@color/textColorPrimary"
                             android:textSize="13sp"
@@ -991,7 +1051,7 @@
                             android:paddingBottom="2dp"
                             android:paddingTop="2dp"
                             android:singleLine="true"
-                            android:text="Days/Week : Three"
+                            android:text="Days/Week : "
                             android:textAllCaps="false"
                             android:textColor="@color/textColorPrimary"
                             android:textSize="13sp"

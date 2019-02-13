@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import io.dume.dume.student.pojo.SearchDataStore;
 import io.dume.dume.student.pojo.StuBaseModel;
 import io.dume.dume.teacher.homepage.TeacherContract;
 
@@ -38,7 +39,9 @@ public class SearchLoadingModel extends StuBaseModel implements SearchLoadingCon
                 String queryStringFromDb = (String) documentSnapshot.get("query_string");
                 if (queryStringFromDb != null) {
                     if (queryStringFromDb.equals(queryString)) {
-                        instructorList.add(documentSnapshot);
+                        if(!SearchDataStore.getInstance().getUserUid().equals(documentSnapshot.getString("mentor_uid"))){
+                            instructorList.add(documentSnapshot);
+                        }
                     }
                 }
 

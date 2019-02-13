@@ -698,7 +698,8 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                         showProgress();
                         fab.setBackgroundTintList(ColorStateList.valueOf(Color.GRAY));
                         fab.setEnabled(false);
-                        String queryString = DumeUtils.generateQueryString(SearchDataStore.REGULAR_DUME, queryList, queryListName);
+                        String packageName = TeacherDataStore.getInstance().getPackageName();
+                        String queryString = DumeUtils.generateQueryString(packageName, queryList, queryListName);
                         ArrayList<Skill> skillArrayList = TeacherDataStore.getInstance().getSkillArrayList();
 
                         for (Skill item : skillArrayList) {
@@ -710,13 +711,19 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                             }
                         }
 
-                        Skill skill = new Skill(true, queryMap.get("Gender").toString(), Float.parseFloat(queryMap.get("Salary").toString().replace("k", "")), new Date(), queryMap, queryString
-                                , new GeoPoint(84.9, 180), 5, 10, "", 4.6f);
+                        float salary = Float.parseFloat(queryMap.get("Salary").toString().replace("k", ""));
+
+                        Skill skill = new Skill(true, queryMap.get("Gender").toString(), salary * 1000, new Date(), queryMap, queryString
+                                , new GeoPoint(84.9, 180), 0, 0, "", 0.0f, 0, 0, packageName);
+                        skill.setQuery_list(queryList);
+                        skill.setQuery_list_name(queryListName);
                         teacherModel.saveSkill(skill, new TeacherContract.Model.Listener<Void>() {
                             @Override
                             public void onSuccess(Void list) {
                                 hideProgress();
-                                startActivity(new Intent(GrabingInfoActivity.this, SkillActivity.class));
+                                Intent intent = new Intent(GrabingInfoActivity.this, SkillActivity.class).setAction("skill_added");
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
                             }
 
                             @Override

@@ -446,7 +446,7 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
         selfRating.put("l_experience", "1");
         selfRating.put("dl_experience", "0");
         selfRating.put("response_time", "90");
-        selfRating.put("student_guided", "5");
+        selfRating.put("student_guided", "0");
         mentorFeild.put("self_rating", selfRating);
 
 
@@ -533,7 +533,7 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
         selfRating.put("l_experience", "1");
         selfRating.put("dl_experience", "0");
         selfRating.put("response_time", "90");
-        selfRating.put("student_guided", "5");
+        selfRating.put("student_guided", "0");
         bootCampField.put("self_rating", selfRating);
 
         List<String> appliedPromoList = new ArrayList<>();
@@ -579,9 +579,8 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
         stuProInfo.put("unread_noti", "0");
         stuProInfo.put("next_rp_write", "1");
         stuProInfo.put("next_rs_write", "1");
-
-        GeoPoint current_address = new GeoPoint(84.9, -180);
-        stuProInfo.put("current_address", current_address);
+        //GeoPoint current_address = new GeoPoint(84.9, -180);
+        stuProInfo.put("current_address", null);
 
         //String[] hawwa = {"joaa", "Enam", "sumon"};Arrays.asList(hawwa);
         List<String> appliedPromoList = new ArrayList<String>();

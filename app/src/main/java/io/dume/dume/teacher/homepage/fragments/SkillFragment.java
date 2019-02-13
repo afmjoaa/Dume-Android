@@ -124,7 +124,7 @@ public class SkillFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.skill_fragment, container, false);
         ButterKnife.bind(this, root);
-
+        scaleTextView.setTypeface(Typeface.createFromAsset(Objects.requireNonNull(getContext()).getAssets(), "fonts/Cairo_Regular.ttf"));
         assert container != null;
         int[] wh = DumeUtils.getScreenSize(container.getContext());
         float mDensity = getResources().getDisplayMetrics().density;
@@ -260,11 +260,11 @@ public class SkillFragment extends Fragment {
     }
 
     public void tips(CharSequence sequence) {
+        scaleTextView.setSelected(true);
         scaleTextView.animateText(sequence);
-        scaleTextView.setTypeface(Typeface.createFromAsset(Objects.requireNonNull(getContext()).getAssets(), "fonts/Cairo_Regular.ttf"));
         /*scaleTextView.setAnimationListener(hTextView -> {
         });*/
-        scaleTextView.setSelected(true);
+
     }
 
 

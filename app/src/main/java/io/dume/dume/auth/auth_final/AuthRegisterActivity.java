@@ -285,8 +285,8 @@ public class AuthRegisterActivity extends CustomStuAppCompatActivity {
         stuProInfo.put("next_rp_write", "1");
         stuProInfo.put("next_rs_write", "1");
 
-        GeoPoint current_address = new GeoPoint(84.9, -180);
-        stuProInfo.put("current_address", current_address);
+        //GeoPoint current_address = new GeoPoint(84.9, -180);
+        stuProInfo.put("current_address", null);
 
         //String[] hawwa = {"joaa", "Enam", "sumon"};Arrays.asList(hawwa);
         List<String> appliedPromoList = new ArrayList<String>();

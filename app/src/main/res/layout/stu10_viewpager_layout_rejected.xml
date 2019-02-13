@@ -10,7 +10,6 @@
     tools:context=".student.recordsRejected.RecordsRejectedActivity$PlaceholderFragment"
     tools:showIn="@layout/stu10_activity_records_rejected">
 
-
     <LinearLayout
         android:id="@+id/nested_host_linearlayout"
         android:layout_width="match_parent"

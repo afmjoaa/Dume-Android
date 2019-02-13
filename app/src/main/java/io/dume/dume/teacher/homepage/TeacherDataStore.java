@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Map;
 
+import io.dume.dume.student.pojo.SearchDataStore;
 import io.dume.dume.teacher.pojo.Skill;
 
 public class TeacherDataStore implements Serializable {
@@ -20,6 +21,15 @@ public class TeacherDataStore implements Serializable {
     private String tUserMail;
     private String tAvatarString = null;
     private String tUserUid;
+    private String packageName;
+
+    public String getPackageName() {
+        return packageName == null ? SearchDataStore.REGULAR_DUME : packageName;
+    }
+
+    public void setPackageName(String packageName) {
+        this.packageName = packageName;
+    }
 
     public static TeacherDataStore getInstance() {
         if (teacherDataStore == null) {

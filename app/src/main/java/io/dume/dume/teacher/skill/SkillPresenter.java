@@ -12,8 +12,10 @@ import com.google.firebase.firestore.ListenerRegistration;
 import java.util.ArrayList;
 import java.util.Map;
 
+import io.dume.dume.Google;
 import io.dume.dume.R;
 import io.dume.dume.model.DumeModel;
+import io.dume.dume.student.pojo.SearchDataStore;
 import io.dume.dume.teacher.homepage.TeacherContract;
 
 import io.dume.dume.teacher.homepage.TeacherDataStore;
@@ -90,18 +92,20 @@ public class SkillPresenter implements SkillContract.Presenter {
         switch (element.getId()) {
             case R.id.fab_regular:
                 if (isProfileOK()) {
+                    TeacherDataStore.getInstance().setPackageName(SearchDataStore.REGULAR_DUME);
                     view.goToCrudActivity(DumeUtils.TEACHER);
                 }
-
 
                 break;
             case R.id.fab_gang:
                 if (isProfileOK()) {
+                    TeacherDataStore.getInstance().setPackageName(SearchDataStore.DUME_GANG);
                     view.goToCrudActivity(DumeUtils.BOOTCAMP);
                 }
                 break;
             case R.id.fab_instant:
                 if (isProfileOK()) {
+                    TeacherDataStore.getInstance().setPackageName(SearchDataStore.INSTANT_DUME);
                     final Map<String, Boolean> achievements = (Map<String, Boolean>) documentSnapshot.get("achievements");
                     Boolean premier = achievements.get("premier");
                     if (premier) {

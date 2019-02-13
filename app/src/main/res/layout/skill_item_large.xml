@@ -286,6 +286,7 @@
                     android:textAllCaps="false"
                     android:textColor="@color/textColorPrimary"
                     android:textSize="12sp"
+                    android:enabled="false"
                     app:fontFamily="@font/cairo_regular" />
 
             </LinearLayout>

@@ -27,7 +27,7 @@
             android:layout_height="320dp"
             android:gravity="center"
             android:orientation="vertical"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <carbon.widget.ImageView
                 android:layout_width="wrap_content"
