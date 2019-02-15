@@ -19,6 +19,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -29,12 +30,26 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import com.bumptech.glide.Glide;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.GeoPoint;
 
+import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Objects;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+
+import io.dume.dume.Google;
 import io.dume.dume.R;
+import io.dume.dume.student.grabingLocation.MenualRecyclerData;
 import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
+import io.dume.dume.student.pojo.SearchDataStore;
+import io.dume.dume.student.recordsPage.Record;
 import io.dume.dume.student.searchResult.SearchResultActivity;
 import io.dume.dume.util.DumeUtils;
 
@@ -76,7 +91,7 @@ public class SearchResultTabviewActivity extends CustomStuAppCompatActivity impl
 
         //making the custom tab here
         int[] wh = DumeUtils.getScreenSize(this);
-        int tabMinWidth = ((wh[0] / 3)-(int) (24 * (getResources().getDisplayMetrics().density)));
+        int tabMinWidth = ((wh[0] / 3) - (int) (24 * (getResources().getDisplayMetrics().density)));
         LinearLayout.LayoutParams textParam = new LinearLayout.LayoutParams
                 (tabMinWidth, LinearLayout.LayoutParams.WRAP_CONTENT);
         // loop through all navigation tabs
@@ -197,10 +212,12 @@ public class SearchResultTabviewActivity extends CustomStuAppCompatActivity impl
 
     public static class PlaceholderFragment extends Fragment {
 
+        private static final String TAG = "PlaceholderFragment";
         private static final String ARG_SECTION_NUMBER = "section_number";
         private SearchResultTabviewActivity myThisActivity;
         private RecyclerView searchResultTabRecyclerView;
         private SwipeRefreshLayout swipeRefreshLayout;
+        private SearchResultTabRecyAda recordsRecyAda;
 
         public PlaceholderFragment() {
         }
@@ -217,8 +234,7 @@ public class SearchResultTabviewActivity extends CustomStuAppCompatActivity impl
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             myThisActivity = (SearchResultTabviewActivity) getActivity();
             View rootView = inflater.inflate(R.layout.stu5_fragment_search_result_tabview, container, false);
-//            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-//            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
+            int fragmentPosition = getArguments().getInt(ARG_SECTION_NUMBER);
             searchResultTabRecyclerView = rootView.findViewById(R.id.search_result_tabview_recycle_view);
             swipeRefreshLayout = rootView.findViewById(R.id.swipeToRefreshSearchTab);
 
@@ -232,22 +248,130 @@ public class SearchResultTabviewActivity extends CustomStuAppCompatActivity impl
                         public void run() {
                             swipeRefreshLayout.setRefreshing(false);
                         }
-                    }, 5000);
+                    }, 4000);
                 }
             });
-
-            //setting the recycler view
-            List<SearchResultTabData> recordData = new ArrayList<>();
-            if(recordData.size()== 0){
+            List<DocumentSnapshot> availableProfileDocu = new ArrayList<>();
+            availableProfileDocu = SearchDataStore.getInstance().getResultList();
+            Log.e(TAG, "availableProfileDocu.size(); " + availableProfileDocu.size());
+            List<SearchResultTabData> availableProfile = generateDataFromDoc(availableProfileDocu);
+            if (availableProfile.size() <= 0) {
                 myThisActivity.noDataBlock.setVisibility(View.VISIBLE);
-            }else{
+            } else {
                 myThisActivity.noDataBlock.setVisibility(View.GONE);
             }
-            SearchResultTabRecyAda recordsRecyAda = new SearchResultTabRecyAda(myThisActivity, recordData);
+
+            switch (fragmentPosition) {
+                case 1:
+                    List<SearchResultTabData> salaryFilterData = availableProfile;
+                    //salaryFilterData.sort((o1, o2) -> o1.getSalary().compareTo(o2.getSalary()));
+                    for (int i = 0; i < salaryFilterData.size(); i++) {
+                        salaryFilterData.get(i).setMentorFilterImage(1);
+                    }
+                    salaryFilterData.sort(Comparator.comparing(SearchResultTabData::getSalary));
+                    recordsRecyAda = new SearchResultTabRecyAda(myThisActivity, salaryFilterData) {
+                        @Override
+                        void OnItemClicked(View v, String identify) {
+                            myThisActivity.searchDataStore.setSelectedMentor(identify);
+                            myThisActivity.onBackPressed();
+                        }
+                    };
+                    break;
+                case 2:
+                    List<SearchResultTabData> ratingFilterData = availableProfile;
+                    for (int i = 0; i < ratingFilterData.size(); i++) {
+                        ratingFilterData.get(i).setMentorFilterImage(2);
+                    }
+                    ratingFilterData.sort(Comparator.comparing(SearchResultTabData::getRating));
+                    recordsRecyAda = new SearchResultTabRecyAda(myThisActivity, ratingFilterData) {
+                        @Override
+                        void OnItemClicked(View v, String identify) {
+                            myThisActivity.searchDataStore.setSelectedMentor(identify);
+                            myThisActivity.onBackPressed();
+                        }
+                    };
+                    break;
+                case 3:
+                    List<SearchResultTabData> expertiseFilterData = availableProfile;
+                    for (int i = 0; i < expertiseFilterData.size(); i++) {
+                        expertiseFilterData.get(i).setMentorFilterImage(3);
+                    }
+                    expertiseFilterData.sort(Comparator.comparing(SearchResultTabData::getExpertise));
+                    recordsRecyAda = new SearchResultTabRecyAda(myThisActivity, expertiseFilterData) {
+                        @Override
+                        void OnItemClicked(View v, String identify) {
+                            myThisActivity.searchDataStore.setSelectedMentor(identify);
+                            myThisActivity.onBackPressed();
+                        }
+                    };
+                    break;
+                case 4:
+                    List<SearchResultTabData> aRatioFilterData = availableProfile;
+                    for (int i = 0; i < aRatioFilterData.size(); i++) {
+                        aRatioFilterData.get(i).setMentorFilterImage(4);
+                    }
+                    aRatioFilterData.sort(Comparator.comparing(SearchResultTabData::getA_ratio));
+                    recordsRecyAda = new SearchResultTabRecyAda(myThisActivity, aRatioFilterData) {
+                        @Override
+                        void OnItemClicked(View v, String identify) {
+                            myThisActivity.searchDataStore.setSelectedMentor(identify);
+                            myThisActivity.onBackPressed();
+                        }
+                    };
+                    break;
+            }
+
+
             searchResultTabRecyclerView.setAdapter(recordsRecyAda);
             searchResultTabRecyclerView.setLayoutManager(new LinearLayoutManager(myThisActivity));
             return rootView;
         }
+
+        public List<SearchResultTabData> generateDataFromDoc(List<DocumentSnapshot> documentSnapshots) {
+            List<SearchResultTabData> returnedData = new ArrayList<>();
+
+            for (int i = 0; i < documentSnapshots.size(); i++) {
+                DocumentSnapshot currentDocument = documentSnapshots.get(i);
+                SearchResultTabData searchResultTabData = new SearchResultTabData();
+                Map<String, Object> sp_info = (Map<String, Object>) currentDocument.get("sp_info");
+                Map<String, Object> selfRating = (Map<String, Object>) sp_info.get("self_rating");
+                Map<String, Object> unread_records = (Map<String, Object>) sp_info.get("unread_records");
+                final String name = String.format("%s %s", sp_info.get("first_name"), sp_info.get("last_name"));
+                searchResultTabData.setMentorName(name);
+                String avatar = (String) sp_info.get("avatar");
+                searchResultTabData.setMentorDPUrl(avatar);
+                searchResultTabData.setGender((String) sp_info.get("gender"));
+                searchResultTabData.setMentorFilterImage(1);
+                searchResultTabData.setIdentify(i);
+
+                NumberFormat currencyInstance = NumberFormat.getCurrencyInstance(Locale.US);
+                Double salary = (Double) currentDocument.get("salary");
+                String format1 = currencyInstance.format(salary);
+                searchResultTabData.setSalary("Salary : " + format1.substring(1, format1.length() - 3) + " BDT");
+                searchResultTabData.setRating((String) selfRating.get("star_rating"));
+
+                Integer a_ratio_value = ((Integer.parseInt(unread_records.get("accepted_count").toString())
+                        + Integer.parseInt(unread_records.get("completed_count").toString())
+                        + Integer.parseInt(unread_records.get("current_count").toString())
+                        + Integer.parseInt(unread_records.get("pending_count").toString()) + 1) /
+                        (Integer.parseInt(unread_records.get("accepted_count").toString())
+                                + Integer.parseInt(unread_records.get("completed_count").toString())
+                                + Integer.parseInt(unread_records.get("current_count").toString())
+                                + Integer.parseInt(unread_records.get("pending_count").toString())
+                                + Integer.parseInt(unread_records.get("rejected_count").toString()) + 1)) * 100;
+                searchResultTabData.setA_ratio(a_ratio_value + " %");
+
+                Integer expertise_value = (Integer.parseInt(selfRating.get("l_expertise").toString()) /
+                        Integer.parseInt(selfRating.get("l_expertise").toString()) + Integer.parseInt(selfRating.get("dl_expertise").toString())) * 100;
+                searchResultTabData.setExpertise(expertise_value + " %");
+                searchResultTabData.setMentorUid(currentDocument.getString("mentor_uid"));
+                searchResultTabData.setDocumentUid(currentDocument.getId());
+                returnedData.add(searchResultTabData);
+            }
+
+            return returnedData;
+        }
+
     }
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
@@ -258,14 +382,11 @@ public class SearchResultTabviewActivity extends CustomStuAppCompatActivity impl
 
         @Override
         public Fragment getItem(int position) {
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a DataHolderFragment (defined as a static inner class below).
             return PlaceholderFragment.newInstance(position + 1);
         }
 
         @Override
         public int getCount() {
-            // Show 3 total pages.
             return 4;
         }
     }

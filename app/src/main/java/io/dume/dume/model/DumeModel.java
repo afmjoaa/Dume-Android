@@ -81,8 +81,8 @@ public class DumeModel implements TeacherModel {
         dataMap.put("mentor_uid", firebaseAuth.getCurrentUser().getUid());
         dataMap.put("enrolled", skill.getEnrolled());
         dataMap.put("sp_info", TeacherDataStore.getInstance().getDocumentSnapshot());
-        dataMap.put("likes", 0);
-        dataMap.put("dislikes", 0);
+        dataMap.put("likes", skill.getLikes());
+        dataMap.put("dislikes", skill.getDislikes());
         dataMap.put("package_name", skill.getPackage_name());
         dataMap.put("query_list", skill.getQuery_list());
         dataMap.put("query_list_name", skill.getQuery_list_name());
@@ -108,7 +108,6 @@ public class DumeModel implements TeacherModel {
         CollectionReference skillCollection = firebaseFirestore.collection("users").document("mentors").collection("skills");
         Query query = skillCollection.whereEqualTo("mentor_uid", FirebaseAuth.getInstance().getCurrentUser().getUid());
         query.addSnapshotListener((Activity) context, new EventListener<QuerySnapshot>() {
-
 
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
@@ -180,7 +179,7 @@ public class DumeModel implements TeacherModel {
                 }
                 if (list.size() > 0) {
                     listener.onSuccess(list);
-                } else listener.onError("");
+                } else listener.onError("No review");
 
 
             } else {

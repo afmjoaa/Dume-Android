@@ -72,6 +72,7 @@ import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.maps.android.ui.IconGenerator;
+import com.hadiidbouk.charts.BarData;
 import com.transitionseverywhere.Fade;
 import com.transitionseverywhere.Slide;
 import com.transitionseverywhere.Transition;
@@ -87,6 +88,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import carbon.widget.RelativeLayout;
@@ -117,6 +119,7 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import me.zhanghai.android.materialratingbar.MaterialRatingBar;
 
+import static io.dume.dume.util.DumeUtils.getLast;
 import static io.dume.dume.util.ImageHelper.getRoundedCornerBitmap;
 import static io.dume.dume.util.ImageHelper.getRoundedCornerBitmapSquare;
 
@@ -213,6 +216,7 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
     private IconGenerator iconFactory;
     private GrabingInfoModel mModel;
     private String contactAvatarString;
+    private String[] splitMainSsss;
 
 
     @Override
@@ -712,9 +716,20 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                         }
 
                         float salary = Float.parseFloat(queryMap.get("Salary").toString().replace("k", ""));
+                        HashMap<String, Object> likes = new HashMap<>();
+                        HashMap<String, Object> dislikes = new HashMap<>();
+
+                        if (getLast(queryMap) != null) {
+                            String mainSsss = (String) queryMap.get(getLast(queryMap));
+                            splitMainSsss = mainSsss.split("\\s*(=>|,|\\s)\\s*");
+                        }
+                        for (String splited : splitMainSsss) {
+                            likes.put(splited, 1);
+                            dislikes.put(splited, 0);
+                        }
 
                         Skill skill = new Skill(true, queryMap.get("Gender").toString(), salary * 1000, new Date(), queryMap, queryString
-                                , new GeoPoint(84.9, 180), 0, 0, "", 0.0f, 0, 0, packageName);
+                                , new GeoPoint(84.9, 180), 0, 0, "", 0.0f, likes, dislikes, packageName);
                         skill.setQuery_list(queryList);
                         skill.setQuery_list_name(queryListName);
                         teacherModel.saveSkill(skill, new TeacherContract.Model.Listener<Void>() {

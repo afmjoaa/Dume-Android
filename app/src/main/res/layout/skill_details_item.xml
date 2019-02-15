@@ -14,6 +14,10 @@
         android:id="@+id/keyTV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:maxWidth="140dp"
         android:text="Product" />
 
     <TextView
@@ -29,6 +33,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
+        android:singleLine="true"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:maxWidth="140dp"
         android:layout_alignParentRight="true"
         android:text="Dume Gang" />
 

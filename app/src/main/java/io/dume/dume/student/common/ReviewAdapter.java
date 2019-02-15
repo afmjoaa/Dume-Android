@@ -11,9 +11,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.location.places.AutocompletePrediction;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import carbon.widget.ImageView;
@@ -44,6 +46,12 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
     public void addMore(List<ReviewHighlightData> loaded) {
         data.addAll(loaded);
         notifyDataSetChanged();
+    }
+
+    public void update(List<ReviewHighlightData> newData) {
+        data.clear();
+        data.addAll(newData);
+        this.notifyDataSetChanged();
     }
 
     @NonNull

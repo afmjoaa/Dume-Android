@@ -92,6 +92,7 @@ import io.dume.dume.R;
 import io.dume.dume.customView.HorizontalLoadViewTwo;
 import io.dume.dume.library.RouteOverlayView;
 import io.dume.dume.library.TrailSupportMapFragment;
+import io.dume.dume.model.DumeModel;
 import io.dume.dume.service.MyNotification;
 import io.dume.dume.student.common.QualificationAdapter;
 import io.dume.dume.student.common.QualificationData;
@@ -227,6 +228,10 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
     private TextView experienceCount;
     private TextView aRatioCount;
     private TextView expertiseCount;
+    private String[] splitMainSsss;
+    private Button loadMoreReviewBtn;
+    private LinearLayout noDataBlockReview;
+    private ReviewHighlightData lastReviewData;
 
 
     @Override
@@ -340,15 +345,15 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
 
         performanceCount = findViewById(R.id.txtStatus);
         ratingPerformance = findViewById(R.id.main_rating_performance);
-
         ratingExperience = findViewById(R.id.main_rating_experience);
         experienceCount = findViewById(R.id.txtStatus_experience);
-
         circleProgressbarARatio = (CircleProgressbar) findViewById(R.id.rating_main_accept_ratio);
         aRatioCount = findViewById(R.id.txtStatus_accept_ratio);
-
         circleProgressbarExpertise = (CircleProgressbar) findViewById(R.id.rating_main_professionalism);
         expertiseCount = findViewById(R.id.txtStatus_professionalism);
+
+        loadMoreReviewBtn = findViewById(R.id.load_more_review_btn);
+        noDataBlockReview = findViewById(R.id.no_data_block);
 
         route = new ArrayList<>();
     }
@@ -442,7 +447,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                             Log.w("foo", "onSuccess: " + list.toString());
                             hideProgressBS();
                             comfirmYesBtn.setBackgroundColor(getResources().getColor(R.color.colorBlack));
-                            comfirmYesBtn.setEnabled(true);
+                            //comfirmYesBtn.setEnabled(true);
                         }
 
                         @Override
@@ -608,6 +613,12 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
             });
 
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setConfirmedOrCanceled(false);
     }
 
     @Override
@@ -1169,8 +1180,6 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
         daysPerWeekTV.setText(daysPerWeekTV.getText() + Temp + " days");
 
         //fixing the rating now
-
-
         performanceCount.setText(self_rating.get("star_count").toString());
         LayerDrawable performanceLayDraw = (LayerDrawable) ratingPerformance.getDrawable();
         DumeUtils.setTextOverDrawable(this, performanceLayDraw, R.id.ic_badge, Color.BLACK, self_rating.get("star_rating").toString());
@@ -1206,26 +1215,97 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
 
         Float comm_value = (Float.parseFloat(self_rating.get("l_communication").toString()) /
                 Float.parseFloat(self_rating.get("l_communication").toString()) + Float.parseFloat(self_rating.get("dl_communication").toString())) * 10;
-        BarData data = new BarData("Comm.", comm_value, comm_value*10 +" %");
+        Float comm_text = comm_value * 10;
+        BarData data = new BarData("Comm.", comm_value, comm_text.toString().substring(0,comm_text.toString().length()-2)+ " %");
         dataList.add(data);
 
         Float beha_value = (Float.parseFloat(self_rating.get("l_communication").toString()) /
                 Float.parseFloat(self_rating.get("l_communication").toString()) + Float.parseFloat(self_rating.get("dl_communication").toString())) * 10;
-        data = new BarData("Behaviour", beha_value, beha_value*10 +" %");
+        Float baha_text = beha_value * 10;
+        data = new BarData("Behaviour", beha_value, baha_text.toString().substring(0,baha_text.toString().length()-2) + " %");
         dataList.add(data);
 
-        data = new BarData("Phy", 10f, "8€");
-        dataList.add(data);
-
-        data = new BarData("Chem", 6.2f, "6.2€");
-        dataList.add(data);
-
-        data = new BarData("Math", 3.3f, "3.3€");
-        dataList.add(data);
-
+        Map<String, Object> jizz = (Map<String, Object>) selectedMentor.get("jizz");
+        if (getLast(jizz) != null) {
+            String mainSsss = (String) jizz.get(getLast(jizz));
+            splitMainSsss = mainSsss.split("\\s*(=>|,|\\s)\\s*");
+        }
+        Map<String, Object> likes = (Map<String, Object>) selectedMentor.get("likes");
+        Map<String, Object> dislikes = (Map<String, Object>) selectedMentor.get("dislikes");
+        for (String splited : splitMainSsss) {
+            Float loop_value = (Float.parseFloat(likes.get(splited).toString()) /
+                    Float.parseFloat(likes.get(splited).toString()) + Float.parseFloat(dislikes.get(splited).toString())) * 10;
+            Float loop_text = (loop_value * 10);
+            data = new BarData(splited, loop_value, loop_text.toString().substring(0,loop_text.toString().length()-2) + " %");
+            dataList.add(data);
+        }
         mChart.setDataList(dataList);
         mChart.build();
 
+        //now fixing the review data
+        new DumeModel(context).loadReview(selectedMentor.getId(), null, new TeacherContract.Model.Listener<List<ReviewHighlightData>>() {
+            @Override
+            public void onSuccess(List<ReviewHighlightData> list) {
+                lastReviewData = list.get(list.size() - 1);
+                reviewRecyAda.update(list);
+                //reviewRecyAda = new ReviewAdapter(context, list, true);
+                if (list.size() >= 10) {
+                    loadMoreReviewBtn.setEnabled(true);
+                    loadMoreReviewBtn.setVisibility(View.VISIBLE);
+                } else {
+                    loadMoreReviewBtn.setEnabled(false);
+                    loadMoreReviewBtn.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onError(String msg) {
+                loadMoreReviewBtn.setVisibility(View.GONE);
+                noDataBlockReview.setVisibility(View.VISIBLE);
+                if (msg.equals("No review")) {
+                    return;
+                }
+                Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        loadMoreReviewBtn.setOnClickListener(view -> {
+            view.setEnabled(false);
+            new DumeModel(context).loadReview(selectedMentor.getId(), lastReviewData.getDoc_id(), new TeacherContract.Model.Listener<List<ReviewHighlightData>>() {
+                @Override
+                public void onSuccess(List<ReviewHighlightData> list) {
+                    lastReviewData = list.get(list.size() - 1);
+                    reviewRecyAda.addMore(list);
+                    if (list.size() >= 10) {
+                        loadMoreReviewBtn.setEnabled(true);
+                        loadMoreReviewBtn.setVisibility(View.VISIBLE);
+                    } else {
+                        loadMoreReviewBtn.setEnabled(false);
+                        loadMoreReviewBtn.setVisibility(View.GONE);
+                    }
+                }
+
+                @Override
+                public void onError(String msg) {
+                    view.setEnabled(true);
+                    if (msg.equals("No review")) {
+                        loadMoreReviewBtn.setVisibility(View.GONE);
+                        return;
+                    }
+                    Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+                }
+            });
+        });
+    }
+
+    public String getLast(Map<String, Object> jizz) {
+        List<String> endOFNest = DumeUtils.getEndOFNest();
+        for (int j = 0; j < endOFNest.size(); j++) {
+            if (jizz.containsKey(endOFNest.get(j))) {
+                return endOFNest.get(j);
+            }
+        }
+        return null;
     }
 
     public void loadQualificationData(Map<String, Object> sp_info) {
@@ -1276,6 +1356,11 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                 });
                 mPresenter.onMapLoaded();
                 zoomRoute(route);
+                if(searchDataStore.getSelectedMentor()!= null && searchDataStore.getSelectedMentor().startsWith("select")){
+                    String[] split = retrivedAction.split("\\s*_\\s*");
+                    onMentorSelect(searchDataStore.getResultList().get(Integer.parseInt(split[1])));
+                    searchDataStore.setSelectedMentor(null);
+                }
             }
         });
     }
@@ -1286,7 +1371,6 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
         LatLngBounds.Builder boundsBuilder = new LatLngBounds.Builder();
         for (LatLng latLngPoint : lstLatLngRoute)
             boundsBuilder.include(latLngPoint);
-
         int routePadding = 70;
         LatLngBounds latLngBounds = boundsBuilder.build();
         mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, routePadding), 2000, new GoogleMap.CancelableCallback() {
@@ -1314,8 +1398,6 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
 
             }
         });
-        /*
-        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));*/
     }
 
 
@@ -1374,7 +1456,9 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                 break;
             case R.id.action_list_view:
                 //Toast.makeText(MainActivity.this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
+                setConfirmedOrCanceled(true);
                 startActivity(new Intent(this, SearchResultTabviewActivity.class));
+                //finish();
                 break;
             case android.R.id.home:
                 if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {

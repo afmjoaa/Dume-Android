@@ -528,6 +528,7 @@ public class DumeUtils {
         }
         return "undefined";
     }
+
     public static List<String> getEndOFNest() {
         endOfNest = new ArrayList<>(Arrays.asList("Subject", "Field", "Software", "Language", "Flavour", "Type", "Course", " Language "));
         return endOfNest;

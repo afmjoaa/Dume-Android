@@ -19,6 +19,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="12dp"
         android:clickable="false"
+        android:scaleType="centerCrop"
         android:src="@drawable/demo_testing_image"
         app:carbon_cornerRadius="6dp"
         app:carbon_elevation="4dp" />
@@ -69,7 +70,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:singleLine="true"
-                android:text=".. 10k BDT"
+                android:text="... 10k BDT"
                 android:textAllCaps="false"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="@color/textColorPrimary"

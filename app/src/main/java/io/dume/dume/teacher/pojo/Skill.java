@@ -8,6 +8,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Skill implements Serializable {
     @PropertyName("status")
@@ -33,7 +34,11 @@ public class Skill implements Serializable {
     @PropertyName("rating")
     float rating;
     HashMap<String, Object> feedback;
-    int likes, dislikes;
+    @PropertyName("map")
+    HashMap<String, Object> likes;
+    @PropertyName("map")
+    HashMap<String, Object> dislikes;
+
     String package_name;
     String id;
 
@@ -84,7 +89,7 @@ public class Skill implements Serializable {
 
     }
 
-    public Skill(boolean status, String gender, float salary, Date creationDate, HashMap<String, Object> map, String queryString, GeoPoint location, int totalRating, int enrolledStudent, String mentor_uid, float rating, int likes, int dislikes, String package_name) {
+    public Skill(boolean status, String gender, float salary, Date creationDate, HashMap<String, Object> map, String queryString, GeoPoint location, int totalRating, int enrolledStudent, String mentor_uid, float rating, HashMap<String, Object> likes, HashMap<String, Object> dislikes, String package_name) {
         this.package_name = package_name;
         this.likes = likes;
         this.dislikes = dislikes;
@@ -101,19 +106,19 @@ public class Skill implements Serializable {
         this.rating = rating;
     }
 
-    public int getLikes() {
+    public HashMap<String, Object> getLikes() {
         return likes;
     }
 
-    public void setLikes(int likes) {
+    public void setLikes(HashMap<String, Object> likes) {
         this.likes = likes;
     }
 
-    public int getDislikes() {
+    public HashMap<String, Object> getDislikes() {
         return dislikes;
     }
 
-    public void setDislikes(int dislikes) {
+    public void setDislikes(HashMap<String, Object> dislikes) {
         this.dislikes = dislikes;
     }
 

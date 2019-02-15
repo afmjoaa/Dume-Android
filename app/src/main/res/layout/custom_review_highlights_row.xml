@@ -19,9 +19,11 @@
             android:layout_height="38dp"
             android:layout_alignParentTop="true"
             android:layout_centerVertical="true"
-            app:carbon_cornerRadius="19dp"
+            app:carbon_cornerRadius="20dp"
             app:carbon_elevation="2dp"
             android:scaleType="centerCrop"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="2dp"
             app:srcCompat="@drawable/alias_profile_icon" />
 
         <TextView

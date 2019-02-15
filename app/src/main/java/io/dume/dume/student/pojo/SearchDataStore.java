@@ -26,7 +26,7 @@ public class SearchDataStore implements Serializable {
     public static String INSTANT_DUME = "Instant Dume";
 
     public static String DEFAULTMALEAVATER = "https://firebasestorage.googleapis.com/v0/b/dume-2d063.appspot.com/o/avatar.png?alt=media&token=801c75b7-59fe-4a13-9191-186ef50de707";
-    public static String DEFAULTFEMALEAVATER = "https://firebasestorage.googleapis.com/v0/b/dume-2d063.appspot.com/o/avatar_female.png?alt=media&token=7202ea91-4f0d-4bd6-838e-8b73d0db13eb";
+    public static String DEFAULTFEMALEAVATER = "https://firebasestorage.googleapis.com/v0/b/dume-2d063.appspot.com/o/tavatar_female.png?alt=media&token=1f96bade-ab4d-4e7f-9b43-d27104cfc35f";
     public static String DEFAULTUSERAVATER = "https://firebasestorage.googleapis.com/v0/b/dume-2d063.appspot.com/o/user.png?alt=media&token=36cf9d33-7b4a-413a-9434-864fcd9e1559";
     public static String BOYSTUDENT = "https://firebasestorage.googleapis.com/v0/b/dume-2d063.appspot.com/o/boy.png?alt=media&token=5d3c72fe-d546-4089-b2bb-bf433c457fc3";
     public static String GIRLSTUDENT = "https://firebasestorage.googleapis.com/v0/b/dume-2d063.appspot.com/o/girl.png?alt=media&token=bfc9872c-5833-459d-96f8-4395f6aa776c";
@@ -48,8 +48,16 @@ public class SearchDataStore implements Serializable {
 
     private Boolean profileChanged = false;
     private Boolean isFirstTime = true;
-
     private Boolean isFirstTimeEnam = true;
+    private String selectedMentor = null;
+
+    public String getSelectedMentor() {
+        return selectedMentor;
+    }
+
+    public void setSelectedMentor(String selectedMentor) {
+        this.selectedMentor = selectedMentor;
+    }
 
     public Boolean getFirstTimeEnam() {
         return isFirstTimeEnam;

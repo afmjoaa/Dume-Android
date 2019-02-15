@@ -30,6 +30,7 @@ public class SearchLoadingModel extends StuBaseModel implements SearchLoadingCon
 
     @Override
     public void search(double lat, double lon, double radius, String queryString, TeacherContract.Model.Listener<List<DocumentSnapshot>> listener) {
+        instructorList = new ArrayList<>();
         GeoFirestore geoFirestore = new GeoFirestore(skillRef);
         GeoQuery geoQuery = geoFirestore.queryAtLocation(new GeoPoint(lat, lon), radius);
         geoQuery.removeAllListeners();
@@ -44,8 +45,6 @@ public class SearchLoadingModel extends StuBaseModel implements SearchLoadingCon
                         }
                     }
                 }
-
-
             }
 
             @Override

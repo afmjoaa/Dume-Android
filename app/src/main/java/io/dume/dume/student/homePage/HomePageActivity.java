@@ -255,6 +255,7 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
         isNightConfig();
 
         locationServiceIntent = new Intent(this, MyLocationService.class);
+        searchDataStore.setSelectedMentor(null);
 //        locationServiceIntent.putExtra("FROM", "HomePageActivity" );
 //        startService(locationServiceIntent);
     }

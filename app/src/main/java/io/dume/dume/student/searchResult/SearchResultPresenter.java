@@ -48,8 +48,6 @@ public class SearchResultPresenter implements SearchResultContract.Presenter {
         view.findView();
         view.initSearchResult();
         view.configSearchResult();
-
-
     }
 
     @Override
@@ -61,7 +59,6 @@ public class SearchResultPresenter implements SearchResultContract.Presenter {
             case R.id.requestBTN:
                 view.showRequestDialogue();
                 break;
-
         }
     }
 }

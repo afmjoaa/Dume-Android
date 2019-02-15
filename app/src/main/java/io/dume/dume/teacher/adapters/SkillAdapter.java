@@ -61,6 +61,8 @@ import io.dume.dume.teacher.pojo.Skill;
 import io.dume.dume.teacher.skill.SkillActivity;
 import io.dume.dume.util.VisibleToggleClickListener;
 
+import static io.dume.dume.util.DumeUtils.getLast;
+
 public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public static int FRAGMENT = 1;
     public static int ACTIVITY = 2;
@@ -82,6 +84,9 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private TextView backSubText;
     private Button backYesBtn;
     private Button backNoBtn;
+    private String[] splitMainSsss;
+    private Integer likes = 0;
+    private Integer dislikes= 0;
 
 
     @Override
@@ -249,7 +254,7 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                                     if (backMainText != null && backSubText != null && backYesBtn != null && backNoBtn != null) {
                                         backMainText.setText("Remove skill ?");
                                         final String thisSkillTitile = myViewHolder.skillTitleTV.getText().toString();
-                                        backSubText.setText(String.format("Confirming will remove your %s skill", thisSkillTitile));
+                                        backSubText.setText(String.format("Confirming will remove your %s skill...", thisSkillTitile));
                                         backYesBtn.setText("Yes, Remove");
                                         backNoBtn.setText("No");
 
@@ -309,7 +314,6 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                         @Override
                         public void onError(String msg) {
                             Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
-
                         }
                     });
 
@@ -317,7 +321,6 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             });
             myViewHolder.publishDate.setText(dateString);
             myViewHolder.enrolledTV.setText("Enrolled Students : " + skillList.get(i).getEnrolled());
-            myViewHolder.likeTV.setText(skill.getLikes() + " likes");
 
             //init review recycler
             new DumeModel(context).loadReview(skill.getId(), null, new TeacherContract.Model.Listener<List<ReviewHighlightData>>() {
@@ -340,7 +343,7 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 public void onError(String msg) {
 
                     myViewHolder.reviewHostLayout.setVisibility(View.GONE);
-                    if (msg.equals("")) {
+                    if (msg.equals("No review")) {
                         return;
                     }
                     Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
@@ -436,7 +439,14 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 final Object o = jizz.get(getLast(i));
                 myViewHolder.skillTitleTV.setText(o.toString() + " / " + jizz.get("Category"));
                 myViewHolder.categoryAvatar.setImageResource(iconList.get(jizz.get("Category")));
+                String mainSsss = o.toString();
+                splitMainSsss = mainSsss.split("\\s*(=>|,|\\s)\\s*");
             }
+            for (String splited : splitMainSsss) {
+                likes = likes + Integer.parseInt(skillList.get(i).getLikes().get(splited).toString());
+                dislikes = dislikes +  Integer.parseInt(skillList.get(i).getDislikes().get(splited).toString());
+            }
+            myViewHolder.likeTV.setText((likes-3) + " likes");
 
         } else {//fragment start here
             SkillFVH myFragmentHolder = (SkillFVH) holder;
@@ -473,13 +483,22 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             if (getLast(i) != null) {
                 final Object o = jizz.get(getLast(i));
                 myFragmentHolder.skillTitleTV.setText(o.toString() + " / " + jizz.get("Category"));
+                String mainSsss = o.toString();
+                splitMainSsss = mainSsss.split("\\s*(=>|,|\\s)\\s*");
             }
             myFragmentHolder.switchCompat.setChecked(skillList.get(i).isStatus());
-            int totalCount = skillList.get(i).getLikes() + skillList.get(i).getDislikes();
+
+            for (String splited : splitMainSsss) {
+                likes = likes + Integer.parseInt(skillList.get(i).getLikes().get(splited).toString());
+                dislikes = dislikes +  Integer.parseInt(skillList.get(i).getDislikes().get(splited).toString());
+            }
+
+
+            int totalCount =likes + dislikes;
             if (totalCount == 0) {
                 myFragmentHolder.likeTV.setText("n/a");
             } else {
-                int likeP = (int) (skillList.get(i).getLikes() / totalCount) * 100;
+                int likeP = (int) (likes/ totalCount) * 100;
                 myFragmentHolder.likeTV.setText(likeP + "% liked");
             }
             int salary = (int) (skillList.get(i).getSalary()) / 1000;

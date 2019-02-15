@@ -123,7 +123,7 @@
                                 android:layout_gravity="center"
                                 android:layout_margin="8dp"
                                 app:carbon_cornerRadius="25dp"
-                                app:carbon_elevation="6dp"
+                                app:carbon_elevation="3dp"
                                 android:scaleType="centerCrop"
                                 app:srcCompat="@drawable/ic_general_user" />
 
@@ -562,8 +562,10 @@
                                 app:hdPinBackgroundColor="@color/pin_background"
                                 app:hdPinDrawable="@drawable/ic_pin"
                                 app:hdPinMarginBottom="20dp"
-                                app:hdPinMarginEnd="11dp"
+                                app:hdPinMarginEnd="7dp"
                                 app:hdPinPaddingBottom="5dp"
+                                app:hdPinPaddingStart="5dp"
+                                app:hdPinPaddingEnd="5dp"
                                 app:hdPinTextColor="@color/pin_text"
                                 app:hdPinTxtSize="12sp"
                                 app:hdProgressClickColor="@color/progress_click"
@@ -600,7 +602,7 @@
                             style="@style/Widget.AppCompat.Button.Borderless"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:drawableBottom="@drawable/ic_down_arrow_small"
+                            android:drawableBottom="@drawable/ic_up_arrow_small"
                             android:drawablePadding="2dp"
                             android:text="Achievements"
                             android:textAllCaps="false"
@@ -783,7 +785,7 @@
                             style="@style/Widget.AppCompat.Button.Borderless"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:drawableBottom="@drawable/ic_down_arrow_small"
+                            android:drawableBottom="@drawable/ic_up_arrow_small"
                             android:drawablePadding="2dp"
                             android:text="More Info"
                             android:textAllCaps="false"
@@ -955,7 +957,7 @@
                             style="@style/Widget.AppCompat.Button.Borderless"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:drawableBottom="@drawable/ic_down_arrow_small"
+                            android:drawableBottom="@drawable/ic_up_arrow_small"
                             android:drawablePadding="2dp"
                             android:text="Agreement Terms"
                             android:textAllCaps="false"
@@ -1062,67 +1064,6 @@
 
                 </LinearLayout>
 
-                <!--location layout-->
-                <!--<LinearLayout
-                    android:id="@+id/location_host_linearlayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:orientation="vertical">
-
-                    <carbon.widget.LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/bg_round_corner_rela_layout"
-                        android:baselineAligned="false"
-                        android:orientation="vertical"
-                        android:paddingLeft="16dp"
-                        android:paddingRight="16dp"
-                        app:carbon_elevation="8dp">
-
-                        <Button
-                            android:id="@+id/show_location_btn"
-                            style="@style/Widget.AppCompat.Button.Borderless"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:drawableBottom="@drawable/ic_down_arrow_small"
-                            android:drawablePadding="2dp"
-                            android:text="Location"
-                            android:textAllCaps="false"
-                            android:textColor="@color/textColorPrimary"
-                            android:textSize="16sp"
-                            app:fontFamily="@font/cairo_regular" />
-
-                    </carbon.widget.LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/location_layout_vertical"
-                        android:layout_width="match_parent"
-                        android:layout_height="180dp"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="5dp"
-                        android:background="@drawable/bg_white_bottom_round"
-                        android:orientation="vertical"
-                        android:paddingBottom="10dp"
-                        android:paddingLeft="16dp"
-                        android:paddingRight="16dp"
-                        android:paddingTop="12dp"
-                        android:translationY="-2dp">
-
-                        <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-                            xmlns:map="http://schemas.android.com/apk/res-auto"
-                            android:id="@+id/mapOne"
-                            android:name="com.google.android.gms.maps.MapFragment"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            map:cameraZoom="15"
-                            map:liteMode="true"
-                            map:mapType="normal" />
-
-                    </LinearLayout>
-
-                </LinearLayout>-->
-
                 <!--review layout-->
                 <LinearLayout
                     android:id="@+id/review_host_linearlayout"
@@ -1146,7 +1087,7 @@
                             style="@style/Widget.AppCompat.Button.Borderless"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:drawableBottom="@drawable/ic_down_arrow_small"
+                            android:drawableBottom="@drawable/ic_up_arrow_small"
                             android:drawablePadding="2dp"
                             android:text="Review Highlights"
                             android:textAllCaps="false"
@@ -1174,9 +1115,47 @@
                             android:id="@+id/recycler_view_reviews"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="16dp">
+                            android:layout_marginTop="16dp" />
 
-                        </android.support.v7.widget.RecyclerView>
+                        <LinearLayout
+                            android:id="@+id/no_data_block"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:layout_marginBottom="24dp"
+                            android:orientation="vertical"
+                            android:visibility="visible">
+
+                            <carbon.widget.ImageView
+                                android:layout_width="100dp"
+                                android:layout_height="wrap_content"
+                                app:carbon_elevation="3dp"
+                                app:srcCompat="@drawable/no_data_wallpaper" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
+                                android:text="Sorry, no review to show right now..."
+                                android:textAlignment="center"
+                                android:textAllCaps="false"
+                                android:textColor="@color/textColorSecondaryDark"
+                                android:textSize="15sp" />
+
+                        </LinearLayout>
+
+                        <Button
+                            android:id="@+id/load_more_review_btn"
+                            style="@style/Widget.AppCompat.Button.Borderless"
+                            android:layout_width="match_parent"
+                            android:layout_height="34dp"
+                            android:text="Load more"
+                            android:background="@drawable/round_btn_joaa"
+                            android:textAllCaps="false"
+                            android:textColor="@color/textColorPrimary"
+                            android:textSize="12sp"
+                            android:visibility="gone"
+                            app:fontFamily="@font/cairo_regular" />
 
                     </LinearLayout>
 
@@ -1292,8 +1271,67 @@
             app:layout_anchorGravity="bottom"
             app:rect_color="@color/transparent" />
 
-
     </android.support.design.widget.CoordinatorLayout>
 
-
 </android.support.design.widget.CoordinatorLayout>
+
+    <!--location layout-->
+    <!--<LinearLayout
+        android:id="@+id/location_host_linearlayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:orientation="vertical">
+
+        <carbon.widget.LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_round_corner_rela_layout"
+            android:baselineAligned="false"
+            android:orientation="vertical"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            app:carbon_elevation="8dp">
+
+            <Button
+                android:id="@+id/show_location_btn"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableBottom="@drawable/ic_down_arrow_small"
+                android:drawablePadding="2dp"
+                android:text="Location"
+                android:textAllCaps="false"
+                android:textColor="@color/textColorPrimary"
+                android:textSize="16sp"
+                app:fontFamily="@font/cairo_regular" />
+
+        </carbon.widget.LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/location_layout_vertical"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/bg_white_bottom_round"
+            android:orientation="vertical"
+            android:paddingBottom="10dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingTop="12dp"
+            android:translationY="-2dp">
+
+            <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:map="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/mapOne"
+                android:name="com.google.android.gms.maps.MapFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                map:cameraZoom="15"
+                map:liteMode="true"
+                map:mapType="normal" />
+
+        </LinearLayout>
+
+    </LinearLayout>-->
