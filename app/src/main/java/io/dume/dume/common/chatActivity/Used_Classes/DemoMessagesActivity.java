@@ -44,15 +44,11 @@ public abstract class DemoMessagesActivity extends CustomStuAppCompatActivity
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        imageLoader = new ImageLoader() {
-            @Override
-            public void loadImage(ImageView imageView, String url) {
-                Glide.with(DemoMessagesActivity.this)
-                        .load(url)
-                        .into(imageView);
-                //Picasso.with(DemoMessagesActivity.this).load(url).into(imageView);
-            }
-
+        imageLoader = (imageView, url) -> {
+            Glide.with(DemoMessagesActivity.this)
+                    .load(url)
+                    .into(imageView);
+            //Picasso.with(DemoMessagesActivity.this).load(url).into(imageView);
         };
     }
 

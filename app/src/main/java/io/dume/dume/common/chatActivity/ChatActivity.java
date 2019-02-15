@@ -28,6 +28,7 @@ import com.transitionseverywhere.Transition;
 import com.transitionseverywhere.TransitionManager;
 import com.transitionseverywhere.TransitionSet;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -95,7 +96,7 @@ public class ChatActivity extends DemoMessagesActivity implements ChatActivityCo
         title.setText(google.getRooms().get(i).getOpponentName());
         Glide.with(this).load(google.getRooms().get(i).getOpponentDP()).apply(new RequestOptions().placeholder(R.drawable.dp)).into(dp);
 
-        mModel.readLastThirty(new TeacherContract.Model.Listener<List<Letter>>() {
+        mModel.readLastThirty(null, new TeacherContract.Model.Listener<List<Letter>>() {
             @Override
             public void onSuccess(List<Letter> list) {
                 for (int i = 0; i < list.size() - 1; i++) {
@@ -104,6 +105,7 @@ public class ChatActivity extends DemoMessagesActivity implements ChatActivityCo
                     } else {
                         TYPE = RECIVER;
                     }
+                    Google.getInstance().setLastDocumentId(list.get(i).getUid());
                     ChatActivity.super.messagesAdapter.addToStart(new Message(list.get(i).getUid(), new User(TYPE + "", "Enam", SearchDataStore.DEFAULTMALEAVATER, true), list.get(i).getBody(), list.get(i).getTimestamp()), true);
                 }
             }
@@ -182,6 +184,35 @@ public class ChatActivity extends DemoMessagesActivity implements ChatActivityCo
 
             }
         });
+        super.messagesAdapter.setLoadMoreListener((page, totalItemsCount) -> {
+            Toast.makeText(this, "Load More", Toast.LENGTH_SHORT).show();
+            mModel.readLastThirty(Google.getInstance().getLastDocumentId(), new TeacherContract.Model.Listener<List<Letter>>() {
+
+                private List<Message> messages;
+
+                @Override
+                public void onSuccess(List<Letter> list) {
+                    messages = new ArrayList<>();
+                    for (int i = 0; i < list.size() - 1; i++) {
+                        if (list.get(i).getUid().equals(FirebaseAuth.getInstance().getUid())) {
+                            TYPE = SENDER;
+                        } else {
+                            TYPE = RECIVER;
+                        }
+                        Message message = new Message(list.get(i).getUid(), new User(TYPE + "", "Enam", SearchDataStore.DEFAULTMALEAVATER, true), list.get(i).getBody(), list.get(i).getTimestamp());
+                        messages.add(message);
+
+                    }
+                    ChatActivity.super.messagesAdapter.addToEnd(messages, true);
+                }
+
+                @Override
+                public void onError(String msg) {
+                    flush(msg);
+                }
+            });
+        });
+
 
     }
 

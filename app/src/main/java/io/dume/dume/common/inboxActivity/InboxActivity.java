@@ -3,6 +3,7 @@ package io.dume.dume.common.inboxActivity;
 import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -16,6 +17,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -334,14 +336,14 @@ public class InboxActivity extends CustomStuAppCompatActivity implements InboxAc
                                     offlineIndicatorCirPro = v.findViewById(R.id.selected_indicator);
                                     chatUserName = v.findViewById(R.id.chat_user_name);
 
-                                    android.util.Pair[] pairsPending = new android.util.Pair[5];
-                                    pairsPending[0] = new android.util.Pair<View, String>(selectedIndicatorCirPro, "tn0ne");
-                                    pairsPending[1] = new android.util.Pair<View, String>(chatUserDP, "tnTwo");
-                                    pairsPending[2] = new android.util.Pair<View, String>(onlineIndicatorCirPro, "tnThree");
-                                    pairsPending[3] = new android.util.Pair<View, String>(offlineIndicatorCirPro, "tnFour");
-                                    pairsPending[4] = new android.util.Pair<View, String>(chatUserName, "tnFive");
+                                    Pair[] pairsPending = new Pair[5];
+                                    pairsPending[0] = new Pair<View, String>(selectedIndicatorCirPro, "tn0ne");
+                                    pairsPending[1] = new Pair<View, String>(chatUserDP, "tnTwo");
+                                    pairsPending[2] = new Pair<View, String>(onlineIndicatorCirPro, "tnThree");
+                                    pairsPending[3] = new Pair<View, String>(offlineIndicatorCirPro, "tnFour");
+                                    pairsPending[4] = new Pair<View, String>(chatUserName, "tnFive");
                                     ActivityOptions optionsPending = null;
-                                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                                         optionsPending = ActivityOptions.makeSceneTransitionAnimation(getActivity(), pairsPending);
                                     }
                                     if (optionsPending != null) {
@@ -376,6 +378,10 @@ public class InboxActivity extends CustomStuAppCompatActivity implements InboxAc
 
                     break;
                 case 2:
+
+
+
+
                     rootView = inflater.inflate(R.layout.common1_fragment_inbox_notification, container, false);
                     inboxRecyclerRecent = rootView.findViewById(R.id.inbox_recycler_view_recent);
 

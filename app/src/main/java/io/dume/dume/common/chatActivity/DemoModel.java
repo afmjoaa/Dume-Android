@@ -54,7 +54,7 @@ public class DemoModel {
         Collections.sort(participants);
         DocumentReference messages = firestore.collection("messages").document(participants.get(0).concat(participants.get(1)));
         messages.set(map, SetOptions.merge());
-        messages.addSnapshotListener((Activity) context,new EventListener<DocumentSnapshot>() {
+        messages.addSnapshotListener((Activity) context, new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
                 if (e != null) {
@@ -115,8 +115,13 @@ public class DemoModel {
         });
     }
 
-    public void readLastThirty(TeacherContract.Model.Listener<List<Letter>> messageListener) {
-        listenerRegistration = firestore.collection("messages").document(Google.getInstance().getCurrentRoom()).collection("chatbox").orderBy("timestamp", Query.Direction.ASCENDING).limit(30).addSnapshotListener((Activity) context, new EventListener<QuerySnapshot>() {
+    public void readLastThirty(String from, TeacherContract.Model.Listener<List<Letter>> messageListener) {
+        Query query = firestore.collection("messages").document(Google.getInstance().getCurrentRoom()).collection("chatbox").orderBy("timestamp", Query.Direction.ASCENDING);
+        if (from != null) {
+            query = query.startAfter(from);
+        }
+
+        listenerRegistration = query.limit(30).addSnapshotListener((Activity) context, new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 listenerRegistration.remove();
@@ -141,10 +146,41 @@ public class DemoModel {
         else return foo;
     }
 
+    public void getNotification(String uid, TeacherContract.Model.Listener<List<Notif>> listener) {
+        if (uid != null && !uid.equals("")) {
+            Query query = firestore.collection("push_notifications").whereEqualTo("uid", uid).orderBy("timestamp", Query.Direction.ASCENDING);
+            query.addSnapshotListener((Activity) context, new EventListener<QuerySnapshot>() {
+                @Override
+                public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                    List<DocumentSnapshot> documents = null;
+                    List<Notif> list = new ArrayList<>();
+                    if (queryDocumentSnapshots != null) {
+                        documents = queryDocumentSnapshots.getDocuments();
+                        if (documents.size() > 0) {
+                            for (int i = 0; i < documents.size(); i++) {
+                                Map<String, Object> data = documents.get(i).getData();
+                                if (data != null) {
+                                    String name = (String) data.get("name");
+                                    String title = (String) data.get("title");
+                                    String body = (String) data.get("reason");
+                                    String uid = (String) data.get("uid");
+                                    String token = (String) data.get("token");
+                                    list.add(new Notif(name, title, body, uid, token));
+                                }
+                            }
+                            listener.onSuccess(list);
+                        } else listener.onError("");
+                    } else listener.onError("");
+                }
+            });
+
+        } else listener.onError("Error: Session Expired. Please Log In");
+    }
+
     public void getRoom(String uid, TeacherContract.Model.Listener<List<Room>> listener) {
         if (uid != null && !uid.equals("")) {
             Query query = firestore.collection("messages").whereArrayContains("participants", uid);
-            query.addSnapshotListener((Activity) context,(queryDocumentSnapshots, e) -> {
+            query.addSnapshotListener((Activity) context, (queryDocumentSnapshots, e) -> {
                 if (e != null || queryDocumentSnapshots == null)
                     listener.onError(e != null ? e.getMessage() : "No Message History Found. Click Message Button To Create New One");
                 else {
