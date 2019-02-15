@@ -17,6 +17,7 @@ public class Google {
     private List<DocumentSnapshot> records;
     private String accountPrefix;
     private String accountMajor;
+    private String lastDocumentId;
 
 
     public String getAccountPrefix() {
@@ -89,5 +90,13 @@ public class Google {
 
     public void setRecords(List<DocumentSnapshot> records) {
         this.records = records;
+    }
+
+    public String getLastDocumentId() {
+        return lastDocumentId;
+    }
+
+    public void setLastDocumentId(String lastDocumentId) {
+        this.lastDocumentId = lastDocumentId;
     }
 }

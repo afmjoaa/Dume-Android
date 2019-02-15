@@ -146,8 +146,10 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
                 @Override
                 public void onFailure(@NonNull Exception e) {
                     view.showToast("Network error !!");
+                    nextActivity();
                 }
             });
+
         } else {
             Log.w(TAG, "mergeImei:  " + "Not Merged");
             nextActivity();

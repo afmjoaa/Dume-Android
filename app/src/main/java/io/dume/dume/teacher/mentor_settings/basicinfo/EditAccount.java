@@ -774,7 +774,6 @@ public class EditAccount extends CustomStuAppCompatActivity implements EditContr
             presenter.fabClicked(new TeacherContract.Model.Listener<Void>() {
                 @Override
                 public void onSuccess(Void list) {
-                    //enableLoad();
                     disableLoad();
                     final Intent intent = new Intent(EditAccount.this, AcademicActivity.class);
                     intent.setAction("add");
