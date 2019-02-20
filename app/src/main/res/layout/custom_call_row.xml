@@ -36,7 +36,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="12dp"
         android:clickable="false"
-        android:src="@drawable/demo_testing_image"
+        app:srcCompat="@drawable/demo_default_avatar_dark"
         app:carbon_cornerRadius="25dp" />
 
     <com.jackandphantom.circularprogressbar.CircleProgressbar

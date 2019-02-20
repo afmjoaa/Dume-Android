@@ -1371,7 +1371,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
         LatLngBounds.Builder boundsBuilder = new LatLngBounds.Builder();
         for (LatLng latLngPoint : lstLatLngRoute)
             boundsBuilder.include(latLngPoint);
-        int routePadding = 70;
+        int routePadding = 150;
         LatLngBounds latLngBounds = boundsBuilder.build();
         mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, routePadding), 2000, new GoogleMap.CancelableCallback() {
             @Override
@@ -1538,9 +1538,9 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                     });
         } else {
             if (gender.equals("Male") || gender.equals("")) {
-                defaultUrl = "https://firebasestorage.googleapis.com/v0/b/dume-2d063.appspot.com/o/avatar.png?alt=media&token=801c75b7-59fe-4a13-9191-186ef50de707";
+                defaultUrl = SearchDataStore.DEFAULTMALEAVATER;
             } else {
-                defaultUrl = "https://firebasestorage.googleapis.com/v0/b/dume-2d063.appspot.com/o/avatar_female.png?alt=media&token=7202ea91-4f0d-4bd6-838e-8b73d0db13eb";
+                defaultUrl = SearchDataStore.DEFAULTFEMALEAVATER;;
             }
             Glide.with(getApplicationContext())
                     .asBitmap()

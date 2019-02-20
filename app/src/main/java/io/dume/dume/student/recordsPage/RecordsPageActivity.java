@@ -63,6 +63,7 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
     private SwipeRefreshLayout swipeRefreshLayout;
     private LinearLayout noDataBlockMain;
     private List<Record> recordListMain = new ArrayList<>();
+    public String retriveAction = null;
 
 
     @Override
@@ -75,10 +76,6 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
         mPresenter.recordsPageEnqueue();
         configureAppbarWithoutColloapsing(this, "Record");
 
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
-
-
         //making the custom tab here
         int[] wh = DumeUtils.getScreenSize(this);
         int tabMinWidth = ((wh[0] / 3) - (int) (24 * (getResources().getDisplayMetrics().density)));
@@ -86,8 +83,6 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
                 (tabMinWidth, LinearLayout.LayoutParams.WRAP_CONTENT);
         // loop through all navigation tabs
         for (int i = 0; i < tabLayout.getTabCount(); i++) {
-            // inflate the Parent LinearLayout Container for the tab
-            // from the layout nav_tab.xml file that we created 'R.layout.nav_tab
             LinearLayout tab = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.custom_tablayout_tab, null);
             String navLabels[] = getResources().getStringArray(R.array.RecordsPageTabtext);
 
@@ -100,7 +95,6 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
             tab_label.setText(navLabels[i]);
             tab_icon.setImageResource(navIcons[i]);
             tab_label.setLayoutParams(textParam);
-
             // finally publish this custom view to navigation tab
             Objects.requireNonNull(tabLayout.getTabAt(i)).setCustomView(tab);
         }
@@ -109,7 +103,9 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
 
-
+        if (getIntent().getAction() != null) {
+            retriveAction = getIntent().getAction();
+        }
     }
 
     @Override
@@ -309,17 +305,27 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
                 case 1:
                     List<Record> recordDataPending = new ArrayList<>();
                     recordDataPending = Google.getInstance().getRecordList();
-                    recordDataPending = recordDataPending.stream().filter(new Predicate<Record>() {
-                        @Override
-                        public boolean test(Record record) {
-                            return record.getStatus().equals("Pending");
-                        }
-                    }).collect(Collectors.toList());
+                    recordDataPending = DumeUtils.filterRecord(recordDataPending, "Pending");
 
                     RecordsRecyAdapter recordsRecyAdapending = new RecordsRecyAdapter(myThisActivity, recordDataPending) {
                         @Override
                         void OnItemClicked(View v, int position) {
-                            startActivity(new Intent(myThisActivity, RecordsPendingActivity.class).setAction("student"));
+                            if (myThisActivity.retriveAction != null) {
+                                switch (myThisActivity.retriveAction) {
+                                    case DumeUtils.STUDENT:
+                                        startActivity(new Intent(myThisActivity, RecordsPendingActivity.class).setAction(DumeUtils.STUDENT));
+                                        break;
+                                    case DumeUtils.TEACHER:
+                                        startActivity(new Intent(myThisActivity, RecordsPendingActivity.class).setAction(DumeUtils.TEACHER));
+                                        break;
+                                    case DumeUtils.BOOTCAMP:
+                                        startActivity(new Intent(myThisActivity, RecordsPendingActivity.class).setAction(DumeUtils.BOOTCAMP));
+                                        break;
+                                    default:
+                                        startActivity(new Intent(myThisActivity, RecordsPendingActivity.class).setAction(DumeUtils.STUDENT));
+                                        break;
+                                }
+                            }
                         }
 
                         @Override
@@ -339,16 +345,26 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
                 case 2:
                     List<Record> recordDataAccepted = new ArrayList<>();
                     recordDataAccepted = Google.getInstance().getRecordList();
-                    recordDataAccepted = recordDataAccepted.stream().filter(new Predicate<Record>() {
-                        @Override
-                        public boolean test(Record record) {
-                            return record.getStatus().equals("Accepted");
-                        }
-                    }).collect(Collectors.toList());
+                    recordDataAccepted = DumeUtils.filterRecord(recordDataAccepted, "Accepted");
                     RecordsRecyAdapter recordsRecyAdaAccepted = new RecordsRecyAdapter(myThisActivity, recordDataAccepted) {
                         @Override
                         void OnItemClicked(View v, int position) {
-                            startActivity(new Intent(myThisActivity, RecordsAcceptedActivity.class).setAction("student"));
+                            if (myThisActivity.retriveAction != null) {
+                                switch (myThisActivity.retriveAction) {
+                                    case DumeUtils.STUDENT:
+                                        startActivity(new Intent(myThisActivity, RecordsAcceptedActivity.class).setAction(DumeUtils.STUDENT));
+                                        break;
+                                    case DumeUtils.TEACHER:
+                                        startActivity(new Intent(myThisActivity, RecordsAcceptedActivity.class).setAction(DumeUtils.TEACHER));
+                                        break;
+                                    case DumeUtils.BOOTCAMP:
+                                        startActivity(new Intent(myThisActivity, RecordsAcceptedActivity.class).setAction(DumeUtils.BOOTCAMP));
+                                        break;
+                                    default:
+                                        startActivity(new Intent(myThisActivity, RecordsAcceptedActivity.class).setAction(DumeUtils.STUDENT));
+                                        break;
+                                }
+                            }
                         }
 
                         @Override
@@ -368,16 +384,26 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
                 case 3:
                     List<Record> recordDataCurrent = new ArrayList<>();
                     recordDataCurrent = Google.getInstance().getRecordList();
-                    recordDataCurrent = recordDataCurrent.stream().filter(new Predicate<Record>() {
-                        @Override
-                        public boolean test(Record record) {
-                            return record.getStatus().equals("OnGoing");
-                        }
-                    }).collect(Collectors.toList());
+                    recordDataCurrent = DumeUtils.filterRecord(recordDataCurrent, "Current");
                     RecordsRecyAdapter recordsRecyAdaCurrent = new RecordsRecyAdapter(myThisActivity, recordDataCurrent) {
                         @Override
                         void OnItemClicked(View v, int position) {
-                            startActivity(new Intent(myThisActivity, RecordsCurrentActivity.class).setAction("student"));
+                            if (myThisActivity.retriveAction != null) {
+                                switch (myThisActivity.retriveAction) {
+                                    case DumeUtils.STUDENT:
+                                        startActivity(new Intent(myThisActivity, RecordsCurrentActivity.class).setAction(DumeUtils.STUDENT));
+                                        break;
+                                    case DumeUtils.TEACHER:
+                                        startActivity(new Intent(myThisActivity, RecordsCurrentActivity.class).setAction(DumeUtils.TEACHER));
+                                        break;
+                                    case DumeUtils.BOOTCAMP:
+                                        startActivity(new Intent(myThisActivity, RecordsCurrentActivity.class).setAction(DumeUtils.BOOTCAMP));
+                                        break;
+                                    default:
+                                        startActivity(new Intent(myThisActivity, RecordsCurrentActivity.class).setAction(DumeUtils.STUDENT));
+                                        break;
+                                }
+                            }
                         }
 
                         @Override
@@ -397,16 +423,26 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
                 case 4:
                     List<Record> recordDataCompletded = new ArrayList<>();
                     recordDataCompletded = Google.getInstance().getRecordList();
-                    recordDataCompletded = recordDataCompletded.stream().filter(new Predicate<Record>() {
-                        @Override
-                        public boolean test(Record record) {
-                            return record.getStatus().equals("Completed");
-                        }
-                    }).collect(Collectors.toList());
+                    recordDataCompletded = DumeUtils.filterRecord(recordDataCompletded, "Completed");
                     RecordsRecyAdapter recordsRecyAdaCompleted = new RecordsRecyAdapter(myThisActivity, recordDataCompletded) {
                         @Override
                         void OnItemClicked(View v, int position) {
-                            startActivity(new Intent(myThisActivity, RecordsCompletedActivity.class).setAction("student"));
+                            if (myThisActivity.retriveAction != null) {
+                                switch (myThisActivity.retriveAction) {
+                                    case DumeUtils.STUDENT:
+                                        startActivity(new Intent(myThisActivity, RecordsCompletedActivity.class).setAction(DumeUtils.STUDENT));
+                                        break;
+                                    case DumeUtils.TEACHER:
+                                        startActivity(new Intent(myThisActivity, RecordsCompletedActivity.class).setAction(DumeUtils.TEACHER));
+                                        break;
+                                    case DumeUtils.BOOTCAMP:
+                                        startActivity(new Intent(myThisActivity, RecordsCompletedActivity.class).setAction(DumeUtils.BOOTCAMP));
+                                        break;
+                                    default:
+                                        startActivity(new Intent(myThisActivity, RecordsCompletedActivity.class).setAction(DumeUtils.STUDENT));
+                                        break;
+                                }
+                            }
                         }
 
                         @Override
@@ -427,16 +463,26 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
                 case 5:
                     List<Record> recordDataRejected = new ArrayList<>();
                     recordDataRejected = Google.getInstance().getRecordList();
-                    recordDataRejected = recordDataRejected.stream().filter(new Predicate<Record>() {
-                        @Override
-                        public boolean test(Record record) {
-                            return record.getStatus().equals("Rejected");
-                        }
-                    }).collect(Collectors.toList());
+                    recordDataRejected = DumeUtils.filterRecord(recordDataRejected, "Rejected");
                     RecordsRecyAdapter recordsRecyAdaRejected = new RecordsRecyAdapter(myThisActivity, recordDataRejected) {
                         @Override
                         void OnItemClicked(View v, int position) {
-                            startActivity(new Intent(myThisActivity, RecordsRejectedActivity.class).setAction("student"));
+                            if (myThisActivity.retriveAction != null) {
+                                switch (myThisActivity.retriveAction) {
+                                    case DumeUtils.STUDENT:
+                                        startActivity(new Intent(myThisActivity, RecordsRejectedActivity.class).setAction(DumeUtils.STUDENT));
+                                        break;
+                                    case DumeUtils.TEACHER:
+                                        startActivity(new Intent(myThisActivity, RecordsRejectedActivity.class).setAction(DumeUtils.TEACHER));
+                                        break;
+                                    case DumeUtils.BOOTCAMP:
+                                        startActivity(new Intent(myThisActivity, RecordsRejectedActivity.class).setAction(DumeUtils.BOOTCAMP));
+                                        break;
+                                    default:
+                                        startActivity(new Intent(myThisActivity, RecordsRejectedActivity.class).setAction(DumeUtils.STUDENT));
+                                        break;
+                                }
+                            }
                         }
 
                         @Override

@@ -43,7 +43,8 @@
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_marginBottom="1dp"
-                    android:src="@drawable/demo_testing_image"
+                    android:scaleType="centerCrop"
+                    app:srcCompat="@drawable/demo_default_avatar_dark"
                     app:carbon_cornerRadius="6dp"
                     app:carbon_elevation="4dp" />
 
@@ -51,7 +52,7 @@
                     android:id="@+id/student_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="dony"
+                    android:text="@string/demo_user_name"
                     android:textColor="@color/textColorPrimary"
                     android:textSize="16sp"
                     app:fontFamily="@font/cairo_regular" />
@@ -126,7 +127,8 @@
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_marginBottom="1dp"
-                    android:src="@drawable/demo_testing_image"
+                    android:scaleType="centerCrop"
+                    app:srcCompat="@drawable/demo_default_avatar_dark"
                     app:carbon_cornerRadius="6dp"
                     app:carbon_elevation="4dp" />
 
@@ -134,7 +136,7 @@
                     android:id="@+id/mentor_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Fatema"
+                    android:text="@string/demo_user_name"
                     android:textColor="@color/textColorPrimary"
                     android:textSize="16sp"
                     app:fontFamily="@font/cairo_regular" />
@@ -269,7 +271,7 @@
                     style="@style/Widget.AppCompat.Button.Borderless"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableBottom="@drawable/ic_down_arrow_small"
+                    android:drawableBottom="@drawable/ic_up_arrow_small"
                     android:drawablePadding="2dp"
                     android:text="Agreement Terms"
                     android:textAllCaps="false"
@@ -287,11 +289,30 @@
                 android:layout_marginRight="5dp"
                 android:background="@drawable/bg_white_bottom_round"
                 android:orientation="vertical"
-                android:paddingBottom="8dp"
                 android:paddingLeft="16dp"
-                android:paddingRight="16dp"
                 android:paddingTop="8dp"
+                android:paddingRight="16dp"
+                android:paddingBottom="8dp"
                 android:translationY="-2dp">
+
+                <TextView
+                    android:id="@+id/textview_starting_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="0dp"
+                    android:drawableLeft="@drawable/ic_keyboard_arrow_right_black_24dp"
+                    android:drawablePadding="6dp"
+                    android:drawableStart="@drawable/ic_keyboard_arrow_right_black_24dp"
+                    android:gravity="center_vertical"
+                    android:paddingBottom="2dp"
+                    android:paddingTop="2dp"
+                    android:singleLine="true"
+                    android:text="Starting Time : "
+                    android:textAllCaps="false"
+                    android:textColor="@color/textColorPrimary"
+                    android:textSize="13sp"
+                    android:textStyle="normal"
+                    app:fontFamily="@font/cairo_regular" />
 
                 <TextView
                     android:id="@+id/textview_starting_date"
@@ -305,13 +326,12 @@
                     android:paddingBottom="2dp"
                     android:paddingTop="2dp"
                     android:singleLine="true"
-                    android:text="Starting Date &amp; Time : Tue, Apr 13, 5.00PM"
+                    android:text="Starting Date : "
                     android:textAllCaps="false"
                     android:textColor="@color/textColorPrimary"
                     android:textSize="13sp"
                     android:textStyle="normal"
                     app:fontFamily="@font/cairo_regular" />
-
 
                 <TextView
                     android:id="@+id/textview_preferred_day"
@@ -325,7 +345,9 @@
                     android:paddingBottom="2dp"
                     android:paddingTop="2dp"
                     android:singleLine="true"
-                    android:text="Preferred Day : Sun, Mon, Tue"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="Preferred Day : "
                     android:textAllCaps="false"
                     android:textColor="@color/textColorPrimary"
                     android:textSize="13sp"
@@ -343,7 +365,7 @@
                     android:paddingBottom="2dp"
                     android:paddingTop="2dp"
                     android:singleLine="true"
-                    android:text="Days/Week : Three"
+                    android:text="Days/Week : "
                     android:textAllCaps="false"
                     android:textColor="@color/textColorPrimary"
                     android:textSize="13sp"

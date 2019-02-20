@@ -51,6 +51,8 @@ import io.dume.dume.util.DumeUtils;
 import static io.dume.dume.util.DumeUtils.configToolbarTittle;
 import static io.dume.dume.util.DumeUtils.configureAppbarWithoutColloapsing;
 
+import io.dume.dume.common.chatActivity.*;
+
 public class InboxActivity extends CustomStuAppCompatActivity implements InboxActivityContact.View {
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
@@ -274,7 +276,7 @@ public class InboxActivity extends CustomStuAppCompatActivity implements InboxAc
         private CircleProgressbar offlineIndicatorCirPro;
         private TextView chatUserName;
         private carbon.widget.ImageView chatUserDP1;
-        private DemoModel demoModel;
+        public DemoModel demoModel;
         private Context context;
 
 
@@ -379,26 +381,43 @@ public class InboxActivity extends CustomStuAppCompatActivity implements InboxAc
                     break;
                 case 2:
 
-
-
-
                     rootView = inflater.inflate(R.layout.common1_fragment_inbox_notification, container, false);
                     inboxRecyclerRecent = rootView.findViewById(R.id.inbox_recycler_view_recent);
+                    demoModel.getNotification(FirebaseAuth.getInstance().getUid(), new TeacherContract.Model.Listener<List<InboxNotiData>>() {
+                        @Override
+                        public void onSuccess(List<InboxNotiData> list) {
+                            InboxNotiAdapter notiRecyAda = new InboxNotiAdapter(myThisActivity, list);
+                            inboxRecyclerRecent.setAdapter(notiRecyAda);
+                            inboxRecyclerRecent.setLayoutManager(new LinearLayoutManager(myThisActivity));
 
-                    List<InboxNotiData> notiDialogueData = new ArrayList<>();
-                    InboxNotiAdapter notiRecyAda = new InboxNotiAdapter(myThisActivity, notiDialogueData);
-                    inboxRecyclerRecent.setAdapter(notiRecyAda);
-                    inboxRecyclerRecent.setLayoutManager(new LinearLayoutManager(myThisActivity));
+                        }
+
+                        @Override
+                        public void onError(String msg) {
+                            Toast.makeText(myThisActivity, msg, Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
 
                     break;
                 case 3:
-                    //setting the recycler view
                     rootView = inflater.inflate(R.layout.common1_fragment_default_inbox, container, false);
                     inboxRecycler = rootView.findViewById(R.id.inbox_recycler_view);
-                    List<InboxCallData> callDialogueData = new ArrayList<>();
-                    InboxCallAdapter callRecyAda = new InboxCallAdapter(myThisActivity, callDialogueData);
-                    inboxRecycler.setAdapter(callRecyAda);
-                    inboxRecycler.setLayoutManager(new LinearLayoutManager(myThisActivity));
+
+                    demoModel.getPhoneNumberList(new TeacherContract.Model.Listener<List<InboxCallData>>() {
+                        @Override
+                        public void onSuccess(List<InboxCallData> list) {
+                            InboxCallAdapter callRecyAda = new InboxCallAdapter(myThisActivity, list);
+                            inboxRecycler.setAdapter(callRecyAda);
+                            inboxRecycler.setLayoutManager(new LinearLayoutManager(myThisActivity));
+                        }
+
+                        @Override
+                        public void onError(String msg) {
+
+                        }
+                    });
+
                     break;
 
             }

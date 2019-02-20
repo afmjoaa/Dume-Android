@@ -1,6 +1,7 @@
 package io.dume.dume.teacher.homepage.fragments;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -62,6 +63,7 @@ public class SkillFragment extends Fragment {
     private int itemWidth;
     private Map<String, Object> documentSnapshot;
     private int percentage;
+    private Context context;
 
 
     public static SkillFragment getInstance() {
@@ -117,6 +119,12 @@ public class SkillFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         documentSnapshot = TeacherDataStore.getInstance().getDocumentSnapshot();
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.context = context;
     }
 
     @Override
@@ -292,19 +300,19 @@ public class SkillFragment extends Fragment {
         final Map<String, Boolean> achievements = (Map<String, Boolean>) documentSnapshot.get("achievements");
         Boolean premier = achievements.get("premier");
         if (premier) {
-            addInstantDBtn.setImageDrawable(getResources().getDrawable(R.drawable.dume_instant_image));
+            addInstantDBtn.setImageDrawable(context.getResources().getDrawable(R.drawable.dume_instant_image));
         } else{
-            addInstantDBtn.setImageDrawable(getResources().getDrawable(R.drawable.dume_instant_grayscale_image));
+            addInstantDBtn.setImageDrawable(context.getResources().getDrawable(R.drawable.dume_instant_grayscale_image));
 
         }
         String beh = (String) documentSnapshot.get("pro_com_%");
         int percentage = Integer.parseInt(beh);
         if (percentage >= 95) {
-            addRegularDBtn.setImageDrawable(getResources().getDrawable(R.drawable.dume_regular_image));
-            addDumeGangBtn.setImageDrawable(getResources().getDrawable(R.drawable.dume_gang_image));
+            addRegularDBtn.setImageDrawable(context.getResources().getDrawable(R.drawable.dume_regular_image));
+            addDumeGangBtn.setImageDrawable(context.getResources().getDrawable(R.drawable.dume_gang_image));
         }else {
-            addRegularDBtn.setImageDrawable(getResources().getDrawable(R.drawable.dume_regular_grayscale_image));
-            addDumeGangBtn.setImageDrawable(getResources().getDrawable(R.drawable.dume_gang_grayscale_image));
+            addRegularDBtn.setImageDrawable(context.getResources().getDrawable(R.drawable.dume_regular_grayscale_image));
+            addDumeGangBtn.setImageDrawable(context.getResources().getDrawable(R.drawable.dume_gang_grayscale_image));
 
         }
     }

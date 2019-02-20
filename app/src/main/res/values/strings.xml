@@ -673,5 +673,6 @@ provided.Tap salary for details.  </string>
     <string name="regular_salary_detail">Regular Dume final salary will be the price presented based on your given salary range &amp; it will be shown to you before your confirmation. Tap help for details.</string>
     <string name="instant_salary_detail">Instant Dume final salary will be the price presented based on your given salary range &amp; it will be shown to you before your confirmation. Tap help for details.</string>
     <string name="msg_token_fmt">foo</string>
+    <string name="demo_user_name">Demo user</string>
 
 </resources>

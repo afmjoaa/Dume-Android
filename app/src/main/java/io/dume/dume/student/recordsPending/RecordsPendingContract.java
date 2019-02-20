@@ -1,5 +1,7 @@
 package io.dume.dume.student.recordsPending;
 
+import io.dume.dume.teacher.homepage.TeacherContract;
+
 public interface RecordsPendingContract {
     interface View {
 
@@ -20,6 +22,7 @@ public interface RecordsPendingContract {
     }
 
     interface Model {
+
 
         void recordsPendingHawwa();
     }

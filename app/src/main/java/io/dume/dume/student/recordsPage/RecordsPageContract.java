@@ -35,5 +35,7 @@ public interface RecordsPageContract {
         void recordsPageHawwa();
 
         void getRecords(TeacherContract.Model.Listener<List<Record>> listener);
+
+        void changeRecordStatus(String recordId, String status, TeacherContract.Model.Listener<Void> listener);
     }
 }

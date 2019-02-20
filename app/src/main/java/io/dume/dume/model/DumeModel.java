@@ -12,6 +12,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.GeoPoint;
@@ -71,7 +72,7 @@ public class DumeModel implements TeacherModel {
         HashMap<String, Object> dataMap = new HashMap<>();
         dataMap.put("status", skill.isStatus());
         dataMap.put("salary", skill.getSalary());
-        dataMap.put("creation", skill.getCreation());
+        dataMap.put("creation", FieldValue.serverTimestamp());
         dataMap.put("jizz", skill.getJizz());
         dataMap.put("rating", skill.getRating());
         dataMap.put("totalRating", skill.getTotalRating());

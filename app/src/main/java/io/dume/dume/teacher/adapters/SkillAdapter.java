@@ -435,8 +435,8 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             });
 
             HashMap<String, Object> jizz = skillList.get(i).getJizz();
-            if (getLast(i) != null) {
-                final Object o = jizz.get(getLast(i));
+            if (getLast(jizz) != null) {
+                final Object o = getLast(jizz);
                 myViewHolder.skillTitleTV.setText(o.toString() + " / " + jizz.get("Category"));
                 myViewHolder.categoryAvatar.setImageResource(iconList.get(jizz.get("Category")));
                 String mainSsss = o.toString();
@@ -446,7 +446,7 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 likes = likes + Integer.parseInt(skillList.get(i).getLikes().get(splited).toString());
                 dislikes = dislikes +  Integer.parseInt(skillList.get(i).getDislikes().get(splited).toString());
             }
-            myViewHolder.likeTV.setText((likes-3) + " likes");
+            myViewHolder.likeTV.setText((likes-splitMainSsss.length) + " likes");
 
         } else {//fragment start here
             SkillFVH myFragmentHolder = (SkillFVH) holder;
@@ -478,16 +478,15 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             ViewGroup.LayoutParams layoutParams = myFragmentHolder.hostingRelative.getLayoutParams();
             layoutParams.width = (itemWidth);
             myFragmentHolder.hostingRelative.setLayoutParams(layoutParams);
-            //common code here
+
+
             HashMap<String, Object> jizz = skillList.get(i).getJizz();
-            if (getLast(i) != null) {
-                final Object o = jizz.get(getLast(i));
-                myFragmentHolder.skillTitleTV.setText(o.toString() + " / " + jizz.get("Category"));
-                String mainSsss = o.toString();
-                splitMainSsss = mainSsss.split("\\s*(=>|,|\\s)\\s*");
+            if (getLast(jizz) != null) {
+                String o = getLast(jizz);
+                myFragmentHolder.skillTitleTV.setText(o + " / " + jizz.get("Category"));
+                splitMainSsss = o.split("\\s*(=>|,|\\s)\\s*");
             }
             myFragmentHolder.switchCompat.setChecked(skillList.get(i).isStatus());
-
             for (String splited : splitMainSsss) {
                 likes = likes + Integer.parseInt(skillList.get(i).getLikes().get(splited).toString());
                 dislikes = dislikes +  Integer.parseInt(skillList.get(i).getDislikes().get(splited).toString());
@@ -510,7 +509,7 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         }
     }
 
-    public String getLast(int i) {
+   /* public String getLast(int i) {
         HashMap<String, Object> jizz = skillList.get(i).getJizz();
         for (int j = 0; j < endOfNest.size(); j++) {
             if (jizz.containsKey(endOfNest.get(j))) {
@@ -518,7 +517,7 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             }
         }
         return null;
-    }
+    }*/
 
 
     public void update(ArrayList<Skill> skillList) {

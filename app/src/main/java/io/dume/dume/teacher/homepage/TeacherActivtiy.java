@@ -669,7 +669,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
                 startActivity(new Intent(getApplicationContext(), EditAccount.class));
                 break;
             case R.id.al_records:
-                startActivity(new Intent(this, RecordsPageActivity.class));
+                startActivity(new Intent(this, RecordsPageActivity.class).setAction(DumeUtils.TEACHER));
                 break;
             case R.id.al_messages:
                 startActivity(new Intent(this, InboxActivity.class));
@@ -733,7 +733,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
                 startActivity(new Intent(this, PrivacyPolicyActivity.class));
                 break;
             case R.id.records:
-                startActivity(new Intent(this, RecordsPageActivity.class));
+                startActivity(new Intent(this, RecordsPageActivity.class).setAction(DumeUtils.TEACHER));
                 break;
             case R.id.heat_map:
                 startActivity(new Intent(this, HeatMapActivity.class));

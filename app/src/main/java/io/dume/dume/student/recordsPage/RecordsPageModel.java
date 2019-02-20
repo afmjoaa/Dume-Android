@@ -2,7 +2,10 @@ package io.dume.dume.student.recordsPage;
 
 import android.app.Activity;
 import android.content.Context;
+import android.support.annotation.NonNull;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
@@ -45,7 +48,7 @@ public class RecordsPageModel implements RecordsPageContract.Model {
     public void getRecords(TeacherContract.Model.Listener<List<Record>> listener) {
 
         Google google = Google.getInstance();
-        String pre=null;
+        String pre = null;
         if (google.getAccountMajor() != null) {
             if (google.getAccountMajor().equals(DumeUtils.TEACHER)) {
                 pre = "sp_";
@@ -72,7 +75,7 @@ public class RecordsPageModel implements RecordsPageContract.Model {
                                 String subjectExchange;
                                 String date;
                                 String mentorDpUrl;
-                                String studentDpUrl;
+                                String studentDpUrl, sGender, mGender;
                                 float studentRating;
                                 float mentorRating;
                                 String status;
@@ -89,12 +92,13 @@ public class RecordsPageModel implements RecordsPageContract.Model {
                                 studentName = (String) forMap.get("stu_name");
                                 studentDpUrl = (String) forMap.get("request_avatar");
                                 salaryInDemand = String.valueOf((Double) data.get("salary"));
+                                sGender = (String) forMap.get("request_gender");
+                                mGender = (String) spMap.get("gender");
                                 subjectExchange = DumeUtils.getLast((Map<String, Object>) data.get("jizz"));
                                 Date creation = (Date) data.get("creation");
-
                                 date = creation.toString();
                                 status = (String) data.get("record_status");
-                                Record record = new Record(mentorName, studentName, salaryInDemand, subjectExchange, date, mentorDpUrl, studentDpUrl, studentRating, mentorRating, status, Record.DELIVERED);
+                                Record record = new Record(mentorName, studentName, salaryInDemand, subjectExchange, creation, mentorDpUrl, studentDpUrl, studentRating, mentorRating, status, Record.DELIVERED, sGender, mGender);
                                 recordList.add(record);
                             }
                             listener.onSuccess(recordList);
@@ -106,6 +110,21 @@ public class RecordsPageModel implements RecordsPageContract.Model {
                 }
 
 
+            }
+        });
+    }
+
+    @Override
+    public void changeRecordStatus(String recordId,String status, TeacherContract.Model.Listener<Void> listener) {
+        firestore.document("records/" + recordId).update("record_status", status).addOnSuccessListener((Activity) context, new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                listener.onSuccess(aVoid);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                listener.onError(e.getLocalizedMessage());
             }
         });
     }

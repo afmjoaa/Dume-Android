@@ -24,7 +24,14 @@ import java.util.Map;
 import javax.annotation.Nullable;
 
 import io.dume.dume.Google;
+import io.dume.dume.common.contactActivity.ContactActivityModel;
+import io.dume.dume.common.contactActivity.ContactData;
+import io.dume.dume.common.inboxActivity.InboxCallData;
+import io.dume.dume.common.inboxActivity.InboxNotiData;
+import io.dume.dume.common.inboxActivity.Notif;
+import io.dume.dume.student.recordsPage.RecordsPageModel;
 import io.dume.dume.teacher.homepage.TeacherContract;
+import io.dume.dume.teacher.homepage.TeacherModel;
 import io.dume.dume.teacher.pojo.Letter;
 
 public class DemoModel {
@@ -32,10 +39,105 @@ public class DemoModel {
     private final Context context;
     private ListenerRegistration listenerRegistration;
 
+
     public DemoModel(Context context) {
+
         this.context = context;
         firestore = FirebaseFirestore.getInstance();
     }
+
+
+    public void getPhoneNumberList(TeacherContract.Model.Listener<List<InboxCallData>> listener) {
+
+        if (FirebaseAuth.getInstance().getUid() == null) {
+            listener.onError("Error Type : Session Expired. Please Login To Feel Better");
+            return;
+        }
+
+        Query query = firestore.collection("records").whereArrayContains("participants", FirebaseAuth.getInstance().getUid());
+        query.addSnapshotListener((Activity) context, (queryDocumentSnapshots, e) -> {
+            if (e != null) {
+                listener.onError("Error Code : " + e.getCode() + " \n" + e.getLocalizedMessage());
+
+            } else {
+                List<DocumentSnapshot> documents = queryDocumentSnapshots != null ? queryDocumentSnapshots.getDocuments() : null;
+                if ((documents != null ? documents.size() : 0) > 0) {
+                    List<InboxCallData> list = new ArrayList<>();
+                    List<String> fooList = new ArrayList<>();
+                    for (DocumentSnapshot record : documents) {
+                        String gender = "";
+                        String name = "";
+                        String avatar = "";
+                        String phone = "";
+                        Map<String, Object> sp_info = (Map<String, Object>) record.get("sp_info");
+                        Map<String, Object> sh_info = (Map<String, Object>) record.get("for_whom");
+
+
+                        String record_status = (String) record.get("record_status");
+                        String sh_uid = record.getString("sh_uid");
+                        List<String> pList = (List<String>) record.get("participants");
+                        int participant;
+                        String opponent_uid;
+                        if (pList != null) {
+                            participant = pList.indexOf(FirebaseAuth.getInstance().getUid());
+                        } else {
+                            listener.onError("Participant Not Found");
+                            return;
+                        }
+                        if (participant == 0) {
+                            opponent_uid = pList.get(1);
+                        } else {
+                            opponent_uid = pList.get(0);
+                        }
+                        /*I am Student*/
+                        if (sh_uid.endsWith(FirebaseAuth.getInstance().getUid())) {
+                            if (sp_info != null) {
+                                gender = (String) sp_info.get("gender");
+                                avatar = (String) sp_info.get("avatar");
+                                name = sp_info.get("first_name") + " " + sp_info.get("last_name");
+                                phone = (String) sp_info.get("phone_number");
+                            }
+                        }/*I am Teacher*/ else {
+                            if (sh_info != null) {
+                                gender = (String) sh_info.get("request_gender");
+                                String stu_photo = (String) sh_info.get("stu_photo");
+                                if (stu_photo != null && !sh_info.get("stu_photo").equals("")) {
+                                    avatar = stu_photo;
+                                } else avatar = (String) sh_info.get("request_avatar");
+                                name = (String) sh_info.get("stu_name");
+                                phone = (String) sh_info.get("stu_phone_number");
+
+                            }
+                        }
+
+
+                        InboxCallData inboxCallData = new InboxCallData(name, avatar, phone, opponent_uid);
+
+                        if (record_status != null && (record_status.equals("Accepted") || record_status.equals("Current"))) {
+                            if (fooList.contains(opponent_uid)) {
+
+                            } else {
+                                fooList.add(opponent_uid);
+                                list.add(inboxCallData);
+                            }
+                        }
+
+
+                    }
+
+                    if (list.size() > 0) {
+                        listener.onSuccess(list);
+
+                    } else listener.onError("No Phone Records");
+                } else {
+                    listener.onError("You don't have any records right now. \nRecord is a deal between Mentor and Students");
+                }
+
+
+            }
+        });
+    }
+
 
     public void addMessage(String roomId, Letter letter, TeacherContract.Model.Listener<Void> listener) {
 
@@ -146,31 +248,33 @@ public class DemoModel {
         else return foo;
     }
 
-    public void getNotification(String uid, TeacherContract.Model.Listener<List<Notif>> listener) {
+    public void getNotification(String uid, TeacherContract.Model.Listener<List<InboxNotiData>> listener) {
         if (uid != null && !uid.equals("")) {
-            Query query = firestore.collection("push_notifications").whereEqualTo("uid", uid).orderBy("timestamp", Query.Direction.ASCENDING);
+            Query query = firestore.collection("push_notifications").whereEqualTo("uid", uid).orderBy("date", Query.Direction.DESCENDING);/*.orderBy("timestamp", Query.Direction.ASCENDING);*/
             query.addSnapshotListener((Activity) context, new EventListener<QuerySnapshot>() {
                 @Override
                 public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                     List<DocumentSnapshot> documents = null;
-                    List<Notif> list = new ArrayList<>();
+                    List<InboxNotiData> list = new ArrayList<>();
                     if (queryDocumentSnapshots != null) {
                         documents = queryDocumentSnapshots.getDocuments();
                         if (documents.size() > 0) {
-                            for (int i = 0; i < documents.size(); i++) {
-                                Map<String, Object> data = documents.get(i).getData();
-                                if (data != null) {
-                                    String name = (String) data.get("name");
-                                    String title = (String) data.get("title");
-                                    String body = (String) data.get("reason");
-                                    String uid = (String) data.get("uid");
-                                    String token = (String) data.get("token");
-                                    list.add(new Notif(name, title, body, uid, token));
+                            for (DocumentSnapshot documentSnapshot : documents) {
+                                InboxNotiData inboxNotiData = documentSnapshot.toObject(InboxNotiData.class);
+                                if (inboxNotiData != null) {
+                                    inboxNotiData.setDoc_id(documentSnapshot.getId());
+                                    list.add(inboxNotiData);
                                 }
                             }
                             listener.onSuccess(list);
-                        } else listener.onError("");
-                    } else listener.onError("");
+                        } else listener.onError("Empty Notification");
+                    } else {
+                        listener.onError("Unknown Error From Notification" + e.getMessage());
+                        Log.w("foo", e.getMessage());
+
+                    }
+
+
                 }
             });
 

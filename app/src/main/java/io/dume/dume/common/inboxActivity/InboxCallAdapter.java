@@ -1,6 +1,8 @@
 package io.dume.dume.common.inboxActivity;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.jackandphantom.circularprogressbar.CircleProgressbar;
 
 import java.util.List;
@@ -16,7 +19,7 @@ import java.util.List;
 import carbon.widget.ImageView;
 import io.dume.dume.R;
 
-public class InboxCallAdapter extends RecyclerView.Adapter<InboxCallAdapter.MyViewHolder>{
+public class InboxCallAdapter extends RecyclerView.Adapter<InboxCallAdapter.MyViewHolder> {
 
     private static final String TAG = "InboxCallAdapter";
     private LayoutInflater inflater;
@@ -39,27 +42,21 @@ public class InboxCallAdapter extends RecyclerView.Adapter<InboxCallAdapter.MyVi
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        switch (position){
-            case 1:
-                //testing offline
-                holder.onlineIndicator.setVisibility(View.GONE);
-                holder.offlineIndicator.setVisibility(View.VISIBLE);
-                break;
-            case 2:
-                //testing selected item
-                holder.chatUserDP.setHeight((int) (44*context.getResources().getDisplayMetrics().density));
-                holder.chatUserDP.setWidth((int) (44*context.getResources().getDisplayMetrics().density));
-                break;
-            case 4:
-                //testing call icon
-                holder.callSendOrReceived.setImageResource(R.drawable.ic_call_made_black_24dp);
-                break;
-        }
+        InboxCallData inboxCallData = data.get(position);
+        holder.callUserName.setText(inboxCallData.userName);
+        holder.frequencyAndTime.setText("+88" + inboxCallData.phoneNumber);
+        Glide.with(context).load(inboxCallData.avatar).into(holder.chatUserDP);
+        holder.hostRelativeLayout.setOnClickListener(view -> {
+            Uri u = Uri.parse("tel:" + inboxCallData.phoneNumber);
+            Intent i = new Intent(Intent.ACTION_DIAL, u);
+            context.startActivity(i);
+        });
+        holder.callBtnImage.setOnClickListener(view -> holder.hostRelativeLayout.performClick());
     }
 
     @Override
     public int getItemCount() {
-        return 10;
+        return data.size();
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {

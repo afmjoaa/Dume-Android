@@ -826,7 +826,7 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
 
     @Override
     public void gotoRecordsPage() {
-        startActivity(new Intent(this, RecordsPageActivity.class));
+        startActivity(new Intent(this, RecordsPageActivity.class).setAction(DumeUtils.STUDENT));
     }
 
     @Override

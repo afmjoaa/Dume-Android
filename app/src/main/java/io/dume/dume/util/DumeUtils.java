@@ -37,25 +37,29 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.TimeZone;
+import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import io.dume.dume.Google;
 import io.dume.dume.R;
 import io.dume.dume.student.pojo.SearchDataStore;
+import io.dume.dume.student.recordsPage.Record;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
+import static com.facebook.FacebookSdk.removeLoggingBehavior;
 
 public class DumeUtils {
     public static final String TEACHER = "teacher";
@@ -519,11 +523,35 @@ public class DumeUtils {
         }
         return mQuery.toString();
     }
+
+    public static List<DocumentSnapshot> filterList(List<DocumentSnapshot> list, String identifier) {
+        List<DocumentSnapshot> returnList = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            DocumentSnapshot record = list.get(i);
+            if (identifier.equals(record.get("record_status"))) {
+                returnList.add(record);
+            }
+        }
+        return returnList;
+    }
+
+    public static List<Record> filterRecord(List<Record> list, String identifier) {
+        List<Record> returnList = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            Record record = list.get(i);
+            if (identifier.equals(record.getStatus())) {
+                returnList.add(record);
+            }
+        }
+        return returnList;
+    }
+
+
     public static String getLast(Map<String, Object> jizz) {
         endOfNest = new ArrayList<>(Arrays.asList("Subject", "Field", "Software", "Language", "Flavour", "Type", "Course", " Language "));
         for (int j = 0; j < endOfNest.size(); j++) {
             if (jizz.containsKey(endOfNest.get(j))) {
-                return endOfNest.get(j);
+                return (String) jizz.get(endOfNest.get(j));
             }
         }
         return "undefined";
@@ -579,6 +607,7 @@ public class DumeUtils {
                 return 5;
         }
     }
+
 
     public static int giveIconOnCategoryName(String TabName) {
         switch (TabName) {
