@@ -85,7 +85,6 @@ public class ContactActivityModel implements ContactActivityContact.Model {
                         } else {
                             pUid = pList.get(0);
                         }
-                        FieldValue.arrayRemove()
                         /*I am Student*/
                         if (sh_uid.endsWith(FirebaseAuth.getInstance().getUid())) {
                             if (sp_info != null) {
