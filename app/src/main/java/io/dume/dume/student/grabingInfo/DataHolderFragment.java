@@ -134,7 +134,6 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
         } else {
             //not visible here
         }
-
     }
 
 
