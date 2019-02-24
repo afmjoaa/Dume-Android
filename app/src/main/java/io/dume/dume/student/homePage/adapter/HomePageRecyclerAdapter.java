@@ -2,13 +2,11 @@ package io.dume.dume.student.homePage.adapter;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.view.animation.FastOutLinearInInterpolator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,7 +30,6 @@ import java.util.List;
 
 import io.dume.dume.Google;
 import io.dume.dume.R;
-import io.dume.dume.student.homePage.HomePageActivity;
 import io.dume.dume.student.homePage.HomePageModel;
 import io.dume.dume.teacher.homepage.TeacherContract;
 import me.zhanghai.android.materialratingbar.MaterialRatingBar;
@@ -79,11 +76,6 @@ public class HomePageRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
         return new RatingVH(view);
     }
 
-    private void notifyBar() {
-        notifyDataSetChanged();
-
-    }
-
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder.getItemViewType() > 9000) {
@@ -100,8 +92,7 @@ public class HomePageRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
                     @Override
                     public void onSuccess(String list) {
                         Toast.makeText(context, list, Toast.LENGTH_SHORT).show();
-                        data.remove(position);
-                        notifyBar();
+                        removePromo(position);
                     }
 
                     @Override
@@ -211,17 +202,25 @@ public class HomePageRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
 
     public void addNewData(HomePageRatingData currentRatingDataList) {
         ratingData.add(currentRatingDataList);
+        notifyItemInserted(data.size() - 1);
         notifyDataSetChanged();
     }
 
     public void removeRatingItem(int postion) {
         ratingData.remove(postion);
-
+        notifyItemRemoved(postion);
         notifyDataSetChanged();
     }
 
     public void addPromoToList(HomePageRecyclerData promoData) {
         data.add(promoData);
+        notifyItemInserted(data.size() - 1);
+        notifyDataSetChanged();
+    }
+
+    private void removePromo(int position) {
+        data.remove(position);
+        notifyItemRemoved(position);
         notifyDataSetChanged();
     }
 

@@ -322,6 +322,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
                         skillFragment.noDataBlock.setVisibility(View.GONE);
                     }
                 }
+                skillFragment.changeAddSkillBtnColor();
                 break;
             case 5:
                 break;

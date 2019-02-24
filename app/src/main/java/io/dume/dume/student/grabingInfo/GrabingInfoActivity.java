@@ -693,13 +693,11 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                         for (Skill item : skillArrayList) {
                             if (item.getQuery_string().equals(queryString)) {
                                 flush("Skill Already Exists");
-                                flush("default ");
                                 if(retrivedAction.startsWith("frag")){
                                     hideProgress();
-                                    flush("it's here ");
                                     Intent intent = new Intent(GrabingInfoActivity.this, SkillActivity.class);
                                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                    finishAffinity();
+                                    //finishAffinity();
                                     startActivity(intent);
                                     finish();
                                 }else{
@@ -707,7 +705,6 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                                     Intent intent = new Intent(GrabingInfoActivity.this, SkillActivity.class);
                                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                                     startActivity(intent);
-                                    flush("i should not be here ");
                                 }
                                 return;
                             }
@@ -732,19 +729,16 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                         teacherModel.saveSkill(skill, new TeacherContract.Model.Listener<Void>() {
                             @Override
                             public void onSuccess(Void list) {
-                                flush("default ");
                                 if(retrivedAction.startsWith("frag")){
                                     hideProgress();
-                                    flush("it's here ");
                                     Intent intent = new Intent(GrabingInfoActivity.this, SkillActivity.class).setAction("skill_added");
                                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                    finishAffinity();
+                                    //finishAffinity();
                                     startActivity(intent);
                                     finish();
                                 }else{
                                     //| Intent.FLAG_ACTIVITY_CLEAR_TASK
                                     hideProgress();
-                                    flush("i should not be here " + getIntent().getAction());
                                     Intent intent = new Intent(GrabingInfoActivity.this, SkillActivity.class).setAction("skill_added");
                                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                                     startActivity(intent);

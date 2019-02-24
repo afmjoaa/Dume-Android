@@ -201,6 +201,7 @@ public class SkillFragment extends Fragment {
         addInstantDBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                documentSnapshot = TeacherDataStore.getInstance().getDocumentSnapshot();
                 final Map<String, Boolean> achievements = (Map<String, Boolean>) documentSnapshot.get("achievements");
                 Boolean premier = achievements.get("premier");
                 if (isProfileOK()) {
@@ -287,7 +288,8 @@ public class SkillFragment extends Fragment {
         startActivity(intent);
     }
 
-    private void changeAddSkillBtnColor() {
+    public void changeAddSkillBtnColor() {
+        documentSnapshot = TeacherDataStore.getInstance().getDocumentSnapshot();
         final Map<String, Boolean> achievements = (Map<String, Boolean>) documentSnapshot.get("achievements");
         Boolean premier = achievements.get("premier");
         if (premier) {
