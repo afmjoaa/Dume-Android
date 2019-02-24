@@ -30,9 +30,6 @@ public class RecordsCurrentPresenter implements RecordsCurrentContract.Presenter
     @Override
     public void onRecordsCurrentIntracted(View view) {
         switch (view.getId()) {
-            case R.id.current_contact_btn:
-                mView.contactBtnClicked();
-                break;
             /*case R.id.package_search_btn:
                 mView.executeSearchActivity();
                 break;*/

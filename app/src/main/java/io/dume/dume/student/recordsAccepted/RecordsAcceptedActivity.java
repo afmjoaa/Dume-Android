@@ -102,10 +102,8 @@ public class RecordsAcceptedActivity extends CustomStuAppCompatActivity implemen
     private static final int fromFlag = 22;
     private ViewPager pager;
     private SectionsPagerAdapter myPagerAdapter;
-    private Button acceptContactBtn;
-    private BottomSheetDialog mBottomSheetContactDialog;
-    private View contactSheetView;
     private String retriveAction = null;
+    private RecordsAcceptedModel mModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,7 +111,8 @@ public class RecordsAcceptedActivity extends CustomStuAppCompatActivity implemen
         setContentView(R.layout.stu12_activity_records_accepted);
         setActivityContext(this, fromFlag);
         findLoadView();
-        mPresenter = new RecordsAcceptedPresenter(this, new RecordsAcceptedModel());
+        mModel = new RecordsAcceptedModel(this);
+        mPresenter = new RecordsAcceptedPresenter(this, mModel);
         mPresenter.recordsAcceptedEnqueue();
         DumeUtils.configureAppbar(this, "Accepted Requests");
         if (getIntent().getAction() != null) {
@@ -124,7 +123,7 @@ public class RecordsAcceptedActivity extends CustomStuAppCompatActivity implemen
     @Override
     public void findView() {
         pager = (ViewPager) findViewById(R.id.accepted_page_container);
-        acceptContactBtn = findViewById(R.id.accepted_contact_btn);
+
 
     }
 
@@ -140,13 +139,6 @@ public class RecordsAcceptedActivity extends CustomStuAppCompatActivity implemen
         pager.setAdapter(myPagerAdapter);
     }
 
-    @Override
-    public void contactBtnClicked() {
-        mBottomSheetContactDialog = new BottomSheetDialog(this);
-        contactSheetView = this.getLayoutInflater().inflate(R.layout.custom_bottom_sheet_dialogue_call_msg, null);
-        mBottomSheetContactDialog.setContentView(contactSheetView);
-        mBottomSheetContactDialog.show();
-    }
 
     public void onRecordsAcceptedViewClicked(View view) {
         mPresenter.onRecordsAcceptedIntracted(view);
@@ -252,6 +244,22 @@ public class RecordsAcceptedActivity extends CustomStuAppCompatActivity implemen
         private Button getDirectionBtn;
         private carbon.widget.ImageView mMarkerImageView;
         private View mCustomMarkerView;
+        private BottomSheetDialog mBottomSheetReject;
+        private View sheetViewReject;
+        private TextView rejectMainText;
+        private TextView rejectSubText;
+        private Button rejectYesBtn;
+        private Button rejectNoBtn;
+        private Button acceptContactBtn;
+        private Button cancelRequestBtn;
+        private View divider;
+        private BottomSheetDialog mBottomSheetContactDialog;
+        private View contactSheetView;
+        private TextView contactMainText;
+        private TextView contactSubText;
+        private Button callBtn;
+        private Button offlineMsgBtn;
+        private Button onlineMsgBtn;
 
 
         public PlaceholderFragment() {
@@ -357,15 +365,9 @@ public class RecordsAcceptedActivity extends CustomStuAppCompatActivity implemen
             subjectInDemand = rootView.findViewById(R.id.subject_in_demand);
             salaryInDemandTV = rootView.findViewById(R.id.salary_in_demand);
 
-            FragmentManager fm = getChildFragmentManager();
-            SupportMapFragment mapFragment = (SupportMapFragment) fm.findFragmentByTag("mapFragment");
-            if (mapFragment == null) {
-                mapFragment = new SupportMapFragment();
-                FragmentTransaction ft = fm.beginTransaction();
-                ft.add(R.id.location_layout_vertical, mapFragment, "mapFragment");
-                ft.commit();
-                fm.executePendingTransactions();
-            }
+            acceptContactBtn = rootView.findViewById(R.id.accepted_contact_btn);
+            cancelRequestBtn = rootView.findViewById(R.id.pendding_cancel_btn);
+            divider = rootView.findViewById(R.id.divider3);
 
             //setting the qualification recycler view
             List<Academic> academicList = new ArrayList<>();
@@ -380,6 +382,7 @@ public class RecordsAcceptedActivity extends CustomStuAppCompatActivity implemen
             reviewRecyView.setLayoutManager(new LinearLayoutManager(myThisActivity));
             onMentorSelect(record);
             configFragmentBtnClick();
+            toggleStatus();
             return rootView;
         }
 
@@ -471,7 +474,7 @@ public class RecordsAcceptedActivity extends CustomStuAppCompatActivity implemen
                                 myThisActivity, R.raw.loading_map_style_one);
                         googleMap.setMapStyle(style);
                         googleMap.getUiSettings().setMyLocationButtonEnabled(true);
-                        if(myThisActivity.retriveAction != null){
+                        if (myThisActivity.retriveAction != null) {
                             switch (myThisActivity.retriveAction) {
                                 case DumeUtils.STUDENT:
                                     googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mentor_location_lat_lng, 15.25f));
@@ -725,6 +728,117 @@ public class RecordsAcceptedActivity extends CustomStuAppCompatActivity implemen
                 }
                 qualificaitonRecyAda.update(academicList);
             }
+        }
+
+        public void toggleStatus() {
+
+            //confirm bottom sheet
+            Map<String, Object> documentData = record.getData();
+            Map<String, Object> spMap = (Map<String, Object>) documentData.get("sp_info");
+            Map<String, Object> forMap = (Map<String, Object>) documentData.get("for_whom");
+            String mentorName = spMap.get("first_name") + " " + spMap.get("last_name");
+            String studentName = (String) forMap.get("stu_name");
+
+            //cancel bottom sheet
+            mBottomSheetReject = new BottomSheetDialog(context);
+            sheetViewReject = this.getLayoutInflater().inflate(R.layout.custom_bottom_sheet_dialogue_cancel, null);
+            mBottomSheetReject.setContentView(sheetViewReject);
+            rejectMainText = mBottomSheetReject.findViewById(R.id.main_text);
+            rejectSubText = mBottomSheetReject.findViewById(R.id.sub_text);
+            rejectYesBtn = mBottomSheetReject.findViewById(R.id.cancel_yes_btn);
+            rejectNoBtn = mBottomSheetReject.findViewById(R.id.cancel_no_btn);
+            if (rejectMainText != null && rejectSubText != null && rejectYesBtn != null && rejectNoBtn != null) {
+                rejectMainText.setText("Reject Request");
+                rejectSubText.setText("By Rejecting you are making sure you are not willing to mentor " + studentName);
+                rejectYesBtn.setText("Yes, Reject");
+                rejectNoBtn.setText("No");
+                rejectYesBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        myThisActivity.showProgress();
+                        acceptContactBtn.setEnabled(false);
+                        cancelRequestBtn.setEnabled(false);
+                        myThisActivity.mModel.changeRecordStatus(record.getId(), "Rejected", new TeacherContract.Model.Listener<Void>() {
+                            @Override
+                            public void onSuccess(Void list) {
+                                myThisActivity.hideProgress();
+                                Toast.makeText(myThisActivity, "Status Changed To Rejected", Toast.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void onError(String msg) {
+                                acceptContactBtn.setEnabled(true);
+                                cancelRequestBtn.setEnabled(true);
+                                myThisActivity.showProgress();
+                                Toast.makeText(myThisActivity, msg, Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                });
+                rejectNoBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        mBottomSheetReject.dismiss();
+                    }
+                });
+            }
+
+
+            mBottomSheetContactDialog = new BottomSheetDialog(context);
+            contactSheetView = this.getLayoutInflater().inflate(R.layout.custom_bottom_sheet_dialogue_call_msg, null);
+            mBottomSheetContactDialog.setContentView(contactSheetView);
+            contactMainText = mBottomSheetContactDialog.findViewById(R.id.main_text);
+            contactSubText = mBottomSheetContactDialog.findViewById(R.id.sub_text);
+            callBtn = mBottomSheetContactDialog.findViewById(R.id.call_btn);
+            offlineMsgBtn = mBottomSheetContactDialog.findViewById(R.id.offline_msg_btn);
+            onlineMsgBtn = mBottomSheetContactDialog.findViewById(R.id.online_msg_btn);
+            if (contactMainText != null && contactSubText != null && callBtn != null && offlineMsgBtn != null && onlineMsgBtn != null) {
+
+                callBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                    }
+                });
+
+                offlineMsgBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                    }
+                });
+
+                onlineMsgBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                    }
+                });
+            }
+
+            switch (myThisActivity.retriveAction) {
+                case DumeUtils.STUDENT:
+                    cancelRequestBtn.setVisibility(View.GONE);
+                    divider.setVisibility(View.GONE);
+                    contactMainText.setText("Contact with " + mentorName);
+                    break;
+                case DumeUtils.TEACHER:
+                    contactMainText.setText("Contact with " + studentName);
+                    break;
+                case DumeUtils.BOOTCAMP:
+                    break;
+                default:
+                    break;
+            }
+
+
+            acceptContactBtn.setOnClickListener(view -> {
+                mBottomSheetContactDialog.show();
+            });
+            cancelRequestBtn.setOnClickListener(view -> {
+                mBottomSheetReject.show();
+            });
+
         }
 
         public void configFragmentBtnClick() {

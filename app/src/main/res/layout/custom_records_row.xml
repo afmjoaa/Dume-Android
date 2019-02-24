@@ -168,6 +168,7 @@
             android:layout_height="20dp"
             android:layout_marginBottom="5dp"
             android:contentDescription="ic_delivery"
+            android:visibility="gone"
             app:srcCompat="@drawable/ic_sms_delivered" />
 
     </LinearLayout>

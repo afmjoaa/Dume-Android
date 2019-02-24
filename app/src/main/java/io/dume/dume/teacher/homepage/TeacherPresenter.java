@@ -1,33 +1,43 @@
 package io.dume.dume.teacher.homepage;
 
 import android.graphics.Color;
+import android.util.Log;
 import android.view.View;
 
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
 import io.dume.dume.R;
+import io.dume.dume.student.common.ReviewHighlightData;
+import io.dume.dume.student.homePage.adapter.HomePageRatingData;
+import io.dume.dume.student.recordsPage.Record;
 import io.dume.dume.teacher.pojo.Feedback;
 import io.dume.dume.teacher.pojo.Inbox;
+import io.dume.dume.teacher.pojo.Stat;
 
 public class TeacherPresenter implements TeacherContract.Presenter {
 
     private static final String TAG = TeacherPresenter.class.getSimpleName().toString();
     private TeacherContract.View view;
-    private TeacherContract.Model model;
+    private TeacherModel model;
     private TeacherDataStore teachearDataStore;
 
 
-    public TeacherPresenter(TeacherContract.View view, TeacherContract.Model model) {
+    public TeacherPresenter(TeacherContract.View view, TeacherModel model) {
         this.view = view;
         this.model = model;
         teachearDataStore = TeacherDataStore.getInstance();
@@ -38,7 +48,7 @@ public class TeacherPresenter implements TeacherContract.Presenter {
     public void init() {
         view.init();
         view.configView();
-        model.getFeedBack(new TeacherContract.Model.Listener<ArrayList<Feedback>>() {
+        /*model.getFeedBack(new TeacherContract.Model.Listener<ArrayList<Feedback>>() {
             @Override
             public void onSuccess(ArrayList<Feedback> list) {
 
@@ -90,7 +100,7 @@ public class TeacherPresenter implements TeacherContract.Presenter {
             public void onError(String msg) {
                 view.flush(msg);
             }
-        });
+        });*/
 
     }
 
@@ -114,15 +124,45 @@ public class TeacherPresenter implements TeacherContract.Presenter {
                 view.setMsgName(view.generateMsgName(o1, o));
                 view.setDocumentSnapshot(documentSnapshot);
 
+                //setting the stat in teacherdataStore
+                Date date = new Date();
+                List<Stat> todayStatList = new ArrayList<>();
+                String dailyI = documentSnapshot.getString("daily_i");
+                String dailyR = documentSnapshot.getString("daily_r");
+                String pDailyI = documentSnapshot.getString("p_daily_i");
+                String pDailyR = documentSnapshot.getString("p_daily_r");
+                Stat todayStat = new Stat(dailyI, dailyR, date, FirebaseAuth.getInstance().getUid());
+                todayStatList.add(todayStat);
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(date);
+                calendar.add(Calendar.DAY_OF_MONTH, 1);
+                todayStat = new Stat(pDailyI, pDailyR, calendar.getTime(), FirebaseAuth.getInstance().getUid());
+                todayStatList.add(todayStat);
+                teachearDataStore.setTodayStatList(todayStatList);
+
                 view.setRating((Map<String, Object>) documentSnapshot.get("self_rating"));
                 /*Enams Code Goes Here*/
                 final Map<String, Object> selfRating = (Map<String, Object>) documentSnapshot.get("self_rating");
                 teachearDataStore.setSelfRating(selfRating);
                 teachearDataStore.setDocumentSnapshot(documentSnapshot.getData());
 
-                view.setUnreadMsg(documentSnapshot.getString("unread_msg"));
-                view.setUnreadNoti(documentSnapshot.getString("unread_noti"));
-                view.setUnreadRecords((Map<String, Object>) documentSnapshot.get("unread_records"));
+                String unread_msg = documentSnapshot.getString("unread_msg");
+                view.setUnreadMsg(unread_msg);
+                String unread_noti = documentSnapshot.getString("unread_noti");
+                view.setUnreadNoti(unread_noti);
+                Map<String, Object> unread_records = (Map<String, Object>) documentSnapshot.get("unread_records");
+                view.setUnreadRecords((Map<String, Object>) unread_records);
+                int badge = 0;
+                String unreadMsg = (String) documentSnapshot.get("unread_msg");
+                String unreadNoti = (String) documentSnapshot.get("unread_noti");
+                Map<String, Object> unreadRecords = (Map<String, Object>) documentSnapshot.get("unread_records");
+                String pendingCount = (String) unreadRecords.get("pending_count");
+                String acceptedCount = (String) unreadRecords.get("accepted_count");
+                String currentCount = (String) unreadRecords.get("current_count");
+                badge = Integer.parseInt(unreadMsg) + Integer.parseInt(unreadNoti) + Integer.parseInt(pendingCount) + Integer.parseInt(acceptedCount) +
+                        Integer.parseInt(currentCount);
+
+                view.updateBadge(String.valueOf(badge));
 
                 if (Objects.requireNonNull(documentSnapshot.getString("pro_com_%")).equals("100")) {
                     view.setProfileComPercent(documentSnapshot.getString("pro_com_%"));
@@ -130,22 +170,113 @@ public class TeacherPresenter implements TeacherContract.Presenter {
                     view.setProfileComPercent(documentSnapshot.getString("pro_com_%"));
                     view.showPercentSnackBar(documentSnapshot.getString("pro_com_%"));
                 }
+                //testing fucking code here
+                List<String> ratingArray = (List<String>) documentSnapshot.get("rating_array");
+                if (ratingArray != null && ratingArray.size() > 0) {
+                    for (int i = 0; i < ratingArray.size(); i++) {
+                        int finalI = i;
+                        model.getSingleRecords(ratingArray.get(i), new TeacherContract.Model.Listener<Record>() {
+                            @Override
+                            public void onSuccess(Record list) {
+                                String t_rate_status = list.getT_rate_status();
+                                switch (t_rate_status) {
+                                    case Record.DIALOG:
+                                        HomePageRatingData ratingDataList = new HomePageRatingData();
+                                        List<String> ratingDataItemName = new ArrayList<>();
+                                        ratingDataItemName.add("Expertise");
+                                        ratingDataItemName.add("Experience");
+                                        ratingDataItemName.add("Communication");
+                                        ratingDataItemName.add("Behaviour");
 
+
+                                        String subjectExchange[] = list.getSubjectExchange().split("\\s*(=>|,|\\s)\\s*");
+                                        for (int j = 0; j < subjectExchange.length; j++) {
+                                            ratingDataItemName.add(subjectExchange[j]);
+                                        }
+                                        ratingDataList.setRatingNameList(ratingDataItemName);
+                                        ratingDataList.setName(list.getMentorName());
+                                        ratingDataList.setAvatar(list.getMentorDpUrl());
+                                        view.testingCustomDialogue(ratingDataList);
+                                        break;
+                                    case Record.BOTTOM_SHEET:
+                                        HomePageRatingData currentRatingDataList = new HomePageRatingData();
+                                        List<String> currentRatingDataItemName = new ArrayList<>();
+                                        currentRatingDataItemName.add("Expertise");
+                                        currentRatingDataItemName.add("Experience");
+                                        currentRatingDataItemName.add("Communication");
+                                        currentRatingDataItemName.add("Behaviour");
+                                        String newSubjectExchange[] = list.getSubjectExchange().split("\\s*(=>|,|\\s)\\s*");
+                                        currentRatingDataItemName.addAll(Arrays.asList(newSubjectExchange));
+                                        currentRatingDataList.setRatingNameList(currentRatingDataItemName);
+                                        currentRatingDataList.setName(list.getMentorName());
+                                        currentRatingDataList.setAvatar(list.getMentorDpUrl());
+                                        view.showSingleBottomSheetRating(currentRatingDataList);
+                                        break;
+                                    case Record.DONE:
+                                        model.removeCompletedRating(ratingArray.get(finalI), new TeacherContract.Model.Listener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void list) {
+                                            }
+
+                                            @Override
+                                            public void onError(String msg) {
+                                                view.flush(msg);
+                                            }
+                                        });
+                                        break;
+                                }
+                            }
+
+                            @Override
+                            public void onError(String msg) {
+                                view.flush(msg);
+
+                            }
+                        });
+                    }
+                }
                 listener.onSuccess(null);
             }
 
             @Override
             public void onError(String msg) {
+                //listener.onError(msg);
                 view.flush(msg);
             }
         });
     }
 
+    @Override
+    public void loadStat(TeacherContract.Model.Listener<List<Stat>> listener) {
+        model.getStatList(new TeacherContract.Model.Listener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot list) {
+                List<DocumentSnapshot> documentSnapshots = list.getDocuments();
+                List<Stat> stat = new ArrayList<>();
+                for (int i = 0; i < list.size(); i++) {
+                    DocumentSnapshot document = documentSnapshots.get(i);
+                    Stat currentStat = document.toObject(Stat.class);
+                    if (currentStat != null) {
+                        currentStat.setIdentify(i);
+                    }
+                    stat.add(currentStat);
+                }
+                if (list.size() > 0) {
+                    listener.onSuccess(stat);
+                    teachearDataStore.setStat(stat);
+                } else listener.onError("No review");
+            }
+
+            @Override
+            public void onError(String msg) {
+                listener.onError("Empty Response");
+                Log.e(TAG, "onError: " + msg);
+            }
+        });
+    }
 
     @Override
     public void onButtonClicked() {
-
-
     }
 
     @Override

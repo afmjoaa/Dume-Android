@@ -4,14 +4,18 @@ import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import io.dume.dume.student.pojo.SearchDataStore;
 import io.dume.dume.teacher.pojo.Skill;
+import io.dume.dume.teacher.pojo.Stat;
 
 public class TeacherDataStore implements Serializable {
     private Map<String, Object> selfRating = null;
     private Map<String, Object> documentSnapshot;
+    private List<Stat> stat;
+    private List<Stat> todayStatList;
     private static TeacherDataStore teacherDataStore = null;
     private String packName;
     private ArrayList<Skill> skillArrayList = null;
@@ -36,6 +40,22 @@ public class TeacherDataStore implements Serializable {
             teacherDataStore = new TeacherDataStore();
         }
         return teacherDataStore;
+    }
+
+    public List<Stat> getTodayStatList() {
+        return todayStatList;
+    }
+
+    public void setTodayStatList(List<Stat> todayStatList) {
+        this.todayStatList = todayStatList;
+    }
+
+    public List<Stat> getStat() {
+        return stat;
+    }
+
+    public void setStat(List<Stat> stat) {
+        this.stat = stat;
     }
 
     public ArrayList<Skill> getSkillArrayList() {
@@ -96,14 +116,6 @@ public class TeacherDataStore implements Serializable {
 
     public String gettUserUid() {
         return tUserUid;
-    }
-
-    public static TeacherDataStore getTeacherDataStore() {
-        return teacherDataStore;
-    }
-
-    public static void setTeacherDataStore(TeacherDataStore teacherDataStore) {
-        TeacherDataStore.teacherDataStore = teacherDataStore;
     }
 
     public String getPackName() {

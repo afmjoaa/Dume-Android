@@ -6,7 +6,13 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+
+import io.dume.dume.student.homePage.adapter.HomePageRatingData;
+import io.dume.dume.student.homePage.adapter.HomePageRecyclerData;
+import io.dume.dume.student.recordsPage.Record;
+import io.dume.dume.teacher.homepage.TeacherContract;
 
 public interface HomePageContract {
     interface View {
@@ -18,6 +24,8 @@ public interface HomePageContract {
         void makingCallbackInterfaces();
 
         void init();
+
+        void loadPromoData(HomePageRecyclerData promoList);
 
         void findView();
 
@@ -67,7 +75,10 @@ public interface HomePageContract {
 
         void startMentoringImageViewClicked();
 
-        void testingCustomDialogue();
+
+
+        //testing the customDialogue
+        void testingCustomDialogue(HomePageRatingData myData);
 
         void gotoMentorProfile();
 
@@ -132,6 +143,8 @@ public interface HomePageContract {
         boolean checkNull();
 
         void initRecentSearchRecycler(DocumentSnapshot documentSnapshot);
+
+        void showSingleBottomSheetRating(HomePageRatingData currentRatingDataList);
     }
 
     interface Presenter {
@@ -151,9 +164,20 @@ public interface HomePageContract {
 
     interface Model {
 
+        void applyPromo(HomePageRecyclerData promoData, String promo_code, String accountType, TeacherContract.Model.Listener<String> listener);
+
         void hawwa();
 
+
+        void getPromo(String promoCode, TeacherContract.Model.Listener<HomePageRecyclerData> listener);
+
+        void submitRating(String record_id, String skill_id, String opponent_uid, String myAccountType, Map<String, Boolean> inputRating, float inputStar, String feedbackString, TeacherContract.Model.Listener<Void> listener);
+
+        void getSingleRecords(String recordId, TeacherContract.Model.Listener<Record> listener);
+
         void addShapShotListener(EventListener<DocumentSnapshot> updateViewListener);
+
+        void removeCompletedRating(String identify, TeacherContract.Model.Listener<Void> listener);
     }
 
     interface ParentCallback {

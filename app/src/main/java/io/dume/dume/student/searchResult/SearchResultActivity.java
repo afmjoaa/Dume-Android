@@ -436,6 +436,9 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                     recordsData.put("record_status", SearchDataStore.STATUSPENDING);
                     recordsData.put("sp_uid", spUid);
                     recordsData.put("sh_uid", shUid);
+                    recordsData.put("t_rate_status", "dialog");
+                    recordsData.put("s_rate_status", "dialog");
+
                     List<String> participants = new ArrayList<>();
                     participants.add((String) skillMap.get("mentor_uid"));
                     participants.add((String) searchDataStore.getUserUid());

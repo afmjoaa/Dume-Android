@@ -2,6 +2,8 @@ package io.dume.dume;
 
 import com.google.firebase.firestore.DocumentSnapshot;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import io.dume.dume.common.chatActivity.Room;
@@ -18,6 +20,7 @@ public class Google {
     private String accountPrefix;
     private String accountMajor;
     private String lastDocumentId;
+    private List<String> appliedPromoList;
 
 
     public String getAccountPrefix() {
@@ -98,5 +101,13 @@ public class Google {
 
     public void setLastDocumentId(String lastDocumentId) {
         this.lastDocumentId = lastDocumentId;
+    }
+
+    public List<String> getAppliedPromoList() {
+        return appliedPromoList;
+    }
+
+    public void setAppliedPromoList(List<String> appliedPromoList) {
+        this.appliedPromoList = appliedPromoList;
     }
 }

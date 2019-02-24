@@ -40,6 +40,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.io.IOException;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -74,6 +75,12 @@ public class DumeUtils {
     private static final int HEIGHT_INDEX = 1;
     private static ArrayList<String> endOfNest;
 
+    public static String getFormattedDate(Date current) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        DateFormat formatter = new SimpleDateFormat("hh:mm");
+        formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+        return simpleDateFormat.format(current);
+    }
 
     public static String getApplicationName() {
         return "Dume";

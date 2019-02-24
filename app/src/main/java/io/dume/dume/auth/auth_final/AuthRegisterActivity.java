@@ -99,6 +99,11 @@ public class AuthRegisterActivity extends CustomStuAppCompatActivity {
         unreadRecords.put("rejected_count", "0");
         mentorFeild.put("unread_records", unreadRecords);
 
+        mentorFeild.put("daily_i", "0");
+        mentorFeild.put("daily_r", "0");
+        mentorFeild.put("p_daily_i", "0");
+        mentorFeild.put("p_daily_r", "0");
+
         Map<String, Object> selfRating = new HashMap<>();
         selfRating.put("star_rating", "5.00");
         selfRating.put("star_count", "1");
@@ -114,8 +119,6 @@ public class AuthRegisterActivity extends CustomStuAppCompatActivity {
         selfRating.put("student_guided", "5");
         mentorFeild.put("self_rating", selfRating);
 
-
-
         /* Payment Section */
         Map<String, Object> paymentMap = new HashMap<>();
         paymentMap.put("obligation_amount", "0");
@@ -128,6 +131,9 @@ public class AuthRegisterActivity extends CustomStuAppCompatActivity {
         mentorFeild.put("applied_promo", appliedPromoList);
         ArrayList<String> availablePromoList = new ArrayList<>();
         mentorFeild.put("available_promo", availablePromoList);
+
+        List<String> rating_array = new ArrayList<>();
+        mentorFeild.put("rating_array", rating_array);
 
         Map<String, Object> achievements = new HashMap<>();
         achievements.put("joined", true);
@@ -216,6 +222,11 @@ public class AuthRegisterActivity extends CustomStuAppCompatActivity {
         bootCampField.put("account_active", true);
         bootCampField.put("pro_com_%", "60");
 
+        bootCampField.put("daily_i", "0");
+        bootCampField.put("daily_r", "0");
+        bootCampField.put("p_daily_i", "0");
+        bootCampField.put("p_daily_r", "0");
+
         bootCampField.put("unread_msg", "0");
         bootCampField.put("unread_noti", "0");
         Map<String, Object> unreadRecords = new HashMap<>();
@@ -246,6 +257,9 @@ public class AuthRegisterActivity extends CustomStuAppCompatActivity {
         List<String> availablePromoList = new ArrayList<>();
         bootCampField.put("available_promo", availablePromoList);
 
+        List<String> rating_array = new ArrayList<>();
+        bootCampField.put("rating_array", rating_array);
+
         Map<String, Object> achievements = new HashMap<>();
         achievements.put("joined", true);
         achievements.put("inaugural", false);
@@ -267,7 +281,6 @@ public class AuthRegisterActivity extends CustomStuAppCompatActivity {
             });
         }
     }
-
 
     private Map<String, Object> generateStuProInfo(DataStore dataStore) {
         Map<String, Object> stuProInfo = new HashMap<>();
@@ -293,6 +306,8 @@ public class AuthRegisterActivity extends CustomStuAppCompatActivity {
         stuProInfo.put("applied_promo", appliedPromoList);
         List<String> availablePromoList = new ArrayList<String>();
         stuProInfo.put("available_promo", availablePromoList);
+        List<String> rating_array = new ArrayList<>();
+        stuProInfo.put("rating_array", rating_array);
 
         Map<String, Object> selfRating = new HashMap<>();
         selfRating.put("star_rating", "5.00");

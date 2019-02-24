@@ -8,8 +8,6 @@ public interface RecordsAcceptedContract {
         void initRecordsAccepted();
 
         void findView();
-
-        void contactBtnClicked();
     }
 
     interface Presenter {

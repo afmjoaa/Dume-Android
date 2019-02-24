@@ -169,7 +169,7 @@
 
             <Button
                 android:id="@+id/pendding_cancel_btn"
-                style="@style/myButtonStyleDisable"
+                style="@style/myButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/divider2"
@@ -177,11 +177,9 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:layout_marginTop="2dp"
-                android:enabled="false"
-                android:clickable="false"
-                android:text="Cancel Request"
+                android:text="Delete Record"
                 android:textAllCaps="false"
-                android:textColor="@color/textColorSecondary"
+                android:textColor="@color/white"
                 android:textSize="16sp"
                 app:fontFamily="@font/cairo_regular" />
 

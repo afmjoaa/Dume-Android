@@ -30,12 +30,14 @@ import javax.annotation.Nullable;
 
 import io.dume.dume.Google;
 import io.dume.dume.student.common.ReviewHighlightData;
+import io.dume.dume.student.homePage.HomePageModel;
+import io.dume.dume.student.recordsPage.Record;
 import io.dume.dume.teacher.homepage.TeacherContract;
 import io.dume.dume.teacher.homepage.TeacherDataStore;
 import io.dume.dume.teacher.pojo.Skill;
 import io.dume.dume.util.DumeUtils;
 
-public class DumeModel implements TeacherModel {
+public class DumeModel extends HomePageModel implements TeacherModel {
 
     private static final String TAG = "DumeModel";
     private final FirebaseFirestore firebaseFirestore;
@@ -45,6 +47,7 @@ public class DumeModel implements TeacherModel {
     private final GeoFirestore geoFirestore;
 
     public DumeModel(Context context) {
+        super((Activity) context, context);
         this.context = context;
         firebaseFirestore = FirebaseFirestore.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();

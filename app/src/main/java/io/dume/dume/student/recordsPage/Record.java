@@ -4,6 +4,8 @@ import java.util.Date;
 
 public class Record {
     public static int DELIVERED = 2, NOT_DELIVERED = 1, DELIVERED_SEEN = 3;
+    public static final String DIALOG =  "dialog", BOTTOM_SHEET = "bottom_sheet", DONE = "done";
+
 
     String mentorName;
     String studentName;
@@ -17,6 +19,8 @@ public class Record {
     String status;
     int deliveryStatus;
     String sGender, mGender;
+    String t_rate_status;
+    String s_rate_status;
 
     public Record(String mentorName, String studentName, String salaryInDemand, String subjectExchange, Date date, String mentorDpUrl, String studentDpUrl, float studentRating, float mentorRating, String status, int deliveryStatus, String studentGender, String mentorGender) {
         this.mentorName = mentorName;
@@ -32,6 +36,22 @@ public class Record {
         this.deliveryStatus = deliveryStatus;
         this.sGender = studentGender;
         this.mGender = mentorGender;
+    }
+
+    public String getT_rate_status() {
+        return t_rate_status;
+    }
+
+    public void setT_rate_status(String t_rate_status) {
+        this.t_rate_status = t_rate_status;
+    }
+
+    public String getS_rate_status() {
+        return s_rate_status;
+    }
+
+    public void setS_rate_status(String s_rate_status) {
+        this.s_rate_status = s_rate_status;
     }
 
     public String getMentorName() {

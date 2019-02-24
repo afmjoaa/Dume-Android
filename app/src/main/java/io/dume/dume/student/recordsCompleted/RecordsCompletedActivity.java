@@ -11,6 +11,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -191,6 +192,15 @@ public class RecordsCompletedActivity extends CustomStuAppCompatActivity impleme
         private LinearLayout agreementHideable;
         private static final String TAG = "PlaceholderFragment";
         private static DocumentSnapshot record;
+        private Button requestAgainBtn;
+        private BottomSheetDialog mBottomSheetReject;
+        private View sheetViewReject;
+        private TextView rejectMainText;
+        private TextView rejectSubText;
+        private Button rejectYesBtn;
+        private Button rejectNoBtn;
+        private View divider;
+
 
         public PlaceholderFragment() {
         }
@@ -268,8 +278,12 @@ public class RecordsCompletedActivity extends CustomStuAppCompatActivity impleme
             subjectInDemand = rootView.findViewById(R.id.subject_in_demand);
             salaryInDemandTV = rootView.findViewById(R.id.salary_in_demand);
 
+            requestAgainBtn = rootView.findViewById(R.id.pendding_cancel_btn);
+            divider = rootView.findViewById(R.id.divider2);
+
             onMentorSelect(record);
             configFragmentBtnClick();
+            toggleStatus();
             return rootView;
         }
 
@@ -639,16 +653,97 @@ public class RecordsCompletedActivity extends CustomStuAppCompatActivity impleme
             });
         }
 
+        public void toggleStatus() {
+
+            //confirm bottom sheet
+            Map<String, Object> documentData = record.getData();
+            Map<String, Object> spMap = (Map<String, Object>) documentData.get("sp_info");
+            Map<String, Object> forMap = (Map<String, Object>) documentData.get("for_whom");
+            String mentorName = spMap.get("first_name") + " " + spMap.get("last_name");
+            String studentName = (String) forMap.get("stu_name");
+            Double salary = (Double) selectedMentor.get("salary");
+
+            //cancel bottom sheet
+            mBottomSheetReject = new BottomSheetDialog(context);
+            sheetViewReject = this.getLayoutInflater().inflate(R.layout.custom_bottom_sheet_dialogue_cancel, null);
+            mBottomSheetReject.setContentView(sheetViewReject);
+            rejectMainText = mBottomSheetReject.findViewById(R.id.main_text);
+            rejectSubText = mBottomSheetReject.findViewById(R.id.sub_text);
+            rejectYesBtn = mBottomSheetReject.findViewById(R.id.cancel_yes_btn);
+            rejectNoBtn = mBottomSheetReject.findViewById(R.id.cancel_no_btn);
+            if (rejectMainText != null && rejectSubText != null && rejectYesBtn != null && rejectNoBtn != null) {
+                rejectMainText.setText("Request Again ?");
+                rejectSubText.setText("Request " + mentorName + " again for the topic...");
+                rejectYesBtn.setText("Yes, Request");
+                rejectNoBtn.setText("No");
+                rejectYesBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        /*myThisActivity.showProgress();
+                        acceptContactBtn.setEnabled(false);
+                        cancelRequestBtn.setEnabled(false);
+                        myThisActivity.mModel.changeRecordStatus(record.getId(), "Rejected", new TeacherContract.Model.Listener<Void>() {
+                            @Override
+                            public void onSuccess(Void list) {
+                                myThisActivity.hideProgress();
+                                Toast.makeText(myThisActivity, "Status Changed To Rejected", Toast.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void onError(String msg) {
+                                acceptContactBtn.setEnabled(true);
+                                cancelRequestBtn.setEnabled(true);
+                                myThisActivity.showProgress();
+                                Toast.makeText(myThisActivity, msg, Toast.LENGTH_SHORT).show();
+                            }
+                        });*/
+                    }
+                });
+                rejectNoBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        mBottomSheetReject.dismiss();
+                    }
+                });
+            }
+
+
+            switch (myThisActivity.retriveAction) {
+                case DumeUtils.STUDENT:
+
+                    break;
+                case DumeUtils.TEACHER:
+                    requestAgainBtn.setText("Pay Dume Obligation");
+                    if (rejectMainText != null) {
+                        rejectMainText.setText("Pay Due Dume Obligation");
+                        NumberFormat currencyInstance = NumberFormat.getCurrencyInstance(Locale.US);
+                        String format1 = currencyInstance.format(salary * 0.25);
+                        rejectSubText.setText("Dear " + mentorName + "your Dume obligation amount is " + format1.substring(1, format1.length() - 3) + " BDT. Please paid due amount for uninterrupted service.");
+                        rejectYesBtn.setText("Pay Now");
+                        rejectNoBtn.setText("latter");
+                    }
+                    break;
+                case DumeUtils.BOOTCAMP:
+                    requestAgainBtn.setVisibility(View.GONE);
+                    divider.setVisibility(View.GONE);
+                    break;
+                default:
+                    break;
+            }
+
+            requestAgainBtn.setOnClickListener(view -> {
+                mBottomSheetReject.show();
+            });
+        }
     }
 
     public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 
         private List<DocumentSnapshot> recordDataCompleted;
-
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
             recordDataCompleted = new ArrayList<>();
-            recordDataCompleted = DumeUtils.filterList(Google.getInstance().getRecords(),"Completed");
+            recordDataCompleted = DumeUtils.filterList(Google.getInstance().getRecords(), "Completed");
             Log.e("foo", "SectionsPagerAdapter: " + "hjhjhjhjh");
         }
 

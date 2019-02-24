@@ -288,6 +288,22 @@ public class RecordsCurrentActivity extends CustomStuAppCompatActivity implement
         private carbon.widget.ImageView mMarkerImageView;
         private View mCustomMarkerView;
         private Button getDirectionBtn;
+        private Button contactBtn;
+        private Button cancelBtn;
+        private View divider;
+        private BottomSheetDialog mBottomSheetContactDialog;
+        private View contactSheetView;
+        private TextView contactMainText;
+        private TextView contactSubText;
+        private Button callBtn;
+        private Button offlineMsgBtn;
+        private Button onlineMsgBtn;
+        private BottomSheetDialog mBottomSheetReject;
+        private View sheetViewReject;
+        private TextView rejectMainText;
+        private TextView rejectSubText;
+        private Button rejectYesBtn;
+        private Button rejectNoBtn;
 
 
         public PlaceholderFragment() {
@@ -395,6 +411,10 @@ public class RecordsCurrentActivity extends CustomStuAppCompatActivity implement
             finishingDateValue = rootView.findViewById(R.id.finishing_date_value);
             getDirectionBtn = rootView.findViewById(R.id.get_direction_btn);
 
+            contactBtn = rootView.findViewById(R.id.current_contact_btn);
+            cancelBtn = rootView.findViewById(R.id.current_cancel_btn);
+            divider = rootView.findViewById(R.id.divider3);
+
             //testting the reminder here
             timePickerReminder = new TimePickerFragment();
             timePickerReminder.setTimePickerListener(new TimePickerDialog.OnTimeSetListener() {
@@ -442,6 +462,7 @@ public class RecordsCurrentActivity extends CustomStuAppCompatActivity implement
             reviewRecyView.setLayoutManager(new LinearLayoutManager(myThisActivity));
             onMentorSelect(record);
             configFragmentBtnClick();
+            toggleStatus();
 
             //fucking the code for calender decorator
             oneDayDecorator = new OneDayDecorator();
@@ -469,6 +490,122 @@ public class RecordsCurrentActivity extends CustomStuAppCompatActivity implement
             new ApiSimulator().executeOnExecutor(Executors.newSingleThreadExecutor());
 
             return rootView;
+        }
+
+        public void toggleStatus() {
+
+            //confirm bottom sheet
+            Map<String, Object> documentData = record.getData();
+            Map<String, Object> spMap = (Map<String, Object>) documentData.get("sp_info");
+            Map<String, Object> forMap = (Map<String, Object>) documentData.get("for_whom");
+            String mentorName = spMap.get("first_name") + " " + spMap.get("last_name");
+            String studentName = (String) forMap.get("stu_name");
+
+            //cancel bottom sheet
+            mBottomSheetReject = new BottomSheetDialog(context);
+            sheetViewReject = this.getLayoutInflater().inflate(R.layout.custom_bottom_sheet_dialogue_cancel, null);
+            mBottomSheetReject.setContentView(sheetViewReject);
+            rejectMainText = mBottomSheetReject.findViewById(R.id.main_text);
+            rejectSubText = mBottomSheetReject.findViewById(R.id.sub_text);
+            rejectYesBtn = mBottomSheetReject.findViewById(R.id.cancel_yes_btn);
+            rejectNoBtn = mBottomSheetReject.findViewById(R.id.cancel_no_btn);
+            if (rejectMainText != null && rejectSubText != null && rejectYesBtn != null && rejectNoBtn != null) {
+                rejectMainText.setText("Reject Request");
+                rejectSubText.setText("By Rejecting you are making sure you are not willing to mentor " + studentName);
+                rejectYesBtn.setText("Yes, Reject");
+                rejectNoBtn.setText("No");
+                rejectYesBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        /*myThisActivity.showProgress();
+                        acceptContactBtn.setEnabled(false);
+                        cancelRequestBtn.setEnabled(false);
+                        myThisActivity.mModel.changeRecordStatus(record.getId(), "Rejected", new TeacherContract.Model.Listener<Void>() {
+                            @Override
+                            public void onSuccess(Void list) {
+                                myThisActivity.hideProgress();
+                                Toast.makeText(myThisActivity, "Status Changed To Rejected", Toast.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void onError(String msg) {
+                                acceptContactBtn.setEnabled(true);
+                                cancelRequestBtn.setEnabled(true);
+                                myThisActivity.showProgress();
+                                Toast.makeText(myThisActivity, msg, Toast.LENGTH_SHORT).show();
+                            }
+                        });*/
+                    }
+                });
+                rejectNoBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        mBottomSheetReject.dismiss();
+                    }
+                });
+            }
+
+
+            mBottomSheetContactDialog = new BottomSheetDialog(context);
+            contactSheetView = this.getLayoutInflater().inflate(R.layout.custom_bottom_sheet_dialogue_call_msg, null);
+            mBottomSheetContactDialog.setContentView(contactSheetView);
+            contactMainText = mBottomSheetContactDialog.findViewById(R.id.main_text);
+            contactSubText = mBottomSheetContactDialog.findViewById(R.id.sub_text);
+            callBtn = mBottomSheetContactDialog.findViewById(R.id.call_btn);
+            offlineMsgBtn = mBottomSheetContactDialog.findViewById(R.id.offline_msg_btn);
+            onlineMsgBtn = mBottomSheetContactDialog.findViewById(R.id.online_msg_btn);
+            if (contactMainText != null && contactSubText != null && callBtn != null && offlineMsgBtn != null && onlineMsgBtn != null) {
+
+                callBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                    }
+                });
+
+                offlineMsgBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                    }
+                });
+
+                onlineMsgBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                    }
+                });
+            }
+
+            switch (myThisActivity.retriveAction) {
+                case DumeUtils.STUDENT:
+                    cancelBtn.setVisibility(View.GONE);
+                    divider.setVisibility(View.GONE);
+                    contactMainText.setText("Contact with " + mentorName);
+                    break;
+                case DumeUtils.TEACHER:
+                    cancelBtn.setVisibility(View.GONE);
+                    divider.setVisibility(View.GONE);
+                    contactMainText.setText("Contact with " + studentName);
+                    break;
+                case DumeUtils.BOOTCAMP:
+                    cancelBtn.setVisibility(View.GONE);
+                    divider.setVisibility(View.GONE);
+                    break;
+                default:
+                    cancelBtn.setVisibility(View.GONE);
+                    divider.setVisibility(View.GONE);
+                    break;
+            }
+
+            contactBtn.setOnClickListener(view -> {
+                mBottomSheetContactDialog.show();
+            });
+            cancelBtn.setOnClickListener(view -> {
+                mBottomSheetReject.show();
+            });
+
         }
 
         public void onMentorSelect(DocumentSnapshot selectedMentor) {

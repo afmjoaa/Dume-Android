@@ -27,8 +27,8 @@
     <string name="err_msg_email">Enter valid email address</string>
     <string name="err_msg_password">Enter the password</string>
     <string name="privacy_notice1">By Continuing, I confirm that I have read</string>
-    <string name="privacy_notice2">and agree to the&#160;</string>
-    <string name="privacy_notice3">and&#160;</string>
+    <string name="privacy_notice2">and agree to the&#160;&#160;</string>
+    <string name="privacy_notice3">&#160;and&#160;&#160;</string>
     <string name="hiperlink_term_text">Terms &amp; Conditions&#160;</string>
     <string name="hiperlink_privacy_text">Privacy Policy.</string>
     <string name="title_activity_social_init">SocialInitActivity</string>

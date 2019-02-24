@@ -2,6 +2,7 @@ package io.dume.dume.student.recordsPending;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Animatable2;
@@ -86,24 +87,12 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
 
     private RecordsPendingContract.Presenter mPresenter;
     private static final int fromFlag = 20;
-    private BottomSheetDialog mBottomSheetDialog;
-    private View sheetView;
     private OnSwipeTouchListener onSwipeTouchListener;
     private RelativeLayout recordsHostLayout;
     private ViewPager pager;
     private SectionsPagerAdapter myPagerAdapter;
     private RecordsPendingModel mModel;
     private String retriveAction;
-    private TextView confirmMainText;
-    private TextView confirmSubText;
-    private Button comfirmYesBtn;
-    private Button confirmNoBtn;
-    private BottomSheetDialog mBottomSheetReject;
-    private View sheetViewReject;
-    private TextView rejectMainText;
-    private TextView rejectSubText;
-    private Button rejectYesBtn;
-    private Button rejectNoBtn;
 
 
     @Override
@@ -136,47 +125,7 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
 
     @Override
     public void configRecordsPending() {
-        //confirm bottom sheet
-        mBottomSheetDialog = new BottomSheetDialog(this);
-        sheetView = this.getLayoutInflater().inflate(R.layout.custom_bottom_sheet_dialogue_cancel, null);
-        mBottomSheetDialog.setContentView(sheetView);
-        confirmMainText = mBottomSheetDialog.findViewById(R.id.main_text);
-        confirmSubText = mBottomSheetDialog.findViewById(R.id.sub_text);
-        comfirmYesBtn = mBottomSheetDialog.findViewById(R.id.cancel_yes_btn);
-        confirmNoBtn = mBottomSheetDialog.findViewById(R.id.cancel_no_btn);
-        if (confirmMainText != null && confirmSubText != null && comfirmYesBtn != null && confirmNoBtn != null) {
-            confirmMainText.setText("Accept Request");
-            confirmSubText.setText("By Accepting you are making sure you will mentor ___");
-            comfirmYesBtn.setText("Yes, Accept");
-            confirmNoBtn.setText("No");
-            confirmNoBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    mBottomSheetDialog.dismiss();
-                }
-            });
-        }
 
-        //cancel bottom sheet
-        mBottomSheetReject = new BottomSheetDialog(this);
-        sheetViewReject = this.getLayoutInflater().inflate(R.layout.custom_bottom_sheet_dialogue_cancel, null);
-        mBottomSheetReject.setContentView(sheetView);
-        rejectMainText = mBottomSheetReject.findViewById(R.id.main_text);
-        rejectSubText = mBottomSheetReject.findViewById(R.id.sub_text);
-        rejectYesBtn = mBottomSheetReject.findViewById(R.id.cancel_yes_btn);
-        rejectNoBtn = mBottomSheetReject.findViewById(R.id.cancel_no_btn);
-        if (rejectMainText != null && rejectSubText != null && rejectYesBtn != null && rejectNoBtn != null) {
-            rejectMainText.setText("Reject Request");
-            rejectSubText.setText("By Rejecting you are making sure you are not willing to mentor ___");
-            rejectYesBtn.setText("Yes, Reject");
-            rejectNoBtn.setText("No");
-            rejectNoBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    mBottomSheetReject.dismiss();
-                }
-            });
-        }
     }
 
 
@@ -278,6 +227,19 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
         private LinearLayout agreementHideable;
         private Button acceptBTN;
         private Button rejectBTN;
+        private View divider;
+        private BottomSheetDialog mBottomSheetDialog;
+        private View sheetView;
+        private TextView confirmMainText;
+        private TextView confirmSubText;
+        private Button comfirmYesBtn;
+        private Button confirmNoBtn;
+        private BottomSheetDialog mBottomSheetReject;
+        private View sheetViewReject;
+        private TextView rejectMainText;
+        private TextView rejectSubText;
+        private Button rejectYesBtn;
+        private Button rejectNoBtn;
 
         public PlaceholderFragment() {
         }
@@ -635,6 +597,7 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
             deliveryImageStatus = rootView.findViewById(R.id.delivery_status_image_view);
             acceptBTN = rootView.findViewById(R.id.pendding_accept_btn);
             rejectBTN = rootView.findViewById(R.id.pendding_cancel_btn);
+            divider = rootView.findViewById(R.id.divider1);
             //setting the qualification recycler view
             List<Academic> academicList = new ArrayList<>();
             qualificaitonRecyAda = new QualificationAdapter(myThisActivity, academicList);
@@ -654,51 +617,125 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
 
 
         public void toggleStatus() {
+            switch (myThisActivity.retriveAction) {
+                case DumeUtils.STUDENT:
+                    acceptBTN.setVisibility(View.GONE);
+                    divider.setVisibility(View.GONE);
+                    rejectBTN.setText("Cancel Request");
+                    break;
+                case DumeUtils.TEACHER:
+                    break;
+                case DumeUtils.BOOTCAMP:
+                    break;
+                default:
+                    break;
+            }
+
+            //confirm bottom sheet
+            Map<String, Object> documentData = record.getData();
+            Map<String, Object> spMap = (Map<String, Object>) documentData.get("sp_info");
+            Map<String, Object> forMap = (Map<String, Object>) documentData.get("for_whom");
+            String mentorName = spMap.get("first_name") + " " + spMap.get("last_name");
+            String studentName = (String) forMap.get("stu_name");
+
+            mBottomSheetDialog = new BottomSheetDialog(context);
+            sheetView = this.getLayoutInflater().inflate(R.layout.custom_bottom_sheet_dialogue_cancel, null);
+            mBottomSheetDialog.setContentView(sheetView);
+            confirmMainText = mBottomSheetDialog.findViewById(R.id.main_text);
+            confirmSubText = mBottomSheetDialog.findViewById(R.id.sub_text);
+            comfirmYesBtn = mBottomSheetDialog.findViewById(R.id.cancel_yes_btn);
+            confirmNoBtn = mBottomSheetDialog.findViewById(R.id.cancel_no_btn);
+            if (confirmMainText != null && confirmSubText != null && comfirmYesBtn != null && confirmNoBtn != null) {
+                confirmMainText.setText("Accept Request");
+                confirmSubText.setText("By Accepting you are making sure you will mentor " + studentName);
+                comfirmYesBtn.setText("Yes, Accept");
+                confirmNoBtn.setText("No");
+                comfirmYesBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        rejectBTN.setEnabled(false);
+                        acceptBTN.setEnabled(false);
+                        myThisActivity.showProgress();
+                        myThisActivity.mModel.changeRecordStatus(record.getId(), "Accepted", new TeacherContract.Model.Listener<Void>() {
+                            @Override
+                            public void onSuccess(Void list) {
+                                Toast.makeText(myThisActivity, "Status Changed To Accepted", Toast.LENGTH_SHORT).show();
+                                myThisActivity.hideProgress();
+                            }
+
+                            @Override
+                            public void onError(String msg) {
+                                rejectBTN.setEnabled(true);
+                                acceptBTN.setEnabled(true);
+                                myThisActivity.hideProgress();
+                                Toast.makeText(myThisActivity, msg, Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                });
+                confirmNoBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        mBottomSheetDialog.dismiss();
+                    }
+                });
+            }
+
+            //cancel bottom sheet
+            mBottomSheetReject = new BottomSheetDialog(context);
+            sheetViewReject = this.getLayoutInflater().inflate(R.layout.custom_bottom_sheet_dialogue_cancel, null);
+            mBottomSheetReject.setContentView(sheetViewReject);
+            rejectMainText = mBottomSheetReject.findViewById(R.id.main_text);
+            rejectSubText = mBottomSheetReject.findViewById(R.id.sub_text);
+            rejectYesBtn = mBottomSheetReject.findViewById(R.id.cancel_yes_btn);
+            rejectNoBtn = mBottomSheetReject.findViewById(R.id.cancel_no_btn);
+            if (rejectMainText != null && rejectSubText != null && rejectYesBtn != null && rejectNoBtn != null) {
+                rejectMainText.setText("Reject Request");
+                rejectSubText.setText("By Rejecting you are making sure you are not willing to mentor " + studentName);
+                rejectYesBtn.setText("Yes, Reject");
+                rejectNoBtn.setText("No");
+                rejectYesBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        myThisActivity.showProgress();
+                        rejectBTN.setEnabled(false);
+                        acceptBTN.setEnabled(false);
+                        myThisActivity.mModel.changeRecordStatus(record.getId(), "Rejected", new TeacherContract.Model.Listener<Void>() {
+                            @Override
+                            public void onSuccess(Void list) {
+                                myThisActivity.hideProgress();
+                                Toast.makeText(myThisActivity, "Status Changed To Rejected", Toast.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void onError(String msg) {
+                                rejectBTN.setEnabled(true);
+                                acceptBTN.setEnabled(true);
+                                myThisActivity.showProgress();
+                                Toast.makeText(myThisActivity, msg, Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                });
+                rejectNoBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        mBottomSheetReject.dismiss();
+                    }
+                });
+            }
 
             acceptBTN.setOnClickListener(view -> {
-                myThisActivity.mBottomSheetDialog.show();
-                /*rejectBTN.setEnabled(false);
-                acceptBTN.setEnabled(false);
-                myThisActivity.mModel.changeRecordStatus(record.getId(), "Accepted", new TeacherContract.Model.Listener<Void>() {
-                    @Override
-                    public void onSuccess(Void list) {
-                        Toast.makeText(myThisActivity, "Status Changed To Accepted", Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void onError(String msg) {
-                        rejectBTN.setEnabled(true);
-                        acceptBTN.setEnabled(true);
-                        Toast.makeText(myThisActivity, msg, Toast.LENGTH_SHORT).show();
-                    }
-                });*/
+                mBottomSheetDialog.show();
             });
             rejectBTN.setOnClickListener(view -> {
-                myThisActivity.mBottomSheetReject.show();
-                /*rejectBTN.setEnabled(false);
-                acceptBTN.setEnabled(false);
-                myThisActivity.mModel.changeRecordStatus(record.getId(), "Rejected", new TeacherContract.Model.Listener<Void>() {
-                    @Override
-                    public void onSuccess(Void list) {
-                        Toast.makeText(myThisActivity, "Status Changed To Rejected", Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void onError(String msg) {
-                        rejectBTN.setEnabled(true);
-                        acceptBTN.setEnabled(true);
-                        Toast.makeText(myThisActivity, msg, Toast.LENGTH_SHORT).show();
-                    }
-                });*/
+                mBottomSheetReject.show();
             });
 
         }
 
-
         public void configFragmentBtnClick() {
             //setting the animation for the btn
-
-
             showAdditionalRatingBtn.setOnClickListener(new VisibleToggleClickListener() {
 
                 @SuppressLint("CheckResult")
@@ -1033,7 +1070,6 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
                 }
             });
         }
-
     }
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {

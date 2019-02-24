@@ -11,6 +11,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -154,6 +155,13 @@ public class RecordsRejectedActivity extends CustomStuAppCompatActivity implemen
         private LinearLayout agreementHideable;
         private DocumentSnapshot selectedMentor;
         private String defaultUrl;
+        private Button deleteRecordBtn;
+        private BottomSheetDialog mBottomSheetReject;
+        private View sheetViewReject;
+        private TextView rejectMainText;
+        private TextView rejectSubText;
+        private Button rejectYesBtn;
+        private Button rejectNoBtn;
 
 
         public PlaceholderFragment() {
@@ -205,8 +213,12 @@ public class RecordsRejectedActivity extends CustomStuAppCompatActivity implemen
             dateTV = rootView.findViewById(R.id.textview_starting_date);
             preferredDayTV = rootView.findViewById(R.id.textview_preferred_day);
             daysPerWeekTV = rootView.findViewById(R.id.textview_days_week);
+
+            deleteRecordBtn = rootView.findViewById(R.id.pendding_cancel_btn);
+
             onMentorSelect(record);
             configFragmentBtnClick();
+            toggleStatus();
             return rootView;
         }
 
@@ -359,6 +371,76 @@ public class RecordsRejectedActivity extends CustomStuAppCompatActivity implemen
                         });
                     }
                 }
+            });
+        }
+
+        public void toggleStatus() {
+
+            //confirm bottom sheet
+            Map<String, Object> documentData = record.getData();
+            Map<String, Object> spMap = (Map<String, Object>) documentData.get("sp_info");
+            Map<String, Object> forMap = (Map<String, Object>) documentData.get("for_whom");
+            String mentorName = spMap.get("first_name") + " " + spMap.get("last_name");
+            String studentName = (String) forMap.get("stu_name");
+            Double salary = (Double) selectedMentor.get("salary");
+
+            //cancel bottom sheet
+            mBottomSheetReject = new BottomSheetDialog(context);
+            sheetViewReject = this.getLayoutInflater().inflate(R.layout.custom_bottom_sheet_dialogue_cancel, null);
+            mBottomSheetReject.setContentView(sheetViewReject);
+            rejectMainText = mBottomSheetReject.findViewById(R.id.main_text);
+            rejectSubText = mBottomSheetReject.findViewById(R.id.sub_text);
+            rejectYesBtn = mBottomSheetReject.findViewById(R.id.cancel_yes_btn);
+            rejectNoBtn = mBottomSheetReject.findViewById(R.id.cancel_no_btn);
+            if (rejectMainText != null && rejectSubText != null && rejectYesBtn != null && rejectNoBtn != null) {
+                rejectMainText.setText("Delete this record ?");
+                rejectSubText.setText("Deleting will delete this record and you will never find this again...");
+                rejectYesBtn.setText("Yes, Delete");
+                rejectNoBtn.setText("No");
+                rejectYesBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        /*myThisActivity.showProgress();
+                        acceptContactBtn.setEnabled(false);
+                        cancelRequestBtn.setEnabled(false);
+                        myThisActivity.mModel.changeRecordStatus(record.getId(), "Rejected", new TeacherContract.Model.Listener<Void>() {
+                            @Override
+                            public void onSuccess(Void list) {
+                                myThisActivity.hideProgress();
+                                Toast.makeText(myThisActivity, "Status Changed To Rejected", Toast.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void onError(String msg) {
+                                acceptContactBtn.setEnabled(true);
+                                cancelRequestBtn.setEnabled(true);
+                                myThisActivity.showProgress();
+                                Toast.makeText(myThisActivity, msg, Toast.LENGTH_SHORT).show();
+                            }
+                        });*/
+                    }
+                });
+                rejectNoBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        mBottomSheetReject.dismiss();
+                    }
+                });
+            }
+
+            switch (myThisActivity.retriveAction) {
+                case DumeUtils.STUDENT:
+                    break;
+                case DumeUtils.TEACHER:
+                    break;
+                case DumeUtils.BOOTCAMP:
+                    break;
+                default:
+                    break;
+            }
+
+            deleteRecordBtn.setOnClickListener(view -> {
+                mBottomSheetReject.show();
             });
         }
     }

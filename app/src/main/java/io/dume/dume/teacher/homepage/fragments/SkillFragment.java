@@ -44,6 +44,7 @@ public class SkillFragment extends Fragment {
 
     private SkillViewModel mViewModel;
     @BindView(R.id.skillRV)
+    public
     RecyclerView skillRV;
     @BindView(R.id.more_btn)
     Button openSkillBtn;
@@ -54,16 +55,18 @@ public class SkillFragment extends Fragment {
     @BindView(R.id.add_instant_btn)
     ImageView addInstantDBtn;
     @BindView(R.id.no_data_block)
+    public
     LinearLayout noDataBlock;
     @BindView(R.id.tipsTV)
     ScaleTextView scaleTextView;
     private TeacherActivtiy fragmentActivity;
     private TeacherDataStore teacherDataStore;
     private static SkillFragment skillFragment = null;
-    private int itemWidth;
+    public int itemWidth;
     private Map<String, Object> documentSnapshot;
     private int percentage;
     private Context context;
+    public SkillAdapter skillAdapter;
 
 
     public static SkillFragment getInstance() {
@@ -87,7 +90,8 @@ public class SkillFragment extends Fragment {
                         @Override
                         public void onSuccess(ArrayList<Skill> list) {
                             teacherDataStore.setSkillArrayList(list);
-                            skillRV.setAdapter(new SkillAdapter(fragmentActivity, SkillAdapter.FRAGMENT, itemWidth, list));
+                            skillAdapter = new SkillAdapter(fragmentActivity, SkillAdapter.FRAGMENT, itemWidth, list);
+                            skillRV.setAdapter(skillAdapter);
                             if (list.size() == 0) {
                                 noDataBlock.setVisibility(View.VISIBLE);
                             } else {
@@ -101,7 +105,8 @@ public class SkillFragment extends Fragment {
                         }
                     });
                 } else {
-                    skillRV.setAdapter(new SkillAdapter(fragmentActivity, SkillAdapter.FRAGMENT, itemWidth, teacherDataStore.getSkillArrayList()));
+                    skillAdapter = new SkillAdapter(fragmentActivity, SkillAdapter.FRAGMENT, itemWidth, teacherDataStore.getSkillArrayList());
+                    skillRV.setAdapter(skillAdapter);
                     if (teacherDataStore.getSkillArrayList().size() == 0) {
                         noDataBlock.setVisibility(View.VISIBLE);
                     } else {
@@ -171,7 +176,7 @@ public class SkillFragment extends Fragment {
         openSkillBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getContext(), SkillActivity.class).setAction("fromFrag"));
+                startActivity(new Intent(context, SkillActivity.class).setAction("fromFrag"));
             }
         });
 
@@ -179,7 +184,7 @@ public class SkillFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if (isProfileOK()) {
-                    goToCrudActivity(DumeUtils.TEACHER);
+                    goToCrudActivity("frag_" + DumeUtils.TEACHER);
                 }
             }
         });
@@ -188,7 +193,7 @@ public class SkillFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if (isProfileOK()) {
-                    goToCrudActivity(DumeUtils.BOOTCAMP);
+                    goToCrudActivity("frag_" + DumeUtils.BOOTCAMP);
                 }
             }
         });
@@ -200,8 +205,8 @@ public class SkillFragment extends Fragment {
                 Boolean premier = achievements.get("premier");
                 if (isProfileOK()) {
                     if (premier) {
-                        goToCrudActivity(DumeUtils.TEACHER);
-                    } else{
+                        goToCrudActivity("frag_" + DumeUtils.TEACHER);
+                    } else {
                         tips("Unlocking Premier Badge is must...");
                     }
                 }
@@ -210,14 +215,16 @@ public class SkillFragment extends Fragment {
 
         changeAddSkillBtnColor();
         fragmentActivity = (TeacherActivtiy) getActivity();
-        teacherDataStore = fragmentActivity != null ? fragmentActivity.teacherDataStore : null;
+        teacherDataStore = TeacherDataStore.getInstance();
         if (teacherDataStore != null) {
             if (teacherDataStore.getSkillArrayList() == null) {
                 new DumeModel(getContext()).getSkill(new TeacherContract.Model.Listener<ArrayList<Skill>>() {
                     @Override
                     public void onSuccess(ArrayList<Skill> list) {
                         teacherDataStore.setSkillArrayList(list);
-                        skillRV.setAdapter(new SkillAdapter(fragmentActivity, SkillAdapter.FRAGMENT, itemWidth, list));
+                        skillAdapter = new SkillAdapter(fragmentActivity, SkillAdapter.FRAGMENT, itemWidth, list);
+                        skillRV.setAdapter(skillAdapter);
+
                         if (list.size() == 0) {
                             noDataBlock.setVisibility(View.VISIBLE);
                         } else {
@@ -231,7 +238,8 @@ public class SkillFragment extends Fragment {
                     }
                 });
             } else {
-                skillRV.setAdapter(new SkillAdapter(fragmentActivity, SkillAdapter.FRAGMENT, itemWidth, teacherDataStore.getSkillArrayList()));
+                skillAdapter = new SkillAdapter(fragmentActivity, SkillAdapter.FRAGMENT, itemWidth, teacherDataStore.getSkillArrayList());
+                skillRV.setAdapter(skillAdapter);
                 if (teacherDataStore.getSkillArrayList().size() == 0) {
                     noDataBlock.setVisibility(View.VISIBLE);
                 } else {
@@ -239,23 +247,6 @@ public class SkillFragment extends Fragment {
                 }
                 //loadData();
             }
-        } else {
-            new DumeModel(getContext()).getSkill(new TeacherContract.Model.Listener<ArrayList<Skill>>() {
-                @Override
-                public void onSuccess(ArrayList<Skill> list) {
-                    teacherDataStore.setSkillArrayList(list);
-                    skillRV.setAdapter(new SkillAdapter(fragmentActivity, SkillAdapter.FRAGMENT, itemWidth, list));
-                    if (list.size() == 0) {
-                        noDataBlock.setVisibility(View.VISIBLE);
-                    } else {
-                        noDataBlock.setVisibility(View.GONE);
-                    }
-                }
-                @Override
-                public void onError(String msg) {
-                    Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
-                }
-            });
         }
         return root;
     }
@@ -292,16 +283,16 @@ public class SkillFragment extends Fragment {
     }
 
     public void goToCrudActivity(String action) {
-        Intent intent = new Intent(getContext(), CrudSkillActivity.class).setAction(action);
+        Intent intent = new Intent(context, CrudSkillActivity.class).setAction(action);
         startActivity(intent);
     }
 
-    private void changeAddSkillBtnColor(){
+    private void changeAddSkillBtnColor() {
         final Map<String, Boolean> achievements = (Map<String, Boolean>) documentSnapshot.get("achievements");
         Boolean premier = achievements.get("premier");
         if (premier) {
             addInstantDBtn.setImageDrawable(context.getResources().getDrawable(R.drawable.dume_instant_image));
-        } else{
+        } else {
             addInstantDBtn.setImageDrawable(context.getResources().getDrawable(R.drawable.dume_instant_grayscale_image));
 
         }
@@ -310,10 +301,35 @@ public class SkillFragment extends Fragment {
         if (percentage >= 95) {
             addRegularDBtn.setImageDrawable(context.getResources().getDrawable(R.drawable.dume_regular_image));
             addDumeGangBtn.setImageDrawable(context.getResources().getDrawable(R.drawable.dume_gang_image));
-        }else {
+        } else {
             addRegularDBtn.setImageDrawable(context.getResources().getDrawable(R.drawable.dume_regular_grayscale_image));
             addDumeGangBtn.setImageDrawable(context.getResources().getDrawable(R.drawable.dume_gang_grayscale_image));
 
         }
     }
 }
+
+/*else {
+            new DumeModel(getContext()).getSkill(new TeacherContract.Model.Listener<ArrayList<Skill>>() {
+                @Override
+                public void onSuccess(ArrayList<Skill> list) {
+                    //TeacherDataStore.getInstance().setSkillArrayList(list);
+                    if (skillRV.getAdapter() != null && skillAdapter!= null) {
+                        skillAdapter.update(list);
+                    }else {
+                        skillAdapter = new SkillAdapter(fragmentActivity, SkillAdapter.FRAGMENT, itemWidth, list);
+                        skillRV.setAdapter(skillAdapter);
+                    }
+                    if (list.size() == 0) {
+                        noDataBlock.setVisibility(View.VISIBLE);
+                    } else {
+                        noDataBlock.setVisibility(View.GONE);
+                    }
+                }
+
+                @Override
+                public void onError(String msg) {
+                    Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
+                }
+            });
+        }*/

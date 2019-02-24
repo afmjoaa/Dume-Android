@@ -86,7 +86,7 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private Button backNoBtn;
     private String[] splitMainSsss;
     private Integer likes = 0;
-    private Integer dislikes= 0;
+    private Integer dislikes = 0;
 
 
     @Override
@@ -419,10 +419,10 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                         ((Animatable) d).start();
                     }
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        ((Animatable2) d).registerAnimationCallback (new Animatable2.AnimationCallback(){
-                            public void onAnimationEnd(Drawable drawable){
+                        ((Animatable2) d).registerAnimationCallback(new Animatable2.AnimationCallback() {
+                            public void onAnimationEnd(Drawable drawable) {
                                 //Do something
-                                if(visible){
+                                if (visible) {
                                     myViewHolder.reviewShowBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, context.getResources().getDrawable(R.drawable.ic_up_arrow_small));
                                 } else {
                                     myViewHolder.reviewShowBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, context.getResources().getDrawable(R.drawable.ic_down_arrow_small));
@@ -444,9 +444,9 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             }
             for (String splited : splitMainSsss) {
                 likes = likes + Integer.parseInt(skillList.get(i).getLikes().get(splited).toString());
-                dislikes = dislikes +  Integer.parseInt(skillList.get(i).getDislikes().get(splited).toString());
+                dislikes = dislikes + Integer.parseInt(skillList.get(i).getDislikes().get(splited).toString());
             }
-            myViewHolder.likeTV.setText((likes-splitMainSsss.length) + " likes");
+            myViewHolder.likeTV.setText((likes - splitMainSsss.length) + " likes");
 
         } else {//fragment start here
             SkillFVH myFragmentHolder = (SkillFVH) holder;
@@ -489,15 +489,15 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             myFragmentHolder.switchCompat.setChecked(skillList.get(i).isStatus());
             for (String splited : splitMainSsss) {
                 likes = likes + Integer.parseInt(skillList.get(i).getLikes().get(splited).toString());
-                dislikes = dislikes +  Integer.parseInt(skillList.get(i).getDislikes().get(splited).toString());
+                dislikes = dislikes + Integer.parseInt(skillList.get(i).getDislikes().get(splited).toString());
             }
 
 
-            int totalCount =likes + dislikes;
+            int totalCount = likes + dislikes;
             if (totalCount == 0) {
                 myFragmentHolder.likeTV.setText("n/a");
             } else {
-                int likeP = (int) (likes/ totalCount) * 100;
+                int likeP = (int) (likes / totalCount) * 100;
                 myFragmentHolder.likeTV.setText(likeP + "% liked");
             }
             int salary = (int) (skillList.get(i).getSalary()) / 1000;
@@ -524,6 +524,7 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         this.skillList.clear();
         this.skillList.addAll(skillList);
         this.notifyDataSetChanged();
+        Log.w(TAG, "getItemCount: " + skillList.toString());
     }
 
     @Override
@@ -536,8 +537,10 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             } else {
                 return skillList.size();
             }
+        } else {
+            Log.w(TAG, "getItemCount: " + skillList.size());
+            return 0;
         }
-        return 0;
     }
 
     class SkillAVH extends RecyclerView.ViewHolder {

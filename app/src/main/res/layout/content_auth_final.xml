@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".auth.auth_final.AuthRegisterActivity"
     tools:showIn="@layout/activity_auth_final">
@@ -13,17 +13,17 @@
         android:layout_height="wrap_content"
         android:layout_gravity="start"
         android:layout_marginTop="20dp"
+        android:layout_marginBottom="50dp"
         android:orientation="vertical">
-
 
         <!--bullshit testing-->
         <LinearLayout
             android:id="@+id/user_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:layout_marginEnd="20dp"
             android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="10dp"
             android:baselineAligned="false"
             android:orientation="horizontal">
 
@@ -113,9 +113,9 @@
             android:id="@+id/linear_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:layout_marginEnd="20dp"
             android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="10dp"
             android:orientation="vertical">
 
             <android.support.design.widget.TextInputLayout
@@ -154,9 +154,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:layout_marginEnd="20dp"
             android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="10dp"
             android:orientation="vertical"
 
             app:layout_anchor="@id/linear_email">
@@ -181,8 +181,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="5dp"
-                    android:layout_marginRight="5dp"
                     android:layout_marginTop="5dp"
+                    android:layout_marginRight="5dp"
                     android:text="+88"
                     android:textSize="18sp" />
 
@@ -197,17 +197,17 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:clickable="false"
-                        android:textColor="@color/disable_color"
                         android:descendantFocusability="beforeDescendants"
-
                         android:focusableInTouchMode="true"
+
                         android:fontFamily="@font/cairo_regular"
                         android:hint="Mobile Number"
                         android:imeOptions="actionDone"
-
                         android:nextFocusLeft="@id/phoneNumberEditText"
+
                         android:nextFocusUp="@id/phoneNumberEditText"
                         android:singleLine="true"
+                        android:textColor="@color/disable_color"
                         android:textSize="18sp" />
                 </android.support.design.widget.TextInputLayout>
 
@@ -234,29 +234,30 @@
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:layout_marginEnd="20dp"
             android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="10dp"
             android:orientation="vertical">
 
             <CheckBox
                 android:id="@+id/privacyCB"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:layout_editor_absoluteX="0dp"
-                tools:layout_editor_absoluteY="0dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
                 android:checked="true"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toLeftOf="@id/plain_privacy_text1"
-                app:layout_constraintBottom_toTopOf="@+id/plain_privacy_text3"
-                />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/plain_privacy_text1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
-                android:layout_marginLeft="32dp"
+                android:layout_marginStart="36dp"
+                android:layout_marginLeft="36dp"
+                android:layout_marginTop="5dp"
                 android:fontFamily="@font/cairo_regular"
                 android:gravity="start"
                 android:text="@string/privacy_notice1"
@@ -271,22 +272,22 @@
                 android:id="@+id/plain_privacy_text2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
-                android:layout_marginLeft="32dp"
+                android:layout_marginStart="36dp"
+                android:layout_marginLeft="36dp"
+                android:layout_marginTop="6dp"
                 android:fontFamily="@font/cairo_regular"
                 android:gravity="start"
                 android:text="@string/privacy_notice2"
-                android:textAlignment="viewStart"
+                android:textAlignment="textStart"
                 android:textSize="14sp"
-                app:layout_constraintBottom_toTopOf="@+id/hiperlink_privacy_text"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/plain_privacy_text1"
-                app:layout_constraintVertical_bias="0.0" />
+                app:layout_constraintTop_toBottomOf="@+id/plain_privacy_text1" />
 
             <TextView
                 android:id="@+id/hiperlink_terms_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
                 android:fontFamily="@font/cairo_regular"
                 android:gravity="start"
                 android:onClick="onViewClick"
@@ -294,10 +295,8 @@
                 android:textAlignment="textStart"
                 android:textColor="@color/colorDarkAzure"
                 android:textSize="14sp"
-                app:layout_constraintBottom_toTopOf="@+id/hiperlink_privacy_text"
                 app:layout_constraintStart_toEndOf="@+id/plain_privacy_text2"
-                app:layout_constraintTop_toBottomOf="@+id/plain_privacy_text1"
-                tools:layout_editor_absoluteY="37dp" />
+                app:layout_constraintTop_toBottomOf="@+id/plain_privacy_text1" />
 
             <TextView
                 android:id="@+id/plain_privacy_text3"
@@ -305,19 +304,21 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/cairo_regular"
                 android:gravity="start"
+                android:layout_marginTop="6dp"
                 android:text="@string/privacy_notice3"
                 android:textAlignment="viewStart"
                 android:textSize="14sp"
-                app:layout_constraintBottom_toTopOf="@+id/hiperlink_privacy_text"
                 app:layout_constraintStart_toEndOf="@+id/hiperlink_terms_text"
-                app:layout_constraintTop_toBottomOf="@+id/plain_privacy_text1" />
+                app:layout_constraintTop_toBottomOf="@+id/plain_privacy_text1"
+                tools:layout_editor_absoluteY="30dp" />
 
             <TextView
                 android:id="@+id/hiperlink_privacy_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
-                android:layout_marginLeft="32dp"
+                android:layout_marginStart="36dp"
+                android:layout_marginLeft="36dp"
+                android:layout_marginTop="6dp"
                 android:fontFamily="@font/cairo_regular"
                 android:gravity="start"
                 android:onClick="onViewClick"
@@ -335,9 +336,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="top|end"
-            android:layout_marginBottom="20dp"
             android:layout_marginEnd="20dp"
             android:layout_marginRight="20dp"
+            android:layout_marginBottom="20dp"
             android:clickable="true"
             android:focusable="true"
             android:onClick="onViewClick"

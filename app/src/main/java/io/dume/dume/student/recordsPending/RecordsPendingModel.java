@@ -15,12 +15,10 @@ import io.dume.dume.teacher.homepage.TeacherContract;
 public class RecordsPendingModel extends RecordsPageModel implements RecordsPendingContract.Model {
 
     private final Context context;
-    private FirebaseFirestore firestore;
 
     public RecordsPendingModel(Context context) {
         super(context);
         this.context = context;
-        firestore = FirebaseFirestore.getInstance();
     }
 
 

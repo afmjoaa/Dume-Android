@@ -36,6 +36,7 @@ import io.dume.dume.customView.HorizontalLoadView;
 import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
 import io.dume.dume.teacher.adapters.SkillAdapter;
 import io.dume.dume.teacher.crudskill.CrudSkillActivity;
+import io.dume.dume.teacher.homepage.TeacherActivtiy;
 import io.dume.dume.teacher.homepage.TeacherDataStore;
 import io.dume.dume.teacher.mentor_settings.basicinfo.EditAccount;
 import io.dume.dume.teacher.pojo.Skill;
@@ -80,6 +81,7 @@ public class SkillActivity extends CustomStuAppCompatActivity implements SkillCo
                     multiFab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorAccent)));
                 }
             }
+
             @Override
             public void onShown(Snackbar snackbar) {
                 multiFab.setTranslationY(-30 * mDensity);
@@ -90,11 +92,12 @@ public class SkillActivity extends CustomStuAppCompatActivity implements SkillCo
             }
         });
 
-        enamSnackbar.addCallback(new Snackbar.Callback(){
+        enamSnackbar.addCallback(new Snackbar.Callback() {
             @Override
             public void onDismissed(Snackbar snackbar, int event) {
                 multiFab.setTranslationY(0);
             }
+
             @Override
             public void onShown(Snackbar snackbar) {
                 multiFab.setTranslationY(-30 * mDensity);
@@ -298,22 +301,30 @@ public class SkillActivity extends CustomStuAppCompatActivity implements SkillCo
         if (loadView.getVisibility() == View.VISIBLE) {
             loadView.setVisibility(View.INVISIBLE);
         }
-
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
-            super.onBackPressed();
+            if (isTaskRoot()) {
+                startActivity(new Intent(this, TeacherActivtiy.class));
+                finish();
+            } else {
+                super.onBackPressed();
+            }
         }
         return super.onOptionsItemSelected(item);
     }
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        if (isTaskRoot()) {
+            startActivity(new Intent(this, TeacherActivtiy.class));
+            finish();
+        } else {
+            super.onBackPressed();
+        }
     }
 
 }

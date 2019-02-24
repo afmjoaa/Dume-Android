@@ -413,6 +413,11 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
         mentorFeild.put("avatar", dataStore.getPhotoUri());
         mentorFeild.put("location", location);
 
+        mentorFeild.put("daily_i", "0");
+        mentorFeild.put("daily_r", "0");
+        mentorFeild.put("p_daily_i", "0");
+        mentorFeild.put("p_daily_r", "0");
+
         mentorFeild.put("gender", "");
         mentorFeild.put("religion", "");
         mentorFeild.put("birth_date", "");
@@ -466,6 +471,9 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
         ArrayList<String> availablePromoList = new ArrayList<>();
         mentorFeild.put("available_promo", availablePromoList);
 
+        List<String> rating_array = new ArrayList<>();
+        mentorFeild.put("rating_array", rating_array);
+
         Map<String, Object> achievements = new HashMap<>();
         achievements.put("joined", true);
         achievements.put("inaugural", false);
@@ -510,6 +518,11 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
         bootCampField.put("avatar", "");
         bootCampField.put("location", location);
 
+        bootCampField.put("daily_i", "0");
+        bootCampField.put("daily_r", "0");
+        bootCampField.put("p_daily_i", "0");
+        bootCampField.put("p_daily_r", "0");
+
         bootCampField.put("account_active", true);
         bootCampField.put("pro_com_%", "60");
 
@@ -542,6 +555,9 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
         bootCampField.put("applied_promo", appliedPromoList);
         List<String> availablePromoList = new ArrayList<>();
         bootCampField.put("available_promo", availablePromoList);
+
+        List<String> rating_array = new ArrayList<>();
+        bootCampField.put("rating_array", rating_array);
 
         Map<String, Object> achievements = new HashMap<>();
         achievements.put("joined", true);
@@ -589,6 +605,9 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
         stuProInfo.put("applied_promo", appliedPromoList);
         List<String> availablePromoList = new ArrayList<String>();
         stuProInfo.put("available_promo", availablePromoList);
+
+        List<String> rating_array = new ArrayList<>();
+        stuProInfo.put("rating_array", rating_array);
 
         Map<String, Object> selfRating = new HashMap<>();
         selfRating.put("star_rating", "5.00");
