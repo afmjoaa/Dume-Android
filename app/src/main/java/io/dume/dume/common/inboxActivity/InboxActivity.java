@@ -380,8 +380,6 @@ public class InboxActivity extends CustomStuAppCompatActivity implements InboxAc
                 case 2:
 
 
-
-
                     rootView = inflater.inflate(R.layout.common1_fragment_inbox_notification, container, false);
                     inboxRecyclerRecent = rootView.findViewById(R.id.inbox_recycler_view_recent);
 
@@ -413,6 +411,7 @@ public class InboxActivity extends CustomStuAppCompatActivity implements InboxAc
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
         }
+
 
         @Override
         public Fragment getItem(int position) {

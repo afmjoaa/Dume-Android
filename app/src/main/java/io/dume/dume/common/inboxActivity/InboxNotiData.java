@@ -1,12 +1,28 @@
 package io.dume.dume.common.inboxActivity;
 
-import java.net.URL;
+import java.io.Serializable;
+import java.util.Date;
 
-public class InboxNotiData {
+public class InboxNotiData implements Serializable {
+    public static String DUME_NOTIFICATION = "global",
+            NEW_DUME_REQUEST = "new_request",
+            REQUEST_ACCEPTED = "request_accepted",
+            REQUEST_REJECTED = "request_rejected",
+            PAYMENT_SUCCESS = "p_success",
+            PAYMENT_FAILED = "p_failed",
+            WARNING = "warning",
+            NEW_ROOM_STARTED = "new_room";
 
-    URL notiUserDP;
-    String notiUserName;
-    String freqAndTime;
-    boolean typeView;//using this for different view for same recycler.
+    String name;
+    String title;
+    String body;
+    boolean seen;
+    String type;
+    String avatar;
+    String mail;
+    Date date;
+
+
+
 
 }
