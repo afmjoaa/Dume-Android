@@ -1,10 +1,13 @@
 package io.dume.dume.student.recordsCurrent;
 
 import android.annotation.SuppressLint;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -30,6 +33,7 @@ import android.support.v4.view.animation.FastOutLinearInInterpolator;
 import android.support.v4.view.animation.LinearOutSlowInInterpolator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SwitchCompat;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.Gravity;
@@ -39,6 +43,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -52,18 +57,14 @@ import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.GeoPoint;
-import com.google.maps.android.SphericalUtil;
-import com.google.maps.android.ui.IconGenerator;
 import com.hadiidbouk.charts.BarData;
 import com.hadiidbouk.charts.ChartProgressBar;
 import com.jackandphantom.circularprogressbar.CircleProgressbar;
@@ -93,7 +94,7 @@ import java.util.concurrent.Executors;
 
 import io.dume.dume.Google;
 import io.dume.dume.R;
-import io.dume.dume.library.RouteOverlayView;
+import io.dume.dume.broadcastReceiver.MyAlarmBroadCast;
 import io.dume.dume.model.DumeModel;
 import io.dume.dume.student.common.QualificationAdapter;
 import io.dume.dume.student.common.ReviewAdapter;
@@ -304,6 +305,14 @@ public class RecordsCurrentActivity extends CustomStuAppCompatActivity implement
         private TextView rejectSubText;
         private Button rejectYesBtn;
         private Button rejectNoBtn;
+        private Integer myTimePickerHourOfDay = null;
+        private Integer myTimePickerMinite = null;
+        private SwitchCompat reminderSwitch;
+        private Calendar alarmCalender;
+        private SharedPreferences localDb;
+        private String recordTimeSuggestedTime;
+        private AlarmManager alarmManager;
+        private ArrayList<PendingIntent> intentArray;
 
 
         public PlaceholderFragment() {
@@ -323,6 +332,7 @@ public class RecordsCurrentActivity extends CustomStuAppCompatActivity implement
             super.onCreate(savedInstanceState);
             searchDataStore = SearchDataStore.getInstance();
             mDensity = context.getResources().getDisplayMetrics().density;
+            localDb = context.getSharedPreferences("DUME_REMINDER", MODE_PRIVATE);
         }
 
         @Override
@@ -414,39 +424,7 @@ public class RecordsCurrentActivity extends CustomStuAppCompatActivity implement
             contactBtn = rootView.findViewById(R.id.current_contact_btn);
             cancelBtn = rootView.findViewById(R.id.current_cancel_btn);
             divider = rootView.findViewById(R.id.divider3);
-
-            //testting the reminder here
-            timePickerReminder = new TimePickerFragment();
-            timePickerReminder.setTimePickerListener(new TimePickerDialog.OnTimeSetListener() {
-                @Override
-                public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                    String myTime;
-                    if (DateFormat.is24HourFormat(getActivity())) {
-                        myTime = "" + hourOfDay + ":" + minute;
-                    } else {
-                        String AM_PM;
-                        int myHourOfDay = hourOfDay;
-                        if (hourOfDay < 12) {
-                            AM_PM = "AM";
-                        } else {
-                            AM_PM = "PM";
-                        }
-                        if (hourOfDay >= 13) {
-                            myHourOfDay = hourOfDay - 12;
-                        } else if (hourOfDay == 0) {
-                            myHourOfDay = 12;
-                        }
-                        myTime = "" + myHourOfDay + ":" + minute + " " + AM_PM;
-                        reminderEditText.setText(myTime);
-                    }
-                }
-            });
-            reminderEditText.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    timePickerReminder.show(getChildFragmentManager(), "time_reminder");
-                }
-            });
+            reminderSwitch = rootView.findViewById(R.id.reminder_switch);
 
 
             //setting the qualification recycler view
@@ -489,7 +467,197 @@ public class RecordsCurrentActivity extends CustomStuAppCompatActivity implement
             );
             new ApiSimulator().executeOnExecutor(Executors.newSingleThreadExecutor());
 
+
+            //testting the reminder here
+            timePickerReminder = new TimePickerFragment();
+            timePickerReminder.setTimePickerListener(new TimePickerDialog.OnTimeSetListener() {
+                @Override
+                public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+
+                    myTimePickerHourOfDay = hourOfDay;
+                    myTimePickerMinite = minute;
+                    if (reminderSwitch.isChecked()) {
+
+                        if (isAlarmExists(record.getId().hashCode())) {
+                            stopAlarm(record.getId().hashCode());
+                        }
+                        setReminder(record.getId(), true, myTimePickerHourOfDay, myTimePickerMinite);
+                        setAlarm(myTimePickerHourOfDay, myTimePickerMinite, record.getId().hashCode());
+
+                    }
+                    String myTime;
+                    if (DateFormat.is24HourFormat(getActivity())) {
+                        myTime = "" + hourOfDay + ":" + minute;
+                    } else {
+                        String AM_PM;
+                        if (hourOfDay < 12) {
+                            AM_PM = "AM";
+                        } else {
+                            AM_PM = "PM";
+                        }
+                        if (hourOfDay >= 13) {
+                            myTimePickerHourOfDay = hourOfDay - 12;
+                        } else if (hourOfDay == 0) {
+                            myTimePickerHourOfDay = 12;
+                        }
+                        myTime = "" + myTimePickerHourOfDay + ":" + minute + " " + AM_PM;
+
+                    }
+                    reminderEditText.setText(myTime);
+                    //setAlarm(calendar.getTimeInMillis());
+
+                }
+            });
+            reminderEditText.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    timePickerReminder.show(getChildFragmentManager(), "time_reminder");
+                }
+            });
+
+
+            BackUpReminder reminderOn = isReminderOn(record.getId());
+            if (reminderOn.isSet) {
+                String myTime;
+                myTimePickerHourOfDay = reminderOn.hour;
+                myTimePickerMinite = reminderOn.minute;
+                if (DateFormat.is24HourFormat(getActivity())) {
+                    myTime = "" + reminderOn.hour + ":" + reminderOn.minute;
+                } else {
+                    String AM_PM;
+
+                    if (reminderOn.hour < 12) {
+                        AM_PM = "AM";
+                    } else {
+                        AM_PM = "PM";
+                    }
+                    if (reminderOn.hour >= 13) {
+                        myTimePickerHourOfDay = reminderOn.hour - 12;
+                    } else if (reminderOn.hour == 0) {
+                        myTimePickerHourOfDay = 12;
+                    }
+                    myTime = "" + myTimePickerHourOfDay + ":" + reminderOn.minute + " " + AM_PM;
+                }
+                reminderEditText.setText(myTime);
+            } else {
+                reminderEditText.setText(recordTimeSuggestedTime);
+                reminderSwitch.setChecked(false);
+            }
+
+
+            reminderSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked) {
+                        if (isAlarmExists(record.getId().hashCode())) {
+                            stopAlarm(record.getId().hashCode());
+                        }
+                        setReminder(record.getId(), isChecked, myTimePickerHourOfDay, myTimePickerMinite);
+                        setAlarm(myTimePickerHourOfDay, myTimePickerMinite, record.getId().hashCode());
+                    } else {
+                        setReminder(record.getId(), isChecked, myTimePickerHourOfDay, myTimePickerMinite);
+
+                    }
+                }
+            });
+
+
             return rootView;
+        }
+
+        public void stopAlarm(int requestCode) {
+
+            for (int i = 0; i < getSelectedDates().size(); i++) {
+                Intent intent = new Intent(getActivity(), MyAlarmBroadCast.class);//the same as up
+                intent.setAction(MyAlarmBroadCast.ACTION_ALARM_RECEIVER);//the same as up
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), requestCode + i, intent, PendingIntent.FLAG_CANCEL_CURRENT);//the same as up
+                alarmManager.cancel(pendingIntent);//important
+                pendingIntent.cancel();//important
+            }
+
+        }
+
+        public boolean isAlarmExists(int requestCode) {
+            Intent intent = new Intent(getActivity(), MyAlarmBroadCast.class);//the same as up
+            intent.setAction(MyAlarmBroadCast.ACTION_ALARM_RECEIVER);//the same as up
+            boolean isWorking = (PendingIntent.getBroadcast(getActivity(), requestCode, intent, PendingIntent.FLAG_NO_CREATE) != null);//just changed the flag
+            Log.d(TAG, "alarm is " + (isWorking ? "" : "not") + " working...");
+            return isWorking;
+        }
+
+
+        public BackUpReminder isReminderOn(String id) {
+            BackUpReminder backUpReminder = new BackUpReminder();
+            backUpReminder.isSet = localDb.getBoolean(id + "_isSet", false);
+            backUpReminder.hour = localDb.getInt(id + "_hour", 0);
+            backUpReminder.minute = localDb.getInt(id + "_minute", 0);
+            return backUpReminder;
+        }
+
+        public void setReminder(String id, boolean status, int hour, int minute) {
+            SharedPreferences.Editor edit = localDb.edit();
+            edit.putBoolean(id + "_isSet", status);
+            edit.putInt(id + "_hour", hour);
+            edit.putInt(id + "_minute", minute);
+            edit.apply();
+            edit.commit();
+
+        }
+
+        class BackUpReminder {
+            public boolean isSet;
+            public int hour;
+            public int minute;
+        }
+
+        private void setAlarm(int hourOfDay, int minute, int requestCode) {
+            Log.w(TAG, "setAlarm: " + requestCode);
+            //getting the alarm manager
+
+
+            //creating a new intent specifying the broadcast receiver
+            Intent i = new Intent(context, MyAlarmBroadCast.class);
+
+            //creating a pending intent using the intent
+            alarmCalender = Calendar.getInstance();
+            ArrayList<CalendarDay> selectedDates = getSelectedDates();
+            alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+            for (int count = 0; count < selectedDates.size(); count++) {
+                Calendar instance = Calendar.getInstance();
+                PendingIntent pi = PendingIntent.getBroadcast(context, requestCode + count, i, 0);
+                CalendarDay calendarDay = selectedDates.get(count);
+                Log.w(TAG, "setAlarm: " + calendarDay.getDay());
+                alarmCalender.set(calendarDay.getYear(),
+                        calendarDay.getMonth() - 1,
+                        calendarDay.getDay(),
+                        hourOfDay, minute, 0);
+                if (alarmManager != null) {
+                    if (alarmCalender.getTimeInMillis() >= instance.getTimeInMillis()) {
+                        alarmManager.set(AlarmManager.RTC_WAKEUP, alarmCalender.getTimeInMillis(), pi);
+                    }
+                }
+
+                Log.w(TAG, "setAlarm: Millis " + alarmCalender.getTimeInMillis());
+                Date date = new Date(alarmCalender.getTimeInMillis());
+                Log.w(TAG, "setAlarm:" + date.toString());
+            }
+
+
+         /*   alarmCalender.set(alarmCalender.get(Calendar.YEAR),
+                    alarmCalender.get(Calendar.MONTH),
+                    alarmCalender.get(Calendar.DAY_OF_MONTH),
+                    hourOfDay, minute, 0);
+            if (alarmManager != null) {
+                PendingIntent pi = PendingIntent.getBroadcast(myThisActivity, 12, i, 0);
+                alarmManager.set(AlarmManager.RTC_WAKEUP, alarmCalender.getTimeInMillis(), pi);
+                PendingIntent pi1 = PendingIntent.getBroadcast(myThisActivity, 13, i, 0);
+
+                alarmManager.set(AlarmManager.RTC_WAKEUP, alarmCalender.getTimeInMillis() + 30000, pi1);
+            }*/
+            Toast.makeText(myThisActivity, "Alarm is set", Toast.LENGTH_SHORT).show();
+
+            //setting the repeating alarm that will be fired every day
+            //am.setRepeating(AlarmManager.RTC_WAKEUP, time, , pi);
         }
 
         public void toggleStatus() {
@@ -807,8 +975,12 @@ public class RecordsCurrentActivity extends CustomStuAppCompatActivity implement
             Temp = (String) start_date.get("date_string");
             startingDateValue.setText(Temp);
 
-            Temp = (String) start_time.get("time_string");
-            reminderEditText.setText(Temp);
+            recordTimeSuggestedTime = (String) start_time.get("time_string");
+            Long dbHour = (Long) start_time.get("hour_of_day");
+            myTimePickerHourOfDay = dbHour.intValue();
+            Long dbMinute = (Long) start_time.get("minute");
+            myTimePickerMinite = dbMinute.intValue();
+
 
             Calendar calendar = Calendar.getInstance();
             Integer mMonth = calendar.get(Calendar.MONTH);
@@ -1370,6 +1542,24 @@ public class RecordsCurrentActivity extends CustomStuAppCompatActivity implement
             });
         }
 
+        public ArrayList<CalendarDay> getSelectedDates() {
+            final ArrayList<CalendarDay> dates = new ArrayList<>();
+            final CalendarDay day = CalendarDay.from(startingYear.intValue(), startingMonth.intValue() + 1, startingDay.intValue());
+            LocalDate temp = day.getDate();
+            List<Long> selectedDaysInt = (List<Long>) preferred_days.get("selectedDaysInt");
+            Double daysPerMonth = selectedDaysInt.size() * 4.4285;
+            Integer count = 0;
+            while (count < daysPerMonth.intValue()) {
+                for (int i = 0; i < selectedDaysInt.size(); i++) {
+                    final CalendarDay thisDay = CalendarDay.from(temp);
+                    dates.add(thisDay);
+                    temp = calcNextDay(temp, returesDaysofWeek(selectedDaysInt.get(i).intValue()));
+                    count++;
+                }
+            }
+            return dates;
+        }
+
 
         private class ApiSimulator extends AsyncTask<Void, Void, List<CalendarDay>> {
 
@@ -1474,7 +1664,6 @@ public class RecordsCurrentActivity extends CustomStuAppCompatActivity implement
                     defaultUrl = SearchDataStore.DEFAULTMALEAVATER;
                 } else {
                     defaultUrl = SearchDataStore.DEFAULTFEMALEAVATER;
-                    ;
                 }
                 Glide.with(context)
                         .asBitmap()
@@ -1521,3 +1710,32 @@ public class RecordsCurrentActivity extends CustomStuAppCompatActivity implement
 temp = temp.plusDays(1);
 //final DayOfWeek dayOfWeek = temp.getDayOfWeek();
 } while (temp.getDayOfWeek() != DayOfWeek.MONDAY );*/
+
+
+/*if (chk_monday.isChecked()) {
+                        forday(2);
+                    } else if (chk_tuesday.isChecked()) {
+                        forday(3);
+                    } else if (chk_wednesday.isChecked()) {
+                        forday(4);
+                    } else if (chk_thursday.isChecked()) {
+                        forday(5);
+                    } else if (chk_friday.isChecked()) {
+                        forday(6);
+                    } else if (chk_sat.isChecked()) {
+                        forday(7);
+                    } else if (chk_sunday.isChecked()) {
+                        forday(1);
+                    }
+
+public void forday(int week) {
+
+        calSet.set(Calendar.DAY_OF_WEEK, week);
+        calSet.set(Calendar.HOUR_OF_DAY, hour);
+        calSet.set(Calendar.MINUTE, minuts);
+        calSet.set(Calendar.SECOND, 0);
+        calSet.set(Calendar.MILLISECOND, 0);
+
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,
+                calSet.getTimeInMillis(), 1 * 60 * 60 * 1000, pendingIntent);
+    }*/

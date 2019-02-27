@@ -1,99 +1,190 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<carbon.widget.RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/hostRelativeLayout"
+    android:id="@+id/hosting_relative_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:clickable="true"
-    android:focusable="true"
-    android:foreground="?android:attr/selectableItemBackground">
+    android:layout_marginLeft="10dp"
+    android:layout_marginTop="10dp"
+    android:layout_marginRight="10dp"
+    app:carbon_cornerRadius="5dp"
+    app:carbon_rippleColor="@color/colorAccent">
 
-    <carbon.widget.ImageView
-        android:id="@+id/noti_user_dp"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_centerVertical="true"
-        android:layout_marginBottom="12dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="12dp"
-        android:clickable="false"
-        android:src="@drawable/demo_testing_image"
-        app:carbon_cornerRadius="25dp" />
-
-    <com.jackandphantom.circularprogressbar.CircleProgressbar
-        android:id="@+id/selected_indicator"
-        android:layout_width="52dp"
-        android:layout_height="52dp"
-        android:layout_centerVertical="true"
-        android:layout_marginBottom="12dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="12dp"
-        app:cpb_backgroundProgressColor="@color/white"
-        app:cpb_backgroundProgressWidth="10"
-        app:cpb_clockwise="true"
-        app:cpb_foregroundProgressColor="@color/inbox_active_color"
-        app:cpb_foregroundProgressWidth="4"
-        app:cpb_progress="100"
-        app:cpb_roundedCorner="true" />
-
-
-    <LinearLayout
-        android:id="@+id/vertical_textview_container"
+    <carbon.widget.FrameLayout
+        android:id="@+id/primary_framelayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="26dp"
-        android:layout_marginStart="26dp"
-        android:layout_toEndOf="@id/noti_user_dp"
-        android:layout_toRightOf="@id/noti_user_dp"
-        android:orientation="vertical">
+        android:background="@color/white"
+        android:padding="7dp"
+        app:carbon_elevation="3dp"
+        app:carbon_cornerRadius="5dp">
+        <!-- app:carbon_elevation="3dp"-->
 
-        <TextView
-            android:id="@+id/noti_user_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
+        <carbon.widget.ImageView
+            android:id="@+id/skillDots"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="end"
+            android:layout_marginTop="4dp"
             android:layout_marginEnd="6dp"
             android:layout_marginRight="6dp"
-            android:layout_marginTop="3dp"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:maxWidth="160dp"
-            android:singleLine="true"
-            android:text="Sumon"
-            android:textAppearance="?android:attr/textAppearanceListItem"
-            app:fontFamily="@font/cairo_regular" />
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="3dp"
+            app:carbon_cornerRadius="14dp"
+            app:carbon_rippleColor="@color/colorRippleDefault"
+            app:carbon_rippleHotspot="true"
+            app:carbon_rippleStyle="background"
+            app:srcCompat="@drawable/ic_delete_icon" />
 
-
-        <TextView
-            android:id="@+id/frequency_and_time"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="1dp"
-            android:ellipsize="end"
-            android:maxWidth="160dp"
-            android:maxLines="1"
-            android:text="(2) Yesterday, 11:36 PM"
-            android:textAllCaps="false"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="@color/textColorSecondary"
-            android:textSize="12sp"
-            app:fontFamily="@font/cairo_regular" />
+            android:orientation="vertical">
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="90dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:layout_width="90dp"
+                        android:layout_height="match_parent">
+
+                        <carbon.widget.ImageView
+                            android:id="@+id/categoryAvaterIV"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:layout_centerVertical="true"
+                            android:layout_centerHorizontal="true"
+                            android:clickable="false"
+                            android:padding="3dp"
+                            app:carbon_cornerRadius="25dp"
+                            app:srcCompat="@drawable/ic_dume_admin" />
+
+                        <com.jackandphantom.circularprogressbar.CircleProgressbar
+                            android:id="@+id/selected_indicator"
+                            android:layout_width="52dp"
+                            android:layout_height="52dp"
+                            android:layout_centerVertical="true"
+                            android:layout_centerHorizontal="true"
+                            app:cpb_backgroundProgressColor="@color/white"
+                            app:cpb_backgroundProgressWidth="10"
+                            app:cpb_clockwise="true"
+                            app:cpb_foregroundProgressColor="@color/inbox_active_color"
+                            app:cpb_foregroundProgressWidth="4"
+                            app:cpb_progress="100"
+                            app:cpb_roundedCorner="true" />
+
+                    </RelativeLayout>
+
+                    <TextView
+                        android:id="@+id/likeTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="40% likes"
+                        android:textStyle="italic" />
+
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginRight="5dp"
+                    android:background="#eee4e3e4" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/noti_user_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginBottom="3dp"
+                        android:layout_weight="1"
+                        android:text="Math, English,Phsysics"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+
+
+                    <TextView
+                        android:id="@+id/frequency_and_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="Sold - 3 times"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </carbon.widget.FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/primary_framelayout"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:background="@drawable/bg_white_bottom_round"
+        android:orientation="vertical"
+        android:paddingLeft="16dp"
+        android:paddingTop="8dp"
+        android:paddingRight="16dp"
+        android:paddingBottom="8dp"
+        android:translationY="-2dp">
 
     </LinearLayout>
 
-    <View
-        android:id="@+id/divider2"
+    <LinearLayout
+        android:id="@+id/recycle_hosting_linear"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_alignParentBottom="true"
-        android:layout_marginEnd="16dp"
-        android:layout_marginLeft="88dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginStart="88dp"
-        android:background="#41a7a7a7" />
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/primary_framelayout"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:background="@drawable/bg_white_bottom_round"
+        android:orientation="vertical"
+        android:paddingLeft="16dp"
+        android:paddingTop="8dp"
+        android:paddingRight="16dp"
+        android:paddingBottom="8dp"
+        android:translationY="-2dp"
+        android:visibility="gone">
 
-</RelativeLayout>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/skillDetailsRV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+</carbon.widget.RelativeLayout>

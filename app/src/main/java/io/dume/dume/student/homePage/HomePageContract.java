@@ -140,6 +140,8 @@ public interface HomePageContract {
 
         void gotoTestingActivity();
 
+        void gotoBootCampActivity();
+
         boolean checkNull();
 
         void initRecentSearchRecycler(DocumentSnapshot documentSnapshot);

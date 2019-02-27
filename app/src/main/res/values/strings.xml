@@ -502,8 +502,8 @@ provided.Tap salary for details.  </string>
     <string name="done_icon">Done_icon</string>
     <string name="switch_learner">Switch Learner</string>
     <string name="for_me">For Me</string>
-    <string name="dume_products"><![CDATA[Dume Gang: This is our finding nearby boot camp package.\nRegular Dume : This is the regular monthly tuition we are generally familiar with.\nInstant Dume : This is our premier package here we instantly give you a capable mentor for a certain time to teach & guide you in a specific subject.]]></string>
-    <string name="dume_products_mentor"><![CDATA[Dume Gang: This is our finding nearby boot camp package.\nRegular Dume : This is the regular monthly tuition we are generally familiar with.\nInstant Dume : This is our premier package. One will be eligible for this if he unlocks the premier badge.]]></string>
+    <string name="dume_products"><![CDATA[Dume Batch: This is our finding nearby boot camp package.\nRegular Dume : This is the regular monthly tuition we are generally familiar with.\nInstant Dume : This is our premier package here we instantly give you a capable mentor for a certain time to teach & guide you in a specific subject.]]></string>
+    <string name="dume_products_mentor"><![CDATA[Dume Batch: This is our finding nearby boot camp package.\nRegular Dume : This is the regular monthly tuition we are generally familiar with.\nInstant Dume : This is our premier package. One will be eligible for this if he unlocks the premier badge.]]></string>
     <string name="dume_product_intro">You can choose between regular, instant or boot camp/couching center with ease.</string>
     <string name="choosing_text">Choosing mentors have never been easy with Dume</string>
     <string name="start_couching_text">Life is constantly bringing us challenges and opportunities. When we have the courage to step up to the challenges and seize the opportunities we move forward. As a coach, you can help others make this kind of progress.</string>
@@ -657,7 +657,7 @@ provided.Tap salary for details.  </string>
         <item>Real time service for student and mentor</item>
         <item>Allow Dume some permissions</item>
         <item>Choose between Student, Mentor or Boot-camp profile</item>
-        <item>Search between Dume Gang, Regular Dume or Instant Dume  package</item>
+        <item>Search between Dume Batch, Regular Dume or Instant Dume  package</item>
     </string-array>
 
     <string-array name="after_splash_data">
@@ -665,14 +665,29 @@ provided.Tap salary for details.  </string>
         <item><![CDATA[Know something better then other!! Start sharing and earn money.Don\'t have anything to share don\'t worry start taking dume and be the best at what you do.]]></item>
         <item><![CDATA[Dume would like to access your current location, make phone call, receive sms & write to storage for proper functioning & better search result.]]></item>
         <item>Select which category suite you best and build your profile.You can switch profile anytime as you wish.</item>
-        <item>In simple and short Dume Gang is couching center whereas Regular Dume is monthly tuition and Instant Dume is weekly.</item>
+        <item>In simple and short Dume Batch is couching center whereas Regular Dume is monthly tuition and Instant Dume is weekly.</item>
     </string-array>
     <string name="title_activity_boot_camp_add">Start Boot Camp</string>
     <string name="title_activity_student_addvertise">Enhance your skill</string>
-    <string name="gang_salary_detail">Dume Gang final salary will be the price presented based on your given salary range &amp; it will be shown to you before your confirmation. Tap help for details.</string>
+    <string name="gang_salary_detail">Dume Batch final salary will be the price presented based on your given salary range &amp; it will be shown to you before your confirmation. Tap help for details.</string>
     <string name="regular_salary_detail">Regular Dume final salary will be the price presented based on your given salary range &amp; it will be shown to you before your confirmation. Tap help for details.</string>
     <string name="instant_salary_detail">Instant Dume final salary will be the price presented based on your given salary range &amp; it will be shown to you before your confirmation. Tap help for details.</string>
     <string name="msg_token_fmt">foo</string>
     <string name="demo_user_name">Demo user</string>
+
+    <string name="new_message_notification_title_template">New message: %1$s</string>
+
+    <!-- TODO: remove this placeholder text -->
+    <string name="new_message_notification_placeholder_text_template">You said %1$s and lorem ipsum
+        dolor sit amet, consectetur adipiscing elit. Etiam non enim magna. Morbi dictum, velit vel
+        semper venenatis, magna odio volutpat velit, at ullamcorper nulla lacus sed turpis.
+        Pellentesque vitae metus elit, nec tincidunt tellus. Integer sed nisl sem, ullamcorper
+        ornare lacus. Duis ac mauris sed massa congue volutpat. Donec sed erat sit amet turpis
+        viverra rhoncus sit amet nec magna. Donec lacinia ligula at libero volutpat volutpat nec nec
+        tortor.
+    </string>
+
+    <string name="action_share">Share</string>
+    <string name="action_reply">Reply</string>
 
 </resources>

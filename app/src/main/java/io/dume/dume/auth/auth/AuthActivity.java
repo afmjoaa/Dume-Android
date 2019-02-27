@@ -320,7 +320,15 @@ public class AuthActivity extends CustomStuAppCompatActivity implements AuthCont
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        presenter.onBottomNavChange(item);
+        switch (item.getItemId()) {
+            case R.id.bootcamp_nav:
+                showToast("Boot Camp Service is coming soon...");
+                bottomNavigationView.setSelectedItemId(1);
+                return false;
+            default:
+                presenter.onBottomNavChange(item);
+                break;
+        }
         return true;
     }
 

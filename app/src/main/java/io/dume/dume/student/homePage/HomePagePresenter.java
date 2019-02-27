@@ -113,7 +113,7 @@ public class HomePagePresenter implements HomePageContract.Presenter {
             case R.id.boot_camp:
                 //add boot camp here
                 //mView.switchProfileDialog(DumeUtils.BOOTCAMP);
-                mView.gotoTestingActivity();
+                mView.gotoBootCampActivity();
                 break;
             case R.id.al_display_pic:
                 mView.gotoProfilePage();

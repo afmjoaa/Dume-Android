@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
@@ -52,7 +53,7 @@ public class MyNotification extends FirebaseMessagingService {
             NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID, name, importance);
             mChannel.setDescription(Description);
             mChannel.enableLights(true);
-            mChannel.setLightColor(Color.RED);
+            mChannel.setLightColor(Color.WHITE);
             mChannel.enableVibration(true);
             mChannel.setVibrationPattern(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
             mChannel.setShowBadge(false);
@@ -60,9 +61,17 @@ public class MyNotification extends FirebaseMessagingService {
         }
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "my_channel_01")
-                .setSmallIcon(R.mipmap.icon_launcher)
+                .setSmallIcon(R.drawable.ic_notification_launcher)
                 .setContentTitle(messageTitle)
-                .setContentText(messageBody);
+                .setContentText(messageBody)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+                .setOnlyAlertOnce(true)
+                .setAutoCancel(true)
+                .setLights(Color.WHITE, 800, 800)
+                .setVibrate(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400})
+                .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
+                .setColor(getResources().getColor(R.color.noti_color));
 
         Intent resultIntent = new Intent(this, HomePageActivity.class);
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);

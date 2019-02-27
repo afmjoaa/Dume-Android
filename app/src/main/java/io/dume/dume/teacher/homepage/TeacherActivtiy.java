@@ -767,6 +767,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
             case R.id.mentor:
                 break;
             case R.id.boot_camp:
+                flush("Boot Camp Service is coming soon...");
                 switchProfileDialog(DumeUtils.BOOTCAMP);
                 break;
 

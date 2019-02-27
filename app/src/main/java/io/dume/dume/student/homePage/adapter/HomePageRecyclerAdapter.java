@@ -42,7 +42,6 @@ public class HomePageRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
     private Context context;
     private List<HomePageRecyclerData> data;
     private String[] feedbackStrings;
-    private int totalCount;
     private final int promoStart;
 
 

@@ -203,12 +203,12 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
     @Override
     protected void onDestroy() {
         super.onDestroy();
-//        stopService(locationServiceIntent);
+//       stopService(locationServiceIntent);
     }
 
     @Override
     public void loadPromoData(HomePageRecyclerData promoData) {
-        Log.w(TAG, "loadPromoData: " );
+        Log.w(TAG, "loadPromoData: ");
         hPageBSRcyclerAdapter.addPromoToList(promoData);
     }
 
@@ -1453,10 +1453,14 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
     }
 
     @Override
+    public void gotoBootCampActivity() {
+        flush("Boot Camp Service is coming soon...");
+    }
+
+    @Override
     public boolean checkNull() {
         return switchAcountBtn != null;
     }
-
 
     @Override
     public void showSingleBottomSheetRating(HomePageRatingData currentRatingDataList) {

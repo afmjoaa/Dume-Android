@@ -377,7 +377,7 @@ public class InboxActivity extends CustomStuAppCompatActivity implements InboxAc
                         }
                     });
                     //setting the recycler view
-
+                    myThisActivity.fab.show();
                     break;
                 case 2:
 
@@ -398,7 +398,7 @@ public class InboxActivity extends CustomStuAppCompatActivity implements InboxAc
                         }
                     });
 
-
+                    myThisActivity.fab.hide();
                     break;
                 case 3:
                     rootView = inflater.inflate(R.layout.common1_fragment_default_inbox, container, false);
@@ -418,11 +418,9 @@ public class InboxActivity extends CustomStuAppCompatActivity implements InboxAc
                         }
                     });
 
+                    myThisActivity.fab.hide();
                     break;
-
             }
-
-
             return rootView;
         }
     }
