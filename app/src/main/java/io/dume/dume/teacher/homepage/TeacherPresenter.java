@@ -299,6 +299,10 @@ public class TeacherPresenter implements TeacherContract.Presenter {
                 break;
             case R.id.mentor_add_layout:
                 view.gotoBootCampAddvertise();
+                break;
+            case R.id.profile_data:
+                view.gotoProfilePage();
+                break;
 
         }
     }

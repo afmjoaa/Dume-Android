@@ -99,6 +99,7 @@ import io.dume.dume.student.homePage.adapter.HomePageRecyclerAdapter;
 import io.dume.dume.student.homePage.adapter.HomePageRecyclerData;
 import io.dume.dume.student.pojo.CusStuAppComMapActivity;
 import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
+import io.dume.dume.student.profilePage.ProfilePageActivity;
 import io.dume.dume.student.recordsPage.RecordsPageActivity;
 import io.dume.dume.student.studentHelp.StudentHelpActivity;
 import io.dume.dume.student.studentPayment.StudentPaymentActivity;
@@ -1259,6 +1260,11 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
     public void gotoBootCamPHomePage() {
         startActivity(new Intent(getApplicationContext(), BootCampHomePageActivity.class));
         finish();
+    }
+
+    @Override
+    public void gotoProfilePage() {
+        startActivity(new Intent(this, EditAccount.class));
     }
 
     @Override

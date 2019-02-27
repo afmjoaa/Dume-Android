@@ -129,4 +129,7 @@
     <color name="skill_color">#e8f4f4</color>
     <color name="noti_color">#04AA77</color>
 
+    <color name="notificationItemColor">#edfffe</color>
+    <color name="snack_action">#90caf9</color>
+
 </resources>

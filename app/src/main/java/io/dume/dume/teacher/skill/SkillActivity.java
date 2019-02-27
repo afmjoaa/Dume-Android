@@ -256,7 +256,7 @@ public class SkillActivity extends CustomStuAppCompatActivity implements SkillCo
         TextView textViewStart = snackView.findViewById(R.id.custom_snackbar_text);
         textViewStart.setText(message);
         TextView actionTV = snackView.findViewById(R.id.actionTV);
-        actionTV.setTextColor(getResources().getColor(R.color.frag_icon_active));
+        actionTV.setTextColor(getResources().getColor(R.color.snack_action));
         actionTV.setOnClickListener(view -> {
             startActivity(new Intent(getApplicationContext(), EditAccount.class));
         });

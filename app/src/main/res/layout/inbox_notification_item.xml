@@ -8,15 +8,16 @@
     android:layout_marginTop="10dp"
     android:layout_marginRight="10dp"
     app:carbon_cornerRadius="5dp"
+
     app:carbon_rippleColor="@color/colorAccent">
 
     <carbon.widget.FrameLayout
         android:id="@+id/primary_framelayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
         android:padding="7dp"
         app:carbon_elevation="3dp"
+        android:background="@color/notificationItemColor"
         app:carbon_cornerRadius="5dp">
         <!-- app:carbon_elevation="3dp"-->
 
@@ -54,12 +55,13 @@
 
                     <RelativeLayout
                         android:layout_width="90dp"
+                        android:layout_marginBottom="2dp"
                         android:layout_height="match_parent">
 
                         <carbon.widget.ImageView
                             android:id="@+id/categoryAvaterIV"
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
+                            android:layout_width="38dp"
+                            android:layout_height="38dp"
                             android:layout_centerVertical="true"
                             android:layout_centerHorizontal="true"
                             android:clickable="false"
@@ -69,8 +71,8 @@
 
                         <com.jackandphantom.circularprogressbar.CircleProgressbar
                             android:id="@+id/selected_indicator"
-                            android:layout_width="52dp"
-                            android:layout_height="52dp"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
                             android:layout_centerVertical="true"
                             android:layout_centerHorizontal="true"
                             app:cpb_backgroundProgressColor="@color/white"
@@ -84,13 +86,13 @@
                     </RelativeLayout>
 
                     <TextView
-                        android:id="@+id/likeTV"
+                        android:id="@+id/dateTV"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="40% likes"
+                        android:text="Date"
                         android:textStyle="italic" />
 
 
@@ -113,15 +115,18 @@
 
                     <TextView
                         android:id="@+id/noti_user_name"
-                        android:layout_width="match_parent"
+                        android:layout_width="200dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
                         android:layout_marginLeft="5dp"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginTop="2dp"
                         android:layout_marginEnd="5dp"
                         android:layout_marginRight="5dp"
-                        android:layout_marginBottom="3dp"
+                        android:layout_marginBottom="4dp"
                         android:layout_weight="1"
+                        android:singleLine="true"
+                        android:maxLines="1"
+                        android:ellipsize="end"
                         android:text="Math, English,Phsysics"
                         android:textColor="@color/black"
                         android:textSize="16sp" />
@@ -154,7 +159,7 @@
         android:layout_below="@+id/primary_framelayout"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
-        android:background="@drawable/bg_white_bottom_round"
+        android:background="@drawable/bottom_round_light_green_bg"
         android:orientation="vertical"
         android:paddingLeft="16dp"
         android:paddingTop="8dp"
@@ -171,7 +176,7 @@
         android:layout_below="@+id/primary_framelayout"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
-        android:background="@drawable/bg_white_bottom_round"
+        android:background="@drawable/bottom_round_light_green_bg"
         android:orientation="vertical"
         android:paddingLeft="16dp"
         android:paddingTop="8dp"
@@ -180,10 +185,16 @@
         android:translationY="-2dp"
         android:visibility="gone">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/skillDetailsRV"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:text="Description here"
+            android:textSize="14sp" />
 
     </LinearLayout>
 

@@ -9,7 +9,6 @@
     android:focusable="true"
     android:foreground="?android:attr/selectableItemBackground">
 
-
     <com.jackandphantom.circularprogressbar.CircleProgressbar
         android:id="@+id/selected_indicator"
         android:layout_width="50dp"
