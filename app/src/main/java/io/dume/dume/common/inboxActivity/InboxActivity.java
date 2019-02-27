@@ -122,13 +122,15 @@ public class InboxActivity extends CustomStuAppCompatActivity implements InboxAc
                 switch (currentTabPosition) {
                     case 0:
                         contactFromIntent.putExtra("contactFrom", 0);
+                        contactFromIntent.setAction("from_message");
                         startActivity(contactFromIntent);
                         break;
                     case 1:
-                        Toast.makeText(InboxActivity.this, "Coming soon", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(InboxActivity.this, "Send notification feature is coming soon", Toast.LENGTH_SHORT).show();
                         break;
                     case 2:
                         contactFromIntent.putExtra("contactFrom", 2);
+                        contactFromIntent.setAction("from_call");
                         startActivity(contactFromIntent);
                         break;
                 }
@@ -377,7 +379,6 @@ public class InboxActivity extends CustomStuAppCompatActivity implements InboxAc
                         }
                     });
                     //setting the recycler view
-                    myThisActivity.fab.show();
                     break;
                 case 2:
 
@@ -397,8 +398,6 @@ public class InboxActivity extends CustomStuAppCompatActivity implements InboxAc
                             Toast.makeText(myThisActivity, msg, Toast.LENGTH_SHORT).show();
                         }
                     });
-
-                    myThisActivity.fab.hide();
                     break;
                 case 3:
                     rootView = inflater.inflate(R.layout.common1_fragment_default_inbox, container, false);
@@ -417,8 +416,6 @@ public class InboxActivity extends CustomStuAppCompatActivity implements InboxAc
 
                         }
                     });
-
-                    myThisActivity.fab.hide();
                     break;
             }
             return rootView;

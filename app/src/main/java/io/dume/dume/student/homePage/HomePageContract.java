@@ -138,6 +138,8 @@ public interface HomePageContract {
 
         void switchProfileDialog(String identify);
 
+        void showPercentSnak(String message, String actionName);
+
         void gotoTestingActivity();
 
         void gotoBootCampActivity();

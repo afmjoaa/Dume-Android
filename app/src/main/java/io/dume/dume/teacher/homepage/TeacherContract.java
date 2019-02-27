@@ -101,6 +101,8 @@ public interface TeacherContract {
 
         void gotoBootCamPHomePage();
 
+        void gotoProfilePage();
+
         void switchProfileDialog(String identify);
 
         void showSingleBottomSheetRating(HomePageRatingData currentRatingDataList);

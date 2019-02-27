@@ -8,7 +8,6 @@
     android:focusable="true"
     android:foreground="?android:attr/selectableItemBackground">
 
-
     <com.jackandphantom.circularprogressbar.CircleProgressbar
         android:id="@+id/selected_indicator"
         android:layout_width="50dp"
@@ -34,9 +33,30 @@
         android:layout_marginLeft="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="12dp"
+        android:scaleType="centerCrop"
         android:clickable="false"
-        android:src="@drawable/demo_testing_image"
+        app:srcCompat="@drawable/demo_default_avatar_dark"
         app:carbon_cornerRadius="25dp" />
+
+    <carbon.widget.ImageView
+        android:id="@+id/call_btn_image"
+        android:layout_width="40dp"
+        android:visibility="gone"
+        android:layout_height="40dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="6dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:padding="5dp"
+        app:carbon_cornerRadius="20dp"
+        app:carbon_rippleColor="#5000796b"
+        app:carbon_rippleRadius="20dp"
+        app:carbon_rippleStyle="background"
+        app:srcCompat="@drawable/ic_inbox_call_instant" />
 
     <LinearLayout
         android:id="@+id/vertical_textview_container"

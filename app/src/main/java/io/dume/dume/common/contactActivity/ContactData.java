@@ -22,6 +22,7 @@ public class ContactData {
     String status;
     String userId;
     String record_id;
+    String phone;
     int flagStatus;
     Map<String, Object> record;
 
@@ -34,7 +35,7 @@ public class ContactData {
     }
 
 
-    ContactData(String record_id, String contactUserDP, String contactUserName, String status, String userId, Map<String, Object> record) {
+    ContactData(String record_id, String contactUserDP, String contactUserName, String status, String userId, Map<String, Object> record, String phone) {
 
         this.record_id = record_id;
         this.record = record;
@@ -43,6 +44,15 @@ public class ContactData {
         this.contactUserDP = contactUserDP;
         this.contactUserName = contactUserName;
         this.status = status;
+        this.phone = phone;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public String getUserId() {

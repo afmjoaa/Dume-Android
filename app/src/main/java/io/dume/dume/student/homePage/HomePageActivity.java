@@ -111,6 +111,7 @@ import io.dume.dume.student.studentPayment.StudentPaymentActivity;
 import io.dume.dume.student.studentSettings.StudentSettingsActivity;
 import io.dume.dume.teacher.homepage.TeacherActivtiy;
 import io.dume.dume.teacher.homepage.TeacherContract;
+import io.dume.dume.teacher.mentor_settings.basicinfo.EditAccount;
 import io.dume.dume.util.DumeUtils;
 import io.dume.dume.util.NetworkUtil;
 import me.zhanghai.android.materialratingbar.MaterialRatingBar;
@@ -199,6 +200,8 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
     private BottomSheetDialog mCancelBottomSheetDialog;
     private View cancelsheetRootView;
     private HomePageRecyclerAdapter hPageBSRcyclerAdapter;
+    private Snackbar enamSnackbar;
+
 
     @Override
     protected void onDestroy() {
@@ -270,6 +273,16 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
             hPageBSRecycler.setAdapter(hPageBSRcyclerAdapter);
             hPageBSRecycler.setLayoutManager(new LinearLayoutManager(this));
         }
+
+        enamSnackbar.addCallback(new Snackbar.Callback() {
+            @Override
+            public void onDismissed(Snackbar snackbar, int event) {
+            }
+
+            @Override
+            public void onShown(Snackbar snackbar) {
+            }
+        });
     }
 
 
@@ -353,6 +366,7 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
         loadView = findViewById(R.id.loadViewTwo);
         bottomSheetNSV = findViewById(R.id.bottom_sheet_scroll_view);
         recentSearchRV = findViewById(R.id.recent_search_recycler);
+        enamSnackbar = Snackbar.make(coordinatorLayout, "Replace with your own action", Snackbar.LENGTH_LONG);
 
     }
 
@@ -1180,7 +1194,10 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
 
     @Override
     public void flush(String msg) {
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+        Toast toast = Toast.makeText(this, msg, Toast.LENGTH_SHORT);
+        TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
+        if( v != null) v.setGravity(Gravity.CENTER);
+        toast.show();
     }
 
     @Override
@@ -1425,6 +1442,34 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
             });
         }
         mCancelBottomSheetDialog.show();
+    }
+
+    @Override
+    public void showPercentSnak(String message, String actionName) {
+        Snackbar.SnackbarLayout layout = (Snackbar.SnackbarLayout) enamSnackbar.getView();
+        TextView textView = (TextView) layout.findViewById(android.support.design.R.id.snackbar_text);
+        textView.setVisibility(View.INVISIBLE);
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View snackView = inflater.inflate(R.layout.teachers_snakbar_layout, null);
+        // layout.setBackgroundColor(R.color.red);
+        TextView textViewStart = snackView.findViewById(R.id.custom_snackbar_text);
+        textViewStart.setText(message);
+        TextView actionTV = snackView.findViewById(R.id.actionTV);
+        actionTV.setTextColor(getResources().getColor(R.color.snack_action));
+        actionTV.setOnClickListener(view -> {
+            startActivity(new Intent(getApplicationContext(), ProfilePageActivity.class));
+        });
+        actionTV.setText(actionName);
+        layout.setPadding(0, 0, 0, 0);
+        CoordinatorLayout.LayoutParams parentParams = (CoordinatorLayout.LayoutParams) layout.getLayoutParams();
+        parentParams.height = (int) (30 * (getResources().getDisplayMetrics().density));
+       /* parentParams.setAnchorId(R.id.Secondary_toolbar);
+        parentParams.anchorGravity = Gravity.BOTTOM;*/
+        layout.setLayoutParams(parentParams);
+        layout.addView(snackView, 0);
+        int status = NetworkUtil.getConnectivityStatusString(this);
+        enamSnackbar.show();
+
     }
 
     @Override
