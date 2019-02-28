@@ -84,8 +84,8 @@ public class ContactDataAdapter extends RecyclerView.Adapter<ContactDataAdapter.
 
         holder.hostRelativeLayout.setOnClickListener(view -> {
             if(isFromMsg){
-                if (single.getStatus().equals("Pending")) {
-                    Toast.makeText(context, "Your request is not accepted yet.", Toast.LENGTH_SHORT).show();
+                if (single.getStatus().equals("Pending") || single.getStatus().equals("Rejected") || single.getStatus().equals("Completed")) {
+                    Toast.makeText(context, "Your request is not accepted or current yet.", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 Map<String, Object> map = new HashMap<>();

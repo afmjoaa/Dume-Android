@@ -13,6 +13,8 @@ public interface ChatActivityContact {
         void showDialogue();
 
         void viewMuskClicked();
+
+        void comingSoon();
     }
 
     interface Presenter {

@@ -8,7 +8,7 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".student.recordsPending.RecordsPendingActivity$PlaceholderFragment"
     tools:showIn="@layout/stu9_activity_records_pendding">
-
+    <!--  -->
 
     <LinearLayout
         android:id="@+id/nested_host_linearlayout"
@@ -392,6 +392,154 @@
                     android:paddingBottom="2dp"
                     android:singleLine="true"
                     android:text="Days/Week : "
+                    android:textAllCaps="false"
+                    android:textColor="@color/textColorPrimary"
+                    android:textSize="13sp"
+                    android:textStyle="normal"
+                    app:fontFamily="@font/cairo_regular" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!--student info layout-->
+        <LinearLayout
+            android:id="@+id/stu_more_info_host_linearlayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:visibility="gone"
+            android:orientation="vertical">
+
+            <carbon.widget.LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_round_corner_rela_layout"
+                android:baselineAligned="false"
+                android:orientation="vertical"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                app:carbon_elevation="8dp">
+
+                <Button
+                    android:id="@+id/stu_show_more_info_btn"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableBottom="@drawable/ic_up_arrow_small"
+                    android:drawablePadding="2dp"
+                    android:text="Student Info"
+                    android:textAllCaps="false"
+                    android:textColor="@color/textColorPrimary"
+                    android:textSize="16sp"
+                    app:fontFamily="@font/cairo_regular" />
+
+            </carbon.widget.LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/stu_more_info_layout_vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:background="@drawable/bg_white_bottom_round"
+                android:orientation="vertical"
+                android:paddingLeft="16dp"
+                android:paddingTop="8dp"
+                android:paddingRight="16dp"
+                android:paddingBottom="8dp"
+                android:translationY="-2dp">
+
+                <TextView
+                    android:id="@+id/stu_textview_current_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="0dp"
+                    android:drawableStart="@drawable/ic_keyboard_arrow_right_black_24dp"
+                    android:drawableLeft="@drawable/ic_keyboard_arrow_right_black_24dp"
+                    android:drawablePadding="6dp"
+                    android:gravity="center_vertical"
+                    android:paddingTop="2dp"
+                    android:paddingBottom="2dp"
+                    android:singleLine="true"
+                    android:text="Current Status : "
+                    android:textAllCaps="false"
+                    android:textColor="@color/textColorPrimary"
+                    android:textSize="13sp"
+                    android:textStyle="normal"
+                    app:fontFamily="@font/cairo_regular" />
+
+                <TextView
+                    android:id="@+id/stu_previous_result"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="0dp"
+                    android:drawableStart="@drawable/ic_keyboard_arrow_right_black_24dp"
+                    android:drawableLeft="@drawable/ic_keyboard_arrow_right_black_24dp"
+                    android:drawablePadding="6dp"
+                    android:gravity="center_vertical"
+                    android:paddingTop="2dp"
+                    android:paddingBottom="2dp"
+                    android:singleLine="true"
+                    android:text="Previous Result : "
+                    android:textAllCaps="false"
+                    android:textColor="@color/textColorPrimary"
+                    android:textSize="13sp"
+                    android:textStyle="normal"
+                    app:fontFamily="@font/cairo_regular" />
+
+
+                <TextView
+                    android:id="@+id/stu_textview_gender"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="0dp"
+                    android:drawableStart="@drawable/ic_keyboard_arrow_right_black_24dp"
+                    android:drawableLeft="@drawable/ic_keyboard_arrow_right_black_24dp"
+                    android:drawablePadding="6dp"
+                    android:gravity="center_vertical"
+                    android:paddingTop="2dp"
+                    android:paddingBottom="2dp"
+                    android:singleLine="true"
+                    android:text="Gender : "
+                    android:textAllCaps="false"
+                    android:textColor="@color/textColorPrimary"
+                    android:textSize="13sp"
+                    android:textStyle="normal"
+                    app:fontFamily="@font/cairo_regular" />
+
+                <TextView
+                    android:id="@+id/stu_textview_behaviour"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="0dp"
+                    android:drawableStart="@drawable/ic_keyboard_arrow_right_black_24dp"
+                    android:drawableLeft="@drawable/ic_keyboard_arrow_right_black_24dp"
+                    android:drawablePadding="6dp"
+                    android:gravity="center_vertical"
+                    android:paddingTop="2dp"
+                    android:paddingBottom="2dp"
+                    android:singleLine="true"
+                    android:text="Behaviour : "
+                    android:textAllCaps="false"
+                    android:textColor="@color/textColorPrimary"
+                    android:textSize="13sp"
+                    android:textStyle="normal"
+                    app:fontFamily="@font/cairo_regular" />
+
+                <TextView
+                    android:id="@+id/stu_textview_communication"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="0dp"
+                    android:drawableStart="@drawable/ic_keyboard_arrow_right_black_24dp"
+                    android:drawableLeft="@drawable/ic_keyboard_arrow_right_black_24dp"
+                    android:drawablePadding="6dp"
+                    android:gravity="center_vertical"
+                    android:paddingTop="2dp"
+                    android:paddingBottom="2dp"
+                    android:singleLine="true"
+                    android:text="Communication : "
                     android:textAllCaps="false"
                     android:textColor="@color/textColorPrimary"
                     android:textSize="13sp"

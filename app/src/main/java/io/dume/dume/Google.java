@@ -103,12 +103,14 @@ public class Google {
         this.records = records;
     }
 
-    public String getLastDocumentId() {
-        return lastDocumentId;
+    public DocumentSnapshot lastDocumentOfMessage;
+
+    public DocumentSnapshot getLastDocumentOfMessage() {
+        return lastDocumentOfMessage;
     }
 
-    public void setLastDocumentId(String lastDocumentId) {
-        this.lastDocumentId = lastDocumentId;
+    public void setLastDocumentOfMessage(DocumentSnapshot lastDocumentOfMessage) {
+        this.lastDocumentOfMessage = lastDocumentOfMessage;
     }
 
     public List<String> getAppliedPromoList() {

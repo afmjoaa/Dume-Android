@@ -7,10 +7,10 @@
     <item
         android:id="@+id/rating_professionalism_icon"
         android:drawable="@drawable/ic_rating_profisionalism_icon"
-        android:left="0dp"
-        android:right="0dp"
-        android:top="0dp"
-        android:bottom="0dp"
+        android:left="13dp"
+        android:right="13dp"
+        android:top="13dp"
+        android:bottom="13dp"
         android:gravity="center"/>
 
     <!-- badge not needed  -->

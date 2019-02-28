@@ -501,10 +501,10 @@ public class RecordsCompletedActivity extends CustomStuAppCompatActivity impleme
                     }
                     Drawable[] compoundDrawables = showAdditionalRatingBtn.getCompoundDrawables();
                     Drawable d = compoundDrawables[3];
-                    if (d instanceof Animatable) {
-                        ((Animatable) d).start();
-                    }
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        if (d instanceof Animatable) {
+                            ((Animatable) d).start();
+                        }
                         ((Animatable2) d).registerAnimationCallback(new Animatable2.AnimationCallback() {
                             public void onAnimationEnd(Drawable drawable) {
                                 //Do something
@@ -516,6 +516,14 @@ public class RecordsCompletedActivity extends CustomStuAppCompatActivity impleme
                                 showAdditionalRatingBtn.setEnabled(true);
                             }
                         });
+                    }else{
+                        if (visible) {
+                            showAdditionalRatingBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_down_arrow_small));
+                            showAdditionalRatingBtn.setEnabled(true);
+                        } else {
+                            showAdditionalRatingBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_up_arrow_small));
+                            showAdditionalRatingBtn.setEnabled(true);
+                        }
                     }
                 }
             });
@@ -567,10 +575,10 @@ public class RecordsCompletedActivity extends CustomStuAppCompatActivity impleme
                     }
                     Drawable[] compoundDrawables = agreementInfoBtn.getCompoundDrawables();
                     Drawable d = compoundDrawables[3];
-                    if (d instanceof Animatable) {
-                        ((Animatable) d).start();
-                    }
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        if (d instanceof Animatable) {
+                            ((Animatable) d).start();
+                        }
                         ((Animatable2) d).registerAnimationCallback(new Animatable2.AnimationCallback() {
                             public void onAnimationEnd(Drawable drawable) {
                                 //Do something
@@ -582,6 +590,14 @@ public class RecordsCompletedActivity extends CustomStuAppCompatActivity impleme
                                 agreementInfoBtn.setEnabled(true);
                             }
                         });
+                    }else {
+                        if (visible) {
+                            agreementInfoBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_down_arrow_small));
+                            agreementInfoBtn.setEnabled(true);
+                        } else {
+                            agreementInfoBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_up_arrow_small));
+                            agreementInfoBtn.setEnabled(true);
+                        }
                     }
                 }
             });
@@ -633,10 +649,10 @@ public class RecordsCompletedActivity extends CustomStuAppCompatActivity impleme
                     }
                     Drawable[] compoundDrawables = achievementInfoBtn.getCompoundDrawables();
                     Drawable d = compoundDrawables[3];
-                    if (d instanceof Animatable) {
-                        ((Animatable) d).start();
-                    }
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        if (d instanceof Animatable) {
+                            ((Animatable) d).start();
+                        }
                         ((Animatable2) d).registerAnimationCallback(new Animatable2.AnimationCallback() {
                             public void onAnimationEnd(Drawable drawable) {
                                 //Do something
@@ -648,13 +664,20 @@ public class RecordsCompletedActivity extends CustomStuAppCompatActivity impleme
                                 achievementInfoBtn.setEnabled(true);
                             }
                         });
+                    }else {
+                        if (visible) {
+                            achievementInfoBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_down_arrow_small));
+                            achievementInfoBtn.setEnabled(true);
+                        } else {
+                            achievementInfoBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_up_arrow_small));
+                            achievementInfoBtn.setEnabled(true);
+                        }
                     }
                 }
             });
         }
 
         public void toggleStatus() {
-
             //confirm bottom sheet
             Map<String, Object> documentData = record.getData();
             Map<String, Object> spMap = (Map<String, Object>) documentData.get("sp_info");
@@ -722,6 +745,8 @@ public class RecordsCompletedActivity extends CustomStuAppCompatActivity impleme
                         rejectYesBtn.setText("Pay Now");
                         rejectNoBtn.setText("latter");
                     }
+                    showAdditionalRatingBtn.setText("Your Rating");
+                    achievementInfoBtn.setText("Your Achievements");
                     break;
                 case DumeUtils.BOOTCAMP:
                     requestAgainBtn.setVisibility(View.GONE);

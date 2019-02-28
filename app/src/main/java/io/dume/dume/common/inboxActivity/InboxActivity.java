@@ -354,7 +354,6 @@ public class InboxActivity extends CustomStuAppCompatActivity implements InboxAc
                                         startActivity(new Intent(myThisActivity, ChatActivity.class).setAction("testing"), optionsPending.toBundle());
                                     } else {
                                         startActivity(new Intent(myThisActivity, ChatActivity.class).setAction("testing"));
-
                                     }
 
                                 }
