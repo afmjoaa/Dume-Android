@@ -29,6 +29,7 @@ import io.dume.dume.Google;
 import io.dume.dume.R;
 import io.dume.dume.common.chatActivity.ChatActivity;
 import io.dume.dume.common.chatActivity.DemoModel;
+import io.dume.dume.common.inboxActivity.InboxActivity;
 import io.dume.dume.teacher.homepage.TeacherContract;
 
 public class ContactDataAdapter extends RecyclerView.Adapter<ContactDataAdapter.MyViewHolder> {
@@ -68,12 +69,17 @@ public class ContactDataAdapter extends RecyclerView.Adapter<ContactDataAdapter.
         Glide.with(context).load(single.getContactUserDP()).into(holder.contactUserDP);
         holder.contactUserName.setText(single.getContactUserName());
         holder.statusText.setText(single.getStatus());
-        if(isFromMsg){
+        if (isFromMsg) {
             holder.callBtn.setVisibility(View.GONE);
-        }else {
-            holder.callBtn.setVisibility(View.VISIBLE);
-            holder.statusIndicatorImage.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_call_made_black_24dp));
-            holder.statusText.setText(String.format("+88%s", single.getPhone()));
+        } else {
+            if (single.getStatus().equals("Current") || single.getStatus().equals("Accepted")) {
+                holder.callBtn.setVisibility(View.VISIBLE);
+                holder.statusIndicatorImage.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_call_made_black_24dp));
+                holder.statusText.setText(String.format("+88%s", single.getPhone()));
+            } else {
+                holder.callBtn.setVisibility(View.VISIBLE);
+                holder.callBtn.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_inbox_call_instant_disable));
+            }
         }
         holder.callBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,7 +89,7 @@ public class ContactDataAdapter extends RecyclerView.Adapter<ContactDataAdapter.
         });
 
         holder.hostRelativeLayout.setOnClickListener(view -> {
-            if(isFromMsg){
+            if (isFromMsg) {
                 if (single.getStatus().equals("Pending") || single.getStatus().equals("Rejected") || single.getStatus().equals("Completed")) {
                     Toast.makeText(context, "Your request is not accepted or current yet.", Toast.LENGTH_SHORT).show();
                     return;
@@ -131,39 +137,34 @@ public class ContactDataAdapter extends RecyclerView.Adapter<ContactDataAdapter.
                     }
                     if (optionsPending != null) {
                         context.startActivity(new Intent(context, ChatActivity.class).setAction("testing"), optionsPending.toBundle());
+                        ((Activity) context).finish();
                     } else {
                         context.startActivity(new Intent(context, ChatActivity.class).setAction("testing"));
-
+                        ((Activity) context).finish();
                     }
 
-                } else new DemoModel(context).addRoom(map, new TeacherContract.Model.Listener<Void>() {
-                    @Override
-                    public void onSuccess(Void list) {
-                        Google.getInstance().setCurrentRoom(foo.get(0).concat(foo.get(1)));
-                        android.util.Pair[] pairsPending = new android.util.Pair[3];
-                        pairsPending[0] = new android.util.Pair<View, String>(holder.statusIndicatorImage, "tn0ne");
-                        pairsPending[1] = new android.util.Pair<View, String>(holder.contactUserDP, "tnTwo");
-                        pairsPending[2] = new android.util.Pair<View, String>(holder.contactUserName, "tnFive");
-                        ActivityOptions optionsPending = null;
-                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-                            optionsPending = ActivityOptions.makeSceneTransitionAnimation((Activity) context, pairsPending);
-                        }
-                        if (optionsPending != null) {
-                            context.startActivity(new Intent(context, ChatActivity.class).setAction("testing"), optionsPending.toBundle());
-                        } else {
-                            context.startActivity(new Intent(context, ChatActivity.class).setAction("testing"));
-
+                } else
+                    new DemoModel(context).addRoom(map, new TeacherContract.Model.Listener<Void>() {
+                        @Override
+                        public void onSuccess(Void list) {
+                            Google.getInstance().setCurrentRoom(foo.get(0).concat(foo.get(1)));
+                            Intent returnIntent = new Intent();
+                            ((Activity) context).setResult(Activity.RESULT_OK,returnIntent);
+                            ((Activity) context).finish();
+                            //context.startActivity(new Intent(context, InboxActivity.class).setAction("testing"));
                         }
 
-                    }
+                        @Override
+                        public void onError(String msg) {
+                            Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
 
-                    @Override
-                    public void onError(String msg) {
-                        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
-
-                    }
-                });
-            }else{
+                        }
+                    });
+            } else {
+                if (single.getStatus().equals("Pending") || single.getStatus().equals("Rejected") || single.getStatus().equals("Completed")) {
+                    Toast.makeText(context, "Your request is not accepted or current yet.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 //Toast.makeText(context, "from call", Toast.LENGTH_SHORT).show();
                 Uri u = Uri.parse("tel:" + single.getPhone());
                 Intent i = new Intent(Intent.ACTION_DIAL, u);

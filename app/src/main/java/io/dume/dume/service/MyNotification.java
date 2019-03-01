@@ -26,14 +26,17 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import io.dume.dume.R;
+import io.dume.dume.common.chatActivity.ChatActivity;
 import io.dume.dume.student.homePage.HomePageActivity;
 
 public class MyNotification extends FirebaseMessagingService {
 
     private static String token;
     private final FirebaseFirestore firestore;
+    private String type = "";
 
 
     public MyNotification() {
@@ -88,12 +91,23 @@ public class MyNotification extends FirebaseMessagingService {
     public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
         if (remoteMessage != null) {
-            sendNotification(remoteMessage.getNotification().getTitle(), remoteMessage.getNotification().getBody());
+
+            Map<String, String> data = remoteMessage.getData();
+            if (data.get("type") != null) {
+                type = data.get("type");
+            }
+
+            if (type.equals("message")) {
+                if (!ChatActivity.isActivityLive) {
+                    sendNotification(remoteMessage.getNotification().getTitle(), remoteMessage.getNotification().getBody());
+                }
+            } else
+                sendNotification(remoteMessage.getNotification().getTitle(), remoteMessage.getNotification().getBody());
 
         }
-
         Log.w("foo", "messageReceived: " + remoteMessage.getData().toString());
     }
+
 
     @Override
     public void onDeletedMessages() {

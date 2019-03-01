@@ -205,17 +205,24 @@ public class DemoModel {
         });
     }
 
-    public void onInboxChange(/*String room_id,*/ TeacherContract.Model.Listener<List<Letter>> messageListener) {
+    public void onInboxChange(TeacherContract.Model.Listener<Letter> messageListener) {
         firestore.collection("messages").document(Google.getInstance().getCurrentRoom()).collection("chatbox").orderBy("timestamp", Query.Direction.DESCENDING).limit(1).addSnapshotListener((Activity) context, new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                List<DocumentSnapshot> documents = queryDocumentSnapshots.getDocuments();
-                List<Letter> letters = new ArrayList<>();
-                for (int i = 0; i < documents.size(); i++) {
-                    Letter letter = documents.get(i).toObject(Letter.class);
-                    letters.add(letter);
+                List<DocumentSnapshot> documents = null;
+                if (queryDocumentSnapshots != null) {
+                    documents = queryDocumentSnapshots.getDocuments();
                 }
-                messageListener.onSuccess(letters);
+                Letter letter = null;
+                if (documents != null && documents.size() > 0) {
+                    letter = documents.get(0).toObject(Letter.class);
+                    if (letter != null) {
+                        messageListener.onSuccess(letter);
+                    } else messageListener.onError("null found");
+                }else {
+                    messageListener.onError("null found");
+                }
+
                 if (e != null) {
                     messageListener.onError(e.getCode() + e.getMessage());
                 }

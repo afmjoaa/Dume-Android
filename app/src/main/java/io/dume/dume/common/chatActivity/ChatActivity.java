@@ -15,12 +15,19 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.github.ybq.android.spinkit.sprite.Sprite;
+import com.github.ybq.android.spinkit.style.ChasingDots;
+import com.github.ybq.android.spinkit.style.DoubleBounce;
+import com.github.ybq.android.spinkit.style.FoldingCube;
+import com.github.ybq.android.spinkit.style.Pulse;
+import com.github.ybq.android.spinkit.style.ThreeBounce;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.RemoteMessage;
@@ -38,6 +45,7 @@ import com.transitionseverywhere.TransitionSet;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 import carbon.widget.ImageView;
 import io.dume.dume.Google;
@@ -61,6 +69,7 @@ public class ChatActivity extends DemoMessagesActivity implements ChatActivityCo
         DialogInterface.OnClickListener {
 
     private ChatActivityContact.Presenter mPresenter;
+    public static boolean isActivityLive = false;
     private static final byte CONTENT_TYPE_VOICE = 1;
     private LinearLayout attachmentHolder;
     private View inbetweenDivider;
@@ -79,6 +88,24 @@ public class ChatActivity extends DemoMessagesActivity implements ChatActivityCo
     private static FirebaseMessaging notificationInstance;
     private String token = null;
     private String name = null;
+    private Google google;
+    private RelativeLayout loadingProgressBar;
+    private ProgressBar progressBar;
+    private RelativeLayout hideableTypingRelative;
+    private ProgressBar progressBarTypingTwo;
+    private LinearLayout noDataBlock;
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        isActivityLive = false;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        isActivityLive = true;
+    }
 
     public static void open(Context context) {
         context.startActivity(new Intent(context, ChatActivity.class));
@@ -101,6 +128,7 @@ public class ChatActivity extends DemoMessagesActivity implements ChatActivityCo
         mPresenter.chatEnqueue();
         configureAppbarWithoutColloapsing(this, " ");
         //findLoadView
+        google = Google.getInstance();
         this.messagesList = (MessagesList) findViewById(R.id.messagesList);
         this.messagesList.removeAllViews();
 
@@ -136,7 +164,7 @@ public class ChatActivity extends DemoMessagesActivity implements ChatActivityCo
             @Override
             public void onSuccess(List<Letter> list) {
                 List<Message> messages = new ArrayList<>();
-                for (int i = 1; i < list.size(); i++) {
+                for (int i = 0; i < list.size(); i++) {
                     if (list.get(i).getUid().equals(FirebaseAuth.getInstance().getUid())) {
                         TYPE = SENDER;
                     } else {
@@ -147,6 +175,7 @@ public class ChatActivity extends DemoMessagesActivity implements ChatActivityCo
                     Log.w(TAG, "tttt " + list.get(i).getBody());
                 }
                 Log.w(TAG, "onSuccess: To test " + messages.size());
+                loadingProgressBar.setVisibility(View.GONE);
                 ChatActivity.super.messagesAdapter.addToEnd(messages, false);
 
                 if (list.size() > 0) {
@@ -155,6 +184,42 @@ public class ChatActivity extends DemoMessagesActivity implements ChatActivityCo
                 if (list.size() == 30) {
                     isDataExists = true;
                 }
+                if (list.size() <= 0) {
+                    noDataBlock.setVisibility(View.VISIBLE);
+                } else {
+                    noDataBlock.setVisibility(View.GONE);
+                }
+
+                mModel.onInboxChange(new TeacherContract.Model.Listener<Letter>() {
+                    @Override
+                    public void onSuccess(Letter letter) {
+                        if (letter.getUid().equals(FirebaseAuth.getInstance().getUid())) {
+                            TYPE = SENDER;
+                        } else {
+                            TYPE = RECIVER;
+                        }
+                        /*(google.getSnapCounter() == 2 && letter.size() != 0 && letter.get(0).getBody().equals(list.get(0).getBody()))*/
+                        google.setSnapCounter(google.getSnapCounter() + 1);
+                        if (google.getSnapCounter() == 1 && list.size() != 0) {
+
+                        } else if (list.size() > 0 && (google.getSnapCounter() == 2 && letter.getBody().equals(list.get(0).getBody()))) {
+
+                        } else {
+                            ChatActivity.super.messagesAdapter
+                                    .addToStart(new Message(letter.getUid(), new User("" + TYPE, "Enam", SearchDataStore.DEFAULTMALEAVATER, true), letter.getBody(), letter.getTimestamp()), true);
+                            if (noDataBlock.getVisibility() == View.VISIBLE) {
+                                noDataBlock.setVisibility(View.GONE);
+                            }
+                        }
+
+                    }
+
+                    @Override
+                    public void onError(String msg) {
+
+                    }
+                });
+
             }
 
             @Override
@@ -163,26 +228,6 @@ public class ChatActivity extends DemoMessagesActivity implements ChatActivityCo
             }
         });
 
-
-        mModel.onInboxChange(new TeacherContract.Model.Listener<List<Letter>>() {
-            @Override
-            public void onSuccess(List<Letter> list) {
-
-                for (int i = 0; i < list.size(); i++) {
-                    if (list.get(i).getUid().equals(FirebaseAuth.getInstance().getUid())) {
-                        TYPE = SENDER;
-                    } else {
-                        TYPE = RECIVER;
-                    }
-                    ChatActivity.super.messagesAdapter
-                            .addToStart(new Message(list.get(i).getUid(), new User("" + TYPE, "Enam", SearchDataStore.DEFAULTMALEAVATER, true), list.get(i).getBody(), list.get(i).getTimestamp()), true);
-                }
-            }
-            @Override
-            public void onError(String msg) {
-
-            }
-        });
 
         input.setTypingListener(new MessageInput.TypingListener() {
             @Override
@@ -220,10 +265,9 @@ public class ChatActivity extends DemoMessagesActivity implements ChatActivityCo
             @Override
             public void onSuccess(Boolean list) {
                 if (list) {
-                    typeingTV.setVisibility(View.VISIBLE);
-                    typeingTV.setText("Foo is Typing...");
+                    hideableTypingRelative.setVisibility(View.VISIBLE);
                 } else {
-                    typeingTV.setVisibility(View.GONE);
+                    hideableTypingRelative.setVisibility(View.GONE);
                 }
             }
 
@@ -273,6 +317,12 @@ public class ChatActivity extends DemoMessagesActivity implements ChatActivityCo
     }
 
     @Override
+    protected void onDestroy() {
+        google.setSnapCounter(0);
+        super.onDestroy();
+    }
+
+    @Override
     public void findView() {
         attachmentHolder = findViewById(R.id.attachment_holder);
         inbetweenDivider = findViewById(R.id.inbetween_divider);
@@ -284,6 +334,11 @@ public class ChatActivity extends DemoMessagesActivity implements ChatActivityCo
         title = findViewById(R.id.noti_user_name);
         input = findViewById(R.id.input);
         typeingTV = findViewById(R.id.isTypingTV);
+        loadingProgressBar = findViewById(R.id.loadingPanel);
+        progressBar = findViewById(R.id.progress_bar);
+        progressBarTypingTwo = findViewById(R.id.typing_progress_bar_one);
+        hideableTypingRelative = findViewById(R.id.hideable_retative_typing);
+        noDataBlock = findViewById(R.id.no_data_block);
     }
 
     @Override
@@ -294,11 +349,52 @@ public class ChatActivity extends DemoMessagesActivity implements ChatActivityCo
                 activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
             }
         }
+
+
     }
 
     @Override
     public void configChat() {
+        final int min = 1;
+        final int max = 3;
+        final int random = new Random().nextInt((max - min) + 1) + min;
+        Sprite doubleBounce = new DoubleBounce();
+        switch (random) {
+            case 1:
+                doubleBounce = new DoubleBounce();
+                break;
+            case 2:
+                doubleBounce = new ChasingDots();
+                break;
+            case 3:
+                doubleBounce = new Pulse();
+                break;
+            default:
+                doubleBounce = new DoubleBounce();
+                break;
+        }
+        doubleBounce.setColor(getResources().getColor(R.color.inbox_active_color));
+        progressBar.setIndeterminateDrawable(doubleBounce);
 
+        Sprite typingSpriteTwo = new ThreeBounce();
+        typingSpriteTwo.setColor(getResources().getColor(R.color.inbox_active_color));
+        progressBarTypingTwo.setIndeterminateDrawable(typingSpriteTwo);
+
+
+        /*MessagesListAdapter.HoldersConfig holdersConfig = new MessagesListAdapter.HoldersConfig();
+        holdersConfig.setIncomingLayout(R.layout.item_incoming_image_message);
+        holdersConfig.setOutcomingLayout(R.layout.my_item_outcoming);
+        holdersConfig.setIncomingHolder(CustomIncomingMessageViewHolder.class);
+        holdersConfig.setOutcomingHolder(CustomOutcomingMessageViewHolder.class);*/
+
+       /* MessageHolders holdersConfig = new MessageHolders()
+                .setIncomingTextConfig(
+                        CustomIncomingMessageViewHolder.class,
+                        R.layout.item_incoming_image_message)
+                .setOutcomingTextConfig(CustomOutcomingMessageViewHolder.class,
+                        R.layout.my_item_outcoming);
+
+        this.messagesAdapter = new MessagesListAdapter<>(senderId, holdersConfig, imageLoader);*/
     }
 
     @Override
@@ -431,7 +527,12 @@ public class ChatActivity extends DemoMessagesActivity implements ChatActivityCo
                         R.layout.item_custom_incoming_voice_message,
                         OutcomingVoiceMessageViewHolder.class,
                         R.layout.item_custom_outcoming_voice_message,
-                        this);
+                        this)
+                .setIncomingTextConfig(
+                        CustomIncomingMessageViewHolder.class,
+                        R.layout.my_item_incoming)
+                .setOutcomingTextConfig(CustomOutcomingMessageViewHolder.class,
+                        R.layout.my_item_outcoming);
 
 
         super.messagesAdapter = new MessagesListAdapter<>(super.senderId, holders, super.imageLoader);

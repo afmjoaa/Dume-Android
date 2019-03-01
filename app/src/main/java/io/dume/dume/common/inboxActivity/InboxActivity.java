@@ -45,7 +45,11 @@ import io.dume.dume.common.chatActivity.DemoModel;
 import io.dume.dume.common.chatActivity.Room;
 import io.dume.dume.common.contactActivity.ContactActivity;
 import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
+import io.dume.dume.teacher.adapters.AcademicAdapter;
+import io.dume.dume.teacher.homepage.TeacherActivtiy;
 import io.dume.dume.teacher.homepage.TeacherContract;
+import io.dume.dume.teacher.homepage.fragments.AcademicFragment;
+import io.dume.dume.teacher.mentor_settings.basicinfo.EditAccount;
 import io.dume.dume.util.DumeUtils;
 
 import static io.dume.dume.util.DumeUtils.configToolbarTittle;
@@ -123,7 +127,7 @@ public class InboxActivity extends CustomStuAppCompatActivity implements InboxAc
                     case 0:
                         contactFromIntent.putExtra("contactFrom", 0);
                         contactFromIntent.setAction("from_message");
-                        startActivity(contactFromIntent);
+                        startActivityForResult(contactFromIntent, 4321);
                         break;
                     case 1:
                         Toast.makeText(InboxActivity.this, "Send notification feature is coming soon", Toast.LENGTH_SHORT).show();
@@ -232,6 +236,24 @@ public class InboxActivity extends CustomStuAppCompatActivity implements InboxAc
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case 4321:
+                if (resultCode == InboxActivity.RESULT_OK) {
+                    switch (mViewPager.getCurrentItem()) {
+                        case 0:
+                            PlaceholderFragment messageFragment = Google.getInstance().getMessageFragment();
+                            if(messageFragment!= null){
+                                messageFragment.loadAgain();
+                            }
+                            break;
+                    }
+                }
+                break;
+        }
+    }
 
     protected void animateFab(int position) {
         fab.clearAnimation();
@@ -280,6 +302,10 @@ public class InboxActivity extends CustomStuAppCompatActivity implements InboxAc
         private carbon.widget.ImageView chatUserDP1;
         public DemoModel demoModel;
         private Context context;
+        private InboxCallAdapter callRecyAda;
+        private InboxNotiAdapter notiRecyAda;
+        private LinearLayout noDataBlockMsg;
+        private LinearLayout noDataBlockCall;
 
 
         public PlaceholderFragment() {
@@ -289,6 +315,7 @@ public class InboxActivity extends CustomStuAppCompatActivity implements InboxAc
         @Override
         public void onAttach(Context context) {
             this.context = context;
+            myThisActivity = (InboxActivity) getActivity();
             super.onAttach(context);
             demoModel = new DemoModel(context);
         }
@@ -298,12 +325,99 @@ public class InboxActivity extends CustomStuAppCompatActivity implements InboxAc
             Bundle args = new Bundle();
             args.putInt(ARG_SECTION_NUMBER, sectionNumber);
             fragment.setArguments(args);
+            if(sectionNumber ==1){
+                Google.getInstance().setMessageFragment(fragment);
+            }
             return fragment;
         }
 
         @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        public void setUserVisibleHint(boolean isVisibleToUser) {
+            super.setUserVisibleHint(isVisibleToUser);
+            if (isVisibleToUser) {
+                if (getArguments() != null && myThisActivity != null) {
+                    position = Objects.requireNonNull(getArguments()).getInt(ARG_SECTION_NUMBER);
+                    switch (position) {
+                        case 1:
+                            myThisActivity.showProgress();
+                            demoModel.getRoom(FirebaseAuth.getInstance().getUid(), new TeacherContract.Model.Listener<List<Room>>() {
+                                @Override
+                                public void onSuccess(List<Room> list) {
+                                    myThisActivity.hideProgress();
+                                    if (list.size() < 1) {
+                                        myThisActivity.flush("No Message History Found");
+                                        return;
+                                    }
+                                    List<String> foo = new ArrayList<>();
+                                    for (Room room : list) {
+                                        foo.add(room.getRoomId());
+                                    }
+                                    Google.getInstance().setRoomIdList(foo);
+                                    Google.getInstance().setRooms(list);
+                                    Log.w(TAG, "onSuccess: " + list.toString());
+                                    inboxRecycler = rootView.findViewById(R.id.inbox_recycler_view);
+                                    recordsRecyAda = new InboxChatAdapter(myThisActivity, list) {
+                                        @Override
+                                        void OnItemClicked(View v, int position) {
+                                            Google.getInstance().setCurrentRoom(list.get(position).getRoomId());
+                                            selectedIndicatorCirPro = v.findViewById(R.id.selected_indicator);
+                                            chatUserDP = v.findViewById(R.id.chat_user_display_pic);
+                                            onlineIndicatorCirPro = v.findViewById(R.id.selected_indicator);
+                                            offlineIndicatorCirPro = v.findViewById(R.id.selected_indicator);
+                                            chatUserName = v.findViewById(R.id.chat_user_name);
 
+                                            Pair[] pairsPending = new Pair[5];
+                                            pairsPending[0] = new Pair<View, String>(selectedIndicatorCirPro, "tn0ne");
+                                            pairsPending[1] = new Pair<View, String>(chatUserDP, "tnTwo");
+                                            pairsPending[2] = new Pair<View, String>(onlineIndicatorCirPro, "tnThree");
+                                            pairsPending[3] = new Pair<View, String>(offlineIndicatorCirPro, "tnFour");
+                                            pairsPending[4] = new Pair<View, String>(chatUserName, "tnFive");
+                                            ActivityOptions optionsPending = null;
+                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                                optionsPending = ActivityOptions.makeSceneTransitionAnimation(getActivity(), pairsPending);
+                                            }
+                                            if (optionsPending != null) {
+                                                startActivity(new Intent(myThisActivity, ChatActivity.class).setAction("testing"), optionsPending.toBundle());
+                                            } else {
+                                                startActivity(new Intent(myThisActivity, ChatActivity.class).setAction("testing"));
+                                            }
+
+                                        }
+
+                                        @Override
+                                        void OnItemLongClicked(View v, int position) {
+                                            Toast.makeText(myThisActivity, "Inbox Chat long click", Toast.LENGTH_SHORT).show();
+                                            chatUserDP1 = v.findViewById(R.id.chat_user_display_pic);
+                                            chatUserDP1.setHeight((int) (44 * myThisActivity.getResources().getDisplayMetrics().density));
+                                            chatUserDP1.setWidth((int) (44 * myThisActivity.getResources().getDisplayMetrics().density));
+                                            configToolbarTittle(myThisActivity, "1");
+                                        }
+                                    };
+                                    inboxRecycler.setAdapter(recordsRecyAda);
+                                    inboxRecycler.setLayoutManager(new LinearLayoutManager(myThisActivity));
+                                    if(list.size()<= 0){
+                                        noDataBlockMsg.setVisibility(View.VISIBLE);
+                                    }else {
+                                        noDataBlockMsg.setVisibility(View.GONE);
+                                    }
+                                }
+
+                                @Override
+                                public void onError(String msg) {
+                                    myThisActivity.flush(msg);
+                                    myThisActivity.hideProgress();
+                                }
+                            });
+                            break;
+                    }
+                }
+            } else {
+                //nothing to do here
+            }
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             myThisActivity = (InboxActivity) getActivity();
             position = Objects.requireNonNull(getArguments()).getInt(ARG_SECTION_NUMBER);
             Log.w(TAG, "onCreateView: " + context == null ? "NullFucker" : "Not Null Dear");
@@ -311,6 +425,7 @@ public class InboxActivity extends CustomStuAppCompatActivity implements InboxAc
             switch (position) {
                 case 1:
                     rootView = inflater.inflate(R.layout.common1_fragment_default_inbox, container, false);
+                    noDataBlockMsg = rootView.findViewById(R.id.no_data_block);
                     Log.w(TAG, "onCreateView: Switch Case :" + position);
                     myThisActivity.showProgress();
                     demoModel.getRoom(FirebaseAuth.getInstance().getUid(), new TeacherContract.Model.Listener<List<Room>>() {
@@ -369,6 +484,11 @@ public class InboxActivity extends CustomStuAppCompatActivity implements InboxAc
                             };
                             inboxRecycler.setAdapter(recordsRecyAda);
                             inboxRecycler.setLayoutManager(new LinearLayoutManager(myThisActivity));
+                            if(list.size()<= 0){
+                                noDataBlockMsg.setVisibility(View.VISIBLE);
+                            }else {
+                                noDataBlockMsg.setVisibility(View.GONE);
+                            }
                         }
 
                         @Override
@@ -380,16 +500,14 @@ public class InboxActivity extends CustomStuAppCompatActivity implements InboxAc
                     //setting the recycler view
                     break;
                 case 2:
-
                     rootView = inflater.inflate(R.layout.common1_fragment_inbox_notification, container, false);
                     inboxRecyclerRecent = rootView.findViewById(R.id.inbox_recycler_view_recent);
                     demoModel.getNotification(FirebaseAuth.getInstance().getUid(), new TeacherContract.Model.Listener<List<InboxNotiData>>() {
                         @Override
                         public void onSuccess(List<InboxNotiData> list) {
-                            InboxNotiAdapter notiRecyAda = new InboxNotiAdapter(myThisActivity, list);
+                            notiRecyAda = new InboxNotiAdapter(myThisActivity, list);
                             inboxRecyclerRecent.setAdapter(notiRecyAda);
                             inboxRecyclerRecent.setLayoutManager(new LinearLayoutManager(myThisActivity));
-
                         }
 
                         @Override
@@ -401,13 +519,19 @@ public class InboxActivity extends CustomStuAppCompatActivity implements InboxAc
                 case 3:
                     rootView = inflater.inflate(R.layout.common1_fragment_default_inbox, container, false);
                     inboxRecycler = rootView.findViewById(R.id.inbox_recycler_view);
+                    noDataBlockCall = rootView.findViewById(R.id.no_data_block);
 
                     demoModel.getPhoneNumberList(new TeacherContract.Model.Listener<List<InboxCallData>>() {
                         @Override
                         public void onSuccess(List<InboxCallData> list) {
-                            InboxCallAdapter callRecyAda = new InboxCallAdapter(myThisActivity, list);
+                            callRecyAda = new InboxCallAdapter(myThisActivity, list);
                             inboxRecycler.setAdapter(callRecyAda);
                             inboxRecycler.setLayoutManager(new LinearLayoutManager(myThisActivity));
+                            if(list.size()<= 0){
+                                noDataBlockCall.setVisibility(View.VISIBLE);
+                            }else {
+                                noDataBlockCall.setVisibility(View.GONE);
+                            }
                         }
 
                         @Override
@@ -418,6 +542,78 @@ public class InboxActivity extends CustomStuAppCompatActivity implements InboxAc
                     break;
             }
             return rootView;
+        }
+
+        public void loadAgain(){
+            myThisActivity.showProgress();
+            demoModel.getRoom(FirebaseAuth.getInstance().getUid(), new TeacherContract.Model.Listener<List<Room>>() {
+                @Override
+                public void onSuccess(List<Room> list) {
+                    myThisActivity.hideProgress();
+                    if (list.size() < 1) {
+                        myThisActivity.flush("No Message History Found");
+                        return;
+                    }
+                    List<String> foo = new ArrayList<>();
+                    for (Room room : list) {
+                        foo.add(room.getRoomId());
+                    }
+                    Google.getInstance().setRoomIdList(foo);
+                    Google.getInstance().setRooms(list);
+                    Log.w(TAG, "onSuccess: " + list.toString());
+                    inboxRecycler = rootView.findViewById(R.id.inbox_recycler_view);
+                    recordsRecyAda = new InboxChatAdapter(myThisActivity, list) {
+                        @Override
+                        void OnItemClicked(View v, int position) {
+                            Google.getInstance().setCurrentRoom(list.get(position).getRoomId());
+                            selectedIndicatorCirPro = v.findViewById(R.id.selected_indicator);
+                            chatUserDP = v.findViewById(R.id.chat_user_display_pic);
+                            onlineIndicatorCirPro = v.findViewById(R.id.selected_indicator);
+                            offlineIndicatorCirPro = v.findViewById(R.id.selected_indicator);
+                            chatUserName = v.findViewById(R.id.chat_user_name);
+
+                            Pair[] pairsPending = new Pair[5];
+                            pairsPending[0] = new Pair<View, String>(selectedIndicatorCirPro, "tn0ne");
+                            pairsPending[1] = new Pair<View, String>(chatUserDP, "tnTwo");
+                            pairsPending[2] = new Pair<View, String>(onlineIndicatorCirPro, "tnThree");
+                            pairsPending[3] = new Pair<View, String>(offlineIndicatorCirPro, "tnFour");
+                            pairsPending[4] = new Pair<View, String>(chatUserName, "tnFive");
+                            ActivityOptions optionsPending = null;
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                optionsPending = ActivityOptions.makeSceneTransitionAnimation(getActivity(), pairsPending);
+                            }
+                            if (optionsPending != null) {
+                                startActivity(new Intent(myThisActivity, ChatActivity.class).setAction("testing"), optionsPending.toBundle());
+                            } else {
+                                startActivity(new Intent(myThisActivity, ChatActivity.class).setAction("testing"));
+                            }
+
+                        }
+
+                        @Override
+                        void OnItemLongClicked(View v, int position) {
+                            Toast.makeText(myThisActivity, "Inbox Chat long click", Toast.LENGTH_SHORT).show();
+                            chatUserDP1 = v.findViewById(R.id.chat_user_display_pic);
+                            chatUserDP1.setHeight((int) (44 * myThisActivity.getResources().getDisplayMetrics().density));
+                            chatUserDP1.setWidth((int) (44 * myThisActivity.getResources().getDisplayMetrics().density));
+                            configToolbarTittle(myThisActivity, "1");
+                        }
+                    };
+                    inboxRecycler.setAdapter(recordsRecyAda);
+                    inboxRecycler.setLayoutManager(new LinearLayoutManager(myThisActivity));
+                    if(list.size()<= 0){
+                        noDataBlockMsg.setVisibility(View.VISIBLE);
+                    }else {
+                        noDataBlockMsg.setVisibility(View.GONE);
+                    }
+                }
+
+                @Override
+                public void onError(String msg) {
+                    myThisActivity.flush(msg);
+                    myThisActivity.hideProgress();
+                }
+            });
         }
     }
 

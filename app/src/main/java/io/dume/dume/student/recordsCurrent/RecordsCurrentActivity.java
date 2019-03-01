@@ -505,7 +505,11 @@ public class RecordsCurrentActivity extends CustomStuAppCompatActivity implement
                     }
                     String myTime;
                     if (DateFormat.is24HourFormat(getActivity())) {
-                        myTime = "" + hourOfDay + ":" + minute;
+                        if (minute < 10) {
+                            myTime = "" + hourOfDay + ":0" + minute;
+                        } else {
+                            myTime = "" + hourOfDay + ":" + minute;
+                        }
                     } else {
                         String AM_PM;
                         if (hourOfDay < 12) {
@@ -518,8 +522,11 @@ public class RecordsCurrentActivity extends CustomStuAppCompatActivity implement
                         } else if (hourOfDay == 0) {
                             myTimePickerHourOfDay = 12;
                         }
-                        myTime = "" + myTimePickerHourOfDay + ":" + minute + " " + AM_PM;
-
+                        if (minute < 10) {
+                            myTime = "" + myTimePickerHourOfDay + ":0" + minute + " " + AM_PM;
+                        } else {
+                            myTime = "" + myTimePickerHourOfDay + ":" + minute + " " + AM_PM;
+                        }
                     }
                     reminderEditText.setText(myTime);
                     //setAlarm(calendar.getTimeInMillis());
@@ -540,10 +547,13 @@ public class RecordsCurrentActivity extends CustomStuAppCompatActivity implement
                 myTimePickerHourOfDay = reminderOn.hour;
                 myTimePickerMinite = reminderOn.minute;
                 if (DateFormat.is24HourFormat(getActivity())) {
-                    myTime = "" + reminderOn.hour + ":" + reminderOn.minute;
+                    if (reminderOn.minute < 10) {
+                        myTime = "" + reminderOn.hour + ":0" + reminderOn.minute;
+                    } else {
+                        myTime = "" + reminderOn.hour + ":" + reminderOn.minute;
+                    }
                 } else {
                     String AM_PM;
-
                     if (reminderOn.hour < 12) {
                         AM_PM = "AM";
                     } else {
@@ -554,7 +564,11 @@ public class RecordsCurrentActivity extends CustomStuAppCompatActivity implement
                     } else if (reminderOn.hour == 0) {
                         myTimePickerHourOfDay = 12;
                     }
-                    myTime = "" + myTimePickerHourOfDay + ":" + reminderOn.minute + " " + AM_PM;
+                    if (reminderOn.minute < 10) {
+                        myTime = "" + myTimePickerHourOfDay + ":0" + reminderOn.minute + " " + AM_PM;
+                    } else {
+                        myTime = "" + myTimePickerHourOfDay + ":" + reminderOn.minute + " " + AM_PM;
+                    }
                 }
                 reminderEditText.setText(myTime);
             } else {

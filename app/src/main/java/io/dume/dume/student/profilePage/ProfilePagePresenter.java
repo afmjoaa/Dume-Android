@@ -68,7 +68,9 @@ public class ProfilePagePresenter implements ProfilePageContract.Presenter {
                     mView.setProfileComPercent(documentSnapshot.getString("pro_com_%"));
                 }
                 final String avatar = documentSnapshot.getString("avatar");
-                mView.setAvatar(avatar);
+                if(avatar!= null && !avatar.equals("")){
+                    mView.setAvatar(avatar);
+                }
             } else {
                 mView.flush("Does not found any user");
                 Log.w(TAG, "onAccountTypeFound: document is not null");

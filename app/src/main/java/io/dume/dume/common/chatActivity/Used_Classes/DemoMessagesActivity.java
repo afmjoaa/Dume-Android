@@ -43,7 +43,6 @@ public abstract class DemoMessagesActivity extends CustomStuAppCompatActivity
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         imageLoader = (imageView, url) -> {
             Glide.with(DemoMessagesActivity.this)
                     .load(url)

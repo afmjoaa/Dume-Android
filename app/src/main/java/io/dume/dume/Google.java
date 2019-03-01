@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.List;
 
 import io.dume.dume.common.chatActivity.Room;
+import io.dume.dume.common.inboxActivity.InboxActivity;
 import io.dume.dume.student.recordsPage.Record;
 import io.dume.dume.util.DumeUtils;
 
@@ -24,6 +25,33 @@ public class Google {
     private String lastDocumentId;
     private List<String> appliedPromoList;
     private final List<MediaPlayer> mMediaPlayer;
+    private String lastMsg;
+    private int snapCounter = 0;
+    private InboxActivity.PlaceholderFragment messageFragment;
+
+    public InboxActivity.PlaceholderFragment getMessageFragment() {
+        return messageFragment;
+    }
+
+    public void setMessageFragment(InboxActivity.PlaceholderFragment messageFragment) {
+        this.messageFragment = messageFragment;
+    }
+
+    public int getSnapCounter() {
+        return snapCounter;
+    }
+
+    public void setSnapCounter(int snapCounter) {
+        this.snapCounter = snapCounter;
+    }
+
+    public String getLastMsg() {
+        return lastMsg;
+    }
+
+    public void setLastMsg(String lastMsg) {
+        this.lastMsg = lastMsg;
+    }
 
 
     public String getAccountPrefix() {

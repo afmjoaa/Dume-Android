@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -28,6 +29,7 @@ public class ContactActivity extends CustomStuAppCompatActivity implements Conta
     private HorizontalLoadView loadView;
     private String retriveAction;
     private Boolean isFromMsg;
+    private LinearLayout noDataBlock;
 
 
     @Override
@@ -35,7 +37,7 @@ public class ContactActivity extends CustomStuAppCompatActivity implements Conta
         super.onCreate(savedInstanceState);
         setContentView(R.layout.common5_activity_contact);
         setActivityContext(this, fromFlag);
-        if (getIntent().getAction() != null){
+        if (getIntent().getAction() != null) {
             retriveAction = getIntent().getAction();
         }
         isFromMsg = retriveAction.equals("from_message");
@@ -52,6 +54,7 @@ public class ContactActivity extends CustomStuAppCompatActivity implements Conta
     public void findView() {
         contactRecyclerView = findViewById(R.id.contact_recycler_view);
         loadView = findViewById(R.id.loadView);
+        noDataBlock = findViewById(R.id.no_data_block);
     }
 
     @Override
@@ -74,6 +77,11 @@ public class ContactActivity extends CustomStuAppCompatActivity implements Conta
     public void loadRV(List<ContactData> dataList) {
         ContactDataAdapter contactRecyAda = new ContactDataAdapter(this, dataList, isFromMsg);
         contactRecyclerView.setAdapter(contactRecyAda);
+        if (dataList.size() <= 0){
+            noDataBlock.setVisibility(View.VISIBLE);
+        }else {
+            noDataBlock.setVisibility(View.GONE);
+        }
     }
 
 

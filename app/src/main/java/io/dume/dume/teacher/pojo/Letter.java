@@ -37,7 +37,7 @@ public class Letter {
         this.doc = doc;
     }
 
-    Letter() {
+    public Letter() {
 
     }
 
