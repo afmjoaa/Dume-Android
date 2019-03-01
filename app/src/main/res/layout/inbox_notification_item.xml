@@ -5,8 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginLeft="10dp"
-    android:layout_marginTop="10dp"
     android:layout_marginRight="10dp"
+    android:layout_marginTop="10dp"
     app:carbon_cornerRadius="5dp"
 
     app:carbon_rippleColor="@color/colorAccent">
@@ -15,10 +15,10 @@
         android:id="@+id/primary_framelayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="7dp"
-        app:carbon_elevation="3dp"
         android:background="@color/notificationItemColor"
-        app:carbon_cornerRadius="5dp">
+        android:padding="7dp"
+        app:carbon_cornerRadius="5dp"
+        app:carbon_elevation="3dp">
         <!-- app:carbon_elevation="3dp"-->
 
         <carbon.widget.ImageView
@@ -26,9 +26,9 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_gravity="end"
-            android:layout_marginTop="4dp"
             android:layout_marginEnd="6dp"
             android:layout_marginRight="6dp"
+            android:layout_marginTop="4dp"
             android:clickable="true"
             android:focusable="true"
             android:padding="3dp"
@@ -51,19 +51,21 @@
                 <LinearLayout
                     android:layout_width="90dp"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:layout_gravity="center"
+                    android:gravity="center">
 
                     <RelativeLayout
                         android:layout_width="90dp"
-                        android:layout_marginBottom="2dp"
-                        android:layout_height="match_parent">
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="2dp">
 
                         <carbon.widget.ImageView
                             android:id="@+id/categoryAvaterIV"
                             android:layout_width="38dp"
                             android:layout_height="38dp"
-                            android:layout_centerVertical="true"
                             android:layout_centerHorizontal="true"
+                            android:layout_centerVertical="true"
                             android:clickable="false"
                             android:padding="3dp"
                             app:carbon_cornerRadius="25dp"
@@ -73,8 +75,8 @@
                             android:id="@+id/selected_indicator"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:layout_centerVertical="true"
                             android:layout_centerHorizontal="true"
+                            android:layout_centerVertical="true"
                             app:cpb_backgroundProgressColor="@color/white"
                             app:cpb_backgroundProgressWidth="10"
                             app:cpb_clockwise="true"
@@ -93,7 +95,8 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:text="Date"
-                        android:textStyle="italic" />
+                        android:textStyle="italic"
+                        android:visibility="gone" />
 
 
                 </LinearLayout>
@@ -102,8 +105,8 @@
                     android:layout_width="1dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="5dp"
                     android:layout_marginEnd="5dp"
+                    android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
                     android:background="#eee4e3e4" />
 
@@ -117,16 +120,16 @@
                         android:id="@+id/noti_user_name"
                         android:layout_width="200dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginTop="2dp"
-                        android:layout_marginEnd="5dp"
-                        android:layout_marginRight="5dp"
                         android:layout_marginBottom="4dp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginTop="2dp"
                         android:layout_weight="1"
-                        android:singleLine="true"
-                        android:maxLines="1"
                         android:ellipsize="end"
+                        android:maxLines="1"
+                        android:singleLine="true"
                         android:text="Math, English,Phsysics"
                         android:textColor="@color/black"
                         android:textSize="16sp" />
@@ -136,10 +139,10 @@
                         android:id="@+id/frequency_and_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
-                        android:layout_marginLeft="5dp"
                         android:layout_marginEnd="8dp"
+                        android:layout_marginLeft="5dp"
                         android:layout_marginRight="8dp"
+                        android:layout_marginStart="5dp"
                         android:layout_weight="1"
                         android:gravity="center"
                         android:text="Sold - 3 times"
@@ -161,10 +164,10 @@
         android:layout_marginRight="5dp"
         android:background="@drawable/bottom_round_light_green_bg"
         android:orientation="vertical"
-        android:paddingLeft="16dp"
-        android:paddingTop="8dp"
-        android:paddingRight="16dp"
         android:paddingBottom="8dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="8dp"
         android:translationY="-2dp">
 
     </LinearLayout>
@@ -178,10 +181,10 @@
         android:layout_marginRight="5dp"
         android:background="@drawable/bottom_round_light_green_bg"
         android:orientation="vertical"
-        android:paddingLeft="16dp"
-        android:paddingTop="8dp"
-        android:paddingRight="16dp"
         android:paddingBottom="8dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="8dp"
         android:translationY="-2dp"
         android:visibility="gone">
 
@@ -189,10 +192,10 @@
             android:id="@+id/description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
             android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
             android:text="Description here"
             android:textSize="14sp" />
 

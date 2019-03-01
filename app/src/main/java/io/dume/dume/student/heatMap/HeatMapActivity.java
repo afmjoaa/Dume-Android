@@ -129,6 +129,15 @@ public class HeatMapActivity extends CusStuAppComMapActivity implements OnMapRea
                 chooseAccouTypeBtn.setText(accountTypeArr[position]);
                 chooseAccouTypeBtn.performClick();
                 heatMapAccountRecyAda.update(getFinalData(position));
+
+
+
+                /*Enam's Magic Happens Here*/
+
+
+
+
+
             }
         };
         myAccountRecycler.setAdapter(heatMapAccountRecyAda);

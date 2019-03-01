@@ -730,7 +730,6 @@ public class StudentSettingsActivity extends CustomStuAppCompatActivity
 
         }
 
-
         public void gotoTeacherActivity() {
             startActivity(new Intent(context, TeacherActivtiy.class));
             ((Activity) context).finish();
@@ -742,6 +741,7 @@ public class StudentSettingsActivity extends CustomStuAppCompatActivity
             ((Activity) context).finish();
 
         }
+
 
         @Override
         public void onAttach(Context context) {

@@ -387,6 +387,8 @@ public class InboxActivity extends CustomStuAppCompatActivity implements InboxAc
                     demoModel.getNotification(FirebaseAuth.getInstance().getUid(), new TeacherContract.Model.Listener<List<InboxNotiData>>() {
                         @Override
                         public void onSuccess(List<InboxNotiData> list) {
+
+
                             InboxNotiAdapter notiRecyAda = new InboxNotiAdapter(myThisActivity, list);
                             inboxRecyclerRecent.setAdapter(notiRecyAda);
                             inboxRecyclerRecent.setLayoutManager(new LinearLayoutManager(myThisActivity));

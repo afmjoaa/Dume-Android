@@ -16,7 +16,6 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.GeoPoint;
-import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -31,11 +30,9 @@ import javax.annotation.Nullable;
 import io.dume.dume.Google;
 import io.dume.dume.student.common.ReviewHighlightData;
 import io.dume.dume.student.homePage.HomePageModel;
-import io.dume.dume.student.recordsPage.Record;
 import io.dume.dume.teacher.homepage.TeacherContract;
 import io.dume.dume.teacher.homepage.TeacherDataStore;
 import io.dume.dume.teacher.pojo.Skill;
-import io.dume.dume.util.DumeUtils;
 
 public class DumeModel extends HomePageModel implements TeacherModel {
 
@@ -208,5 +205,9 @@ public class DumeModel extends HomePageModel implements TeacherModel {
         });
     }
 
+
+    public void modifySeenStatusNotification(String doc_id, TeacherContract.Model.Listener<Boolean> listener) {
+        firestore.collection("push_notifications").document(doc_id).update("seen", true).addOnSuccessListener((Activity) context, aVoid -> listener.onSuccess(true)).addOnFailureListener(e -> listener.onError(e.getLocalizedMessage()));
+    }
 
 }
