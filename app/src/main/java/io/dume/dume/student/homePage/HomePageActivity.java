@@ -198,11 +198,18 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
     private static Map<String, Map<String, Object>> recently_searched;
     private BottomSheetDialog mCancelBottomSheetDialog;
     private View cancelsheetRootView;
+    private HomePageRecyclerAdapter hPageBSRcyclerAdapter;
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-//        stopService(locationServiceIntent);
+//       stopService(locationServiceIntent);
+    }
+
+    @Override
+    public void loadPromoData(HomePageRecyclerData promoData) {
+        Log.w(TAG, "loadPromoData: ");
+        hPageBSRcyclerAdapter.addPromoToList(promoData);
     }
 
     @Override
@@ -255,8 +262,14 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
         isNightConfig();
 
         locationServiceIntent = new Intent(this, MyLocationService.class);
+        searchDataStore.setSelectedMentor(null);
 //        locationServiceIntent.putExtra("FROM", "HomePageActivity" );
 //        startService(locationServiceIntent);
+        if (hPageBSRcyclerAdapter == null) {
+            hPageBSRcyclerAdapter = new HomePageRecyclerAdapter(this, new ArrayList<>());
+            hPageBSRecycler.setAdapter(hPageBSRcyclerAdapter);
+            hPageBSRecycler.setLayoutManager(new LinearLayoutManager(this));
+        }
     }
 
 
@@ -473,12 +486,6 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
         mCancelBottomSheetDialog = new BottomSheetDialog(this);
         cancelsheetRootView = this.getLayoutInflater().inflate(R.layout.custom_bottom_sheet_dialogue_cancel, null);
         mCancelBottomSheetDialog.setContentView(cancelsheetRootView);
-
-        //initializing the recycler
-        List<HomePageRecyclerData> promoData = new ArrayList<>();
-        HomePageRecyclerAdapter hPageBSRcyclerAdapter = new HomePageRecyclerAdapter(this, promoData);
-        hPageBSRecycler.setAdapter(hPageBSRcyclerAdapter);
-        hPageBSRecycler.setLayoutManager(new LinearLayoutManager(this));
     }
 
     @Override
@@ -825,7 +832,7 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
 
     @Override
     public void gotoRecordsPage() {
-        startActivity(new Intent(this, RecordsPageActivity.class));
+        startActivity(new Intent(this, RecordsPageActivity.class).setAction(DumeUtils.STUDENT));
     }
 
     @Override
@@ -1046,9 +1053,9 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
 
     //testing the customDialogue
     @Override
-    public void testingCustomDialogue() {
+    public void testingCustomDialogue(HomePageRatingData myData) {
         // custom dialog
-        final Dialog dialog = new Dialog(context);
+        Dialog dialog = new Dialog(context);
         dialog.setContentView(R.layout.custom_rating_dialogue);
         dialog.setCanceledOnTouchOutside(false);
 
@@ -1068,9 +1075,13 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
         RelativeLayout firstLayout = dialog.findViewById(R.id.first_layout);
         RelativeLayout secondLayout = dialog.findViewById(R.id.second_layout);
 
+        ratingPrimaryText.setText("How was your learning with " + myData.getName());
+        Glide.with(getApplicationContext()).load(myData.getAvatar()).into(ratedMentorDP);
 
         //testing the recycle view here
-        HomePageRatingAdapter itemRatingRecycleAdapter = new HomePageRatingAdapter(this, getFinalRatingData());
+
+
+        HomePageRatingAdapter itemRatingRecycleAdapter = new HomePageRatingAdapter(this, myData);
         itemRatingRecycleView.setAdapter(itemRatingRecycleAdapter);
         itemRatingRecycleView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -1103,8 +1114,6 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
                 }
             }
         });
-        dialog.show();
-
 
         dismissBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1140,9 +1149,20 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
         SubmitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (feedbackTextView == null && feedbackTextView.getText().equals("")) {
+                    feedbackTextView.setError("Please write your feedack.");
+                } else if (itemRatingRecycleAdapter.getInputRating() == null) {
+                    flush("Make sure you hit the like or dislike thumb");
+                } else {
+
+                }
+
+
                 dialog.dismiss();
             }
         });
+
+        dialog.show();
     }
 
     @Override
@@ -1156,6 +1176,7 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
         startActivity(new Intent(this, PayActivity.class));
         finish();
     }
+
 
     @Override
     public void flush(String msg) {
@@ -1344,16 +1365,6 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
      * mDecimalRatingBars.startAnimation(new RatingAnimation(mDecimalRatingBars));
      * */
 
-    public List<HomePageRatingData> getFinalRatingData() {
-        List<HomePageRatingData> data = new ArrayList<>();
-        String[] primaryText = getResources().getStringArray(R.array.rating_demo_data);
-        for (String aPrimaryText : primaryText) {
-            HomePageRatingData current = new HomePageRatingData();
-            current.ratingAboutName = aPrimaryText;
-            data.add(current);
-        }
-        return data;
-    }
 
     @Override
     public void switchProfileDialog(String identify) {
@@ -1442,7 +1453,24 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
     }
 
     @Override
+    public void gotoBootCampActivity() {
+        flush("Boot Camp Service is coming soon...");
+    }
+
+    @Override
     public boolean checkNull() {
         return switchAcountBtn != null;
+    }
+
+    @Override
+    public void showSingleBottomSheetRating(HomePageRatingData currentRatingDataList) {
+        List<HomePageRecyclerData> promoData = new ArrayList<>();
+        if (hPageBSRcyclerAdapter == null) {
+            hPageBSRcyclerAdapter = new HomePageRecyclerAdapter(this, promoData);
+            hPageBSRecycler.setAdapter(hPageBSRcyclerAdapter);
+            hPageBSRecycler.setLayoutManager(new LinearLayoutManager(this));
+        }
+        hPageBSRcyclerAdapter.addNewData(currentRatingDataList);
+
     }
 }

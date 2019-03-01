@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jackandphantom.circularprogressbar.CircleProgressbar;
@@ -41,49 +42,34 @@ public class InboxNotiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        if (viewType == 9998 || viewType == 9999) {
-            View view = inflater.inflate(R.layout.custom_inside_barrier, parent, false);
-            return new HeaderVH(view);
-        }
-
-        View view = inflater.inflate(R.layout.custom_noti_row, parent, false);
-        MyViewHolder holder = new MyViewHolder(view);
-        return holder;
+        View view = inflater.inflate(R.layout.inbox_notification_item, parent, false);
+        return new MyViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        if (holder.getItemViewType() == 9998) {
-            HeaderVH headerVH = (HeaderVH) holder;
-            headerVH.headerText.setText(R.string.recent_updates);
-        }else if(holder.getItemViewType() == 9999){
-            HeaderVH headerVH = (HeaderVH) holder;
-            headerVH.headerText.setText(R.string.viewed_updates);
+        InboxNotiData item = data.get(position);
+        MyViewHolder myViewHolder = (MyViewHolder) holder;
+        myViewHolder.onlineOrOffline.setForegroundProgressColor(R.color.status_viewed);
+        ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) myViewHolder.dividerTwo.getLayoutParams();
+        params.leftMargin = (int) (16 * context.getResources().getDisplayMetrics().density);
+        params.rightMargin = (int) (16 * context.getResources().getDisplayMetrics().density);
+
+        if (!item.isSeen()) {
+            myViewHolder.host.setBackgroundColor(context.getResources().getColor(R.color.colorNarvik));
         }
-        else {
-            MyViewHolder myViewHolder = (MyViewHolder) holder;
-            switch (position) {
-                case 1:
-                    //testing offline
-                    myViewHolder.onlineOrOffline.setForegroundProgressColor(R.color.status_viewed);
-                    break;
-                case 2:
-                    break;
-                case 9:
-                    myViewHolder.onlineOrOffline.setForegroundProgressColor(R.color.status_viewed);
-                    ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) myViewHolder.dividerTwo.getLayoutParams();
-                    params.leftMargin = (int) (16 * context.getResources().getDisplayMetrics().density);
-                    params.rightMargin = (int) (16 * context.getResources().getDisplayMetrics().density);
-                    break;
-            }
-        }
+        myViewHolder.notiUserName.setText(item.getTitle());
+        myViewHolder.freqAndTime.setText(item.getBody());
+
+
+
         //position == data.size()-1;
 
     }
 
     @Override
     public int getItemCount() {
-        return 10;
+        return data.size();
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
@@ -93,6 +79,7 @@ public class InboxNotiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         private final TextView freqAndTime;
         private final CircleProgressbar onlineOrOffline;
         private final View dividerTwo;
+        private final RelativeLayout host;
 
         public MyViewHolder(View itemView) {
             super(itemView);
@@ -101,7 +88,7 @@ public class InboxNotiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             freqAndTime = itemView.findViewById(R.id.frequency_and_time);
             onlineOrOffline = itemView.findViewById(R.id.selected_indicator);
             dividerTwo = itemView.findViewById(R.id.divider2);
-
+            host = itemView.findViewById(R.id.hostRelativeLayout);
         }
     }
 

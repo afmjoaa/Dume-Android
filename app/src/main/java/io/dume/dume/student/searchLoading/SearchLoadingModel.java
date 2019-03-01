@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import io.dume.dume.student.pojo.SearchDataStore;
 import io.dume.dume.student.pojo.StuBaseModel;
 import io.dume.dume.teacher.homepage.TeacherContract;
 
@@ -29,6 +30,7 @@ public class SearchLoadingModel extends StuBaseModel implements SearchLoadingCon
 
     @Override
     public void search(double lat, double lon, double radius, String queryString, TeacherContract.Model.Listener<List<DocumentSnapshot>> listener) {
+        instructorList = new ArrayList<>();
         GeoFirestore geoFirestore = new GeoFirestore(skillRef);
         GeoQuery geoQuery = geoFirestore.queryAtLocation(new GeoPoint(lat, lon), radius);
         geoQuery.removeAllListeners();
@@ -38,11 +40,11 @@ public class SearchLoadingModel extends StuBaseModel implements SearchLoadingCon
                 String queryStringFromDb = (String) documentSnapshot.get("query_string");
                 if (queryStringFromDb != null) {
                     if (queryStringFromDb.equals(queryString)) {
-                        instructorList.add(documentSnapshot);
+                        if(!SearchDataStore.getInstance().getUserUid().equals(documentSnapshot.getString("mentor_uid"))){
+                            instructorList.add(documentSnapshot);
+                        }
                     }
                 }
-
-
             }
 
             @Override

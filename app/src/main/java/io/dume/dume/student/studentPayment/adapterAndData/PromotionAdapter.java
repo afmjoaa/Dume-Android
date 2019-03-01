@@ -6,23 +6,34 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import io.dume.dume.R;
+import io.dume.dume.student.homePage.adapter.HomePageRecyclerData;
+import io.dume.dume.util.DumeUtils;
 
 public class PromotionAdapter extends RecyclerView.Adapter<PromotionAdapter.MyViewHolder> {
 
     private static final String TAG = "PromotionAdapter";
     private LayoutInflater inflater;
     private Context context;
-    private List<PromotionData> data;
+    private List<HomePageRecyclerData> data;
 
-    public PromotionAdapter(Context context, List<PromotionData> data) {
+    public PromotionAdapter(Context context, List<HomePageRecyclerData> data) {
         inflater = LayoutInflater.from(context);
         this.data = data;
         this.context = context;
     }
+
+    public void addPromoToList(HomePageRecyclerData promoData) {
+        data.add(promoData);
+        notifyDataSetChanged();
+    }
+
 
     @NonNull
     @Override
@@ -33,19 +44,34 @@ public class PromotionAdapter extends RecyclerView.Adapter<PromotionAdapter.MyVi
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
-
+    public void onBindViewHolder(@NonNull MyViewHolder holder, int i) {
+        holder.title.setText(data.get(i).getTitle());
+         HomePageRecyclerData homePageRecyclerData = data.get(i);
+        holder.description.setText(homePageRecyclerData.getDescription());
+        holder.date.setText(DumeUtils.getFormattedDate(homePageRecyclerData.getStart_date()));
     }
 
     @Override
     public int getItemCount() {
-        return 3;
+        return data.size();
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
 
+
+        @BindView(R.id.percent_off_btn)
+        TextView title;
+        @BindView(R.id.info_text)
+        TextView description;
+        @BindView(R.id.valid_time_text)
+        TextView date;
+        @BindView(R.id.valid_count_text)
+        TextView tutionCount;
+
+
         public MyViewHolder(View itemView) {
             super(itemView);
+            ButterKnife.bind(this, itemView);
         }
     }
 

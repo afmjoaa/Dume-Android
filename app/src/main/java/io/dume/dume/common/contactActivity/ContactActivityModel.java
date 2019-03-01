@@ -8,6 +8,7 @@ import com.google.common.io.LittleEndianDataInputStream;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
@@ -31,7 +32,7 @@ public class ContactActivityModel implements ContactActivityContact.Model {
     private Context context;
 
 
-    ContactActivityModel(Context context) {
+    public ContactActivityModel(Context context) {
         this.context = context;
         firestore = FirebaseFirestore.getInstance();
     }
@@ -43,7 +44,6 @@ public class ContactActivityModel implements ContactActivityContact.Model {
 
     @Override
     public void readContact(String accountMajor, TeacherContract.Model.Listener<List<ContactData>> listener) {
-        char prefix;
 
         if (FirebaseAuth.getInstance().getUid() == null) {
             listener.onError("Error Type : Session Expired. Please Login To Feel Better");
@@ -62,15 +62,15 @@ public class ContactActivityModel implements ContactActivityContact.Model {
                     List<String> fooList = new ArrayList<>();
                     for (DocumentSnapshot record : documents) {
                         Map<String, Object> sp_info = (Map<String, Object>) record.get("sp_info");
+                        Map<String, Object> sh_info = (Map<String, Object>) record.get("for_whom");
+
                         String gender = "";
                         String name = "";
                         String avatar = "";
-                        if (sp_info != null) {
-                            gender = (String) sp_info.get("gender");
-                            avatar = (String) sp_info.get("avatar");
-                            name = sp_info.get("first_name") + " " + sp_info.get("last_name");
-                        }
+                        String phone = "";
+
                         String record_status = (String) record.get("record_status");
+                        String sh_uid = record.getString("sh_uid");
                         List<String> pList = (List<String>) record.get("participants");
                         int participant;
                         String pUid;
@@ -85,6 +85,28 @@ public class ContactActivityModel implements ContactActivityContact.Model {
                         } else {
                             pUid = pList.get(0);
                         }
+                        /*I am Student*/
+                        if (sh_uid.endsWith(FirebaseAuth.getInstance().getUid())) {
+                            if (sp_info != null) {
+                                gender = (String) sp_info.get("gender");
+                                avatar = (String) sp_info.get("avatar");
+                                name = sp_info.get("first_name") + " " + sp_info.get("last_name");
+
+                            }
+                        }/*I am Teacher*/ else {
+                            if (sh_info != null) {
+                                gender = (String) sh_info.get("request_gender");
+                                String stu_photo = (String) sh_info.get("stu_photo");
+                                if (stu_photo != null && !sh_info.get("stu_photo").equals("")) {
+                                    avatar = stu_photo;
+                                } else avatar = (String) sh_info.get("request_avatar");
+                                name = (String) sh_info.get("stu_name");
+                                phone = (String) sh_info.get("stu_phone_number");
+
+                            }
+                        }
+
+
                         ContactData data = new ContactData(record.getId(), avatar, name, record_status, pUid, record.getData());
                         if (fooList.contains(pUid)) {
                             if (record_status != null && record_status.equals("Accepted")) {

@@ -31,9 +31,6 @@ public class RecordsAcceptedPresenter implements RecordsAcceptedContract.Present
     @Override
     public void onRecordsAcceptedIntracted(View view) {
         switch (view.getId()) {
-            case R.id.accepted_contact_btn:
-                mView.contactBtnClicked();
-                break;
             /*case R.id.package_search_btn:
                 mView.executeSearchActivity();
                 break;*/

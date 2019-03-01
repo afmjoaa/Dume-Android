@@ -17,7 +17,6 @@
         android:background="@color/recordsBgColor"
         android:orientation="vertical">
 
-
         <!--basic info-->
         <RelativeLayout
             android:id="@+id/recordsHostLayout"
@@ -43,7 +42,8 @@
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_marginBottom="1dp"
-                    android:src="@drawable/demo_testing_image"
+                    android:scaleType="centerCrop"
+                    app:srcCompat="@drawable/demo_default_avatar_dark"
                     app:carbon_cornerRadius="6dp"
                     app:carbon_elevation="4dp" />
 
@@ -51,7 +51,7 @@
                     android:id="@+id/student_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="dony"
+                    android:text="Demo user"
                     android:textColor="@color/textColorPrimary"
                     android:textSize="16sp"
                     app:fontFamily="@font/cairo_regular" />
@@ -126,7 +126,8 @@
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_marginBottom="1dp"
-                    android:src="@drawable/demo_testing_image"
+                    android:scaleType="centerCrop"
+                    app:srcCompat="@drawable/demo_default_avatar_dark"
                     app:carbon_cornerRadius="6dp"
                     app:carbon_elevation="4dp" />
 
@@ -134,7 +135,7 @@
                     android:id="@+id/mentor_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Fatema"
+                    android:text="Demo user"
                     android:textColor="@color/textColorPrimary"
                     android:textSize="16sp"
                     app:fontFamily="@font/cairo_regular" />
@@ -196,7 +197,7 @@
                 android:background="#41a7a7a7" />
 
             <Button
-                android:id="@+id/pendding_cancel_btn"
+                android:id="@+id/pendding_accept_btn"
                 style="@style/myButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -205,20 +206,37 @@
                 android:layout_marginTop="2dp"
                 android:layout_marginRight="16dp"
                 android:layout_marginBottom="4dp"
-                android:text="Cancel Request"
+                android:text="Accept Request"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 android:textSize="16sp"
                 app:fontFamily="@font/cairo_regular" />
 
-            <!-- <View
-                 android:id="@+id/divider3"
-                 android:layout_width="match_parent"
-                 android:layout_height="1dp"
-                 android:layout_below="@+id/pendding_cancel_btn"
-                 android:layout_marginLeft="16dp"
-                 android:layout_marginRight="16dp"
-                 android:background="#3ca7a7a7" />-->
+            <View
+                android:id="@+id/divider1"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@+id/pendding_accept_btn"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:background="#41a7a7a7" />
+
+            <Button
+                android:id="@+id/pendding_cancel_btn"
+                style="@style/myButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/divider1"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="4dp"
+                android:text="Reject Request"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                app:fontFamily="@font/cairo_regular" />
+
 
         </RelativeLayout>
 
@@ -279,7 +297,7 @@
                     style="@style/Widget.AppCompat.Button.Borderless"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableBottom="@drawable/ic_down_arrow_small"
+                    android:drawableBottom="@drawable/ic_up_arrow_small"
                     android:drawablePadding="2dp"
                     android:text="Agreement Terms"
                     android:textAllCaps="false"
@@ -304,6 +322,25 @@
                 android:translationY="-2dp">
 
                 <TextView
+                    android:id="@+id/textview_starting_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="0dp"
+                    android:drawableStart="@drawable/ic_keyboard_arrow_right_black_24dp"
+                    android:drawableLeft="@drawable/ic_keyboard_arrow_right_black_24dp"
+                    android:drawablePadding="6dp"
+                    android:gravity="center_vertical"
+                    android:paddingTop="2dp"
+                    android:paddingBottom="2dp"
+                    android:singleLine="true"
+                    android:text="Starting Time : "
+                    android:textAllCaps="false"
+                    android:textColor="@color/textColorPrimary"
+                    android:textSize="13sp"
+                    android:textStyle="normal"
+                    app:fontFamily="@font/cairo_regular" />
+
+                <TextView
                     android:id="@+id/textview_starting_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -315,13 +352,12 @@
                     android:paddingTop="2dp"
                     android:paddingBottom="2dp"
                     android:singleLine="true"
-                    android:text="Starting Date &amp; Time : Tue, Apr 13, 5.00PM"
+                    android:text="Starting Date : "
                     android:textAllCaps="false"
                     android:textColor="@color/textColorPrimary"
                     android:textSize="13sp"
                     android:textStyle="normal"
                     app:fontFamily="@font/cairo_regular" />
-
 
                 <TextView
                     android:id="@+id/textview_preferred_day"
@@ -331,11 +367,13 @@
                     android:drawableStart="@drawable/ic_keyboard_arrow_right_black_24dp"
                     android:drawableLeft="@drawable/ic_keyboard_arrow_right_black_24dp"
                     android:drawablePadding="6dp"
+                    android:ellipsize="end"
                     android:gravity="center_vertical"
+                    android:maxLines="1"
                     android:paddingTop="2dp"
                     android:paddingBottom="2dp"
                     android:singleLine="true"
-                    android:text="Preferred Day : Sun, Mon, Tue"
+                    android:text="Preferred Day : "
                     android:textAllCaps="false"
                     android:textColor="@color/textColorPrimary"
                     android:textSize="13sp"
@@ -353,7 +391,7 @@
                     android:paddingTop="2dp"
                     android:paddingBottom="2dp"
                     android:singleLine="true"
-                    android:text="Days/Week : Three"
+                    android:text="Days/Week : "
                     android:textAllCaps="false"
                     android:textColor="@color/textColorPrimary"
                     android:textSize="13sp"
@@ -387,7 +425,7 @@
                     style="@style/Widget.AppCompat.Button.Borderless"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableBottom="@drawable/ic_down_arrow_small"
+                    android:drawableBottom="@drawable/ic_up_arrow_small"
                     android:drawablePadding="2dp"
                     android:text="Feature Rating"
                     android:textAllCaps="false"
@@ -668,6 +706,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
+                        android:layout_marginTop="12dp"
                         android:gravity="center"
                         app:hdBarCanBeClick="true"
                         app:hdBarHeight="160dp"
@@ -681,7 +720,7 @@
                         app:hdMaxValue="10"
                         app:hdPinBackgroundColor="@color/pin_background"
                         app:hdPinDrawable="@drawable/ic_pin"
-                        app:hdPinMarginBottom="20dp"
+                        app:hdPinMarginBottom="22dp"
                         app:hdPinMarginEnd="11dp"
                         app:hdPinPaddingBottom="5dp"
                         app:hdPinTextColor="@color/pin_text"
@@ -720,7 +759,7 @@
                     style="@style/Widget.AppCompat.Button.Borderless"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableBottom="@drawable/ic_down_arrow_small"
+                    android:drawableBottom="@drawable/ic_up_arrow_small"
                     android:drawablePadding="2dp"
                     android:text="Achievements"
                     android:textAllCaps="false"
@@ -903,7 +942,7 @@
                     style="@style/Widget.AppCompat.Button.Borderless"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableBottom="@drawable/ic_down_arrow_small"
+                    android:drawableBottom="@drawable/ic_up_arrow_small"
                     android:drawablePadding="2dp"
                     android:text="More Info"
                     android:textAllCaps="false"
@@ -939,7 +978,7 @@
                     android:paddingTop="2dp"
                     android:paddingBottom="2dp"
                     android:singleLine="true"
-                    android:text="Current Status : EECE Student in MIST"
+                    android:text="Current Status : "
                     android:textAllCaps="false"
                     android:textColor="@color/textColorPrimary"
                     android:textSize="13sp"
@@ -958,7 +997,7 @@
                     android:paddingTop="2dp"
                     android:paddingBottom="2dp"
                     android:singleLine="true"
-                    android:text="Currently Mentoring : 3 Student"
+                    android:text="Student Guided : "
                     android:textAllCaps="false"
                     android:textColor="@color/textColorPrimary"
                     android:textSize="13sp"
@@ -977,7 +1016,45 @@
                     android:paddingTop="2dp"
                     android:paddingBottom="2dp"
                     android:singleLine="true"
-                    android:text="Marital Status : Single"
+                    android:text="Marital Status : "
+                    android:textAllCaps="false"
+                    android:textColor="@color/textColorPrimary"
+                    android:textSize="13sp"
+                    android:textStyle="normal"
+                    app:fontFamily="@font/cairo_regular" />
+
+                <TextView
+                    android:id="@+id/textview_religion"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="0dp"
+                    android:drawableStart="@drawable/ic_keyboard_arrow_right_black_24dp"
+                    android:drawableLeft="@drawable/ic_keyboard_arrow_right_black_24dp"
+                    android:drawablePadding="6dp"
+                    android:gravity="center_vertical"
+                    android:paddingTop="2dp"
+                    android:paddingBottom="2dp"
+                    android:singleLine="true"
+                    android:text="Religion : "
+                    android:textAllCaps="false"
+                    android:textColor="@color/textColorPrimary"
+                    android:textSize="13sp"
+                    android:textStyle="normal"
+                    app:fontFamily="@font/cairo_regular" />
+
+                <TextView
+                    android:id="@+id/textview_gender"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="0dp"
+                    android:drawableStart="@drawable/ic_keyboard_arrow_right_black_24dp"
+                    android:drawableLeft="@drawable/ic_keyboard_arrow_right_black_24dp"
+                    android:drawablePadding="6dp"
+                    android:gravity="center_vertical"
+                    android:paddingTop="2dp"
+                    android:paddingBottom="2dp"
+                    android:singleLine="true"
+                    android:text="Gender : "
                     android:textAllCaps="false"
                     android:textColor="@color/textColorPrimary"
                     android:textSize="13sp"
@@ -995,7 +1072,7 @@
                     android:paddingTop="5dp"
                     android:paddingBottom="5dp"
                     android:singleLine="true"
-                    android:text="Qualifications :"
+                    android:text="Qualifications : "
                     android:textAllCaps="false"
                     android:textColor="@color/textColorPrimary"
                     android:textSize="13sp"
@@ -1005,10 +1082,7 @@
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/recycler_view_qualifications"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp">
-
-                </android.support.v7.widget.RecyclerView>
+                    android:layout_height="wrap_content" />
 
             </LinearLayout>
 
@@ -1037,7 +1111,7 @@
                     style="@style/Widget.AppCompat.Button.Borderless"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableBottom="@drawable/ic_down_arrow_small"
+                    android:drawableBottom="@drawable/ic_up_arrow_small"
                     android:drawablePadding="2dp"
                     android:text="Review Highlights"
                     android:textAllCaps="false"
@@ -1065,9 +1139,47 @@
                     android:id="@+id/recycler_view_reviews"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp">
+                    android:layout_marginTop="16dp" />
 
-                </android.support.v7.widget.RecyclerView>
+                <LinearLayout
+                    android:id="@+id/no_data_block"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="24dp"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:visibility="visible">
+
+                    <carbon.widget.ImageView
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        app:carbon_elevation="3dp"
+                        app:srcCompat="@drawable/no_data_wallpaper" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="Sorry, no review to show right now..."
+                        android:textAlignment="center"
+                        android:textAllCaps="false"
+                        android:textColor="@color/textColorSecondaryDark"
+                        android:textSize="15sp" />
+
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/load_more_review_btn"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="match_parent"
+                    android:layout_height="34dp"
+                    android:background="@drawable/round_btn_joaa"
+                    android:text="Load more"
+                    android:textAllCaps="false"
+                    android:textColor="@color/textColorPrimary"
+                    android:textSize="12sp"
+                    android:visibility="gone"
+                    app:fontFamily="@font/cairo_regular" />
 
             </LinearLayout>
 

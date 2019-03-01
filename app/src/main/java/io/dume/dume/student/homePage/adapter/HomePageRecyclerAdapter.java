@@ -1,5 +1,6 @@
 package io.dume.dume.student.homePage.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
@@ -18,6 +19,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.transitionseverywhere.Fade;
 import com.transitionseverywhere.Slide;
 import com.transitionseverywhere.TransitionManager;
@@ -26,30 +28,37 @@ import com.transitionseverywhere.TransitionSet;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.dume.dume.Google;
 import io.dume.dume.R;
-import io.dume.dume.student.homePage.HomePageActivity;
+import io.dume.dume.student.homePage.HomePageModel;
+import io.dume.dume.teacher.homepage.TeacherContract;
 import me.zhanghai.android.materialratingbar.MaterialRatingBar;
 
 public class HomePageRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static final String TAG = "HomePageRecyclerAdapter";
+    private List<HomePageRatingData> ratingData;
     private LayoutInflater inflater;
     private Context context;
     private List<HomePageRecyclerData> data;
     private String[] feedbackStrings;
+    private final int promoStart;
 
 
     public HomePageRecyclerAdapter(Context context, List<HomePageRecyclerData> data) {
         inflater = LayoutInflater.from(context);
         this.data = data;
+        this.ratingData = new ArrayList<>();
         this.context = context;
+        promoStart = 9000;
+        //  totalCount = data.size() + ratingData.size();
         feedbackStrings = context.getResources().getStringArray(R.array.review_hint_text_dependent);
     }
 
     @Override
     public int getItemViewType(int position) {
-        if (position == 0) {
-            return 9999;
+        if (position > ratingData.size() - 1) {
+            return promoStart + 1;
         }
         return super.getItemViewType(position);
     }
@@ -57,18 +66,44 @@ public class HomePageRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        if (viewType == 9999) {
-            View view = inflater.inflate(R.layout.custom_rating_dialogue, parent, false);
-            return new RatingVH(view);
+        if (viewType > 9000) {
+            View view = inflater.inflate(R.layout.custom_hp_bsr_row, parent, false);
+            HomePageRecyclerAdapter.MyViewHolder holder = new HomePageRecyclerAdapter.MyViewHolder(view);
+            return holder;
         }
-        View view = inflater.inflate(R.layout.custom_hp_bsr_row, parent, false);
-        HomePageRecyclerAdapter.MyViewHolder holder = new HomePageRecyclerAdapter.MyViewHolder(view);
-        return holder;
+        View view = inflater.inflate(R.layout.custom_rating_dialogue, parent, false);
+        return new RatingVH(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        if (holder.getItemViewType() == 9999) {
+        if (holder.getItemViewType() > 9000) {
+            MyViewHolder myViewHolder = (MyViewHolder) holder;
+            HomePageRecyclerData homePageRecyclerData = data.get(position);
+            myViewHolder.mainAboutIntro.setText(homePageRecyclerData.title);
+            myViewHolder.mainAboutBody.setText(homePageRecyclerData.getDescription());
+            myViewHolder.mainAboutSubBody.setText(homePageRecyclerData.getSub_description());
+            Glide.with(context).load(homePageRecyclerData.getPromo_image()).into(myViewHolder.mainAboutImage);
+
+            myViewHolder.mainAbotuBtn.setOnClickListener(view -> {
+                view.setEnabled(false);
+                new HomePageModel((Activity) context, context).applyPromo(homePageRecyclerData, homePageRecyclerData.getPromo_code(), Google.getInstance().getAccountMajor(), new TeacherContract.Model.Listener<String>() {
+                    @Override
+                    public void onSuccess(String list) {
+                        Toast.makeText(context, list, Toast.LENGTH_SHORT).show();
+                        removePromo(position);
+                    }
+
+                    @Override
+                    public void onError(String msg) {
+                        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+            });
+
+
+        } else {
             RatingVH headerVH = (RatingVH) holder;
             headerVH.smallTitle.setVisibility(View.VISIBLE);
             headerVH.dismissBtn.setVisibility(View.GONE);
@@ -79,17 +114,19 @@ public class HomePageRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
             headerVH.nextSubmitBtn.setLayoutParams(params);
 
             //changing margin for image view
-            RelativeLayout.LayoutParams lp =(RelativeLayout.LayoutParams) headerVH.ratedMentorDP.getLayoutParams();
+            RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) headerVH.ratedMentorDP.getLayoutParams();
             lp.setMargins(0, (int) (38 * (context.getResources().getDisplayMetrics().density)), 0, (int) (10 * (context.getResources().getDisplayMetrics().density)));
             headerVH.ratedMentorDP.setLayoutParams(lp);
 
             // margin for the text view
-            RelativeLayout.LayoutParams lpTextView =(RelativeLayout.LayoutParams) headerVH.ratingPrimaryText.getLayoutParams();
+            RelativeLayout.LayoutParams lpTextView = (RelativeLayout.LayoutParams) headerVH.ratingPrimaryText.getLayoutParams();
             lpTextView.setMargins((int) (16 * (context.getResources().getDisplayMetrics().density)), 0, (int) (16 * (context.getResources().getDisplayMetrics().density)), (int) (10 * (context.getResources().getDisplayMetrics().density)));
             headerVH.ratingPrimaryText.setLayoutParams(lpTextView);
 
+            Glide.with(context).load(ratingData.get(position).getAvatar()).into(headerVH.ratedMentorDP);
+            headerVH.ratingPrimaryText.setText(String.format("How was your learning with %s", ratingData.get(position).getName()));
             //testing code here
-            HomePageRatingAdapter itemRatingRecycleAdapter = new HomePageRatingAdapter(context, getFinalRatingData());
+            HomePageRatingAdapter itemRatingRecycleAdapter = new HomePageRatingAdapter(context, ratingData.get(position));
             headerVH.itemRatingRecycleView.setAdapter(itemRatingRecycleAdapter);
             headerVH.itemRatingRecycleView.setLayoutManager(new LinearLayoutManager(context));
 
@@ -136,21 +173,17 @@ public class HomePageRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
                         headerVH.firstLayout.setVisibility(View.GONE);
                         headerVH.secondLayout.setVisibility(View.VISIBLE);
 
-                    } else{
+                    } else {
                         Toast.makeText(context, "please rate your experience", Toast.LENGTH_SHORT).show();
                     }
                 }
             });
 
-            headerVH.submitBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    removeAt(holder.getAdapterPosition());
-                }
+            headerVH.submitBtn.setOnClickListener(view -> {
+                //removeAt(holder.getAdapterPosition());
+                this.removeRatingItem(position);
             });
 
-        } else {
-            MyViewHolder myViewHolder = (MyViewHolder) holder;
         }
     }
 
@@ -160,20 +193,34 @@ public class HomePageRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
         notifyItemRangeChanged(position, 1);
     }
 
-    public List<HomePageRatingData> getFinalRatingData() {
-        List<HomePageRatingData> data = new ArrayList<>();
-        String[] primaryText = context.getResources().getStringArray(R.array.rating_demo_data);
-        for (String aPrimaryText : primaryText) {
-            HomePageRatingData current = new HomePageRatingData();
-            current.ratingAboutName = aPrimaryText;
-            data.add(current);
-        }
-        return data;
-    }
 
     @Override
     public int getItemCount() {
-        return 2;
+        return data.size() + ratingData.size();
+    }
+
+    public void addNewData(HomePageRatingData currentRatingDataList) {
+        ratingData.add(currentRatingDataList);
+        notifyItemInserted(data.size() - 1);
+        notifyDataSetChanged();
+    }
+
+    public void removeRatingItem(int postion) {
+        ratingData.remove(postion);
+        notifyItemRemoved(postion);
+        notifyDataSetChanged();
+    }
+
+    public void addPromoToList(HomePageRecyclerData promoData) {
+        data.add(promoData);
+        notifyItemInserted(data.size() - 1);
+        notifyDataSetChanged();
+    }
+
+    private void removePromo(int position) {
+        data.remove(position);
+        notifyItemRemoved(position);
+        notifyDataSetChanged();
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
@@ -193,8 +240,6 @@ public class HomePageRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
             mainAboutSubBody = itemView.findViewById(R.id.main_about_sub_body);
             mainAboutImage = itemView.findViewById(R.id.main_about_image);
             mainAbotuBtn = itemView.findViewById(R.id.main_about_btn);
-
-
         }
     }
 

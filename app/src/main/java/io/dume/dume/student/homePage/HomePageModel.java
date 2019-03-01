@@ -2,11 +2,36 @@ package io.dume.dume.student.homePage;
 
 import android.app.Activity;
 import android.content.Context;
+import android.support.annotation.NonNull;
+import android.util.Log;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.ServerTimestamp;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Nullable;
+
+import io.dume.dume.Google;
+import io.dume.dume.model.DumeModel;
+import io.dume.dume.student.grabingLocation.MenualRecyclerData;
+import io.dume.dume.student.homePage.adapter.HomePageRecyclerData;
 import io.dume.dume.student.pojo.StuBaseModel;
+import io.dume.dume.student.recordsPage.Record;
+import io.dume.dume.teacher.homepage.TeacherContract;
+import io.dume.dume.util.DumeUtils;
 
 public class HomePageModel extends StuBaseModel implements HomePageContract.Model {
     private Context context;
@@ -19,13 +44,276 @@ public class HomePageModel extends StuBaseModel implements HomePageContract.Mode
         this.activity = activity;
     }
 
+
+    @Override
+    public void applyPromo(HomePageRecyclerData promoData, String promo_code, String accountType, TeacherContract.Model.Listener<String> listener) {
+        String path;
+        if (accountType == DumeUtils.TEACHER) {
+            path = "/users/mentors/mentor_profile";
+        } else {
+            path = "/users/students/stu_pro_info";
+
+        }
+
+
+        Map<String, Object> promoMap = new HashMap<>();
+
+        promoMap.put("title",promoData.getTitle());
+        promoMap.put("description",promoData.getDescription());
+        promoMap.put("sub_description",promoData.getSub_description());
+        promoMap.put("expirity",promoData.getExpirity());
+        promoMap.put("start_date",promoData.getStart_date());
+        promoMap.put("max_dicount_percentage",promoData.getMax_dicount_percentage());
+        promoMap.put("max_discount_credit",promoData.getMax_discount_credit());
+        promoMap.put("max_tution_count",promoData.getMax_tution_count());
+        promoMap.put("promo_image",promoData.getPromo_image());
+        promoMap.put("product",promoData.getProduct());
+        promoMap.put("promo_code",promoData.getPromo_code());
+        promoMap.put("promo_for",promoData.getPromo_for());
+        promoMap.put("expired",promoData.isExpired());
+        promoMap.put("criteria",promoData.getCriteria());
+
+
+        firestore.collection(path).document(FirebaseAuth.getInstance().getUid())
+                .update("applied_promo", FieldValue.arrayUnion(promo_code),
+                        "available_promo", FieldValue.arrayRemove(promo_code),
+                        promo_code, promoMap).addOnSuccessListener(aVoid -> listener.onSuccess("Promo Applied.")).addOnFailureListener(e -> listener.onError(e.getLocalizedMessage()));
+
+    }
+
+
     @Override
     public void hawwa() {
 
     }
 
     @Override
+    public void getPromo(String promoCode, TeacherContract.Model.Listener<HomePageRecyclerData> listener) {
+        firestore.collection("promo").whereEqualTo("promo_code", promoCode).addSnapshotListener((Activity) context, new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                if (queryDocumentSnapshots == null) {
+                    listener.onError("Promo Not Exists");
+                } else {
+                    List<DocumentSnapshot> documents = queryDocumentSnapshots.getDocuments();
+                    if (documents.size() > 0) {
+                        HomePageRecyclerData homePageRecyclerData = documents.get(0).toObject(HomePageRecyclerData.class);
+                        if (!homePageRecyclerData.isExpired()) {
+                            listener.onSuccess(homePageRecyclerData);
+                        }
+                    } else listener.onError("Promo Not Exists");
+
+                }
+
+            }
+        });
+    }
+
+
+    @Override
+    public void submitRating(String record_id, String skill_id, String opponent_uid, String myAccountType, Map<String, Boolean> inputRating, float inputStar, String feedbackString, TeacherContract.Model.Listener<Void> listener) {
+
+        String keyToChange;
+        String path;
+
+        if (myAccountType == DumeUtils.TEACHER) {
+            keyToChange = "ts_rate_status";
+            path = "/users/students/stu_pro_info";
+        } else {
+            keyToChange = "s_rate_status";
+            path = "/users/mentors/mentor_profile";
+        }
+        firestore.collection("records").document(record_id).update(keyToChange, Record.DONE);
+        firestore.collection(path).document(opponent_uid).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                if (documentSnapshot == null) {
+                    return;
+                }
+                Map<String, Object> self_rating = (Map<String, Object>) documentSnapshot.get("self_rating");
+                float star_rating = Float.parseFloat((String) self_rating.get("star_rating"));
+
+                Integer dl_behaviour = Integer.parseInt((String) self_rating.get("dl_behaviour"));
+                Integer l_behaviour = Integer.parseInt((String) self_rating.get("l_behaviour"));
+                Integer dl_communication = Integer.parseInt((String) self_rating.get("dl_communication"));
+                Integer l_communication = Integer.parseInt((String) self_rating.get("l_communication"));
+                Integer dl_experience = Integer.parseInt((String) self_rating.get("dl_experience"));
+                Integer l_experience = Integer.parseInt((String) self_rating.get("l_experience"));
+                Integer dl_expertise = Integer.parseInt((String) self_rating.get("dl_expertise"));
+                Integer l_expertise = Integer.parseInt((String) self_rating.get("l_expertise"));
+                Integer star_count = Integer.parseInt((String) self_rating.get("star_count"));
+                Integer student_guided = Integer.parseInt((String) self_rating.get("student_guided"));
+                student_guided++;
+
+
+                star_rating = (star_rating * star_count) + inputStar / (++star_count);
+                for (Map.Entry<String, Boolean> entry : inputRating.entrySet()) {
+                    switch (entry.getKey()) {
+                        case "Expertise":
+                            if (entry.getValue()) {
+                                l_expertise = l_expertise + 1;
+                            } else {
+                                dl_expertise = dl_expertise + 1;
+
+                            }
+                            break;
+                        case "Experience":
+                            if (entry.getValue()) {
+                                l_experience = l_experience + 1;
+                            } else {
+                                dl_experience = dl_experience + 1;
+
+                            }
+
+                            break;
+                        case "Communication":
+                            if (entry.getValue()) {
+                                l_communication = l_communication + 1;
+                            } else {
+                                dl_communication = dl_communication + 1;
+
+                            }
+
+                            break;
+                        case "Behaviour":
+                            if (entry.getValue()) {
+                                l_behaviour = l_behaviour + 1;
+                            } else {
+                                dl_behaviour = dl_behaviour + 1;
+
+                            }
+
+                            break;
+                    }
+
+
+                }
+
+
+                Map<String, Object> selfRating = new HashMap<>();
+                selfRating.put("star_rating", star_rating);
+                selfRating.put("star_count", star_count);
+                selfRating.put("l_communication", l_communication);
+                selfRating.put("dl_communication", dl_communication);
+                selfRating.put("l_behaviour", l_behaviour);
+                selfRating.put("dl_behaviour", dl_behaviour);
+                selfRating.put("l_expertise", l_expertise);
+                selfRating.put("dl_expertise", dl_expertise);
+                selfRating.put("l_experience", l_experience);
+                selfRating.put("dl_experience", dl_experience);
+                selfRating.put("student_guided", student_guided);
+                documentSnapshot.getReference().update("self_rating", self_rating);
+
+
+                firestore.collection("/users/mentors/skills/").document(skill_id).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                        if (myAccountType == DumeUtils.STUDENT) {
+                            Map<String, Integer> likes = (Map<String, Integer>) documentSnapshot.get("likes");
+                            Map<String, Integer> dislikes = (Map<String, Integer>) documentSnapshot.get("dislikes");
+                            for (Map.Entry<String, Integer> entry : likes.entrySet()) {
+                                final Boolean aBoolean = inputRating.get(entry.getKey());
+                                if (aBoolean) {
+                                    Integer value = entry.getValue();
+                                    likes.put(entry.getKey(), ++value);
+                                }
+                            }
+                            for (Map.Entry<String, Integer> entry : dislikes.entrySet()) {
+                                final Boolean aBoolean = inputRating.get(entry.getKey());
+                                if (!aBoolean) {
+                                    Integer value = entry.getValue();
+                                    dislikes.put(entry.getKey(), ++value);
+                                }
+                            }
+                            firestore.collection("/users/mentors/skills/").document(skill_id).update("sp_info.self_rating", self_rating, "likes", likes, "dislikes", dislikes);
+                        }
+                    }
+                });
+                Map<String, Object> reviewMap = new HashMap<>();
+                reviewMap.put("body", feedbackString);
+                reviewMap.put("dislikes", 0);
+                reviewMap.put("likes", 0);
+                reviewMap.put("name", "Foo will be replaced");
+                reviewMap.put("r_avatar", "avatar");
+                reviewMap.put("reviewer_rating", inputStar);
+                reviewMap.put("time", FieldValue.serverTimestamp());
+                firestore.collection("/users/mentors/skills/").document(skill_id).collection("reviews").add(reviewMap);
+
+
+            }
+        });
+
+
+    }
+
+    @Override
+    public void getSingleRecords(String recordId, TeacherContract.Model.Listener<Record> listener) {
+        firestore.collection("records").document(recordId).addSnapshotListener((Activity) context, new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    listener.onError(e.getMessage());
+                } else {
+                    if (documentSnapshot != null) {
+                        String mentorName;
+                        String studentName;
+                        String salaryInDemand;
+                        String subjectExchange;
+                        String date;
+                        String mentorDpUrl;
+                        String studentDpUrl, sGender, mGender;
+                        float studentRating;
+                        float mentorRating;
+                        String status;
+                        int deliveryStatus;
+                        Map<String, Object> data = documentSnapshot.getData();
+                        Map<String, Object> spMap = (Map<String, Object>) data.get("sp_info");
+                        mentorName = spMap.get("first_name") + " " + spMap.get("last_name");
+                        mentorDpUrl = (String) spMap.get("avatar");
+                        Map<String, Object> bal = (Map<String, Object>) spMap.get("self_rating");
+                        mentorRating = Float.parseFloat((String) bal.get("star_rating"));
+                        Map<String, Object> forMap = (Map<String, Object>) data.get("for_whom");
+                        Map<String, Object> shMap = (Map<String, Object>) forMap.get("request_sr");
+                        studentRating = Float.parseFloat((String) shMap.get("star_rating"));
+                        studentName = (String) forMap.get("stu_name");
+                        studentDpUrl = (String) forMap.get("request_avatar");
+                        salaryInDemand = String.valueOf((Double) data.get("salary"));
+                        sGender = (String) forMap.get("request_gender");
+                        mGender = (String) spMap.get("gender");
+                        subjectExchange = DumeUtils.getLast((Map<String, Object>) data.get("jizz"));
+                        Date creation = (Date) data.get("creation");
+                        date = creation.toString();
+                        status = (String) data.get("record_status");
+                        Record record = new Record(mentorName, studentName, salaryInDemand, subjectExchange, creation, mentorDpUrl, studentDpUrl, studentRating, mentorRating, status, Record.DELIVERED, sGender, mGender);
+                        record.setT_rate_status(documentSnapshot.getString("t_rate_status"));
+                        record.setS_rate_status(documentSnapshot.getString("s_rate_status"));
+                        listener.onSuccess(record);
+
+                    } else listener.onError("No record found.");
+                }
+            }
+        });
+    }
+
+    @Override
     public void addShapShotListener(EventListener<DocumentSnapshot> updateViewListener) {
         userStudentProInfo.addSnapshotListener(activity, updateViewListener);
     }
+
+    @Override
+    public void removeCompletedRating(String identify, TeacherContract.Model.Listener<Void> listener) {
+        userStudentProInfo.update("rating_array", FieldValue.arrayRemove(identify)).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.w(TAG, "onSuccess: " + "Ok");
+                listener.onSuccess(aVoid);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                listener.onError(e.getLocalizedMessage());
+            }
+        });
+    }
+
 }

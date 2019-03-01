@@ -1,7 +1,9 @@
 package io.dume.dume.student.studentPayment;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
@@ -26,13 +28,22 @@ import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.google.firebase.firestore.DocumentSnapshot;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+import io.dume.dume.Google;
 import io.dume.dume.R;
 import io.dume.dume.student.grabingLocation.MenualRecyclerData;
 import io.dume.dume.student.grabingLocation.PlaceMenualRecyAda;
+import io.dume.dume.student.homePage.HomePageModel;
+import io.dume.dume.student.homePage.adapter.HomePageRatingData;
+import io.dume.dume.student.homePage.adapter.HomePageRecyclerData;
 import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
+import io.dume.dume.student.pojo.SearchDataStore;
 import io.dume.dume.student.studentHelp.StudentHelpActivity;
 import io.dume.dume.student.studentPayment.adapterAndData.ObligationAndClaimAdapter;
 import io.dume.dume.student.studentPayment.adapterAndData.ObligationAndClaimData;
@@ -42,6 +53,8 @@ import io.dume.dume.student.studentPayment.adapterAndData.PromotionAdapter;
 import io.dume.dume.student.studentPayment.adapterAndData.PromotionData;
 import io.dume.dume.student.studentPayment.adapterAndData.TransactionData;
 import io.dume.dume.student.studentPayment.adapterAndData.TransactionHistoryAdapter;
+import io.dume.dume.teacher.homepage.TeacherDataStore;
+import io.dume.dume.util.DumeUtils;
 import io.dume.dume.util.RadioBtnDialogue;
 
 import static io.dume.dume.util.DumeUtils.configAppbarTittle;
@@ -186,7 +199,7 @@ public class StudentPaymentActivity extends CustomStuAppCompatActivity implement
         addPaymentDialogue.setItemChoiceListener(new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-               // selectGenderTextView.setText(genderSelcetionArr[i]);
+                // selectGenderTextView.setText(genderSelcetionArr[i]);
                 Toast.makeText(StudentPaymentActivity.this, "fucked that", Toast.LENGTH_SHORT).show();
             }
         });
@@ -198,9 +211,9 @@ public class StudentPaymentActivity extends CustomStuAppCompatActivity implement
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
-            if(mainLayoutContent.getVisibility() == View.VISIBLE){
+            if (mainLayoutContent.getVisibility() == View.VISIBLE) {
                 super.onBackPressed();
-            }else{
+            } else {
                 configAppbarTittle(StudentPaymentActivity.this, "Payment");
                 mainLayoutContent.setVisibility(View.VISIBLE);
                 secondaryHideAbleLayout.setVisibility(View.GONE);
@@ -288,6 +301,7 @@ public class StudentPaymentActivity extends CustomStuAppCompatActivity implement
 
         private StudentPaymentActivity myMainActivity;
         private RecyclerView pCustomRecyclerView;
+        private Context context;
 
         @Override
         public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -303,11 +317,73 @@ public class StudentPaymentActivity extends CustomStuAppCompatActivity implement
             pCustomRecyclerView = rootView.findViewById(R.id.p_recycler_view);
 
             //menual one
-            List<PromotionData> promotionData = new ArrayList<>();
+            List<HomePageRecyclerData> promotionData = new ArrayList<>();
             PromotionAdapter promotionAdapter = new PromotionAdapter(myMainActivity, promotionData);
             pCustomRecyclerView.setAdapter(promotionAdapter);
             pCustomRecyclerView.setLayoutManager(new LinearLayoutManager(myMainActivity));
+
+            List<String> appliedPromoList;
+
+            if (Google.getInstance().getAccountMajor() == DumeUtils.TEACHER) {
+                Map<String, Object> documentSnapshot = TeacherDataStore.getInstance().getDocumentSnapshot();
+                appliedPromoList = (ArrayList) documentSnapshot.get("applied_promo");
+
+
+            } else {
+                Map<String, Object> documentSnapshot = SearchDataStore.getInstance().getDocumentSnapshot();
+                appliedPromoList = (ArrayList) documentSnapshot.get("applied_promo");
+
+            }
+            if (appliedPromoList == null) {
+                appliedPromoList = new ArrayList<>();
+            }
+
+
+            for (String promo_code : appliedPromoList) {
+
+                Map<String, Object> promoMap;
+
+                if (Google.getInstance().getAccountMajor() == DumeUtils.TEACHER) {
+                    Map<String, Object> documentSnapshot = TeacherDataStore.getInstance().getDocumentSnapshot();
+                    promoMap = (Map<String, Object>) documentSnapshot.get(promo_code);
+
+
+                } else {
+                    Map<String, Object> documentSnapshot = SearchDataStore.getInstance().getDocumentSnapshot();
+                    promoMap = (Map<String, Object>) documentSnapshot.get(promo_code);
+
+                }
+                HomePageRecyclerData homePageRecyclerData = new HomePageRecyclerData();
+                homePageRecyclerData.setTitle(promoMap.get("title").toString());
+                homePageRecyclerData.setDescription(promoMap.get("description").toString());
+                homePageRecyclerData.setStart_date((Date) promoMap.get("start_date"));
+                homePageRecyclerData.setProduct(promoMap.get("product").toString());
+                Long max_tution_count = (Long) promoMap.get("max_tution_count");
+                homePageRecyclerData.setMax_tution_count(max_tution_count.intValue());
+                Long max_dicount_percentage = (Long) promoMap.get("max_dicount_percentage");
+                homePageRecyclerData.setMax_dicount_percentage((Integer) max_dicount_percentage.intValue());
+                Long max_discount_credit = (Long) promoMap.get("max_discount_credit");
+                homePageRecyclerData.setMax_discount_credit((Integer) max_discount_credit.intValue());
+                homePageRecyclerData.setExpirity((Date) promoMap.get("expirity"));
+                homePageRecyclerData.setCriteria((Map<String, Object>) promoMap.get("criteria"));
+                homePageRecyclerData.setPromo_for(promoMap.get("promo_for").toString());
+                homePageRecyclerData.setPromo_image(promoMap.get("promo_image").toString());
+                homePageRecyclerData.setSub_description(promoMap.get("sub_description").toString());
+                homePageRecyclerData.setPromo_code(promoMap.get("promo_code").toString());
+                homePageRecyclerData.setExpired((Boolean) promoMap.get("expired"));
+                promotionAdapter.addPromoToList(homePageRecyclerData);
+
+            }
+            //
+
+
             return rootView;
+        }
+
+        @Override
+        public void onAttach(Context context) {
+            this.context = context;
+            super.onAttach(context);
         }
 
         @Override

@@ -98,4 +98,34 @@
         android:background="@color/tabViewPager"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
+    <LinearLayout
+        android:id="@+id/no_data_block"
+        android:layout_width="match_parent"
+        android:layout_height="320dp"
+        app:layout_anchor="@+id/app_bar"
+        app:layout_anchorGravity="bottom"
+        android:layout_marginTop="132dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+        <carbon.widget.ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:carbon_elevation="3dp"
+            app:srcCompat="@drawable/no_data_wallpaper" />
+
+        <TextView
+            android:id="@+id/no_item_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Sorry, no records to show right now ..."
+            android:textAlignment="center"
+            android:textAllCaps="false"
+            android:textColor="@color/textColorSecondary"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+
 </android.support.design.widget.CoordinatorLayout>

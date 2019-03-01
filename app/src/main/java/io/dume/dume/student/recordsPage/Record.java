@@ -1,21 +1,28 @@
 package io.dume.dume.student.recordsPage;
 
+import java.util.Date;
+
 public class Record {
     public static int DELIVERED = 2, NOT_DELIVERED = 1, DELIVERED_SEEN = 3;
+    public static final String DIALOG =  "dialog", BOTTOM_SHEET = "bottom_sheet", DONE = "done";
+
 
     String mentorName;
     String studentName;
     String salaryInDemand;
     String subjectExchange;
-    String date;
+    Date date;
     String mentorDpUrl;
     String studentDpUrl;
     float studentRating;
     float mentorRating;
     String status;
     int deliveryStatus;
+    String sGender, mGender;
+    String t_rate_status;
+    String s_rate_status;
 
-    public Record(String mentorName, String studentName, String salaryInDemand, String subjectExchange, String date, String mentorDpUrl, String studentDpUrl, float studentRating, float mentorRating, String status, int deliveryStatus) {
+    public Record(String mentorName, String studentName, String salaryInDemand, String subjectExchange, Date date, String mentorDpUrl, String studentDpUrl, float studentRating, float mentorRating, String status, int deliveryStatus, String studentGender, String mentorGender) {
         this.mentorName = mentorName;
         this.studentName = studentName;
         this.salaryInDemand = salaryInDemand;
@@ -27,6 +34,24 @@ public class Record {
         this.mentorRating = mentorRating;
         this.status = status;
         this.deliveryStatus = deliveryStatus;
+        this.sGender = studentGender;
+        this.mGender = mentorGender;
+    }
+
+    public String getT_rate_status() {
+        return t_rate_status;
+    }
+
+    public void setT_rate_status(String t_rate_status) {
+        this.t_rate_status = t_rate_status;
+    }
+
+    public String getS_rate_status() {
+        return s_rate_status;
+    }
+
+    public void setS_rate_status(String s_rate_status) {
+        this.s_rate_status = s_rate_status;
     }
 
     public String getMentorName() {
@@ -61,11 +86,11 @@ public class Record {
         this.subjectExchange = subjectExchange;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
@@ -115,5 +140,21 @@ public class Record {
 
     public void setDeliveryStatus(int deliveryStatus) {
         this.deliveryStatus = deliveryStatus;
+    }
+
+    public String getsGender() {
+        return sGender;
+    }
+
+    public void setsGender(String sGender) {
+        this.sGender = sGender;
+    }
+
+    public String getmGender() {
+        return mGender;
+    }
+
+    public void setmGender(String mGender) {
+        this.mGender = mGender;
     }
 }

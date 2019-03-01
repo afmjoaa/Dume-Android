@@ -36,6 +36,7 @@ import io.dume.dume.customView.HorizontalLoadView;
 import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
 import io.dume.dume.teacher.adapters.SkillAdapter;
 import io.dume.dume.teacher.crudskill.CrudSkillActivity;
+import io.dume.dume.teacher.homepage.TeacherActivtiy;
 import io.dume.dume.teacher.homepage.TeacherDataStore;
 import io.dume.dume.teacher.mentor_settings.basicinfo.EditAccount;
 import io.dume.dume.teacher.pojo.Skill;
@@ -76,7 +77,6 @@ public class SkillActivity extends CustomStuAppCompatActivity implements SkillCo
             public void onDismissed(Snackbar snackbar, int event) {
                 multiFab.setTranslationY(0);
                 multiFab.setEnabled(true);
-                //floatingButoon.setClickable(true);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     multiFab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorAccent)));
                 }
@@ -86,14 +86,23 @@ public class SkillActivity extends CustomStuAppCompatActivity implements SkillCo
             public void onShown(Snackbar snackbar) {
                 multiFab.setTranslationY(-30 * mDensity);
                 multiFab.setEnabled(false);
-
-                //floatingButoon.setClickable(false);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     multiFab.setBackgroundTintList(ColorStateList.valueOf(Color.GRAY));
                 }
             }
         });
 
+        enamSnackbar.addCallback(new Snackbar.Callback() {
+            @Override
+            public void onDismissed(Snackbar snackbar, int event) {
+                multiFab.setTranslationY(0);
+            }
+
+            @Override
+            public void onShown(Snackbar snackbar) {
+                multiFab.setTranslationY(-30 * mDensity);
+            }
+        });
         changeAddSkillBtnColor();
     }
 
@@ -108,25 +117,23 @@ public class SkillActivity extends CustomStuAppCompatActivity implements SkillCo
         Boolean premier = achievements.get("premier");
         if (premier) {
             fabInstant.setColorNormalResId(R.color.colorBlack);
-            fabInstant.setIconDrawable(getResources().getDrawable(R.drawable.dume_instant_image));
+            fabInstant.setImageDrawable(getResources().getDrawable(R.drawable.dume_instant_image));
         } else {
             fabInstant.setColorNormalResId(R.color.recordsBgColor);
-            fabInstant.setIconDrawable(getResources().getDrawable(R.drawable.dume_instant_grayscale_image));
-
+            fabInstant.setImageDrawable(getResources().getDrawable(R.drawable.dume_instant_grayscale_image));
         }
         String beh = (String) documentSnapshot.get("pro_com_%");
         int percentage = Integer.parseInt(beh);
         if (percentage >= 95) {
             fabRegular.setColorNormalResId(R.color.colorBlack);
-            fabRegular.setIconDrawable(getResources().getDrawable(R.drawable.dume_regular_image));
+            fabRegular.setImageDrawable(getResources().getDrawable(R.drawable.dume_regular_image));
             fabGang.setColorNormalResId(R.color.colorBlack);
-            fabGang.setIconDrawable(getResources().getDrawable(R.drawable.dume_gang_image));
+            fabGang.setImageDrawable(getResources().getDrawable(R.drawable.dume_gang_image));
         } else {
             fabRegular.setColorNormalResId(R.color.recordsBgColor);
-            fabRegular.setIconDrawable(getResources().getDrawable(R.drawable.dume_regular_grayscale_image));
+            fabRegular.setImageDrawable(getResources().getDrawable(R.drawable.dume_regular_grayscale_image));
             fabGang.setColorNormalResId(R.color.recordsBgColor);
-            fabGang.setIconDrawable(getResources().getDrawable(R.drawable.dume_gang_grayscale_image));
-
+            fabGang.setImageDrawable(getResources().getDrawable(R.drawable.dume_gang_grayscale_image));
         }
     }
 
@@ -203,7 +210,6 @@ public class SkillActivity extends CustomStuAppCompatActivity implements SkillCo
         TextView v = toast.getView().findViewById(android.R.id.message);
         if (v != null) v.setGravity(Gravity.CENTER);
         toast.show();
-
     }
 
 
@@ -220,9 +226,7 @@ public class SkillActivity extends CustomStuAppCompatActivity implements SkillCo
 
     @Override
     public void loadSkillRV(ArrayList<Skill> list) {
-
         TeacherDataStore.getInstance().setSkillArrayList(list);
-
         adapter.update(list);
         if (list.size() == 0) {
             noDataBlock.setVisibility(View.VISIBLE);
@@ -297,22 +301,30 @@ public class SkillActivity extends CustomStuAppCompatActivity implements SkillCo
         if (loadView.getVisibility() == View.VISIBLE) {
             loadView.setVisibility(View.INVISIBLE);
         }
-
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
-            super.onBackPressed();
+            if (isTaskRoot()) {
+                startActivity(new Intent(this, TeacherActivtiy.class));
+                finish();
+            } else {
+                super.onBackPressed();
+            }
         }
         return super.onOptionsItemSelected(item);
     }
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        if (isTaskRoot()) {
+            startActivity(new Intent(this, TeacherActivtiy.class));
+            finish();
+        } else {
+            super.onBackPressed();
+        }
     }
 
 }

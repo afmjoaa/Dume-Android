@@ -9,19 +9,24 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.location.places.AutocompletePrediction;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import io.dume.dume.R;
 import io.dume.dume.teacher.pojo.Stat;
 
 public abstract class StatAdapter extends RecyclerView.Adapter<StatAdapter.FeedBackVH> {
     private final int itemWidth;
     private final Context context;
-    private Stat stat;
+    private List<Stat> stat;
     private ViewGroup parent;
 
-    public StatAdapter(Context context, int itemWidth, Stat stat) {
+    public StatAdapter(Context context, int itemWidth, List<Stat> stat) {
         this.stat = stat;
         this.itemWidth = itemWidth;
-        this.context=context;
+        this.context = context;
     }
 
     @NonNull
@@ -38,11 +43,37 @@ public abstract class StatAdapter extends RecyclerView.Adapter<StatAdapter.FeedB
         ViewGroup.LayoutParams layoutParams = holder.hostingRelative.getLayoutParams();
         layoutParams.width = (itemWidth);
         holder.hostingRelative.setLayoutParams(layoutParams);
+        holder.valueTV.setText(String.format("%s", position == 0 ? stat.get(0).getRequest_i() : stat.get(0).getRequest_r()));
+        holder.valueTitleTV.setText(String.format("%s", position == 0 ? "Profile Impressions" : "Profile Request"));
+        switch (position) {
+            case 0:
+                Float valueStatTVValueI = (Float.parseFloat(stat.get(0).getRequest_i()) - Float.parseFloat(stat.get(1).getRequest_i()) /
+                        Float.parseFloat(stat.get(1).getRequest_i())) * 100;
+                holder.valueStatTV.setText(String.format("  (%s%%)", valueStatTVValueI.toString()));
+                break;
+            case 1:
+                Float valueStatTVValueR = (Float.parseFloat(stat.get(0).getRequest_r()) - Float.parseFloat(stat.get(1).getRequest_r()) /
+                        Float.parseFloat(stat.get(1).getRequest_r())) * 100;
+                holder.valueStatTV.setText(String.format("  (%s%%)", valueStatTVValueR.toString()));
+                break;
+            default:
+                break;
+        }
 
-        holder.valueTV.setText(String.format("%s", position == 0 ? Integer.toString(stat.getImpression()) : Integer.toString(stat.getView())));
-        holder.valueTitleTV.setText(String.format("%s", position == 0 ? "Profile Impressions" : "Profile Views"));
+        holder.hostingRelative.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onItemClick(position, view);
+            }
+        });
     }
+
     public abstract void onItemClick(int position, View view);
+
+    public void update(List<Stat> newData) {
+        this.stat = newData;
+        this.notifyDataSetChanged();
+    }
 
     @Override
     public int getItemCount() {
@@ -53,12 +84,14 @@ public abstract class StatAdapter extends RecyclerView.Adapter<StatAdapter.FeedB
         private final TextView valueTV;
         private final TextView valueTitleTV;
         private final carbon.widget.RelativeLayout hostingRelative;
+        private final TextView valueStatTV;
 
         public FeedBackVH(View itemView) {
             super(itemView);
             valueTitleTV = itemView.findViewById(R.id.reportTitle);
             valueTV = itemView.findViewById(R.id.reportValue);
             hostingRelative = itemView.findViewById(R.id.hosting_relative_layout);
+            valueStatTV = itemView.findViewById(R.id.valueStatTV);
 
         }
     }

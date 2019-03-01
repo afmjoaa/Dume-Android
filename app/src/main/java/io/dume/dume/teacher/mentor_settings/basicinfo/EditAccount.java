@@ -110,8 +110,8 @@ public class EditAccount extends CustomStuAppCompatActivity implements EditContr
         presenter = new EditPresenter(this, this, EditModel.getModelInstance(this));
         presenter.enqueue();
         TransitionManager.beginDelayedTransition(pHostRelative);
-        if(getIntent().getAction()!= null){
-            if(getIntent().getAction().equals("scroll_down")){
+        if (getIntent().getAction() != null) {
+            if (getIntent().getAction().equals("scroll_down")) {
                 mScrollView.post(new Runnable() {
                     @Override
                     public void run() {
@@ -371,6 +371,16 @@ public class EditAccount extends CustomStuAppCompatActivity implements EditContr
             @Override
             public void afterTextChanged(Editable s) {
                 generatePercent();
+            }
+        });
+
+        currentStatusET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    currentStatusET.setHint("Lecturer in MIST");
+                } else {
+                    currentStatusET.setHint("");
+                }
             }
         });
         selectGenderEditText.addTextChangedListener(new TextWatcher() {
@@ -706,6 +716,15 @@ public class EditAccount extends CustomStuAppCompatActivity implements EditContr
         if (!databaseComPercent.equals(getProfileComPercent())) {
             someThingChanged(true);
         }
+
+        String profileComPercent = getProfileComPercent();
+        if (profileComPercent != null) {
+            if (profileComPercent.equals("100")) {
+                initProfileCompleteView();
+            } else {
+                disInitProfileCompleteView();
+            }
+        }
         return getProfileComPercent();
         //to be continued
     }
@@ -743,6 +762,13 @@ public class EditAccount extends CustomStuAppCompatActivity implements EditContr
     }
 
     @Override
+    public void disInitProfileCompleteView() {
+        seekbarStaylayout.setVisibility(View.VISIBLE);
+        profileCompleteTextView.setVisibility(View.GONE);
+        dividerHorizontalUnderPCT.setVisibility(View.GONE);
+    }
+
+    @Override
     public void addQualifiaction() {
         if (isChanged) {
             presenter.fabClicked(new TeacherContract.Model.Listener<Void>() {
@@ -753,12 +779,13 @@ public class EditAccount extends CustomStuAppCompatActivity implements EditContr
                     intent.setAction("add");
                     startActivityForResult(intent, 1234);
                 }
+
                 @Override
                 public void onError(String msg) {
                     toast(msg);
                 }
             });
-        }else {
+        } else {
             final Intent intent = new Intent(this, AcademicActivity.class);
             intent.setAction("add");
             startActivityForResult(intent, 1234);

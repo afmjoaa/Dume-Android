@@ -14,7 +14,8 @@
         android:layout_height="wrap_content"
         android:clickable="true"
         android:focusable="true"
-        android:foreground="?android:attr/selectableItemBackground">
+        android:foreground="?android:attr/selectableItemBackground"
+        android:visibility="gone">
 
         <carbon.widget.ImageView
             android:id="@+id/mentor_display_pic"

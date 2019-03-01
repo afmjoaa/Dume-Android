@@ -14,12 +14,18 @@ import android.widget.Toast;
 
 import com.google.firebase.firestore.GeoPoint;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
 import io.dume.dume.R;
 import io.dume.dume.model.DumeModel;
+import io.dume.dume.student.homePage.adapter.HomePageRatingData;
+import io.dume.dume.student.homePage.adapter.HomePageRecyclerData;
 import io.dume.dume.student.pojo.SearchDataStore;
+import io.dume.dume.student.recordsPage.Record;
 import io.dume.dume.teacher.homepage.TeacherActivtiy;
 import io.dume.dume.teacher.homepage.TeacherContract;
 import io.dume.dume.util.DumeUtils;
@@ -86,7 +92,6 @@ public class HomePagePresenter implements HomePageContract.Presenter {
                 break;
             //temporary code goes here
             case R.id.promotion_validity_text:
-                mView.testingCustomDialogue();
                 break;
 
         }
@@ -108,7 +113,7 @@ public class HomePagePresenter implements HomePageContract.Presenter {
             case R.id.boot_camp:
                 //add boot camp here
                 //mView.switchProfileDialog(DumeUtils.BOOTCAMP);
-                mView.gotoTestingActivity();
+                mView.gotoBootCampActivity();
                 break;
             case R.id.al_display_pic:
                 mView.gotoProfilePage();
@@ -223,7 +228,32 @@ public class HomePagePresenter implements HomePageContract.Presenter {
     @Override
     public void getDataFromDB() {
         mModel.addShapShotListener((documentSnapshot, e) -> {
+
+
             if (documentSnapshot != null) {
+
+
+                ArrayList<String> available_promo = (ArrayList<String>) documentSnapshot.get("available_promo");
+                ArrayList<String> tempList = new ArrayList<>();
+                for (String promoCode : available_promo) {
+                    if (!tempList.contains(promoCode)) {
+                        tempList.add(promoCode);
+                    }
+                }
+                available_promo = tempList;
+                for (String promoCode : available_promo) {
+                    mModel.getPromo(promoCode, new TeacherContract.Model.Listener<HomePageRecyclerData>() {
+                        @Override
+                        public void onSuccess(HomePageRecyclerData list) {
+                            mView.loadPromoData(list);
+                        }
+
+                        @Override
+                        public void onError(String msg) {
+                            mView.flush(msg);
+                        }
+                    });
+                }
                 if (mView.checkNull()) {
                     final String avatar = documentSnapshot.getString("avatar");
                     if (avatar != null && !avatar.equals("")) {
@@ -248,11 +278,91 @@ public class HomePagePresenter implements HomePageContract.Presenter {
                         mView.setProfileComPercent(documentSnapshot.getString("pro_com_%"));
                         mView.showSnackBar(documentSnapshot.getString("pro_com_%"));
                     }
+                    //testing fucking code here
+                    List<String> ratingArray = (List<String>) documentSnapshot.get("rating_array");
+                    if (ratingArray != null && ratingArray.size() > 0) {
+                        for (int i = 0; i < ratingArray.size(); i++) {
+                            int finalI = i;
+                            mModel.getSingleRecords(ratingArray.get(i), new TeacherContract.Model.Listener<Record>() {
+                                @Override
+                                public void onSuccess(Record list) {
+                                    String s_rate_status = list.getS_rate_status();
+                                    switch (s_rate_status) {
+                                        case Record.DIALOG:
+                                            HomePageRatingData ratingDataList = new HomePageRatingData();
+                                            List<String> ratingDataItemName = new ArrayList<>();
+                                            ratingDataItemName.add("Expertise");
+                                            ratingDataItemName.add("Experience");
+                                            ratingDataItemName.add("Communication");
+                                            ratingDataItemName.add("Behaviour");
+                                            String subjectExchange[] = list.getSubjectExchange().split("\\s*(=>|,|\\s)\\s*");
+                                            for (int j = 0; j < subjectExchange.length; j++) {
+                                                ratingDataItemName.add(subjectExchange[j]);
+                                            }
+                                            ratingDataList.setRatingNameList(ratingDataItemName);
+                                            ratingDataList.setName(list.getMentorName());
+                                            ratingDataList.setAvatar(list.getMentorDpUrl());
+                                            mView.testingCustomDialogue(ratingDataList);
+                                            break;
+                                        case Record.BOTTOM_SHEET:
+                                            HomePageRatingData currentRatingDataList = new HomePageRatingData();
+                                            List<String> currentRatingDataItemName = new ArrayList<>();
+                                            currentRatingDataItemName.add("Expertise");
+                                            currentRatingDataItemName.add("Experience");
+                                            currentRatingDataItemName.add("Communication");
+                                            currentRatingDataItemName.add("Behaviour");
+                                            String newSubjectExchange[] = list.getSubjectExchange().split("\\s*(=>|,|\\s)\\s*");
+                                            currentRatingDataItemName.addAll(Arrays.asList(newSubjectExchange));
+                                            currentRatingDataList.setRatingNameList(currentRatingDataItemName);
+                                            currentRatingDataList.setName(list.getMentorName());
+                                            currentRatingDataList.setAvatar(list.getMentorDpUrl());
+                                            mView.showSingleBottomSheetRating(currentRatingDataList);
+                                            break;
+                                        case Record.DONE:
+                                            mModel.removeCompletedRating(ratingArray.get(finalI), new TeacherContract.Model.Listener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void list) {
+
+                                                }
+
+                                                @Override
+                                                public void onError(String msg) {
+                                                    mView.flush(msg);
+                                                }
+                                            });
+                                            break;
+
+                                    }
+                                }
+
+                                @Override
+                                public void onError(String msg) {
+                                    mView.flush(msg);
+
+                                }
+                            });
+                        }
+                    }
+
+
                 }
             } else {
                 mView.flush("Does not found any user");
             }
         });
+
+
     }
 
 }
+
+/*  public List<HomePageRatingData> getFinalRatingData() {
+        List<HomePageRatingData> data = new ArrayList<>();
+        String[] primaryText = getResources().getStringArray(R.array.rating_demo_data);
+        for (String aPrimaryText : primaryText) {
+            HomePageRatingData current = new HomePageRatingData();
+            current.ratingAboutName = aPrimaryText;
+            data.add(current);
+        }
+        return data;
+    }*/

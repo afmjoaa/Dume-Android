@@ -32,9 +32,11 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.dume.dume.R;
+import io.dume.dume.teacher.adapters.AcademicAdapter;
 import io.dume.dume.teacher.adapters.StatAdapter;
 import io.dume.dume.teacher.homepage.TeacherActivtiy;
 import io.dume.dume.teacher.homepage.TeacherContract;
+import io.dume.dume.teacher.homepage.TeacherDataStore;
 import io.dume.dume.teacher.pojo.Stat;
 import io.dume.dume.util.DumeUtils;
 import io.dume.dume.util.GridSpacingItemDecoration;
@@ -49,11 +51,8 @@ public class StatisticsFragment extends Fragment {
     private int itemWidth;
     private TeacherActivtiy fragmentActivity;
     private Context context;
-
-
-    public static StatisticsFragment newInstance() {
-        return new StatisticsFragment();
-    }
+    private TeacherDataStore teacherDataStore;
+    private StatAdapter statAdapter;
 
     public static StatisticsFragment getInstance() {
         if (statisticsFragment == null) {
@@ -63,12 +62,17 @@ public class StatisticsFragment extends Fragment {
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.context = context;
+    }
+
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.statistics_fragment, container, false);
         ButterKnife.bind(this, root);
         fragmentActivity = (TeacherActivtiy) getActivity();
-        context = getContext();
-        mViewModel = new StatisticsViewModel();
+        mViewModel = new StatisticsViewModel(context);
         mViewModel.getChartEntry(new TeacherContract.Model.Listener<List<ArrayList<Entry>>>() {
             @Override
             public void onSuccess(List<ArrayList<Entry>> entrieslist) {
@@ -111,12 +115,45 @@ public class StatisticsFragment extends Fragment {
 
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
         recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, (int) (10 * mDensity), true));
-        recyclerView.setAdapter(new StatAdapter(getContext(), itemWidth, new Stat(123, 3, 1, null)) {
-            @Override
-            public void onItemClick(int position, View view) {
-                Toast.makeText(getContext(), "", Toast.LENGTH_SHORT).show();
+        fragmentActivity = (TeacherActivtiy) getActivity();
+        teacherDataStore = fragmentActivity != null ? fragmentActivity.teacherDataStore : null;
+        if (teacherDataStore != null) {
+            if (teacherDataStore.getDocumentSnapshot() == null) {
+                fragmentActivity.presenter.loadProfile(new TeacherContract.Model.Listener<Void>() {
+                    @Override
+                    public void onSuccess(Void list) {
+                        if (recyclerView.getAdapter() != null) {
+                            statAdapter.update(teacherDataStore.getTodayStatList());
+                        } else {
+                            statAdapter = new StatAdapter(getContext(), itemWidth, teacherDataStore.getTodayStatList()) {
+                                @Override
+                                public void onItemClick(int position, View view) {
+                                    Toast.makeText(context, "", Toast.LENGTH_SHORT).show();
+                                }
+                            };
+                            recyclerView.setAdapter(statAdapter);
+                        }
+                    }
+                    @Override
+                    public void onError(String msg) {
+                        fragmentActivity.flush(msg);
+                    }
+                });
+            } else {
+                if (recyclerView.getAdapter() != null) {
+                    statAdapter.update(teacherDataStore.getTodayStatList());
+                } else {
+                    statAdapter = new StatAdapter(getContext(), itemWidth, teacherDataStore.getTodayStatList()) {
+                        @Override
+                        public void onItemClick(int position, View view) {
+                            Toast.makeText(context, "", Toast.LENGTH_SHORT).show();
+                        }
+                    };
+                    recyclerView.setAdapter(statAdapter);
+                }
             }
-        });
+        }
+
         return root;
     }
 

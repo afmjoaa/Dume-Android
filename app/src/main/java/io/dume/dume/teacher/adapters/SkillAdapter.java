@@ -2,48 +2,66 @@ package io.dume.dume.teacher.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.Animatable;
+import android.graphics.drawable.Animatable2;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.design.widget.BottomSheetDialog;
 import android.support.v4.view.animation.FastOutLinearInInterpolator;
 import android.support.v4.view.animation.LinearOutSlowInInterpolator;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.firestore.DocumentReference;
 import com.transitionseverywhere.Fade;
 import com.transitionseverywhere.Slide;
 import com.transitionseverywhere.Transition;
 import com.transitionseverywhere.TransitionManager;
 import com.transitionseverywhere.TransitionSet;
 
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import carbon.widget.RelativeLayout;
 import io.dume.dume.R;
+import io.dume.dume.model.DumeModel;
 import io.dume.dume.student.common.ReviewAdapter;
 import io.dume.dume.student.common.ReviewHighlightData;
+import io.dume.dume.student.homePage.HomePageActivity;
+import io.dume.dume.student.searchResult.SearchResultActivity;
+import io.dume.dume.teacher.homepage.TeacherContract;
 import io.dume.dume.teacher.model.KeyMap;
 import io.dume.dume.teacher.model.LocalDb;
 import io.dume.dume.teacher.pojo.Skill;
 import io.dume.dume.teacher.skill.SkillActivity;
 import io.dume.dume.util.VisibleToggleClickListener;
+
+import static io.dume.dume.util.DumeUtils.getLast;
 
 public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public static int FRAGMENT = 1;
@@ -58,6 +76,17 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private HashMap<String, Integer> iconList;
     private LocalDb localDb;
     private float mDensity;
+    private ReviewAdapter reviewRecyAda;
+    private ReviewHighlightData lastReviewData;
+    private BottomSheetDialog mBackBSD;
+    private View backsheetRootView;
+    private TextView backMainText;
+    private TextView backSubText;
+    private Button backYesBtn;
+    private Button backNoBtn;
+    private String[] splitMainSsss;
+    private Integer likes = 0;
+    private Integer dislikes = 0;
 
 
     @Override
@@ -123,6 +152,14 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
         context = viewGroup.getContext();
+        //init the back dialog
+        mBackBSD = new BottomSheetDialog(context);
+        backsheetRootView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.custom_bottom_sheet_dialogue_cancel, null);
+        mBackBSD.setContentView(backsheetRootView);
+        backMainText = mBackBSD.findViewById(R.id.main_text);
+        backSubText = mBackBSD.findViewById(R.id.sub_text);
+        backYesBtn = mBackBSD.findViewById(R.id.cancel_yes_btn);
+        backNoBtn = mBackBSD.findViewById(R.id.cancel_no_btn);
         if (layoutSize == FRAGMENT) {
             inflate = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.skill_item_small, viewGroup, false);
             return new SkillFVH(inflate);
@@ -141,15 +178,18 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             SkillAVH myViewHolder = (SkillAVH) holder;
             ArrayList<KeyMap> detailList = new ArrayList<>();
             Skill skill = skillList.get(i);
+            myViewHolder.switchCompat.setChecked(skill.isStatus());
+            int salary = (int) skill.getSalary();
+            String format1 = NumberFormat.getCurrencyInstance(Locale.US).format(salary);
 
-            detailList.add(new KeyMap("Enrolled Students", skill.getEnrolled()));
-            detailList.add(new KeyMap("Package Name", "Regular Dume"));
-            detailList.add(new KeyMap("Salary", skill.getSalary() + "k BDT"));
+            detailList.add(new KeyMap("Salary", format1.substring(1, format1.length() - 3) + " BDT"));
             detailList.add(new KeyMap("Skill Visibility", skill.isStatus() ? "Public" : "Private (Inactive)"));
             detailList.add(new KeyMap("Rating", ((int) skill.getRating()) + "/ 옷" + skill.getTotalRating()));
-            detailList.add(new KeyMap("Skill Type", skill.getJizz().get("Category")));
+            detailList.add(new KeyMap("Package Name", skill.getPackage_name()));
+            for (int j = 0; j < skill.getQuery_list().size() - 2; j++) {
+                detailList.add(new KeyMap(skill.getQuery_list_name().get(j), skill.getQuery_list().get(j)));
+            }
             detailList.add(new KeyMap("Gender Filter", skill.getJizz().get("Gender").equals("Any") ? "None" : skill.getJizz().get("Gender")));
-
             SkillDetailsAdapter skillDetailsAdapter = new SkillDetailsAdapter(detailList);
             myViewHolder.detailsRV.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
             myViewHolder.detailsRV.setAdapter(skillDetailsAdapter);
@@ -202,6 +242,7 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             myViewHolder.moreVertSkill.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+
                     PopupMenu popup = new PopupMenu(context, view);
                     popup.getMenuInflater().inflate(R.menu.menu_edit_remove, popup.getMenu());
 
@@ -210,10 +251,42 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                             int id = item.getItemId();
                             switch (id) {
                                 case R.id.action_remove:
-                                    Toast.makeText(context, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
+                                    if (backMainText != null && backSubText != null && backYesBtn != null && backNoBtn != null) {
+                                        backMainText.setText("Remove skill ?");
+                                        final String thisSkillTitile = myViewHolder.skillTitleTV.getText().toString();
+                                        backSubText.setText(String.format("Confirming will remove your %s skill...", thisSkillTitile));
+                                        backYesBtn.setText("Yes, Remove");
+                                        backNoBtn.setText("No");
+
+                                        backYesBtn.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View view) {
+                                                mBackBSD.dismiss();
+                                                new DumeModel(context).deleteSkill(skill.getId(), new TeacherContract.Model.Listener<Void>() {
+                                                    @Override
+                                                    public void onSuccess(Void list) {
+                                                        Toast.makeText(context, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
+                                                    }
+
+                                                    @Override
+                                                    public void onError(String msg) {
+                                                        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+                                                    }
+                                                });
+                                            }
+                                        });
+
+                                        backNoBtn.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View view) {
+                                                mBackBSD.dismiss();
+                                            }
+                                        });
+                                    }
+                                    mBackBSD.show();
                                     break;
                                 case R.id.action_edit:
-                                    Toast.makeText(context, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(context, "Feature is Coming Soon...", Toast.LENGTH_SHORT).show();
                                     break;
                             }
                             return true;
@@ -225,17 +298,77 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             String dateString = format.format(skillList.get(i).getCreation());
-            myViewHolder.salaryTV.setText((int) skillList.get(i).getSalary() + " tk");
-            myViewHolder.switchCompat.setChecked(skillList.get(i).isStatus());
+            int salary1 = (int) skillList.get(i).getSalary();
+            String format2 = NumberFormat.getCurrencyInstance(Locale.US).format(salary1);
+            myViewHolder.salaryTV.setText(format2.substring(1, format2.length() - 3) + " BDT");
+            myViewHolder.switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    new DumeModel(context).swithSkillStatus(skill.getId(), b, new TeacherContract.Model.Listener<Void>() {
+                        @Override
+                        public void onSuccess(Void list) {
+                            String foo = b ? "Active" : "Inactive";
+                            Toast.makeText(context, "Skill Status Changed To " + foo, Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void onError(String msg) {
+                            Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+                }
+            });
             myViewHolder.publishDate.setText(dateString);
             myViewHolder.enrolledTV.setText("Enrolled Students : " + skillList.get(i).getEnrolled());
-            myViewHolder.likeTV.setText((int) (skillList.get(i).getRating() * 100) / 5 + " likes");
 
             //init review recycler
-            List<ReviewHighlightData> reviewData = new ArrayList<>();
-            ReviewAdapter reviewRecyAda = new ReviewAdapter(context, reviewData, true);
-            myViewHolder.reviewRecycler.setAdapter(reviewRecyAda);
-            myViewHolder.reviewRecycler.setLayoutManager(new LinearLayoutManager(context));
+            new DumeModel(context).loadReview(skill.getId(), null, new TeacherContract.Model.Listener<List<ReviewHighlightData>>() {
+                @Override
+                public void onSuccess(List<ReviewHighlightData> list) {
+
+                    lastReviewData = list.get(list.size() - 1);
+                    reviewRecyAda = new ReviewAdapter(context, list, true);
+                    myViewHolder.reviewRecycler.setAdapter(reviewRecyAda);
+                    myViewHolder.reviewRecycler.setLayoutManager(new LinearLayoutManager(context));
+                    if (list.size() >= 10) {
+                        myViewHolder.loadMoreBTN.setEnabled(true);
+                    } else {
+                        myViewHolder.loadMoreBTN.setEnabled(false);
+                        myViewHolder.loadMoreBTN.setVisibility(View.GONE);
+                    }
+                }
+
+                @Override
+                public void onError(String msg) {
+
+                    myViewHolder.reviewHostLayout.setVisibility(View.GONE);
+                    if (msg.equals("No review")) {
+                        return;
+                    }
+                    Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            myViewHolder.loadMoreBTN.setOnClickListener(view -> {
+                view.setEnabled(false);
+                new DumeModel(context).loadReview(skill.getId(), lastReviewData.getDoc_id(), new TeacherContract.Model.Listener<List<ReviewHighlightData>>() {
+                    @Override
+                    public void onSuccess(List<ReviewHighlightData> list) {
+                        view.setEnabled(true);
+                        lastReviewData = list.get(list.size() - 1);
+                        reviewRecyAda.addMore(list);
+                    }
+
+                    @Override
+                    public void onError(String msg) {
+                        view.setEnabled(true);
+                        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+                    }
+                });
+            });
+
+
             myViewHolder.reviewShowBtn.setOnClickListener(new VisibleToggleClickListener() {
 
                 @SuppressLint("CheckResult")
@@ -274,47 +407,109 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                                 }
                             });
                     TransitionManager.beginDelayedTransition(myViewHolder.reviewHostLayout, set1);
+                    myViewHolder.reviewShowBtn.setEnabled(false);
                     if (visible) {
                         myViewHolder.reviewLayoutVertical.setVisibility(View.VISIBLE);
                     } else {
                         myViewHolder.reviewLayoutVertical.setVisibility(View.INVISIBLE);
                     }
+                    Drawable[] compoundDrawables = myViewHolder.reviewShowBtn.getCompoundDrawables();
+                    Drawable d = compoundDrawables[3];
+                    if (d instanceof Animatable) {
+                        ((Animatable) d).start();
+                    }
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        ((Animatable2) d).registerAnimationCallback(new Animatable2.AnimationCallback() {
+                            public void onAnimationEnd(Drawable drawable) {
+                                //Do something
+                                if (visible) {
+                                    myViewHolder.reviewShowBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, context.getResources().getDrawable(R.drawable.ic_up_arrow_small));
+                                } else {
+                                    myViewHolder.reviewShowBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, context.getResources().getDrawable(R.drawable.ic_down_arrow_small));
+                                }
+                                myViewHolder.reviewShowBtn.setEnabled(true);
+                            }
+                        });
+                    }
                 }
             });
 
             HashMap<String, Object> jizz = skillList.get(i).getJizz();
-            if (getLast(i) != null) {
-                final Object o = jizz.get(getLast(i));
+            if (getLast(jizz) != null) {
+                final Object o = getLast(jizz);
                 myViewHolder.skillTitleTV.setText(o.toString() + " / " + jizz.get("Category"));
                 myViewHolder.categoryAvatar.setImageResource(iconList.get(jizz.get("Category")));
+                String mainSsss = o.toString();
+                splitMainSsss = mainSsss.split("\\s*(=>|,|\\s)\\s*");
             }
+            for (String splited : splitMainSsss) {
+                likes = likes + Integer.parseInt(skillList.get(i).getLikes().get(splited).toString());
+                dislikes = dislikes + Integer.parseInt(skillList.get(i).getDislikes().get(splited).toString());
+            }
+            myViewHolder.likeTV.setText((likes - splitMainSsss.length) + " likes");
 
         } else {//fragment start here
             SkillFVH myFragmentHolder = (SkillFVH) holder;
+            myFragmentHolder.switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    new DumeModel(context).swithSkillStatus(skillList.get(i).getId(), b, new TeacherContract.Model.Listener<Void>() {
+                        @Override
+                        public void onSuccess(Void list) {
+                            String foo = b ? "Active" : "Inactive";
+                            Toast.makeText(context, "Skill Status Changed To " + foo, Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void onError(String msg) {
+                            Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+
+                        }
+                    });
+
+                }
+            });
             myFragmentHolder.itemView.setOnClickListener(view -> {
                 context.startActivity(new Intent(context, SkillActivity.class));
             });
 
 
+            //fixing width
             ViewGroup.LayoutParams layoutParams = myFragmentHolder.hostingRelative.getLayoutParams();
             layoutParams.width = (itemWidth);
             myFragmentHolder.hostingRelative.setLayoutParams(layoutParams);
-            //common code here
+
+
             HashMap<String, Object> jizz = skillList.get(i).getJizz();
-            if (getLast(i) != null) {
-                final Object o = jizz.get(getLast(i));
-                myFragmentHolder.skillTitleTV.setText(o.toString() + " / " + jizz.get("Category"));
-                //myFragmentHolder.categoryAvatar.setImageResource(iconList.get(jizz.get("Category")));
+            if (getLast(jizz) != null) {
+                String o = getLast(jizz);
+                myFragmentHolder.skillTitleTV.setText(o + " / " + jizz.get("Category"));
+                splitMainSsss = o.split("\\s*(=>|,|\\s)\\s*");
+            }
+            myFragmentHolder.switchCompat.setChecked(skillList.get(i).isStatus());
+            for (String splited : splitMainSsss) {
+                likes = likes + Integer.parseInt(skillList.get(i).getLikes().get(splited).toString());
+                dislikes = dislikes + Integer.parseInt(skillList.get(i).getDislikes().get(splited).toString());
             }
 
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-            //myFragmentHolder.salaryTV.setText((int) skillList.get(i).getSalary() + " tk");
-            myFragmentHolder.switchCompat.setChecked(skillList.get(i).isStatus());
-            myFragmentHolder.likeTV.setText((int) (skillList.get(i).getRating() * 100) / 5 + "% liked");
+
+            int totalCount = likes + dislikes;
+            if (totalCount == 0) {
+                myFragmentHolder.likeTV.setText("n/a");
+            } else {
+                int likeP = (int) (likes / totalCount) * 100;
+                myFragmentHolder.likeTV.setText(likeP + "% liked");
+            }
+            int salary = (int) (skillList.get(i).getSalary()) / 1000;
+
+
+            myFragmentHolder.packageName.setText(skillList.get(i).getPackage_name() + " / " + salary + " k");
+
+
         }
     }
 
-    public String getLast(int i) {
+   /* public String getLast(int i) {
         HashMap<String, Object> jizz = skillList.get(i).getJizz();
         for (int j = 0; j < endOfNest.size(); j++) {
             if (jizz.containsKey(endOfNest.get(j))) {
@@ -322,15 +517,14 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             }
         }
         return null;
-    }
-
-
+    }*/
 
 
     public void update(ArrayList<Skill> skillList) {
         this.skillList.clear();
         this.skillList.addAll(skillList);
         this.notifyDataSetChanged();
+        Log.w(TAG, "getItemCount: " + skillList.toString());
     }
 
     @Override
@@ -343,8 +537,10 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             } else {
                 return skillList.size();
             }
+        } else {
+            Log.w(TAG, "getItemCount: " + skillList.size());
+            return 0;
         }
-        return 0;
     }
 
     class SkillAVH extends RecyclerView.ViewHolder {
@@ -379,6 +575,8 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         Button reviewShowBtn;
         @BindView(R.id.review_host_linearlayout)
         LinearLayout reviewHostLayout;
+        @BindView(R.id.load_more_review_btn)
+        Button loadMoreBTN;
 
 
         public SkillAVH(@NonNull View itemView) {

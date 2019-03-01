@@ -84,6 +84,8 @@ public class EditContract {
 
         void initProfileCompleteView();
 
+        void disInitProfileCompleteView();
+
         void addQualifiaction();
 
         void modifyQualification();

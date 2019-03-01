@@ -9,6 +9,8 @@ public interface RecordsCurrentContract {
 
         void findView();
 
+        void flush(String msg);
+
         void contactBtnClicked();
     }
 

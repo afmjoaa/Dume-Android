@@ -2,6 +2,7 @@ package io.dume.dume.auth.code_verification;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -17,6 +18,8 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,13 +32,16 @@ import io.dume.dume.R;
 import io.dume.dume.auth.AuthGlobalContract;
 import io.dume.dume.auth.DataStore;
 import io.dume.dume.auth.auth.AuthContract;
+import io.dume.dume.service.MyNotification;
 import io.dume.dume.util.DumeUtils;
 
+import static android.content.Context.MODE_PRIVATE;
 import static io.dume.dume.student.pojo.StuBaseModel.setStuProfile;
 import static io.dume.dume.util.DumeUtils.hideKeyboard;
 
 public class PhoneVerficationPresenter implements PhoneVerificationContract.Presenter {
 
+    private SharedPreferences preferences;
     private Activity activity;
     PhoneVerificationContract.View view;
     PhoneVerificationContract.Model model;
@@ -54,6 +60,7 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
         fireStore = FirebaseFirestore.getInstance();
         imeiList = DumeUtils.getImei(context);
         dataStore = DataStore.getInstance();
+        preferences = context.getSharedPreferences("dume", MODE_PRIVATE);
 
     }
 
@@ -93,12 +100,15 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
             public void onSuccess() {
 
                 hideKeyboard(activity);
+                Log.w(TAG, "onSuccess: Verified Pin");
                 //view.hideProgress();
                 if (DataStore.STATION == 1) {//user exist
                     mergeImei();
+                    Log.w(TAG, "onSuccess: Verified Pin");
 
                 } else if (DataStore.STATION == 2) {//register user now
                     saveUserToDb(model.getData());
+                    Log.w(TAG, "onSuccess: Verified Pin");
                 } else {
                     nextActivity();
                 }
@@ -124,7 +134,8 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
                 break;
             }
         }
-        if(!isImeiMatched){
+        if (!isImeiMatched) {
+
             fireStore.document("mini_users/" + FirebaseAuth.getInstance().getUid()).update("imei", FieldValue.arrayUnion(imeiList.get(0)), "imei", FieldValue.arrayUnion(imeiList.get(1))).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
@@ -138,7 +149,9 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
                     nextActivity();
                 }
             });
-        }else{
+
+        } else {
+            Log.w(TAG, "mergeImei:  " + "Not Merged");
             nextActivity();
         }
     }
@@ -151,7 +164,7 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
             public void onStart() {
                 view.showProgress();
                 Log.w(TAG, "onStart: ");
-                //"Resending Code"
+
             }
 
             @Override
@@ -185,20 +198,102 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
         model.onAccountTypeFound(FirebaseAuth.getInstance().getCurrentUser(), new AuthGlobalContract.AccountTypeFoundListener() {
             @Override
             public void onStart() {
-                view.showProgress();
-                //"Authenticating..."
+
+
             }
 
             @Override
             public void onTeacherFound() {
+
+                final HashMap<String, Object> data = new HashMap<>();
+                String token = MyNotification.getToken(context);
+                if (!token.equals("undefined")) {
+                    FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(new OnSuccessListener<InstanceIdResult>() {
+                        @Override
+                        public void onSuccess(InstanceIdResult instanceIdResult) {
+                            preferences.edit().putString("fcm_token", instanceIdResult.getToken()).apply();
+                            data.put("token", token);
+                            FirebaseFirestore.getInstance().collection("token").document(FirebaseAuth.getInstance().getCurrentUser().getUid()).set(data).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    view.gotoTeacherActivity();
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.e("foo", "onFailure: " + e.getLocalizedMessage());
+                                    view.gotoTeacherActivity();
+                                }
+                            });
+                        }
+                    });
+                } else {
+                    data.put("token", token);
+                    FirebaseFirestore.getInstance().collection("token").document(FirebaseAuth.getInstance().getCurrentUser().getUid()).set(data).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            view.gotoTeacherActivity();
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.e("foo", "onFailure: " + e.getLocalizedMessage());
+                            view.gotoTeacherActivity();
+                        }
+                    });
+                }
                 //view.hideProgress();
-                view.gotoTeacherActivity();
+
             }
 
             @Override
             public void onStudentFound() {
-                view.hideProgress();
-                view.gotoStudentActivity();
+
+
+                final HashMap<String, Object> data = new HashMap<>();
+                String token = MyNotification.getToken(context);
+                if (!token.equals("undefined")) {
+                    FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(new OnSuccessListener<InstanceIdResult>() {
+                        @Override
+                        public void onSuccess(InstanceIdResult instanceIdResult) {
+                            preferences.edit().putString("fcm_token", instanceIdResult.getToken()).apply();
+                            data.put("token", token);
+                            FirebaseFirestore.getInstance().collection("token").document(FirebaseAuth.getInstance().getCurrentUser().getUid()).set(data).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    view.hideProgress();
+                                    view.gotoStudentActivity();
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    view.hideProgress();
+                                    view.gotoStudentActivity();
+                                    Log.e("foo", "onFailure: " + e.getLocalizedMessage());
+                                }
+                            });
+                        }
+                    });
+                } else {
+                    data.put("token", token);
+                    FirebaseFirestore.getInstance().collection("token").document(FirebaseAuth.getInstance().getCurrentUser().getUid()).set(data).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            view.hideProgress();
+                            view.gotoStudentActivity();
+
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            view.hideProgress();
+                            view.gotoStudentActivity();
+                            Log.e("foo", "onFailure: " + e.getLocalizedMessage());
+                        }
+                    });
+                }
+
+
             }
 
             @Override
@@ -210,7 +305,45 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
             @Override
             public void onForeignObligation() {
                 //view.hideProgress();
-                view.gotoForeignObligation();
+                final HashMap<String, Object> data = new HashMap<>();
+                String token = MyNotification.getToken(context);
+                if (!token.equals("undefined")) {
+                    FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(new OnSuccessListener<InstanceIdResult>() {
+                        @Override
+                        public void onSuccess(InstanceIdResult instanceIdResult) {
+                            preferences.edit().putString("fcm_token", instanceIdResult.getToken()).apply();
+                            data.put("token", token);
+                            FirebaseFirestore.getInstance().collection("token").document(FirebaseAuth.getInstance().getCurrentUser().getUid()).set(data).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    view.gotoForeignObligation();
+
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.e("foo", "onFailure: " + e.getLocalizedMessage());
+                                    view.gotoForeignObligation();
+                                }
+                            });
+                        }
+                    });
+                } else {
+                    data.put("token", token);
+                    FirebaseFirestore.getInstance().collection("token").document(FirebaseAuth.getInstance().getCurrentUser().getUid()).set(data).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            view.gotoForeignObligation();
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.e("foo", "onFailure: " + e.getLocalizedMessage());
+                            view.gotoForeignObligation();
+                        }
+                    });
+                }
+
             }
 
             @Override
@@ -280,6 +413,11 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
         mentorFeild.put("avatar", dataStore.getPhotoUri());
         mentorFeild.put("location", location);
 
+        mentorFeild.put("daily_i", "0");
+        mentorFeild.put("daily_r", "0");
+        mentorFeild.put("p_daily_i", "0");
+        mentorFeild.put("p_daily_r", "0");
+
         mentorFeild.put("gender", "");
         mentorFeild.put("religion", "");
         mentorFeild.put("birth_date", "");
@@ -315,7 +453,7 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
         selfRating.put("l_experience", "1");
         selfRating.put("dl_experience", "0");
         selfRating.put("response_time", "90");
-        selfRating.put("student_guided", "5");
+        selfRating.put("student_guided", "0");
         mentorFeild.put("self_rating", selfRating);
 
 
@@ -332,6 +470,9 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
         mentorFeild.put("applied_promo", appliedPromoList);
         ArrayList<String> availablePromoList = new ArrayList<>();
         mentorFeild.put("available_promo", availablePromoList);
+
+        List<String> rating_array = new ArrayList<>();
+        mentorFeild.put("rating_array", rating_array);
 
         Map<String, Object> achievements = new HashMap<>();
         achievements.put("joined", true);
@@ -377,6 +518,11 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
         bootCampField.put("avatar", "");
         bootCampField.put("location", location);
 
+        bootCampField.put("daily_i", "0");
+        bootCampField.put("daily_r", "0");
+        bootCampField.put("p_daily_i", "0");
+        bootCampField.put("p_daily_r", "0");
+
         bootCampField.put("account_active", true);
         bootCampField.put("pro_com_%", "60");
 
@@ -402,13 +548,16 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
         selfRating.put("l_experience", "1");
         selfRating.put("dl_experience", "0");
         selfRating.put("response_time", "90");
-        selfRating.put("student_guided", "5");
+        selfRating.put("student_guided", "0");
         bootCampField.put("self_rating", selfRating);
 
         List<String> appliedPromoList = new ArrayList<>();
         bootCampField.put("applied_promo", appliedPromoList);
         List<String> availablePromoList = new ArrayList<>();
         bootCampField.put("available_promo", availablePromoList);
+
+        List<String> rating_array = new ArrayList<>();
+        bootCampField.put("rating_array", rating_array);
 
         Map<String, Object> achievements = new HashMap<>();
         achievements.put("joined", true);
@@ -448,15 +597,17 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
         stuProInfo.put("unread_noti", "0");
         stuProInfo.put("next_rp_write", "1");
         stuProInfo.put("next_rs_write", "1");
-
-        GeoPoint current_address = new GeoPoint(84.9, -180);
-        stuProInfo.put("current_address", current_address);
+        //GeoPoint current_address = new GeoPoint(84.9, -180);
+        stuProInfo.put("current_address", null);
 
         //String[] hawwa = {"joaa", "Enam", "sumon"};Arrays.asList(hawwa);
         List<String> appliedPromoList = new ArrayList<String>();
         stuProInfo.put("applied_promo", appliedPromoList);
         List<String> availablePromoList = new ArrayList<String>();
         stuProInfo.put("available_promo", availablePromoList);
+
+        List<String> rating_array = new ArrayList<>();
+        stuProInfo.put("rating_array", rating_array);
 
         Map<String, Object> selfRating = new HashMap<>();
         selfRating.put("star_rating", "5.00");

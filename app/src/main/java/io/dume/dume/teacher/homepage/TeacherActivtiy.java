@@ -89,7 +89,6 @@ import io.dume.dume.common.aboutUs.AboutUsActivity;
 import io.dume.dume.common.inboxActivity.InboxActivity;
 import io.dume.dume.common.privacyPolicy.PrivacyPolicyActivity;
 import io.dume.dume.customView.HorizontalLoadViewTwo;
-import io.dume.dume.inter_face.UserQueryListener;
 import io.dume.dume.model.DumeModel;
 import io.dume.dume.student.freeCashBack.FreeCashBackActivity;
 import io.dume.dume.student.heatMap.HeatMapActivity;
@@ -98,13 +97,14 @@ import io.dume.dume.student.homePage.adapter.HomePageRatingAdapter;
 import io.dume.dume.student.homePage.adapter.HomePageRatingData;
 import io.dume.dume.student.homePage.adapter.HomePageRecyclerAdapter;
 import io.dume.dume.student.homePage.adapter.HomePageRecyclerData;
-import io.dume.dume.student.mentorAddvertise.MentorAddvertiseActivity;
 import io.dume.dume.student.pojo.CusStuAppComMapActivity;
 import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
 import io.dume.dume.student.recordsPage.RecordsPageActivity;
 import io.dume.dume.student.studentHelp.StudentHelpActivity;
 import io.dume.dume.student.studentPayment.StudentPaymentActivity;
 import io.dume.dume.teacher.adapters.AcademicAdapter;
+import io.dume.dume.teacher.adapters.MyTabAdapter;
+import io.dume.dume.teacher.adapters.SkillAdapter;
 import io.dume.dume.teacher.boot_camp_addvertise.BootCampAdd;
 import io.dume.dume.teacher.homepage.fragments.AcademicFragment;
 import io.dume.dume.teacher.homepage.fragments.InboxFragment;
@@ -114,14 +114,13 @@ import io.dume.dume.teacher.homepage.fragments.SkillFragment;
 import io.dume.dume.teacher.homepage.fragments.StatisticsFragment;
 import io.dume.dume.teacher.mentor_settings.AccountSettings;
 import io.dume.dume.teacher.mentor_settings.basicinfo.EditAccount;
+import io.dume.dume.teacher.pojo.Skill;
 import io.dume.dume.teacher.pojo.TabModel;
 import io.dume.dume.teacher.skill.SkillActivity;
 import io.dume.dume.util.DumeUtils;
 import io.dume.dume.util.NetworkUtil;
 import me.zhanghai.android.materialratingbar.MaterialRatingBar;
 import q.rorbin.verticaltablayout.VerticalTabLayout;
-import q.rorbin.verticaltablayout.adapter.TabAdapter;
-import q.rorbin.verticaltablayout.widget.ITabView;
 import q.rorbin.verticaltablayout.widget.TabView;
 
 import static io.dume.dume.util.DumeUtils.animateImage;
@@ -167,7 +166,6 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
     private FrameLayout viewMusk;
     private AppBarLayout mainAppbar;
     private CoordinatorLayout coordinatorLayout;
-
     private int spacing;
     private SupportMapFragment mapFragment;
     private GoogleMap mMap;
@@ -205,6 +203,10 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
     private View cancelsheetRootView;
     private static final int fromFlag = 1604;
     private carbon.widget.LinearLayout percentOffBlock;
+    private ArrayList<TabModel> tabModelArrayList;
+    private MyTabAdapter tabAdapter;
+    private HomePageRecyclerAdapter hPageBSRcyclerAdapter;
+    private TeacherModel model;
 
 
     @Override
@@ -214,12 +216,18 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         ButterKnife.bind(this);
         setActivityContextMap(this, fromFlag);
         teacherDataStore = TeacherDataStore.getInstance();
-        presenter = new TeacherPresenter(this, new TeacherModel());
+        model = new TeacherModel(this);
+        presenter = new TeacherPresenter(this, model);
         presenter.init();
         settingStatusBarTransparent();
         setDarkStatusBarIcon();
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         getLocationPermission(mapFragment);
+    }
+
+    @Override
+    public void updateBadge(String badgeNumber) {
+        tabLayout.setTabBadge(1, badgeNumber);
     }
 
     @Override
@@ -291,6 +299,49 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        switch (viewPager.getCurrentItem()) {
+            case 0:
+                break;
+            case 1:
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+            case 4:
+                SkillFragment skillFragment = SkillFragment.getInstance();
+                ArrayList<Skill> skillArrayList = TeacherDataStore.getInstance().getSkillArrayList();
+                if (skillArrayList != null) {
+                    skillFragment.skillAdapter = new SkillAdapter(TeacherActivtiy.this, SkillAdapter.FRAGMENT, skillFragment.itemWidth, teacherDataStore.getSkillArrayList());
+                    skillFragment.skillRV.setAdapter(skillFragment.skillAdapter);
+                    if (skillArrayList.size() == 0) {
+                        skillFragment.noDataBlock.setVisibility(View.VISIBLE);
+                    } else {
+                        skillFragment.noDataBlock.setVisibility(View.GONE);
+                    }
+                }
+                skillFragment.changeAddSkillBtnColor();
+                break;
+            case 5:
+                break;
+        }
+        //viewPager.setCurrentItem(3);
+        presenter.loadProfile(new TeacherContract.Model.Listener<Void>() {
+            @Override
+            public void onSuccess(Void list) {
+
+            }
+
+            @Override
+            public void onError(String msg) {
+                flush(msg);
+            }
+        });
+    }
+
+    @Override
     public void configView() {
         mentorProfile.setVisible(false);
         fab.setAlpha(0.90f);
@@ -329,10 +380,10 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         cancelsheetRootView = this.getLayoutInflater().inflate(R.layout.custom_bottom_sheet_dialogue_cancel, null);
         mCancelBottomSheetDialog.setContentView(cancelsheetRootView);
         //initializing the recycler
-        List<HomePageRecyclerData> promoData = new ArrayList<>();
+        /*List<HomePageRecyclerData> promoData = new ArrayList<>();
         HomePageRecyclerAdapter hPageBSRcyclerAdapter = new HomePageRecyclerAdapter(this, promoData);
         hPageBSRecycler.setAdapter(hPageBSRcyclerAdapter);
-        hPageBSRecycler.setLayoutManager(new LinearLayoutManager(this));
+        hPageBSRecycler.setLayoutManager(new LinearLayoutManager(this));*/
         //setting do more
         doMoreDetailTextView.setText("Start a couching center");
     }
@@ -462,6 +513,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
 
             }
 
+
             @Override
             public void onSlide(@NonNull View bottomSheet, float slideOffset) {
                 if (slideOffset > 0.0f && slideOffset < 1.0f) {
@@ -516,45 +568,16 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
 
 
         ButterKnife.bind(this);
-        ArrayList<TabModel> tabModelArrayList = new ArrayList<>();
+        tabModelArrayList = new ArrayList<>();
         tabModelArrayList.add(new TabModel(R.drawable.performance, R.drawable.performance_selected, 0, "Performance"));
         tabModelArrayList.add(new TabModel(R.drawable.inbox, R.drawable.inbox_selected, 0, "Inbox"));
         tabModelArrayList.add(new TabModel(R.drawable.pay, R.drawable.pay_selceted, 0, "Pay"));
-        tabModelArrayList.add(new TabModel(R.drawable.ic_statistics, R.drawable.ic_statistics_selected, 3, "Statistics"));
+        tabModelArrayList.add(new TabModel(R.drawable.ic_statistics, R.drawable.ic_statistics_selected, 0, "Statistics"));
         tabModelArrayList.add(new TabModel(R.drawable.skills, R.drawable.skills_selected, 0, "Manage Skills"));
         tabModelArrayList.add(new TabModel(R.drawable.academics_icon, R.drawable.academics_icon_selected, 0, "Academic"));
-        tabLayout.setTabAdapter(new TabAdapter() {
+        tabAdapter = new MyTabAdapter(tabModelArrayList);
+        tabLayout.setTabAdapter(tabAdapter);
 
-            @Override
-            public int getCount() {
-                return tabModelArrayList.size();
-            }
-
-            @Override
-            public ITabView.TabBadge getBadge(int position) {
-                if (tabModelArrayList.get(position).getBadge() > 0) {
-                    return new ITabView.TabBadge.Builder().setBadgeNumber(2).setBadgeText(tabModelArrayList.get(position).getBadge() + "").build();
-                }
-                return null;
-            }
-
-            @Override
-            public ITabView.TabIcon getIcon(int position) {
-                int normalIcon = tabModelArrayList.get(position).getNormalIcon();
-                int selected = tabModelArrayList.get(position).getSelectedIcon();
-                return new ITabView.TabIcon.Builder().setIcon(selected, normalIcon).build();
-            }
-
-            @Override
-            public ITabView.TabTitle getTitle(int position) {
-                return null;
-            }
-
-            @Override
-            public int getBackground(int position) {
-                return 0;
-            }
-        });
         tabLayout.addOnTabSelectedListener(new VerticalTabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabView tab, int position) {
@@ -669,7 +692,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
                 startActivity(new Intent(getApplicationContext(), EditAccount.class));
                 break;
             case R.id.al_records:
-                startActivity(new Intent(this, RecordsPageActivity.class));
+                startActivity(new Intent(this, RecordsPageActivity.class).setAction(DumeUtils.TEACHER));
                 break;
             case R.id.al_messages:
                 startActivity(new Intent(this, InboxActivity.class));
@@ -733,7 +756,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
                 startActivity(new Intent(this, PrivacyPolicyActivity.class));
                 break;
             case R.id.records:
-                startActivity(new Intent(this, RecordsPageActivity.class));
+                startActivity(new Intent(this, RecordsPageActivity.class).setAction(DumeUtils.TEACHER));
                 break;
             case R.id.heat_map:
                 startActivity(new Intent(this, HeatMapActivity.class));
@@ -744,6 +767,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
             case R.id.mentor:
                 break;
             case R.id.boot_camp:
+                flush("Boot Camp Service is coming soon...");
                 switchProfileDialog(DumeUtils.BOOTCAMP);
                 break;
 
@@ -858,7 +882,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         String o1 = documentSnapshot.getString("first_name");
         switch (checkedId) {
             case R.id.buttonActive:
-               // Toast.makeText(this, "You are active on Dume network now", Toast.LENGTH_SHORT).show();
+                // Toast.makeText(this, "You are active on Dume network now", Toast.LENGTH_SHORT).show();
                 userNameTextView.setText(String.format("%s %s", o1, o));
                 userNameTextView.setText(o1 + " " + o + "- Active");
                 buttonActive.setCompoundDrawablesWithIntrinsicBounds(R.drawable.state_active_active, 0, 0, 0);
@@ -917,11 +941,12 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
 
     //testing the customDialogue
     @Override
-    public void testingCustomDialogue() {
+    public void testingCustomDialogue(HomePageRatingData myData) {
         // custom dialog
-        final Dialog dialog = new Dialog(context);
+        Dialog dialog = new Dialog(context);
         dialog.setContentView(R.layout.custom_rating_dialogue);
         dialog.setCanceledOnTouchOutside(false);
+
         //all find view here
         MaterialRatingBar mDecimalRatingBars = dialog.findViewById(R.id.rated_mentor_rating_bar);
         RecyclerView itemRatingRecycleView = dialog.findViewById(R.id.rating_item_recycler);
@@ -938,9 +963,13 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         RelativeLayout firstLayout = dialog.findViewById(R.id.first_layout);
         RelativeLayout secondLayout = dialog.findViewById(R.id.second_layout);
 
+        ratingPrimaryText.setText("How was your learning with " + myData.getName());
+        Glide.with(getApplicationContext()).load(myData.getAvatar()).into(ratedMentorDP);
 
         //testing the recycle view here
-        HomePageRatingAdapter itemRatingRecycleAdapter = new HomePageRatingAdapter(this, getFinalRatingData());
+
+
+        HomePageRatingAdapter itemRatingRecycleAdapter = new HomePageRatingAdapter(this, myData);
         itemRatingRecycleView.setAdapter(itemRatingRecycleAdapter);
         itemRatingRecycleView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -973,8 +1002,6 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
                 }
             }
         });
-        dialog.show();
-
 
         dismissBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1002,7 +1029,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
                     secondLayout.setVisibility(View.VISIBLE);
 
                 } else {
-                    Toast.makeText(TeacherActivtiy.this, "please rate your experience", Toast.LENGTH_SHORT).show();
+                    flush("please rate your experience");
                 }
             }
         });
@@ -1013,17 +1040,8 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
                 dialog.dismiss();
             }
         });
-    }
 
-    public List<HomePageRatingData> getFinalRatingData() {
-        List<HomePageRatingData> data = new ArrayList<>();
-        String[] primaryText = getResources().getStringArray(R.array.rating_demo_data);
-        for (String aPrimaryText : primaryText) {
-            HomePageRatingData current = new HomePageRatingData();
-            current.ratingAboutName = aPrimaryText;
-            data.add(current);
-        }
-        return data;
+        dialog.show();
     }
 
     @Override
@@ -1353,5 +1371,17 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
                 }
                 break;
         }
+    }
+
+    @Override
+    public void showSingleBottomSheetRating(HomePageRatingData currentRatingDataList) {
+        List<HomePageRecyclerData> promoData = new ArrayList<>();
+        if (hPageBSRcyclerAdapter == null) {
+            hPageBSRcyclerAdapter = new HomePageRecyclerAdapter(this, promoData);
+            hPageBSRecycler.setAdapter(hPageBSRcyclerAdapter);
+            hPageBSRecycler.setLayoutManager(new LinearLayoutManager(this));
+        }
+        hPageBSRcyclerAdapter.addNewData(currentRatingDataList);
+
     }
 }

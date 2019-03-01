@@ -5,17 +5,23 @@ import android.view.View;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
+import io.dume.dume.student.homePage.adapter.HomePageRatingData;
 import io.dume.dume.teacher.pojo.Feedback;
 import io.dume.dume.teacher.pojo.Inbox;
+import io.dume.dume.teacher.pojo.Stat;
 
 public interface TeacherContract {
 
 
     interface View {
+        void updateBadge(String badgeNumber);
+
         void init();
 
         void onSwitchAccount();
@@ -32,9 +38,10 @@ public interface TeacherContract {
 
         void enhanceVIewImageClicked();
 
-        void testingCustomDialogue();
-
         void showSnackBar(String messages, String actionName);
+
+        //testing the customDialogue
+        void testingCustomDialogue(HomePageRatingData myData);
 
         void setDocumentSnapshot(DocumentSnapshot documentSnapshot);
 
@@ -95,10 +102,14 @@ public interface TeacherContract {
         void gotoBootCamPHomePage();
 
         void switchProfileDialog(String identify);
+
+        void showSingleBottomSheetRating(HomePageRatingData currentRatingDataList);
     }
 
 
     interface Presenter {
+        void loadStat(Model.Listener<List<Stat>> listener);
+
         void onButtonClicked();
 
         void onViewInteracted(android.view.View view);
@@ -118,10 +129,12 @@ public interface TeacherContract {
 
         void getInbox(Listener listener);
 
-        void getChartEntry(Listener t);
+        void getChartEntry(TeacherContract.Model.Listener<List<ArrayList<Entry>>> listener);
 
 
         void getMendatory(Listener<DocumentSnapshot> listener);
+
+        void getStatList(Listener<QuerySnapshot> listener);
 
 
         interface Listener<T> {

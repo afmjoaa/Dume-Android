@@ -649,7 +649,7 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
             instantDumeBadgeOffLayDraw = (LayerDrawable) instantDumePercentageOffImage.getDrawable();
             DumeUtils.setTextOverDrawable(this, instantDumeBadgeOffLayDraw, R.id.ic_badge, 0xff575757, "-40%", 3);
 
-            packageSearchBtn.setText("Search Dume Gang");
+            packageSearchBtn.setText("Search Dume Batch");
 
         }
     }

@@ -20,8 +20,12 @@ import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import java.util.Map;
 
 import io.dume.dume.inter_face.usefulListeners;
+import io.dume.dume.model.DumeModel;
+import io.dume.dume.student.recordsPage.Record;
+import io.dume.dume.teacher.homepage.TeacherContract;
+import io.dume.dume.teacher.homepage.TeacherModel;
 
-public class StuBaseModel {
+public abstract class StuBaseModel{
     private static final String TAG = "StuBaseModel";
     protected Context context;
     protected Activity activity;

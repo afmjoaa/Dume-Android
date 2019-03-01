@@ -21,6 +21,7 @@
         <item name="android:windowTranslucentStatus">false</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
         <item name="android:fontFamily">@font/cairo_regular</item>
+
     </style>
 
 

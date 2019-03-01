@@ -9,24 +9,40 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+
+import java.text.DateFormat;
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
 
 import carbon.widget.ImageView;
 import carbon.widget.RecyclerView;
 import io.dume.dume.R;
+import io.dume.dume.student.pojo.SearchDataStore;
 import me.zhanghai.android.materialratingbar.MaterialRatingBar;
+
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 public abstract class RecordsRecyAdapter extends RecyclerView.Adapter<RecordsRecyAdapter.MyViewHolder> {
 
     private static final String TAG = "InboxChatAdapter";
+    private final float mDensity;
     private LayoutInflater inflater;
     private Context context;
     private List<Record> data;
+    private String defaultUrl;
 
     public RecordsRecyAdapter(Context context, List<Record> data) {
         inflater = LayoutInflater.from(context);
         this.data = data;
         this.context = context;
+        mDensity = context.getResources().getDisplayMetrics().density;
     }
 
 
@@ -40,17 +56,25 @@ public abstract class RecordsRecyAdapter extends RecyclerView.Adapter<RecordsRec
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+        Record current = data.get(position);
         if (position % 2 == 0) {
             holder.relativeHostLayout.setBackgroundColor(context.getResources().getColor(R.color.tabFirstItem));
-            //holder.relativeHostLayout.setBackgroundResource(R.drawable.bg_tab_first_color);
         } else {
             holder.relativeHostLayout.setBackgroundColor(context.getResources().getColor(R.color.tabSecondItem));
-            //holder.relativeHostLayout.setBackgroundResource(R.drawable.bg_tab_first_color);
         }
         holder.mentorName.setText(data.get(position).getMentorName());
         holder.studentName.setText(data.get(position).getStudentName());
-        holder.salaryInDemand.setText(data.get(position).getSalaryInDemand());
+        String salaryInDemand = data.get(position).getSalaryInDemand();
+        salaryInDemand = NumberFormat.getCurrencyInstance(Locale.US).format(Double.parseDouble(salaryInDemand));
+        holder.salaryInDemand.setText(salaryInDemand.substring(1, salaryInDemand.length() - 3) + " BDT");
+        holder.subjectInDemand.setText(current.getSubjectExchange());
 
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
+        DateFormat formatter = new SimpleDateFormat("hh:mm aaa");
+        formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+        String timeFormatted = formatter.format(current.getDate());
+        holder.deliveryTime.setText(simpleDateFormat.format(current.getDate()) + " " + timeFormatted);
         holder.relativeHostLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -65,6 +89,23 @@ public abstract class RecordsRecyAdapter extends RecyclerView.Adapter<RecordsRec
                 return true;
             }
         });
+
+        if (current.getStudentDpUrl() != null && !current.getStudentDpUrl().equals("")) {
+            Glide.with(getApplicationContext()).load(current.getStudentDpUrl()).apply(new RequestOptions().override((int) (50 * mDensity), (int) (50 * mDensity)).placeholder(R.drawable.demo_default_avatar_dark)).into(holder.studentDisplayPic);
+        } else {
+            if (current.sGender != null || current.sGender.equals("Male") || current.sGender.equals("")) {
+                defaultUrl = SearchDataStore.DEFAULTMALEAVATER;
+            } else {
+                defaultUrl = SearchDataStore.DEFAULTFEMALEAVATER;
+            }
+            Glide.with(getApplicationContext()).load(defaultUrl).apply(new RequestOptions().override((int) (50 * mDensity), (int) (50 * mDensity)).placeholder(R.drawable.demo_default_avatar_dark)).into(holder.studentDisplayPic);
+        }
+
+        Glide.with(context).load(current.getMentorDpUrl()).into(holder.mentorDisplayPic);
+
+        holder.mentorRatingBar.setRating(current.getMentorRating());
+        holder.studentRatingBar.setRating(current.getStudentRating());
+
 
     }
 

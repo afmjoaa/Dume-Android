@@ -2,7 +2,8 @@ package io.dume.dume.teacher.mentor_settings;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.content.DialogInterface;
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.media.Ringtone;
@@ -57,14 +58,18 @@ import java.util.Map;
 import io.dume.dume.R;
 import io.dume.dume.auth.auth.AuthActivity;
 import io.dume.dume.customView.HorizontalLoadView;
+import io.dume.dume.model.DumeModel;
 import io.dume.dume.student.common.SettingData;
 import io.dume.dume.student.common.SettingsAdapter;
 import io.dume.dume.student.heatMap.AccountRecyData;
 import io.dume.dume.student.heatMap.HeatMapAccountRecyAda;
+import io.dume.dume.student.homePage.HomePageActivity;
 import io.dume.dume.student.homePage.MapsActivity;
 import io.dume.dume.student.studentSettings.SavedPlacesAdapter;
 import io.dume.dume.student.studentSettings.StudentSettingsActivity;
 import io.dume.dume.teacher.adapters.BasicInfoAdapter;
+import io.dume.dume.teacher.homepage.TeacherActivtiy;
+import io.dume.dume.teacher.homepage.TeacherContract;
 import io.dume.dume.teacher.mentor_settings.basicinfo.EditAccount;
 import io.dume.dume.teacher.model.KeyValueModel;
 import io.dume.dume.teacher.pojo.Education;
@@ -257,6 +262,7 @@ public class AccountSettings extends AppCompatActivity implements AccountSetting
     public void updateLocation() {
 
     }
+
     public List<SettingData> getFinalData() {
         List<SettingData> data = new ArrayList<>();
         int[] imageIcons = {
@@ -321,9 +327,9 @@ public class AccountSettings extends AppCompatActivity implements AccountSetting
                             FirebaseAuth.getInstance().signOut();
                             startActivity(new Intent(getApplicationContext(), AuthActivity.class));
 
-                    }
+                        }
 
-                    break;
+                        break;
                 }
 
             }
@@ -331,7 +337,7 @@ public class AccountSettings extends AppCompatActivity implements AccountSetting
         joarBaccha.setAdapter(settingsAdapter);
     }
 
-    private void inviteAFriendCalled(){
+    private void inviteAFriendCalled() {
         try {
             Intent i = new Intent(Intent.ACTION_SEND);
             i.setType("text/plain");
@@ -343,8 +349,8 @@ public class AccountSettings extends AppCompatActivity implements AccountSetting
             Uri screenshotUri = Uri.parse("android.resource://io.dume.dume/drawable/avatar.png");
             i.putExtra(Intent.EXTRA_STREAM, screenshotUri);*/
             startActivity(Intent.createChooser(i, "Share via"));
-        } catch(Exception e) {
-            Log.e(TAG, "inviteAFriendCalled: "+ e.toString());
+        } catch (Exception e) {
+            Log.e(TAG, "inviteAFriendCalled: " + e.toString());
         }
     }
 
@@ -353,6 +359,7 @@ public class AccountSettings extends AppCompatActivity implements AccountSetting
         toolTipsManager.show(builder.build());*/
         presenter.onViewClicked(view);
     }
+
     //Account Fragment here
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class AccountFragment extends Fragment {
@@ -365,6 +372,7 @@ public class AccountSettings extends AppCompatActivity implements AccountSetting
         };
         private String[] accountTypeArr;
         private HeatMapAccountRecyAda heatMapAccountRecyAda;
+        private Context context;
 
         @Override
         public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -377,6 +385,25 @@ public class AccountSettings extends AppCompatActivity implements AccountSetting
             super.setUserVisibleHint(isVisibleToUser);
         }
 
+        @Override
+        public void onAttach(Context context) {
+            this.context = context;
+            super.onAttach(context);
+
+        }
+
+        public void gotoTeacherActivity() {
+            startActivity(new Intent(context, TeacherActivtiy.class));
+            ((Activity) context).finish();
+        }
+
+
+        public void gotoStudentActivity() {
+            startActivity(new Intent(context, HomePageActivity.class));
+            ((Activity) context).finish();
+
+        }
+
         @Nullable
         @Override
         public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -387,18 +414,36 @@ public class AccountSettings extends AppCompatActivity implements AccountSetting
 
             //testing code goes here
             //setting the adapter with the recycler view
-            heatMapAccountRecyAda = new HeatMapAccountRecyAda(myMainActivity, getFinalData(0)) {
+
+            heatMapAccountRecyAda = new HeatMapAccountRecyAda(myMainActivity, getFinalData(1)) {
                 @Override
                 protected void OnAccouItemClicked(View v, int position) {
 
                     Bundle Uargs = new Bundle();
                     Uargs.putString("msg", "Switching to " + accountTypeArr[position]);
                     AlertMsgDialogue accountChangerAlertDialogue = new AlertMsgDialogue();
-                    accountChangerAlertDialogue.setItemChoiceListener(new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
+                    accountChangerAlertDialogue.setItemChoiceListener((dialogInterface, i) -> {
+
+                        heatMapAccountRecyAda.update(getFinalData(position));
+                        String toChange = accountTypeArr[position].equals("Mentor") ? DumeUtils.TEACHER : accountTypeArr[position].equals("Student") ? DumeUtils.STUDENT : accountTypeArr[position];
+                        if (toChange.equals("Boot Camp")) {
+                            Toast.makeText(context, "Bootcamp service is under development.", Toast.LENGTH_SHORT).show();
+                        } else {
                             Toast.makeText(myMainActivity, "Switching ...", Toast.LENGTH_SHORT).show();
-                            heatMapAccountRecyAda.update(getFinalData(position));
+                            new DumeModel(context).switchAcount(toChange, new TeacherContract.Model.Listener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    if (toChange.equals(DumeUtils.TEACHER))
+                                        gotoTeacherActivity();
+                                    else if (toChange.equals(DumeUtils.STUDENT))
+                                        gotoStudentActivity();
+                                }
+
+                                @Override
+                                public void onError(String msg) {
+                                    Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+                                }
+                            });
                         }
                     });
                     accountChangerAlertDialogue.setArguments(Uargs);
@@ -438,7 +483,7 @@ public class AccountSettings extends AppCompatActivity implements AccountSetting
 
     //Saved places fragment here
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public static class SavedPlacesFragment extends Fragment{
+    public static class SavedPlacesFragment extends Fragment {
 
         private AccountSettings myMainActivity;
         private RecyclerView savedPlacesRecycler;
@@ -605,10 +650,7 @@ class BadgeAdapter extends RecyclerView.Adapter<BadgeAdapter.BadgeImageHolder> {
     }
 
 
-
 }
-
-
 
 
 class EducationAdapter extends RecyclerView.Adapter<EducationAdapter.MyViewVH> {

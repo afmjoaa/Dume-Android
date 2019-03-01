@@ -57,16 +57,16 @@ public class AuthModel implements AuthContract.Model, SplashContract.Model, Phon
         this.activity = activity;
         mAuth = FirebaseAuth.getInstance();
         mIntent = this.activity.getIntent();
-        if (mIntent.getSerializableExtra("datastore") != null) {
+        /*if (mIntent.getSerializableExtra("datastore") != null) {
             datastore = (DataStore) mIntent.getSerializableExtra("datastore");
-        } else {
+        } else {*/
             datastore = DataStore.getInstance();
-        }
+      /*  }*/
         firestore = FirebaseFirestore.getInstance();
-        FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
+        /*FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
                 .setTimestampsInSnapshotsEnabled(true)
                 .build();
-        firestore.setFirestoreSettings(settings);
+        firestore.setFirestoreSettings(settings);*/
         Log.w(TAG, "AuthModel: " + firestore.hashCode());
     }
 
@@ -202,15 +202,12 @@ public class AuthModel implements AuthContract.Model, SplashContract.Model, Phon
     public void verifyCode(String code, PhoneVerificationContract.Model.CodeVerificationCallBack listener) {
         if (listener != null && datastore != null) {
             listener.onStart();
+
+
             PhoneAuthCredential credential = PhoneAuthProvider.getCredential(datastore.getVerificationId(), code);
             mAuth.signInWithCredential(credential).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     listener.onSuccess();
-                    if (DataStore.STATION == 1) {
-                    } else if (DataStore.STATION == 2) {
-
-                    }
-
 
                 } else {
                     if (task.getException() != null) {
@@ -257,7 +254,10 @@ public class AuthModel implements AuthContract.Model, SplashContract.Model, Phon
 
     @Override
     public boolean isUserLoggedIn() {
-        return mAuth.getCurrentUser() != null;
+        String uid = mAuth.getUid();
+        String foo = uid == null ? "Null" : uid;
+        Log.w(TAG, "isUserLoggedIn: " + foo);
+        return uid != null;
     }
 
     @Override

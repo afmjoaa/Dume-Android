@@ -26,8 +26,10 @@ import android.widget.Toast;
 import com.appyvet.materialrangebar.IRangeBarFormatter;
 import com.appyvet.materialrangebar.RangeBar;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 import io.dume.dume.R;
@@ -132,7 +134,6 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
         } else {
             //not visible here
         }
-
     }
 
 
@@ -152,32 +153,32 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
             TextView min, max;
             min = view.findViewById(R.id.minSal);
             max = view.findViewById(R.id.maxSal);
-            rangeBar.setFormatter(new IRangeBarFormatter() {
-                @Override
-                public String format(String value) {
-                    return value + "k";
-                }
-            });
+            rangeBar.setFormatter(value -> Integer.parseInt(value) + "k");
 
             if (myMainActivity.retrivedAction.equals(DumeUtils.STUDENT)) {
                 rangeBar.setRangeBarEnabled(true);
             } else {
                 rangeBar.setRangeBarEnabled(false);
                 max.setVisibility(View.GONE);
-                min.setText("Salaray = ");
+                min.setText("Salaray = " + rangeBar.getRightPinValue());
             }
 
             rangeBar.setOnRangeBarChangeListener(new RangeBar.OnRangeBarChangeListener() {
                 @Override
                 public void onRangeChangeListener(RangeBar rangeBar, int leftPinIndex, int rightPinIndex, String leftPinValue, String rightPinValue) {
                     String salaryValue = "";
+                    NumberFormat currencyInstance = NumberFormat.getCurrencyInstance(Locale.US);
+                    String format = currencyInstance.format(Integer.parseInt(leftPinValue) * 1000);
+                    String format1 = currencyInstance.format(Integer.parseInt(rightPinValue) * 1000);
                     if (myMainActivity.retrivedAction.equals(DumeUtils.STUDENT)) {
-                        min.setText("Min Salary = " + leftPinValue + "k");
-                        max.setText("Max Salary = " + rightPinValue + "k");
+
+                        min.setText("Min Salary = " + format.substring(1, format.length() - 3) + " BDT");
+                        max.setText("Max Salary = " + format1.substring(1, format1.length() - 3) + " BDT");
                         salaryValue = leftPinValue + "k - " + rightPinValue + "k";
                     } else {
-                        min.setText("Salary = " + rightPinValue + "k");
-                        salaryValue = rightPinValue;
+
+                        min.setText("Salary = " + format1.substring(1, format1.length() - 3) + " BDT");
+                        salaryValue = rightPinValue + "k";
                     }
                     AppCompatRadioButton rd = new AppCompatRadioButton(mContext);
                     rd.setText(salaryValue);

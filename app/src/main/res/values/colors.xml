@@ -127,5 +127,6 @@
     <color name="view">#7b1fa2</color>
     <color name="impression">#0288d1</color>
     <color name="skill_color">#e8f4f4</color>
+    <color name="noti_color">#04AA77</color>
 
 </resources>

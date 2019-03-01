@@ -19,6 +19,11 @@
             android:layout_height="38dp"
             android:layout_alignParentTop="true"
             android:layout_centerVertical="true"
+            app:carbon_cornerRadius="20dp"
+            app:carbon_elevation="2dp"
+            android:scaleType="centerCrop"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="2dp"
             app:srcCompat="@drawable/alias_profile_icon" />
 
         <TextView
@@ -97,7 +102,7 @@
         <Button
             android:id="@+id/like_text_view"
             style="@style/Widget.AppCompat.Button.Borderless"
-            android:layout_width="60dp"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
@@ -121,7 +126,7 @@
         <Button
             android:id="@+id/dislike_text_view"
             style="@style/Widget.AppCompat.Button.Borderless"
-            android:layout_width="60dp"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_marginEnd="2dp"

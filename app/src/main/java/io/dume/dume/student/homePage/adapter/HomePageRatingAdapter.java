@@ -12,8 +12,12 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import bolts.Bolts;
 import carbon.widget.ImageView;
 import io.dume.dume.R;
 
@@ -22,12 +26,14 @@ public class HomePageRatingAdapter extends RecyclerView.Adapter<HomePageRatingAd
     private static final String TAG = "HomePageRatingAdapter";
     private LayoutInflater inflater;
     private Context context;
-    private List<HomePageRatingData> data;
+    private HomePageRatingData data;
+    Map<String, Boolean> inputMap;
 
-    public HomePageRatingAdapter(Context context, List<HomePageRatingData> data) {
+    public HomePageRatingAdapter(Context context, HomePageRatingData data) {
         inflater = LayoutInflater.from(context);
         this.data = data;
         this.context = context;
+        inputMap = new HashMap<>();
     }
 
     @NonNull
@@ -38,10 +44,17 @@ public class HomePageRatingAdapter extends RecyclerView.Adapter<HomePageRatingAd
         return holder;
     }
 
+    public Map<String, Boolean> getInputRating() {
+        if (inputMap.size() == data.ratingNameList.size()) {
+            return inputMap;
+        }
+        return null;
+    }
+
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int position) {
-        HomePageRatingData current = data.get(position);
-        myViewHolder.ratingAboutName.setText(current.ratingAboutName);
+        HomePageRatingData current = data;
+        myViewHolder.ratingAboutName.setText(current.ratingNameList.get(position));
 
         myViewHolder.upExpertise.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -49,7 +62,7 @@ public class HomePageRatingAdapter extends RecyclerView.Adapter<HomePageRatingAd
                 myViewHolder.progressBarDown.setProgress(0);
                 myViewHolder.progressBarDown.setVisibility(View.INVISIBLE);
                 myViewHolder.progressBarUp.setVisibility(View.VISIBLE);
-
+                inputMap.put(data.ratingNameList.get(position), true);
                 ObjectAnimator animation = ObjectAnimator.ofInt(myViewHolder.progressBarUp, "progress", 0, 100);
                 animation.setDuration(2000); // 2 second
                 animation.setInterpolator(new DecelerateInterpolator());
@@ -63,7 +76,7 @@ public class HomePageRatingAdapter extends RecyclerView.Adapter<HomePageRatingAd
                 myViewHolder.progressBarUp.setProgress(0);
                 myViewHolder.progressBarUp.setVisibility(View.INVISIBLE);
                 myViewHolder.progressBarDown.setVisibility(View.VISIBLE);
-
+                inputMap.put(data.ratingNameList.get(position), false);
                 ObjectAnimator animation = ObjectAnimator.ofInt(myViewHolder.progressBarDown, "progress", 0, 100);
                 animation.setDuration(2000); // 2 second
                 animation.setInterpolator(new DecelerateInterpolator());
@@ -74,7 +87,7 @@ public class HomePageRatingAdapter extends RecyclerView.Adapter<HomePageRatingAd
 
     @Override
     public int getItemCount() {
-        return data.size();
+        return data.getRatingNameList().size();
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {

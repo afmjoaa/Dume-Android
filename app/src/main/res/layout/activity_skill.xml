@@ -125,7 +125,7 @@
             app:fab_size="mini"
             fab:fab_colorNormal="@color/colorBlack"
             fab:fab_colorPressed="@color/colorWhite"
-            fab:fab_title="Dume Gang    " />
+            fab:fab_title="Dume Batch   " />
 
         <com.getbase.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_regular"

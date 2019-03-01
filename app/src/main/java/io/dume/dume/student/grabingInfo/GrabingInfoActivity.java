@@ -1,8 +1,6 @@
 package io.dume.dume.student.grabingInfo;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
-import android.app.Dialog;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -30,15 +28,12 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
-import android.support.design.widget.TextInputLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.animation.FastOutLinearInInterpolator;
 import android.support.v4.view.animation.LinearOutSlowInInterpolator;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.AppCompatRadioButton;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
@@ -51,7 +46,6 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.ScaleAnimation;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
@@ -79,7 +73,6 @@ import com.transitionseverywhere.TransitionManager;
 import com.transitionseverywhere.TransitionSet;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -90,15 +83,11 @@ import java.util.List;
 import java.util.Objects;
 
 import carbon.widget.RelativeLayout;
-import id.zelory.compressor.Compressor;
 import io.dume.dume.R;
 import io.dume.dume.inter_face.OnTabModificationListener;
-import io.dume.dume.inter_face.usefulListeners;
 import io.dume.dume.model.DumeModel;
 import io.dume.dume.model.TeacherModel;
 import io.dume.dume.student.grabingPackage.GrabingPackageActivity;
-import io.dume.dume.student.homePage.HomePageActivity;
-import io.dume.dume.student.homePage.adapter.HomePageRatingAdapter;
 import io.dume.dume.student.pojo.CusStuAppComMapActivity;
 import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
 import io.dume.dume.student.pojo.SearchDataStore;
@@ -108,15 +97,11 @@ import io.dume.dume.teacher.model.LocalDb;
 import io.dume.dume.teacher.pojo.Skill;
 import io.dume.dume.teacher.skill.SkillActivity;
 import io.dume.dume.util.DumeUtils;
-import io.dume.dume.util.FileUtil;
 import io.dume.dume.util.OnViewClick;
 import io.dume.dume.util.RadioBtnDialogue;
 import io.dume.dume.util.VisibleToggleClickListener;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
-import me.zhanghai.android.materialratingbar.MaterialRatingBar;
 
+import static io.dume.dume.util.DumeUtils.getLast;
 import static io.dume.dume.util.ImageHelper.getRoundedCornerBitmap;
 import static io.dume.dume.util.ImageHelper.getRoundedCornerBitmapSquare;
 
@@ -213,6 +198,7 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
     private IconGenerator iconFactory;
     private GrabingInfoModel mModel;
     private String contactAvatarString;
+    private String[] splitMainSsss;
 
 
     @Override
@@ -691,6 +677,8 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                 switch (retrivedAction) {
                     case DumeUtils.TEACHER:
                     case DumeUtils.BOOTCAMP:
+                    case "frag_" +DumeUtils.BOOTCAMP:
+                    case "frag_" +DumeUtils.TEACHER:
                         HashMap<String, Object> queryMap = new HashMap<>();
                         for (int i = 0; i < queryList.size(); i++) {
                             queryMap.put(queryListName.get(i), queryList.get(i));
@@ -698,25 +686,63 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                         showProgress();
                         fab.setBackgroundTintList(ColorStateList.valueOf(Color.GRAY));
                         fab.setEnabled(false);
-                        String queryString = DumeUtils.generateQueryString(SearchDataStore.REGULAR_DUME, queryList, queryListName);
+                        String packageName = TeacherDataStore.getInstance().getPackageName();
+                        String queryString = DumeUtils.generateQueryString(packageName, queryList, queryListName);
                         ArrayList<Skill> skillArrayList = TeacherDataStore.getInstance().getSkillArrayList();
 
                         for (Skill item : skillArrayList) {
                             if (item.getQuery_string().equals(queryString)) {
                                 flush("Skill Already Exists");
-                                hideProgress();
-                                startActivity(new Intent(GrabingInfoActivity.this, SkillActivity.class));
+                                if(retrivedAction.startsWith("frag")){
+                                    hideProgress();
+                                    Intent intent = new Intent(GrabingInfoActivity.this, SkillActivity.class);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    //finishAffinity();
+                                    startActivity(intent);
+                                    finish();
+                                }else{
+                                    hideProgress();
+                                    Intent intent = new Intent(GrabingInfoActivity.this, SkillActivity.class);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    startActivity(intent);
+                                }
                                 return;
                             }
                         }
 
-                        Skill skill = new Skill(true, queryMap.get("Gender").toString(), Float.parseFloat(queryMap.get("Salary").toString().replace("k", "")), new Date(), queryMap, queryString
-                                , new GeoPoint(84.9, 180), 5, 10, "", 4.6f);
+                        float salary = Float.parseFloat(queryMap.get("Salary").toString().replace("k", ""));
+                        HashMap<String, Object> likes = new HashMap<>();
+                        HashMap<String, Object> dislikes = new HashMap<>();
+                        if (getLast(queryMap) != null) {
+                            String mainSsss = (String) getLast(queryMap);
+                            splitMainSsss = mainSsss.split("\\s*(=>|,|\\s)\\s*");
+                        }
+                        for (String splited : splitMainSsss) {
+                            likes.put(splited, 1);
+                            dislikes.put(splited, 0);
+                        }
+
+                        Skill skill = new Skill(true, queryMap.get("Gender").toString(), salary * 1000, new Date(), queryMap, queryString
+                                , new GeoPoint(84.9, 180), 0, 0, "", 0.0f, likes, dislikes, packageName);
+                        skill.setQuery_list(queryList);
+                        skill.setQuery_list_name(queryListName);
                         teacherModel.saveSkill(skill, new TeacherContract.Model.Listener<Void>() {
                             @Override
                             public void onSuccess(Void list) {
-                                hideProgress();
-                                startActivity(new Intent(GrabingInfoActivity.this, SkillActivity.class));
+                                if(retrivedAction.startsWith("frag")){
+                                    hideProgress();
+                                    Intent intent = new Intent(GrabingInfoActivity.this, SkillActivity.class).setAction("skill_added");
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    //finishAffinity();
+                                    startActivity(intent);
+                                    finish();
+                                }else{
+                                    //| Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                    hideProgress();
+                                    Intent intent = new Intent(GrabingInfoActivity.this, SkillActivity.class).setAction("skill_added");
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    startActivity(intent);
+                                }
                             }
 
                             @Override
@@ -728,6 +754,7 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                             }
                         });
                         break;
+
                     case DumeUtils.STUDENT:
                         showProgress();
                         fab.setBackgroundTintList(ColorStateList.valueOf(Color.GRAY));
@@ -916,6 +943,7 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                 queryListName.add("Category");
                 break;
             case DumeUtils.TEACHER:
+            case "frag_" + DumeUtils.TEACHER:
                 selected_category_position = getIntent().getIntExtra(DumeUtils.SELECTED_ID, 0);
                 forMeWrapper.setVisibility(View.GONE);
                 toolbar.setTitle("Select Skill");
@@ -923,6 +951,7 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                 queryListName.add("Category");
                 break;
             case DumeUtils.BOOTCAMP:
+            case "frag_" + DumeUtils.BOOTCAMP:
                 selected_category_position = getIntent().getIntExtra(DumeUtils.SELECTED_ID, 0);
                 forMeWrapper.setVisibility(View.GONE);
                 toolbar.setTitle("Select Skill");
@@ -994,7 +1023,7 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
             switch (levelName) {
                 case "Gender":
                     if (!(fragmentId < tabLayout.getTabCount() - 1)) {
-                        if (retrivedAction.equals(DumeUtils.BOOTCAMP)) {
+                        if (retrivedAction.equals(DumeUtils.BOOTCAMP) || retrivedAction.equals("frag_" + DumeUtils.BOOTCAMP)) {
                             flush("now bootcamp will work");
                             mSectionsPagerAdapter.newTab(db.capacity);
                             mViewPager.setCurrentItem(fragmentId + 1);

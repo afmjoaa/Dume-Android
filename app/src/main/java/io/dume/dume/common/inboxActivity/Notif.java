@@ -1,6 +1,6 @@
-package io.dume.dume.common.chatActivity;
+package io.dume.dume.common.inboxActivity;
 
-class Notif {
+public class Notif {
     String title;
     String uid;
     String reason;

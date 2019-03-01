@@ -172,6 +172,12 @@ public class CrudSkillActivity extends CusStuAppComMapActivity implements CrudCo
                     startActivity(new Intent(getApplicationContext(), GrabingInfoActivity.class).setAction(DumeUtils.TEACHER).putExtra(DumeUtils.SELECTED_ID, position));
                 } else if (fromWhere.equals(DumeUtils.BOOTCAMP)) {
                     startActivity(new Intent(getApplicationContext(), GrabingInfoActivity.class).setAction(DumeUtils.BOOTCAMP).putExtra(DumeUtils.SELECTED_ID, position));
+                } else if (fromWhere.equals("frag_" + DumeUtils.TEACHER)) {
+                    startActivity(new Intent(getApplicationContext(), GrabingInfoActivity.class).setAction("frag_" + DumeUtils.TEACHER).putExtra(DumeUtils.SELECTED_ID, position));
+                    finish();
+                } else if (fromWhere.equals("frag_" + DumeUtils.BOOTCAMP)) {
+                    startActivity(new Intent(getApplicationContext(), GrabingInfoActivity.class).setAction("frag_" + DumeUtils.BOOTCAMP).putExtra(DumeUtils.SELECTED_ID, position));
+                    finish();
                 } else {
                     flush("this is else working ");
                     startActivity(new Intent(getApplicationContext(), GrabingInfoActivity.class).setAction(DumeUtils.STUDENT).putExtra(DumeUtils.SELECTED_ID, position));
@@ -234,9 +240,9 @@ public class CrudSkillActivity extends CusStuAppComMapActivity implements CrudCo
                         }
                     });
         } else {
-            if(searchDataStore.getGender().equals("Male") || searchDataStore.getGender().equals("")){
+            if (searchDataStore.getGender().equals("Male") || searchDataStore.getGender().equals("")) {
                 defaultUrl = "https://firebasestorage.googleapis.com/v0/b/dume-2d063.appspot.com/o/avatar.png?alt=media&token=801c75b7-59fe-4a13-9191-186ef50de707";
-            }else {
+            } else {
                 defaultUrl = "https://firebasestorage.googleapis.com/v0/b/dume-2d063.appspot.com/o/avatar_female.png?alt=media&token=7202ea91-4f0d-4bd6-838e-8b73d0db13eb";
             }
             Glide.with(getApplicationContext())
@@ -260,6 +266,7 @@ public class CrudSkillActivity extends CusStuAppComMapActivity implements CrudCo
         iconFactory.setContentPadding((int) (27 * (getResources().getDisplayMetrics().density)), (int) (2 * (getResources().getDisplayMetrics().density)), 0, (int) (6 * (getResources().getDisplayMetrics().density)));
         addCustomInfoWindow(iconFactory, makeCharSequence("Radius", Integer.toString(SearchDataStore.SHORTRADIUS)) + " m", lattitudeLongitude);
     }
+
     //testing custom marker code here
     private Bitmap getMarkerBitmapFromView(View view, Bitmap bitmap) {
 

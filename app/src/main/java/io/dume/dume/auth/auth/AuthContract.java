@@ -35,9 +35,9 @@ public interface AuthContract {
 
         void onValidationFailed(String err);
 
-        void goToVerificationActivity(DataStore dataStore);
+        void goToVerificationActivity();
 
-        void goToRegesterActivity(DataStore dataStore);
+        void goToRegesterActivity();
 
         void showProgress();
 
@@ -45,7 +45,7 @@ public interface AuthContract {
 
         void showToast(String toast);
 
-        void restoreData(DataStore dataStore);
+        void restoreData();
 
 
     }
