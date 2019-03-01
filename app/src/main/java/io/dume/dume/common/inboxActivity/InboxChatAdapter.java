@@ -43,8 +43,7 @@ public abstract class InboxChatAdapter extends RecyclerView.Adapter<InboxChatAda
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         holder.chatUserName.setText(data.get(position).getOpponentName());
-        Glide.with(context).load(data.get(position)).apply(new RequestOptions().placeholder(R.drawable.avatar)).into(holder.chatUserDP);
-
+        Glide.with(context).load(data.get(position).getOpponentDP()).apply(new RequestOptions().placeholder(R.drawable.avatar)).into(holder.chatUserDP);
         switch (position) {
             case 1:
                 //testing offline

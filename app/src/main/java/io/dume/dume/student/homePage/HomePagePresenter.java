@@ -28,6 +28,7 @@ import io.dume.dume.student.pojo.SearchDataStore;
 import io.dume.dume.student.recordsPage.Record;
 import io.dume.dume.teacher.homepage.TeacherActivtiy;
 import io.dume.dume.teacher.homepage.TeacherContract;
+import io.dume.dume.teacher.homepage.TeacherDataStore;
 import io.dume.dume.util.DumeUtils;
 
 public class HomePagePresenter implements HomePageContract.Presenter {
@@ -41,6 +42,8 @@ public class HomePagePresenter implements HomePageContract.Presenter {
     private char mProfileChar = '!';
     private int mChatCount = 0;
     private int mRecPendingCount = 0, mRecAcceptedCount = 0, mRecCurrentCount = 0;
+    private Map<String, Object> documentSnapshot;
+    private int percentage;
 
     public HomePagePresenter(Context context, HomePageContract.Model mModel) {
         this.context = context;
@@ -57,6 +60,24 @@ public class HomePagePresenter implements HomePageContract.Presenter {
         mView.makingCallbackInterfaces();
         mView.configHomePage();
         getDataFromDB();
+    }
+
+    protected boolean isProfileOK() {
+        documentSnapshot = SearchDataStore.getInstance().getDocumentSnapshot();
+
+        if (documentSnapshot != null) {
+            String beh = (String) documentSnapshot.get("pro_com_%");
+            percentage = Integer.parseInt(beh);
+            if (percentage >= 95) {
+                return true;
+            }
+
+        }
+        mView.flush("Profile should be at least 95% completed");
+        String snackString = "Profile only " + percentage + "% complete";
+        mView.showPercentSnak(snackString, "GO TO PROFILE");
+        return false;
+
     }
 
     @Override
@@ -78,8 +99,10 @@ public class HomePagePresenter implements HomePageContract.Presenter {
                 break;
             case R.id.search_mentor_btn:
             case R.id.search_mentor_btn_nogps:
+                if (isProfileOK()) {
+                    mView.gotoGrabingLocationPage();
+                }
                 //mView.gotoGrabingInfoPage();
-                mView.gotoGrabingLocationPage();
                 break;
             case R.id.refer_mentor_imageView:
                 mView.referMentorImageViewClicked();

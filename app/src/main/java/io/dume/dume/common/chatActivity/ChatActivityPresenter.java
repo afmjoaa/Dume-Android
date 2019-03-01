@@ -31,15 +31,20 @@ public class ChatActivityPresenter implements ChatActivityContact.Presenter {
     public void onChatViewIntracted(View view) {
         switch (view.getId()) {
             case R.id.attachment_document_image:
-                mView.showDialogue();
+                //mView.showDialogue();
+                mView.comingSoon();
                 break;
             case R.id.attachment_audio_image:
+                mView.comingSoon();
                 break;
             case R.id.attachment_camera_image:
+                mView.comingSoon();
                 break;
             case R.id.attachment_gallery_image:
+                mView.comingSoon();
                 break;
             case R.id.attachment_location_image:
+                mView.comingSoon();
                 break;
             case R.id.view_musk:
                 mView.viewMuskClicked();

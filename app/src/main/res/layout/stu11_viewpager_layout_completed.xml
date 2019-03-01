@@ -17,7 +17,6 @@
         android:background="@color/recordsBgColor"
         android:orientation="vertical">
 
-
         <!--basic info-->
         <RelativeLayout
             android:id="@+id/recordsHostLayout"

@@ -28,6 +28,7 @@ import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.firebase.auth.FirebaseAuth;
+import com.jaeger.library.StatusBarUtil;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -242,6 +243,13 @@ public class CustomStuAppCompatActivity extends AppCompatActivity implements MyC
             activity.getWindow().setStatusBarColor(Color.TRANSPARENT);
         }
 
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M){
+            StatusBarUtil.setTranslucent(activity, 50);
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+            }
+        }
+
         //lollipop only support white status bar icon color so have to fix it by the status bar util library
         //by making translucent status bar and test thoroughly
         //StatusBarUtil.setTranslucent(this, 100);
@@ -254,6 +262,12 @@ public class CustomStuAppCompatActivity extends AppCompatActivity implements MyC
         decor = activity.getWindow().getDecorView();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             decor.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+        }else{
+            StatusBarUtil.setDarkMode(activity);
+            StatusBarUtil.setTranslucent(activity, 50);
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+            }
         }
     }
 
@@ -262,6 +276,12 @@ public class CustomStuAppCompatActivity extends AppCompatActivity implements MyC
         decor = activity.getWindow().getDecorView();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             decor.setSystemUiVisibility(0);
+        }else{
+            StatusBarUtil.setLightMode(activity);
+            StatusBarUtil.setTranslucent(activity, 50);
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+            }
         }
     }
 

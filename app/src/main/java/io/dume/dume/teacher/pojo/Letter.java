@@ -1,5 +1,7 @@
 package io.dume.dume.teacher.pojo;
 
+import com.google.firebase.firestore.DocumentSnapshot;
+
 import java.util.Date;
 
 public class Letter {
@@ -7,6 +9,33 @@ public class Letter {
     String uid;
     String body;
     Date timestamp;
+    DocumentSnapshot doc;
+    String token;
+    String name;
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public DocumentSnapshot getDoc() {
+        return doc;
+    }
+
+    public void setDoc(DocumentSnapshot doc) {
+        this.doc = doc;
+    }
 
     Letter() {
 

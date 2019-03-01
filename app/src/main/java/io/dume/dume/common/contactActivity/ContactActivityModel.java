@@ -91,6 +91,8 @@ public class ContactActivityModel implements ContactActivityContact.Model {
                                 gender = (String) sp_info.get("gender");
                                 avatar = (String) sp_info.get("avatar");
                                 name = sp_info.get("first_name") + " " + sp_info.get("last_name");
+                                phone = (String) sp_info.get("phone_number");
+
 
                             }
                         }/*I am Teacher*/ else {
@@ -107,7 +109,7 @@ public class ContactActivityModel implements ContactActivityContact.Model {
                         }
 
 
-                        ContactData data = new ContactData(record.getId(), avatar, name, record_status, pUid, record.getData());
+                        ContactData data = new ContactData(record.getId(), avatar, name, record_status, pUid, record.getData(), phone);
                         if (fooList.contains(pUid)) {
                             if (record_status != null && record_status.equals("Accepted")) {
                                 for (int i = 0; i < list.size(); i++) {

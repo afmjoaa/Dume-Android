@@ -32,8 +32,6 @@ public interface ContactActivityContact {
 
         void contactActivityHawwa();
 
-
-
         void readContact(String accountMajor, TeacherContract.Model.Listener<List<ContactData>> listener);
     }
 }

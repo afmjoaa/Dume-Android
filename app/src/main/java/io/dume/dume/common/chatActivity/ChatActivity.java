@@ -4,12 +4,15 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.view.animation.LinearOutSlowInInterpolator;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -17,7 +20,11 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.messaging.RemoteMessage;
+import com.jaeger.library.StatusBarUtil;
 import com.stfalcon.chatkit.messages.MessageHolders;
 import com.stfalcon.chatkit.messages.MessageInput;
 import com.stfalcon.chatkit.messages.MessagesList;
@@ -68,12 +75,21 @@ public class ChatActivity extends DemoMessagesActivity implements ChatActivityCo
     private TextView typeingTV;
     private TextView title;
     private ImageView dp;
+    public boolean isDataExists = false;
+    private static FirebaseMessaging notificationInstance;
+    private String token = null;
+    private String name = null;
 
     public static void open(Context context) {
         context.startActivity(new Intent(context, ChatActivity.class));
+        notificationInstance = FirebaseMessaging.getInstance();
+        RemoteMessage.Builder builder = new RemoteMessage.Builder("TOKEN");
+        builder.addData("", "").addData("", "");
+        notificationInstance.send(builder.build());
     }
 
     private MessagesList messagesList;
+    private static final String TAG = "ChatActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,7 +102,13 @@ public class ChatActivity extends DemoMessagesActivity implements ChatActivityCo
         configureAppbarWithoutColloapsing(this, " ");
         //findLoadView
         this.messagesList = (MessagesList) findViewById(R.id.messagesList);
+        this.messagesList.removeAllViews();
+
+
         initAdapter();
+        if (!this.messagesAdapter.isEmpty()) {
+            this.messagesAdapter.clear();
+        }
 
         MessageInput input = (MessageInput) findViewById(R.id.input);
         input.setInputListener(this);
@@ -94,19 +116,44 @@ public class ChatActivity extends DemoMessagesActivity implements ChatActivityCo
         Google google = Google.getInstance();
         int i = google.getRoomIdList().indexOf(google.getCurrentRoom());
         title.setText(google.getRooms().get(i).getOpponentName());
+        name = google.getRooms().get(i).getOpponentName();
+        mModel.getToken(google.getRooms().get(i).getOpponentUid()
+                , new TeacherContract.Model.Listener<String>() {
+                    @Override
+                    public void onSuccess(String list) {
+                        token = list;
+                    }
+
+                    @Override
+                    public void onError(String msg) {
+                        token = null;
+                        flush(msg);
+                    }
+                });
         Glide.with(this).load(google.getRooms().get(i).getOpponentDP()).apply(new RequestOptions().placeholder(R.drawable.dp)).into(dp);
 
-        mModel.readLastThirty(null, new TeacherContract.Model.Listener<List<Letter>>() {
+        mModel.readLastThirtyOnce(new TeacherContract.Model.Listener<List<Letter>>() {
             @Override
             public void onSuccess(List<Letter> list) {
-                for (int i = 0; i < list.size() - 1; i++) {
+                List<Message> messages = new ArrayList<>();
+                for (int i = 1; i < list.size(); i++) {
                     if (list.get(i).getUid().equals(FirebaseAuth.getInstance().getUid())) {
                         TYPE = SENDER;
                     } else {
                         TYPE = RECIVER;
                     }
-                    Google.getInstance().setLastDocumentId(list.get(i).getUid());
-                    ChatActivity.super.messagesAdapter.addToStart(new Message(list.get(i).getUid(), new User(TYPE + "", "Enam", SearchDataStore.DEFAULTMALEAVATER, true), list.get(i).getBody(), list.get(i).getTimestamp()), true);
+                    Message message = new Message(list.get(i).getUid(), new User(TYPE + "", "Enam", SearchDataStore.DEFAULTMALEAVATER, true), list.get(i).getBody(), list.get(i).getTimestamp());
+                    messages.add(message);
+                    Log.w(TAG, "tttt " + list.get(i).getBody());
+                }
+                Log.w(TAG, "onSuccess: To test " + messages.size());
+                ChatActivity.super.messagesAdapter.addToEnd(messages, false);
+
+                if (list.size() > 0) {
+                    Google.getInstance().setLastDocumentOfMessage(list.get(list.size() - 1).getDoc());
+                }
+                if (list.size() == 30) {
+                    isDataExists = true;
                 }
             }
 
@@ -127,15 +174,16 @@ public class ChatActivity extends DemoMessagesActivity implements ChatActivityCo
                     } else {
                         TYPE = RECIVER;
                     }
-                    ChatActivity.super.messagesAdapter.addToStart(new Message(list.get(i).getUid(), new User("" + TYPE, "Enam", SearchDataStore.DEFAULTMALEAVATER, true), list.get(i).getBody(), list.get(i).getTimestamp()), true);
+                    ChatActivity.super.messagesAdapter
+                            .addToStart(new Message(list.get(i).getUid(), new User("" + TYPE, "Enam", SearchDataStore.DEFAULTMALEAVATER, true), list.get(i).getBody(), list.get(i).getTimestamp()), true);
                 }
             }
-
             @Override
             public void onError(String msg) {
 
             }
         });
+
         input.setTypingListener(new MessageInput.TypingListener() {
             @Override
             public void onStartTyping() {
@@ -184,35 +232,43 @@ public class ChatActivity extends DemoMessagesActivity implements ChatActivityCo
 
             }
         });
+
         super.messagesAdapter.setLoadMoreListener((page, totalItemsCount) -> {
-            Toast.makeText(this, "Load More", Toast.LENGTH_SHORT).show();
-            mModel.readLastThirty(Google.getInstance().getLastDocumentId(), new TeacherContract.Model.Listener<List<Letter>>() {
+            if (isDataExists) {
+                mModel.readLastThirty(Google.getInstance().getLastDocumentOfMessage(), new TeacherContract.Model.Listener<List<Letter>>() {
 
-                private List<Message> messages;
+                    private List<Message> messages;
 
-                @Override
-                public void onSuccess(List<Letter> list) {
-                    messages = new ArrayList<>();
-                    for (int i = 0; i < list.size() - 1; i++) {
-                        if (list.get(i).getUid().equals(FirebaseAuth.getInstance().getUid())) {
-                            TYPE = SENDER;
-                        } else {
-                            TYPE = RECIVER;
+                    @Override
+                    public void onSuccess(List<Letter> list) {
+                        messages = new ArrayList<>();
+                        for (int i = 0; i < list.size(); i++) {
+                            if (list.get(i).getUid().equals(FirebaseAuth.getInstance().getUid())) {
+                                TYPE = SENDER;
+                            } else {
+                                TYPE = RECIVER;
+                            }
+                            Message message = new Message(list.get(i).getUid(), new User(TYPE + "", "Enam", SearchDataStore.DEFAULTMALEAVATER, true), list.get(i).getBody(), list.get(i).getTimestamp());
+                            messages.add(message);
                         }
-                        Message message = new Message(list.get(i).getUid(), new User(TYPE + "", "Enam", SearchDataStore.DEFAULTMALEAVATER, true), list.get(i).getBody(), list.get(i).getTimestamp());
-                        messages.add(message);
+                        if (list.size() > 0) {
+                            Google.getInstance().setLastDocumentOfMessage(list.get(list.size() - 1).getDoc());
+
+                        }
+                        isDataExists = list.size() == 30;
+                        ChatActivity.super.messagesAdapter.addToEnd(messages, false);
+
 
                     }
-                    ChatActivity.super.messagesAdapter.addToEnd(messages, true);
-                }
 
-                @Override
-                public void onError(String msg) {
-                    flush(msg);
-                }
-            });
+                    @Override
+                    public void onError(String msg) {
+                        flush(msg);
+                    }
+                });
+
+            }
         });
-
 
     }
 
@@ -232,7 +288,12 @@ public class ChatActivity extends DemoMessagesActivity implements ChatActivityCo
 
     @Override
     public void initChat() {
-
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            StatusBarUtil.setTranslucent(activity, 50);
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+            }
+        }
     }
 
     @Override
@@ -244,17 +305,19 @@ public class ChatActivity extends DemoMessagesActivity implements ChatActivityCo
     public boolean onSubmit(CharSequence input) {
         if (FirebaseAuth.getInstance().getCurrentUser() != null && !FirebaseAuth.getInstance().getCurrentUser().getUid().equals("")) {
             Letter letter = new Letter(FirebaseAuth.getInstance().getUid(), input.toString(), new Date());
+            letter.setToken(token);
+            letter.setName(name);
             mModel.addMessage(Google.getInstance().getCurrentRoom(), letter, new TeacherContract.Model.Listener<Void>() {
                 @Override
                 public void onSuccess(Void list) {
-                    flush("Sent");
                     /*ChatActivity.super.messagesAdapter.addToStart(
                             MessagesFixtures.getTextMessage(input.toString()), true);*/
+
                 }
 
                 @Override
                 public void onError(String msg) {
-
+                    flush(msg);
                 }
             });
 
@@ -267,7 +330,10 @@ public class ChatActivity extends DemoMessagesActivity implements ChatActivityCo
     }
 
     public void flush(String toFlush) {
-        Toast.makeText(this, toFlush, Toast.LENGTH_SHORT).show();
+        Toast toast = Toast.makeText(this, toFlush, Toast.LENGTH_SHORT);
+        TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
+        if (v != null) v.setGravity(Gravity.CENTER);
+        toast.show();
     }
 
     @Override
@@ -327,6 +393,11 @@ public class ChatActivity extends DemoMessagesActivity implements ChatActivityCo
     @Override
     public void viewMuskClicked() {
         onAddAttachments();
+    }
+
+    @Override
+    public void comingSoon() {
+        flush("This feature is not available right now...[Coming soon]");
     }
 
     @Override

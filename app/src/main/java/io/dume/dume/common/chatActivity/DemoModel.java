@@ -2,9 +2,12 @@ package io.dume.dume.common.chatActivity;
 
 import android.app.Activity;
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -13,8 +16,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
+import com.google.firebase.firestore.Source;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -38,6 +43,7 @@ public class DemoModel {
     private final FirebaseFirestore firestore;
     private final Context context;
     private ListenerRegistration listenerRegistration;
+    private static final String TAG = "DemoModel";
 
 
     public DemoModel(Context context) {
@@ -217,10 +223,11 @@ public class DemoModel {
         });
     }
 
-    public void readLastThirty(String from, TeacherContract.Model.Listener<List<Letter>> messageListener) {
-        Query query = firestore.collection("messages").document(Google.getInstance().getCurrentRoom()).collection("chatbox").orderBy("timestamp", Query.Direction.ASCENDING);
+    public void readLastThirty(DocumentSnapshot from, TeacherContract.Model.Listener<List<Letter>> messageListener) {
+        Query query = firestore.collection("messages").document(Google.getInstance().getCurrentRoom()).collection("chatbox").orderBy("timestamp", Query.Direction.DESCENDING);
         if (from != null) {
             query = query.startAfter(from);
+
         }
 
         listenerRegistration = query.limit(30).addSnapshotListener((Activity) context, new EventListener<QuerySnapshot>() {
@@ -231,11 +238,39 @@ public class DemoModel {
                 List<Letter> letters = new ArrayList<>();
                 for (int i = 0; i < documents.size(); i++) {
                     Letter letter = documents.get(i).toObject(Letter.class);
+                    if (letter != null) {
+                        letter.setDoc(documents.get(i));
+                    }
                     letters.add(letter);
                 }
                 messageListener.onSuccess(letters);
                 if (e != null) {
                     messageListener.onError(e.getCode() + e.getMessage());
+                }
+            }
+        });
+    }
+
+    public void readLastThirtyOnce(TeacherContract.Model.Listener<List<Letter>> messageListener) {
+        Query query = firestore.collection("messages").document(Google.getInstance().getCurrentRoom()).collection("chatbox").orderBy("timestamp", Query.Direction.DESCENDING);
+        Source source = Source.SERVER;
+        query.limit(30).get(source).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    List<Letter> letters = new ArrayList<>();
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        //Log.d(TAG, document.getId() + " => " + document.getData());
+                        Letter letter = document.toObject(Letter.class);
+                        if (letter != null) {
+                            letter.setDoc(document);
+                        }
+                        letters.add(letter);
+                    }
+                    messageListener.onSuccess(letters);
+                } else {
+                    messageListener.onError(task.getException().getLocalizedMessage());
+                    Log.d(TAG, "Error getting documents: ", task.getException());
                 }
             }
         });
@@ -326,6 +361,23 @@ public class DemoModel {
         } else {
             listener.onError("Session Expired. Please Log In");
         }
+    }
+
+
+    public void getToken(String uid, TeacherContract.Model.Listener<String> listener) {
+        firestore.collection("token").document(uid).addSnapshotListener((Activity) context, new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    listener.onError(e.getLocalizedMessage());
+                }
+                if (documentSnapshot != null) {
+                    String token = documentSnapshot.getString("token");
+                    listener.onSuccess(token);
+                }
+            }
+        });
+
     }
 
 

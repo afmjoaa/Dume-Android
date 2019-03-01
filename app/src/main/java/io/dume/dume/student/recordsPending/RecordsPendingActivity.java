@@ -2,7 +2,6 @@ package io.dume.dume.student.recordsPending;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Animatable2;
@@ -36,9 +35,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.GeoPoint;
 import com.hadiidbouk.charts.BarData;
 import com.hadiidbouk.charts.ChartProgressBar;
 import com.jackandphantom.circularprogressbar.CircleProgressbar;
@@ -57,22 +54,17 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 import carbon.widget.ImageView;
 import io.dume.dume.Google;
 import io.dume.dume.R;
-import io.dume.dume.library.RouteOverlayView;
 import io.dume.dume.model.DumeModel;
 import io.dume.dume.student.common.QualificationAdapter;
-import io.dume.dume.student.common.QualificationData;
 import io.dume.dume.student.common.ReviewAdapter;
 import io.dume.dume.student.common.ReviewHighlightData;
 import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
 import io.dume.dume.student.pojo.SearchDataStore;
 import io.dume.dume.student.recordsPage.Record;
-import io.dume.dume.student.searchResult.SearchResultActivity;
 import io.dume.dume.teacher.homepage.TeacherContract;
 import io.dume.dume.teacher.pojo.Academic;
 import io.dume.dume.util.DumeUtils;
@@ -80,7 +72,6 @@ import io.dume.dume.util.OnSwipeTouchListener;
 import io.dume.dume.util.VisibleToggleClickListener;
 import me.zhanghai.android.materialratingbar.MaterialRatingBar;
 
-import static com.facebook.FacebookSdk.getApplicationContext;
 import static io.dume.dume.util.DumeUtils.getLast;
 
 public class RecordsPendingActivity extends CustomStuAppCompatActivity implements RecordsPendingContract.View {
@@ -210,10 +201,10 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
         private RelativeLayout relativeHostLayout;
         private String defaultUrl;
         private float mDensity;
-        private Button moreInfoBtn;
         private Button reviewInfoBtn;
         private LinearLayout reviewHidable;
         private LinearLayout reviewHost;
+        private Button moreInfoBtn;
         private LinearLayout moreInfoHidable;
         private LinearLayout moreInfoHost;
         private LinearLayout achievementHidable;
@@ -240,6 +231,14 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
         private TextView rejectSubText;
         private Button rejectYesBtn;
         private Button rejectNoBtn;
+        private Button stuMoreInfoBtn;
+        private LinearLayout stuMoreInfoHidable;
+        private LinearLayout stuMoreInfoHost;
+        private TextView stuComTV;
+        private TextView stuBehaTV;
+        private TextView stuGenderTV;
+        private TextView stuPreviousResultTV;
+        private TextView stuCurrentStatusTV;
 
         public PlaceholderFragment() {
         }
@@ -331,7 +330,7 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
                 ;
             }
 
-            Glide.with(context).load(record.getMentorDpUrl()).into(mentorDisplayPic);
+            Glide.with(context).load(record.getMentorDpUrl()).apply(new RequestOptions().override((int) (50 * mDensity), (int) (50 * mDensity)).placeholder(R.drawable.demo_default_avatar_dark)).into(mentorDisplayPic);
 
             mentorRatingBar.setRating(record.getMentorRating());
             studentRatingBar.setRating(record.getStudentRating());
@@ -504,6 +503,23 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
             });
 
             Log.e(TAG, "onMentorSelect: " + "method is running ");
+
+            //setting the student info here
+            Float stu_comm_value = ((Float.parseFloat((String) shMap.get("l_communication"))) /
+                    (Float.parseFloat((String) shMap.get("l_communication")) + Float.parseFloat((String) shMap.get("dl_communication")))) * 100;
+            stuComTV.setText(String.format("%s%s %%", stuComTV.getText(), stu_comm_value.toString().substring(0, stu_comm_value.toString().length() - 2)));
+
+            Float stu_beha_value = ((Float.parseFloat((String) shMap.get("l_behaviour"))) /
+                    (Float.parseFloat((String) shMap.get("l_behaviour")) + Float.parseFloat((String) shMap.get("dl_behaviour")))) * 100;
+            stuBehaTV.setText(String.format("%s%s %%", stuBehaTV.getText(), stu_beha_value.toString().substring(0, stu_beha_value.toString().length() - 2)));
+
+            String stuTemp = (String) forMap.get("request_gender");
+            stuGenderTV.setText(String.format("%s%s", stuGenderTV.getText(), stuTemp));
+            stuTemp = (String) forMap.get("request_cs");
+            stuCurrentStatusTV.setText(String.format("%s%s", stuCurrentStatusTV.getText(), stuTemp));
+            stuTemp = (String) forMap.get("request_pr");
+            stuPreviousResultTV.setText(String.format("%s%s", stuPreviousResultTV.getText(), stuTemp));
+
         }
 
         public void loadQualificationData(Map<String, Object> sp_info) {
@@ -540,6 +556,10 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
             moreInfoHost = rootView.findViewById(R.id.more_info_host_linearlayout);
             moreInfoHidable = rootView.findViewById(R.id.more_info_layout_vertical);
 
+            stuMoreInfoBtn = rootView.findViewById(R.id.stu_show_more_info_btn);
+            stuMoreInfoHost = rootView.findViewById(R.id.stu_more_info_host_linearlayout);
+            stuMoreInfoHidable = rootView.findViewById(R.id.stu_more_info_layout_vertical);
+
             reviewHost = rootView.findViewById(R.id.review_host_linearlayout);
             reviewHidable = rootView.findViewById(R.id.review_layout_vertical);
             reviewInfoBtn = rootView.findViewById(R.id.review_info_btn);
@@ -555,6 +575,12 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
             ratingHostVertical = rootView.findViewById(R.id.rating_host_linearlayout);
             showAdditionalRatingBtn = rootView.findViewById(R.id.show_additional_rating_btn);
             onlyRatingContainer = rootView.findViewById(R.id.rating_layout_vertical);
+
+            stuComTV = rootView.findViewById(R.id.stu_textview_communication);
+            stuBehaTV = rootView.findViewById(R.id.stu_textview_behaviour);
+            stuGenderTV = rootView.findViewById(R.id.stu_textview_gender);
+            stuPreviousResultTV = rootView.findViewById(R.id.stu_previous_result);
+            stuCurrentStatusTV = rootView.findViewById(R.id.stu_textview_current_status);
 
             //testing anything can happen
             salaryBtn = rootView.findViewById(R.id.show_salary_btn);
@@ -622,8 +648,13 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
                     acceptBTN.setVisibility(View.GONE);
                     divider.setVisibility(View.GONE);
                     rejectBTN.setText("Cancel Request");
+                    stuMoreInfoHost.setVisibility(View.GONE);
                     break;
                 case DumeUtils.TEACHER:
+                    stuMoreInfoHost.setVisibility(View.VISIBLE);
+                    showAdditionalRatingBtn.setText("Your Rating");
+                    achievementInfoBtn.setText("Your Achievements");
+                    moreInfoBtn.setText("Your Info");
                     break;
                 case DumeUtils.BOOTCAMP:
                     break;
@@ -784,10 +815,10 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
                     }
                     Drawable[] compoundDrawables = showAdditionalRatingBtn.getCompoundDrawables();
                     Drawable d = compoundDrawables[3];
-                    if (d instanceof Animatable) {
-                        ((Animatable) d).start();
-                    }
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        if (d instanceof Animatable) {
+                            ((Animatable) d).start();
+                        }
                         ((Animatable2) d).registerAnimationCallback(new Animatable2.AnimationCallback() {
                             public void onAnimationEnd(Drawable drawable) {
                                 //Do something
@@ -799,6 +830,14 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
                                 showAdditionalRatingBtn.setEnabled(true);
                             }
                         });
+                    }else{
+                        if (visible) {
+                            showAdditionalRatingBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_down_arrow_small));
+                            showAdditionalRatingBtn.setEnabled(true);
+                        } else {
+                            showAdditionalRatingBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_up_arrow_small));
+                            showAdditionalRatingBtn.setEnabled(true);
+                        }
                     }
                 }
             });
@@ -851,10 +890,11 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
                     }
                     Drawable[] compoundDrawables = moreInfoBtn.getCompoundDrawables();
                     Drawable d = compoundDrawables[3];
-                    if (d instanceof Animatable) {
-                        ((Animatable) d).start();
-                    }
+
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        if (d instanceof Animatable) {
+                            ((Animatable) d).start();
+                        }
                         ((Animatable2) d).registerAnimationCallback(new Animatable2.AnimationCallback() {
                             public void onAnimationEnd(Drawable drawable) {
                                 //Do something
@@ -866,6 +906,92 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
                                 moreInfoBtn.setEnabled(true);
                             }
                         });
+                    }else {
+                        if (visible) {
+                            moreInfoBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_down_arrow_small));
+                            moreInfoBtn.setEnabled(true);
+                        } else {
+                            moreInfoBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_up_arrow_small));
+                            moreInfoBtn.setEnabled(true);
+                        }
+                    }
+                }
+
+            });
+
+
+            //setting the animation for the more info btn
+            stuMoreInfoBtn.setOnClickListener(new VisibleToggleClickListener() {
+
+                @SuppressLint("CheckResult")
+                @Override
+                protected void changeVisibility(boolean visible) {
+                    TransitionSet set = new TransitionSet()
+                            .addTransition(new Fade())
+                            .addTransition(new Slide(Gravity.TOP))
+                            .setInterpolator(visible ? new LinearOutSlowInInterpolator() : new FastOutLinearInInterpolator())
+                            .addListener(new Transition.TransitionListener() {
+                                @Override
+                                public void onTransitionStart(@NonNull Transition transition) {
+
+                                }
+
+                                @Override
+                                public void onTransitionEnd(@NonNull Transition transition) {
+                                    if (visible) {
+                                        stuMoreInfoHidable.setVisibility(View.GONE);
+                                    }
+                                }
+
+                                @Override
+                                public void onTransitionCancel(@NonNull Transition transition) {
+
+                                }
+
+                                @Override
+                                public void onTransitionPause(@NonNull Transition transition) {
+
+                                }
+
+                                @Override
+                                public void onTransitionResume(@NonNull Transition transition) {
+
+                                }
+                            });
+                    TransitionManager.beginDelayedTransition(stuMoreInfoHost, set);
+                    //onlyRatingContainer.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
+                    stuMoreInfoBtn.setEnabled(false);
+                    if (visible) {
+                        stuMoreInfoHidable.setVisibility(View.INVISIBLE);
+                    } else {
+                        stuMoreInfoHidable.setVisibility(View.VISIBLE);
+                    }
+                    Drawable[] compoundDrawables = stuMoreInfoBtn.getCompoundDrawables();
+                    Drawable d = compoundDrawables[3];
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        if (d instanceof Animatable) {
+                            ((Animatable) d).start();
+                        }
+                        ((Animatable2) d).registerAnimationCallback(new Animatable2.AnimationCallback() {
+                            public void onAnimationEnd(Drawable drawable) {
+                                //Do something
+                                if (visible) {
+                                    stuMoreInfoBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_down_arrow_small));
+                                } else {
+                                    stuMoreInfoBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_up_arrow_small));
+                                }
+                                stuMoreInfoBtn.setEnabled(true);
+                            }
+                        });
+                    }else{
+                        if (visible) {
+                            stuMoreInfoBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_down_arrow_small));
+                            stuMoreInfoBtn.setEnabled(true);
+                        } else {
+                            stuMoreInfoBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_up_arrow_small));
+                            stuMoreInfoBtn.setEnabled(true);
+                        }
                     }
                 }
 
@@ -919,10 +1045,11 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
                     }
                     Drawable[] compoundDrawables = reviewInfoBtn.getCompoundDrawables();
                     Drawable d = compoundDrawables[3];
-                    if (d instanceof Animatable) {
-                        ((Animatable) d).start();
-                    }
+
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        if (d instanceof Animatable) {
+                            ((Animatable) d).start();
+                        }
                         ((Animatable2) d).registerAnimationCallback(new Animatable2.AnimationCallback() {
                             public void onAnimationEnd(Drawable drawable) {
                                 //Do something
@@ -934,6 +1061,14 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
                                 reviewInfoBtn.setEnabled(true);
                             }
                         });
+                    }else {
+                        if (visible) {
+                            reviewInfoBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_down_arrow_small));
+                            reviewInfoBtn.setEnabled(true);
+                        } else {
+                            reviewInfoBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_up_arrow_small));
+                            reviewInfoBtn.setEnabled(true);
+                        }
                     }
                 }
             });
@@ -985,10 +1120,10 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
                     }
                     Drawable[] compoundDrawables = agreementInfoBtn.getCompoundDrawables();
                     Drawable d = compoundDrawables[3];
-                    if (d instanceof Animatable) {
-                        ((Animatable) d).start();
-                    }
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        if (d instanceof Animatable) {
+                            ((Animatable) d).start();
+                        }
                         ((Animatable2) d).registerAnimationCallback(new Animatable2.AnimationCallback() {
                             public void onAnimationEnd(Drawable drawable) {
                                 //Do something
@@ -1000,6 +1135,15 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
                                 agreementInfoBtn.setEnabled(true);
                             }
                         });
+                    }else{
+                        //Do something
+                        if (visible) {
+                            agreementInfoBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_down_arrow_small));
+                            agreementInfoBtn.setEnabled(true);
+                        } else {
+                            agreementInfoBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_up_arrow_small));
+                            agreementInfoBtn.setEnabled(true);
+                        }
                     }
                 }
             });
@@ -1055,6 +1199,9 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
                         ((Animatable) d).start();
                     }
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        if (d instanceof Animatable) {
+                            ((Animatable) d).start();
+                        }
                         ((Animatable2) d).registerAnimationCallback(new Animatable2.AnimationCallback() {
                             public void onAnimationEnd(Drawable drawable) {
                                 //Do something
@@ -1066,6 +1213,15 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
                                 achievementInfoBtn.setEnabled(true);
                             }
                         });
+                    }else{
+                        //Do something
+                        if (visible) {
+                            achievementInfoBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_down_arrow_small));
+                            achievementInfoBtn.setEnabled(true);
+                        } else {
+                            achievementInfoBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_up_arrow_small));
+                            achievementInfoBtn.setEnabled(true);
+                        }
                     }
                 }
             });

@@ -415,10 +415,10 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     }
                     Drawable[] compoundDrawables = myViewHolder.reviewShowBtn.getCompoundDrawables();
                     Drawable d = compoundDrawables[3];
-                    if (d instanceof Animatable) {
-                        ((Animatable) d).start();
-                    }
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        if (d instanceof Animatable) {
+                            ((Animatable) d).start();
+                        }
                         ((Animatable2) d).registerAnimationCallback(new Animatable2.AnimationCallback() {
                             public void onAnimationEnd(Drawable drawable) {
                                 //Do something
@@ -430,6 +430,14 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                                 myViewHolder.reviewShowBtn.setEnabled(true);
                             }
                         });
+                    }else{
+                        if (visible) {
+                            myViewHolder.reviewShowBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, context.getResources().getDrawable(R.drawable.ic_up_arrow_small));
+                            myViewHolder.reviewShowBtn.setEnabled(true);
+                        } else {
+                            myViewHolder.reviewShowBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, context.getResources().getDrawable(R.drawable.ic_down_arrow_small));
+                            myViewHolder.reviewShowBtn.setEnabled(true);
+                        }
                     }
                 }
             });

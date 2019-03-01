@@ -66,7 +66,7 @@ public class NewMessageNotification {
 
                 // Set required fields, including the small icon, the
                 // notification title, and text.
-                .setSmallIcon(R.drawable.ic_stat_new_message)
+                .setSmallIcon(R.drawable.ic_copy_icon)
                 .setContentTitle(title)
                 .setContentText(text)
 
@@ -118,7 +118,7 @@ public class NewMessageNotification {
                 // content intent provides access to the same actions in
                 // another way.
                 .addAction(
-                        R.drawable.ic_action_stat_share,
+                        R.drawable.ic_copy_icon,
                         res.getString(R.string.action_share),
                         PendingIntent.getActivity(
                                 context,
@@ -128,7 +128,7 @@ public class NewMessageNotification {
                                         .putExtra(Intent.EXTRA_TEXT, "Dummy text"), "Dummy title"),
                                 PendingIntent.FLAG_UPDATE_CURRENT))
                 .addAction(
-                        R.drawable.ic_action_stat_reply,
+                        R.drawable.ic_copy_icon,
                         res.getString(R.string.action_reply),
                         null)
 

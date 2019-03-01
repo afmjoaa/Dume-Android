@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -33,6 +34,7 @@ import io.dume.dume.teacher.homepage.TeacherContract;
 public class ContactDataAdapter extends RecyclerView.Adapter<ContactDataAdapter.MyViewHolder> {
 
     private static final String TAG = "ContactDataAdapter";
+    private final Boolean isFromMsg;
     private LayoutInflater inflater;
     private Context context;
     private List<ContactData> data;
@@ -43,10 +45,11 @@ public class ContactDataAdapter extends RecyclerView.Adapter<ContactDataAdapter.
     };
     private String[] statusText;
 
-    public ContactDataAdapter(Context context, List<ContactData> data) {
+    public ContactDataAdapter(Context context, List<ContactData> data, Boolean isFromMsg) {
         inflater = LayoutInflater.from(context);
         this.data = data;
         this.context = context;
+        this.isFromMsg = isFromMsg;
         statusText = context.getResources().getStringArray(R.array.statusText);
     }
 
@@ -55,74 +58,68 @@ public class ContactDataAdapter extends RecyclerView.Adapter<ContactDataAdapter.
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = inflater.inflate(R.layout.custom_contact_row, parent, false);
-        ContactDataAdapter.MyViewHolder holder = new ContactDataAdapter.MyViewHolder(view);
-        return holder;
+        return new MyViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
-
         ContactData single = this.data.get(position);
         Glide.with(context).load(single.getContactUserDP()).into(holder.contactUserDP);
         holder.contactUserName.setText(single.getContactUserName());
         holder.statusText.setText(single.getStatus());
-        holder.itemView.setOnClickListener(view -> {
-            if (single.getStatus().equals("Pending")) {
-                Toast.makeText(context, "Your request is not accepted yet.", Toast.LENGTH_SHORT).show();
-                return;
+        if(isFromMsg){
+            holder.callBtn.setVisibility(View.GONE);
+        }else {
+            holder.callBtn.setVisibility(View.VISIBLE);
+            holder.statusIndicatorImage.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_call_made_black_24dp));
+            holder.statusText.setText(String.format("+88%s", single.getPhone()));
+        }
+        holder.callBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                holder.hostRelativeLayout.performClick();
             }
-            Map<String, Object> map = new HashMap<>();
-            String sp_uid = (String) data.get(position).getRecord().get("sp_uid");
-            String sh_uid = (String) data.get(position).getRecord().get("sh_uid");
-            Map<String, Object> sp_info = (Map<String, Object>) data.get(position).getRecord().get("sp_info");
-            Map<String, Object> sh_info = (Map<String, Object>) data.get(position).getRecord().get("for_whom");
-            Map<String, Object> stringHashMap = new HashMap<String, Object>();
-            stringHashMap.put("name", sp_info.get("first_name") + " " + sp_info.get("last_name"));
-            stringHashMap.put("active", true);
-            Map<String, Object> stringHashMap1 = new HashMap<String, Object>();
-            stringHashMap1.put("name", sh_info.get("stu_name"));
-            stringHashMap1.put("active", true);
+        });
 
-            map.put(sp_uid.substring(2), stringHashMap);
-            map.put(sh_uid.substring(2), stringHashMap1);
-
-            List<String> participants = new ArrayList<>();
-            participants.add(sp_uid.substring(2));
-            participants.add(sh_uid.substring(2));
-            map.put("participants", participants);
-            Map<String, Object> typing = new HashMap<>();
-            typing.put(sp_uid.substring(2), false);
-            typing.put(sh_uid.substring(2), false);
-            map.put("typing", typing);
-            map.put("expire_date", new Date());
-            map.put("expired", false);
-            map.put("spam", false);
-            List<String> foo = new ArrayList<>((List<String>) map.get("participants"));
-            Collections.sort(foo);
-
-            List<String> roomIdList = Google.getInstance().getRoomIdList();
-            if (roomIdList != null && roomIdList.contains(foo.get(0).concat(foo.get(1)))) {
-                Log.w(TAG, "onBindViewHolder: Already Have Room");
-                Google.getInstance().setCurrentRoom(foo.get(0).concat(foo.get(1)));
-                android.util.Pair[] pairsPending = new android.util.Pair[3];
-                pairsPending[0] = new android.util.Pair<View, String>(holder.statusIndicatorImage, "tn0ne");
-                pairsPending[1] = new android.util.Pair<View, String>(holder.contactUserDP, "tnTwo");
-                pairsPending[2] = new android.util.Pair<View, String>(holder.contactUserName, "tnFive");
-                ActivityOptions optionsPending = null;
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-                    optionsPending = ActivityOptions.makeSceneTransitionAnimation((Activity) context, pairsPending);
+        holder.hostRelativeLayout.setOnClickListener(view -> {
+            if(isFromMsg){
+                if (single.getStatus().equals("Pending") || single.getStatus().equals("Rejected") || single.getStatus().equals("Completed")) {
+                    Toast.makeText(context, "Your request is not accepted or current yet.", Toast.LENGTH_SHORT).show();
+                    return;
                 }
-                if (optionsPending != null) {
-                    context.startActivity(new Intent(context, ChatActivity.class).setAction("testing"), optionsPending.toBundle());
-                } else {
-                    context.startActivity(new Intent(context, ChatActivity.class).setAction("testing"));
+                Map<String, Object> map = new HashMap<>();
+                String sp_uid = (String) data.get(position).getRecord().get("sp_uid");
+                String sh_uid = (String) data.get(position).getRecord().get("sh_uid");
+                Map<String, Object> sp_info = (Map<String, Object>) data.get(position).getRecord().get("sp_info");
+                Map<String, Object> sh_info = (Map<String, Object>) data.get(position).getRecord().get("for_whom");
+                Map<String, Object> stringHashMap = new HashMap<String, Object>();
+                stringHashMap.put("name", sp_info.get("first_name") + " " + sp_info.get("last_name"));
+                stringHashMap.put("active", true);
+                Map<String, Object> stringHashMap1 = new HashMap<String, Object>();
+                stringHashMap1.put("name", sh_info.get("stu_name"));
+                stringHashMap1.put("active", true);
 
-                }
+                map.put(sp_uid.substring(2), stringHashMap);
+                map.put(sh_uid.substring(2), stringHashMap1);
 
-            } else new DemoModel(context).addRoom(map, new TeacherContract.Model.Listener<Void>() {
-                @Override
-                public void onSuccess(Void list) {
+                List<String> participants = new ArrayList<>();
+                participants.add(sp_uid.substring(2));
+                participants.add(sh_uid.substring(2));
+                map.put("participants", participants);
+                Map<String, Object> typing = new HashMap<>();
+                typing.put(sp_uid.substring(2), false);
+                typing.put(sh_uid.substring(2), false);
+                map.put("typing", typing);
+                map.put("expire_date", new Date());
+                map.put("expired", false);
+                map.put("spam", false);
+                List<String> foo = new ArrayList<>((List<String>) map.get("participants"));
+                Collections.sort(foo);
+
+                List<String> roomIdList = Google.getInstance().getRoomIdList();
+                if (roomIdList != null && roomIdList.contains(foo.get(0).concat(foo.get(1)))) {
+                    Log.w(TAG, "onBindViewHolder: Already Have Room");
                     Google.getInstance().setCurrentRoom(foo.get(0).concat(foo.get(1)));
                     android.util.Pair[] pairsPending = new android.util.Pair[3];
                     pairsPending[0] = new android.util.Pair<View, String>(holder.statusIndicatorImage, "tn0ne");
@@ -139,16 +136,39 @@ public class ContactDataAdapter extends RecyclerView.Adapter<ContactDataAdapter.
 
                     }
 
-                }
+                } else new DemoModel(context).addRoom(map, new TeacherContract.Model.Listener<Void>() {
+                    @Override
+                    public void onSuccess(Void list) {
+                        Google.getInstance().setCurrentRoom(foo.get(0).concat(foo.get(1)));
+                        android.util.Pair[] pairsPending = new android.util.Pair[3];
+                        pairsPending[0] = new android.util.Pair<View, String>(holder.statusIndicatorImage, "tn0ne");
+                        pairsPending[1] = new android.util.Pair<View, String>(holder.contactUserDP, "tnTwo");
+                        pairsPending[2] = new android.util.Pair<View, String>(holder.contactUserName, "tnFive");
+                        ActivityOptions optionsPending = null;
+                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                            optionsPending = ActivityOptions.makeSceneTransitionAnimation((Activity) context, pairsPending);
+                        }
+                        if (optionsPending != null) {
+                            context.startActivity(new Intent(context, ChatActivity.class).setAction("testing"), optionsPending.toBundle());
+                        } else {
+                            context.startActivity(new Intent(context, ChatActivity.class).setAction("testing"));
 
-                @Override
-                public void onError(String msg) {
-                    Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+                        }
 
-                }
-            });
+                    }
 
+                    @Override
+                    public void onError(String msg) {
+                        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
 
+                    }
+                });
+            }else{
+                //Toast.makeText(context, "from call", Toast.LENGTH_SHORT).show();
+                Uri u = Uri.parse("tel:" + single.getPhone());
+                Intent i = new Intent(Intent.ACTION_DIAL, u);
+                context.startActivity(i);
+            }
         });
 
 
@@ -190,6 +210,7 @@ public class ContactDataAdapter extends RecyclerView.Adapter<ContactDataAdapter.
         private final TextView contactUserName;
         private final TextView statusText;
         private final RelativeLayout hostRelativeLayout;
+        private final ImageView callBtn;
 
         public MyViewHolder(View itemView) {
             super(itemView);
@@ -198,6 +219,7 @@ public class ContactDataAdapter extends RecyclerView.Adapter<ContactDataAdapter.
             statusIndicatorImage = itemView.findViewById(R.id.status_indicator_image);
             contactUserName = itemView.findViewById(R.id.chat_user_name);
             statusText = itemView.findViewById(R.id.status_text);
+            callBtn = itemView.findViewById(R.id.call_btn_image);
 
         }
     }

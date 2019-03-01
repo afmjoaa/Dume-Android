@@ -26,6 +26,8 @@ public class ContactActivity extends CustomStuAppCompatActivity implements Conta
     private static final int fromFlag = 31;
     private RecyclerView contactRecyclerView;
     private HorizontalLoadView loadView;
+    private String retriveAction;
+    private Boolean isFromMsg;
 
 
     @Override
@@ -33,6 +35,10 @@ public class ContactActivity extends CustomStuAppCompatActivity implements Conta
         super.onCreate(savedInstanceState);
         setContentView(R.layout.common5_activity_contact);
         setActivityContext(this, fromFlag);
+        if (getIntent().getAction() != null){
+            retriveAction = getIntent().getAction();
+        }
+        isFromMsg = retriveAction.equals("from_message");
         mPresenter = new ContactActivityPresenter(this, new ContactActivityModel(this));
         mPresenter.contactActivityEnqueue();
         DumeUtils.configureAppbar(this, "Select contact", true);
@@ -66,7 +72,7 @@ public class ContactActivity extends CustomStuAppCompatActivity implements Conta
 
     @Override
     public void loadRV(List<ContactData> dataList) {
-        ContactDataAdapter contactRecyAda = new ContactDataAdapter(this, dataList);
+        ContactDataAdapter contactRecyAda = new ContactDataAdapter(this, dataList, isFromMsg);
         contactRecyclerView.setAdapter(contactRecyAda);
     }
 

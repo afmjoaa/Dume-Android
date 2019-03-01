@@ -354,10 +354,10 @@ public class RecordsRejectedActivity extends CustomStuAppCompatActivity implemen
                     }
                     Drawable[] compoundDrawables = agreementInfoBtn.getCompoundDrawables();
                     Drawable d = compoundDrawables[3];
-                    if (d instanceof Animatable) {
-                        ((Animatable) d).start();
-                    }
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        if (d instanceof Animatable) {
+                            ((Animatable) d).start();
+                        }
                         ((Animatable2) d).registerAnimationCallback(new Animatable2.AnimationCallback() {
                             public void onAnimationEnd(Drawable drawable) {
                                 //Do something
@@ -369,6 +369,14 @@ public class RecordsRejectedActivity extends CustomStuAppCompatActivity implemen
                                 agreementInfoBtn.setEnabled(true);
                             }
                         });
+                    } else {
+                        if (visible) {
+                            agreementInfoBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_down_arrow_small));
+                            agreementInfoBtn.setEnabled(true);
+                        } else {
+                            agreementInfoBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_up_arrow_small));
+                            agreementInfoBtn.setEnabled(true);
+                        }
                     }
                 }
             });
@@ -451,7 +459,7 @@ public class RecordsRejectedActivity extends CustomStuAppCompatActivity implemen
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
             recordDataRejected = new ArrayList<>();
-            recordDataRejected = DumeUtils.filterList(Google.getInstance().getRecords(),"Rejected");
+            recordDataRejected = DumeUtils.filterList(Google.getInstance().getRecords(), "Rejected");
         }
 
         @Override
