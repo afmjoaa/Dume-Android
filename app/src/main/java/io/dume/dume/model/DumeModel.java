@@ -210,4 +210,6 @@ public class DumeModel extends HomePageModel implements TeacherModel {
         firestore.collection("push_notifications").document(doc_id).update("seen", true).addOnSuccessListener((Activity) context, aVoid -> listener.onSuccess(true)).addOnFailureListener(e -> listener.onError(e.getLocalizedMessage()));
     }
 
+
+
 }

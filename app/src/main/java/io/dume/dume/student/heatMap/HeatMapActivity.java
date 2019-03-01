@@ -280,7 +280,7 @@ public class HeatMapActivity extends CusStuAppComMapActivity implements OnMapRea
         }
         mProvider.setGradient(ALT_HEATMAP_GRADIENT);
         mOverlay.clearTileCache();
-        moveCamera(new LatLng(-38.3282, 143), 6, "Device Location", mMap);
+        moveCamera(new LatLng(-38.3282, 143), 14f, "Device Location", mMap);
     }
 
 
@@ -332,7 +332,7 @@ public class HeatMapActivity extends CusStuAppComMapActivity implements OnMapRea
     }
 
     //sending data set to mlist
-    private class DataSet {
+    public class DataSet {
         private ArrayList<LatLng> mDataset;
         private String mUrl;
 
