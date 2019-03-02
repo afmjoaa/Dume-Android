@@ -539,7 +539,7 @@ public class CusStuAppComMapActivity extends CustomStuAppCompatActivity implemen
         }
     }
 
-    protected void getDeviceLocationWithZoom(GoogleMap mMap, float zoom) {
+    protected void getDeviceLocationWithZoom(GoogleMap mMap, float zoomOne) {
         Log.d(TAG, "getDeviceLocation: getting the device current location");
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(activity);
         try {
@@ -550,7 +550,7 @@ public class CusStuAppComMapActivity extends CustomStuAppCompatActivity implemen
                             public void onSuccess(Location location) {
                                 CameraPosition cameraPosition = new CameraPosition.Builder()
                                         .target(new LatLng(location.getLatitude(), location.getLongitude()))
-                                        .zoom(zoom)
+                                        .zoom(zoomOne)
                                         .bearing(0)
                                         .tilt(0)
                                         .build();
