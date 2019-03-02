@@ -29,9 +29,6 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import io.dume.dume.Google;
 import io.dume.dume.R;
@@ -64,6 +61,8 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
     private LinearLayout noDataBlockMain;
     private List<Record> recordListMain = new ArrayList<>();
     public String retriveAction = null;
+    private View customView;
+    private TextView badgeTV;
 
 
     @Override
@@ -83,7 +82,7 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
                 (tabMinWidth, LinearLayout.LayoutParams.WRAP_CONTENT);
         // loop through all navigation tabs
         for (int i = 0; i < tabLayout.getTabCount(); i++) {
-            LinearLayout tab = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.custom_tablayout_tab, null);
+            LinearLayout tab = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.custom_tablayout_with_badge, null);
             String navLabels[] = getResources().getStringArray(R.array.RecordsPageTabtext);
 
             // get child TextView and ImageView from this layout for the icon and label
@@ -127,6 +126,33 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
         } else {
             noDataBlockMain.bringToFront();
             noDataBlockMain.setVisibility(View.VISIBLE);
+        }
+        List<Record> recordDataPending = DumeUtils.filterRecord(recordListMain, "Pending");
+        List<Record> recordDataAccepted = DumeUtils.filterRecord(recordListMain, "Accepted");
+        List<Record> recordDataCurrent = DumeUtils.filterRecord(recordListMain, "Current");
+        List<Record> recordDataCompleted = DumeUtils.filterRecord(recordListMain, "Completed");
+        List<Record> recordDataRejected = DumeUtils.filterRecord(recordListMain, "Rejected");
+
+        for (int i = 0; i < 5; i++) {
+            customView = tabLayout.getTabAt(i).getCustomView();
+            badgeTV = customView.findViewById(R.id.badgeTV);
+            switch (i){
+                case 0:
+                    badgeTV.setText(recordDataPending.size());
+                    break;
+                case 1:
+                    badgeTV.setText(recordDataAccepted.size());
+                    break;
+                case 2:
+                    badgeTV.setText(recordDataCurrent.size());
+                    break;
+                case 3:
+                    badgeTV.setText(recordDataCompleted.size());
+                    break;
+                case 4:
+                    badgeTV.setText(recordDataRejected.size());
+                    break;
+            }
         }
     }
 
