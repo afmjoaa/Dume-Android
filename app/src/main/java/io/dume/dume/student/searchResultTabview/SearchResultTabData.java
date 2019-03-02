@@ -15,6 +15,10 @@ public class SearchResultTabData implements Serializable {
     String mentorUid;
     String documentUid;
     Integer identify;
+    Integer mSalary;
+    Float mRating;
+    Integer mAcceptRatio;
+    Integer mExpirtise;
 
     public SearchResultTabData(String mentorDPUrl, String mentorName, String salary, String rating, String expertise, String a_ratio, int mentorFilterImage, String gender, String mentorUid, String documentUid, Integer identify) {
         this.mentorDPUrl = mentorDPUrl;
@@ -120,4 +124,6 @@ public class SearchResultTabData implements Serializable {
     public void setDocumentUid(String documentUid) {
         this.documentUid = documentUid;
     }
+
+
 }

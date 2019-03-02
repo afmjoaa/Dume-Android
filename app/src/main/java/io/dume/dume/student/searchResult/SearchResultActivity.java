@@ -1141,7 +1141,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
 
         //fill up all info of the mentor TODO
         NumberFormat currencyInstance = NumberFormat.getCurrencyInstance(Locale.US);
-        Double salary = (Double) selectedMentor.get("salary");
+        Number salary = (Number) selectedMentor.get("salary");
         String format1 = currencyInstance.format(salary);
         salaryBtn.setText("Salary : " + format1.substring(1, format1.length() - 3) + " BDT");
         //setting the achievements badge

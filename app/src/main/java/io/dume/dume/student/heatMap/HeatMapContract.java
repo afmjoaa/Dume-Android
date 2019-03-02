@@ -11,6 +11,8 @@ public interface HeatMapContract {
 
         void viewMuskClicked();
 
+        void flush(String msg);
+
         void onCenterCurrentLocation();
     }
 

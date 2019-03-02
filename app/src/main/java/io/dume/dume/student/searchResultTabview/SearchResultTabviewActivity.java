@@ -36,6 +36,7 @@ import com.google.firebase.firestore.GeoPoint;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
@@ -268,7 +269,9 @@ public class SearchResultTabviewActivity extends CustomStuAppCompatActivity impl
                     for (int i = 0; i < salaryFilterData.size(); i++) {
                         salaryFilterData.get(i).setMentorFilterImage(1);
                     }
-                    salaryFilterData.sort(Comparator.comparing(SearchResultTabData::getSalary));
+
+                    Collections.sort(salaryFilterData, (t1, t2) -> t1.mSalary - t2.mSalary);
+                    // salaryFilterData.sort(Comparator.comparing(SearchResultTabData::getSalary));
                     recordsRecyAda = new SearchResultTabRecyAda(myThisActivity, salaryFilterData) {
                         @Override
                         void OnItemClicked(View v, String identify) {
@@ -282,7 +285,9 @@ public class SearchResultTabviewActivity extends CustomStuAppCompatActivity impl
                     for (int i = 0; i < ratingFilterData.size(); i++) {
                         ratingFilterData.get(i).setMentorFilterImage(2);
                     }
-                    ratingFilterData.sort(Comparator.comparing(SearchResultTabData::getRating));
+                    Collections.sort(ratingFilterData, (t1, t2) -> t1.mRating.compareTo(t2.mRating));
+
+                    // ratingFilterData.sort(Comparator.comparing(SearchResultTabData::getRating));
                     recordsRecyAda = new SearchResultTabRecyAda(myThisActivity, ratingFilterData) {
                         @Override
                         void OnItemClicked(View v, String identify) {
@@ -296,7 +301,9 @@ public class SearchResultTabviewActivity extends CustomStuAppCompatActivity impl
                     for (int i = 0; i < expertiseFilterData.size(); i++) {
                         expertiseFilterData.get(i).setMentorFilterImage(3);
                     }
-                    expertiseFilterData.sort(Comparator.comparing(SearchResultTabData::getExpertise));
+                    Collections.sort(expertiseFilterData, (t1, t2) -> t1.mExpirtise - t2.mExpirtise);
+
+                    //expertiseFilterData.sort(Comparator.comparing(SearchResultTabData::getExpertise));
                     recordsRecyAda = new SearchResultTabRecyAda(myThisActivity, expertiseFilterData) {
                         @Override
                         void OnItemClicked(View v, String identify) {
@@ -310,7 +317,9 @@ public class SearchResultTabviewActivity extends CustomStuAppCompatActivity impl
                     for (int i = 0; i < aRatioFilterData.size(); i++) {
                         aRatioFilterData.get(i).setMentorFilterImage(4);
                     }
-                    aRatioFilterData.sort(Comparator.comparing(SearchResultTabData::getA_ratio));
+                    Collections.sort(aRatioFilterData, (t1, t2) -> t1.mAcceptRatio - t2.mAcceptRatio);
+
+                    //  aRatioFilterData.sort(Comparator.comparing(SearchResultTabData::getA_ratio));
                     recordsRecyAda = new SearchResultTabRecyAda(myThisActivity, aRatioFilterData) {
                         @Override
                         void OnItemClicked(View v, String identify) {
@@ -345,7 +354,9 @@ public class SearchResultTabviewActivity extends CustomStuAppCompatActivity impl
                 searchResultTabData.setIdentify(i);
 
                 NumberFormat currencyInstance = NumberFormat.getCurrencyInstance(Locale.US);
-                Double salary = (Double) currentDocument.get("salary");
+                Number salary = (Number) currentDocument.get("salary");
+                searchResultTabData.mSalary = salary.intValue();
+
                 String format1 = currencyInstance.format(salary);
                 searchResultTabData.setSalary("Salary : " + format1.substring(1, format1.length() - 3) + " BDT");
                 searchResultTabData.setRating((String) selfRating.get("star_rating"));
@@ -360,9 +371,13 @@ public class SearchResultTabviewActivity extends CustomStuAppCompatActivity impl
                                 + Integer.parseInt(unread_records.get("pending_count").toString())
                                 + Integer.parseInt(unread_records.get("rejected_count").toString()) + 1)) * 100;
                 searchResultTabData.setA_ratio(a_ratio_value + " %");
+                searchResultTabData.mAcceptRatio = a_ratio_value;
+
 
                 Integer expertise_value = (Integer.parseInt(selfRating.get("l_expertise").toString()) /
                         Integer.parseInt(selfRating.get("l_expertise").toString()) + Integer.parseInt(selfRating.get("dl_expertise").toString())) * 100;
+                searchResultTabData.mExpirtise = expertise_value;
+                searchResultTabData.mRating = Float.parseFloat((String) selfRating.get("star_rating"));
                 searchResultTabData.setExpertise(expertise_value + " %");
                 searchResultTabData.setMentorUid(currentDocument.getString("mentor_uid"));
                 searchResultTabData.setDocumentUid(currentDocument.getId());

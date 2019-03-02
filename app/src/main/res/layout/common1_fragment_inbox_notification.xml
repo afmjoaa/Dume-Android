@@ -108,4 +108,31 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
+    <LinearLayout
+        android:id="@+id/no_data_block"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <carbon.widget.ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:carbon_elevation="3dp"
+            app:srcCompat="@drawable/no_data_wallpaper" />
+
+        <TextView
+            android:id="@+id/no_item_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Sorry, no chat room to show right now..."
+            android:textAlignment="center"
+            android:textAllCaps="false"
+            android:textColor="@color/textColorSecondary"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+
 </LinearLayout>

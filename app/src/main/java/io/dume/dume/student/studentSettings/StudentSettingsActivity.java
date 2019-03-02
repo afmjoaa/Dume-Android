@@ -2,7 +2,9 @@ package io.dume.dume.student.studentSettings;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.Ringtone;
@@ -28,6 +30,7 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -51,15 +54,19 @@ import java.util.Map;
 
 import carbon.widget.ImageView;
 import io.dume.dume.R;
+import io.dume.dume.model.DumeModel;
 import io.dume.dume.student.common.SettingData;
 import io.dume.dume.student.common.SettingsAdapter;
 import io.dume.dume.student.grabingLocation.GrabingLocationActivity;
 import io.dume.dume.student.heatMap.AccountRecyData;
 import io.dume.dume.student.heatMap.HeatMapAccountRecyAda;
+import io.dume.dume.student.homePage.HomePageActivity;
 import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
 import io.dume.dume.student.profilePage.ProfilePageActivity;
+import io.dume.dume.teacher.homepage.TeacherActivtiy;
 import io.dume.dume.teacher.homepage.TeacherContract;
 import io.dume.dume.util.AlertMsgDialogue;
+import io.dume.dume.util.DumeUtils;
 
 import static io.dume.dume.util.DumeUtils.configAppbarTittle;
 import static io.dume.dume.util.DumeUtils.configureAppbar;
@@ -375,15 +382,15 @@ public class StudentSettingsActivity extends CustomStuAppCompatActivity
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(nameTextView.getText().toString().equals("") || addressTextView.getText().toString().equals("")){
+                if (nameTextView.getText().toString().equals("") || addressTextView.getText().toString().equals("")) {
                     flush("Field can't be kept empty");
-                    if(nameTextView.getText().toString().equals("")){
+                    if (nameTextView.getText().toString().equals("")) {
                         emptyNameFound.setVisibility(View.VISIBLE);
                     }
-                    if(addressTextView.getText().toString().equals("")){
+                    if (addressTextView.getText().toString().equals("")) {
                         emptyAddressFound.setVisibility(View.VISIBLE);
                     }
-                }else{
+                } else {
                     showProgress();
                     dialog.dismiss();
                     //save data to db and update view
@@ -520,7 +527,10 @@ public class StudentSettingsActivity extends CustomStuAppCompatActivity
 
     @Override
     public void flush(String msg) {
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+        Toast toast = Toast.makeText(context, msg, Toast.LENGTH_SHORT);
+        TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
+        if( v != null) v.setGravity(Gravity.CENTER);
+        toast.show();
     }
 
     @Override
@@ -656,6 +666,7 @@ public class StudentSettingsActivity extends CustomStuAppCompatActivity
         };
         private String[] accountTypeArr;
         private HeatMapAccountRecyAda heatMapAccountRecyAda;
+        private Context context;
 
         @Override
         public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -681,26 +692,73 @@ public class StudentSettingsActivity extends CustomStuAppCompatActivity
             heatMapAccountRecyAda = new HeatMapAccountRecyAda(myMainActivity, getFinalData(0)) {
                 @Override
                 protected void OnAccouItemClicked(View v, int position) {
+                    if (position == 2) {
+                        toast("Bootcamp service is under development...");
+                    } else {
+                        Bundle Uargs = new Bundle();
+                        Uargs.putString("msg", "Switching to " + accountTypeArr[position]);
+                        AlertMsgDialogue accountChangerAlertDialogue = new AlertMsgDialogue();
+                        accountChangerAlertDialogue.setItemChoiceListener(new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                heatMapAccountRecyAda.update(getFinalData(position));
+                                String toChange = accountTypeArr[position].equals("Mentor") ? DumeUtils.TEACHER : accountTypeArr[position].equals("Student") ? DumeUtils.STUDENT : accountTypeArr[position];
+                                if (toChange.equals("Boot Camp")) {
+                                    toast("Bootcamp service is under development...");
+                                } else {
+                                    Toast.makeText(myMainActivity, "Switching ...", Toast.LENGTH_SHORT).show();
+                                    new DumeModel(context).switchAcount(toChange, new TeacherContract.Model.Listener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            if (toChange.equals(DumeUtils.TEACHER))
+                                                gotoTeacherActivity();
+                                            else if (toChange.equals(DumeUtils.STUDENT))
+                                                gotoStudentActivity();
+                                        }
 
-                    Bundle Uargs = new Bundle();
-                    Uargs.putString("msg", "Switching to " + accountTypeArr[position]);
-                    AlertMsgDialogue accountChangerAlertDialogue = new AlertMsgDialogue();
-                    accountChangerAlertDialogue.setItemChoiceListener(new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            Toast.makeText(myMainActivity, "Switching ...", Toast.LENGTH_SHORT).show();
-                            heatMapAccountRecyAda.update(getFinalData(position));
-                        }
-                    });
-                    accountChangerAlertDialogue.setArguments(Uargs);
-                    accountChangerAlertDialogue.show(myMainActivity.getSupportFragmentManager(), "accountChangerAlertDialogue");
+                                        @Override
+                                        public void onError(String msg) {
+                                            Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                }
 
+                            }
+                        });
+                        accountChangerAlertDialogue.setArguments(Uargs);
+                        accountChangerAlertDialogue.show(myMainActivity.getSupportFragmentManager(), "accountChangerAlertDialogue");
+                    }
                 }
             };
             accountChangerRecycler.setAdapter(heatMapAccountRecyAda);
             accountChangerRecycler.setLayoutManager(new LinearLayoutManager(myMainActivity));
             return rootView;
 
+        }
+
+        public void gotoTeacherActivity() {
+            startActivity(new Intent(context, TeacherActivtiy.class));
+            ((Activity) context).finish();
+        }
+
+
+        public void gotoStudentActivity() {
+            startActivity(new Intent(context, HomePageActivity.class));
+            ((Activity) context).finish();
+
+        }
+
+        public void toast(String msg) {
+            Toast toast = Toast.makeText(context, msg, Toast.LENGTH_SHORT);
+            TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
+            if( v != null) v.setGravity(Gravity.CENTER);
+            toast.show();
+        }
+
+        @Override
+        public void onAttach(Context context) {
+            this.context = context;
+            super.onAttach(context);
         }
 
         public List<AccountRecyData> getFinalData(int selectedItem) {
@@ -807,6 +865,7 @@ public class StudentSettingsActivity extends CustomStuAppCompatActivity
                                         Toast.makeText(myMainActivity, "Successfully deleted", Toast.LENGTH_SHORT).show();
                                         myMainActivity.hideProgress();
                                     }
+
                                     @Override
                                     public void onError(String msg) {
                                         Toast.makeText(myMainActivity, msg, Toast.LENGTH_SHORT).show();
@@ -820,6 +879,7 @@ public class StudentSettingsActivity extends CustomStuAppCompatActivity
                                         Toast.makeText(myMainActivity, "Successfully deleted", Toast.LENGTH_SHORT).show();
                                         myMainActivity.hideProgress();
                                     }
+
                                     @Override
                                     public void onError(String msg) {
                                         Toast.makeText(myMainActivity, msg, Toast.LENGTH_SHORT).show();

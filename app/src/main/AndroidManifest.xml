@@ -32,6 +32,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_notification_launcher" />
+        <meta-data android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/inbox_active_color" />
+
         <!-- google map api metadata -->
 
         <meta-data
@@ -279,5 +285,7 @@
             android:label="@string/title_activity_student_addvertise"
             android:theme="@style/AppTheme.NoActionBar.transparent.black" />
     </application>
+
+
 
 </manifest>

@@ -139,5 +139,8 @@ public class MyNotification extends FirebaseMessagingService {
         return token;
     }
 
-
+    @Override
+    public void onRebind(Intent intent) {
+        super.onRebind(intent);
+    }
 }

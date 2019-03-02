@@ -91,12 +91,6 @@ public class HomePagePresenter implements HomePageContract.Presenter {
             case R.id.fab:
                 mView.onCenterCurrentLocation();
                 break;
-            case R.id.profile_data:
-                mView.gotoProfilePage();
-                break;
-            case R.id.mentor_add_layout:
-                mView.gotoMentorAddvertise();
-                break;
             case R.id.search_mentor_btn:
             case R.id.search_mentor_btn_nogps:
                 if (isProfileOK()) {

@@ -1,6 +1,7 @@
 package io.dume.dume.student.heatMap;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.Collections;
 import java.util.List;
@@ -45,10 +45,15 @@ public abstract class HeatMapAccountRecyAda extends RecyclerView.Adapter<HeatMap
         if (position == (data.size() - 1)) {
             holder.divider.setVisibility(View.INVISIBLE);
         }
+
         if (current.selectedOne == position) {
             holder.doneIcon.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             holder.doneIcon.setVisibility(View.INVISIBLE);
+        }
+
+        if (position == 2) {
+            holder.accouTypeText.setTextColor(Color.GRAY);
         }
         holder.accouContainer.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,14 +63,14 @@ public abstract class HeatMapAccountRecyAda extends RecyclerView.Adapter<HeatMap
                     data.get(i).selectedOne = position;
                 }
                 notifyDataSetChanged();*/
-                OnAccouItemClicked(v, holder.getAdapterPosition());
+                OnAccouItemClicked(v, position);
             }
         });
     }
 
     protected abstract void OnAccouItemClicked(View v, int position);
 
-    public void update(List<AccountRecyData> newData){
+    public void update(List<AccountRecyData> newData) {
         data.clear();
         data.addAll(newData);
         this.notifyDataSetChanged();

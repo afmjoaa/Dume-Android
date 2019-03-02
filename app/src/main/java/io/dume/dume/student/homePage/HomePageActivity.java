@@ -201,6 +201,7 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
     private View cancelsheetRootView;
     private HomePageRecyclerAdapter hPageBSRcyclerAdapter;
     private Snackbar enamSnackbar;
+    private LinearLayout mentorAddLayout;
 
 
     @Override
@@ -344,6 +345,7 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
         secondaryAppBarLayout = findViewById(R.id.secondary_Appbar);
         secondaryCollapsableToolbar = findViewById(R.id.secondary_collapsing_toolbar);
         profileDataLayout = findViewById(R.id.profile_data);
+        mentorAddLayout = findViewById(R.id.mentor_add_layout);
         map = findViewById(R.id.map);
         primaryNavContainer = findViewById(R.id.primary_navigation_container);
         secondaryNavContainer = findViewById(R.id.secondary_noGps_navigation_container);
@@ -500,6 +502,21 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
         mCancelBottomSheetDialog = new BottomSheetDialog(this);
         cancelsheetRootView = this.getLayoutInflater().inflate(R.layout.custom_bottom_sheet_dialogue_cancel, null);
         mCancelBottomSheetDialog.setContentView(cancelsheetRootView);
+        //onclick listener
+        profileDataLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                drawer.closeDrawer(GravityCompat.START, true);
+                gotoProfilePage();
+            }
+        });
+        mentorAddLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                drawer.closeDrawer(GravityCompat.START, true);
+                gotoMentorAddvertise();
+            }
+        });
     }
 
     @Override

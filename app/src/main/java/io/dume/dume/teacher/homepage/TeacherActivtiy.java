@@ -99,7 +99,6 @@ import io.dume.dume.student.homePage.adapter.HomePageRecyclerAdapter;
 import io.dume.dume.student.homePage.adapter.HomePageRecyclerData;
 import io.dume.dume.student.pojo.CusStuAppComMapActivity;
 import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
-import io.dume.dume.student.profilePage.ProfilePageActivity;
 import io.dume.dume.student.recordsPage.RecordsPageActivity;
 import io.dume.dume.student.studentHelp.StudentHelpActivity;
 import io.dume.dume.student.studentPayment.StudentPaymentActivity;
@@ -208,6 +207,8 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
     private MyTabAdapter tabAdapter;
     private HomePageRecyclerAdapter hPageBSRcyclerAdapter;
     private TeacherModel model;
+    private LinearLayout profileDataLayout;
+    private LinearLayout BootCampAddLayout;
 
 
     @Override
@@ -296,7 +297,8 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         doMoreDetailTextView = findViewById(R.id.make_money_mentoring);
         loadView = findViewById(R.id.loadViewTwo);
         bottomSheetNSV = findViewById(R.id.bottom_sheet_scroll_view);
-
+        profileDataLayout = findViewById(R.id.profile_data);
+        BootCampAddLayout = findViewById(R.id.mentor_add_layout);
     }
 
     @Override
@@ -387,6 +389,21 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         hPageBSRecycler.setLayoutManager(new LinearLayoutManager(this));*/
         //setting do more
         doMoreDetailTextView.setText("Start a couching center");
+        //setting the onclick listener here
+        profileDataLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                drawerLayout.closeDrawer(GravityCompat.START, true);
+                gotoProfilePage();
+            }
+        });
+        BootCampAddLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                drawerLayout.closeDrawer(GravityCompat.START, true);
+                gotoBootCampAddvertise();
+            }
+        });
     }
 
     @Override

@@ -306,6 +306,7 @@ public class InboxActivity extends CustomStuAppCompatActivity implements InboxAc
         private InboxNotiAdapter notiRecyAda;
         private LinearLayout noDataBlockMsg;
         private LinearLayout noDataBlockCall;
+        private LinearLayout noDataBlockNoti;
 
 
         public PlaceholderFragment() {
@@ -502,12 +503,19 @@ public class InboxActivity extends CustomStuAppCompatActivity implements InboxAc
                 case 2:
                     rootView = inflater.inflate(R.layout.common1_fragment_inbox_notification, container, false);
                     inboxRecyclerRecent = rootView.findViewById(R.id.inbox_recycler_view_recent);
+                    noDataBlockNoti = rootView.findViewById(R.id.no_data_block);
                     demoModel.getNotification(FirebaseAuth.getInstance().getUid(), new TeacherContract.Model.Listener<List<InboxNotiData>>() {
                         @Override
                         public void onSuccess(List<InboxNotiData> list) {
                             notiRecyAda = new InboxNotiAdapter(myThisActivity, list);
+                            InboxNotiAdapter notiRecyAda = new InboxNotiAdapter(myThisActivity, list);
                             inboxRecyclerRecent.setAdapter(notiRecyAda);
                             inboxRecyclerRecent.setLayoutManager(new LinearLayoutManager(myThisActivity));
+                            if(list.size()<= 0){
+                                noDataBlockNoti.setVisibility(View.VISIBLE);
+                            }else {
+                                noDataBlockNoti.setVisibility(View.GONE);
+                            }
                         }
 
                         @Override
@@ -622,6 +630,7 @@ public class InboxActivity extends CustomStuAppCompatActivity implements InboxAc
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
         }
+
 
         @Override
         public Fragment getItem(int position) {

@@ -110,6 +110,7 @@
                     android:contentDescription="@string/search_icon"
                     android:tint="@color/icon_color"
                     android:visibility="invisible"
+                    app:carbon_tint="@color/icon_color"
                     app:srcCompat="@drawable/ic_discard" />
 
             </carbon.widget.RelativeLayout>

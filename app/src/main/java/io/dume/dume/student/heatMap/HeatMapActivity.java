@@ -25,13 +25,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
@@ -48,16 +51,21 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.InputStream;
+import java.nio.file.attribute.PosixFilePermission;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
 import carbon.widget.LinearLayout;
+import io.dume.dume.Google;
 import io.dume.dume.R;
 import io.dume.dume.customView.HorizontalLoadView;
 import io.dume.dume.student.pojo.CusStuAppComMapActivity;
+import io.dume.dume.student.pojo.DataSet;
 import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
+import io.dume.dume.teacher.homepage.TeacherContract;
+import io.dume.dume.util.DumeUtils;
 import io.dume.dume.util.VisibleToggleClickListener;
 
 public class HeatMapActivity extends CusStuAppComMapActivity implements OnMapReadyCallback, MyGpsLocationChangeListener,
@@ -83,6 +91,7 @@ public class HeatMapActivity extends CusStuAppComMapActivity implements OnMapRea
     };
     private String[] accountTypeArr;
     private int thisPosition = 0;
+    private static final LatLngBounds LAT_LNG_BOUNDS = new LatLngBounds(new LatLng(19, 87), new LatLng(27, 93));
 
     //testing for the heat map code here
     private static final int[] ALT_HEATMAP_GRADIENT_COLORS = {
@@ -104,6 +113,10 @@ public class HeatMapActivity extends CusStuAppComMapActivity implements OnMapRea
     private HashMap<String, DataSet> mLists = new HashMap<String, DataSet>();
     private HeatMapAccountRecyAda heatMapAccountRecyAda;
     private HorizontalLoadView myLoadView;
+    private HeatMapModel heatMapModel;
+    private HeatMapModel mModel;
+    private Google google;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,7 +124,8 @@ public class HeatMapActivity extends CusStuAppComMapActivity implements OnMapRea
         setContentView(R.layout.stunav_activity1_heat_map);
         setActivityContextMap(this, fromFlag);
         findLoadView();
-        mPresenter = new HeatMapPresenter(this, new HeatMapModel());
+        mModel = new HeatMapModel();
+        mPresenter = new HeatMapPresenter(this, mModel);
         mPresenter.heatMapEnqueue();
         setSupportActionBar(toolbar);
 
@@ -129,20 +143,58 @@ public class HeatMapActivity extends CusStuAppComMapActivity implements OnMapRea
                 chooseAccouTypeBtn.setText(accountTypeArr[position]);
                 chooseAccouTypeBtn.performClick();
                 heatMapAccountRecyAda.update(getFinalData(position));
+                switch (position) {
+                    case 0:
+                        if (mMap != null) {
+                            mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+                                @Override
+                                public void onMapLoaded() {
+                                    mProvider = new HeatmapTileProvider.Builder().data(mLists.get(DumeUtils.STUDENT).getData()).build();
+                                    mOverlay = mMap.addTileOverlay(new TileOverlayOptions().tileProvider(mProvider));
+                                }
+                            });
+                        }
+                        break;
+                    case 1:
+                        if (mMap != null) {
+                            mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+                                @Override
+                                public void onMapLoaded() {
+                                    mProvider = new HeatmapTileProvider.Builder().data(mLists.get(DumeUtils.TEACHER).getData()).build();
+                                    mOverlay = mMap.addTileOverlay(new TileOverlayOptions().tileProvider(mProvider));
+                                }
+                            });
+                        }
+                        break;
+                    case 2:
+                        Toast.makeText(HeatMapActivity.this, "BootCamp is coming soon...", Toast.LENGTH_SHORT).show();
+                        break;
+                    default:
+                        break;
+                }
+                mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(LAT_LNG_BOUNDS, 10));
+
+
             }
         };
         myAccountRecycler.setAdapter(heatMapAccountRecyAda);
         myAccountRecycler.setLayoutManager(new LinearLayoutManager(this));
 
-        //testing the demo heat map code here
-        try {
-            mLists.put(getString(R.string.police_stations), new DataSet(readItems(R.raw.police),
-                    getString(R.string.police_stations_url)));
-            mLists.put(getString(R.string.medicare), new DataSet(readItems(R.raw.medicare),
-                    getString(R.string.medicare_url)));
-        } catch (JSONException e) {
-            Toast.makeText(this, "Problem reading list of markers.", Toast.LENGTH_LONG).show();
-        }
+
+        mModel.getMentorLocData(new TeacherContract.Model.Listener<DataSet>() {
+            @Override
+            public void onSuccess(DataSet list) {
+                mLists.put(DumeUtils.TEACHER, list);
+
+            }
+
+            @Override
+            public void onError(String msg) {
+                Log.w(TAG, "onError: " + msg);
+
+            }
+        });
+
 
     }
 
@@ -159,7 +211,7 @@ public class HeatMapActivity extends CusStuAppComMapActivity implements OnMapRea
         fab = findViewById(R.id.fab);
         accountTypeArr = getResources().getStringArray(R.array.AccountType);
         myLoadView = findViewById(R.id.loadView);
-
+        google = Google.getInstance();
     }
 
     @Override
@@ -228,11 +280,11 @@ public class HeatMapActivity extends CusStuAppComMapActivity implements OnMapRea
                     myAccountRecycler.setVisibility(View.VISIBLE);
                     chooseAccouTypeBtn.setCompoundDrawablesWithIntrinsicBounds(imageIcons[thisPosition], 0, R.drawable.ic_keyboard_arrow_up_black_24dp, 0);
                     viewMusk.setVisibility(View.VISIBLE);
-                    myLoadView.setTranslationY(2*getResources().getDisplayMetrics().density);
+                    myLoadView.setTranslationY(2 * getResources().getDisplayMetrics().density);
                 } else {
                     myAccountRecycler.setVisibility(View.INVISIBLE);
                     viewMusk.setVisibility(View.INVISIBLE);
-                    myLoadView.setTranslationY(-8*getResources().getDisplayMetrics().density);
+                    myLoadView.setTranslationY(-8 * getResources().getDisplayMetrics().density);
                     chooseAccouTypeBtn.setCompoundDrawablesWithIntrinsicBounds(imageIcons[thisPosition], 0, R.drawable.ic_keyboard_arrow_down_black_24dp, 0);
                     /*myAccountRecycler.postDelayed(new Runnable() {
                         @Override
@@ -252,28 +304,82 @@ public class HeatMapActivity extends CusStuAppComMapActivity implements OnMapRea
         MapStyleOptions style = MapStyleOptions.loadRawResourceStyle(
                 this, R.raw.map_style_default_no_landmarks);
         googleMap.setMapStyle(style);
-
         mMap = googleMap;
         onMapReadyListener(mMap);
         onMapReadyGeneralConfig();
-        startHeatMap(mMap);
+        String accountMajor = google.getAccountMajor();
+        switch (accountMajor) {
+            case DumeUtils.STUDENT:
+                mModel.getMentorLocData(new TeacherContract.Model.Listener<DataSet>() {
+                    @Override
+                    public void onSuccess(DataSet list) {
+                        mLists.put(DumeUtils.TEACHER, list);
+                        mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+                            @Override
+                            public void onMapLoaded() {
+                                startHeatMap(mMap, DumeUtils.TEACHER);
+                                hideProgress();
+                            }
+                        });
+                    }
 
+                    @Override
+                    public void onError(String msg) {
+                        Log.w(TAG, "onError: " + msg);
+
+                    }
+                });
+                break;
+            case DumeUtils.TEACHER:
+            case DumeUtils.BOOTCAMP:
+            default:
+                mModel.getStuLocData(new TeacherContract.Model.Listener<DataSet>() {
+                    @Override
+                    public void onSuccess(DataSet list) {
+                        mLists.put(DumeUtils.STUDENT, list);
+                        mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+                            @Override
+                            public void onMapLoaded() {
+                                startHeatMap(mMap, DumeUtils.STUDENT);
+                                hideProgress();
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onError(String msg) {
+                        Log.w(TAG, "onError: " + msg);
+                        flush(msg);
+                        hideProgress();
+                    }
+                });
+                break;
+
+        }
     }
 
-    public void startHeatMap(GoogleMap mMap) {
+
+    public void startHeatMap(GoogleMap mMap, String identify) {
         if (mProvider == null) {
             mProvider = new HeatmapTileProvider.Builder().data(
-                    mLists.get(getString(R.string.police_stations)).getData()).build();
+                    mLists.get(identify).getData()).build();
             mOverlay = mMap.addTileOverlay(new TileOverlayOptions().tileProvider(mProvider));
         } else {
-            /*mProvider.setData(mLists.get(dataset).getData());
-            mOverlay.clearTileCache();*/
+            mProvider.setData(mLists.get(DumeUtils.STUDENT).getData());
+            mOverlay.clearTileCache();
         }
         mProvider.setGradient(ALT_HEATMAP_GRADIENT);
         mOverlay.clearTileCache();
-        moveCamera(new LatLng(-38.3282, 143), 6, "Device Location", mMap);
+        //moveCamera(new LatLng(-38.3282, 143), 6, "Device Location", mMap);
     }
 
+    @Override
+    public void flush(String msg) {
+        Toast toast = Toast.makeText(context, msg, Toast.LENGTH_SHORT);
+        TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
+        if (v != null) v.setGravity(Gravity.CENTER);
+        toast.show();
+    }
 
     @Override
     public void onCenterCurrentLocation() {
@@ -282,9 +388,11 @@ public class HeatMapActivity extends CusStuAppComMapActivity implements OnMapRea
             ((Animatable) d).start();
         }
         Log.d(TAG, "onClick: clicked gps icon");
-        //testing here as well
-        //getDeviceLocation(mMap);
-        moveCamera(new LatLng(-38.3282, 143), 6, "Device Location", mMap);
+        if (mMap != null) {
+            getDeviceLocationWithZoom(mMap, 6f);
+        } else {
+            flush("Wait a bit...");
+        }
 
     }
 
@@ -323,23 +431,7 @@ public class HeatMapActivity extends CusStuAppComMapActivity implements OnMapRea
     }
 
     //sending data set to mlist
-    private class DataSet {
-        private ArrayList<LatLng> mDataset;
-        private String mUrl;
 
-        public DataSet(ArrayList<LatLng> dataSet, String url) {
-            this.mDataset = dataSet;
-            this.mUrl = url;
-        }
-
-        public ArrayList<LatLng> getData() {
-            return mDataset;
-        }
-
-        public String getUrl() {
-            return mUrl;
-        }
-    }
 
     //reading the raw file and converting it into a list
     private ArrayList<LatLng> readItems(int resource) throws JSONException {
@@ -363,9 +455,9 @@ public class HeatMapActivity extends CusStuAppComMapActivity implements OnMapRea
         if (id == R.id.action_help) {
             return true;
         } else if (id == android.R.id.home) {
-            if(viewMusk.getVisibility() == View.VISIBLE){
+            if (viewMusk.getVisibility() == View.VISIBLE) {
                 chooseAccouTypeBtn.performClick();
-            }else {
+            } else {
                 super.onBackPressed();
             }
         }

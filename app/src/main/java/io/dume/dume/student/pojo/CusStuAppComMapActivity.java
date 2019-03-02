@@ -539,6 +539,49 @@ public class CusStuAppComMapActivity extends CustomStuAppCompatActivity implemen
         }
     }
 
+    protected void getDeviceLocationWithZoom(GoogleMap mMap, float zoom) {
+        Log.d(TAG, "getDeviceLocation: getting the device current location");
+        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(activity);
+        try {
+            if (MLOCATIONPERMISSIONGRANTED) {
+                mFusedLocationProviderClient.getLastLocation()
+                        .addOnSuccessListener(new OnSuccessListener<Location>() {
+                            @Override
+                            public void onSuccess(Location location) {
+                                CameraPosition cameraPosition = new CameraPosition.Builder()
+                                        .target(new LatLng(location.getLatitude(), location.getLongitude()))
+                                        .zoom(zoom)
+                                        .bearing(0)
+                                        .tilt(0)
+                                        .build();
+                                if (location != null) {
+                                    mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition),new GoogleMap.CancelableCallback() {
+                                        @Override
+                                        public void onFinish() {
+                                            //nothing to do
+                                        }
+
+                                        @Override
+                                        public void onCancel() {
+                                        }
+                                    });
+                                }
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.d("MapDemoActivity", "Error trying to get last GPS location");
+                                Toast.makeText(context, "unable to get current location", Toast.LENGTH_SHORT).show();
+                                e.printStackTrace();
+                            }
+                        });
+            }
+        } catch (SecurityException e) {
+            Log.e(TAG, "getDeviceLocation: SecurityException: " + e.getMessage());
+        }
+    }
+
     protected void onMapReadyGeneralConfig() {
         //TODO: setting up the parent map activity
         if (MLOCATIONPERMISSIONGRANTED) {
@@ -585,7 +628,7 @@ public class CusStuAppComMapActivity extends CustomStuAppCompatActivity implemen
                     COMPASSBTN.setElevation((int) (6 * (getResources().getDisplayMetrics().density)));
                 }
 
-                if(fromFlag == 1604){
+                if (fromFlag == 1604) {
                     rlp.topMargin = (int) (20 * (getResources().getDisplayMetrics().density));
                     rlp.leftMargin = (int) (16 * (getResources().getDisplayMetrics().density));
                     rlp.bottomMargin = (int) (10 * (getResources().getDisplayMetrics().density));

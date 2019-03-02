@@ -23,6 +23,7 @@ public class InboxNotiData implements Serializable {
     String uid;
     Date date;
 
+
     public Date getTimestapm() {
         return date;
     }

@@ -2,7 +2,8 @@ package io.dume.dume.teacher.mentor_settings;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.content.DialogInterface;
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.media.Ringtone;
@@ -27,6 +28,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -57,14 +59,19 @@ import java.util.Map;
 import io.dume.dume.R;
 import io.dume.dume.auth.auth.AuthActivity;
 import io.dume.dume.customView.HorizontalLoadView;
+import io.dume.dume.model.DumeModel;
 import io.dume.dume.student.common.SettingData;
 import io.dume.dume.student.common.SettingsAdapter;
 import io.dume.dume.student.heatMap.AccountRecyData;
 import io.dume.dume.student.heatMap.HeatMapAccountRecyAda;
+import io.dume.dume.student.homePage.HomePageActivity;
 import io.dume.dume.student.homePage.MapsActivity;
+import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
 import io.dume.dume.student.studentSettings.SavedPlacesAdapter;
 import io.dume.dume.student.studentSettings.StudentSettingsActivity;
 import io.dume.dume.teacher.adapters.BasicInfoAdapter;
+import io.dume.dume.teacher.homepage.TeacherActivtiy;
+import io.dume.dume.teacher.homepage.TeacherContract;
 import io.dume.dume.teacher.mentor_settings.basicinfo.EditAccount;
 import io.dume.dume.teacher.model.KeyValueModel;
 import io.dume.dume.teacher.pojo.Education;
@@ -72,8 +79,9 @@ import io.dume.dume.util.AlertMsgDialogue;
 import io.dume.dume.util.DumeUtils;
 
 import static io.dume.dume.util.DumeUtils.configAppbarTittle;
+import static io.dume.dume.util.DumeUtils.showToast;
 
-public class AccountSettings extends AppCompatActivity implements AccountSettingsContract.MentorView {
+public class AccountSettings extends CustomStuAppCompatActivity implements AccountSettingsContract.MentorView {
     private CoordinatorLayout transitionContainer;
     private CollapsingToolbarLayout collapsingToolbarLayout;
     private HorizontalLoadView horizontalLoadView;
@@ -97,23 +105,25 @@ public class AccountSettings extends AppCompatActivity implements AccountSetting
     private String[] settingNameArr;
     private NestedScrollView scrollView;
     private AppBarLayout appBarLayout;
+    private static final int fromFlag = 287;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account_settings);
+        setActivityContext(this,fromFlag);
         presenter = new AccountSettingsPresenter(this, new AccountSettingsModel());
         presenter.enqueue();
         presenter.loadData();
-
+        findLoadView();
     }
 
     @Override
     public void setViewConfig() {
         DumeUtils.configureAppbar(this, "Account Settings");
         horizontalLoadView = findViewById(R.id.loadView);
-        transitionContainer = findViewById(R.id.transitionContainer);
+        transitionContainer = findViewById(R.id.parent_coor_layout);
         profileContainer = findViewById(R.id.profileSection);
         indicator = findViewById(R.id.indicatorImg);
         frameLayout = findViewById(R.id.framLayout);
@@ -228,9 +238,11 @@ public class AccountSettings extends AppCompatActivity implements AccountSetting
     }
 
     @Override
-    public void toast(String toast) {
-        Toast.makeText(this, toast, Toast.LENGTH_SHORT).show();
-
+    public void toast(String msg) {
+        Toast toast = Toast.makeText(this, msg, Toast.LENGTH_SHORT);
+        TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
+        if( v != null) v.setGravity(Gravity.CENTER);
+        toast.show();
     }
 
     @Override
@@ -257,6 +269,7 @@ public class AccountSettings extends AppCompatActivity implements AccountSetting
     public void updateLocation() {
 
     }
+
     public List<SettingData> getFinalData() {
         List<SettingData> data = new ArrayList<>();
         int[] imageIcons = {
@@ -307,7 +320,7 @@ public class AccountSettings extends AppCompatActivity implements AccountSetting
                         getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new AccountSettings.AccountFragment()).commit();
                         break;
                     case 3:
-                        Toast.makeText(AccountSettings.this, "Chat settings are coming soon", Toast.LENGTH_SHORT).show();
+                        toast("Chat settings are coming soon");
                         break;
                     case 4:
                         Toast.makeText(AccountSettings.this, "Coming soon", Toast.LENGTH_SHORT).show();
@@ -321,9 +334,9 @@ public class AccountSettings extends AppCompatActivity implements AccountSetting
                             FirebaseAuth.getInstance().signOut();
                             startActivity(new Intent(getApplicationContext(), AuthActivity.class));
 
-                    }
+                        }
 
-                    break;
+                        break;
                 }
 
             }
@@ -331,7 +344,7 @@ public class AccountSettings extends AppCompatActivity implements AccountSetting
         joarBaccha.setAdapter(settingsAdapter);
     }
 
-    private void inviteAFriendCalled(){
+    private void inviteAFriendCalled() {
         try {
             Intent i = new Intent(Intent.ACTION_SEND);
             i.setType("text/plain");
@@ -343,8 +356,8 @@ public class AccountSettings extends AppCompatActivity implements AccountSetting
             Uri screenshotUri = Uri.parse("android.resource://io.dume.dume/drawable/avatar.png");
             i.putExtra(Intent.EXTRA_STREAM, screenshotUri);*/
             startActivity(Intent.createChooser(i, "Share via"));
-        } catch(Exception e) {
-            Log.e(TAG, "inviteAFriendCalled: "+ e.toString());
+        } catch (Exception e) {
+            Log.e(TAG, "inviteAFriendCalled: " + e.toString());
         }
     }
 
@@ -353,6 +366,7 @@ public class AccountSettings extends AppCompatActivity implements AccountSetting
         toolTipsManager.show(builder.build());*/
         presenter.onViewClicked(view);
     }
+
     //Account Fragment here
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class AccountFragment extends Fragment {
@@ -365,6 +379,7 @@ public class AccountSettings extends AppCompatActivity implements AccountSetting
         };
         private String[] accountTypeArr;
         private HeatMapAccountRecyAda heatMapAccountRecyAda;
+        private Context context;
 
         @Override
         public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -377,6 +392,25 @@ public class AccountSettings extends AppCompatActivity implements AccountSetting
             super.setUserVisibleHint(isVisibleToUser);
         }
 
+        @Override
+        public void onAttach(Context context) {
+            this.context = context;
+            super.onAttach(context);
+
+        }
+
+        public void gotoTeacherActivity() {
+            startActivity(new Intent(context, TeacherActivtiy.class));
+            ((Activity) context).finish();
+        }
+
+
+        public void gotoStudentActivity() {
+            startActivity(new Intent(context, HomePageActivity.class));
+            ((Activity) context).finish();
+
+        }
+
         @Nullable
         @Override
         public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -387,23 +421,42 @@ public class AccountSettings extends AppCompatActivity implements AccountSetting
 
             //testing code goes here
             //setting the adapter with the recycler view
-            heatMapAccountRecyAda = new HeatMapAccountRecyAda(myMainActivity, getFinalData(0)) {
+
+            heatMapAccountRecyAda = new HeatMapAccountRecyAda(myMainActivity, getFinalData(1)) {
                 @Override
                 protected void OnAccouItemClicked(View v, int position) {
-
-                    Bundle Uargs = new Bundle();
-                    Uargs.putString("msg", "Switching to " + accountTypeArr[position]);
-                    AlertMsgDialogue accountChangerAlertDialogue = new AlertMsgDialogue();
-                    accountChangerAlertDialogue.setItemChoiceListener(new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            Toast.makeText(myMainActivity, "Switching ...", Toast.LENGTH_SHORT).show();
+                    if(position == 2){
+                        toast("Bootcamp service is under development...");
+                    }else{
+                        Bundle Uargs = new Bundle();
+                        Uargs.putString("msg", "Switching to " + accountTypeArr[position]);
+                        AlertMsgDialogue accountChangerAlertDialogue = new AlertMsgDialogue();
+                        accountChangerAlertDialogue.setItemChoiceListener((dialogInterface, i) -> {
                             heatMapAccountRecyAda.update(getFinalData(position));
-                        }
-                    });
-                    accountChangerAlertDialogue.setArguments(Uargs);
-                    accountChangerAlertDialogue.show(myMainActivity.getSupportFragmentManager(), "accountChangerAlertDialogue");
+                            String toChange = accountTypeArr[position].equals("Mentor") ? DumeUtils.TEACHER : accountTypeArr[position].equals("Student") ? DumeUtils.STUDENT : accountTypeArr[position];
+                            if (toChange.equals("Boot Camp")) {
+                                toast("Bootcamp service is under development.");
+                            } else {
+                                Toast.makeText(myMainActivity, "Switching ...", Toast.LENGTH_SHORT).show();
+                                new DumeModel(context).switchAcount(toChange, new TeacherContract.Model.Listener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        if (toChange.equals(DumeUtils.TEACHER))
+                                            gotoTeacherActivity();
+                                        else if (toChange.equals(DumeUtils.STUDENT))
+                                            gotoStudentActivity();
+                                    }
 
+                                    @Override
+                                    public void onError(String msg) {
+                                        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            }
+                        });
+                        accountChangerAlertDialogue.setArguments(Uargs);
+                        accountChangerAlertDialogue.show(myMainActivity.getSupportFragmentManager(), "accountChangerAlertDialogue");
+                    }
                 }
             };
             accountChangerRecycler.setAdapter(heatMapAccountRecyAda);
@@ -424,6 +477,13 @@ public class AccountSettings extends AppCompatActivity implements AccountSetting
             return data;
         }
 
+        public void toast(String msg) {
+            Toast toast = Toast.makeText(context, msg, Toast.LENGTH_SHORT);
+            TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
+            if( v != null) v.setGravity(Gravity.CENTER);
+            toast.show();
+        }
+
         @Override
         public boolean onOptionsItemSelected(MenuItem item) {
             int id = item.getItemId();
@@ -438,7 +498,7 @@ public class AccountSettings extends AppCompatActivity implements AccountSetting
 
     //Saved places fragment here
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public static class SavedPlacesFragment extends Fragment{
+    public static class SavedPlacesFragment extends Fragment {
 
         private AccountSettings myMainActivity;
         private RecyclerView savedPlacesRecycler;
@@ -605,10 +665,7 @@ class BadgeAdapter extends RecyclerView.Adapter<BadgeAdapter.BadgeImageHolder> {
     }
 
 
-
 }
-
-
 
 
 class EducationAdapter extends RecyclerView.Adapter<EducationAdapter.MyViewVH> {
