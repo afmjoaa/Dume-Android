@@ -48,6 +48,7 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -972,7 +973,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         TextView ratingPrimaryText = dialog.findViewById(R.id.rating_primary_text);
         TextView ratingSecondaryText = dialog.findViewById(R.id.rating_secondary_text);
         TextInputLayout feedbackTextViewLayout = dialog.findViewById(R.id.input_layout_firstname);
-        AutoCompleteTextView feedbackTextView = dialog.findViewById(R.id.feedback_textview);
+        EditText feedbackTextView = dialog.findViewById(R.id.feedback_textview);
         Button dismissBtn = (Button) dialog.findViewById(R.id.skip_btn);
         Button dismissBtnOne = (Button) dialog.findViewById(R.id.skip_btn_two);
         Button nextSubmitBtn = dialog.findViewById(R.id.next_btn);

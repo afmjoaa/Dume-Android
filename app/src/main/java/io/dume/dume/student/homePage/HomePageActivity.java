@@ -49,6 +49,7 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -62,7 +63,6 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -78,11 +78,14 @@ import java.util.Map;
 import java.util.Objects;
 
 import info.hoang8f.android.segmented.SegmentedGroup;
+import io.dume.dume.Google;
 import io.dume.dume.R;
 import io.dume.dume.bootCamp.bootCampHomePage.BootCampHomePageActivity;
 import io.dume.dume.common.aboutUs.AboutUsActivity;
+import io.dume.dume.common.chatActivity.DemoModel;
 import io.dume.dume.common.inboxActivity.InboxActivity;
 import io.dume.dume.common.privacyPolicy.PrivacyPolicyActivity;
+import io.dume.dume.customView.HorizontalLoadView;
 import io.dume.dume.customView.HorizontalLoadViewTwo;
 import io.dume.dume.model.DumeModel;
 import io.dume.dume.obligation.foreignObli.PayActivity;
@@ -103,6 +106,7 @@ import io.dume.dume.student.pojo.CusStuAppComMapActivity;
 import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
 import io.dume.dume.student.pojo.SearchDataStore;
 import io.dume.dume.student.profilePage.ProfilePageActivity;
+import io.dume.dume.student.recordsPage.Record;
 import io.dume.dume.student.recordsPage.RecordsPageActivity;
 import io.dume.dume.student.searchLoading.SearchLoadingActivity;
 import io.dume.dume.student.searchResult.SearchResultActivity;
@@ -111,7 +115,6 @@ import io.dume.dume.student.studentPayment.StudentPaymentActivity;
 import io.dume.dume.student.studentSettings.StudentSettingsActivity;
 import io.dume.dume.teacher.homepage.TeacherActivtiy;
 import io.dume.dume.teacher.homepage.TeacherContract;
-import io.dume.dume.teacher.mentor_settings.basicinfo.EditAccount;
 import io.dume.dume.util.DumeUtils;
 import io.dume.dume.util.NetworkUtil;
 import me.zhanghai.android.materialratingbar.MaterialRatingBar;
@@ -192,7 +195,7 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
     private TextView promotionTextView;
     private Snackbar mySnackbar;
     private CoordinatorLayout coordiHackFab;
-    private HorizontalLoadViewTwo loadView;
+    private HorizontalLoadViewTwo loadViewOne;
     private NestedScrollView bottomSheetNSV;
     private RecyclerView recentSearchRV;
     private RecentSearchAdapter recentSearchAdapter;
@@ -202,6 +205,8 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
     private HomePageRecyclerAdapter hPageBSRcyclerAdapter;
     private Snackbar enamSnackbar;
     private LinearLayout mentorAddLayout;
+    private HomePageModel mModel;
+    private HorizontalLoadView loadView;
 
 
     @Override
@@ -258,7 +263,8 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
         //findLoadView();
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         getLocationPermission(mapFragment);
-        mPresenter = new HomePagePresenter(this, new HomePageModel(this, this));
+        mModel = new HomePageModel(this, this);
+        mPresenter = new HomePagePresenter(this, mModel);
         mPresenter.homePageEnqueue();
         settingStatusBarTransparent();
         setDarkStatusBarIcon();
@@ -271,6 +277,7 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
 //        startService(locationServiceIntent);
         if (hPageBSRcyclerAdapter == null) {
             hPageBSRcyclerAdapter = new HomePageRecyclerAdapter(this, new ArrayList<>());
+            hPageBSRcyclerAdapter.setWindow(getWindow());
             hPageBSRecycler.setAdapter(hPageBSRcyclerAdapter);
             hPageBSRecycler.setLayoutManager(new LinearLayoutManager(this));
         }
@@ -313,6 +320,7 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
 
     @Override
     public void findView() {
+        loadView = findViewById(R.id.loadView);
         switchAcountBtn = findViewById(R.id.switch_account_btn);
         nestedScrollViewContent = findViewById(R.id.s_R_Layout);
         fab = findViewById(R.id.fab);
@@ -365,7 +373,7 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
         doMoreDetailTextView = findViewById(R.id.make_money_mentoring);
         promotionTextView = findViewById(R.id.promotion_text);
         promotionValidityTextView = findViewById(R.id.promotion_validity_text);
-        loadView = findViewById(R.id.loadViewTwo);
+        loadViewOne = findViewById(R.id.loadViewTwo);
         bottomSheetNSV = findViewById(R.id.bottom_sheet_scroll_view);
         recentSearchRV = findViewById(R.id.recent_search_recycler);
         enamSnackbar = Snackbar.make(coordinatorLayout, "Replace with your own action", Snackbar.LENGTH_LONG);
@@ -1084,11 +1092,14 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
 
     //testing the customDialogue
     @Override
-    public void testingCustomDialogue(HomePageRatingData myData) {
+    public void testingCustomDialogue(HomePageRatingData myData, Record record) {
         // custom dialog
+        String keyToChange = "s_rate_status";
         Dialog dialog = new Dialog(context);
         dialog.setContentView(R.layout.custom_rating_dialogue);
         dialog.setCanceledOnTouchOutside(false);
+        DocumentSnapshot snapshot = record.getRecordSnap();
+
 
         //all find view here
         MaterialRatingBar mDecimalRatingBars = dialog.findViewById(R.id.rated_mentor_rating_bar);
@@ -1097,7 +1108,7 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
         TextView ratingPrimaryText = dialog.findViewById(R.id.rating_primary_text);
         TextView ratingSecondaryText = dialog.findViewById(R.id.rating_secondary_text);
         TextInputLayout feedbackTextViewLayout = dialog.findViewById(R.id.input_layout_firstname);
-        AutoCompleteTextView feedbackTextView = dialog.findViewById(R.id.feedback_textview);
+        EditText feedbackTextView = dialog.findViewById(R.id.feedback_textview);
         Button dismissBtn = (Button) dialog.findViewById(R.id.skip_btn);
         Button dismissBtnOne = (Button) dialog.findViewById(R.id.skip_btn_two);
         Button nextSubmitBtn = dialog.findViewById(R.id.next_btn);
@@ -1110,8 +1121,6 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
         Glide.with(getApplicationContext()).load(myData.getAvatar()).into(ratedMentorDP);
 
         //testing the recycle view here
-
-
         HomePageRatingAdapter itemRatingRecycleAdapter = new HomePageRatingAdapter(this, myData);
         itemRatingRecycleView.setAdapter(itemRatingRecycleAdapter);
         itemRatingRecycleView.setLayoutManager(new LinearLayoutManager(this));
@@ -1128,12 +1137,12 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
                 if (hasFocus) {
                     int rating = mDecimalRatingBars.getProgress();
                     if (rating <= 100) {
-                        String userName = "Azgor";
+                        String userName = myData.getName();
                         feedbackTextView.setHint("Share how " + userName + " can improve");
                     } else if (rating > 100 && rating <= 200) {
                         feedbackTextView.setHint(feedbackStrings[1]);
                     } else if (rating > 200 && rating <= 300) {
-                        String userName = "Azgor";
+                        String userName = myData.getName();
                         feedbackTextView.setHint("Say something about " + userName);
                     } else if (rating > 300 && rating <= 400) {
                         feedbackTextView.setHint(feedbackStrings[3]);
@@ -1143,19 +1152,6 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
                 } else {
                     feedbackTextView.setHint(feedbackStrings[4]);
                 }
-            }
-        });
-
-        dismissBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-        dismissBtnOne.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
             }
         });
 
@@ -1177,18 +1173,45 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
             }
         });
 
-        SubmitBtn.setOnClickListener(new View.OnClickListener() {
+        SubmitBtn.setOnClickListener(view -> {
+            if (feedbackTextView.getText() != null && feedbackTextView.getText().toString().equals("")) {
+                feedbackTextView.setError("Please write your feedack.");
+            } else if (itemRatingRecycleAdapter.getInputRating() == null) {
+                flush("Make sure you hit the like or dislike thumb");
+            } else {
+                SubmitBtn.setEnabled(false);
+                showProgress();
+                mModel.submitRating(snapshot.getId(), snapshot.getString("skill_uid"), new DemoModel(context).opponentUid((List<String>) snapshot.get("participants")),
+                        Google.getInstance().getAccountMajor(), itemRatingRecycleAdapter.getInputRating(), mDecimalRatingBars.getRating(), feedbackTextView.getText().toString(), new TeacherContract.Model.Listener<Void>() {
+                            @Override
+                            public void onSuccess(Void list) {
+                                hideProgress();
+                                SubmitBtn.setEnabled(true);
+                                flush("from inside submitteed");
+                            }
+
+                            @Override
+                            public void onError(String msg) {
+                                flush(msg);
+                                hideProgress();
+                                SubmitBtn.setEnabled(true);
+                            }
+                        });
+                dialog.dismiss();
+            }
+        });
+
+        dismissBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                if (feedbackTextView == null && feedbackTextView.getText().equals("")) {
-                    feedbackTextView.setError("Please write your feedack.");
-                } else if (itemRatingRecycleAdapter.getInputRating() == null) {
-                    flush("Make sure you hit the like or dislike thumb");
-                } else {
-
-                }
-
-
+            public void onClick(View v) {
+                mModel.changeRecordStatus(snapshot.getId(), keyToChange, Record.BOTTOM_SHEET);
+                dialog.dismiss();
+            }
+        });
+        dismissBtnOne.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mModel.changeRecordStatus(snapshot.getId(), keyToChange, Record.BOTTOM_SHEET);
                 dialog.dismiss();
             }
         });
@@ -1213,7 +1236,7 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
     public void flush(String msg) {
         Toast toast = Toast.makeText(this, msg, Toast.LENGTH_SHORT);
         TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
-        if( v != null) v.setGravity(Gravity.CENTER);
+        if (v != null) v.setGravity(Gravity.CENTER);
         toast.show();
     }
 
@@ -1491,8 +1514,28 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
 
     @Override
     public void showProgress() {
+        if (loadViewOne.getVisibility() == View.INVISIBLE || loadViewOne.getVisibility() == View.GONE) {
+            loadViewOne.setVisibility(View.VISIBLE);
+        }
+        if (!loadViewOne.isRunningAnimation()) {
+            loadViewOne.startLoading();
+        }
+    }
+
+    @Override
+    public void hideProgress() {
+        if (loadViewOne.isRunningAnimation()) {
+            loadViewOne.stopLoading();
+        }
+        if (loadViewOne.getVisibility() == View.VISIBLE) {
+            loadViewOne.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    @Override
+    public void showProgressTwo() {
         if (loadView.getVisibility() == View.INVISIBLE || loadView.getVisibility() == View.GONE) {
-            loadView.setVisibility(View.VISIBLE);
+            loadViewOne.setVisibility(View.VISIBLE);
         }
         if (!loadView.isRunningAnimation()) {
             loadView.startLoading();
@@ -1500,7 +1543,7 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
     }
 
     @Override
-    public void hideProgress() {
+    public void hideProgressTwo() {
         if (loadView.isRunningAnimation()) {
             loadView.stopLoading();
         }

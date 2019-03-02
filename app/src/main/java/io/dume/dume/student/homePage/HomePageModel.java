@@ -8,11 +8,13 @@ import android.util.Log;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.ServerTimestamp;
 
@@ -28,15 +30,19 @@ import io.dume.dume.Google;
 import io.dume.dume.model.DumeModel;
 import io.dume.dume.student.grabingLocation.MenualRecyclerData;
 import io.dume.dume.student.homePage.adapter.HomePageRecyclerData;
+import io.dume.dume.student.pojo.SearchDataStore;
 import io.dume.dume.student.pojo.StuBaseModel;
 import io.dume.dume.student.recordsPage.Record;
 import io.dume.dume.teacher.homepage.TeacherContract;
+import io.dume.dume.teacher.homepage.TeacherDataStore;
 import io.dume.dume.util.DumeUtils;
 
 public class HomePageModel extends StuBaseModel implements HomePageContract.Model {
     private Context context;
     private Activity activity;
     private static final String TAG = "HomePageModel";
+    private ListenerRegistration registration;
+    private String name;
 
     public HomePageModel(Activity activity, Context context) {
         super(context);
@@ -58,20 +64,20 @@ public class HomePageModel extends StuBaseModel implements HomePageContract.Mode
 
         Map<String, Object> promoMap = new HashMap<>();
 
-        promoMap.put("title",promoData.getTitle());
-        promoMap.put("description",promoData.getDescription());
-        promoMap.put("sub_description",promoData.getSub_description());
-        promoMap.put("expirity",promoData.getExpirity());
-        promoMap.put("start_date",promoData.getStart_date());
-        promoMap.put("max_dicount_percentage",promoData.getMax_dicount_percentage());
-        promoMap.put("max_discount_credit",promoData.getMax_discount_credit());
-        promoMap.put("max_tution_count",promoData.getMax_tution_count());
-        promoMap.put("promo_image",promoData.getPromo_image());
-        promoMap.put("product",promoData.getProduct());
-        promoMap.put("promo_code",promoData.getPromo_code());
-        promoMap.put("promo_for",promoData.getPromo_for());
-        promoMap.put("expired",promoData.isExpired());
-        promoMap.put("criteria",promoData.getCriteria());
+        promoMap.put("title", promoData.getTitle());
+        promoMap.put("description", promoData.getDescription());
+        promoMap.put("sub_description", promoData.getSub_description());
+        promoMap.put("expirity", promoData.getExpirity());
+        promoMap.put("start_date", promoData.getStart_date());
+        promoMap.put("max_dicount_percentage", promoData.getMax_dicount_percentage());
+        promoMap.put("max_discount_credit", promoData.getMax_discount_credit());
+        promoMap.put("max_tution_count", promoData.getMax_tution_count());
+        promoMap.put("promo_image", promoData.getPromo_image());
+        promoMap.put("product", promoData.getProduct());
+        promoMap.put("promo_code", promoData.getPromo_code());
+        promoMap.put("promo_for", promoData.getPromo_for());
+        promoMap.put("expired", promoData.isExpired());
+        promoMap.put("criteria", promoData.getCriteria());
 
 
         firestore.collection(path).document(FirebaseAuth.getInstance().getUid())
@@ -115,16 +121,25 @@ public class HomePageModel extends StuBaseModel implements HomePageContract.Mode
 
         String keyToChange;
         String path;
+        name = "";
 
         if (myAccountType == DumeUtils.TEACHER) {
             keyToChange = "ts_rate_status";
             path = "/users/students/stu_pro_info";
+            name = TeacherDataStore.getInstance().gettUserName();
+
         } else {
             keyToChange = "s_rate_status";
             path = "/users/mentors/mentor_profile";
+            name = SearchDataStore.getInstance().getUserName();
+
         }
-        firestore.collection("records").document(record_id).update(keyToChange, Record.DONE);
+        changeRecordStatus(record_id, keyToChange, Record.DONE);
+
         firestore.collection(path).document(opponent_uid).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+
+            private ListenerRegistration registration;
+
             @Override
             public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
                 if (documentSnapshot == null) {
@@ -182,11 +197,8 @@ public class HomePageModel extends StuBaseModel implements HomePageContract.Mode
                                 dl_behaviour = dl_behaviour + 1;
 
                             }
-
                             break;
                     }
-
-
                 }
 
 
@@ -205,41 +217,51 @@ public class HomePageModel extends StuBaseModel implements HomePageContract.Mode
                 documentSnapshot.getReference().update("self_rating", self_rating);
 
 
-                firestore.collection("/users/mentors/skills/").document(skill_id).addSnapshotListener(new EventListener<DocumentSnapshot>() {
-                    @Override
-                    public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-                        if (myAccountType == DumeUtils.STUDENT) {
-                            Map<String, Integer> likes = (Map<String, Integer>) documentSnapshot.get("likes");
-                            Map<String, Integer> dislikes = (Map<String, Integer>) documentSnapshot.get("dislikes");
-                            for (Map.Entry<String, Integer> entry : likes.entrySet()) {
-                                final Boolean aBoolean = inputRating.get(entry.getKey());
-                                if (aBoolean) {
-                                    Integer value = entry.getValue();
-                                    likes.put(entry.getKey(), ++value);
+                if (myAccountType.equals(DumeUtils.STUDENT)) {
+                    registration = firestore.collection("/users/mentors/skills/").document(skill_id).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+
+                        @Override
+                        public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                            if (myAccountType == DumeUtils.STUDENT) {
+                                Map<String, Number> dblikes = (Map<String, Number>) documentSnapshot.get("likes");
+                                Map<String, Number> likes = dblikes;
+                                Map<String, Number> dbdislikes = (Map<String, Number>) documentSnapshot.get("dislikes");
+                                Map<String, Number> dislikes = dbdislikes;
+                                for (Map.Entry<String, Number> entry : dblikes.entrySet()) {
+                                    Boolean aBoolean = inputRating.get(entry.getKey());
+                                    if (aBoolean) {
+                                        Number value = entry.getValue();
+                                        value = 1 + value.longValue();
+                                        likes.put(entry.getKey(), value);
+                                    }
                                 }
-                            }
-                            for (Map.Entry<String, Integer> entry : dislikes.entrySet()) {
-                                final Boolean aBoolean = inputRating.get(entry.getKey());
-                                if (!aBoolean) {
-                                    Integer value = entry.getValue();
-                                    dislikes.put(entry.getKey(), ++value);
+                                for (Map.Entry<String, Number> entry : dbdislikes.entrySet()) {
+                                    final Boolean aBoolean = inputRating.get(entry.getKey());
+                                    if (!aBoolean) {
+                                        Number value = entry.getValue();
+                                        value = 1 + value.longValue();
+                                        dislikes.put(entry.getKey(), value);
+                                    }
                                 }
+                                listener.onSuccess(null);
+
+                                registration.remove();
+                                firestore.collection("/users/mentors/skills/").document(skill_id).update("sp_info.self_rating", self_rating, "likes", likes, "dislikes", dislikes);
                             }
-                            firestore.collection("/users/mentors/skills/").document(skill_id).update("sp_info.self_rating", self_rating, "likes", likes, "dislikes", dislikes);
                         }
-                    }
-                });
+                    });
+                }
+
+
                 Map<String, Object> reviewMap = new HashMap<>();
                 reviewMap.put("body", feedbackString);
                 reviewMap.put("dislikes", 0);
                 reviewMap.put("likes", 0);
-                reviewMap.put("name", "Foo will be replaced");
+                reviewMap.put("name", name);
                 reviewMap.put("r_avatar", "avatar");
                 reviewMap.put("reviewer_rating", inputStar);
                 reviewMap.put("time", FieldValue.serverTimestamp());
                 firestore.collection("/users/mentors/skills/").document(skill_id).collection("reviews").add(reviewMap);
-
-
             }
         });
 
@@ -287,6 +309,7 @@ public class HomePageModel extends StuBaseModel implements HomePageContract.Mode
                         Record record = new Record(mentorName, studentName, salaryInDemand, subjectExchange, creation, mentorDpUrl, studentDpUrl, studentRating, mentorRating, status, Record.DELIVERED, sGender, mGender);
                         record.setT_rate_status(documentSnapshot.getString("t_rate_status"));
                         record.setS_rate_status(documentSnapshot.getString("s_rate_status"));
+                        record.setRecordSnap(documentSnapshot);
                         listener.onSuccess(record);
 
                     } else listener.onError("No record found.");
@@ -314,6 +337,10 @@ public class HomePageModel extends StuBaseModel implements HomePageContract.Mode
                 listener.onError(e.getLocalizedMessage());
             }
         });
+    }
+
+    public void changeRecordStatus(String record_id, String keyToChange, String status) {
+        firestore.collection("records").document(record_id).update(keyToChange, status);
     }
 
 }

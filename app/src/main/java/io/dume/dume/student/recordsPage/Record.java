@@ -1,5 +1,7 @@
 package io.dume.dume.student.recordsPage;
 
+import com.google.firebase.firestore.DocumentSnapshot;
+
 import java.util.Date;
 
 public class Record {
@@ -15,6 +17,15 @@ public class Record {
     String mentorDpUrl;
     String studentDpUrl;
     float studentRating;
+
+    public DocumentSnapshot getRecordSnap() {
+        return recordSnap;
+    }
+
+    public void setRecordSnap(DocumentSnapshot recordSnap) {
+        this.recordSnap = recordSnap;
+    }
+
     float mentorRating;
     String status;
     int deliveryStatus;
@@ -22,6 +33,7 @@ public class Record {
     String t_rate_status;
     String s_rate_status;
 
+    DocumentSnapshot recordSnap;
     public Record(String mentorName, String studentName, String salaryInDemand, String subjectExchange, Date date, String mentorDpUrl, String studentDpUrl, float studentRating, float mentorRating, String status, int deliveryStatus, String studentGender, String mentorGender) {
         this.mentorName = mentorName;
         this.studentName = studentName;

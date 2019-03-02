@@ -11,8 +11,12 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -20,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.transitionseverywhere.Fade;
 import com.transitionseverywhere.Slide;
 import com.transitionseverywhere.TransitionManager;
@@ -30,7 +35,12 @@ import java.util.List;
 
 import io.dume.dume.Google;
 import io.dume.dume.R;
+import io.dume.dume.common.chatActivity.DemoModel;
+import io.dume.dume.student.homePage.HomePageActivity;
 import io.dume.dume.student.homePage.HomePageModel;
+import io.dume.dume.student.recordsPage.Record;
+import io.dume.dume.teacher.homepage.TeacherActivityMock;
+import io.dume.dume.teacher.homepage.TeacherActivtiy;
 import io.dume.dume.teacher.homepage.TeacherContract;
 import me.zhanghai.android.materialratingbar.MaterialRatingBar;
 
@@ -43,9 +53,19 @@ public class HomePageRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
     private List<HomePageRecyclerData> data;
     private String[] feedbackStrings;
     private final int promoStart;
+    private final HomePageModel homePageModel;
+    private Window window;
 
+    public Window getWindow() {
+        return window;
+    }
+
+    public void setWindow(Window window) {
+        this.window = window;
+    }
 
     public HomePageRecyclerAdapter(Context context, List<HomePageRecyclerData> data) {
+
         inflater = LayoutInflater.from(context);
         this.data = data;
         this.ratingData = new ArrayList<>();
@@ -53,6 +73,7 @@ public class HomePageRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
         promoStart = 9000;
         //  totalCount = data.size() + ratingData.size();
         feedbackStrings = context.getResources().getStringArray(R.array.review_hint_text_dependent);
+        homePageModel = new HomePageModel((Activity) context, context);
     }
 
     @Override
@@ -62,6 +83,7 @@ public class HomePageRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
         }
         return super.getItemViewType(position);
     }
+
 
     @NonNull
     @Override
@@ -142,12 +164,12 @@ public class HomePageRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
                     if (hasFocus) {
                         int rating = headerVH.mDecimalRatingBars.getProgress();
                         if (rating <= 100) {
-                            String userName = "Azgor";
+                            String userName =  ratingData.get(position).getName();
                             headerVH.feedbackTextView.setHint("Share how " + userName + " can improve");
                         } else if (rating > 100 && rating <= 200) {
                             headerVH.feedbackTextView.setHint(feedbackStrings[1]);
                         } else if (rating > 200 && rating <= 300) {
-                            String userName = "Azgor";
+                            String userName =  ratingData.get(position).getName();
                             headerVH.feedbackTextView.setHint("Say something about " + userName);
                         } else if (rating > 300 && rating <= 400) {
                             headerVH.feedbackTextView.setHint(feedbackStrings[3]);
@@ -172,19 +194,71 @@ public class HomePageRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
 
                         headerVH.firstLayout.setVisibility(View.GONE);
                         headerVH.secondLayout.setVisibility(View.VISIBLE);
-
+                        headerVH.smallTitle.setVisibility(View.GONE);
                     } else {
                         Toast.makeText(context, "please rate your experience", Toast.LENGTH_SHORT).show();
                     }
                 }
             });
 
+
+
+
             headerVH.submitBtn.setOnClickListener(view -> {
-                //removeAt(holder.getAdapterPosition());
-                this.removeRatingItem(position);
+                if (headerVH.feedbackTextView.getText() != null && headerVH.feedbackTextView.getText().toString().equals("")) {
+                    headerVH.feedbackTextView.setError("Please write your feedback...");
+                } else if (itemRatingRecycleAdapter.getInputRating() == null) {
+                    flush("Make sure you hit the like or dislike thumb");
+                } else {
+                    if (context instanceof HomePageActivity) {
+                        HomePageActivity myAct = (HomePageActivity) context;
+                        myAct.showProgressTwo();
+
+                    } else if (context instanceof TeacherActivtiy) {
+                        TeacherActivtiy myAct = (TeacherActivtiy) context;
+                        //myAct.showProgressTwo();
+                    }
+                    headerVH.submitBtn.setEnabled(false);
+                    HomePageRatingData homePageRatingData = ratingData.get(position);
+                    Record record = homePageRatingData.getRecord();
+                    DocumentSnapshot snapshot = record.getRecordSnap();
+                    homePageModel.submitRating(snapshot.getId(), snapshot.getString("skill_uid"), new DemoModel(context).opponentUid((List<String>) snapshot.get("participants")),
+                            Google.getInstance().getAccountMajor(), itemRatingRecycleAdapter.getInputRating(), headerVH.mDecimalRatingBars.getRating(), headerVH.feedbackTextView.getText().toString(), new TeacherContract.Model.Listener<Void>() {
+                                @Override
+                                public void onSuccess(Void list) {
+                                    removeRatingItem(position);
+                                    headerVH.submitBtn.setEnabled(true);
+                                    flush("done submitting inside");
+                                    if (context instanceof HomePageActivity) {
+                                        HomePageActivity myAct = (HomePageActivity) context;
+                                        myAct.hideProgressTwo();
+
+                                    } else if (context instanceof TeacherActivtiy) {
+                                        TeacherActivtiy myAct = (TeacherActivtiy) context;
+                                        //myAct.showProgressTwo();
+                                    }
+
+                                }
+
+                                @Override
+                                public void onError(String msg) {
+                                    flush(msg);
+                                    removeRatingItem(position);
+                                    headerVH.submitBtn.setEnabled(true);
+                                }
+                            });
+                }
             });
 
+
         }
+    }
+
+    public void flush(String msg) {
+        Toast toast = Toast.makeText(context, msg, Toast.LENGTH_SHORT);
+        TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
+        if (v != null) v.setGravity(Gravity.CENTER);
+        toast.show();
     }
 
     public void removeAt(int position) {
@@ -206,9 +280,11 @@ public class HomePageRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
     }
 
     public void removeRatingItem(int postion) {
-        ratingData.remove(postion);
-        notifyItemRemoved(postion);
-        notifyDataSetChanged();
+        if(ratingData.size()>0 && postion<ratingData.size()){
+            ratingData.remove(postion);
+            notifyItemRemoved(postion);
+            notifyDataSetChanged();
+        }
     }
 
     public void addPromoToList(HomePageRecyclerData promoData) {
@@ -251,7 +327,7 @@ public class HomePageRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
         private final TextView ratingPrimaryText;
         private final TextView ratingSecondaryText;
         private final TextInputLayout feedbackTextViewLayout;
-        private final AutoCompleteTextView feedbackTextView;
+        private final EditText feedbackTextView;
         private final Button dismissBtn;
         private final Button dismissBtnOne;
         private final Button nextSubmitBtn;

@@ -1,8 +1,10 @@
 package io.dume.dume.student.studentHelp;
 
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -25,7 +27,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,6 +38,8 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,16 +47,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import io.dume.dume.Google;
 import io.dume.dume.R;
 import io.dume.dume.common.appInfoActivity.AppInfoActivity;
 import io.dume.dume.common.privacyPolicy.PrivacyPolicyActivity;
+import io.dume.dume.model.DumeModel;
 import io.dume.dume.student.common.SettingData;
 import io.dume.dume.student.common.SettingsAdapter;
 import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
+import io.dume.dume.student.pojo.SearchDataStore;
 import io.dume.dume.student.studentSettings.SavedPlacesAdaData;
 import io.dume.dume.student.studentSettings.SavedPlacesAdapter;
 import io.dume.dume.student.studentSettings.StudentSettingsActivity;
+import io.dume.dume.teacher.homepage.TeacherContract;
+import io.dume.dume.teacher.homepage.TeacherDataStore;
 import io.dume.dume.util.AlertMsgDialogue;
+import io.dume.dume.util.DumeUtils;
 
 import static io.dume.dume.util.DumeUtils.configAppbarTittle;
 import static io.dume.dume.util.DumeUtils.configureAppbar;
@@ -281,11 +293,21 @@ public class StudentHelpActivity extends CustomStuAppCompatActivity implements S
 
         private StudentHelpActivity myMainActivity;
         private AutoCompleteTextView queryTextView;
+        private Context context;
+        private DumeModel dumeModel;
 
         @Override
         public void onCreate(@Nullable Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             setHasOptionsMenu(true);
+            dumeModel = new DumeModel(context);
+        }
+
+        @Override
+        public void onAttach(Context context) {
+            this.context = context;
+            super.onAttach(context);
+
         }
 
         @Nullable
@@ -294,15 +316,67 @@ public class StudentHelpActivity extends CustomStuAppCompatActivity implements S
             myMainActivity = (StudentHelpActivity) getActivity();
             View rootView = inflater.inflate(R.layout.custom_contact_up_fragment, container, false);
             queryTextView = rootView.findViewById(R.id.feedback_textview);
+            Button submitBTN = rootView.findViewById(R.id.submit_btn);
+            Button readFaqBTN = rootView.findViewById(R.id.skip_btn);
+            TextView limit = rootView.findViewById(R.id.limitTV);
+            queryTextView.setOnFocusChangeListener((v, hasFocus) -> {
+                if (hasFocus) {
+                    queryTextView.setHint("Please describe your problem");
+                } else {
+                    queryTextView.setHint("Please describe your problem");
+                }
+            });
 
-            queryTextView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                public void onFocusChange(View v, boolean hasFocus) {
-                    if (hasFocus) {
-                        queryTextView.setHint("Please describe your problem");
+            queryTextView.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+                    if (editable.toString().length() >= 200) {
+                        limit.setText(editable.toString().length() + "/200");
+                        limit.setTextColor(Color.RED);
                     } else {
-                        queryTextView.setHint("Please describe your problem");
+                        limit.setText(editable.toString().length() + "/200");
+                        limit.setTextColor(Color.BLACK);
                     }
                 }
+            });
+            submitBTN.setOnClickListener(view -> {
+                submitBTN.setEnabled(false);
+
+                myMainActivity.showProgress();
+                if (!queryTextView.getText().toString().equals("")) {
+                    dumeModel.reportIssue(Google.getInstance().getAccountMajor().equals(DumeUtils.STUDENT) ? SearchDataStore.getInstance().getUserMail() : TeacherDataStore.getInstance().gettUserMail(), queryTextView.getText().toString(), new TeacherContract.Model.Listener<Void>() {
+                        @Override
+                        public void onSuccess(Void list) {
+                            submitBTN.setEnabled(true);
+
+                            Toast.makeText(myMainActivity, "Your message is sent to Dume authority. You will be notified by your email : " + SearchDataStore.getInstance().getUserMail(), Toast.LENGTH_LONG).show();
+                            myMainActivity.hideProgress();
+                        }
+
+                        @Override
+                        public void onError(String msg) {
+                            myMainActivity.hideProgress();
+                            Toast.makeText(myMainActivity, msg, Toast.LENGTH_SHORT).show();
+                            submitBTN.setEnabled(true);
+
+
+                        }
+                    });
+                }
+                queryTextView.getText().clear();
+            });
+            readFaqBTN.setOnClickListener(view -> {
+
             });
             return rootView;
         }
@@ -350,7 +424,7 @@ public class StudentHelpActivity extends CustomStuAppCompatActivity implements S
             if (id == android.R.id.home) {
                 if (webView.canGoBack()) {
                     webView.goBack();
-                }else {
+                } else {
                     startActivity(new Intent(getActivity(), StudentHelpActivity.class));
                 }
                 return true;

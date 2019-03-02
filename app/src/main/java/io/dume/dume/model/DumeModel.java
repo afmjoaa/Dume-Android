@@ -18,12 +18,15 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.Transaction;
+import com.google.firebase.firestore.WriteBatch;
 
 import org.imperiumlabs.geofirestore.GeoFirestore;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Nullable;
 
@@ -42,6 +45,7 @@ public class DumeModel extends HomePageModel implements TeacherModel {
     private final Context context;
     private CollectionReference skillCollection;
     private final GeoFirestore geoFirestore;
+    private WriteBatch batch;
 
     public DumeModel(Context context) {
         super((Activity) context, context);
@@ -50,6 +54,7 @@ public class DumeModel extends HomePageModel implements TeacherModel {
         firebaseAuth = FirebaseAuth.getInstance();
         skillCollection = firebaseFirestore.collection("users").document("mentors").collection("skills");
         geoFirestore = new GeoFirestore(skillCollection);
+        batch = firebaseFirestore.batch();
     }
 
     public void switchAcount(String to, TeacherContract.Model.Listener<Void> listener) {
@@ -210,6 +215,36 @@ public class DumeModel extends HomePageModel implements TeacherModel {
         firestore.collection("push_notifications").document(doc_id).update("seen", true).addOnSuccessListener((Activity) context, aVoid -> listener.onSuccess(true)).addOnFailureListener(e -> listener.onError(e.getLocalizedMessage()));
     }
 
+
+    public void reportIssue(String usermail, String issue, TeacherContract.Model.Listener<Void> listener) {
+
+        HashMap<String, Object> data = new HashMap<>();
+        data.put("body", issue);
+        data.put("email", usermail);
+        firestore.collection("contact").add(data).addOnSuccessListener((Activity) context, aVoid -> listener.onSuccess(null)).addOnFailureListener(e -> listener.onError(e.getLocalizedMessage()));
+
+
+    }
+
+    public void rateStudent(String realRating, String student_uid, String feedback, Map<String, Boolean> inputLikesOrDislikes, TeacherContract.Model.Listener<Void> listener) {
+
+        /*write to student profile */
+
+        /* write to self-profile */
+    }
+
+    public void rateMentor(String realRating, String mentor_uid, String feedback, Map<String, Boolean> inputLikesOrDislikes, TeacherContract.Model.Listener<Void> listener) {
+
+
+        DocumentReference mentorProfRef = firebaseFirestore.collection("users/mentors/mentor_profile").document(mentor_uid);
+        /*write to mentor Profile */
+
+        /*write to skill */
+
+
+        /* write to self-profile */
+
+    }
 
 
 }

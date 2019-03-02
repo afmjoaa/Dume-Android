@@ -89,6 +89,18 @@
         app:layout_anchorGravity="top"
         app:rect_color="@color/transparent" />
 
+    <io.dume.dume.customView.HorizontalLoadView
+        android:id="@+id/loadView"
+        android:layout_width="20dp"
+        android:layout_height="3dp"
+        android:background="@drawable/bg_black_bottom_less_round"
+        android:elevation="8dp"
+        android:translationY="2dp"
+        android:visibility="gone"
+        app:layout_anchor="@id/secondary_Appbar"
+        app:layout_anchorGravity="bottom"
+        app:rect_color="@color/transparent" />
+
     <include
         layout="@layout/stu_content_homepage"
         android:layout_width="match_parent"
@@ -113,7 +125,7 @@
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <carbon.widget.LinearLayout
-                android:descendantFocusability="blocksDescendants"
+
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
@@ -123,7 +135,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:visibility="visible">
-
                 </android.support.v7.widget.RecyclerView>
 
                 <LinearLayout

@@ -78,7 +78,7 @@ public interface HomePageContract {
 
 
         //testing the customDialogue
-        void testingCustomDialogue(HomePageRatingData myData);
+        void testingCustomDialogue(HomePageRatingData myData, Record record);
 
         void gotoMentorProfile();
 
@@ -139,6 +139,10 @@ public interface HomePageContract {
         void switchProfileDialog(String identify);
 
         void showPercentSnak(String message, String actionName);
+
+        void showProgressTwo();
+
+        void hideProgressTwo();
 
         void gotoTestingActivity();
 

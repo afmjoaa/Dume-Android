@@ -283,7 +283,7 @@ public class DemoModel {
         });
     }
 
-    private String opponentUid(List<String> participants) {
+    public String opponentUid(List<String> participants) {
         String foo = participants.get(0);
         String bar = participants.get(1);
         if (foo.equals(FirebaseAuth.getInstance().getUid())) return bar;

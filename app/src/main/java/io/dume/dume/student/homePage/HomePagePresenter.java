@@ -302,8 +302,9 @@ public class HomePagePresenter implements HomePageContract.Presenter {
                             int finalI = i;
                             mModel.getSingleRecords(ratingArray.get(i), new TeacherContract.Model.Listener<Record>() {
                                 @Override
-                                public void onSuccess(Record list) {
-                                    String s_rate_status = list.getS_rate_status();
+                                public void onSuccess(Record record) {
+
+                                    String s_rate_status = record.getS_rate_status();
                                     switch (s_rate_status) {
                                         case Record.DIALOG:
                                             HomePageRatingData ratingDataList = new HomePageRatingData();
@@ -312,14 +313,14 @@ public class HomePagePresenter implements HomePageContract.Presenter {
                                             ratingDataItemName.add("Experience");
                                             ratingDataItemName.add("Communication");
                                             ratingDataItemName.add("Behaviour");
-                                            String subjectExchange[] = list.getSubjectExchange().split("\\s*(=>|,|\\s)\\s*");
+                                            String subjectExchange[] = record.getSubjectExchange().split("\\s*(=>|,|\\s)\\s*");
                                             for (int j = 0; j < subjectExchange.length; j++) {
                                                 ratingDataItemName.add(subjectExchange[j]);
                                             }
                                             ratingDataList.setRatingNameList(ratingDataItemName);
-                                            ratingDataList.setName(list.getMentorName());
-                                            ratingDataList.setAvatar(list.getMentorDpUrl());
-                                            mView.testingCustomDialogue(ratingDataList);
+                                            ratingDataList.setName(record.getMentorName());
+                                            ratingDataList.setAvatar(record.getMentorDpUrl());
+                                            mView.testingCustomDialogue(ratingDataList, record);
                                             break;
                                         case Record.BOTTOM_SHEET:
                                             HomePageRatingData currentRatingDataList = new HomePageRatingData();
@@ -328,11 +329,12 @@ public class HomePagePresenter implements HomePageContract.Presenter {
                                             currentRatingDataItemName.add("Experience");
                                             currentRatingDataItemName.add("Communication");
                                             currentRatingDataItemName.add("Behaviour");
-                                            String newSubjectExchange[] = list.getSubjectExchange().split("\\s*(=>|,|\\s)\\s*");
+                                            String newSubjectExchange[] = record.getSubjectExchange().split("\\s*(=>|,|\\s)\\s*");
                                             currentRatingDataItemName.addAll(Arrays.asList(newSubjectExchange));
                                             currentRatingDataList.setRatingNameList(currentRatingDataItemName);
-                                            currentRatingDataList.setName(list.getMentorName());
-                                            currentRatingDataList.setAvatar(list.getMentorDpUrl());
+                                            currentRatingDataList.setName(record.getMentorName());
+                                            currentRatingDataList.setAvatar(record.getMentorDpUrl());
+                                            currentRatingDataList.setRecord(record);
                                             mView.showSingleBottomSheetRating(currentRatingDataList);
                                             break;
                                         case Record.DONE:
