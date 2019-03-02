@@ -3,13 +3,15 @@ package io.dume.dume.student.heatMap;
 import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.graphics.drawable.Animatable;
+import android.graphics.drawable.Animatable2;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
+import android.os.Build;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.animation.FastOutLinearInInterpolator;
 import android.support.v4.view.animation.LinearOutSlowInInterpolator;
@@ -17,7 +19,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
@@ -32,7 +33,6 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
@@ -51,7 +51,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.InputStream;
-import java.nio.file.attribute.PosixFilePermission;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -128,7 +127,6 @@ public class HeatMapActivity extends CusStuAppComMapActivity implements OnMapRea
         mPresenter = new HeatMapPresenter(this, mModel);
         mPresenter.heatMapEnqueue();
         setSupportActionBar(toolbar);
-
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         getLocationPermission(mapFragment);
@@ -139,62 +137,95 @@ public class HeatMapActivity extends CusStuAppComMapActivity implements OnMapRea
             @Override
             protected void OnAccouItemClicked(View v, int position) {
                 thisPosition = position;
-                //chooseAccouTypeBtn.setCompoundDrawablesWithIntrinsicBounds( imageIcons[position], 0, R.drawable.ic_keyboard_arrow_down_black_24dp, 0);
-                chooseAccouTypeBtn.setText(accountTypeArr[position]);
-                chooseAccouTypeBtn.performClick();
-                heatMapAccountRecyAda.update(getFinalData(position));
-                switch (position) {
-                    case 0:
-                        if (mMap != null) {
-                            mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
-                                @Override
-                                public void onMapLoaded() {
-                                    mProvider = new HeatmapTileProvider.Builder().data(mLists.get(DumeUtils.STUDENT).getData()).build();
-                                    mOverlay = mMap.addTileOverlay(new TileOverlayOptions().tileProvider(mProvider));
-                                }
-                            });
-                        }
-                        break;
-                    case 1:
-                        if (mMap != null) {
-                            mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
-                                @Override
-                                public void onMapLoaded() {
-                                    mProvider = new HeatmapTileProvider.Builder().data(mLists.get(DumeUtils.TEACHER).getData()).build();
-                                    mOverlay = mMap.addTileOverlay(new TileOverlayOptions().tileProvider(mProvider));
-                                }
-                            });
-                        }
-                        break;
-                    case 2:
-                        Toast.makeText(HeatMapActivity.this, "BootCamp is coming soon...", Toast.LENGTH_SHORT).show();
-                        break;
-                    default:
-                        break;
+                showProgress();
+                if (position == 2) {
+                    flush("BootCamp is under development...");
+                    hideProgress();
+                } else {
+                    chooseAccouTypeBtn.setText(accountTypeArr[position]);
+                    chooseAccouTypeBtn.performClick();
+                    heatMapAccountRecyAda.update(getFinalData(position));
+                    switch (position) {
+                        case 0:
+                            if (mMap != null) {
+                                mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+                                    @Override
+                                    public void onMapLoaded() {
+                                        if (mLists.get(DumeUtils.STUDENT) != null) {
+                                            startHeatMap(mMap, DumeUtils.STUDENT);
+                                            hideProgress();
+                                        } else {
+                                            mModel.getStuLocData(new TeacherContract.Model.Listener<DataSet>() {
+                                                @Override
+                                                public void onSuccess(DataSet list) {
+                                                    mLists.put(DumeUtils.STUDENT, list);
+                                                    mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+                                                        @Override
+                                                        public void onMapLoaded() {
+                                                            startHeatMap(mMap, DumeUtils.STUDENT);
+                                                            hideProgress();
+                                                        }
+                                                    });
+                                                }
+
+                                                @Override
+                                                public void onError(String msg) {
+                                                    Log.w(TAG, "onError: " + msg);
+                                                    flush(msg);
+                                                    hideProgress();
+                                                }
+                                            });
+                                        }
+                                    }
+                                });
+                            }
+                            break;
+                        case 1:
+                            if (mMap != null) {
+                                mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+                                    @Override
+                                    public void onMapLoaded() {
+                                        if (mLists.get(DumeUtils.TEACHER) != null) {
+                                            startHeatMap(mMap, DumeUtils.TEACHER);
+                                            hideProgress();
+                                        } else {
+                                            mModel.getMentorLocData(new TeacherContract.Model.Listener<DataSet>() {
+                                                @Override
+                                                public void onSuccess(DataSet list) {
+                                                    mLists.put(DumeUtils.TEACHER, list);
+                                                    mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+                                                        @Override
+                                                        public void onMapLoaded() {
+                                                            startHeatMap(mMap, DumeUtils.TEACHER);
+                                                            hideProgress();
+                                                        }
+                                                    });
+                                                }
+
+                                                @Override
+                                                public void onError(String msg) {
+                                                    Log.w(TAG, "onError: " + msg);
+                                                    flush(msg);
+                                                    hideProgress();
+                                                }
+                                            });
+                                        }
+                                    }
+                                });
+                            }
+                            break;
+                        case 2:
+                            Toast.makeText(HeatMapActivity.this, "BootCamp is coming soon...", Toast.LENGTH_SHORT).show();
+                            break;
+                        default:
+                            break;
+                    }
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(LAT_LNG_BOUNDS, 10));
                 }
-                mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(LAT_LNG_BOUNDS, 10));
-
-
             }
         };
         myAccountRecycler.setAdapter(heatMapAccountRecyAda);
         myAccountRecycler.setLayoutManager(new LinearLayoutManager(this));
-
-
-        mModel.getMentorLocData(new TeacherContract.Model.Listener<DataSet>() {
-            @Override
-            public void onSuccess(DataSet list) {
-                mLists.put(DumeUtils.TEACHER, list);
-
-            }
-
-            @Override
-            public void onError(String msg) {
-                Log.w(TAG, "onError: " + msg);
-
-            }
-        });
-
 
     }
 
@@ -286,13 +317,35 @@ public class HeatMapActivity extends CusStuAppComMapActivity implements OnMapRea
                     viewMusk.setVisibility(View.INVISIBLE);
                     myLoadView.setTranslationY(-8 * getResources().getDisplayMetrics().density);
                     chooseAccouTypeBtn.setCompoundDrawablesWithIntrinsicBounds(imageIcons[thisPosition], 0, R.drawable.ic_keyboard_arrow_down_black_24dp, 0);
-                    /*myAccountRecycler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                        }
-                    }, 500L);*/
+
                 }
-                //.addTransition(new Scale(0.7f))
+                chooseAccouTypeBtn.setEnabled(false);
+                Drawable[] compoundDrawables = chooseAccouTypeBtn.getCompoundDrawables();
+                Drawable d = compoundDrawables[3];
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if (d instanceof Animatable) {
+                        ((Animatable) d).start();
+                    }
+                    ((Animatable2) d).registerAnimationCallback(new Animatable2.AnimationCallback() {
+                        public void onAnimationEnd(Drawable drawable) {
+                            //Do something
+                            if (visible) {
+                                chooseAccouTypeBtn.setCompoundDrawablesWithIntrinsicBounds(imageIcons[thisPosition], 0, R.drawable.ic_keyboard_arrow_up_black_24dp, 0);
+                            } else {
+                                chooseAccouTypeBtn.setCompoundDrawablesWithIntrinsicBounds(imageIcons[thisPosition], 0, R.drawable.ic_keyboard_arrow_down_black_24dp, 0);
+                            }
+                            chooseAccouTypeBtn.setEnabled(true);
+                        }
+                    });
+                } else {
+                    if (visible) {
+                        chooseAccouTypeBtn.setCompoundDrawablesWithIntrinsicBounds(imageIcons[thisPosition], 0, R.drawable.ic_keyboard_arrow_up_black_24dp, 0);
+                        chooseAccouTypeBtn.setEnabled(true);
+                    } else {
+                        chooseAccouTypeBtn.setCompoundDrawablesWithIntrinsicBounds(imageIcons[thisPosition], 0, R.drawable.ic_keyboard_arrow_down_black_24dp, 0);
+                        chooseAccouTypeBtn.setEnabled(true);
+                    }
+                }
             }
 
         });
@@ -326,7 +379,8 @@ public class HeatMapActivity extends CusStuAppComMapActivity implements OnMapRea
                     @Override
                     public void onError(String msg) {
                         Log.w(TAG, "onError: " + msg);
-
+                        flush(msg);
+                        hideProgress();
                     }
                 });
                 break;
@@ -358,7 +412,6 @@ public class HeatMapActivity extends CusStuAppComMapActivity implements OnMapRea
         }
     }
 
-
     public void startHeatMap(GoogleMap mMap, String identify) {
         if (mProvider == null) {
             mProvider = new HeatmapTileProvider.Builder().data(
@@ -389,11 +442,18 @@ public class HeatMapActivity extends CusStuAppComMapActivity implements OnMapRea
         }
         Log.d(TAG, "onClick: clicked gps icon");
         if (mMap != null) {
-            getDeviceLocationWithZoom(mMap, 6f);
+            if (mMap.getCameraPosition().zoom < 4) {
+                getDeviceLocationWithZoom(mMap, 7.99f);
+            } else if (mMap.getCameraPosition().zoom >= 4 && mMap.getCameraPosition().zoom < 8) {
+                getDeviceLocationWithZoom(mMap, 11.99f);
+            } else if (mMap.getCameraPosition().zoom >= 8 && mMap.getCameraPosition().zoom < 12) {
+                getDeviceLocationWithZoom(mMap, 14.99f);
+            } else if (mMap.getCameraPosition().zoom >= 12 && mMap.getCameraPosition().zoom < 15) {
+                mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(LAT_LNG_BOUNDS, 10));
+            }
         } else {
             flush("Wait a bit...");
         }
-
     }
 
     @Override

@@ -1,0 +1,57 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_tab"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/nav_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="0dp"
+            android:scaleType="centerInside"
+            android:tint="@color/tab_colorstate_list"
+            app:srcCompat="@drawable/ic_payment" />
+
+        <carbon.widget.TextView
+            android:id="@+id/badgeTV"
+            android:layout_width="wrap_content"
+            android:layout_height="12dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="17dp"
+            android:layout_marginStart="17dp"
+            android:adjustViewBounds="true"
+            android:background="@color/tab_colorstate_list"
+            android:fontFamily="@font/cairo_bold"
+            android:gravity="center"
+            android:paddingLeft="1dp"
+            android:paddingRight="1dp"
+            android:scaleType="centerCrop"
+            android:text="0"
+            android:textAlignment="center"
+            android:textSize="6sp"
+            android:textColor="@color/white"
+            app:carbon_cornerRadius="12dp" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/nav_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:lineSpacingExtra="10dp"
+        android:lineSpacingMultiplier="4"
+        android:shadowColor="@android:color/black"
+        android:textAlignment="center"
+        android:textColor="@color/tab_colorstate_list"
+        android:textSize="15sp"
+        app:fontFamily="@font/cairo_regular"
+        tools:text="Home" />
+
+</LinearLayout>

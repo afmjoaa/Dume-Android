@@ -1,7 +1,9 @@
 package io.dume.dume.student.searchResult;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -22,6 +24,7 @@ import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.animation.FastOutLinearInInterpolator;
@@ -95,7 +98,6 @@ import io.dume.dume.library.TrailSupportMapFragment;
 import io.dume.dume.model.DumeModel;
 import io.dume.dume.service.MyNotification;
 import io.dume.dume.student.common.QualificationAdapter;
-import io.dume.dume.student.common.QualificationData;
 import io.dume.dume.student.common.ReviewAdapter;
 import io.dume.dume.student.common.ReviewHighlightData;
 import io.dume.dume.student.homePage.HomePageActivity;
@@ -103,9 +105,7 @@ import io.dume.dume.student.pojo.CusStuAppComMapActivity;
 import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
 import io.dume.dume.student.pojo.SearchDataStore;
 import io.dume.dume.student.searchResultTabview.SearchResultTabviewActivity;
-import io.dume.dume.teacher.adapters.AcademicAdapter;
 import io.dume.dume.teacher.homepage.TeacherContract;
-import io.dume.dume.teacher.model.KeyValueModel;
 import io.dume.dume.teacher.pojo.Academic;
 import io.dume.dume.util.DumeUtils;
 import io.dume.dume.util.OnSwipeTouchListener;
@@ -824,20 +824,31 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                 }
                 Drawable[] compoundDrawables = showAdditionalRatingBtn.getCompoundDrawables();
                 Drawable d = compoundDrawables[3];
-                if (d instanceof Animatable2) {
-                    ((Animatable2) d).start();
-                }
-                ((Animatable2) d).registerAnimationCallback(new Animatable2.AnimationCallback() {
-                    public void onAnimationEnd(Drawable drawable) {
-                        //Do something
-                        if (visible) {
-                            showAdditionalRatingBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_down_arrow_small));
-                        } else {
-                            showAdditionalRatingBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_up_arrow_small));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if (d instanceof Animatable2) {
+                        ((Animatable2) d).start();
+                    }
+                    ((Animatable2) d).registerAnimationCallback(new Animatable2.AnimationCallback() {
+                        public void onAnimationEnd(Drawable drawable) {
+                            //Do something
+                            if (visible) {
+                                showAdditionalRatingBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_down_arrow_small));
+                            } else {
+                                showAdditionalRatingBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_up_arrow_small));
+                            }
+                            showAdditionalRatingBtn.setEnabled(true);
                         }
+                    });
+                } else {
+                    if (visible) {
+                        showAdditionalRatingBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_down_arrow_small));
+                        showAdditionalRatingBtn.setEnabled(true);
+                    } else {
+                        showAdditionalRatingBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_up_arrow_small));
                         showAdditionalRatingBtn.setEnabled(true);
                     }
-                });
+                }
+
             }
         });
 
@@ -889,20 +900,30 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                 }
                 Drawable[] compoundDrawables = moreInfoBtn.getCompoundDrawables();
                 Drawable d = compoundDrawables[3];
-                if (d instanceof Animatable) {
-                    ((Animatable) d).start();
-                }
-                ((Animatable2) d).registerAnimationCallback(new Animatable2.AnimationCallback() {
-                    public void onAnimationEnd(Drawable drawable) {
-                        //Do something
-                        if (visible) {
-                            moreInfoBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_down_arrow_small));
-                        } else {
-                            moreInfoBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_up_arrow_small));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if (d instanceof Animatable) {
+                        ((Animatable) d).start();
+                    }
+                    ((Animatable2) d).registerAnimationCallback(new Animatable2.AnimationCallback() {
+                        public void onAnimationEnd(Drawable drawable) {
+                            //Do something
+                            if (visible) {
+                                moreInfoBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_down_arrow_small));
+                            } else {
+                                moreInfoBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_up_arrow_small));
+                            }
+                            moreInfoBtn.setEnabled(true);
                         }
+                    });
+                } else {
+                    if (visible) {
+                        moreInfoBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_down_arrow_small));
+                        moreInfoBtn.setEnabled(true);
+                    } else {
+                        moreInfoBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_up_arrow_small));
                         moreInfoBtn.setEnabled(true);
                     }
-                });
+                }
             }
 
         });
@@ -955,20 +976,30 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                 }
                 Drawable[] compoundDrawables = reviewInfoBtn.getCompoundDrawables();
                 Drawable d = compoundDrawables[3];
-                if (d instanceof Animatable) {
-                    ((Animatable) d).start();
-                }
-                ((Animatable2) d).registerAnimationCallback(new Animatable2.AnimationCallback() {
-                    public void onAnimationEnd(Drawable drawable) {
-                        //Do something
-                        if (visible) {
-                            reviewInfoBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_down_arrow_small));
-                        } else {
-                            reviewInfoBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_up_arrow_small));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if (d instanceof Animatable) {
+                        ((Animatable) d).start();
+                    }
+                    ((Animatable2) d).registerAnimationCallback(new Animatable2.AnimationCallback() {
+                        public void onAnimationEnd(Drawable drawable) {
+                            //Do something
+                            if (visible) {
+                                reviewInfoBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_down_arrow_small));
+                            } else {
+                                reviewInfoBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_up_arrow_small));
+                            }
+                            reviewInfoBtn.setEnabled(true);
                         }
+                    });
+                } else {
+                    if (visible) {
+                        reviewInfoBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_down_arrow_small));
+                        reviewInfoBtn.setEnabled(true);
+                    } else {
+                        reviewInfoBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_up_arrow_small));
                         reviewInfoBtn.setEnabled(true);
                     }
-                });
+                }
             }
         });
 
@@ -1019,20 +1050,30 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                 }
                 Drawable[] compoundDrawables = agreementInfoBtn.getCompoundDrawables();
                 Drawable d = compoundDrawables[3];
-                if (d instanceof Animatable) {
-                    ((Animatable) d).start();
-                }
-                ((Animatable2) d).registerAnimationCallback(new Animatable2.AnimationCallback() {
-                    public void onAnimationEnd(Drawable drawable) {
-                        //Do something
-                        if (visible) {
-                            agreementInfoBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_down_arrow_small));
-                        } else {
-                            agreementInfoBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_up_arrow_small));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if (d instanceof Animatable) {
+                        ((Animatable) d).start();
+                    }
+                    ((Animatable2) d).registerAnimationCallback(new Animatable2.AnimationCallback() {
+                        public void onAnimationEnd(Drawable drawable) {
+                            //Do something
+                            if (visible) {
+                                agreementInfoBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_down_arrow_small));
+                            } else {
+                                agreementInfoBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_up_arrow_small));
+                            }
+                            agreementInfoBtn.setEnabled(true);
                         }
+                    });
+                } else {
+                    if (visible) {
+                        agreementInfoBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_down_arrow_small));
+                        agreementInfoBtn.setEnabled(true);
+                    } else {
+                        agreementInfoBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_up_arrow_small));
                         agreementInfoBtn.setEnabled(true);
                     }
-                });
+                }
             }
         });
 
@@ -1083,20 +1124,30 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                 }
                 Drawable[] compoundDrawables = achievementInfoBtn.getCompoundDrawables();
                 Drawable d = compoundDrawables[3];
-                if (d instanceof Animatable) {
-                    ((Animatable) d).start();
-                }
-                ((Animatable2) d).registerAnimationCallback(new Animatable2.AnimationCallback() {
-                    public void onAnimationEnd(Drawable drawable) {
-                        //Do something
-                        if (visible) {
-                            achievementInfoBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_down_arrow_small));
-                        } else {
-                            achievementInfoBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_up_arrow_small));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if (d instanceof Animatable) {
+                        ((Animatable) d).start();
+                    }
+                    ((Animatable2) d).registerAnimationCallback(new Animatable2.AnimationCallback() {
+                        public void onAnimationEnd(Drawable drawable) {
+                            //Do something
+                            if (visible) {
+                                achievementInfoBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_down_arrow_small));
+                            } else {
+                                achievementInfoBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_up_arrow_small));
+                            }
+                            achievementInfoBtn.setEnabled(true);
                         }
+                    });
+                } else {
+                    if (visible) {
+                        achievementInfoBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_down_arrow_small));
+                        achievementInfoBtn.setEnabled(true);
+                    } else {
+                        achievementInfoBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_up_arrow_small));
                         achievementInfoBtn.setEnabled(true);
                     }
-                });
+                }
             }
         });
     }
@@ -1219,13 +1270,13 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
         Float comm_value = (Float.parseFloat(self_rating.get("l_communication").toString()) /
                 Float.parseFloat(self_rating.get("l_communication").toString()) + Float.parseFloat(self_rating.get("dl_communication").toString())) * 10;
         Float comm_text = comm_value * 10;
-        BarData data = new BarData("Comm.", comm_value, comm_text.toString().substring(0,comm_text.toString().length()-2)+ " %");
+        BarData data = new BarData("Comm.", comm_value, comm_text.toString().substring(0, comm_text.toString().length() - 2) + " %");
         dataList.add(data);
 
         Float beha_value = (Float.parseFloat(self_rating.get("l_communication").toString()) /
                 Float.parseFloat(self_rating.get("l_communication").toString()) + Float.parseFloat(self_rating.get("dl_communication").toString())) * 10;
         Float baha_text = beha_value * 10;
-        data = new BarData("Behaviour", beha_value, baha_text.toString().substring(0,baha_text.toString().length()-2) + " %");
+        data = new BarData("Behaviour", beha_value, baha_text.toString().substring(0, baha_text.toString().length() - 2) + " %");
         dataList.add(data);
 
         Map<String, Object> jizz = (Map<String, Object>) selectedMentor.get("jizz");
@@ -1239,7 +1290,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
             Float loop_value = (Float.parseFloat(likes.get(splited).toString()) /
                     Float.parseFloat(likes.get(splited).toString()) + Float.parseFloat(dislikes.get(splited).toString())) * 10;
             Float loop_text = (loop_value * 10);
-            data = new BarData(splited, loop_value, loop_text.toString().substring(0,loop_text.toString().length()-2) + " %");
+            data = new BarData(splited, loop_value, loop_text.toString().substring(0, loop_text.toString().length() - 2) + " %");
             dataList.add(data);
         }
         mChart.setDataList(dataList);
@@ -1344,9 +1395,10 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
         mMap.setOnMarkerClickListener(this);
         mMap.setOnInfoWindowClickListener(this);
         //mMap.getUiSettings().setZoomGesturesEnabled(false);
-        mMap.setMyLocationEnabled(false);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            mMap.setMyLocationEnabled(false);
+        }
         // sob kaj sesh a ai duita lagate hobe
-
         mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
             @Override
             public void onMapLoaded() {
@@ -1359,7 +1411,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                 });
                 mPresenter.onMapLoaded();
                 zoomRoute(route);
-                if(searchDataStore.getSelectedMentor()!= null && searchDataStore.getSelectedMentor().startsWith("select")){
+                if (searchDataStore.getSelectedMentor() != null && searchDataStore.getSelectedMentor().startsWith("select")) {
                     String[] split = retrivedAction.split("\\s*_\\s*");
                     onMentorSelect(searchDataStore.getResultList().get(Integer.parseInt(split[1])));
                     searchDataStore.setSelectedMentor(null);
@@ -1543,7 +1595,8 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
             if (gender.equals("Male") || gender.equals("")) {
                 defaultUrl = SearchDataStore.DEFAULTMALEAVATER;
             } else {
-                defaultUrl = SearchDataStore.DEFAULTFEMALEAVATER;;
+                defaultUrl = SearchDataStore.DEFAULTFEMALEAVATER;
+                ;
             }
             Glide.with(getApplicationContext())
                     .asBitmap()
@@ -1560,7 +1613,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
 
         iconFactory.setStyle(IconGenerator.STYLE_DEFAULT);
         iconFactory.setTextAppearance(this, R.style.MyCustomInfoWindowTextApp);
-        iconFactory.setBackground(getDrawable(R.drawable.custom_info_window_vector));
+        iconFactory.setBackground(getResources().getDrawable(R.drawable.custom_info_window_vector));
         iconFactory.setContentPadding((int) (27 * (getResources().getDisplayMetrics().density)), (int) (2 * (getResources().getDisplayMetrics().density)), 0, (int) (6 * (getResources().getDisplayMetrics().density)));
 
         double v = SphericalUtil.computeDistanceBetween(searchDataStore.getAnchorPoint(), lattitudeLongitude);
