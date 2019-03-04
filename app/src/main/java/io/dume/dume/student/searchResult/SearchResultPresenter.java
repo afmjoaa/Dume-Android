@@ -59,6 +59,12 @@ public class SearchResultPresenter implements SearchResultContract.Presenter {
             case R.id.requestBTN:
                 view.showRequestDialogue();
                 break;
+            case R.id.swipe_left:
+                view.onSwipeLeftRight(false);
+                break;
+            case R.id.swipe_right:
+                view.onSwipeLeftRight(true);
+                break;
         }
     }
 }

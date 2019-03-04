@@ -40,12 +40,6 @@ public abstract class StuBaseModel{
         this.activity = (Activity) context;
         mAuth = FirebaseAuth.getInstance();
         firestore = FirebaseFirestore.getInstance();
-       /* FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
-                .setTimestampsInSnapshotsEnabled(true)
-                .build();
-        firestore.setFirestoreSettings(settings);*/
-        //Log.w(TAG, "StuBaseModel: " + firestore.hashCode());
-        //initializing
         mini_users = firestore.collection("mini_users").document(getUser().getUid());
         skillRef = firestore.collection("users/mentors/skills");
 

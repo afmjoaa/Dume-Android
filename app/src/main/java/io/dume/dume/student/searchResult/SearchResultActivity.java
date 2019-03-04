@@ -25,6 +25,7 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.animation.FastOutLinearInInterpolator;
@@ -91,6 +92,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import carbon.widget.ImageView;
+import io.dume.dume.Google;
 import io.dume.dume.R;
 import io.dume.dume.customView.HorizontalLoadViewTwo;
 import io.dume.dume.library.RouteOverlayView;
@@ -104,6 +106,10 @@ import io.dume.dume.student.homePage.HomePageActivity;
 import io.dume.dume.student.pojo.CusStuAppComMapActivity;
 import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
 import io.dume.dume.student.pojo.SearchDataStore;
+import io.dume.dume.student.recordsPage.Record;
+import io.dume.dume.student.recordsPage.RecordsPageActivity;
+import io.dume.dume.student.recordsPage.RecordsPageModel;
+import io.dume.dume.student.recordsPending.RecordsPendingActivity;
 import io.dume.dume.student.searchResultTabview.SearchResultTabviewActivity;
 import io.dume.dume.teacher.homepage.TeacherContract;
 import io.dume.dume.teacher.pojo.Academic;
@@ -232,6 +238,8 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
     private Button loadMoreReviewBtn;
     private LinearLayout noDataBlockReview;
     private ReviewHighlightData lastReviewData;
+    private Marker marker;
+    private List<Marker> markerList;
 
 
     @Override
@@ -240,6 +248,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
         setContentView(R.layout.stu6_activity_search_result);
         setActivityContextMap(this, fromFlag);
         findLoadView();
+        markerList = new ArrayList<>();
         mModel = new SearchResultModel(this);
         mPresenter = new SearchResultPresenter(this, mModel);
         mPresenter.searchResultEnqueue();
@@ -320,9 +329,6 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
         agreementInfoBtn = findViewById(R.id.show_agreement_terms_btn);
         agreementHideable = findViewById(R.id.agreement_term_layout_vertical);
 
-        //locationHostLayout = findViewById(R.id.location_host_linearlayout);
-        //locationInfoBtn = findViewById(R.id.show_location_btn);
-        //locationHideable = findViewById(R.id.location_layout_vertical);
         bottomSheetNSV = findViewById(R.id.bottom_sheet_scroll_view);
         loadViewBS = findViewById(R.id.loadViewTwo);
 
@@ -359,11 +365,40 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
     }
 
     @Override
-    public void goHome() {
-        final Intent intent = new Intent(getApplicationContext(), HomePageActivity.class);
+    public void goHome(DocumentReference documentReference) {
+        /*Intent intent = new Intent(getApplicationContext(), HomePageActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
-        finish();
+        finish();*/
+        RecordsPageModel recordsPageModel = new RecordsPageModel(this);
+        recordsPageModel.getRecords(new TeacherContract.Model.Listener<List<Record>>() {
+            @Override
+            public void onSuccess(List<Record> list) {
+                hideProgress();
+                Google.getInstance().setRecordList(list);
+                TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+
+                Intent mainActivityIntent = new Intent(SearchResultActivity.this, HomePageActivity.class);
+                mainActivityIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+                Intent recordPageActivityIntent = new Intent(SearchResultActivity.this, RecordsPageActivity.class).setAction(DumeUtils.STUDENT);
+
+                Intent intentMain = new Intent(getApplicationContext(), RecordsPendingActivity.class).setAction(DumeUtils.STUDENT);
+                intentMain.putExtra("recordId", documentReference.getId());
+
+                stackBuilder.addNextIntent(mainActivityIntent);
+                stackBuilder.addNextIntent(recordPageActivityIntent);
+                stackBuilder.addNextIntent(intentMain);
+                stackBuilder.startActivities();
+                finish();
+            }
+
+            @Override
+            public void onError(String msg) {
+                hideProgress();
+                flush(msg);
+            }
+        });
     }
 
     @Override
@@ -446,7 +481,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                     mModel.riseNewRecords(recordsData, new TeacherContract.Model.Listener<DocumentReference>() {
                         @Override
                         public void onSuccess(DocumentReference list) {
-                            goHome();
+                            goHome(list);
                             Log.w("foo", "onSuccess: " + list.toString());
                             hideProgressBS();
                             comfirmYesBtn.setBackgroundColor(getResources().getColor(R.color.colorBlack));
@@ -1162,7 +1197,17 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
         String starRating = (String) selfRating.get("star_rating");
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
         route.add(latLng);
-        final Marker marker = addCustomMarkerFromURL(avatar, latLng, gender, starRating);
+        addCustomMarkerFromURL(avatar, latLng, gender, starRating, new TeacherContract.Model.Listener<Marker>() {
+            @Override
+            public void onSuccess(Marker list) {
+                markerList.add(list);
+            }
+
+            @Override
+            public void onError(String msg) {
+
+            }
+        });
     }
 
     public void onMentorSelect(DocumentSnapshot selectedMentor) {
@@ -1212,26 +1257,26 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
 
         //fixing more info now
         String Temp = (String) sp_info.get("current_status");
-        currentStatusTV.setText(currentStatusTV.getText() + Temp);
+        currentStatusTV.setText("Current Status : " + Temp);
         Map<String, Object> self_rating = (Map<String, Object>) sp_info.get("self_rating");
         Temp = (String) self_rating.get("student_guided");
-        currentlyMentoringTV.setText(currentlyMentoringTV.getText() + Temp);
+        currentlyMentoringTV.setText("Student Guided : " + Temp);
         Temp = (String) sp_info.get("marital");
-        maritalStatusTV.setText(maritalStatusTV.getText() + Temp);
+        maritalStatusTV.setText("Marital Status : " + Temp);
         Temp = (String) sp_info.get("gender");
-        genderTV.setText(genderTV.getText() + Temp);
+        genderTV.setText("Gender : " + Temp);
         Temp = (String) sp_info.get("religion");
-        religionTV.setText(religionTV.getText() + Temp);
+        religionTV.setText("Religion : " + Temp);
 
         //fixing the agreement terms now
         Temp = (String) searchDataStore.getStartTime().get("time_string");
-        timeTV.setText(timeTV.getText() + Temp);
+        timeTV.setText("Starting Time : " + Temp);
         Temp = (String) searchDataStore.getStartDate().get("date_string");
-        dateTV.setText(dateTV.getText() + Temp);
+        dateTV.setText("Starting Date : " + Temp);
         Temp = (String) searchDataStore.getPreferredDays().get("selected_days");
-        preferredDayTV.setText(preferredDayTV.getText() + Temp);
+        preferredDayTV.setText("Preferred Day : " + Temp);
         Temp = searchDataStore.getPreferredDays().get("days_per_week").toString();
-        daysPerWeekTV.setText(daysPerWeekTV.getText() + Temp + " days");
+        daysPerWeekTV.setText("Days/Week : " + Temp + " days");
 
         //fixing the rating now
         performanceCount.setText(self_rating.get("star_count").toString());
@@ -1350,6 +1395,9 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                 }
             });
         });
+        requestBTN.setEnabled(true);
+        swipeLeft.setEnabled(true);
+        swipeRight.setEnabled(true);
     }
 
     public String getLast(Map<String, Object> jizz) {
@@ -1402,7 +1450,17 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
         mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
             @Override
             public void onMapLoaded() {
-                addCustomMarkerFromURL(searchDataStore.getAvatarString(), searchDataStore.getAnchorPoint(), searchDataStore.getGender(), null);
+                addCustomMarkerFromURL(searchDataStore.getAvatarString(), searchDataStore.getAnchorPoint(), searchDataStore.getGender(), null, new TeacherContract.Model.Listener<Marker>() {
+                    @Override
+                    public void onSuccess(Marker list) {
+                        //already handled
+                    }
+
+                    @Override
+                    public void onError(String msg) {
+                        //already handled
+                    }
+                });
                 mMap.setOnCameraMoveListener(new GoogleMap.OnCameraMoveListener() {
                     @Override
                     public void onCameraMove() {
@@ -1411,6 +1469,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                 });
                 mPresenter.onMapLoaded();
                 zoomRoute(route);
+                //for the search result tab view activity
                 if (searchDataStore.getSelectedMentor() != null && searchDataStore.getSelectedMentor().startsWith("select")) {
                     String[] split = retrivedAction.split("\\s*_\\s*");
                     onMentorSelect(searchDataStore.getResultList().get(Integer.parseInt(split[1])));
@@ -1465,7 +1524,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
         for (LatLng latLngPoint : lstLatLngRoute)
             boundsBuilder.include(latLngPoint);
 
-        int routePadding = 70;
+        int routePadding = 150;
         LatLngBounds latLngBounds = boundsBuilder.build();
         mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, routePadding), 2000, new GoogleMap.CancelableCallback() {
             @Override
@@ -1557,7 +1616,6 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
 
     //testing custom marker code here
     private Bitmap getMarkerBitmapFromView(View view, Bitmap bitmap) {
-
         mMarkerImageView.setImageBitmap(getRoundedCornerBitmap(bitmap, (int) (28 * (getResources().getDisplayMetrics().density))));
         view.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
         view.layout(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
@@ -1571,12 +1629,11 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
             drawable.draw(canvas);
         view.draw(canvas);
         return returnedBitmap;
-
     }
 
-    private Marker addCustomMarkerFromURL(String url, LatLng lattitudeLongitude, String gender, String stars) {
+    private void addCustomMarkerFromURL(String url, LatLng lattitudeLongitude, String gender, String stars, TeacherContract.Model.Listener<Marker> listener) {
         if (mMap == null) {
-            return null;
+            return;
         }
         if (url != null && !url.equals("")) {
             Glide.with(getApplicationContext())
@@ -1586,9 +1643,10 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                     .into(new SimpleTarget<Bitmap>() {
                         @Override
                         public void onResourceReady(@NonNull Bitmap resource, @Nullable com.bumptech.glide.request.transition.Transition<? super Bitmap> transition) {
-                            mMap.addMarker(new MarkerOptions().position(lattitudeLongitude)
+                            marker = mMap.addMarker(new MarkerOptions().position(lattitudeLongitude)
                                     .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(mCustomMarkerView, resource))));
                             //mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(lattitudeLongitude, 15f));
+                            listener.onSuccess(marker);
                         }
                     });
         } else {
@@ -1596,7 +1654,6 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                 defaultUrl = SearchDataStore.DEFAULTMALEAVATER;
             } else {
                 defaultUrl = SearchDataStore.DEFAULTFEMALEAVATER;
-                ;
             }
             Glide.with(getApplicationContext())
                     .asBitmap()
@@ -1605,12 +1662,12 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                     .into(new SimpleTarget<Bitmap>() {
                         @Override
                         public void onResourceReady(@NonNull Bitmap resource, @Nullable com.bumptech.glide.request.transition.Transition<? super Bitmap> transition) {
-                            mMap.addMarker(new MarkerOptions().position(lattitudeLongitude)
+                            marker = mMap.addMarker(new MarkerOptions().position(lattitudeLongitude)
                                     .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(mCustomMarkerView, resource))));
+                            listener.onSuccess(marker);
                         }
                     });
         }
-
         iconFactory.setStyle(IconGenerator.STYLE_DEFAULT);
         iconFactory.setTextAppearance(this, R.style.MyCustomInfoWindowTextApp);
         iconFactory.setBackground(getResources().getDrawable(R.drawable.custom_info_window_vector));
@@ -1620,13 +1677,11 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
         if (searchDataStore.getAnchorPoint() != lattitudeLongitude) {
             addCustomInfoWindow(iconFactory, makeCharSequence(stars + " ★", formatNumber(v)), lattitudeLongitude);
         }
-        return mMarkerA;
     }
 
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-
         for (DocumentSnapshot item : searchDataStore.getResultList()) {
             GeoPoint location = item.getGeoPoint("location");
             LatLng itemLoc = new LatLng(location.getLatitude(), location.getLongitude());
@@ -1639,7 +1694,29 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
             }
         }
         return false;
-        //true means no default behaviour
+    }
+
+    @Override
+    public void onSwipeLeftRight(Boolean swipeRight) {
+        List<DocumentSnapshot> resultList = searchDataStore.getResultList();
+        for (int i = 0; i < markerList.size(); i++) {
+            if (resultList.get(i).getId().equals(selectedMentor.getId())) {
+                if (swipeRight) {
+                    if(i== (resultList.size()-1)){
+                        onMarkerClick(markerList.get(0));
+                    }else{
+                        onMarkerClick(markerList.get(i+1));
+                    }
+                } else {
+                    if(i == 0){
+                        onMarkerClick(markerList.get(markerList.size()-1));
+                    }else{
+                        onMarkerClick(markerList.get(i-1));
+                    }
+                }
+                break;
+            }
+        }
     }
 
     @Override

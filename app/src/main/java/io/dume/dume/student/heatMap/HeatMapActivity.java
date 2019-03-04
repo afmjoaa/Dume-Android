@@ -321,7 +321,8 @@ public class HeatMapActivity extends CusStuAppComMapActivity implements OnMapRea
                 }
                 chooseAccouTypeBtn.setEnabled(false);
                 Drawable[] compoundDrawables = chooseAccouTypeBtn.getCompoundDrawables();
-                Drawable d = compoundDrawables[3];
+                Drawable d = compoundDrawables[0];
+                Drawable d1 = compoundDrawables[2];
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     if (d instanceof Animatable) {
                         ((Animatable) d).start();
@@ -363,6 +364,8 @@ public class HeatMapActivity extends CusStuAppComMapActivity implements OnMapRea
         String accountMajor = google.getAccountMajor();
         switch (accountMajor) {
             case DumeUtils.STUDENT:
+                chooseAccouTypeBtn.setText(accountTypeArr[1]);
+                chooseAccouTypeBtn.setCompoundDrawablesWithIntrinsicBounds(imageIcons[1], 0, R.drawable.ic_keyboard_arrow_down_black_24dp, 0);
                 mModel.getMentorLocData(new TeacherContract.Model.Listener<DataSet>() {
                     @Override
                     public void onSuccess(DataSet list) {
@@ -387,6 +390,7 @@ public class HeatMapActivity extends CusStuAppComMapActivity implements OnMapRea
             case DumeUtils.TEACHER:
             case DumeUtils.BOOTCAMP:
             default:
+                chooseAccouTypeBtn.setText(accountTypeArr[0]);
                 mModel.getStuLocData(new TeacherContract.Model.Listener<DataSet>() {
                     @Override
                     public void onSuccess(DataSet list) {
@@ -418,7 +422,7 @@ public class HeatMapActivity extends CusStuAppComMapActivity implements OnMapRea
                     mLists.get(identify).getData()).build();
             mOverlay = mMap.addTileOverlay(new TileOverlayOptions().tileProvider(mProvider));
         } else {
-            mProvider.setData(mLists.get(DumeUtils.STUDENT).getData());
+            mProvider.setData(mLists.get(identify).getData());
             mOverlay.clearTileCache();
         }
         mProvider.setGradient(ALT_HEATMAP_GRADIENT);

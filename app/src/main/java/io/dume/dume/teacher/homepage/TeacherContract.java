@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import io.dume.dume.student.homePage.adapter.HomePageRatingData;
+import io.dume.dume.student.recordsPage.Record;
 import io.dume.dume.teacher.pojo.Feedback;
 import io.dume.dume.teacher.pojo.Inbox;
 import io.dume.dume.teacher.pojo.Stat;
@@ -41,7 +42,7 @@ public interface TeacherContract {
         void showSnackBar(String messages, String actionName);
 
         //testing the customDialogue
-        void testingCustomDialogue(HomePageRatingData myData);
+        void testingCustomDialogue(HomePageRatingData myData, Record record);
 
         void setDocumentSnapshot(DocumentSnapshot documentSnapshot);
 
@@ -104,6 +105,10 @@ public interface TeacherContract {
         void gotoProfilePage();
 
         void switchProfileDialog(String identify);
+
+        void showProgressTwo();
+
+        void hideProgressTwo();
 
         void showSingleBottomSheetRating(HomePageRatingData currentRatingDataList);
     }

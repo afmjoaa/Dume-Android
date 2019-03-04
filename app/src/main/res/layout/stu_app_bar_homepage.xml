@@ -125,10 +125,16 @@
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <carbon.widget.LinearLayout
-
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/hack_height"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:visibility="gone"
+                    android:orientation="vertical"/>
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/homePage_bottomSheet_recycler"

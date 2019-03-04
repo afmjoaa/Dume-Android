@@ -26,6 +26,7 @@ import android.view.Display;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
@@ -56,6 +57,7 @@ import java.util.regex.Pattern;
 
 import io.dume.dume.Google;
 import io.dume.dume.R;
+import io.dume.dume.inter_face.usefulListeners;
 import io.dume.dume.student.pojo.SearchDataStore;
 import io.dume.dume.student.recordsPage.Record;
 
@@ -66,6 +68,7 @@ public class DumeUtils {
     public static final String TEACHER = "teacher";
     public static final String BOOTCAMP = "bootcamp";
     public static final String STUDENT = "student";
+    public static final String RECORDTAB = "recordTab";
     public static final String SELECTED_ID = "s_id";
     private static final String TAG = "Bal";
 
@@ -553,7 +556,6 @@ public class DumeUtils {
         return returnList;
     }
 
-
     public static String getLast(Map<String, Object> jizz) {
         endOfNest = new ArrayList<>(Arrays.asList("Subject", "Field", "Software", "Language", "Flavour", "Type", "Course", " Language "));
         for (int j = 0; j < endOfNest.size(); j++) {
@@ -639,6 +641,22 @@ public class DumeUtils {
             default:
                 return 0;
         }
+    }
+
+    public static void setKeyboardVisibilityListener(Activity activity, usefulListeners.KeyboardVisibilityListener keyboardVisibilityListener) {
+        View contentView = activity.findViewById(android.R.id.content);
+        contentView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                float mDensity = activity.getResources().getDisplayMetrics().density;
+                int heightDiff = contentView.getRootView().getHeight() - contentView.getHeight();
+                if (heightDiff >= (120 * mDensity)) {
+                    keyboardVisibilityListener.onKeyboardVisibilityChanged(true);
+                } else {
+                    keyboardVisibilityListener.onKeyboardVisibilityChanged(false);
+                }
+            }
+        });
     }
 
 

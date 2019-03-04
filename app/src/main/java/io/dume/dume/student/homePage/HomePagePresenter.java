@@ -245,11 +245,7 @@ public class HomePagePresenter implements HomePageContract.Presenter {
     @Override
     public void getDataFromDB() {
         mModel.addShapShotListener((documentSnapshot, e) -> {
-
-
             if (documentSnapshot != null) {
-
-
                 ArrayList<String> available_promo = (ArrayList<String>) documentSnapshot.get("available_promo");
                 ArrayList<String> tempList = new ArrayList<>();
                 for (String promoCode : available_promo) {

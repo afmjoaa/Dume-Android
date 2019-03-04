@@ -2,15 +2,18 @@ package io.dume.dume.student.homePage.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Rect;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.view.animation.FastOutLinearInInterpolator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
@@ -42,7 +45,10 @@ import io.dume.dume.student.recordsPage.Record;
 import io.dume.dume.teacher.homepage.TeacherActivityMock;
 import io.dume.dume.teacher.homepage.TeacherActivtiy;
 import io.dume.dume.teacher.homepage.TeacherContract;
+import io.dume.dume.util.DumeUtils;
 import me.zhanghai.android.materialratingbar.MaterialRatingBar;
+
+import static io.dume.dume.util.DumeUtils.showKeyboard;
 
 public class HomePageRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -55,6 +61,7 @@ public class HomePageRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
     private final int promoStart;
     private final HomePageModel homePageModel;
     private Window window;
+    private View contentView;
 
     public Window getWindow() {
         return window;
@@ -130,6 +137,16 @@ public class HomePageRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
             headerVH.smallTitle.setVisibility(View.VISIBLE);
             headerVH.dismissBtn.setVisibility(View.GONE);
             headerVH.dismissBtnOne.setVisibility(View.GONE);
+            if(Google.getInstance().getAccountMajor().equals(DumeUtils.STUDENT)){
+                headerVH.feedbackTextView.setVisibility(View.VISIBLE);
+                headerVH.feedbackTextViewLayout.setVisibility(View.VISIBLE);
+                headerVH.ratingPrimaryText.setText(String.format("How was your learning with %s", ratingData.get(position).getName()));
+            }else {
+                headerVH.feedbackTextView.setVisibility(View.GONE);
+                headerVH.feedbackTextViewLayout.setVisibility(View.GONE);
+                headerVH.ratingPrimaryText.setText(String.format("How was your experience with %s", ratingData.get(position).getName()));
+            }
+
             //button margin fix
             LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) headerVH.nextSubmitBtn.getLayoutParams();
             params.setMargins(0, 0, (int) (20 * (context.getResources().getDisplayMetrics().density)), (int) (10 * (context.getResources().getDisplayMetrics().density)));
@@ -146,7 +163,7 @@ public class HomePageRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
             headerVH.ratingPrimaryText.setLayoutParams(lpTextView);
 
             Glide.with(context).load(ratingData.get(position).getAvatar()).into(headerVH.ratedMentorDP);
-            headerVH.ratingPrimaryText.setText(String.format("How was your learning with %s", ratingData.get(position).getName()));
+
             //testing code here
             HomePageRatingAdapter itemRatingRecycleAdapter = new HomePageRatingAdapter(context, ratingData.get(position));
             headerVH.itemRatingRecycleView.setAdapter(itemRatingRecycleAdapter);
@@ -164,23 +181,90 @@ public class HomePageRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
                     if (hasFocus) {
                         int rating = headerVH.mDecimalRatingBars.getProgress();
                         if (rating <= 100) {
-                            String userName =  ratingData.get(position).getName();
+                            String userName = ratingData.get(position).getName();
                             headerVH.feedbackTextView.setHint("Share how " + userName + " can improve");
                         } else if (rating > 100 && rating <= 200) {
                             headerVH.feedbackTextView.setHint(feedbackStrings[1]);
                         } else if (rating > 200 && rating <= 300) {
-                            String userName =  ratingData.get(position).getName();
+                            String userName = ratingData.get(position).getName();
                             headerVH.feedbackTextView.setHint("Say something about " + userName);
                         } else if (rating > 300 && rating <= 400) {
                             headerVH.feedbackTextView.setHint(feedbackStrings[3]);
                         } else if (rating > 400 && rating <= 500) {
                             headerVH.feedbackTextView.setHint(feedbackStrings[4]);
                         }
+                        if (context instanceof HomePageActivity) {
+                            HomePageActivity myAct = (HomePageActivity) context;
+                            showKeyboard(myAct);
+                        } else if (context instanceof TeacherActivtiy) {
+                            TeacherActivtiy myAct = (TeacherActivtiy) context;
+                            showKeyboard(myAct);
+                        }
                     } else {
                         headerVH.feedbackTextView.setHint(feedbackStrings[4]);
                     }
                 }
             });
+
+            if (context instanceof HomePageActivity) {
+                HomePageActivity myAct = (HomePageActivity) context;
+                contentView = myAct.findViewById(android.R.id.content);
+            } else if (context instanceof TeacherActivtiy) {
+                TeacherActivtiy myAct = (TeacherActivtiy) context;
+                contentView = myAct.findViewById(android.R.id.content);
+            }
+
+            if (contentView != null) {
+                contentView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                    @Override
+                    public void onGlobalLayout() {
+
+                        Rect r = new Rect();
+                        contentView.getWindowVisibleDisplayFrame(r);
+                        int screenHeight = contentView.getRootView().getHeight();
+
+                        // r.bottom is the position above soft keypad or device button.
+                        // if keypad is shown, the r.bottom is smaller than that before.
+                        int keypadHeight = screenHeight - r.bottom;
+
+                        Log.d(TAG, "keypadHeight = " + keypadHeight);
+
+                        if (keypadHeight > screenHeight * 0.15) { // 0.15 ratio is perhaps enough to determine keypad height.
+                            // keyboard is opened
+                            if (headerVH.feedbackTextView.hasFocus()) {
+                                if (context instanceof HomePageActivity) {
+                                    HomePageActivity myAct = (HomePageActivity) context;
+                                    if (myAct.hackHeight.getVisibility() == View.GONE) {
+                                        myAct.hackHeight.setVisibility(View.VISIBLE);
+                                    }
+                                } else if (context instanceof TeacherActivtiy) {
+                                    TeacherActivtiy myAct = (TeacherActivtiy) context;
+                                    if (myAct.hackHeight.getVisibility() == View.GONE) {
+                                        myAct.hackHeight.setVisibility(View.VISIBLE);
+                                    }
+                                }
+                            }
+                        } else {
+                            if (headerVH.feedbackTextView.hasFocus()) {
+                                if (context instanceof HomePageActivity) {
+                                    HomePageActivity myAct = (HomePageActivity) context;
+                                    if (myAct.hackHeight.getVisibility() == View.VISIBLE) {
+                                        myAct.hackHeight.setVisibility(View.GONE);
+                                    }
+                                } else if (context instanceof TeacherActivtiy) {
+                                    TeacherActivtiy myAct = (TeacherActivtiy) context;
+                                    if (myAct.hackHeight.getVisibility() == View.VISIBLE) {
+                                        myAct.hackHeight.setVisibility(View.GONE);
+                                    }
+                                }
+
+                            }
+                            // keyboard is closed
+                        }
+                    }
+                });
+            }
+
 
             headerVH.nextSubmitBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -201,11 +285,10 @@ public class HomePageRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
                 }
             });
 
-
-
-
             headerVH.submitBtn.setOnClickListener(view -> {
-                if (headerVH.feedbackTextView.getText() != null && headerVH.feedbackTextView.getText().toString().equals("")) {
+                if (Google.getInstance().getAccountMajor().equals(DumeUtils.STUDENT) &&
+                        headerVH.feedbackTextView.getText() != null &&
+                        headerVH.feedbackTextView.getText().toString().equals("")) {
                     headerVH.feedbackTextView.setError("Please write your feedback...");
                 } else if (itemRatingRecycleAdapter.getInputRating() == null) {
                     flush("Make sure you hit the like or dislike thumb");
@@ -216,6 +299,7 @@ public class HomePageRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
 
                     } else if (context instanceof TeacherActivtiy) {
                         TeacherActivtiy myAct = (TeacherActivtiy) context;
+                        myAct.showProgressTwo();
                         //myAct.showProgressTwo();
                     }
                     headerVH.submitBtn.setEnabled(false);
@@ -228,13 +312,14 @@ public class HomePageRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
                                 public void onSuccess(Void list) {
                                     removeRatingItem(position);
                                     headerVH.submitBtn.setEnabled(true);
-                                    flush("done submitting inside");
+                                    flush("Thanks for your review...");
                                     if (context instanceof HomePageActivity) {
                                         HomePageActivity myAct = (HomePageActivity) context;
                                         myAct.hideProgressTwo();
 
                                     } else if (context instanceof TeacherActivtiy) {
                                         TeacherActivtiy myAct = (TeacherActivtiy) context;
+                                        myAct.hideProgressTwo();
                                         //myAct.showProgressTwo();
                                     }
 
@@ -280,7 +365,7 @@ public class HomePageRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
     }
 
     public void removeRatingItem(int postion) {
-        if(ratingData.size()>0 && postion<ratingData.size()){
+        if (ratingData.size() > 0 && postion < ratingData.size()) {
             ratingData.remove(postion);
             notifyItemRemoved(postion);
             notifyDataSetChanged();
@@ -327,7 +412,7 @@ public class HomePageRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
         private final TextView ratingPrimaryText;
         private final TextView ratingSecondaryText;
         private final TextInputLayout feedbackTextViewLayout;
-        private final EditText feedbackTextView;
+        private final AutoCompleteTextView feedbackTextView;
         private final Button dismissBtn;
         private final Button dismissBtnOne;
         private final Button nextSubmitBtn;

@@ -112,6 +112,7 @@
         <activity
             android:name=".student.homePage.HomePageActivity"
             android:label=""
+            android:windowSoftInputMode="adjustResize"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".student.homePage.MapsActivity"

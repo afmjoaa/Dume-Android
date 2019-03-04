@@ -17,7 +17,7 @@ public interface SearchResultContract {
 
         void configSearchResult();
 
-        void goHome();
+        void goHome(DocumentReference documentReference);
 
         void initSearchResult();
 
@@ -30,6 +30,8 @@ public interface SearchResultContract {
         void findView();
 
         void centerTheMapCamera();
+
+        void onSwipeLeftRight(Boolean swipeRight);
 
         void showRequestDialogue();
     }

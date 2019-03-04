@@ -2,6 +2,7 @@ package io.dume.dume.student.recordsPending;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Animatable2;
@@ -12,6 +13,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialog;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -53,6 +55,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.TimeZone;
 
 import carbon.widget.ImageView;
@@ -105,13 +108,38 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
     public void findView() {
         recordsHostLayout = findViewById(R.id.recordsHostLayout);
         pager = (ViewPager) findViewById(R.id.pending_page_container);
+    }
 
+    @Override
+    public void flush(String msg) {
+        Toast toast = Toast.makeText(this, msg, Toast.LENGTH_SHORT);
+        TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
+        if (v != null) v.setGravity(Gravity.CENTER);
+        toast.show();
     }
 
     @Override
     public void initRecordsPending() {
         myPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         pager.setAdapter(myPagerAdapter);
+        //testing here
+
+        Intent retrivedIntent = getIntent();
+        int pageToOpen = retrivedIntent.getIntExtra(DumeUtils.RECORDTAB, -1);
+        String recordId = retrivedIntent.getStringExtra("recordId");
+        if (pageToOpen != -1 && pageToOpen < Objects.requireNonNull(pager.getAdapter()).getCount()) {
+            // Open the right pager
+            pager.setCurrentItem(pageToOpen, true);
+        }else if(recordId != null && !recordId.equals("")){
+            List<DocumentSnapshot> pendingRecords = DumeUtils.filterList(Google.getInstance().getRecords(), "Pending");
+            for (int i = 0; i < pendingRecords.size(); i++) {
+                DocumentSnapshot record = pendingRecords.get(i);
+                if (recordId.equals(record.getId())) {
+                    pager.setCurrentItem(i, true);
+                   break;
+                }
+            }
+        }
     }
 
     @Override
@@ -152,6 +180,7 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
         private static final String TAG = "PlaceholderFragment";
         private static final String ARG_SECTION_NUMBER = "section_number";
         private static DocumentSnapshot record;
+        private static List<DocumentSnapshot> recordList;
         private RecordsPendingActivity myThisActivity;
         private RecyclerView qualificationRecyView;
         private QualificationAdapter qualificaitonRecyAda;
@@ -239,12 +268,13 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
         private TextView stuGenderTV;
         private TextView stuPreviousResultTV;
         private TextView stuCurrentStatusTV;
+        private int position;
 
         public PlaceholderFragment() {
         }
 
-        public static PlaceholderFragment newInstance(int sectionNumber, DocumentSnapshot record) {
-            PlaceholderFragment.record = record;
+        public static PlaceholderFragment newInstance(int sectionNumber, List<DocumentSnapshot> recordList) {
+            PlaceholderFragment.recordList = recordList;
             PlaceholderFragment fragment = new PlaceholderFragment();
             Bundle args = new Bundle();
             args.putInt(ARG_SECTION_NUMBER, sectionNumber);
@@ -263,6 +293,107 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
         public void onAttach(Context context) {
             super.onAttach(context);
             this.context = context;
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+            myThisActivity = (RecordsPendingActivity) getActivity();
+            position = Objects.requireNonNull(getArguments()).getInt(ARG_SECTION_NUMBER);
+            record = recordList.get(position);
+            View rootView = inflater.inflate(R.layout.stu9_viewpager_layout_pending, container, false);
+            qualificationRecyView = rootView.findViewById(R.id.recycler_view_qualifications);
+            reviewRecyView = rootView.findViewById(R.id.recycler_view_reviews);
+            mChart = (ChartProgressBar) rootView.findViewById(R.id.myChartProgressBar);
+            ratingPerformance = rootView.findViewById(R.id.main_rating_performance);
+            ratingExperience = rootView.findViewById(R.id.main_rating_experience);
+
+            moreInfoBtn = rootView.findViewById(R.id.show_more_info_btn);
+            moreInfoHost = rootView.findViewById(R.id.more_info_host_linearlayout);
+            moreInfoHidable = rootView.findViewById(R.id.more_info_layout_vertical);
+
+            stuMoreInfoBtn = rootView.findViewById(R.id.stu_show_more_info_btn);
+            stuMoreInfoHost = rootView.findViewById(R.id.stu_more_info_host_linearlayout);
+            stuMoreInfoHidable = rootView.findViewById(R.id.stu_more_info_layout_vertical);
+
+            reviewHost = rootView.findViewById(R.id.review_host_linearlayout);
+            reviewHidable = rootView.findViewById(R.id.review_layout_vertical);
+            reviewInfoBtn = rootView.findViewById(R.id.review_info_btn);
+
+            achievementInfoBtn = rootView.findViewById(R.id.show_achievement_btn);
+            achievementHost = rootView.findViewById(R.id.achievement_host_linearlayout);
+            achievementHidable = rootView.findViewById(R.id.achievement_layout_vertical);
+
+            agreementHostLayout = rootView.findViewById(R.id.agreement_term_host_linearlayout);
+            agreementInfoBtn = rootView.findViewById(R.id.show_agreement_terms_btn);
+            agreementHideable = rootView.findViewById(R.id.agreement_term_layout_vertical);
+
+            ratingHostVertical = rootView.findViewById(R.id.rating_host_linearlayout);
+            showAdditionalRatingBtn = rootView.findViewById(R.id.show_additional_rating_btn);
+            onlyRatingContainer = rootView.findViewById(R.id.rating_layout_vertical);
+
+            stuComTV = rootView.findViewById(R.id.stu_textview_communication);
+            stuBehaTV = rootView.findViewById(R.id.stu_textview_behaviour);
+            stuGenderTV = rootView.findViewById(R.id.stu_textview_gender);
+            stuPreviousResultTV = rootView.findViewById(R.id.stu_previous_result);
+            stuCurrentStatusTV = rootView.findViewById(R.id.stu_textview_current_status);
+
+            //testing anything can happen
+            salaryBtn = rootView.findViewById(R.id.show_salary_btn);
+            joinedBadge = rootView.findViewById(R.id.achievement_joined_image);
+            inauguralBadge = rootView.findViewById(R.id.achievement_inaugural_image);
+            leadingBadge = rootView.findViewById(R.id.achievement_leading_image);
+            premierBadge = rootView.findViewById(R.id.achievement_premier_image);
+
+            currentStatusTV = rootView.findViewById(R.id.textview_current_status);
+            currentlyMentoringTV = rootView.findViewById(R.id.textview_currently_mentoring);
+            maritalStatusTV = rootView.findViewById(R.id.textview_marital_status);
+            religionTV = rootView.findViewById(R.id.textview_religion);
+            genderTV = rootView.findViewById(R.id.textview_gender);
+
+            timeTV = rootView.findViewById(R.id.textview_starting_time);
+            dateTV = rootView.findViewById(R.id.textview_starting_date);
+            preferredDayTV = rootView.findViewById(R.id.textview_preferred_day);
+            daysPerWeekTV = rootView.findViewById(R.id.textview_days_week);
+
+            performanceCount = rootView.findViewById(R.id.txtStatus);
+            experienceCount = rootView.findViewById(R.id.txtStatus_experience);
+            circleProgressbarARatio = (CircleProgressbar) rootView.findViewById(R.id.rating_main_accept_ratio);
+            aRatioCount = rootView.findViewById(R.id.txtStatus_accept_ratio);
+            circleProgressbarExpertise = (CircleProgressbar) rootView.findViewById(R.id.rating_main_professionalism);
+            expertiseCount = rootView.findViewById(R.id.txtStatus_professionalism);
+
+            loadMoreReviewBtn = rootView.findViewById(R.id.load_more_review_btn);
+            noDataBlockReview = rootView.findViewById(R.id.no_data_block);
+
+            relativeHostLayout = rootView.findViewById(R.id.recordsHostLayout);
+            studentDisplayPic = rootView.findViewById(R.id.student_display_pic);
+            mentorDisplayPic = rootView.findViewById(R.id.mentor_display_pic);
+            studentNameTV = rootView.findViewById(R.id.student_name);
+            mentorNameTV = rootView.findViewById(R.id.mentor_name);
+            studentRatingBar = rootView.findViewById(R.id.student_rating_bar);
+            mentorRatingBar = rootView.findViewById(R.id.mentor_rating_bar);
+            subjectInDemand = rootView.findViewById(R.id.subject_in_demand);
+            salaryInDemandTV = rootView.findViewById(R.id.salary_in_demand);
+            deliveryTime = rootView.findViewById(R.id.delivery_time);
+            deliveryImageStatus = rootView.findViewById(R.id.delivery_status_image_view);
+            acceptBTN = rootView.findViewById(R.id.pendding_accept_btn);
+            rejectBTN = rootView.findViewById(R.id.pendding_cancel_btn);
+            divider = rootView.findViewById(R.id.divider1);
+            //setting the qualification recycler view
+            List<Academic> academicList = new ArrayList<>();
+            qualificaitonRecyAda = new QualificationAdapter(myThisActivity, academicList);
+            qualificationRecyView.setAdapter(qualificaitonRecyAda);
+            qualificationRecyView.setLayoutManager(new LinearLayoutManager(myThisActivity));
+
+            //setting the review recycler view
+            List<ReviewHighlightData> reviewData = new ArrayList<>();
+            reviewRecyAda = new ReviewAdapter(myThisActivity, reviewData);
+            reviewRecyView.setAdapter(reviewRecyAda);
+            reviewRecyView.setLayoutManager(new LinearLayoutManager(myThisActivity));
+            onMentorSelect(record);
+            configFragmentBtnClick();
+            toggleStatus();
+            return rootView;
         }
 
         public void onMentorSelect(DocumentSnapshot selectedMentor) {
@@ -293,7 +424,7 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
             studentRating = Float.parseFloat((String) shMap.get("star_rating"));
             studentName = (String) forMap.get("stu_name");
             studentDpUrl = (String) forMap.get("request_avatar");
-            salaryInDemand = String.valueOf((Double) documentData.get("salary"));
+            salaryInDemand = String.valueOf(documentData.get("salary"));
             sGender = (String) forMap.get("request_gender");
             mGender = (String) spMap.get("gender");
             subjectExchange = DumeUtils.getLast((Map<String, Object>) documentData.get("jizz"));
@@ -337,7 +468,7 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
 
             //fill up all info of the mentor
             NumberFormat currencyInstance = NumberFormat.getCurrencyInstance(Locale.US);
-            Double salary = (Double) selectedMentor.get("salary");
+            Number salary = (Number) selectedMentor.get("salary");
             String format1 = currencyInstance.format(salary);
             salaryBtn.setText("Salary : " + format1.substring(1, format1.length() - 3) + " BDT");
 
@@ -542,106 +673,6 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
             }
         }
 
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            myThisActivity = (RecordsPendingActivity) getActivity();
-            View rootView = inflater.inflate(R.layout.stu9_viewpager_layout_pending, container, false);
-            qualificationRecyView = rootView.findViewById(R.id.recycler_view_qualifications);
-            reviewRecyView = rootView.findViewById(R.id.recycler_view_reviews);
-            mChart = (ChartProgressBar) rootView.findViewById(R.id.myChartProgressBar);
-            ratingPerformance = rootView.findViewById(R.id.main_rating_performance);
-            ratingExperience = rootView.findViewById(R.id.main_rating_experience);
-
-            moreInfoBtn = rootView.findViewById(R.id.show_more_info_btn);
-            moreInfoHost = rootView.findViewById(R.id.more_info_host_linearlayout);
-            moreInfoHidable = rootView.findViewById(R.id.more_info_layout_vertical);
-
-            stuMoreInfoBtn = rootView.findViewById(R.id.stu_show_more_info_btn);
-            stuMoreInfoHost = rootView.findViewById(R.id.stu_more_info_host_linearlayout);
-            stuMoreInfoHidable = rootView.findViewById(R.id.stu_more_info_layout_vertical);
-
-            reviewHost = rootView.findViewById(R.id.review_host_linearlayout);
-            reviewHidable = rootView.findViewById(R.id.review_layout_vertical);
-            reviewInfoBtn = rootView.findViewById(R.id.review_info_btn);
-
-            achievementInfoBtn = rootView.findViewById(R.id.show_achievement_btn);
-            achievementHost = rootView.findViewById(R.id.achievement_host_linearlayout);
-            achievementHidable = rootView.findViewById(R.id.achievement_layout_vertical);
-
-            agreementHostLayout = rootView.findViewById(R.id.agreement_term_host_linearlayout);
-            agreementInfoBtn = rootView.findViewById(R.id.show_agreement_terms_btn);
-            agreementHideable = rootView.findViewById(R.id.agreement_term_layout_vertical);
-
-            ratingHostVertical = rootView.findViewById(R.id.rating_host_linearlayout);
-            showAdditionalRatingBtn = rootView.findViewById(R.id.show_additional_rating_btn);
-            onlyRatingContainer = rootView.findViewById(R.id.rating_layout_vertical);
-
-            stuComTV = rootView.findViewById(R.id.stu_textview_communication);
-            stuBehaTV = rootView.findViewById(R.id.stu_textview_behaviour);
-            stuGenderTV = rootView.findViewById(R.id.stu_textview_gender);
-            stuPreviousResultTV = rootView.findViewById(R.id.stu_previous_result);
-            stuCurrentStatusTV = rootView.findViewById(R.id.stu_textview_current_status);
-
-            //testing anything can happen
-            salaryBtn = rootView.findViewById(R.id.show_salary_btn);
-            joinedBadge = rootView.findViewById(R.id.achievement_joined_image);
-            inauguralBadge = rootView.findViewById(R.id.achievement_inaugural_image);
-            leadingBadge = rootView.findViewById(R.id.achievement_leading_image);
-            premierBadge = rootView.findViewById(R.id.achievement_premier_image);
-
-            currentStatusTV = rootView.findViewById(R.id.textview_current_status);
-            currentlyMentoringTV = rootView.findViewById(R.id.textview_currently_mentoring);
-            maritalStatusTV = rootView.findViewById(R.id.textview_marital_status);
-            religionTV = rootView.findViewById(R.id.textview_religion);
-            genderTV = rootView.findViewById(R.id.textview_gender);
-
-            timeTV = rootView.findViewById(R.id.textview_starting_time);
-            dateTV = rootView.findViewById(R.id.textview_starting_date);
-            preferredDayTV = rootView.findViewById(R.id.textview_preferred_day);
-            daysPerWeekTV = rootView.findViewById(R.id.textview_days_week);
-
-            performanceCount = rootView.findViewById(R.id.txtStatus);
-            experienceCount = rootView.findViewById(R.id.txtStatus_experience);
-            circleProgressbarARatio = (CircleProgressbar) rootView.findViewById(R.id.rating_main_accept_ratio);
-            aRatioCount = rootView.findViewById(R.id.txtStatus_accept_ratio);
-            circleProgressbarExpertise = (CircleProgressbar) rootView.findViewById(R.id.rating_main_professionalism);
-            expertiseCount = rootView.findViewById(R.id.txtStatus_professionalism);
-
-            loadMoreReviewBtn = rootView.findViewById(R.id.load_more_review_btn);
-            noDataBlockReview = rootView.findViewById(R.id.no_data_block);
-
-            relativeHostLayout = rootView.findViewById(R.id.recordsHostLayout);
-            studentDisplayPic = rootView.findViewById(R.id.student_display_pic);
-            mentorDisplayPic = rootView.findViewById(R.id.mentor_display_pic);
-            studentNameTV = rootView.findViewById(R.id.student_name);
-            mentorNameTV = rootView.findViewById(R.id.mentor_name);
-            studentRatingBar = rootView.findViewById(R.id.student_rating_bar);
-            mentorRatingBar = rootView.findViewById(R.id.mentor_rating_bar);
-            subjectInDemand = rootView.findViewById(R.id.subject_in_demand);
-            salaryInDemandTV = rootView.findViewById(R.id.salary_in_demand);
-            deliveryTime = rootView.findViewById(R.id.delivery_time);
-            deliveryImageStatus = rootView.findViewById(R.id.delivery_status_image_view);
-            acceptBTN = rootView.findViewById(R.id.pendding_accept_btn);
-            rejectBTN = rootView.findViewById(R.id.pendding_cancel_btn);
-            divider = rootView.findViewById(R.id.divider1);
-            //setting the qualification recycler view
-            List<Academic> academicList = new ArrayList<>();
-            qualificaitonRecyAda = new QualificationAdapter(myThisActivity, academicList);
-            qualificationRecyView.setAdapter(qualificaitonRecyAda);
-            qualificationRecyView.setLayoutManager(new LinearLayoutManager(myThisActivity));
-
-            //setting the review recycler view
-            List<ReviewHighlightData> reviewData = new ArrayList<>();
-            reviewRecyAda = new ReviewAdapter(myThisActivity, reviewData);
-            reviewRecyView.setAdapter(reviewRecyAda);
-            reviewRecyView.setLayoutManager(new LinearLayoutManager(myThisActivity));
-            onMentorSelect(record);
-            configFragmentBtnClick();
-            toggleStatus();
-            return rootView;
-        }
-
-
         public void toggleStatus() {
             switch (myThisActivity.retriveAction) {
                 case DumeUtils.STUDENT:
@@ -830,7 +861,7 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
                                 showAdditionalRatingBtn.setEnabled(true);
                             }
                         });
-                    }else{
+                    } else {
                         if (visible) {
                             showAdditionalRatingBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_down_arrow_small));
                             showAdditionalRatingBtn.setEnabled(true);
@@ -906,7 +937,7 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
                                 moreInfoBtn.setEnabled(true);
                             }
                         });
-                    }else {
+                    } else {
                         if (visible) {
                             moreInfoBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_down_arrow_small));
                             moreInfoBtn.setEnabled(true);
@@ -984,7 +1015,7 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
                                 stuMoreInfoBtn.setEnabled(true);
                             }
                         });
-                    }else{
+                    } else {
                         if (visible) {
                             stuMoreInfoBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_down_arrow_small));
                             stuMoreInfoBtn.setEnabled(true);
@@ -1061,7 +1092,7 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
                                 reviewInfoBtn.setEnabled(true);
                             }
                         });
-                    }else {
+                    } else {
                         if (visible) {
                             reviewInfoBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_down_arrow_small));
                             reviewInfoBtn.setEnabled(true);
@@ -1135,7 +1166,7 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
                                 agreementInfoBtn.setEnabled(true);
                             }
                         });
-                    }else{
+                    } else {
                         //Do something
                         if (visible) {
                             agreementInfoBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_down_arrow_small));
@@ -1213,7 +1244,7 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
                                 achievementInfoBtn.setEnabled(true);
                             }
                         });
-                    }else{
+                    } else {
                         //Do something
                         if (visible) {
                             achievementInfoBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_down_arrow_small));
@@ -1229,22 +1260,18 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
     }
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
-
         private static final String TAG = "SectionsPagerAdapter";
         private List<DocumentSnapshot> recordDataPending;
 
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
             recordDataPending = new ArrayList<>();
-            recordDataPending = Google.getInstance().getRecords();
             recordDataPending = DumeUtils.filterList(Google.getInstance().getRecords(), "Pending");
-
         }
-
 
         @Override
         public Fragment getItem(int position) {
-            return PlaceholderFragment.newInstance(position, recordDataPending.get(position));
+            return PlaceholderFragment.newInstance(position, recordDataPending);
         }
 
         @Override
@@ -1252,7 +1279,6 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
             return recordDataPending.size();
         }
     }
-
 }
 
 /*reviewRecyView.addOnScrollListener(new RecyclerView.OnScrollListener() {

@@ -2,6 +2,7 @@ package io.dume.dume.student.recordsCompleted;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Animatable2;
@@ -66,6 +67,7 @@ import io.dume.dume.student.common.ReviewHighlightData;
 import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
 import io.dume.dume.student.pojo.SearchDataStore;
 import io.dume.dume.student.recordsAccepted.RecordsAcceptedActivity;
+import io.dume.dume.student.recordsCurrent.RecordsCurrentActivity;
 import io.dume.dume.student.recordsPage.Record;
 import io.dume.dume.teacher.homepage.TeacherContract;
 import io.dume.dume.teacher.pojo.Academic;
@@ -114,6 +116,12 @@ public class RecordsCompletedActivity extends CustomStuAppCompatActivity impleme
     public void configRecordsCompleted() {
         myPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         pager.setAdapter(myPagerAdapter);
+        Intent retrivedIntent = getIntent();
+        int pageToOpen = retrivedIntent.getIntExtra(DumeUtils.RECORDTAB, -1);
+        if (pageToOpen != -1 && pageToOpen< Google.getInstance().getRecords().size()) {
+            // Open the right pager
+            pager.setCurrentItem(pageToOpen,true);
+        }
     }
 
     @Override
@@ -146,6 +154,7 @@ public class RecordsCompletedActivity extends CustomStuAppCompatActivity impleme
     public static class PlaceholderFragment extends Fragment {
 
         private static final String ARG_SECTION_NUMBER = "section_number";
+        private static List<DocumentSnapshot> recordList;
         private RecordsCompletedActivity myThisActivity;
         private ChartProgressBar mChart;
         private ImageView ratingPerformance;
@@ -200,13 +209,14 @@ public class RecordsCompletedActivity extends CustomStuAppCompatActivity impleme
         private Button rejectYesBtn;
         private Button rejectNoBtn;
         private View divider;
+        private int fragmentPosition;
 
 
         public PlaceholderFragment() {
         }
 
-        public static PlaceholderFragment newInstance(int sectionNumber, DocumentSnapshot record) {
-            PlaceholderFragment.record = record;
+        public static PlaceholderFragment newInstance(int sectionNumber, List<DocumentSnapshot> recordList) {
+            PlaceholderFragment.recordList = recordList;
             Bundle args = new Bundle();
             args.putInt(ARG_SECTION_NUMBER, sectionNumber);
             PlaceholderFragment fragment;
@@ -231,8 +241,11 @@ public class RecordsCompletedActivity extends CustomStuAppCompatActivity impleme
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             myThisActivity = (RecordsCompletedActivity) getActivity();
+            if (getArguments() != null) {
+                fragmentPosition = getArguments().getInt(ARG_SECTION_NUMBER);
+            }
+            record = recordList.get(fragmentPosition);
             View rootView = inflater.inflate(R.layout.stu11_viewpager_layout_completed, container, false);
-
             mChart = (ChartProgressBar) rootView.findViewById(R.id.myChartProgressBar);
             ratingPerformance = rootView.findViewById(R.id.main_rating_performance);
             ratingExperience = rootView.findViewById(R.id.main_rating_experience);
@@ -769,17 +782,15 @@ public class RecordsCompletedActivity extends CustomStuAppCompatActivity impleme
             super(fm);
             recordDataCompleted = new ArrayList<>();
             recordDataCompleted = DumeUtils.filterList(Google.getInstance().getRecords(), "Completed");
-            Log.e("foo", "SectionsPagerAdapter: " + "hjhjhjhjh");
         }
 
         @Override
         public Fragment getItem(int position) {
-            return PlaceholderFragment.newInstance(position, recordDataCompleted.get(position));
+            return PlaceholderFragment.newInstance(position, recordDataCompleted);
         }
 
         @Override
         public int getCount() {
-            Log.e("foo", "getCount: " + recordDataCompleted.size());
             return recordDataCompleted.size();
         }
     }

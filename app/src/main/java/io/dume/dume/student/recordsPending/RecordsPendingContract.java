@@ -7,9 +7,15 @@ public interface RecordsPendingContract {
 
         void configRecordsPending();
 
+        void flush(String msg);
+
         void initRecordsPending();
 
         void findView();
+
+        void showProgress();
+
+        void hideProgress();
 
     }
 

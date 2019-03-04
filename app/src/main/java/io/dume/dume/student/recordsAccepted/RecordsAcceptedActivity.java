@@ -124,8 +124,6 @@ public class RecordsAcceptedActivity extends CustomStuAppCompatActivity implemen
     @Override
     public void findView() {
         pager = (ViewPager) findViewById(R.id.accepted_page_container);
-
-
     }
 
     @Override
@@ -135,9 +133,14 @@ public class RecordsAcceptedActivity extends CustomStuAppCompatActivity implemen
 
     @Override
     public void configRecordsAccepted() {
-
         myPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         pager.setAdapter(myPagerAdapter);
+        Intent retrivedIntent = getIntent();
+        int pageToOpen = retrivedIntent.getIntExtra(DumeUtils.RECORDTAB, -1);
+        if (pageToOpen != -1 && pageToOpen< Google.getInstance().getRecords().size()) {
+            // Open the right pager
+            pager.setCurrentItem(pageToOpen,true);
+        }
     }
 
 
@@ -270,13 +273,15 @@ public class RecordsAcceptedActivity extends CustomStuAppCompatActivity implemen
         private TextView stuPreviousResultTV;
         private TextView stuCurrentStatusTV;
         private TextView addressTV;
+        private static List<DocumentSnapshot> recordList;
+        private int fragmentPosition;
 
 
         public PlaceholderFragment() {
         }
 
-        public static PlaceholderFragment newInstance(int sectionNumber, DocumentSnapshot record) {
-            PlaceholderFragment.record = record;
+        public static PlaceholderFragment newInstance(int sectionNumber, List<DocumentSnapshot> recordList) {
+            PlaceholderFragment.recordList = recordList;
             PlaceholderFragment fragment = new PlaceholderFragment();
             Bundle args = new Bundle();
             args.putInt(ARG_SECTION_NUMBER, sectionNumber);
@@ -300,7 +305,10 @@ public class RecordsAcceptedActivity extends CustomStuAppCompatActivity implemen
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             myThisActivity = (RecordsAcceptedActivity) getActivity();
-            int fragmentPosition = getArguments().getInt(ARG_SECTION_NUMBER);
+            if (getArguments() != null) {
+                fragmentPosition = getArguments().getInt(ARG_SECTION_NUMBER);
+            }
+            record = recordList.get(fragmentPosition);
             View rootView = inflater.inflate(R.layout.stu12_viewpager_layout_accepted, container, false);
 
             mCustomMarkerView = ((LayoutInflater) Objects.requireNonNull(context.getSystemService(LAYOUT_INFLATER_SERVICE))).inflate(R.layout.custom_marker_view, null);
@@ -1482,13 +1490,12 @@ public class RecordsAcceptedActivity extends CustomStuAppCompatActivity implemen
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
             recordDataAccepted = new ArrayList<>();
-            recordDataAccepted = Google.getInstance().getRecords();
             recordDataAccepted = DumeUtils.filterList(Google.getInstance().getRecords(), "Accepted");
         }
 
         @Override
         public Fragment getItem(int position) {
-            return PlaceholderFragment.newInstance(position, recordDataAccepted.get(position));
+            return PlaceholderFragment.newInstance(position,recordDataAccepted);
         }
 
         @Override

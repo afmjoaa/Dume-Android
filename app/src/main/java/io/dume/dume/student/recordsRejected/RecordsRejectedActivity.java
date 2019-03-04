@@ -2,6 +2,7 @@ package io.dume.dume.student.recordsRejected;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Animatable2;
@@ -100,6 +101,12 @@ public class RecordsRejectedActivity extends CustomStuAppCompatActivity implemen
     public void configRecordsRejected() {
         myPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         pager.setAdapter(myPagerAdapter);
+        Intent retrivedIntent = getIntent();
+        int pageToOpen = retrivedIntent.getIntExtra(DumeUtils.RECORDTAB, -1);
+        if (pageToOpen != -1 && pageToOpen< Google.getInstance().getRecords().size()) {
+            // Open the right pager
+            pager.setCurrentItem(pageToOpen,true);
+        }
     }
 
     @Override
@@ -133,6 +140,7 @@ public class RecordsRejectedActivity extends CustomStuAppCompatActivity implemen
 
         private static final String ARG_SECTION_NUMBER = "section_number";
         private static DocumentSnapshot record;
+        private static List<DocumentSnapshot> recordList;
         private RecordsRejectedActivity myThisActivity;
         private Context context;
         private float mDensity;
@@ -162,13 +170,14 @@ public class RecordsRejectedActivity extends CustomStuAppCompatActivity implemen
         private TextView rejectSubText;
         private Button rejectYesBtn;
         private Button rejectNoBtn;
+        private int fragmentPosition;
 
 
         public PlaceholderFragment() {
         }
 
-        public static PlaceholderFragment newInstance(int sectionNumber, DocumentSnapshot record) {
-            PlaceholderFragment.record = record;
+        public static PlaceholderFragment newInstance(int sectionNumber, List<DocumentSnapshot> recordList) {
+            PlaceholderFragment.recordList = recordList;
             PlaceholderFragment fragment = new PlaceholderFragment();
             Bundle args = new Bundle();
             args.putInt(ARG_SECTION_NUMBER, sectionNumber);
@@ -192,8 +201,12 @@ public class RecordsRejectedActivity extends CustomStuAppCompatActivity implemen
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             myThisActivity = (RecordsRejectedActivity) getActivity();
-            View rootView = inflater.inflate(R.layout.stu10_viewpager_layout_rejected, container, false);
+            if (getArguments() != null) {
+                fragmentPosition = getArguments().getInt(ARG_SECTION_NUMBER);
+            }
+            record = recordList.get(fragmentPosition);
 
+            View rootView = inflater.inflate(R.layout.stu10_viewpager_layout_rejected, container, false);
             salaryBtn = rootView.findViewById(R.id.show_salary_btn);
             agreementHostLayout = rootView.findViewById(R.id.agreement_term_host_linearlayout);
             agreementInfoBtn = rootView.findViewById(R.id.show_agreement_terms_btn);
@@ -464,7 +477,7 @@ public class RecordsRejectedActivity extends CustomStuAppCompatActivity implemen
 
         @Override
         public Fragment getItem(int position) {
-            return PlaceholderFragment.newInstance(position, recordDataRejected.get(position));
+            return PlaceholderFragment.newInstance(position, recordDataRejected);
         }
 
         @Override

@@ -102,6 +102,7 @@ import io.dume.dume.student.common.ReviewHighlightData;
 import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
 import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
 import io.dume.dume.student.pojo.SearchDataStore;
+import io.dume.dume.student.recordsAccepted.RecordsAcceptedActivity;
 import io.dume.dume.student.recordsCurrent.calenderDecorator.EventDecorator;
 import io.dume.dume.student.recordsCurrent.calenderDecorator.HighlightWeekendsDecorator;
 import io.dume.dume.student.recordsCurrent.calenderDecorator.MySelectorDecorator;
@@ -172,6 +173,12 @@ public class RecordsCurrentActivity extends CustomStuAppCompatActivity implement
     public void configRecordsCurrent() {
         myPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         pager.setAdapter(myPagerAdapter);
+        Intent retrivedIntent = getIntent();
+        int pageToOpen = retrivedIntent.getIntExtra(DumeUtils.RECORDTAB, -1);
+        if (pageToOpen != -1 && pageToOpen< Google.getInstance().getRecords().size()) {
+            // Open the right pager
+            pager.setCurrentItem(pageToOpen,true);
+        }
     }
 
     public void onRecordsCurrentViewClicked(View view) {
@@ -213,6 +220,7 @@ public class RecordsCurrentActivity extends CustomStuAppCompatActivity implement
     public static class PlaceholderFragment extends Fragment {
 
         private static final String ARG_SECTION_NUMBER = "section_number";
+        private static List<DocumentSnapshot> recordList;
         private RecordsCurrentActivity myThisActivity;
         private RecyclerView qualificationRecyView;
         private QualificationAdapter qualificaitonRecyAda;
@@ -322,13 +330,14 @@ public class RecordsCurrentActivity extends CustomStuAppCompatActivity implement
         private TextView stuPreviousResultTV;
         private TextView stuCurrentStatusTV;
         private TextView addressTV;
+        private int fragmentPosition;
 
 
         public PlaceholderFragment() {
         }
 
-        public static PlaceholderFragment newInstance(int sectionNumber, DocumentSnapshot record) {
-            PlaceholderFragment.record = record;
+        public static PlaceholderFragment newInstance(int sectionNumber, List<DocumentSnapshot> recordList) {
+            PlaceholderFragment.recordList = recordList;
             PlaceholderFragment fragment = new PlaceholderFragment();
             Bundle args = new Bundle();
             args.putInt(ARG_SECTION_NUMBER, sectionNumber);
@@ -353,7 +362,10 @@ public class RecordsCurrentActivity extends CustomStuAppCompatActivity implement
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             myThisActivity = (RecordsCurrentActivity) getActivity();
-            int fragmentPosition = getArguments().getInt(ARG_SECTION_NUMBER);
+            if (getArguments() != null) {
+                fragmentPosition = getArguments().getInt(ARG_SECTION_NUMBER);
+            }
+            record = recordList.get(fragmentPosition);
             View rootView = inflater.inflate(R.layout.stu13_viewpager_layout_current, container, false);
             //testing the layer drawable for  the calender current date
             mCustomMarkerView = ((LayoutInflater) Objects.requireNonNull(context.getSystemService(LAYOUT_INFLATER_SERVICE))).inflate(R.layout.custom_marker_view, null);
@@ -1871,13 +1883,12 @@ public class RecordsCurrentActivity extends CustomStuAppCompatActivity implement
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
             recordDataCurrent = new ArrayList<>();
-            recordDataCurrent = Google.getInstance().getRecords();
             recordDataCurrent = DumeUtils.filterList(Google.getInstance().getRecords(), "Current");
         }
 
         @Override
         public Fragment getItem(int position) {
-            return PlaceholderFragment.newInstance(position, recordDataCurrent.get(position));
+            return PlaceholderFragment.newInstance(position, recordDataCurrent);
         }
 
         @Override

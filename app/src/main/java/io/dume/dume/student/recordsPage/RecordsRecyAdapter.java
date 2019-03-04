@@ -78,7 +78,7 @@ public abstract class RecordsRecyAdapter extends RecyclerView.Adapter<RecordsRec
         holder.relativeHostLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                OnItemClicked(v, holder.getAdapterPosition());
+                OnItemClicked(v, position);
             }
         });
 

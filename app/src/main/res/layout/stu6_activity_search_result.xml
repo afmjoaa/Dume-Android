@@ -114,6 +114,8 @@
                                 android:paddingLeft="6dp"
                                 android:paddingRight="14dp"
                                 android:paddingStart="6dp"
+                                android:enabled="false"
+                                android:onClick="onSearchResultViewClicked"
                                 android:visibility="gone" />
 
                             <carbon.widget.ImageView
@@ -140,10 +142,12 @@
                                 android:drawableRight="@drawable/ic_swipe_right"
                                 android:drawableEnd="@drawable/ic_swipe_right"
                                 android:gravity="center"
+                                android:onClick="onSearchResultViewClicked"
                                 android:paddingEnd="6dp"
                                 android:paddingLeft="14dp"
                                 android:paddingRight="6dp"
                                 android:paddingStart="14dp"
+                                android:enabled="false"
                                 android:visibility="gone" />
 
                         </LinearLayout>
@@ -203,6 +207,7 @@
                         android:onClick="onSearchResultViewClicked"
                         android:textColor="@color/white"
                         android:textSize="16sp"
+                        android:enabled="false"
                         app:fontFamily="@font/cairo_regular" />
 
                     <View

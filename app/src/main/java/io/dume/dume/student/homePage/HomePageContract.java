@@ -179,7 +179,7 @@ public interface HomePageContract {
 
         void getPromo(String promoCode, TeacherContract.Model.Listener<HomePageRecyclerData> listener);
 
-        void submitRating(String record_id, String skill_id, String opponent_uid, String myAccountType, Map<String, Boolean> inputRating, float inputStar, String feedbackString, TeacherContract.Model.Listener<Void> listener);
+        void submitRating(String record_id, String skill_id, String opponent_uid, String myAccountType, Map<String, Boolean> inputRating, Float inputStar, String feedbackString, TeacherContract.Model.Listener<Void> listener);
 
         void getSingleRecords(String recordId, TeacherContract.Model.Listener<Record> listener);
 

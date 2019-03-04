@@ -65,11 +65,10 @@
             android:paddingTop="2dp"
             android:paddingBottom="2dp"
             android:tint="@color/colorWhite"
-            app:carbon_tint="@color/colorWhite"
             app:carbon_cornerRadius="16dp"
             app:carbon_rippleColor="@color/colorDarkAzure"
             app:carbon_rippleStyle="background"
-            app:srcCompat="@drawable/ic_discard" />
+            app:srcCompat="@drawable/ic_discard_white" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -178,11 +177,10 @@
             android:paddingTop="2dp"
             android:paddingBottom="2dp"
             android:tint="@color/colorWhite"
-            app:carbon_tint="@color/colorWhite"
             app:carbon_cornerRadius="16dp"
             app:carbon_rippleColor="@color/colorDarkAzure"
             app:carbon_rippleStyle="background"
-            app:srcCompat="@drawable/ic_done" />
+            app:srcCompat="@drawable/ic_done_white" />
 
     </LinearLayout>
 

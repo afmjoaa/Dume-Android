@@ -121,6 +121,8 @@ import me.zhanghai.android.materialratingbar.MaterialRatingBar;
 
 import static io.dume.dume.util.DumeUtils.animateImage;
 import static io.dume.dume.util.DumeUtils.getEndOFNest;
+import static io.dume.dume.util.DumeUtils.hideKeyboard;
+import static io.dume.dume.util.DumeUtils.showKeyboard;
 import static io.dume.dume.util.ImageHelper.getRoundedCornerBitmapSquare;
 
 public class HomePageActivity extends CusStuAppComMapActivity implements HomePageContract.View,
@@ -207,6 +209,7 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
     private LinearLayout mentorAddLayout;
     private HomePageModel mModel;
     private HorizontalLoadView loadView;
+    public LinearLayout hackHeight;
 
 
     @Override
@@ -291,6 +294,7 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
             public void onShown(Snackbar snackbar) {
             }
         });
+
     }
 
 
@@ -376,6 +380,7 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
         loadViewOne = findViewById(R.id.loadViewTwo);
         bottomSheetNSV = findViewById(R.id.bottom_sheet_scroll_view);
         recentSearchRV = findViewById(R.id.recent_search_recycler);
+        hackHeight = findViewById(R.id.hack_height);
         enamSnackbar = Snackbar.make(coordinatorLayout, "Replace with your own action", Snackbar.LENGTH_LONG);
 
     }
@@ -585,7 +590,6 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
         recentSearchRV.setLayoutManager(new LinearLayoutManager(this));
     }
 
-
     @Override
     public void onBackPressed() {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -765,6 +769,9 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
                     fab.animate().translationYBy((float) (60.0f * (getResources().getDisplayMetrics().density))).setDuration(60).start();
                     COMPASSBTN.animate().translationYBy((float) (54.0f * (getResources().getDisplayMetrics().density))).setDuration(60).start();
                 } else if (BottomSheetBehavior.STATE_COLLAPSED == newState) {
+                    hideKeyboard(HomePageActivity.this);
+                    hackHeight.setVisibility(View.GONE);
+
                     setDarkStatusBarIcon();
                     nestedScrollViewContent.setVisibility(View.VISIBLE);
                     viewMusk.setVisibility(View.GONE);
@@ -1100,7 +1107,6 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
         dialog.setCanceledOnTouchOutside(false);
         DocumentSnapshot snapshot = record.getRecordSnap();
 
-
         //all find view here
         MaterialRatingBar mDecimalRatingBars = dialog.findViewById(R.id.rated_mentor_rating_bar);
         RecyclerView itemRatingRecycleView = dialog.findViewById(R.id.rating_item_recycler);
@@ -1108,7 +1114,7 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
         TextView ratingPrimaryText = dialog.findViewById(R.id.rating_primary_text);
         TextView ratingSecondaryText = dialog.findViewById(R.id.rating_secondary_text);
         TextInputLayout feedbackTextViewLayout = dialog.findViewById(R.id.input_layout_firstname);
-        EditText feedbackTextView = dialog.findViewById(R.id.feedback_textview);
+        AutoCompleteTextView feedbackTextView = dialog.findViewById(R.id.feedback_textview);
         Button dismissBtn = (Button) dialog.findViewById(R.id.skip_btn);
         Button dismissBtnOne = (Button) dialog.findViewById(R.id.skip_btn_two);
         Button nextSubmitBtn = dialog.findViewById(R.id.next_btn);
@@ -1149,6 +1155,7 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
                     } else if (rating > 400 && rating <= 500) {
                         feedbackTextView.setHint(feedbackStrings[4]);
                     }
+                    showKeyboard(HomePageActivity.this);
                 } else {
                     feedbackTextView.setHint(feedbackStrings[4]);
                 }
@@ -1187,7 +1194,7 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
                             public void onSuccess(Void list) {
                                 hideProgress();
                                 SubmitBtn.setEnabled(true);
-                                flush("from inside submitteed");
+                                flush("Thanks for your review...");
                             }
 
                             @Override
@@ -1535,7 +1542,7 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
     @Override
     public void showProgressTwo() {
         if (loadView.getVisibility() == View.INVISIBLE || loadView.getVisibility() == View.GONE) {
-            loadViewOne.setVisibility(View.VISIBLE);
+            loadView.setVisibility(View.VISIBLE);
         }
         if (!loadView.isRunningAnimation()) {
             loadView.startLoading();

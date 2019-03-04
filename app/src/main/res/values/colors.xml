@@ -68,18 +68,23 @@
     <color name="star_rating_background_2nd">#c3d1da</color>
     <color name="review_like_color">#2699FB</color>
 
+    <color name="status_pending_badge">#e44d4d</color>
     <color name="status_pending">#41F56161</color>
     <color name="toolbar_pending">#ffebee</color>
 
+    <color name="status_rejected_badge">#324046</color>
     <color name="status_rejected">#b0bec5</color>
     <color name="toolbar_rejected">#cfd8dc</color>
 
+    <color name="status_accepted_badge">#efdb2b</color>
     <color name="status_accepted">#41ffeb3b</color>
     <color name="toolbar_accepted">#fffde7</color>
 
+    <color name="status_current_badge">#409c44</color>
     <color name="status_current">#414caf50</color>
     <color name="toolbar_current">#e8f5e9</color>
 
+    <color name="status_completed_badge">#187fd1</color>
     <color name="status_completed">#412196f3</color>
     <color name="toolbar_completed">#e3f2fd</color>
 

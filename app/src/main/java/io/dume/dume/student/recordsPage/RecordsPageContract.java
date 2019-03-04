@@ -26,6 +26,8 @@ public interface RecordsPageContract {
 
         void recordsPageEnqueue();
 
+        void recordsPageLoadData(TeacherContract.Model.Listener<Void> listener);
+
         void onRecordsPageIntracted(android.view.View view);
 
     }

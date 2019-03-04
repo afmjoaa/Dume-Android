@@ -249,7 +249,7 @@ public class SearchResultTabviewActivity extends CustomStuAppCompatActivity impl
                         public void run() {
                             swipeRefreshLayout.setRefreshing(false);
                         }
-                    }, 4000);
+                    }, 1000);
                 }
             });
             List<DocumentSnapshot> availableProfileDocu = new ArrayList<>();

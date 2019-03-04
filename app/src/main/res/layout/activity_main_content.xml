@@ -88,6 +88,18 @@
         app:layout_anchorGravity="top"
         app:rect_color="@color/transparent" />
 
+    <io.dume.dume.customView.HorizontalLoadView
+        android:id="@+id/loadView"
+        android:layout_width="20dp"
+        android:layout_height="3dp"
+        android:background="@drawable/bg_black_bottom_less_round"
+        android:elevation="8dp"
+        android:translationY="2dp"
+        android:visibility="gone"
+        app:layout_anchor="@id/secondary_Appbar"
+        app:layout_anchorGravity="bottom"
+        app:rect_color="@color/transparent" />
+
 
     <android.support.design.widget.CoordinatorLayout
         android:id="@+id/main_interface"
@@ -240,6 +252,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/hack_height"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:visibility="gone"
+                    android:orientation="vertical"/>
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/homePage_bottomSheet_recycler"

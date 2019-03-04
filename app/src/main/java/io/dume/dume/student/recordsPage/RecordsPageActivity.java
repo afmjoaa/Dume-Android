@@ -38,8 +38,10 @@ import io.dume.dume.student.recordsCompleted.RecordsCompletedActivity;
 import io.dume.dume.student.recordsCurrent.RecordsCurrentActivity;
 import io.dume.dume.student.recordsPending.RecordsPendingActivity;
 import io.dume.dume.student.recordsRejected.RecordsRejectedActivity;
+import io.dume.dume.teacher.homepage.TeacherContract;
 import io.dume.dume.util.DumeUtils;
 
+import static io.dume.dume.util.DumeUtils.RECORDTAB;
 import static io.dume.dume.util.DumeUtils.configureAppbarWithoutColloapsing;
 
 public class RecordsPageActivity extends CustomStuAppCompatActivity implements RecordsPageContract.View {
@@ -61,8 +63,6 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
     private LinearLayout noDataBlockMain;
     private List<Record> recordListMain = new ArrayList<>();
     public String retriveAction = null;
-    private View customView;
-    private TextView badgeTV;
 
 
     @Override
@@ -88,6 +88,25 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
             // get child TextView and ImageView from this layout for the icon and label
             TextView tab_label = tab.findViewById(R.id.nav_label);
             ImageView tab_icon = tab.findViewById(R.id.nav_icon);
+            carbon.widget.TextView badgeTV = tab.findViewById(R.id.badgeTV);
+            switch (i) {
+                case 0:
+                    badgeTV.setBackgroundColor(getResources().getColor(R.color.status_pending_badge));
+                    break;
+                case 1:
+                    badgeTV.setBackgroundColor(getResources().getColor(R.color.status_accepted_badge));
+                    badgeTV.setTextColor(getResources().getColor(R.color.black));
+                    break;
+                case 2:
+                    badgeTV.setBackgroundColor(getResources().getColor(R.color.status_current_badge));
+                    break;
+                case 3:
+                    badgeTV.setBackgroundColor(getResources().getColor(R.color.status_completed_badge));
+                    break;
+                case 4:
+                    badgeTV.setBackgroundColor(getResources().getColor(R.color.status_rejected_badge));
+                    break;
+            }
             tab_label.setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/Cairo-Light.ttf"));
             /*tab_label.setTextColor(getResources().getColorStateList(R.color.tab_colorstate_light));
              */
@@ -98,7 +117,16 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
             Objects.requireNonNull(tabLayout.getTabAt(i)).setCustomView(tab);
         }
         // finishes here ................
-
+        mPresenter.recordsPageLoadData(new TeacherContract.Model.Listener<Void>() {
+            @Override
+            public void onSuccess(Void list) {
+                //nothing to do
+            }
+            @Override
+            public void onError(String msg) {
+                //already handled
+            }
+        });
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
 
@@ -112,8 +140,6 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
         tabLayout = findViewById(R.id.tabs);
         mViewPager = findViewById(R.id.container);
         noDataBlockMain = findViewById(R.id.no_data_block);
-
-
     }
 
     @Override
@@ -133,26 +159,45 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
         List<Record> recordDataCompleted = DumeUtils.filterRecord(recordListMain, "Completed");
         List<Record> recordDataRejected = DumeUtils.filterRecord(recordListMain, "Rejected");
 
-        for (int i = 0; i < 5; i++) {
-            customView = tabLayout.getTabAt(i).getCustomView();
-            badgeTV = customView.findViewById(R.id.badgeTV);
-            switch (i){
-                case 0:
-                    badgeTV.setText(recordDataPending.size());
-                    break;
-                case 1:
-                    badgeTV.setText(recordDataAccepted.size());
-                    break;
-                case 2:
-                    badgeTV.setText(recordDataCurrent.size());
-                    break;
-                case 3:
-                    badgeTV.setText(recordDataCompleted.size());
-                    break;
-                case 4:
-                    badgeTV.setText(recordDataRejected.size());
-                    break;
-            }
+        View customView = Objects.requireNonNull(tabLayout.getTabAt(0)).getCustomView();
+        carbon.widget.TextView badgeTV = Objects.requireNonNull(customView).findViewById(R.id.badgeTV);
+        badgeTV.setText("" + recordDataPending.size());
+        if (recordDataPending.size() > 0) {
+            badgeTV.setVisibility(View.VISIBLE);
+        } else {
+            badgeTV.setVisibility(View.GONE);
+        }
+        customView = Objects.requireNonNull(tabLayout.getTabAt(1)).getCustomView();
+        badgeTV = Objects.requireNonNull(customView).findViewById(R.id.badgeTV);
+        badgeTV.setText("" + recordDataAccepted.size());
+        if (recordDataAccepted.size() > 0) {
+            badgeTV.setVisibility(View.VISIBLE);
+        } else {
+            badgeTV.setVisibility(View.GONE);
+        }
+        customView = Objects.requireNonNull(tabLayout.getTabAt(2)).getCustomView();
+        badgeTV = Objects.requireNonNull(customView).findViewById(R.id.badgeTV);
+        badgeTV.setText("" + recordDataCurrent.size());
+        if (recordDataCurrent.size() > 0) {
+            badgeTV.setVisibility(View.VISIBLE);
+        } else {
+            badgeTV.setVisibility(View.GONE);
+        }
+        customView = Objects.requireNonNull(tabLayout.getTabAt(3)).getCustomView();
+        badgeTV = Objects.requireNonNull(customView).findViewById(R.id.badgeTV);
+        badgeTV.setText("" + recordDataCompleted.size());
+        if (recordDataCompleted.size() > 0) {
+            badgeTV.setVisibility(View.VISIBLE);
+        } else {
+            badgeTV.setVisibility(View.GONE);
+        }
+        customView = Objects.requireNonNull(tabLayout.getTabAt(4)).getCustomView();
+        badgeTV = Objects.requireNonNull(customView).findViewById(R.id.badgeTV);
+        badgeTV.setText("" + recordDataRejected.size());
+        if (recordDataRejected.size() > 0) {
+            badgeTV.setVisibility(View.VISIBLE);
+        } else {
+            badgeTV.setVisibility(View.GONE);
         }
     }
 
@@ -283,6 +328,11 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
         private TextView noItemText;
         private LinearLayout noDataBlock;
         private List<Record> recordList;
+        private RecordsRecyAdapter recordsRecyAdapending;
+        private RecordsRecyAdapter recordsRecyAdaAccepted;
+        private RecordsRecyAdapter recordsRecyAdaCurrent;
+        private RecordsRecyAdapter recordsRecyAdaCompleted;
+        private RecordsRecyAdapter recordsRecyAdaRejected;
 
         @Override
         public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -312,17 +362,92 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
             noItemText = rootView.findViewById(R.id.no_item_text);
             noDataBlock = rootView.findViewById(R.id.no_data_block);
 
-            swipeRefreshLayout.setColorSchemeResources(android.R.color.holo_orange_light, android.R.color.holo_green_light,
+            swipeRefreshLayout.setColorSchemeResources( android.R.color.holo_green_light,android.R.color.holo_orange_light,
                     android.R.color.holo_red_light, android.R.color.holo_blue_light);
             swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
                 public void onRefresh() {
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            swipeRefreshLayout.setRefreshing(false);
-                        }
-                    }, 4000);
+                    if(recordsRecyAdaRejected!= null){
+                        myThisActivity.mPresenter.recordsPageLoadData(new TeacherContract.Model.Listener<Void>() {
+                            @Override
+                            public void onSuccess(Void list) {
+                                //nothing to do
+                                switch (fragmentPosition) {
+                                    case 1:
+                                        List<Record> recordDataPending = new ArrayList<>();
+                                        recordDataPending = Google.getInstance().getRecordList();
+                                        recordDataPending = DumeUtils.filterRecord(recordDataPending, "Pending");
+                                        noItemText.setText("Sorry, no pending records to show right now...");
+                                        if (recordDataPending.size() > 0) {
+                                            noDataBlock.setVisibility(View.GONE);
+                                        } else {
+                                            noDataBlock.setVisibility(View.VISIBLE);
+                                        }
+                                        recordRecyclerView.setAdapter(recordsRecyAdapending);
+                                        break;
+                                    case 2:
+                                        List<Record> recordDataAccepted = new ArrayList<>();
+                                        recordDataAccepted = Google.getInstance().getRecordList();
+                                        recordDataAccepted = DumeUtils.filterRecord(recordDataAccepted, "Accepted");
+                                        noItemText.setText("Sorry, no accepted records to show right now...");
+                                        if (recordDataAccepted.size() > 0) {
+                                            noDataBlock.setVisibility(View.GONE);
+                                        } else {
+                                            noDataBlock.setVisibility(View.VISIBLE);
+                                        }
+                                        recordRecyclerView.setAdapter(recordsRecyAdaAccepted);
+                                        break;
+                                    case 3:
+                                        List<Record> recordDataCurrent = new ArrayList<>();
+                                        recordDataCurrent = Google.getInstance().getRecordList();
+                                        recordDataCurrent = DumeUtils.filterRecord(recordDataCurrent, "Current");
+                                        noItemText.setText("Sorry, no current records to show right now...");
+                                        if (recordDataCurrent.size() > 0) {
+                                            noDataBlock.setVisibility(View.GONE);
+                                        } else {
+                                            noDataBlock.setVisibility(View.VISIBLE);
+                                        }
+                                        recordRecyclerView.setAdapter(recordsRecyAdaCurrent);
+                                        break;
+                                    case 4:
+                                        List<Record> recordDataCompletded = new ArrayList<>();
+                                        recordDataCompletded = Google.getInstance().getRecordList();
+                                        recordDataCompletded = DumeUtils.filterRecord(recordDataCompletded, "Completed");
+                                        noItemText.setText("Sorry, no completed records to show right now...");
+                                        if (recordDataCompletded.size() > 0) {
+                                            noDataBlock.setVisibility(View.GONE);
+                                        } else {
+                                            noDataBlock.setVisibility(View.VISIBLE);
+                                        }
+                                        recordRecyclerView.setAdapter(recordsRecyAdaCompleted);
+                                        break;
+
+                                    case 5:
+                                        List<Record> recordDataRejected = new ArrayList<>();
+                                        recordDataRejected = Google.getInstance().getRecordList();
+                                        recordDataRejected = DumeUtils.filterRecord(recordDataRejected, "Rejected");
+                                        noItemText.setText("Sorry, no rejected records to show right now...");
+                                        if (recordDataRejected.size() > 0) {
+                                            noDataBlock.setVisibility(View.GONE);
+                                        } else {
+                                            noDataBlock.setVisibility(View.VISIBLE);
+                                        }
+                                        recordRecyclerView.setAdapter(recordsRecyAdaRejected);
+                                        break;
+                                    default:
+                                        break;
+                                }
+                                swipeRefreshLayout.setRefreshing(false);
+                            }
+                            @Override
+                            public void onError(String msg) {
+                                //already handled
+                                swipeRefreshLayout.setRefreshing(false);
+                            }
+                        });
+                    }else {
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
                 }
             });
 
@@ -332,17 +457,20 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
                     List<Record> recordDataPending = new ArrayList<>();
                     recordDataPending = Google.getInstance().getRecordList();
                     recordDataPending = DumeUtils.filterRecord(recordDataPending, "Pending");
-
-                    RecordsRecyAdapter recordsRecyAdapending = new RecordsRecyAdapter(myThisActivity, recordDataPending) {
+                    recordsRecyAdapending = new RecordsRecyAdapter(myThisActivity, recordDataPending) {
                         @Override
                         void OnItemClicked(View v, int position) {
                             if (myThisActivity.retriveAction != null) {
                                 switch (myThisActivity.retriveAction) {
                                     case DumeUtils.STUDENT:
-                                        startActivity(new Intent(myThisActivity, RecordsPendingActivity.class).setAction(DumeUtils.STUDENT));
+                                        Intent stuIntent = new Intent(myThisActivity, RecordsPendingActivity.class).setAction(DumeUtils.STUDENT);
+                                        stuIntent.putExtra(RECORDTAB, position);
+                                        startActivity(stuIntent);
                                         break;
                                     case DumeUtils.TEACHER:
-                                        startActivity(new Intent(myThisActivity, RecordsPendingActivity.class).setAction(DumeUtils.TEACHER));
+                                        Intent mntIntent = new Intent(myThisActivity, RecordsPendingActivity.class).setAction(DumeUtils.TEACHER);
+                                        mntIntent.putExtra(RECORDTAB, position);
+                                        startActivity(mntIntent);
                                         break;
                                     case DumeUtils.BOOTCAMP:
                                         startActivity(new Intent(myThisActivity, RecordsPendingActivity.class).setAction(DumeUtils.BOOTCAMP));
@@ -353,7 +481,6 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
                                 }
                             }
                         }
-
                         @Override
                         void OnItemLongClicked(View v, int position) {
                             Toast.makeText(myThisActivity, "Pending Record aren't deletable", Toast.LENGTH_SHORT).show();
@@ -372,16 +499,20 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
                     List<Record> recordDataAccepted = new ArrayList<>();
                     recordDataAccepted = Google.getInstance().getRecordList();
                     recordDataAccepted = DumeUtils.filterRecord(recordDataAccepted, "Accepted");
-                    RecordsRecyAdapter recordsRecyAdaAccepted = new RecordsRecyAdapter(myThisActivity, recordDataAccepted) {
+                    recordsRecyAdaAccepted = new RecordsRecyAdapter(myThisActivity, recordDataAccepted) {
                         @Override
                         void OnItemClicked(View v, int position) {
                             if (myThisActivity.retriveAction != null) {
                                 switch (myThisActivity.retriveAction) {
                                     case DumeUtils.STUDENT:
-                                        startActivity(new Intent(myThisActivity, RecordsAcceptedActivity.class).setAction(DumeUtils.STUDENT));
+                                        Intent stuIntent = new Intent(myThisActivity, RecordsAcceptedActivity.class).setAction(DumeUtils.STUDENT);
+                                        stuIntent.putExtra(RECORDTAB, position);
+                                        startActivity(stuIntent);
                                         break;
                                     case DumeUtils.TEACHER:
-                                        startActivity(new Intent(myThisActivity, RecordsAcceptedActivity.class).setAction(DumeUtils.TEACHER));
+                                        final Intent mntIntent = new Intent(myThisActivity, RecordsAcceptedActivity.class).setAction(DumeUtils.TEACHER);
+                                        mntIntent.putExtra(RECORDTAB, position);
+                                        startActivity(mntIntent);
                                         break;
                                     case DumeUtils.BOOTCAMP:
                                         startActivity(new Intent(myThisActivity, RecordsAcceptedActivity.class).setAction(DumeUtils.BOOTCAMP));
@@ -411,16 +542,20 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
                     List<Record> recordDataCurrent = new ArrayList<>();
                     recordDataCurrent = Google.getInstance().getRecordList();
                     recordDataCurrent = DumeUtils.filterRecord(recordDataCurrent, "Current");
-                    RecordsRecyAdapter recordsRecyAdaCurrent = new RecordsRecyAdapter(myThisActivity, recordDataCurrent) {
+                    recordsRecyAdaCurrent = new RecordsRecyAdapter(myThisActivity, recordDataCurrent) {
                         @Override
                         void OnItemClicked(View v, int position) {
                             if (myThisActivity.retriveAction != null) {
                                 switch (myThisActivity.retriveAction) {
                                     case DumeUtils.STUDENT:
-                                        startActivity(new Intent(myThisActivity, RecordsCurrentActivity.class).setAction(DumeUtils.STUDENT));
+                                        final Intent stuIntent = new Intent(myThisActivity, RecordsCurrentActivity.class).setAction(DumeUtils.STUDENT);
+                                        stuIntent.putExtra(RECORDTAB, position);
+                                        startActivity(stuIntent);
                                         break;
                                     case DumeUtils.TEACHER:
-                                        startActivity(new Intent(myThisActivity, RecordsCurrentActivity.class).setAction(DumeUtils.TEACHER));
+                                        final Intent mntIntent = new Intent(myThisActivity, RecordsCurrentActivity.class).setAction(DumeUtils.TEACHER);
+                                        mntIntent.putExtra(RECORDTAB, position);
+                                        startActivity(mntIntent);
                                         break;
                                     case DumeUtils.BOOTCAMP:
                                         startActivity(new Intent(myThisActivity, RecordsCurrentActivity.class).setAction(DumeUtils.BOOTCAMP));
@@ -450,16 +585,20 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
                     List<Record> recordDataCompletded = new ArrayList<>();
                     recordDataCompletded = Google.getInstance().getRecordList();
                     recordDataCompletded = DumeUtils.filterRecord(recordDataCompletded, "Completed");
-                    RecordsRecyAdapter recordsRecyAdaCompleted = new RecordsRecyAdapter(myThisActivity, recordDataCompletded) {
+                    recordsRecyAdaCompleted = new RecordsRecyAdapter(myThisActivity, recordDataCompletded) {
                         @Override
                         void OnItemClicked(View v, int position) {
                             if (myThisActivity.retriveAction != null) {
                                 switch (myThisActivity.retriveAction) {
                                     case DumeUtils.STUDENT:
-                                        startActivity(new Intent(myThisActivity, RecordsCompletedActivity.class).setAction(DumeUtils.STUDENT));
+                                        Intent stuIntent = new Intent(myThisActivity, RecordsCompletedActivity.class).setAction(DumeUtils.STUDENT);
+                                        stuIntent.putExtra(RECORDTAB, position);
+                                        startActivity(stuIntent);
                                         break;
                                     case DumeUtils.TEACHER:
-                                        startActivity(new Intent(myThisActivity, RecordsCompletedActivity.class).setAction(DumeUtils.TEACHER));
+                                        Intent mntIntent = new Intent(myThisActivity, RecordsCompletedActivity.class).setAction(DumeUtils.TEACHER);
+                                        mntIntent.putExtra(RECORDTAB, position);
+                                        startActivity(mntIntent);
                                         break;
                                     case DumeUtils.BOOTCAMP:
                                         startActivity(new Intent(myThisActivity, RecordsCompletedActivity.class).setAction(DumeUtils.BOOTCAMP));
@@ -490,16 +629,20 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
                     List<Record> recordDataRejected = new ArrayList<>();
                     recordDataRejected = Google.getInstance().getRecordList();
                     recordDataRejected = DumeUtils.filterRecord(recordDataRejected, "Rejected");
-                    RecordsRecyAdapter recordsRecyAdaRejected = new RecordsRecyAdapter(myThisActivity, recordDataRejected) {
+                    recordsRecyAdaRejected = new RecordsRecyAdapter(myThisActivity, recordDataRejected) {
                         @Override
                         void OnItemClicked(View v, int position) {
                             if (myThisActivity.retriveAction != null) {
                                 switch (myThisActivity.retriveAction) {
                                     case DumeUtils.STUDENT:
-                                        startActivity(new Intent(myThisActivity, RecordsRejectedActivity.class).setAction(DumeUtils.STUDENT));
+                                        Intent stuIntent = new Intent(myThisActivity, RecordsRejectedActivity.class).setAction(DumeUtils.STUDENT);
+                                        stuIntent.putExtra(RECORDTAB, position);
+                                        startActivity(stuIntent);
                                         break;
                                     case DumeUtils.TEACHER:
-                                        startActivity(new Intent(myThisActivity, RecordsRejectedActivity.class).setAction(DumeUtils.TEACHER));
+                                        Intent mntIntent = new Intent(myThisActivity, RecordsRejectedActivity.class).setAction(DumeUtils.TEACHER);
+                                        mntIntent.putExtra(RECORDTAB, position);
+                                        startActivity(mntIntent);
                                         break;
                                     case DumeUtils.BOOTCAMP:
                                         startActivity(new Intent(myThisActivity, RecordsRejectedActivity.class).setAction(DumeUtils.BOOTCAMP));

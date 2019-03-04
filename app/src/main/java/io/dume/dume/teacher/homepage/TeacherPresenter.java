@@ -48,59 +48,7 @@ public class TeacherPresenter implements TeacherContract.Presenter {
     public void init() {
         view.init();
         view.configView();
-        /*model.getFeedBack(new TeacherContract.Model.Listener<ArrayList<Feedback>>() {
-            @Override
-            public void onSuccess(ArrayList<Feedback> list) {
-
-            }
-
-            @Override
-            public void onError(String msg) {
-                view.flush(msg);
-            }
-        });
-        model.getInbox(new TeacherContract.Model.Listener<ArrayList<Inbox>>() {
-            @Override
-            public void onSuccess(ArrayList<Inbox> list) {
-
-            }
-
-            @Override
-            public void onError(String msg) {
-                view.flush(msg);
-            }
-        });
-        model.getChartEntry(new TeacherContract.Model.Listener<List<ArrayList<Entry>>>() {
-            @Override
-            public void onSuccess(List<ArrayList<Entry>> entrieslist) {
-                List<ILineDataSet> dataSets = new ArrayList<>();
-                for (int i = 0; i < entrieslist.size(); i++) {
-                    LineDataSet lineDataSet = null;
-                    lineDataSet = new LineDataSet(entrieslist.get(i), "Impressions");
-                    lineDataSet.setDrawFilled(true);
-                    lineDataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
-                    lineDataSet.setFillColor(Color.RED);
-                    lineDataSet.setColor(Color.RED);
-                    if (i == 1) {
-                        lineDataSet = new LineDataSet(entrieslist.get(i), "Views");
-                        lineDataSet.setDrawFilled(true);
-                        lineDataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
-                        lineDataSet.setFillColor(Color.MAGENTA);
-                        lineDataSet.setColor(Color.MAGENTA);
-                    }
-                    lineDataSet.setLineWidth(0.0f);
-                    lineDataSet.setDrawValues(false);
-                    dataSets.add(lineDataSet);
-                }
-                LineData lineData = new LineData(dataSets);
-
-            }
-
-            @Override
-            public void onError(String msg) {
-                view.flush(msg);
-            }
-        });*/
+        loadRating();
 
     }
 
@@ -170,71 +118,7 @@ public class TeacherPresenter implements TeacherContract.Presenter {
                     view.setProfileComPercent(documentSnapshot.getString("pro_com_%"));
                     view.showPercentSnackBar(documentSnapshot.getString("pro_com_%"));
                 }
-                //testing fucking code here
-                List<String> ratingArray = (List<String>) documentSnapshot.get("rating_array");
-                if (ratingArray != null && ratingArray.size() > 0) {
-                    for (int i = 0; i < ratingArray.size(); i++) {
-                        int finalI = i;
-                        model.getSingleRecords(ratingArray.get(i), new TeacherContract.Model.Listener<Record>() {
-                            @Override
-                            public void onSuccess(Record list) {
-                                String t_rate_status = list.getT_rate_status();
-                                switch (t_rate_status) {
-                                    case Record.DIALOG:
-                                        HomePageRatingData ratingDataList = new HomePageRatingData();
-                                        List<String> ratingDataItemName = new ArrayList<>();
-                                        ratingDataItemName.add("Expertise");
-                                        ratingDataItemName.add("Experience");
-                                        ratingDataItemName.add("Communication");
-                                        ratingDataItemName.add("Behaviour");
 
-
-                                        String subjectExchange[] = list.getSubjectExchange().split("\\s*(=>|,|\\s)\\s*");
-                                        for (int j = 0; j < subjectExchange.length; j++) {
-                                            ratingDataItemName.add(subjectExchange[j]);
-                                        }
-                                        ratingDataList.setRatingNameList(ratingDataItemName);
-                                        ratingDataList.setName(list.getMentorName());
-                                        ratingDataList.setAvatar(list.getMentorDpUrl());
-                                        view.testingCustomDialogue(ratingDataList);
-                                        break;
-                                    case Record.BOTTOM_SHEET:
-                                        HomePageRatingData currentRatingDataList = new HomePageRatingData();
-                                        List<String> currentRatingDataItemName = new ArrayList<>();
-                                        currentRatingDataItemName.add("Expertise");
-                                        currentRatingDataItemName.add("Experience");
-                                        currentRatingDataItemName.add("Communication");
-                                        currentRatingDataItemName.add("Behaviour");
-                                        String newSubjectExchange[] = list.getSubjectExchange().split("\\s*(=>|,|\\s)\\s*");
-                                        currentRatingDataItemName.addAll(Arrays.asList(newSubjectExchange));
-                                        currentRatingDataList.setRatingNameList(currentRatingDataItemName);
-                                        currentRatingDataList.setName(list.getMentorName());
-                                        currentRatingDataList.setAvatar(list.getMentorDpUrl());
-                                        view.showSingleBottomSheetRating(currentRatingDataList);
-                                        break;
-                                    case Record.DONE:
-                                        model.removeCompletedRating(ratingArray.get(finalI), new TeacherContract.Model.Listener<Void>() {
-                                            @Override
-                                            public void onSuccess(Void list) {
-                                            }
-
-                                            @Override
-                                            public void onError(String msg) {
-                                                view.flush(msg);
-                                            }
-                                        });
-                                        break;
-                                }
-                            }
-
-                            @Override
-                            public void onError(String msg) {
-                                view.flush(msg);
-
-                            }
-                        });
-                    }
-                }
                 listener.onSuccess(null);
             }
 
@@ -244,6 +128,129 @@ public class TeacherPresenter implements TeacherContract.Presenter {
                 view.flush(msg);
             }
         });
+    }
+
+    public void loadRating() {
+        //testing fucking code here
+        if (TeacherDataStore.getInstance().getDocumentSnapshot() == null) {
+            model.getMendatory(new TeacherContract.Model.Listener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    List<String> ratingArray = (List<String>) documentSnapshot.get("rating_array");
+                    if (ratingArray != null && ratingArray.size() > 0) {
+                        for (int i = 0; i < ratingArray.size(); i++) {
+                            int finalI = i;
+                            model.getSingleRecords(ratingArray.get(i), new TeacherContract.Model.Listener<Record>() {
+                                @Override
+                                public void onSuccess(Record record) {
+
+                                    String t_rate_status = record.getT_rate_status();
+                                    switch (t_rate_status) {
+                                        case Record.DIALOG:
+                                            HomePageRatingData ratingDataList = new HomePageRatingData();
+                                            List<String> ratingDataItemName = new ArrayList<>();
+                                            ratingDataItemName.add("Communication");
+                                            ratingDataItemName.add("Behaviour");
+                                            ratingDataList.setRatingNameList(ratingDataItemName);
+                                            ratingDataList.setName(record.getStudentName());
+                                            ratingDataList.setAvatar(record.getStudentDpUrl());
+                                            view.testingCustomDialogue(ratingDataList, record);
+                                            break;
+                                        case Record.BOTTOM_SHEET:
+                                            HomePageRatingData currentRatingDataList = new HomePageRatingData();
+                                            List<String> currentRatingDataItemName = new ArrayList<>();
+                                            currentRatingDataItemName.add("Communication");
+                                            currentRatingDataItemName.add("Behaviour");
+                                            currentRatingDataList.setRatingNameList(currentRatingDataItemName);
+                                            currentRatingDataList.setName(record.getStudentName());
+                                            currentRatingDataList.setAvatar(record.getStudentDpUrl());
+                                            currentRatingDataList.setRecord(record);
+                                            view.showSingleBottomSheetRating(currentRatingDataList);
+                                            break;
+                                        case Record.DONE:
+                                            model.removeCompletedRating(ratingArray.get(finalI), new TeacherContract.Model.Listener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void list) {
+                                                }
+
+                                                @Override
+                                                public void onError(String msg) {
+                                                    view.flush(msg);
+                                                }
+                                            });
+                                            break;
+                                    }
+                                }
+
+                                @Override
+                                public void onError(String msg) {
+                                    view.flush(msg);
+                                }
+                            });
+                        }
+                    }
+                }
+                @Override
+                public void onError(String msg) {
+                    view.flush(msg);
+                }
+            });
+        } else {
+            List<String> ratingArray = (List<String>) TeacherDataStore.getInstance().getDocumentSnapshot().get("rating_array");
+            if (ratingArray != null && ratingArray.size() > 0) {
+                for (int i = 0; i < ratingArray.size(); i++) {
+                    int finalI = i;
+                    model.getSingleRecords(ratingArray.get(i), new TeacherContract.Model.Listener<Record>() {
+                        @Override
+                        public void onSuccess(Record record) {
+
+                            String t_rate_status = record.getT_rate_status();
+                            switch (t_rate_status) {
+                                case Record.DIALOG:
+                                    HomePageRatingData ratingDataList = new HomePageRatingData();
+                                    List<String> ratingDataItemName = new ArrayList<>();
+                                    ratingDataItemName.add("Communication");
+                                    ratingDataItemName.add("Behaviour");
+                                    ratingDataList.setRatingNameList(ratingDataItemName);
+                                    ratingDataList.setName(record.getStudentName());
+                                    ratingDataList.setAvatar(record.getStudentDpUrl());
+                                    view.testingCustomDialogue(ratingDataList, record);
+                                    break;
+                                case Record.BOTTOM_SHEET:
+                                    HomePageRatingData currentRatingDataList = new HomePageRatingData();
+                                    List<String> currentRatingDataItemName = new ArrayList<>();
+                                    currentRatingDataItemName.add("Communication");
+                                    currentRatingDataItemName.add("Behaviour");
+                                    currentRatingDataList.setRatingNameList(currentRatingDataItemName);
+                                    currentRatingDataList.setName(record.getStudentName());
+                                    currentRatingDataList.setAvatar(record.getStudentDpUrl());
+                                    currentRatingDataList.setRecord(record);
+                                    view.showSingleBottomSheetRating(currentRatingDataList);
+                                    break;
+                                case Record.DONE:
+                                    model.removeCompletedRating(ratingArray.get(finalI), new TeacherContract.Model.Listener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void list) {
+                                        }
+
+                                        @Override
+                                        public void onError(String msg) {
+                                            view.flush(msg);
+                                        }
+                                    });
+                                    break;
+                            }
+                        }
+
+                        @Override
+                        public void onError(String msg) {
+                            view.flush(msg);
+                        }
+                    });
+                }
+            }
+        }
+
     }
 
     @Override

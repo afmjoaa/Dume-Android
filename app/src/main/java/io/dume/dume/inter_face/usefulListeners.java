@@ -26,10 +26,8 @@ public interface usefulListeners {
 
     }
 
-    interface withKeyboardListener {
 
-        void onOpen();
-
-        void onClose();
+    interface KeyboardVisibilityListener {
+        void onKeyboardVisibilityChanged(boolean keyboardVisible);
     }
 }

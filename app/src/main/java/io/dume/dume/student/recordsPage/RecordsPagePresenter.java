@@ -28,6 +28,12 @@ public class RecordsPagePresenter implements RecordsPageContract.Presenter {
         view.findView();
         view.initRecordsPage();
         view.configRecordsPage();
+
+
+    }
+
+    @Override
+    public void recordsPageLoadData(TeacherContract.Model.Listener<Void> listener) {
         view.load();
         mModel.getRecords(new TeacherContract.Model.Listener<List<Record>>() {
             @Override
@@ -35,16 +41,16 @@ public class RecordsPagePresenter implements RecordsPageContract.Presenter {
                 view.stopLoad();
                 Google.getInstance().setRecordList(list);
                 view.onDataLoadFinsh();
+                listener.onSuccess(null);
             }
 
             @Override
             public void onError(String msg) {
                 view.stopLoad();
                 view.flush(msg);
-
+                listener.onError(msg);
             }
         });
-
     }
 
     @Override
