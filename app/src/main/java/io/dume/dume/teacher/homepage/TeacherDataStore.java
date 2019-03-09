@@ -19,6 +19,7 @@ public class TeacherDataStore implements Serializable {
     private static TeacherDataStore teacherDataStore = null;
     private String packName;
     private ArrayList<Skill> skillArrayList = null;
+    private List<Boolean> badgeList;
 
     private String tUserName;
     private String tUserNumber;
@@ -26,6 +27,14 @@ public class TeacherDataStore implements Serializable {
     private String tAvatarString = null;
     private String tUserUid;
     private String packageName;
+
+    public List<Boolean> getBadgeList() {
+        return badgeList;
+    }
+
+    public void setBadgeList(List<Boolean> badgeList) {
+        this.badgeList = badgeList;
+    }
 
     public String getPackageName() {
         return packageName == null ? SearchDataStore.REGULAR_DUME : packageName;

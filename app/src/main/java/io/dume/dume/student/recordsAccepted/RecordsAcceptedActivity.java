@@ -441,7 +441,7 @@ public class RecordsAcceptedActivity extends CustomStuAppCompatActivity implemen
             studentRating = Float.parseFloat((String) shMap.get("star_rating"));
             studentName = (String) forMap.get("stu_name");
             studentDpUrl = (String) forMap.get("request_avatar");
-            salaryInDemand = String.valueOf((Double) documentData.get("salary"));
+            salaryInDemand = String.valueOf((Number) documentData.get("salary"));
             sGender = (String) forMap.get("request_gender");
             mGender = (String) spMap.get("gender");
             subjectExchange = DumeUtils.getLast((Map<String, Object>) documentData.get("jizz"));
@@ -478,7 +478,7 @@ public class RecordsAcceptedActivity extends CustomStuAppCompatActivity implemen
 
             //fill up all info of the mentor
             NumberFormat currencyInstance = NumberFormat.getCurrencyInstance(Locale.US);
-            Double salary = (Double) selectedMentor.get("salary");
+            Number salary = (Number) selectedMentor.get("salary");
             String format1 = currencyInstance.format(salary);
             salaryBtn.setText("Salary : " + format1.substring(1, format1.length() - 3) + " BDT");
             loadQualificationData(sp_info);

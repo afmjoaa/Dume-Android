@@ -721,7 +721,7 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                             likes.put(splited, 1);
                             dislikes.put(splited, 0);
                         }
-
+                        //FieldValue.serverTimestamp() done in the dumeModel instead of new date();
                         Skill skill = new Skill(true, queryMap.get("Gender").toString(), salary * 1000, new Date(), queryMap, queryString
                                 , new GeoPoint(84.9, 180), 0, 0, "", 0.0f, likes, dislikes, packageName);
                         skill.setQuery_list(queryList);

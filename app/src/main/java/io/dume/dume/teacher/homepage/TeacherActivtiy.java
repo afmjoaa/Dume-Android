@@ -244,7 +244,9 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
 
     @Override
     public void updateBadge(String badgeNumber) {
-        tabLayout.setTabBadge(1, badgeNumber);
+        if(Integer.parseInt(badgeNumber)!= 0){
+            tabLayout.setTabBadge(1, badgeNumber);
+        }
     }
 
     @Override
@@ -1446,4 +1448,5 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         hPageBSRcyclerAdapter.addNewData(currentRatingDataList);
 
     }
+
 }

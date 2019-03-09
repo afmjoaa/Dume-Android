@@ -70,6 +70,7 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.maps.android.SphericalUtil;
 import com.google.maps.android.ui.IconGenerator;
@@ -467,6 +468,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                     }
                     recordsData.putAll(searchMap);
                     recordsData.putAll(skillMap);
+                    recordsData.put("creation", FieldValue.serverTimestamp());
                     recordsData.put("skill_uid", selectedMentor.getId());
                     recordsData.put("record_status", SearchDataStore.STATUSPENDING);
                     recordsData.put("sp_uid", spUid);
