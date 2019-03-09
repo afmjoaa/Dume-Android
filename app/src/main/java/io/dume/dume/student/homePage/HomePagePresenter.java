@@ -263,7 +263,7 @@ public class HomePagePresenter implements HomePageContract.Presenter {
 
                         @Override
                         public void onError(String msg) {
-                            mView.flush(msg);
+                            Log.w(TAG, "onError: "+msg );
                         }
                     });
                 }

@@ -6,6 +6,8 @@ import android.util.Log;
 
 import com.github.mikephil.charting.data.Entry;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -29,14 +31,22 @@ public class TeacherModel extends HomePageModel implements TeacherContract.Model
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore firestore;
     private static final String TAG = "TeacherModel";
+    private Context context;
+    private DocumentReference mentorProfileinfo;
 
     public TeacherModel(Context context) {
         super((Activity) context, context);
+        this.context = context;
         firestore = FirebaseFirestore.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
         teacherDataStore = TeacherDataStore.getInstance();
+        mentorProfileinfo = firestore.collection("/users/mentors/mentor_profile").document(getUser().getUid());
     }
 
+    @Override
+    public void addShapShotListener(EventListener<DocumentSnapshot> updateViewListener) {
+        userStudentProInfo.addSnapshotListener((Activity) context, updateViewListener);
+    }
     @Override
     public void getFeedBack(Listener listener) {
         ArrayList<Feedback> list = new ArrayList<>();

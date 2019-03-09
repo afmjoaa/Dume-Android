@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import io.dume.dume.student.homePage.adapter.HomePageRatingData;
+import io.dume.dume.student.homePage.adapter.HomePageRecyclerData;
 import io.dume.dume.student.recordsPage.Record;
 import io.dume.dume.teacher.pojo.Feedback;
 import io.dume.dume.teacher.pojo.Inbox;
@@ -21,6 +22,8 @@ public interface TeacherContract {
 
 
     interface View {
+        void loadPromoData(HomePageRecyclerData promoData);
+
         void updateBadge(String badgeNumber);
 
         void init();

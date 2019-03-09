@@ -24,6 +24,7 @@ import java.util.Objects;
 import io.dume.dume.R;
 import io.dume.dume.student.common.ReviewHighlightData;
 import io.dume.dume.student.homePage.adapter.HomePageRatingData;
+import io.dume.dume.student.homePage.adapter.HomePageRecyclerData;
 import io.dume.dume.student.recordsPage.Record;
 import io.dume.dume.teacher.pojo.Feedback;
 import io.dume.dume.teacher.pojo.Inbox;
@@ -118,7 +119,7 @@ public class TeacherPresenter implements TeacherContract.Presenter {
                     view.setProfileComPercent(documentSnapshot.getString("pro_com_%"));
                     view.showPercentSnackBar(documentSnapshot.getString("pro_com_%"));
                 }
-
+loadPromo();
                 listener.onSuccess(null);
             }
 
@@ -130,8 +131,40 @@ public class TeacherPresenter implements TeacherContract.Presenter {
         });
     }
 
+    public void loadPromo()
+    {
+        Map<String, Object> documentSnapshot = TeacherDataStore.getInstance().getDocumentSnapshot();
+        if (documentSnapshot != null) {
+            ArrayList<String> available_promo = (ArrayList<String>) documentSnapshot.get("available_promo");
+            ArrayList<String> tempList = new ArrayList<>();
+            for (String promoCode : available_promo) {
+                if (!tempList.contains(promoCode)) {
+                    tempList.add(promoCode);
+                }
+            }
+            available_promo = tempList;
+            for (String promoCode : available_promo) {
+                model.getPromo(promoCode, new TeacherContract.Model.Listener<HomePageRecyclerData>() {
+                    @Override
+                    public void onSuccess(HomePageRecyclerData list) {
+                        view.loadPromoData(list);
+                    }
+
+                    @Override
+                    public void onError(String msg) {
+                        Log.w(TAG, "onError: "+msg );
+                    }
+                });
+            }
+
+        } else {
+            view.flush("Does not found any user");
+        }
+    }
     public void loadRating() {
         //testing fucking code here
+
+
         if (TeacherDataStore.getInstance().getDocumentSnapshot() == null) {
             model.getMendatory(new TeacherContract.Model.Listener<DocumentSnapshot>() {
                 @Override

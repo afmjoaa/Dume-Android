@@ -219,6 +219,15 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
     public LinearLayout hackHeight;
 
 
+
+    @Override
+    public void loadPromoData(HomePageRecyclerData promoData) {
+        Log.w(TAG, "loadPromoData: ");
+        hPageBSRcyclerAdapter.addPromoToList(promoData);
+    }
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
