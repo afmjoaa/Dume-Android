@@ -624,8 +624,8 @@ provided.Tap salary for details.  </string>
     <string-array name="gpa_options">
         <item>Golden A+</item>
         <item>A+</item>
-        <item>A-</item>
         <item>A</item>
+        <item>A-</item>
         <item>B</item>
         <item>C</item>
         <item>D</item>
@@ -633,8 +633,8 @@ provided.Tap salary for details.  </string>
 
     <string-array name="cgpa_options">
         <item>A+</item>
-        <item>A-</item>
         <item>A</item>
+        <item>A-</item>
         <item>B+</item>
         <item>B</item>
         <item>B-</item>
