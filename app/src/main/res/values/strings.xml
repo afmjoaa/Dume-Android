@@ -193,8 +193,41 @@
         <item>10</item>
         <item>20</item>
         <item>50</item>
-        <item>-1</item>
+        <item>2</item>
     </string-array>
+
+    <string-array name="night_keys">
+        <item>Auto</item>
+        <item>On</item>
+        <item>Off</item>
+    </string-array>
+
+    <string-array name="night_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+
+    <string-array name="offline_wallpaper_keys">
+        <item>Purple</item>
+        <item>Indigo</item>
+        <item>Blue</item>
+        <item>Cyan</item>
+        <item>Teal</item>
+        <item>Green</item>
+        <item>orange</item>
+    </string-array>
+
+    <string-array name="offline_wallpaper_value">
+        <item>#e1bee7</item>
+        <item>#c5cae9</item>
+        <item>#bbdefb</item>
+        <item>#b2ebf2</item>
+        <item>#b2dfdb</item>
+        <item>#c8e6c9</item>
+        <item>#ffccbc</item>
+    </string-array>
+
 
     <string-array name="list_preference_entries">
         <item>Entry 1</item>
@@ -451,6 +484,15 @@
         <item>Sign out</item>
     </string-array>
 
+    <string-array name="settingsHeader_mentor">
+        <item>General</item>
+        <item>Account</item>
+        <item>Chats</item>
+        <item>Broadcasts</item>
+        <item>Invite a friend</item>
+        <item>Sign out</item>
+    </string-array>
+
     <string-array name="helpHeader">
         <item>What\'s new</item>
         <item>Features</item>
@@ -653,6 +695,49 @@ provided.Tap salary for details.  </string>
     <string name="clear_obligation">Your have been accused of creating multiple account without paying the due amount of your previous account.\n Please pay the previous account due amount to clear the obligation</string>
     <string name="academic_info"><![CDATA[•\tSetting false info is strictly prohibited & if you are found guilty your account will be obligated for false info.\n•\tPrimarily add your board exam institution as School/O Level & College/A Level.\n•\tYou can add multiple School/O Level, College/A Level, Under Graduation & Post Graduation according to your associated time and achievement. (optional)]]></string>
 
+    <string-array name="unlock_recipe_value">
+        <item><![CDATA[•\tJoined = true]]></item>
+
+        <item><![CDATA[•\tTotal Students = 1
+        \n•\tOngoing Dume = 1]]></item>
+
+        <item><![CDATA[•\tTotal Students = 4
+        \n•\tOngoing Dume = 2
+        \n•\tRatings >= 4.70 ★
+        \n•\tExpertize >= 80%
+        \n•\tBehaviour >= 80%
+        \n•\tAccept Ratio >= 80% ]]></item>
+
+        <item><![CDATA[•\tTotal Students = 6
+        \n•\tOngoing Dume = 3
+        \n•\tRatings >= 4.80 ★
+        \n•\tExpertize >= 90%
+        \n•\tBehaviour >= 90%
+        \n•\tAccept Ratio >= 80% ]]></item>
+    </string-array>
+
+    <string-array name="congrats_value">
+        <item><![CDATA[•\tJoined = true]]></item>
+
+        <item><![CDATA[•\tTotal Students = 1
+        \n•\tOngoing Dume = 1]]></item>
+
+        <item><![CDATA[•\tTotal Students = 4
+        \n•\tOngoing Dume = 2
+        \n•\tRatings >= 4.70 ★
+        \n•\tExpertize >= 80%
+        \n•\tBehaviour >= 80%
+        \n•\tAccept Ratio >= 80% ]]></item>
+
+        <item><![CDATA[•\tTotal Students = 6
+        \n•\tOngoing Dume = 3
+        \n•\tRatings >= 4.80 ★
+        \n•\tExpertize >= 90%
+        \n•\tBehaviour >= 90%
+        \n•\tAccept Ratio >= 80% ]]></item>
+    </string-array>
+
+
     <string-array name="after_splash_title">
         <item>Find mentor anytime and anywhere</item>
         <item>Real time service for student and mentor</item>
@@ -690,5 +775,6 @@ provided.Tap salary for details.  </string>
 
     <string name="action_share">Share</string>
     <string name="action_reply">Reply</string>
+    <string name="unlock_recipe">Unlock Recipe</string>
 
 </resources>

@@ -253,7 +253,9 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
 
     @Override
     public void updateBadge(String badgeNumber) {
-        tabLayout.setTabBadge(1, badgeNumber);
+        if(Integer.parseInt(badgeNumber)!= 0){
+            tabLayout.setTabBadge(1, badgeNumber);
+        }
     }
 
     @Override
@@ -357,7 +359,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
                 break;
         }
         //viewPager.setCurrentItem(3);
-        /*presenter.loadProfile(new TeacherContract.Model.Listener<Void>() {
+        presenter.loadProfile(new TeacherContract.Model.Listener<Void>() {
             @Override
             public void onSuccess(Void list) {
 
@@ -367,7 +369,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
             public void onError(String msg) {
                 flush(msg);
             }
-        });*/
+        });
     }
 
     @Override
@@ -1455,4 +1457,5 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         hPageBSRcyclerAdapter.addNewData(currentRatingDataList);
 
     }
+
 }

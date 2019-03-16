@@ -9,14 +9,15 @@
         android:title="Search">
 
         <ListPreference
-            android:defaultValue="-1"
+            android:defaultValue="4"
             android:icon="@drawable/ic_search_radius"
             android:entries="@array/search_radius_appearance_keys"
             android:entryValues="@array/search_radius_values"
-            android:key="sync_frequency"
+            android:key="search_radius"
             android:negativeButtonText="@null"
             android:positiveButtonText="@null"
-            android:title="@string/search_radius_title" />
+            android:summary="4 kilometers"
+            android:title="Prefered search radius" />
 
     </PreferenceCategory>
 
@@ -27,28 +28,30 @@
         android:title="Appearance">
 
         <ListPreference
-            android:defaultValue="180"
-            android:entries="@array/search_radius_appearance_keys"
-            android:entryValues="@array/search_radius_values"
-            android:key="sync_frequency"
+            android:defaultValue="3"
+            android:entries="@array/night_keys"
+            android:entryValues="@array/night_values"
+            android:key="demoOne"
             android:negativeButtonText="@null"
             android:positiveButtonText="@null"
             android:selectable="false"
             android:shouldDisableView="true"
             android:icon="@drawable/ic_night_mode"
-            android:title="@string/search_radius_title" />
+            android:summary="Coming soon"
+            android:title="Night mode" />
 
         <ListPreference
-            android:defaultValue="180"
-            android:entries="@array/search_radius_appearance_keys"
-            android:entryValues="@array/search_radius_values"
-            android:key="sync_frequency"
+            android:defaultValue="1"
+            android:entries="@array/offline_wallpaper_keys"
+            android:entryValues="@array/offline_wallpaper_value"
+            android:key="demoTwo"
             android:negativeButtonText="@null"
             android:positiveButtonText="@null"
             android:selectable="false"
+            android:summary="Coming soon"
             android:icon="@drawable/ic_offline_wallpaper"
             android:shouldDisableView="true"
-            android:title="@string/search_radius_title" />
+            android:title="Offline wallpaper" />
 
     </PreferenceCategory>
 
@@ -66,9 +69,9 @@
         <RingtonePreference
             android:defaultValue="content://settings/system/notification_sound"
             android:dependency="notifications_new_message"
-            android:key="notifications_new_message_ringtone"
+            android:key="notifications_ringtone"
             android:ringtoneType="notification"
-            android:title="@string/pref_title_ringtone" />
+            android:title="Notification ringtone" />
 
         <SwitchPreference
             android:defaultValue="true"
@@ -80,33 +83,33 @@
 
     <!--Reminder one-->
     <PreferenceCategory
-        android:key="pref_key_login_settings"
+        android:key="pref_key_reminder_settings"
         android:title="Reminder">
 
         <SwitchPreference
             android:icon="@drawable/ic_reminder_icon"
             android:defaultValue="true"
-            android:key="notifications_new_message"
-            android:title="@string/pref_title_new_message_notifications" />
+            android:key="reminder_new_message"
+            android:title="Toggle reminders" />
 
         <RingtonePreference
             android:defaultValue="content://settings/system/notification_sound"
-            android:dependency="notifications_new_message"
-            android:key="notifications_new_message_ringtone"
-            android:ringtoneType="notification"
-            android:title="@string/pref_title_ringtone" />
+            android:dependency="reminder_new_message"
+            android:key="reminder_ringtone"
+            android:ringtoneType="all"
+            android:title="Reminder ringtone" />
 
         <SwitchPreference
             android:defaultValue="true"
-            android:dependency="notifications_new_message"
-            android:key="notifications_new_message_vibrate"
+            android:dependency="reminder_new_message"
+            android:key="reminder_new_message_vibrate"
             android:title="@string/pref_title_vibrate" />
 
     </PreferenceCategory>
 
 
-    <!--Login-->
-    <PreferenceCategory
+
+    <!--<PreferenceCategory
         android:key="pref_key_login_settings"
         android:title="Login">
 
@@ -122,7 +125,7 @@
             android:title="Change Password Hint"
 
             />
-    </PreferenceCategory>
+    </PreferenceCategory>-->
 
 
     <!--<SwitchPreference

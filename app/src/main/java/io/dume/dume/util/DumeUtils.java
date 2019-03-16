@@ -71,6 +71,8 @@ public class DumeUtils {
     public static final String RECORDTAB = "recordTab";
     public static final String SELECTED_ID = "s_id";
     private static final String TAG = "Bal";
+    public static final String SETTING_PREFERENCE = "settingPre";
+
 
     public static int GALLARY_IMAGE = 1;
     public static int CAMERA_IMAGE = 2;

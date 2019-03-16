@@ -2,9 +2,14 @@ package io.dume.dume.teacher.homepage;
 
 import android.app.Activity;
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.github.mikephil.charting.data.Entry;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -167,6 +172,21 @@ public class TeacherModel extends HomePageModel implements TeacherContract.Model
                 }
             }
 
+        });
+    }
+
+    public void updateBadeStatus(String badgeName, boolean status, Listener<Void> listener) {
+        String path = "achievements." + badgeName;
+        firestore.document("/users/mentors/mentor_profile/" + FirebaseAuth.getInstance().getUid()).update(path, status).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                listener.onSuccess(null);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                listener.onError("Network error !!");
+            }
         });
     }
 }

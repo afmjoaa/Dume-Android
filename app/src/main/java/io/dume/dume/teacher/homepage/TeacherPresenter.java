@@ -91,6 +91,15 @@ public class TeacherPresenter implements TeacherContract.Presenter {
 
                 view.setRating((Map<String, Object>) documentSnapshot.get("self_rating"));
                 /*Enams Code Goes Here*/
+                Map<String, Object> achievements = (Map<String, Object>) documentSnapshot.get("achievements");
+                List<Boolean> badgeStatus = new ArrayList<>();
+                if(achievements!= null){
+                    badgeStatus.add((boolean) achievements.get("joined"));
+                    badgeStatus.add((boolean) achievements.get("inaugural"));
+                    badgeStatus.add((boolean) achievements.get("leading"));
+                    badgeStatus.add((boolean) achievements.get("premier"));
+                }
+                teachearDataStore.setBadgeList(badgeStatus);
                 final Map<String, Object> selfRating = (Map<String, Object>) documentSnapshot.get("self_rating");
                 teachearDataStore.setSelfRating(selfRating);
                 teachearDataStore.setDocumentSnapshot(documentSnapshot.getData());

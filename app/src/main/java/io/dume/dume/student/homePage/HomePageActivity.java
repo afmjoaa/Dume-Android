@@ -884,14 +884,6 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
     @Override
     public void gotoSettingActivity() {
         Intent settingIntent = new Intent(this, StudentSettingsActivity.class);
-        Map<String, Map<String, Object>> saved_places = (Map<String, Map<String, Object>>) documentSnapshot.get("saved_places");
-        settingIntent.putExtra("avatar", getAvatarString());
-        settingIntent.putExtra("userName", getUserName());
-        settingIntent.putExtra("phone", documentSnapshot.getString("phone_number"));
-        settingIntent.putExtra("email", documentSnapshot.getString("email"));
-        if (saved_places != null) {
-            settingIntent.putExtra("sp_count", saved_places.size());
-        }
         startActivity(settingIntent);
     }
 
