@@ -72,6 +72,8 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.GeoPoint;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 import com.google.maps.android.SphericalUtil;
 import com.google.maps.android.ui.IconGenerator;
 import com.hadiidbouk.charts.BarData;
@@ -86,6 +88,7 @@ import com.transitionseverywhere.TransitionSet;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -104,6 +107,7 @@ import io.dume.dume.student.common.QualificationAdapter;
 import io.dume.dume.student.common.ReviewAdapter;
 import io.dume.dume.student.common.ReviewHighlightData;
 import io.dume.dume.student.homePage.HomePageActivity;
+import io.dume.dume.student.homePage.adapter.HomePageRecyclerData;
 import io.dume.dume.student.pojo.CusStuAppComMapActivity;
 import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
 import io.dume.dume.student.pojo.SearchDataStore;
@@ -466,6 +470,28 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                     if (skillMap == null || searchMap == null) {
                         return;
                     }
+                    //testing the promo data here
+                    Map<String, Object> documentSnapshot = searchDataStore.getDocumentSnapshot();
+                    ArrayList<String> applied_promo = (ArrayList<String>) documentSnapshot.get("applied_promo");
+                    if(applied_promo.size()>0){
+                        for (String applied : applied_promo) {
+                            Log.w(TAG, "appliedPromo: " + applied);
+                            Map<String, Object> promo_item = (Map<String, Object>) documentSnapshot.get(applied);
+                            Gson gson = new Gson();
+                            JsonElement jsonElement = gson.toJsonTree(promo_item);
+                            HomePageRecyclerData homePageRecyclerData = gson.fromJson(jsonElement, HomePageRecyclerData.class);
+                            if(homePageRecyclerData!= null){
+                                if(searchDataStore.getPackageName().equals(homePageRecyclerData.getPackageName())){
+                                    if(!homePageRecyclerData.isExpired()){
+                                        Date date = new Date();
+                                        if(homePageRecyclerData.getExpirity().getTime()>date.getTime()){
+                                            recordsData.put("promo", promo_item);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
                     recordsData.putAll(searchMap);
                     recordsData.putAll(skillMap);
                     recordsData.put("creation", FieldValue.serverTimestamp());
@@ -475,7 +501,6 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                     recordsData.put("sh_uid", shUid);
                     recordsData.put("t_rate_status", "dialog");
                     recordsData.put("s_rate_status", "dialog");
-
                     List<String> participants = new ArrayList<>();
                     participants.add((String) skillMap.get("mentor_uid"));
                     participants.add((String) searchDataStore.getUserUid());

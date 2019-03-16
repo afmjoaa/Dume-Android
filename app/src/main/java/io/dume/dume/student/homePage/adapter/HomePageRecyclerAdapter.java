@@ -136,7 +136,6 @@ public class HomePageRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
                     @Override
                     public void onError(String msg) {
                         Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
-
                     }
                 });
             });
