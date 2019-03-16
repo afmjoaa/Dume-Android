@@ -350,7 +350,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
                 break;
         }
         //viewPager.setCurrentItem(3);
-        /*presenter.loadProfile(new TeacherContract.Model.Listener<Void>() {
+        presenter.loadProfile(new TeacherContract.Model.Listener<Void>() {
             @Override
             public void onSuccess(Void list) {
 
@@ -360,7 +360,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
             public void onError(String msg) {
                 flush(msg);
             }
-        });*/
+        });
     }
 
     @Override

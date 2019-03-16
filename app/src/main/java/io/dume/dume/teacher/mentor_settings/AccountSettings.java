@@ -5,6 +5,7 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -15,7 +16,9 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.preference.PreferenceScreen;
 import android.preference.RingtonePreference;
+import android.preference.SwitchPreference;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
@@ -144,7 +147,7 @@ public class AccountSettings extends CustomStuAppCompatActivity implements Accou
         basicRecyclerView.setNestedScrollingEnabled(false);
         slideDown = AnimationUtils.loadAnimation(this, R.anim.slide_down);
         toolTipsManager = new ToolTipsManager();
-        settingNameArr = getResources().getStringArray(R.array.settingsHeader);
+        settingNameArr = getResources().getStringArray(R.array.settingsHeader_mentor);
 
     }
 
@@ -274,7 +277,6 @@ public class AccountSettings extends CustomStuAppCompatActivity implements Accou
         List<SettingData> data = new ArrayList<>();
         int[] imageIcons = {
                 R.drawable.ic_search_settings,
-                R.drawable.ic_star_border_black_24dp,
                 R.drawable.ic_person_outline_black_24dp,
                 R.drawable.ic_settings_chat,
                 R.drawable.ic_settings_broadcasts,
@@ -301,41 +303,29 @@ public class AccountSettings extends CustomStuAppCompatActivity implements Accou
                 switch (position) {
                     case 0:
                         scrollView.setVisibility(View.GONE);
+                        frameLayout.setVisibility(View.VISIBLE);
                         configAppbarTittle(AccountSettings.this, settingNameArr[position]);
                         appBarLayout.setExpanded(false);
-                        Toast.makeText(AccountSettings.this, "0", Toast.LENGTH_SHORT).show();
                         getFragmentManager().beginTransaction().replace(R.id.frameLayout, new AccountSettings.NotificationPreferenceFragment()).commit();
                         break;
                     case 1:
                         scrollView.setVisibility(View.GONE);
-
-                        configAppbarTittle(AccountSettings.this, settingNameArr[position]);
-                        appBarLayout.setExpanded(false);
-                        getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new AccountSettings.SavedPlacesFragment()).commit();
-                        break;
-                    case 2:
-                        scrollView.setVisibility(View.GONE);
+                        frameLayout.setVisibility(View.VISIBLE);
                         configAppbarTittle(AccountSettings.this, settingNameArr[position]);
                         appBarLayout.setExpanded(false);
                         getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new AccountSettings.AccountFragment()).commit();
                         break;
-                    case 3:
+                    case 2:
                         toast("Chat settings are coming soon");
                         break;
-                    case 4:
+                    case 3:
                         Toast.makeText(AccountSettings.this, "Coming soon", Toast.LENGTH_SHORT).show();
                         break;
-                    case 5:
+                    case 4:
                         inviteAFriendCalled();
                         break;
-                    case 6:
-
-                        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-                            FirebaseAuth.getInstance().signOut();
-                            startActivity(new Intent(getApplicationContext(), AuthActivity.class));
-
-                        }
-
+                    case 5:
+                        onSignOut();
                         break;
                 }
 
@@ -400,15 +390,18 @@ public class AccountSettings extends CustomStuAppCompatActivity implements Accou
         }
 
         public void gotoTeacherActivity() {
-            startActivity(new Intent(context, TeacherActivtiy.class));
+            Intent intent = new Intent(context, TeacherActivtiy.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
             ((Activity) context).finish();
         }
 
 
         public void gotoStudentActivity() {
-            startActivity(new Intent(context, HomePageActivity.class));
+            Intent intent = new Intent(context, HomePageActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
             ((Activity) context).finish();
-
         }
 
         @Nullable
@@ -419,14 +412,13 @@ public class AccountSettings extends CustomStuAppCompatActivity implements Accou
             accountChangerRecycler = rootView.findViewById(R.id.account_changer_recycler);
             accountTypeArr = myMainActivity.getResources().getStringArray(R.array.AccountType);
 
-            //testing code goes here
-            //setting the adapter with the recycler view
-
             heatMapAccountRecyAda = new HeatMapAccountRecyAda(myMainActivity, getFinalData(1)) {
                 @Override
                 protected void OnAccouItemClicked(View v, int position) {
                     if(position == 2){
                         toast("Bootcamp service is under development...");
+                    }else if(position ==1 ){
+                        toast("You are already inside your mentor profile. Press back to navigate to homepage...");
                     }else{
                         Bundle Uargs = new Bundle();
                         Uargs.putString("msg", "Switching to " + accountTypeArr[position]);
@@ -489,39 +481,74 @@ public class AccountSettings extends CustomStuAppCompatActivity implements Accou
             int id = item.getItemId();
             if (id == android.R.id.home) {
                 startActivity(new Intent(getActivity(), AccountSettings.class));
-                return true;
+
             }
             return super.onOptionsItemSelected(item);
         }
 
     }
 
-    //Saved places fragment here
+    //testing TODO
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public static class SavedPlacesFragment extends Fragment {
-
-        private AccountSettings myMainActivity;
-        private RecyclerView savedPlacesRecycler;
-        private SavedPlacesAdapter savedPlacesAdapter;
+    public static class NotificationPreferenceFragment extends PreferenceFragment {
+        private SharedPreferences.Editor editor;
+        private Context context;
 
         @Override
-        public void onCreate(@Nullable Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            setHasOptionsMenu(true);
+        public void onAttach(Context context) {
+            super.onAttach(context);
+            this.context = context;
+            editor = context.getSharedPreferences(DumeUtils.SETTING_PREFERENCE, MODE_PRIVATE).edit();
         }
 
-        @Nullable
         @Override
-        public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-            myMainActivity = (AccountSettings) getActivity();
-            View rootView = inflater.inflate(R.layout.stu_setting_saved_places_fragment, container, false);
-            savedPlacesRecycler = rootView.findViewById(R.id.saved_place_recycler);
-            //testing code goes here
-            /*List<SavedPlacesAdaData> recordDataCurrent = new ArrayList<>();
-            savedPlacesAdapter = new SavedPlacesAdapter(myMainActivity, recordDataCurrent);
-            savedPlacesRecycler.setAdapter(savedPlacesAdapter);
-            savedPlacesRecycler.setLayoutManager(new LinearLayoutManager(myMainActivity));*/
-            return rootView;
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+
+            addPreferencesFromResource(R.xml.pref_notification);
+            setHasOptionsMenu(true);
+            bindPreferenceSummaryToValue(findPreference("notifications_ringtone"));
+            bindPreferenceSummaryToValue(findPreference("reminder_ringtone"));
+            bindPreferenceSummaryToValue(findPreference("search_radius"));
+            //testing here
+            SwitchPreference notificationSwitch = (SwitchPreference) findPreference("notifications_new_message");
+            SwitchPreference reminderSwitch = (SwitchPreference) findPreference("reminder_new_message");
+
+            notificationSwitch.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object o) {
+                    if(notificationSwitch.isChecked()){
+                        // Checked the switch programmatically
+                        notificationSwitch.setChecked(false);
+                    }else {
+                        // Unchecked the switch programmatically
+                        notificationSwitch.setChecked(true);
+                    }
+                    editor.putBoolean("notification", notificationSwitch.isChecked());
+                    editor.apply();
+                    return false;
+                }
+            });
+
+            reminderSwitch.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object o) {
+                    if(reminderSwitch.isChecked()){
+                        // Checked the switch programmatically
+                        reminderSwitch.setChecked(false);
+                    }else {
+                        // Unchecked the switch programmatically
+                        reminderSwitch.setChecked(true);
+                    }
+                    editor.putBoolean("reminder", reminderSwitch.isChecked());
+                    editor.apply();
+                    return false;
+                }
+            });
+
+            Preference searchRadiusPreference = findPreference("pref_key_login_settings");
+            PreferenceScreen preferenceScreen = getPreferenceScreen();
+            preferenceScreen.removePreference(searchRadiusPreference);
         }
 
         @Override
@@ -529,29 +556,6 @@ public class AccountSettings extends CustomStuAppCompatActivity implements Accou
             int id = item.getItemId();
             if (id == android.R.id.home) {
                 startActivity(new Intent(getActivity(), AccountSettings.class));
-                return true;
-            }
-            return super.onOptionsItemSelected(item);
-        }
-    }
-
-    //testing TODO
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public static class NotificationPreferenceFragment extends PreferenceFragment {
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.xml.pref_notification);
-            setHasOptionsMenu(true);
-
-            bindPreferenceSummaryToValue(findPreference("notifications_new_message_ringtone"));
-        }
-
-        @Override
-        public boolean onOptionsItemSelected(MenuItem item) {
-            int id = item.getItemId();
-            if (id == android.R.id.home) {
-                startActivity(new Intent(getActivity(), StudentSettingsActivity.class));
                 return true;
             }
             return super.onOptionsItemSelected(item);
@@ -570,10 +574,10 @@ public class AccountSettings extends CustomStuAppCompatActivity implements Accou
                 int index = listPreference.findIndexOfValue(stringValue);
 
                 // Set the summary to reflect the new value.
-                preference.setSummary(
-                        index >= 0
-                                ? listPreference.getEntries()[index]
-                                : null);
+                preference.setSummary(index >= 0 ? listPreference.getEntries()[index] : null);
+                SharedPreferences.Editor editor = preference.getContext().getSharedPreferences(DumeUtils.SETTING_PREFERENCE, MODE_PRIVATE).edit();
+                editor.putString(preference.getKey().toString(), index >= 0 ? listPreference.getEntries()[index].toString() : null);
+                editor.apply();
 
             } else if (preference instanceof RingtonePreference) {
                 // For ringtone preferences, look up the correct display value
@@ -581,7 +585,9 @@ public class AccountSettings extends CustomStuAppCompatActivity implements Accou
                 if (TextUtils.isEmpty(stringValue)) {
                     // Empty values correspond to 'silent' (no ringtone).
                     preference.setSummary(R.string.pref_ringtone_silent);
-
+                    SharedPreferences.Editor editor = preference.getContext().getSharedPreferences(DumeUtils.SETTING_PREFERENCE, MODE_PRIVATE).edit();
+                    editor.putString(preference.getKey().toString(), null);
+                    editor.apply();
                 } else {
                     Ringtone ringtone = RingtoneManager.getRingtone(
                             preference.getContext(), Uri.parse(stringValue));
@@ -589,11 +595,17 @@ public class AccountSettings extends CustomStuAppCompatActivity implements Accou
                     if (ringtone == null) {
                         // Clear the summary if there was a lookup error.
                         preference.setSummary(null);
+                        SharedPreferences.Editor editor = preference.getContext().getSharedPreferences(DumeUtils.SETTING_PREFERENCE, MODE_PRIVATE).edit();
+                        editor.putString(preference.getKey().toString(), null);
+                        editor.apply();
                     } else {
                         // Set the summary to reflect the new ringtone display
                         // name.
                         String name = ringtone.getTitle(preference.getContext());
                         preference.setSummary(name);
+                        SharedPreferences.Editor editor = preference.getContext().getSharedPreferences(DumeUtils.SETTING_PREFERENCE, MODE_PRIVATE).edit();
+                        editor.putString(preference.getKey().toString(), stringValue);
+                        editor.apply();
                     }
                 }
 
@@ -601,6 +613,11 @@ public class AccountSettings extends CustomStuAppCompatActivity implements Accou
                 // For all other preferences, set the summary to the value's
                 // simple string representation.
                 preference.setSummary(stringValue);
+                //preference.getTitle();
+                SharedPreferences.Editor editor = preference.getContext().getSharedPreferences(DumeUtils.SETTING_PREFERENCE, MODE_PRIVATE).edit();
+                editor.putString(preference.getKey().toString(), stringValue);
+                editor.apply();
+
             }
             return true;
         }
@@ -632,77 +649,5 @@ public class AccountSettings extends CustomStuAppCompatActivity implements Accou
         super.onBackPressed();
     }
 
-
-}
-
-class BadgeAdapter extends RecyclerView.Adapter<BadgeAdapter.BadgeImageHolder> {
-
-
-    @NonNull
-    @Override
-    public BadgeImageHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View badgeImage = LayoutInflater.from(parent.getContext()).inflate(R.layout.account_settings_badge_item, parent, false);
-        return new BadgeImageHolder(badgeImage);
-    }
-
-    @Override
-    public void onBindViewHolder(@NonNull BadgeImageHolder holder, int position) {
-
-    }
-
-    @Override
-    public int getItemCount() {
-        return 10;
-    }
-
-    class BadgeImageHolder extends RecyclerView.ViewHolder {
-        ImageView badgeImageView;
-
-        BadgeImageHolder(View itemView) {
-            super(itemView);
-            badgeImageView = itemView.findViewById(R.id.badgeImageView);
-        }
-    }
-
-
-}
-
-
-class EducationAdapter extends RecyclerView.Adapter<EducationAdapter.MyViewVH> {
-    private ArrayList<Education> educationArrayList;
-
-    public EducationAdapter(ArrayList<Education> educationArrayList) {
-        this.educationArrayList = educationArrayList;
-    }
-
-    @NonNull
-    @Override
-    public MyViewVH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View item = LayoutInflater.from(parent.getContext()).inflate(R.layout.education_item, parent, false);
-        return new MyViewVH(item);
-    }
-
-    @Override
-    public void onBindViewHolder(@NonNull MyViewVH holder, int position) {
-        holder.institution.setText(educationArrayList.get(position).getTitle());
-        holder.degree.setText("(" + educationArrayList.get(position).getDegree() + ")");
-        holder.duration.setText(new StringBuilder().append("[").append(educationArrayList.get(position).getFrom()).append("-").append(educationArrayList.get(position).getTo()).append("]").toString());
-    }
-
-    @Override
-    public int getItemCount() {
-        return educationArrayList.size();
-    }
-
-    class MyViewVH extends RecyclerView.ViewHolder {
-        TextView institution, degree, description, duration;
-
-        public MyViewVH(View itemView) {
-            super(itemView);
-            institution = itemView.findViewById(R.id.institutionTV);
-            degree = itemView.findViewById(R.id.degreeNameTV);
-            duration = itemView.findViewById(R.id.durationTV);
-        }
-    }
 
 }

@@ -107,6 +107,7 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
                     badgeTV.setBackgroundColor(getResources().getColor(R.color.status_rejected_badge));
                     break;
             }
+            badgeTV.setVisibility(View.GONE);
             tab_label.setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/Cairo-Light.ttf"));
             /*tab_label.setTextColor(getResources().getColorStateList(R.color.tab_colorstate_light));
              */

@@ -61,6 +61,7 @@ public class PerformanceFragment extends Fragment {
     private RelativeLayout premierHost;
     private ImageView achievementPremierImage;
     private Dialog dialog;
+    private String[] unlockRecipeValue;
 
 
     public static PerformanceFragment getInstance() {
@@ -90,7 +91,8 @@ public class PerformanceFragment extends Fragment {
         final View root = inflater.inflate(R.layout.performance_fragment, container, false);
         ButterKnife.bind(root);
         dialog = new Dialog(context);
-        dialog.setContentView(R.layout.custom_obligation_dialogue);
+        dialog.setContentView(R.layout.custom_badge_dialogue);
+        unlockRecipeValue = context.getResources().getStringArray(R.array.unlock_recipe_value);
         performanceRV = root.findViewById(R.id.performanceRV);
         joinedHost = root.findViewById(R.id.joined_host);
         achievementJoinedImage = root.findViewById(R.id.achievement_joined_image);
@@ -292,7 +294,7 @@ public class PerformanceFragment extends Fragment {
         inauguralHost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Drawable drawable = achievementJoinedImage.getDrawable();
+                Drawable drawable = achievementInauguralImage.getDrawable();
                 if (drawable.equals(context.getResources().getDrawable(R.drawable.ic_badge_disable))) {
                     testingCustomDialogue(drawable, "inaugural", false);
                 } else {
@@ -303,7 +305,7 @@ public class PerformanceFragment extends Fragment {
         leadingHost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Drawable drawable = achievementJoinedImage.getDrawable();
+                Drawable drawable = achievementLeadingImage.getDrawable();
                 if (drawable.equals(context.getResources().getDrawable(R.drawable.ic_badge_disable))) {
                     testingCustomDialogue(drawable, "leading", false);
                 } else {
@@ -314,7 +316,7 @@ public class PerformanceFragment extends Fragment {
         premierHost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Drawable drawable = achievementJoinedImage.getDrawable();
+                Drawable drawable = achievementPremierImage.getDrawable();
                 if (drawable.equals(context.getResources().getDrawable(R.drawable.ic_badge_disable))) {
                     testingCustomDialogue(drawable, "premier", false);
                 } else {
@@ -329,21 +331,55 @@ public class PerformanceFragment extends Fragment {
             //all find view here
             Button dismissBtn = dialog.findViewById(R.id.dismiss_btn);
             TextView dialogText = dialog.findViewById(R.id.dialog_text);
+            TextView dialogTitleText = dialog.findViewById(R.id.dialog_title_text);
             carbon.widget.ImageView dialogImage = dialog.findViewById(R.id.dialog_image);
             dialogText.setGravity(Gravity.START);
             dialogImage.setCornerRadius(0);
             dialogImage.setElevation(0);
-
             dismissBtn.setText("Gotcha");
             dialogImage.setImageDrawable(drawable);
-            dialogText.setText(R.string.academic_info);
-
             dismissBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     dialog.dismiss();
                 }
             });
+            switch (badgeName) {
+                case "joined":
+                    if(badgeStatus){
+                        dialogTitleText.setText("Congrats " + TeacherDataStore.getInstance().gettUserName() + "");
+                        dialogText.setText(R.string.academic_info);
+                    }else {
+                        dialogTitleText.setText(R.string.unlock_recipe);
+                        dialogText.setText(unlockRecipeValue[0]);
+                    }
+                    break;
+                case "inaugural":
+                    if(badgeStatus){
+                        dialogText.setText(R.string.academic_info);
+                    }else {
+                        dialogTitleText.setText(R.string.unlock_recipe);
+                        dialogText.setText(unlockRecipeValue[1]);
+                    }
+                    break;
+                case "leading":
+                    if(badgeStatus){
+                        dialogText.setText(R.string.academic_info);
+                    }else {
+                        dialogTitleText.setText(R.string.unlock_recipe);
+                        dialogText.setText(unlockRecipeValue[2]);
+                    }
+                    break;
+                case "premier":
+                    if(badgeStatus){
+                        dialogText.setText(R.string.academic_info);
+                    }else {
+                        dialogTitleText.setText(R.string.unlock_recipe);
+                        dialogText.setText(unlockRecipeValue[3]);
+                    }
+                    break;
+            }
+
             dialog.show();
         }
     }

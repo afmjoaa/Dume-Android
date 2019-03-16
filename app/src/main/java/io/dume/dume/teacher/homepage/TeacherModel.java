@@ -166,7 +166,7 @@ public class TeacherModel extends HomePageModel implements TeacherContract.Model
     }
 
     public void updateBadeStatus(String badgeName, boolean status, Listener<Void> listener) {
-        String path = "achievements" + badgeName;
+        String path = "achievements." + badgeName;
         firestore.document("/users/mentors/mentor_profile/" + FirebaseAuth.getInstance().getUid()).update(path, status).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
