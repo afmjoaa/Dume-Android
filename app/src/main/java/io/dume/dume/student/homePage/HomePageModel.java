@@ -80,12 +80,39 @@ public class HomePageModel extends StuBaseModel implements HomePageContract.Mode
         promoMap.put("criteria", promoData.getCriteria());
 
 
-
         firestore.collection(path).document(FirebaseAuth.getInstance().getUid())
                 .update("applied_promo", FieldValue.arrayUnion(promo_code),
                         "available_promo", FieldValue.arrayRemove(promo_code),
                         promo_code, promoMap).addOnSuccessListener(aVoid -> listener.onSuccess("Promo Applied.")).addOnFailureListener(e -> listener.onError(e.getLocalizedMessage()));
 
+    }
+
+    @Override
+    public void updatePromo(HomePageRecyclerData promoData, String promoCode, TeacherContract.Model.Listener<String> listener) {
+        String accountType = Google.getInstance().getAccountMajor();
+        String path;
+        if (accountType == DumeUtils.TEACHER) {
+            path = "/users/mentors/mentor_profile";
+        } else {
+            path = "/users/students/stu_pro_info";
+
+        }
+
+        if (promoData.getMax_tution_count() > 1) {
+            Integer max_tution_count = promoData.getMax_tution_count();
+            max_tution_count -= 1;
+            firestore.collection(path).document(FirebaseAuth.getInstance().getUid()).update(promoCode + ".max_tution_count", max_tution_count).addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    listener.onSuccess("Promo Updated");
+                }
+            });
+        } else {
+            firestore.collection(path).document(FirebaseAuth.getInstance().getUid())
+                    .update("applied_promo", FieldValue.arrayRemove(promoCode),
+                            promoCode, FieldValue.delete()).addOnSuccessListener(aVoid -> listener.onSuccess("Promo Used")).addOnFailureListener(e -> listener.onError(e.getLocalizedMessage()));
+
+        }
     }
 
 
