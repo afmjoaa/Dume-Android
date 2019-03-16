@@ -255,7 +255,9 @@ public class HomePagePresenter implements HomePageContract.Presenter {
             Gson gson = new Gson();
             JsonElement jsonElement = gson.toJsonTree(promo_item);
             HomePageRecyclerData homePageRecyclerData = gson.fromJson(jsonElement, HomePageRecyclerData.class);
-            mView.loadHeadsUpPromo(homePageRecyclerData);
+            if(homePageRecyclerData!= null){
+                mView.loadHeadsUpPromo(homePageRecyclerData);
+            }
         }
     }
 

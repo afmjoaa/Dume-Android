@@ -120,7 +120,9 @@ public interface TeacherContract {
 
 
     interface Presenter {
-        void appliedPromo();
+        void appliedPromo(Map<String, Object> documentSnapshot);
+
+        void loadPromo();
 
         void loadStat(Model.Listener<List<Stat>> listener);
 

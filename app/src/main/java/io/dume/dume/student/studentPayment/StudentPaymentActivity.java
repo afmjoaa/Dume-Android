@@ -367,7 +367,12 @@ public class StudentPaymentActivity extends CustomStuAppCompatActivity implement
                 homePageRecyclerData.setExpirity((Date) promoMap.get("expirity"));
                 homePageRecyclerData.setCriteria((Map<String, Object>) promoMap.get("criteria"));
                 homePageRecyclerData.setPromo_for(promoMap.get("promo_for").toString());
-                homePageRecyclerData.setPromo_image(promoMap.get("promo_image").toString());
+                Object promo_image = promoMap.get("promo_image");
+                if(promo_image == null){
+                    homePageRecyclerData.setPromo_image(null);
+                }else{
+                    homePageRecyclerData.setPromo_image(promo_image.toString());
+                }
                 homePageRecyclerData.setSub_description(promoMap.get("sub_description").toString());
                 homePageRecyclerData.setPromo_code(promoMap.get("promo_code").toString());
                 homePageRecyclerData.setExpired((Boolean) promoMap.get("expired"));
