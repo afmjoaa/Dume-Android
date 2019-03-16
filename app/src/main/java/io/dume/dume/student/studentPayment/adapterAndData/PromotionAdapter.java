@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -48,7 +49,10 @@ public class PromotionAdapter extends RecyclerView.Adapter<PromotionAdapter.MyVi
         holder.title.setText(data.get(i).getTitle());
          HomePageRecyclerData homePageRecyclerData = data.get(i);
         holder.description.setText(homePageRecyclerData.getDescription());
-        holder.date.setText(DumeUtils.getFormattedDate(homePageRecyclerData.getStart_date()));
+        Date start_date = homePageRecyclerData.getStart_date();
+        if(start_date!= null){
+            holder.date.setText(DumeUtils.getFormattedDate(start_date));
+        }
     }
 
     @Override

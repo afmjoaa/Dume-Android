@@ -7,10 +7,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -70,7 +72,10 @@ public class ContactActivity extends CustomStuAppCompatActivity implements Conta
 
     @Override
     public void flush(String toFlush) {
-        Toast.makeText(context, toFlush, Toast.LENGTH_SHORT).show();
+        Toast toast = Toast.makeText(this, toFlush, Toast.LENGTH_SHORT);
+        TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
+        if( v != null) v.setGravity(Gravity.CENTER);
+        toast.show();
     }
 
     @Override

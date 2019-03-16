@@ -23,6 +23,7 @@ import com.google.firebase.firestore.Source;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -309,14 +310,12 @@ public class DemoModel {
                                 }
                             }
                             listener.onSuccess(list);
-                        } else listener.onError("Empty Notification");
+                        } else  listener.onSuccess(list);
                     } else {
                         listener.onError("Unknown Error From Notification" + e.getMessage());
                         Log.w("foo", e.getMessage());
 
                     }
-
-
                 }
             });
 
@@ -335,31 +334,24 @@ public class DemoModel {
                     for (int i = 0; i < documents.size(); i++) {
                         DocumentSnapshot snapshot = documents.get(i);
                         Map<String, Object> map = snapshot.getData();
-                        String opUid, opDP = "", opName, lastMsgTime = "12/3/2019";
+                        String opUid, opDP = "", opName, unreadMsgString;
+                        Number unreadMsg;
+                        Date lastMsgTime;
                         boolean mute = false;
                         if (map != null) {
                             List<String> participants = (List<String>) map.get("participants");
                             opUid = opponentUid(participants);
-                           /* String foo = participants.get(0);
-                            String bar = participants.get(1);
-                            if (foo.equals(FirebaseAuth.getInstance().getUid())) opUid = bar;
-                            else opUid = foo;*/
 
                             Map<String, Object> opMap = (Map<String, Object>) map.get(opUid);
                             opName = (String) opMap.get("name");
-                            Object muteObj = opMap.get("mute");
-                            if (muteObj != null) {
-                                mute = (boolean) muteObj;
-                            }
-
+                            opDP= (String)opMap.get("dp");
+                            mute = (Boolean) opMap.get("mute");
+                            unreadMsg = (Number) opMap.get("unread_msg");
+                            unreadMsgString = (String) opMap.get("last_msg");
+                            lastMsgTime = (Date) opMap.get("last_msg_time");
 
                         } else return;
-
-
-                        roomList.add(new Room(snapshot.getId(), opUid, opDP, opName, lastMsgTime, mute))
-                        ;
-
-
+                        roomList.add(new Room(snapshot.getId(), opUid, opDP, opName, lastMsgTime, mute, unreadMsgString, unreadMsg.intValue()));
                     }
                     listener.onSuccess(roomList);
                 }

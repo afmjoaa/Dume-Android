@@ -181,7 +181,7 @@ public interface HomePageContract {
 
         void applyPromo(HomePageRecyclerData promoData, String promo_code, String accountType, TeacherContract.Model.Listener<String> listener);
 
-        void updatePromo(HomePageRecyclerData promoData, String promoCode, TeacherContract.Model.Listener<String> listener);
+        void updatePromo(HomePageRecyclerData promoData, TeacherContract.Model.Listener<String> listener);
 
         void hawwa();
 

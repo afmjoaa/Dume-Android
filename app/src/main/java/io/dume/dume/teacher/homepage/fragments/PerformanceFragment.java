@@ -62,6 +62,7 @@ public class PerformanceFragment extends Fragment {
     private ImageView achievementPremierImage;
     private Dialog dialog;
     private String[] unlockRecipeValue;
+    private String[] congratsValue;
 
 
     public static PerformanceFragment getInstance() {
@@ -93,6 +94,7 @@ public class PerformanceFragment extends Fragment {
         dialog = new Dialog(context);
         dialog.setContentView(R.layout.custom_badge_dialogue);
         unlockRecipeValue = context.getResources().getStringArray(R.array.unlock_recipe_value);
+        congratsValue = context.getResources().getStringArray(R.array.congrats_value);
         performanceRV = root.findViewById(R.id.performanceRV);
         joinedHost = root.findViewById(R.id.joined_host);
         achievementJoinedImage = root.findViewById(R.id.achievement_joined_image);
@@ -284,10 +286,10 @@ public class PerformanceFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Drawable drawable = achievementJoinedImage.getDrawable();
-                if (drawable.equals(context.getResources().getDrawable(R.drawable.ic_badge_disable))) {
-                    testingCustomDialogue(drawable, "joined", false);
-                } else {
+                if (teacherDataStore.getBadgeList().get(0)) {
                     testingCustomDialogue(drawable, "joined", true);
+                } else {
+                    testingCustomDialogue(drawable, "joined", false);
                 }
             }
         });
@@ -295,10 +297,10 @@ public class PerformanceFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Drawable drawable = achievementInauguralImage.getDrawable();
-                if (drawable.equals(context.getResources().getDrawable(R.drawable.ic_badge_disable))) {
-                    testingCustomDialogue(drawable, "inaugural", false);
-                } else {
+                if (teacherDataStore.getBadgeList().get(1)) {
                     testingCustomDialogue(drawable, "inaugural", true);
+                } else {
+                    testingCustomDialogue(drawable, "inaugural", false);
                 }
             }
         });
@@ -306,10 +308,10 @@ public class PerformanceFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Drawable drawable = achievementLeadingImage.getDrawable();
-                if (drawable.equals(context.getResources().getDrawable(R.drawable.ic_badge_disable))) {
-                    testingCustomDialogue(drawable, "leading", false);
-                } else {
+                if (teacherDataStore.getBadgeList().get(2)) {
                     testingCustomDialogue(drawable, "leading", true);
+                } else {
+                    testingCustomDialogue(drawable, "leading", false);
                 }
             }
         });
@@ -317,10 +319,10 @@ public class PerformanceFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Drawable drawable = achievementPremierImage.getDrawable();
-                if (drawable.equals(context.getResources().getDrawable(R.drawable.ic_badge_disable))) {
-                    testingCustomDialogue(drawable, "premier", false);
-                } else {
+                if (teacherDataStore.getBadgeList().get(3)) {
                     testingCustomDialogue(drawable, "premier", true);
+                } else {
+                    testingCustomDialogue(drawable, "premier", false);
                 }
             }
         });
@@ -347,8 +349,8 @@ public class PerformanceFragment extends Fragment {
             switch (badgeName) {
                 case "joined":
                     if(badgeStatus){
-                        dialogTitleText.setText("Congrats " + TeacherDataStore.getInstance().gettUserName() + "");
-                        dialogText.setText(R.string.academic_info);
+                        dialogTitleText.setText("Congrats " + TeacherDataStore.getInstance().gettUserName());
+                        dialogText.setText(congratsValue[0]);
                     }else {
                         dialogTitleText.setText(R.string.unlock_recipe);
                         dialogText.setText(unlockRecipeValue[0]);
@@ -356,7 +358,8 @@ public class PerformanceFragment extends Fragment {
                     break;
                 case "inaugural":
                     if(badgeStatus){
-                        dialogText.setText(R.string.academic_info);
+                        dialogTitleText.setText("Congrats " + TeacherDataStore.getInstance().gettUserName());
+                        dialogText.setText(congratsValue[1]);
                     }else {
                         dialogTitleText.setText(R.string.unlock_recipe);
                         dialogText.setText(unlockRecipeValue[1]);
@@ -364,7 +367,8 @@ public class PerformanceFragment extends Fragment {
                     break;
                 case "leading":
                     if(badgeStatus){
-                        dialogText.setText(R.string.academic_info);
+                        dialogTitleText.setText("Congrats " + TeacherDataStore.getInstance().gettUserName());
+                        dialogText.setText(congratsValue[2]);
                     }else {
                         dialogTitleText.setText(R.string.unlock_recipe);
                         dialogText.setText(unlockRecipeValue[2]);
@@ -372,7 +376,8 @@ public class PerformanceFragment extends Fragment {
                     break;
                 case "premier":
                     if(badgeStatus){
-                        dialogText.setText(R.string.academic_info);
+                        dialogTitleText.setText("Congrats " + TeacherDataStore.getInstance().gettUserName());
+                        dialogText.setText(congratsValue[3]);
                     }else {
                         dialogTitleText.setText(R.string.unlock_recipe);
                         dialogText.setText(unlockRecipeValue[3]);

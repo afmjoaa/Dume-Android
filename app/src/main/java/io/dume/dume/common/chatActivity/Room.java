@@ -1,12 +1,19 @@
 package io.dume.dume.common.chatActivity;
 
+import java.util.Date;
+
 public class Room {
     String roomId;
     String opponentUid;
     String opponentDP;
     String opponentName;
-    String lastActiveTime;
     boolean mute;
+    String unreadMsgString;
+    Date lastMsgTime;
+    Integer unreadMsg;
+
+
+
 
     public String getRoomId() {
         return roomId;
@@ -16,13 +23,15 @@ public class Room {
         this.roomId = roomId;
     }
 
-    public Room(String roomId,String opponentUid, String opponentDP, String opponentName, String lastActiveTime, boolean mute) {
+    public Room(String roomId,String opponentUid, String opponentDP, String opponentName, Date lastMsgTime, boolean mute,  String unreadMsgString, Integer unreadMsg) {
         this.roomId = roomId;
         this.opponentUid = opponentUid;
         this.opponentDP = opponentDP;
         this.opponentName = opponentName;
-        this.lastActiveTime = lastActiveTime;
+        this.lastMsgTime = lastMsgTime;
         this.mute = mute;
+        this.unreadMsgString= unreadMsgString;
+        this.unreadMsg = unreadMsg;
     }
 
     public String getOpponentUid() {
@@ -49,19 +58,35 @@ public class Room {
         this.opponentName = opponentName;
     }
 
-    public String getLastActiveTime() {
-        return lastActiveTime;
-    }
-
-    public void setLastActiveTime(String lastActiveTime) {
-        this.lastActiveTime = lastActiveTime;
-    }
-
     public boolean isMute() {
         return mute;
     }
 
     public void setMute(boolean mute) {
         this.mute = mute;
+    }
+
+    public String getUnreadMsgString() {
+        return unreadMsgString;
+    }
+
+    public void setUnreadMsgString(String unreadMsgString) {
+        this.unreadMsgString = unreadMsgString;
+    }
+
+    public Date getLastMsgTime() {
+        return lastMsgTime;
+    }
+
+    public void setLastMsgTime(Date lastMsgTime) {
+        this.lastMsgTime = lastMsgTime;
+    }
+
+    public Integer getUnreadMsg() {
+        return unreadMsg;
+    }
+
+    public void setUnreadMsg(Integer unreadMsg) {
+        this.unreadMsg = unreadMsg;
     }
 }

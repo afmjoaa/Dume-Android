@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -99,12 +100,25 @@ public class ContactDataAdapter extends RecyclerView.Adapter<ContactDataAdapter.
                 String sh_uid = (String) data.get(position).getRecord().get("sh_uid");
                 Map<String, Object> sp_info = (Map<String, Object>) data.get(position).getRecord().get("sp_info");
                 Map<String, Object> sh_info = (Map<String, Object>) data.get(position).getRecord().get("for_whom");
+                //mentor
                 Map<String, Object> stringHashMap = new HashMap<String, Object>();
                 stringHashMap.put("name", sp_info.get("first_name") + " " + sp_info.get("last_name"));
                 stringHashMap.put("active", true);
+                stringHashMap.put("mute", false);
+                stringHashMap.put("dp", (String)sp_info.get("avatar"));
+                stringHashMap.put("unread_msg", 0);
+                stringHashMap.put("last_msg", "");
+                stringHashMap.put("last_msg_time", new Date());
+
+                //student
                 Map<String, Object> stringHashMap1 = new HashMap<String, Object>();
                 stringHashMap1.put("name", sh_info.get("stu_name"));
                 stringHashMap1.put("active", true);
+                stringHashMap1.put("mute", false);
+                stringHashMap1.put("dp", (String) sp_info.get("stu_photo"));
+                stringHashMap1.put("unread_msg", 0);
+                stringHashMap1.put("last_msg", "");
+                stringHashMap1.put("last_msg_time", new Date());
 
                 map.put(sp_uid.substring(2), stringHashMap);
                 map.put(sh_uid.substring(2), stringHashMap1);
@@ -162,7 +176,10 @@ public class ContactDataAdapter extends RecyclerView.Adapter<ContactDataAdapter.
                     });
             } else {
                 if (single.getStatus().equals("Pending") || single.getStatus().equals("Rejected") || single.getStatus().equals("Completed")) {
-                    Toast.makeText(context, "Your request is not accepted or current yet.", Toast.LENGTH_SHORT).show();
+                    Toast toast = Toast.makeText(context, "Your request is not accepted or current yet.", Toast.LENGTH_SHORT);
+                    TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
+                    if( v != null) v.setGravity(Gravity.CENTER);
+                    toast.show();
                     return;
                 }
                 //Toast.makeText(context, "from call", Toast.LENGTH_SHORT).show();

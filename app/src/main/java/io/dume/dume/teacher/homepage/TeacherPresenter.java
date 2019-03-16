@@ -53,6 +53,7 @@ public class TeacherPresenter implements TeacherContract.Presenter {
         view.init();
         view.configView();
         loadRating();
+        loadPromo();
 
     }
 
@@ -131,7 +132,6 @@ public class TeacherPresenter implements TeacherContract.Presenter {
                     view.setProfileComPercent(documentSnapshot.getString("pro_com_%"));
                     view.showPercentSnackBar(documentSnapshot.getString("pro_com_%"));
                 }
-                loadPromo();
                 listener.onSuccess(null);
             }
 
@@ -143,9 +143,8 @@ public class TeacherPresenter implements TeacherContract.Presenter {
         });
     }
 
-    @Override public void appliedPromo()
-    {
-        Map<String, Object> documentSnapshot = TeacherDataStore.getInstance().getDocumentSnapshot();
+    @Override
+    public void appliedPromo(Map<String, Object> documentSnapshot) {
         ArrayList<String> applied_promo = (ArrayList<String>) documentSnapshot.get("applied_promo");
         if (applied_promo != null) {
             for (String applied : applied_promo) {
@@ -153,51 +152,85 @@ public class TeacherPresenter implements TeacherContract.Presenter {
                 Gson gson = new Gson();
                 JsonElement jsonElement = gson.toJsonTree(promo_item);
                 HomePageRecyclerData homePageRecyclerData = gson.fromJson(jsonElement, HomePageRecyclerData.class);
-                view.loadHeadsUpPromo(homePageRecyclerData);
+                if(homePageRecyclerData!= null){
+                    view.loadHeadsUpPromo(homePageRecyclerData);
+                }
             }
-
         }
     }
 
-
+    @Override
     public void loadPromo() {
-        Map<String, Object> documentSnapshot = TeacherDataStore.getInstance().getDocumentSnapshot();
+        if (TeacherDataStore.getInstance().getDocumentSnapshot() == null) {
+            model.getMendatory(new TeacherContract.Model.Listener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    if (documentSnapshot != null) {
+                        ArrayList<String> available_promo = (ArrayList<String>) documentSnapshot.get("available_promo");
+                        TeacherDataStore.getInstance().setDocumentSnapshot(documentSnapshot.getData());
+                        appliedPromo(documentSnapshot.getData());
+                        ArrayList<String> tempList = new ArrayList<>();
+                        for (String promoCode : available_promo) {
+                            if (!tempList.contains(promoCode)) {
+                                tempList.add(promoCode);
+                            }
+                        }
+                        available_promo = tempList;
+                        for (String promoCode : available_promo) {
+                            model.getPromo(promoCode, new TeacherContract.Model.Listener<HomePageRecyclerData>() {
+                                @Override
+                                public void onSuccess(HomePageRecyclerData list) {
+                                    view.loadPromoData(list);
+                                }
 
-        if (documentSnapshot != null) {
-            ArrayList<String> available_promo = (ArrayList<String>) documentSnapshot.get("available_promo");
+                                @Override
+                                public void onError(String msg) {
+                                    Log.w(TAG, "onError: " + msg);
+                                }
+                            });
+                        }
 
-            appliedPromo();
-
-            ArrayList<String> tempList = new ArrayList<>();
-            for (String promoCode : available_promo) {
-                if (!tempList.contains(promoCode)) {
-                    tempList.add(promoCode);
+                    } else {
+                        view.flush("Does not found any user");
+                    }
                 }
-            }
-            available_promo = tempList;
-            for (String promoCode : available_promo) {
-                model.getPromo(promoCode, new TeacherContract.Model.Listener<HomePageRecyclerData>() {
-                    @Override
-                    public void onSuccess(HomePageRecyclerData list) {
-                        view.loadPromoData(list);
+                @Override
+                public void onError(String msg) {
+                    view.flush(msg);
+                }
+            });
+        }else {
+            Map<String, Object> documentSnapshot = TeacherDataStore.getInstance().getDocumentSnapshot();
+            if (documentSnapshot != null) {
+                ArrayList<String> available_promo = (ArrayList<String>) documentSnapshot.get("available_promo");
+                appliedPromo(documentSnapshot);
+                ArrayList<String> tempList = new ArrayList<>();
+                for (String promoCode : available_promo) {
+                    if (!tempList.contains(promoCode)) {
+                        tempList.add(promoCode);
                     }
-
-                    @Override
-                    public void onError(String msg) {
-                        Log.w(TAG, "onError: " + msg);
-                    }
-                });
+                }
+                available_promo = tempList;
+                for (String promoCode : available_promo) {
+                    model.getPromo(promoCode, new TeacherContract.Model.Listener<HomePageRecyclerData>() {
+                        @Override
+                        public void onSuccess(HomePageRecyclerData list) {
+                            view.loadPromoData(list);
+                        }
+                        @Override
+                        public void onError(String msg) {
+                            Log.w(TAG, "onError: " + msg);
+                        }
+                    });
+                }
+            } else {
+                view.flush("Does not found any user");
             }
-
-        } else {
-            view.flush("Does not found any user");
         }
     }
 
     public void loadRating() {
         //testing fucking code here
-
-
         if (TeacherDataStore.getInstance().getDocumentSnapshot() == null) {
             model.getMendatory(new TeacherContract.Model.Listener<DocumentSnapshot>() {
                 @Override

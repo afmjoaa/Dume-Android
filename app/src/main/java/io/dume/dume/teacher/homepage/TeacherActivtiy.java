@@ -227,14 +227,6 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
     public void loadPromoData(HomePageRecyclerData promoData) {
         Log.w(TAG, "loadPromoData: ");
         hPageBSRcyclerAdapter.addPromoToList(promoData);
-        if (promoData.getMax_dicount_percentage() > discount) {
-            discount = promoData.getMax_dicount_percentage();
-            Date expirity = promoData.getExpirity();
-            Date now = new Date();
-            long leftMillis = expirity.getTime() - now.getTime();
-            int daysLeft = (int) (leftMillis / (1000 * 60 * 60 * 24));
-            setHeadsUpPromo(discount.toString(), (daysLeft > 1 ? daysLeft + " days" : "less than a day"), promoData.getPackageName() == null ? "" : promoData.getPackageName());
-        }
     }
 
     @Override

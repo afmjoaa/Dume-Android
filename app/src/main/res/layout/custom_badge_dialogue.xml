@@ -28,10 +28,10 @@
         android:layout_marginLeft="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        android:layout_marginBottom="4dp"
+        android:layout_marginBottom="8dp"
         android:text="Dialogue Title"
-        android:textColor="@color/textColorPrimary"
         android:textAllCaps="false"
+        android:textColor="@color/textColorPrimary"
         android:textSize="18sp" />
 
     <TextView

@@ -46,6 +46,8 @@ import io.dume.dume.student.recordsPage.Record;
 import io.dume.dume.teacher.homepage.TeacherActivityMock;
 import io.dume.dume.teacher.homepage.TeacherActivtiy;
 import io.dume.dume.teacher.homepage.TeacherContract;
+import io.dume.dume.teacher.homepage.TeacherModel;
+import io.dume.dume.teacher.homepage.TeacherPresenter;
 import io.dume.dume.util.DumeUtils;
 import me.zhanghai.android.materialratingbar.MaterialRatingBar;
 
@@ -122,13 +124,18 @@ public class HomePageRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
                     public void onSuccess(String list) {
                         Toast.makeText(context, list, Toast.LENGTH_SHORT).show();
                         removePromo(position);
-                        new HomePagePresenter(context,new HomePageModel((Activity) context,context)).getDataFromDB();
+
+                        if(Google.getInstance().getAccountMajor().equals(DumeUtils.STUDENT)){
+                            new HomePagePresenter(context,homePageModel).getDataFromDB();
+                        }else if(Google.getInstance().getAccountMajor().equals(DumeUtils.TEACHER)){
+                            TeacherActivtiy teacherActivtiy = (TeacherActivtiy) context;
+                            teacherActivtiy.presenter.loadPromo();
+                        }
                     }
 
                     @Override
                     public void onError(String msg) {
                         Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
-
                     }
                 });
             });
