@@ -88,7 +88,7 @@ public class HomePageModel extends StuBaseModel implements HomePageContract.Mode
     }
 
     @Override
-    public void updatePromo(HomePageRecyclerData promoData, String promoCode, TeacherContract.Model.Listener<String> listener) {
+    public void updatePromo(HomePageRecyclerData promoData, TeacherContract.Model.Listener<String> listener) {
         String accountType = Google.getInstance().getAccountMajor();
         String path;
         if (accountType == DumeUtils.TEACHER) {
@@ -101,7 +101,7 @@ public class HomePageModel extends StuBaseModel implements HomePageContract.Mode
         if (promoData.getMax_tution_count() > 1) {
             Integer max_tution_count = promoData.getMax_tution_count();
             max_tution_count -= 1;
-            firestore.collection(path).document(FirebaseAuth.getInstance().getUid()).update(promoCode + ".max_tution_count", max_tution_count).addOnSuccessListener(new OnSuccessListener<Void>() {
+            firestore.collection(path).document(FirebaseAuth.getInstance().getUid()).update(promoData.getPromo_code() + ".max_tution_count", max_tution_count).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
                     listener.onSuccess("Promo Updated");
@@ -109,8 +109,8 @@ public class HomePageModel extends StuBaseModel implements HomePageContract.Mode
             });
         } else {
             firestore.collection(path).document(FirebaseAuth.getInstance().getUid())
-                    .update("applied_promo", FieldValue.arrayRemove(promoCode),
-                            promoCode, FieldValue.delete()).addOnSuccessListener(aVoid -> listener.onSuccess("Promo Used")).addOnFailureListener(e -> listener.onError(e.getLocalizedMessage()));
+                    .update("applied_promo", FieldValue.arrayRemove(promoData.getPromo_code()),
+                            promoData.getPromo_code(), FieldValue.delete()).addOnSuccessListener(aVoid -> listener.onSuccess("Promo Used")).addOnFailureListener(e -> listener.onError(e.getLocalizedMessage()));
 
         }
     }
