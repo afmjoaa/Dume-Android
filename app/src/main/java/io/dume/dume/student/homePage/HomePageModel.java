@@ -98,7 +98,7 @@ public class HomePageModel extends StuBaseModel implements HomePageContract.Mode
 
         }
 
-        if (promoData.getMax_tution_count() > 1) {
+        if (promoData.getMax_tution_count() > 1 && !promoData.isExpired()) {
             Integer max_tution_count = promoData.getMax_tution_count();
             max_tution_count -= 1;
             firestore.collection(path).document(FirebaseAuth.getInstance().getUid()).update(promoData.getPromo_code() + ".max_tution_count", max_tution_count).addOnSuccessListener(new OnSuccessListener<Void>() {

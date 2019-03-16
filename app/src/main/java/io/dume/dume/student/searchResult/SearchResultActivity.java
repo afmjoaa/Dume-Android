@@ -2,6 +2,7 @@ package io.dume.dume.student.searchResult;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -107,6 +108,7 @@ import io.dume.dume.student.common.QualificationAdapter;
 import io.dume.dume.student.common.ReviewAdapter;
 import io.dume.dume.student.common.ReviewHighlightData;
 import io.dume.dume.student.homePage.HomePageActivity;
+import io.dume.dume.student.homePage.HomePageModel;
 import io.dume.dume.student.homePage.adapter.HomePageRecyclerData;
 import io.dume.dume.student.pojo.CusStuAppComMapActivity;
 import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
@@ -245,6 +247,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
     private ReviewHighlightData lastReviewData;
     private Marker marker;
     private List<Marker> markerList;
+    private HomePageModel homePageModel;
 
 
     @Override
@@ -257,7 +260,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
         mModel = new SearchResultModel(this);
         mPresenter = new SearchResultPresenter(this, mModel);
         mPresenter.searchResultEnqueue();
-
+        homePageModel = new HomePageModel((Activity) context, context);
         mapFragment = (TrailSupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         assert mapFragment != null;
         mapFragment.getMapAsync(this);
@@ -487,6 +490,20 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                                         if(homePageRecyclerData.getExpirity().getTime()>date.getTime()){
                                             recordsData.put("promo", promo_item);
                                         }
+                                    }else {
+                                        homePageModel.updatePromo(homePageRecyclerData, new TeacherContract.Model.Listener<String>() {
+                                            @Override
+                                            public void onSuccess(String list) {
+                                                Log.w(TAG, "onSuccess: promo updated" );
+                                            }
+
+                                            @Override
+                                            public void onError(String msg) {
+                                                Log.w(TAG, msg );
+
+
+                                            }
+                                        });
                                     }
                                 }
                             }
