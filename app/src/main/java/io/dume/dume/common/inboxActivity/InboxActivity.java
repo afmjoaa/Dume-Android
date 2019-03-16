@@ -245,7 +245,7 @@ public class InboxActivity extends CustomStuAppCompatActivity implements InboxAc
                     switch (mViewPager.getCurrentItem()) {
                         case 0:
                             PlaceholderFragment messageFragment = Google.getInstance().getMessageFragment();
-                            if(messageFragment!= null){
+                            if (messageFragment != null) {
                                 messageFragment.loadAgain();
                             }
                             break;
@@ -307,6 +307,7 @@ public class InboxActivity extends CustomStuAppCompatActivity implements InboxAc
         private LinearLayout noDataBlockMsg;
         private LinearLayout noDataBlockCall;
         private LinearLayout noDataBlockNoti;
+        private TextView noDataBlockTV;
 
 
         public PlaceholderFragment() {
@@ -326,7 +327,7 @@ public class InboxActivity extends CustomStuAppCompatActivity implements InboxAc
             Bundle args = new Bundle();
             args.putInt(ARG_SECTION_NUMBER, sectionNumber);
             fragment.setArguments(args);
-            if(sectionNumber ==1){
+            if (sectionNumber == 1) {
                 Google.getInstance().setMessageFragment(fragment);
             }
             return fragment;
@@ -396,9 +397,9 @@ public class InboxActivity extends CustomStuAppCompatActivity implements InboxAc
                                     };
                                     inboxRecycler.setAdapter(recordsRecyAda);
                                     inboxRecycler.setLayoutManager(new LinearLayoutManager(myThisActivity));
-                                    if(list.size()<= 0){
+                                    if (list.size() <= 0) {
                                         noDataBlockMsg.setVisibility(View.VISIBLE);
-                                    }else {
+                                    } else {
                                         noDataBlockMsg.setVisibility(View.GONE);
                                     }
                                 }
@@ -435,7 +436,7 @@ public class InboxActivity extends CustomStuAppCompatActivity implements InboxAc
 
                             myThisActivity.hideProgress();
                             if (list.size() < 1) {
-                                myThisActivity.flush("No Message History Found");
+                                noDataBlockMsg.setVisibility(View.VISIBLE);
                                 return;
                             }
                             List<String> foo = new ArrayList<>();
@@ -485,16 +486,16 @@ public class InboxActivity extends CustomStuAppCompatActivity implements InboxAc
                             };
                             inboxRecycler.setAdapter(recordsRecyAda);
                             inboxRecycler.setLayoutManager(new LinearLayoutManager(myThisActivity));
-                            if(list.size()<= 0){
+                            if (list.size() <= 0) {
                                 noDataBlockMsg.setVisibility(View.VISIBLE);
-                            }else {
+                            } else {
                                 noDataBlockMsg.setVisibility(View.GONE);
                             }
                         }
 
                         @Override
                         public void onError(String msg) {
-                            myThisActivity.flush(msg);
+                            //myThisActivity.flush(msg);
                             myThisActivity.hideProgress();
                         }
                     });
@@ -511,16 +512,16 @@ public class InboxActivity extends CustomStuAppCompatActivity implements InboxAc
                             InboxNotiAdapter notiRecyAda = new InboxNotiAdapter(myThisActivity, list);
                             inboxRecyclerRecent.setAdapter(notiRecyAda);
                             inboxRecyclerRecent.setLayoutManager(new LinearLayoutManager(myThisActivity));
-                            if(list.size()<= 0){
+                            if (list.size() <= 0) {
                                 noDataBlockNoti.setVisibility(View.VISIBLE);
-                            }else {
+                            } else {
                                 noDataBlockNoti.setVisibility(View.GONE);
                             }
                         }
 
                         @Override
                         public void onError(String msg) {
-                            Toast.makeText(myThisActivity, msg, Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(myThisActivity, msg, Toast.LENGTH_SHORT).show();
                         }
                     });
                     break;
@@ -528,6 +529,8 @@ public class InboxActivity extends CustomStuAppCompatActivity implements InboxAc
                     rootView = inflater.inflate(R.layout.common1_fragment_default_inbox, container, false);
                     inboxRecycler = rootView.findViewById(R.id.inbox_recycler_view);
                     noDataBlockCall = rootView.findViewById(R.id.no_data_block);
+                    noDataBlockTV = rootView.findViewById(R.id.no_item_text);
+                    noDataBlockTV.setText("Sorry, no call to show right now...");
 
                     demoModel.getPhoneNumberList(new TeacherContract.Model.Listener<List<InboxCallData>>() {
                         @Override
@@ -535,16 +538,17 @@ public class InboxActivity extends CustomStuAppCompatActivity implements InboxAc
                             callRecyAda = new InboxCallAdapter(myThisActivity, list);
                             inboxRecycler.setAdapter(callRecyAda);
                             inboxRecycler.setLayoutManager(new LinearLayoutManager(myThisActivity));
-                            if(list.size()<= 0){
+                            if (list.size() <= 0) {
                                 noDataBlockCall.setVisibility(View.VISIBLE);
-                            }else {
+                            } else {
                                 noDataBlockCall.setVisibility(View.GONE);
                             }
                         }
 
                         @Override
                         public void onError(String msg) {
-
+                            //Toast.makeText(myThisActivity, msg, Toast.LENGTH_SHORT).show();
+                            noDataBlockCall.setVisibility(View.VISIBLE);
                         }
                     });
                     break;
@@ -552,7 +556,7 @@ public class InboxActivity extends CustomStuAppCompatActivity implements InboxAc
             return rootView;
         }
 
-        public void loadAgain(){
+        public void loadAgain() {
             myThisActivity.showProgress();
             demoModel.getRoom(FirebaseAuth.getInstance().getUid(), new TeacherContract.Model.Listener<List<Room>>() {
                 @Override
@@ -609,9 +613,9 @@ public class InboxActivity extends CustomStuAppCompatActivity implements InboxAc
                     };
                     inboxRecycler.setAdapter(recordsRecyAda);
                     inboxRecycler.setLayoutManager(new LinearLayoutManager(myThisActivity));
-                    if(list.size()<= 0){
+                    if (list.size() <= 0) {
                         noDataBlockMsg.setVisibility(View.VISIBLE);
-                    }else {
+                    } else {
                         noDataBlockMsg.setVisibility(View.GONE);
                     }
                 }

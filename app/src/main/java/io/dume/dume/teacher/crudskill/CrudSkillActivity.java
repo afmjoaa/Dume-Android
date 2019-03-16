@@ -213,9 +213,11 @@ public class CrudSkillActivity extends CusStuAppComMapActivity implements CrudCo
                     }, 0L);
                     break;
                 case DumeUtils.TEACHER:
+                case ("frag_" + DumeUtils.TEACHER):
                     getDeviceLocation(mMap);
                     break;
                 case (DumeUtils.BOOTCAMP):
+                case ("frag_" + DumeUtils.BOOTCAMP):
                     getDeviceLocation(mMap);
                     break;
             }

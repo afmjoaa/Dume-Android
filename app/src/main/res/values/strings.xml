@@ -717,24 +717,17 @@ provided.Tap salary for details.  </string>
     </string-array>
 
     <string-array name="congrats_value">
-        <item><![CDATA[•\tJoined = true]]></item>
+        <item><![CDATA[•\tJoined badge is unlocked upon your joining in Dume network.]]></item>
 
-        <item><![CDATA[•\tTotal Students = 1
-        \n•\tOngoing Dume = 1]]></item>
+        <item><![CDATA[•\tBadge helps you find more tuition
+        \n•\tInaugural badge will ensure exposure needed to sell your skill.]]></item>
 
-        <item><![CDATA[•\tTotal Students = 4
-        \n•\tOngoing Dume = 2
-        \n•\tRatings >= 4.70 ★
-        \n•\tExpertize >= 80%
-        \n•\tBehaviour >= 80%
-        \n•\tAccept Ratio >= 80% ]]></item>
+        <item><![CDATA[•\tBadge helps you get adequate exposer
+        \n•\tLeading badge will ensure you get your preferred tuition ]]></item>
 
-        <item><![CDATA[•\tTotal Students = 6
-        \n•\tOngoing Dume = 3
-        \n•\tRatings >= 4.80 ★
-        \n•\tExpertize >= 90%
-        \n•\tBehaviour >= 90%
-        \n•\tAccept Ratio >= 80% ]]></item>
+        <item><![CDATA[•\tBadge helps you to earn more money with less effort
+        \n•\tPremier badge unlocks instant dume (weekly mentor) service for you
+        \n•\tThis also ensures you get maximum earning from Dume network ]]></item>
     </string-array>
 
 

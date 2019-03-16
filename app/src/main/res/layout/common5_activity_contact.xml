@@ -73,7 +73,7 @@
         android:layout_height="320dp"
         app:layout_anchor="@+id/app_bar"
         app:layout_anchorGravity="bottom"
-        android:layout_marginTop="132dp"
+        android:layout_marginTop="140dp"
         android:gravity="center"
         android:orientation="vertical"
         android:visibility="gone">

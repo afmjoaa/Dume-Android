@@ -16,6 +16,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -136,10 +137,9 @@ public class ContactActivityModel implements ContactActivityContact.Model {
                     Log.w("foo", "readContact: Set  :" + set.toString());*/
                     listener.onSuccess(list);
                 } else {
+                    listener.onSuccess(new ArrayList<>());
                     listener.onError("You don't have any records right now. \nRecord is a deal between Mentor and Students");
                 }
-
-
             }
         });
     }

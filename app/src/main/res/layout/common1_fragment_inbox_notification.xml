@@ -113,6 +113,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
+        android:paddingBottom="100dp"
         android:orientation="vertical"
         android:visibility="gone">
 
@@ -127,7 +128,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="Sorry, no chat room to show right now..."
+            android:text="Sorry, no noti to show right now..."
             android:textAlignment="center"
             android:textAllCaps="false"
             android:textColor="@color/textColorSecondary"

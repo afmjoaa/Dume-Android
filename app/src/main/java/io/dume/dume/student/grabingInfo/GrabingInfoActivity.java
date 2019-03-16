@@ -854,6 +854,8 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                 break;
             case DumeUtils.TEACHER:
             case DumeUtils.BOOTCAMP:
+            case ("frag_" + DumeUtils.TEACHER):
+            case ("frag_" + DumeUtils.BOOTCAMP):
                 GeoPoint geoPointTeacher = (GeoPoint) TeacherDataStore.getInstance().getDocumentSnapshot().get("location");
                 LatLng teacherLatLng = new LatLng(geoPointTeacher.getLatitude(), geoPointTeacher.getLongitude());
                 addCustomMarkerFromURL(TeacherDataStore.getInstance().gettAvatarString(), teacherLatLng);
