@@ -41,6 +41,7 @@ import io.dume.dume.R;
 import io.dume.dume.common.chatActivity.DemoModel;
 import io.dume.dume.student.homePage.HomePageActivity;
 import io.dume.dume.student.homePage.HomePageModel;
+import io.dume.dume.student.homePage.HomePagePresenter;
 import io.dume.dume.student.recordsPage.Record;
 import io.dume.dume.teacher.homepage.TeacherActivityMock;
 import io.dume.dume.teacher.homepage.TeacherActivtiy;
@@ -121,6 +122,7 @@ public class HomePageRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
                     public void onSuccess(String list) {
                         Toast.makeText(context, list, Toast.LENGTH_SHORT).show();
                         removePromo(position);
+                        new HomePagePresenter(context,new HomePageModel((Activity) context,context)).getDataFromDB();
                     }
 
                     @Override

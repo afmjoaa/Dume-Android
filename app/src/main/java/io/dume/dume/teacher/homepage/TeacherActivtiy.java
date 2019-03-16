@@ -76,6 +76,7 @@ import com.transitionseverywhere.TransitionManager;
 import com.transitionseverywhere.TransitionSet;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -217,16 +218,44 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
     private LinearLayout BootCampAddLayout;
     private HorizontalLoadView loadView;
     public LinearLayout hackHeight;
-
+    private TextView promotionTextView, promotionExpireDate;
+    Integer discount = 0;
+    private carbon.widget.LinearLayout headerTab;
 
 
     @Override
     public void loadPromoData(HomePageRecyclerData promoData) {
         Log.w(TAG, "loadPromoData: ");
         hPageBSRcyclerAdapter.addPromoToList(promoData);
+        if (promoData.getMax_dicount_percentage() > discount) {
+            discount = promoData.getMax_dicount_percentage();
+            Date expirity = promoData.getExpirity();
+            Date now = new Date();
+            long leftMillis = expirity.getTime() - now.getTime();
+            int daysLeft = (int) (leftMillis / (1000 * 60 * 60 * 24));
+            setHeadsUpPromo(discount.toString(), (daysLeft > 1 ? daysLeft + " days" : "less than a day"), promoData.getPackageName() == null ? "" : promoData.getPackageName());
+        }
+    }
+
+    @Override
+    public void loadHeadsUpPromo(HomePageRecyclerData promoData) {
+        if (promoData.getMax_dicount_percentage() > discount) {
+            discount = promoData.getMax_dicount_percentage();
+            Date expirity = promoData.getExpirity();
+            Date now = new Date();
+            long leftMillis = expirity.getTime() - now.getTime();
+            int daysLeft = (int) (leftMillis / (1000 * 60 * 60 * 24));
+            setHeadsUpPromo(discount.toString(), (daysLeft > 1 ? daysLeft + " days" : "less than a day"), promoData.getPackageName() == null ? "" : promoData.getPackageName());
+        }
     }
 
 
+    public void setHeadsUpPromo(String discount, String dayLeft, String packageName) {
+        percentOffBlock.setVisibility(View.VISIBLE);
+        headerTab.setBackground(getResources().getDrawable(R.drawable.bg_white_bottom_round_6));
+        promotionTextView.setText(discount + "% off " + packageName);
+        promotionExpireDate.setText(dayLeft);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -253,7 +282,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
 
     @Override
     public void updateBadge(String badgeNumber) {
-        if(Integer.parseInt(badgeNumber)!= 0){
+        if (Integer.parseInt(badgeNumber) != 0) {
             tabLayout.setTabBadge(1, badgeNumber);
         }
     }
@@ -286,7 +315,6 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         infoItem = menu.findItem(R.id.information_item);
         selectAccount = menu.findItem(R.id.select_account);
         skills = menu.findItem(R.id.skills);
-
         studentProfile = menu.findItem(R.id.student);
         mentorProfile = menu.findItem(R.id.mentor);
         bootCampProfile = menu.findItem(R.id.boot_camp);
@@ -314,7 +342,6 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         userName = findViewById(R.id.user_name);
         hPageBSRecycler = findViewById(R.id.homePage_bottomSheet_recycler);
         feedbackStrings = getResources().getStringArray(R.array.review_hint_text_dependent);
-
         userNameTextView = findViewById(R.id.user_name);
         userAddressingTextView = findViewById(R.id.user_addressing);
         userRatingTextView = findViewById(R.id.user_rating);
@@ -327,6 +354,9 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         profileDataLayout = findViewById(R.id.profile_data);
         BootCampAddLayout = findViewById(R.id.mentor_add_layout);
         hackHeight = findViewById(R.id.hack_height);
+        promotionTextView = findViewById(R.id.promotion_text);
+        promotionExpireDate = findViewById(R.id.promotion_validity_text);
+        headerTab = findViewById(R.id.header_fuck);
     }
 
     @Override
@@ -1443,7 +1473,6 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
             loadView.setVisibility(View.INVISIBLE);
         }
     }
-
 
 
     @Override

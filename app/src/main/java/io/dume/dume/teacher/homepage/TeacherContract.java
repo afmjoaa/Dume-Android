@@ -24,6 +24,8 @@ public interface TeacherContract {
     interface View {
         void loadPromoData(HomePageRecyclerData promoData);
 
+        void loadHeadsUpPromo(HomePageRecyclerData promoData);
+
         void updateBadge(String badgeNumber);
 
         void init();
@@ -118,6 +120,8 @@ public interface TeacherContract {
 
 
     interface Presenter {
+        void appliedPromo();
+
         void loadStat(Model.Listener<List<Stat>> listener);
 
         void onButtonClicked();

@@ -172,6 +172,7 @@ public class EditAccount extends CustomStuAppCompatActivity implements EditContr
     @Override
     public void onDataLoad(DocumentSnapshot documentSnapshot) {
         TeacherDataStore.getInstance().setDocumentSnapshot(documentSnapshot.getData());
+        TeacherDataStore.getInstance().setSnapshot(documentSnapshot);
         databaseComPercent = documentSnapshot.getString("pro_com_%");
         final RequestOptions requestOptions = new RequestOptions();
         String gender = documentSnapshot.getString("gender");

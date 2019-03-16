@@ -20,13 +20,21 @@ public class TeacherDataStore implements Serializable {
     private String packName;
     private ArrayList<Skill> skillArrayList = null;
     private List<Boolean> badgeList;
-
+private DocumentSnapshot snapshot;
     private String tUserName;
     private String tUserNumber;
     private String tUserMail;
     private String tAvatarString = null;
     private String tUserUid;
     private String packageName;
+
+    public DocumentSnapshot getSnapshot() {
+        return snapshot;
+    }
+
+    public void setSnapshot(DocumentSnapshot snapshot) {
+        this.snapshot = snapshot;
+    }
 
     public List<Boolean> getBadgeList() {
         return badgeList;

@@ -357,7 +357,7 @@ public class StudentPaymentActivity extends CustomStuAppCompatActivity implement
                 homePageRecyclerData.setTitle(promoMap.get("title").toString());
                 homePageRecyclerData.setDescription(promoMap.get("description").toString());
                 homePageRecyclerData.setStart_date((Date) promoMap.get("start_date"));
-                homePageRecyclerData.setProduct(promoMap.get("product").toString());
+                homePageRecyclerData.setPackageName(promoMap.get("packageName").toString());
                 Long max_tution_count = (Long) promoMap.get("max_tution_count");
                 homePageRecyclerData.setMax_tution_count(max_tution_count.intValue());
                 Long max_dicount_percentage = (Long) promoMap.get("max_dicount_percentage");

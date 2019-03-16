@@ -23,7 +23,11 @@ public interface HomePageContract {
 
         void makingCallbackInterfaces();
 
+        void setHeadsUpPromo(String discount, String dayLeft, String packageName);
+
         void init();
+
+        void loadHeadsUpPromo(HomePageRecyclerData promoData);
 
         void loadPromoData(HomePageRecyclerData promoList);
 
@@ -166,6 +170,9 @@ public interface HomePageContract {
         void checkNetworkAndGps();
 
         void defaultOptionMenuCreated();
+
+
+        void appliedPromo(DocumentSnapshot documentSnapshot);
 
         void getDataFromDB();
     }

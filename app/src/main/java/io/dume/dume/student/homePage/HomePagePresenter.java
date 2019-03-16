@@ -12,7 +12,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.GeoPoint;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -242,11 +245,28 @@ public class HomePagePresenter implements HomePageContract.Presenter {
         });
     }
 
+
+    @Override
+    public void appliedPromo(DocumentSnapshot documentSnapshot) {
+        ArrayList<String> applied_promo = (ArrayList<String>) documentSnapshot.get("applied_promo");
+        for (String applied : applied_promo) {
+            Log.w(TAG, "appliedPromo: " + applied);
+            Map<String, Object> promo_item = (Map<String, Object>) documentSnapshot.get(applied);
+            Gson gson = new Gson();
+            JsonElement jsonElement = gson.toJsonTree(promo_item);
+            HomePageRecyclerData homePageRecyclerData = gson.fromJson(jsonElement, HomePageRecyclerData.class);
+            mView.loadHeadsUpPromo(homePageRecyclerData);
+        }
+    }
+
     @Override
     public void getDataFromDB() {
         mModel.addShapShotListener((documentSnapshot, e) -> {
             if (documentSnapshot != null) {
                 ArrayList<String> available_promo = (ArrayList<String>) documentSnapshot.get("available_promo");
+
+                appliedPromo(documentSnapshot);
+
                 ArrayList<String> tempList = new ArrayList<>();
                 for (String promoCode : available_promo) {
                     if (!tempList.contains(promoCode)) {
@@ -254,6 +274,7 @@ public class HomePagePresenter implements HomePageContract.Presenter {
                     }
                 }
                 available_promo = tempList;
+
                 for (String promoCode : available_promo) {
                     mModel.getPromo(promoCode, new TeacherContract.Model.Listener<HomePageRecyclerData>() {
                         @Override
@@ -263,7 +284,7 @@ public class HomePagePresenter implements HomePageContract.Presenter {
 
                         @Override
                         public void onError(String msg) {
-                            Log.w(TAG, "onError: "+msg );
+                            Log.w(TAG, "onError: " + msg);
                         }
                     });
                 }
