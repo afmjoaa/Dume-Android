@@ -35,6 +35,7 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -64,6 +65,8 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 import com.google.maps.android.ui.IconGenerator;
 import com.touchboarder.weekdaysbuttons.WeekdaysDataItem;
 import com.touchboarder.weekdaysbuttons.WeekdaysDataSource;
@@ -76,6 +79,7 @@ import com.warkiz.widget.IndicatorSeekBar;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -85,6 +89,7 @@ import biz.laenger.android.vpbs.ViewPagerBottomSheetBehavior;
 import io.dume.dume.R;
 import io.dume.dume.customView.HorizontalLoadViewTwo;
 import io.dume.dume.student.grabingLocation.GrabingLocationActivity;
+import io.dume.dume.student.homePage.adapter.HomePageRecyclerData;
 import io.dume.dume.student.pojo.CusStuAppComMapActivity;
 import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
 import io.dume.dume.student.pojo.SearchDataStore;
@@ -164,6 +169,9 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
     private carbon.widget.ImageView mMarkerImageView;
     private IconGenerator iconFactory;
     private int SEARCH_REQUEST_CODE = 0101;
+    private String gangDiscount= null;
+    private String regularDiscount= null;
+    private String instantDiscount= null;
 
 
     @Override
@@ -542,13 +550,35 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
         });
 
         dumeGangBadgeOffLayDraw = (LayerDrawable) dumeGangPercentageOffImage.getDrawable();
-        DumeUtils.setTextOverDrawable(this, dumeGangBadgeOffLayDraw, R.id.ic_badge, Color.WHITE, "-20%", 3);
-
         regularDumeBadgeOffLayDraw = (LayerDrawable) regularDumePercentageOffImage.getDrawable();
-        DumeUtils.setTextOverDrawable(this, regularDumeBadgeOffLayDraw, R.id.ic_badge, 0xff575757, "-30%", 3);
-
         instantDumeBadgeOffLayDraw = (LayerDrawable) instantDumePercentageOffImage.getDrawable();
-        DumeUtils.setTextOverDrawable(this, instantDumeBadgeOffLayDraw, R.id.ic_badge, 0xff575757, "-40%", 3);
+
+        Map<String, Object> documentSnapshot = searchDataStore.getDocumentSnapshot();
+        ArrayList<String> applied_promo = (ArrayList<String>) documentSnapshot.get("applied_promo");
+        if(applied_promo.size()>0){
+            for (String applied : applied_promo) {
+                Log.w(TAG, "appliedPromo: " + applied);
+                Map<String, Object> promo_item = (Map<String, Object>) documentSnapshot.get(applied);
+                Gson gson = new Gson();
+                JsonElement jsonElement = gson.toJsonTree(promo_item);
+                HomePageRecyclerData homePageRecyclerData = gson.fromJson(jsonElement, HomePageRecyclerData.class);
+                if(homePageRecyclerData!= null){
+                    if(homePageRecyclerData.getPackageName().equals(SearchDataStore.DUME_GANG)){
+                        Integer max_dicount_percentage = homePageRecyclerData.getMax_dicount_percentage();
+                        gangDiscount = "-" + max_dicount_percentage.toString() +"%";
+                        DumeUtils.setTextOverDrawable(this, dumeGangBadgeOffLayDraw, R.id.ic_badge, Color.WHITE, gangDiscount, 3);
+                    }else if(homePageRecyclerData.getPackageName().equals(SearchDataStore.REGULAR_DUME)){
+                        Integer max_dicount_percentage = homePageRecyclerData.getMax_dicount_percentage();
+                        regularDiscount = "-" + max_dicount_percentage.toString() +"%";
+                        DumeUtils.setTextOverDrawable(this, regularDumeBadgeOffLayDraw, R.id.ic_badge, 0xff575757, regularDiscount, 3);
+                    }else {
+                        Integer max_dicount_percentage = homePageRecyclerData.getMax_dicount_percentage();
+                        instantDiscount = "-" + max_dicount_percentage.toString() +"%";
+                        DumeUtils.setTextOverDrawable(this, instantDumeBadgeOffLayDraw, R.id.ic_badge, 0xff575757, instantDiscount, 3);
+                    }
+                }
+            }
+        }
     }
 
     @Override
@@ -641,16 +671,25 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
             regularDumePercentageOffImage.setImageResource(R.drawable.ic_percentage_off_badge_layer_list_inactive);
             instantDumePercentageOffImage.setImageResource(R.drawable.ic_percentage_off_badge_layer_list_inactive);
             dumeGangBadgeOffLayDraw = (LayerDrawable) dumeGangPercentageOffImage.getDrawable();
-            DumeUtils.setTextOverDrawable(this, dumeGangBadgeOffLayDraw, R.id.ic_badge, Color.WHITE, "-20%", 3);
-
             regularDumeBadgeOffLayDraw = (LayerDrawable) regularDumePercentageOffImage.getDrawable();
-            DumeUtils.setTextOverDrawable(this, regularDumeBadgeOffLayDraw, R.id.ic_badge, 0xff575757, "-30%", 3);
-
             instantDumeBadgeOffLayDraw = (LayerDrawable) instantDumePercentageOffImage.getDrawable();
-            DumeUtils.setTextOverDrawable(this, instantDumeBadgeOffLayDraw, R.id.ic_badge, 0xff575757, "-40%", 3);
 
+            if(gangDiscount!=null){
+                DumeUtils.setTextOverDrawable(this, dumeGangBadgeOffLayDraw, R.id.ic_badge, Color.WHITE, gangDiscount, 3);
+            }else{
+                DumeUtils.setTextOverDrawable(this, dumeGangBadgeOffLayDraw, R.id.ic_badge, Color.WHITE, "-0%", 3);
+            }
+            if(regularDiscount!= null){
+                DumeUtils.setTextOverDrawable(this, regularDumeBadgeOffLayDraw, R.id.ic_badge, 0xff575757, regularDiscount, 3);
+            }else{
+                DumeUtils.setTextOverDrawable(this, regularDumeBadgeOffLayDraw, R.id.ic_badge, 0xff575757, "-0%", 3);
+            }
+            if(instantDiscount!= null){
+                DumeUtils.setTextOverDrawable(this, instantDumeBadgeOffLayDraw, R.id.ic_badge, 0xff575757, instantDiscount, 3);
+            }else{
+                DumeUtils.setTextOverDrawable(this, instantDumeBadgeOffLayDraw, R.id.ic_badge, 0xff575757, "-0%", 3);
+            }
             packageSearchBtn.setText("Search Dume Batch");
-
         }
     }
 
@@ -718,14 +757,25 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
             regularDumePercentageOffImage.setImageResource(R.drawable.ic_percentage_off_badge_layer_list);
             instantDumePercentageOffImage.setImageResource(R.drawable.ic_percentage_off_badge_layer_list_inactive);
             dumeGangBadgeOffLayDraw = (LayerDrawable) dumeGangPercentageOffImage.getDrawable();
-            DumeUtils.setTextOverDrawable(this, dumeGangBadgeOffLayDraw, R.id.ic_badge, 0xff575757, "-20%", 3);
-
             regularDumeBadgeOffLayDraw = (LayerDrawable) regularDumePercentageOffImage.getDrawable();
-            DumeUtils.setTextOverDrawable(this, regularDumeBadgeOffLayDraw, R.id.ic_badge, Color.WHITE, "-30%", 3);
-
             instantDumeBadgeOffLayDraw = (LayerDrawable) instantDumePercentageOffImage.getDrawable();
-            DumeUtils.setTextOverDrawable(this, instantDumeBadgeOffLayDraw, R.id.ic_badge, 0xff575757, "-40%", 3);
+
             packageSearchBtn.setText("Search Regular Dume");
+            if(gangDiscount!=null){
+                DumeUtils.setTextOverDrawable(this, dumeGangBadgeOffLayDraw, R.id.ic_badge, 0xff575757, gangDiscount, 3);
+            }else{
+                DumeUtils.setTextOverDrawable(this, dumeGangBadgeOffLayDraw, R.id.ic_badge, 0xff575757, "-0%", 3);
+            }
+            if(regularDiscount!= null){
+                DumeUtils.setTextOverDrawable(this, regularDumeBadgeOffLayDraw, R.id.ic_badge, Color.WHITE, regularDiscount, 3);
+            }else{
+                DumeUtils.setTextOverDrawable(this, regularDumeBadgeOffLayDraw, R.id.ic_badge, Color.WHITE, "-0%", 3);
+            }
+            if(instantDiscount!= null){
+                DumeUtils.setTextOverDrawable(this, instantDumeBadgeOffLayDraw, R.id.ic_badge, 0xff575757, instantDiscount, 3);
+            }else{
+                DumeUtils.setTextOverDrawable(this, instantDumeBadgeOffLayDraw, R.id.ic_badge, 0xff575757, "-0%", 3);
+            }
         }
     }
 
@@ -786,13 +836,23 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
             regularDumePercentageOffImage.setImageResource(R.drawable.ic_percentage_off_badge_layer_list_inactive);
             instantDumePercentageOffImage.setImageResource(R.drawable.ic_percentage_off_badge_layer_list);
             dumeGangBadgeOffLayDraw = (LayerDrawable) dumeGangPercentageOffImage.getDrawable();
-            DumeUtils.setTextOverDrawable(this, dumeGangBadgeOffLayDraw, R.id.ic_badge, 0xff575757, "-20%", 3);
-
             regularDumeBadgeOffLayDraw = (LayerDrawable) regularDumePercentageOffImage.getDrawable();
-            DumeUtils.setTextOverDrawable(this, regularDumeBadgeOffLayDraw, R.id.ic_badge, 0xff575757, "-30%", 3);
-
             instantDumeBadgeOffLayDraw = (LayerDrawable) instantDumePercentageOffImage.getDrawable();
-            DumeUtils.setTextOverDrawable(this, instantDumeBadgeOffLayDraw, R.id.ic_badge, Color.WHITE, "-40%", 3);
+            if(gangDiscount!=null){
+                DumeUtils.setTextOverDrawable(this, dumeGangBadgeOffLayDraw, R.id.ic_badge, 0xff575757, gangDiscount, 3);
+            }else{
+                DumeUtils.setTextOverDrawable(this, dumeGangBadgeOffLayDraw, R.id.ic_badge, 0xff575757, "-0%", 3);
+            }
+            if(regularDiscount!= null){
+                DumeUtils.setTextOverDrawable(this, regularDumeBadgeOffLayDraw, R.id.ic_badge, 0xff575757, regularDiscount, 3);
+            }else{
+                DumeUtils.setTextOverDrawable(this, regularDumeBadgeOffLayDraw, R.id.ic_badge, 0xff575757, "-0%", 3);
+            }
+            if(instantDiscount!= null){
+                DumeUtils.setTextOverDrawable(this, instantDumeBadgeOffLayDraw, R.id.ic_badge, Color.WHITE, instantDiscount, 3);
+            }else{
+                DumeUtils.setTextOverDrawable(this, instantDumeBadgeOffLayDraw, R.id.ic_badge, Color.WHITE, "-0%", 3);
+            }
             packageSearchBtn.setText("Search Instant Dume");
         }
     }
