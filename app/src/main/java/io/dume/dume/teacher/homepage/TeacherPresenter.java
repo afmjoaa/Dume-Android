@@ -8,10 +8,13 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.google.android.gms.dynamic.ObjectWrapper;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -93,7 +96,7 @@ public class TeacherPresenter implements TeacherContract.Presenter {
                 /*Enams Code Goes Here*/
                 Map<String, Object> achievements = (Map<String, Object>) documentSnapshot.get("achievements");
                 List<Boolean> badgeStatus = new ArrayList<>();
-                if(achievements!= null){
+                if (achievements != null) {
                     badgeStatus.add((boolean) achievements.get("joined"));
                     badgeStatus.add((boolean) achievements.get("inaugural"));
                     badgeStatus.add((boolean) achievements.get("leading"));
@@ -103,7 +106,7 @@ public class TeacherPresenter implements TeacherContract.Presenter {
                 final Map<String, Object> selfRating = (Map<String, Object>) documentSnapshot.get("self_rating");
                 teachearDataStore.setSelfRating(selfRating);
                 teachearDataStore.setDocumentSnapshot(documentSnapshot.getData());
-
+                teachearDataStore.setSnapshot(documentSnapshot);
                 String unread_msg = documentSnapshot.getString("unread_msg");
                 view.setUnreadMsg(unread_msg);
                 String unread_noti = documentSnapshot.getString("unread_noti");
@@ -128,7 +131,7 @@ public class TeacherPresenter implements TeacherContract.Presenter {
                     view.setProfileComPercent(documentSnapshot.getString("pro_com_%"));
                     view.showPercentSnackBar(documentSnapshot.getString("pro_com_%"));
                 }
-loadPromo();
+                loadPromo();
                 listener.onSuccess(null);
             }
 
@@ -140,11 +143,31 @@ loadPromo();
         });
     }
 
-    public void loadPromo()
+    @Override public void appliedPromo()
     {
         Map<String, Object> documentSnapshot = TeacherDataStore.getInstance().getDocumentSnapshot();
+        ArrayList<String> applied_promo = (ArrayList<String>) documentSnapshot.get("applied_promo");
+        if (applied_promo != null) {
+            for (String applied : applied_promo) {
+                Map<String, Object> promo_item = (Map<String, Object>) documentSnapshot.get(applied);
+                Gson gson = new Gson();
+                JsonElement jsonElement = gson.toJsonTree(promo_item);
+                HomePageRecyclerData homePageRecyclerData = gson.fromJson(jsonElement, HomePageRecyclerData.class);
+                view.loadHeadsUpPromo(homePageRecyclerData);
+            }
+
+        }
+    }
+
+
+    public void loadPromo() {
+        Map<String, Object> documentSnapshot = TeacherDataStore.getInstance().getDocumentSnapshot();
+
         if (documentSnapshot != null) {
             ArrayList<String> available_promo = (ArrayList<String>) documentSnapshot.get("available_promo");
+
+            appliedPromo();
+
             ArrayList<String> tempList = new ArrayList<>();
             for (String promoCode : available_promo) {
                 if (!tempList.contains(promoCode)) {
@@ -161,7 +184,7 @@ loadPromo();
 
                     @Override
                     public void onError(String msg) {
-                        Log.w(TAG, "onError: "+msg );
+                        Log.w(TAG, "onError: " + msg);
                     }
                 });
             }
@@ -170,6 +193,7 @@ loadPromo();
             view.flush("Does not found any user");
         }
     }
+
     public void loadRating() {
         //testing fucking code here
 
@@ -232,6 +256,7 @@ loadPromo();
                         }
                     }
                 }
+
                 @Override
                 public void onError(String msg) {
                     view.flush(msg);

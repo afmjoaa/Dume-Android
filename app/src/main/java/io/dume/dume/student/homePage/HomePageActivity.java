@@ -73,6 +73,7 @@ import com.transitionseverywhere.TransitionManager;
 import com.transitionseverywhere.TransitionSet;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -210,6 +211,10 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
     private HomePageModel mModel;
     private HorizontalLoadView loadView;
     public LinearLayout hackHeight;
+    private TextView promotionTV;
+    private TextView promotionExpireDate;
+    private Integer discount = 0;
+    private carbon.widget.LinearLayout headsUpPromoContainer;
 
 
     @Override
@@ -217,10 +222,19 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
         super.onDestroy();
 //       stopService(locationServiceIntent);
     }
-
+    @Override
+    public void loadHeadsUpPromo(HomePageRecyclerData promoData) {
+        if (promoData.getMax_dicount_percentage() > discount) {
+            discount = promoData.getMax_dicount_percentage();
+            Date expirity = promoData.getExpirity();
+            Date now = new Date();
+            long leftMillis = expirity.getTime() - now.getTime();
+            int daysLeft = (int) (leftMillis / (1000 * 60 * 60 * 24));
+            setHeadsUpPromo(discount.toString(), (daysLeft > 1 ? daysLeft + " days" : "less than a day"), promoData.getPackageName() == null ? "" : promoData.getPackageName());
+        }
+    }
     @Override
     public void loadPromoData(HomePageRecyclerData promoData) {
-        Log.w(TAG, "loadPromoData: ");
         hPageBSRcyclerAdapter.addPromoToList(promoData);
     }
 
@@ -382,8 +396,20 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
         recentSearchRV = findViewById(R.id.recent_search_recycler);
         hackHeight = findViewById(R.id.hack_height);
         enamSnackbar = Snackbar.make(coordinatorLayout, "Replace with your own action", Snackbar.LENGTH_LONG);
+        promotionTV = findViewById(R.id.promotion_text);
+        promotionExpireDate = findViewById(R.id.promotion_validity_text);
+        headsUpPromoContainer = findViewById(R.id.percent_off_block);
 
     }
+
+    @Override
+    public void setHeadsUpPromo(String discount, String dayLeft, String packageName) {
+        headsUpPromoContainer.setVisibility(View.VISIBLE);
+        searchMentorBtn.setBackground(getResources().getDrawable(R.drawable.bg_white_bottom_round));
+        promotionTextView.setText(discount + "% off " + packageName);
+        promotionExpireDate.setText(dayLeft);
+    }
+
 
     @Override
     public void init() {

@@ -73,11 +73,12 @@ public class HomePageModel extends StuBaseModel implements HomePageContract.Mode
         promoMap.put("max_discount_credit", promoData.getMax_discount_credit());
         promoMap.put("max_tution_count", promoData.getMax_tution_count());
         promoMap.put("promo_image", promoData.getPromo_image());
-        promoMap.put("product", promoData.getProduct());
+        promoMap.put("packageName", promoData.getPackageName());
         promoMap.put("promo_code", promoData.getPromo_code());
         promoMap.put("promo_for", promoData.getPromo_for());
         promoMap.put("expired", promoData.isExpired());
         promoMap.put("criteria", promoData.getCriteria());
+
 
 
         firestore.collection(path).document(FirebaseAuth.getInstance().getUid())

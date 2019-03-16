@@ -22,6 +22,7 @@
             android:visibility="visible">
 
             <carbon.widget.LinearLayout
+                android:id="@+id/percent_off_block"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
@@ -31,6 +32,7 @@
                 android:orientation="horizontal"
                 android:paddingBottom="2dp"
                 app:carbon_elevation="5dp"
+                android:visibility="invisible"
                 android:paddingTop="2dp">
 
                 <TextView
@@ -67,7 +69,7 @@
                 android:layout_height="48dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
-                android:background="@drawable/bg_white_bottom_round"
+                android:background="@drawable/bg_white_round_corner"
                 android:onClick="onHomePageViewClicked"
                 android:padding="0dp"
                 app:carbon_cornerRadius="0dp"

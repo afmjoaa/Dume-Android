@@ -19,11 +19,12 @@ public class HomePageRecyclerData implements Serializable {
     String promo_for;
     boolean expired;
     Map<String, Object> criteria;
+    String packageName;
 
     public HomePageRecyclerData() {
     }
 
-    public HomePageRecyclerData(String title, String description, String sub_description, Date expirity, Date start_date, Integer max_dicount_percentage, Integer max_discount_credit, Integer max_tution_count, String promo_image, String product, String promo_code, String promo_for, Map<String, Object> criteria) {
+    public HomePageRecyclerData(String title, String description, String sub_description, Date expirity, Date start_date, Integer max_dicount_percentage, Integer max_discount_credit, Integer max_tution_count, String promo_image, String product, String promo_code, String promo_for, Map<String, Object> criteria, String packageName) {
         this.title = title;
         this.description = description;
         this.sub_description = sub_description;
@@ -37,6 +38,15 @@ public class HomePageRecyclerData implements Serializable {
         this.promo_code = promo_code;
         this.promo_for = promo_for;
         this.criteria = criteria;
+        this.packageName = packageName;
+    }
+
+    public String getPackageName() {
+        return packageName;
+    }
+
+    public void setPackageName(String packageName) {
+        this.packageName = packageName;
     }
 
     public boolean isExpired() {
