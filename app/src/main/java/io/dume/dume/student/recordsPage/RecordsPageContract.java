@@ -38,6 +38,10 @@ public interface RecordsPageContract {
 
         void getRecords(TeacherContract.Model.Listener<List<Record>> listener);
 
-        void changeRecordStatus(String recordId, String status, TeacherContract.Model.Listener<Void> listener);
+        void changeRecordStatus(String recordId, String status, String rejectedBy, TeacherContract.Model.Listener<Void> listener);
+
+        void changeRecordValues(String recordId, String key, Boolean value, TeacherContract.Model.Listener<Void> listener);
+
+        void setPenalty(String acountMajor, Integer amount, TeacherContract.Model.Listener<Void> listener);
     }
 }

@@ -43,6 +43,7 @@ public class LocalDb {
     public final List<String> crossCheck;
     public final List<String> payment;
     public final List<String> capacity;
+    private final ArrayList<String> innerArt;
 
 
     public List<String> getInnerSchoolEnglishMediumEdExcelOLevel() {
@@ -277,7 +278,7 @@ public class LocalDb {
 
         };
 
-        innerLevel = new ArrayList<String>(Arrays.asList("School", "College", "University", "Arabic", "Babysitting")) {
+        innerLevel = new ArrayList<String>(Arrays.asList("School", "College", "University")) {
             @Override
             public String toString() {
                 return "Level";
@@ -597,7 +598,7 @@ public class LocalDb {
                 return "Type";
             }
         };
-        innerOthers = new ArrayList<String>(Arrays.asList("BCS", "IELTS", "SAT", "GRE", "GMAT")) {
+        innerOthers = new ArrayList<String>(Arrays.asList("BCS", "IELTS", "SAT", "GRE", "GMAT","Arabic (Quran)","Baby Sitting")) {
             @Override
             public String toString() {
                 return "Item";
@@ -638,6 +639,14 @@ public class LocalDb {
                 return "Capacity";
             }
         };
+        innerArt = new ArrayList<String>(Arrays.asList("Therapeutic Art", "Digital Art", "Visual art", "Applied Art", "Performing Art", "Character Art")) {
+            @Override
+            public String toString() {
+                return "Field";
+            }
+        };
+
+
 
 
         levelOneMap = new HashMap<>(categories.size());
@@ -646,10 +655,10 @@ public class LocalDb {
         levelOneMap.put(categories.get(2), innerProgramming);
         levelOneMap.put(categories.get(3), innerLanguage);
         levelOneMap.put(categories.get(4), innerDance);
-        levelOneMap.put(categories.get(5), innerDance);
+        levelOneMap.put(categories.get(5), innerArt);
         levelOneMap.put(categories.get(6), innerCooking);
         levelOneMap.put(categories.get(7), innerMusic);
-        levelOneMap.put(categories.get(8), innerDance);
+        levelOneMap.put(categories.get(8), innerOthers);
         educaitonMap = new HashMap<>();
         educaitonMap.put(innerLevel.get(0), innerSchool);
         educaitonMap.put(innerLevel.get(1), innerCollege);

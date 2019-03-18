@@ -175,9 +175,9 @@ public class RecordsCurrentActivity extends CustomStuAppCompatActivity implement
         pager.setAdapter(myPagerAdapter);
         Intent retrivedIntent = getIntent();
         int pageToOpen = retrivedIntent.getIntExtra(DumeUtils.RECORDTAB, -1);
-        if (pageToOpen != -1 && pageToOpen< Google.getInstance().getRecords().size()) {
+        if (pageToOpen != -1 && pageToOpen < Objects.requireNonNull(pager.getAdapter()).getCount()) {
             // Open the right pager
-            pager.setCurrentItem(pageToOpen,true);
+            pager.setCurrentItem(pageToOpen, true);
         }
     }
 
@@ -1270,7 +1270,7 @@ public class RecordsCurrentActivity extends CustomStuAppCompatActivity implement
                                 stuMoreInfoBtn.setEnabled(true);
                             }
                         });
-                    }else{
+                    } else {
                         if (visible) {
                             stuMoreInfoBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_down_arrow_small));
                             stuMoreInfoBtn.setEnabled(true);
@@ -1348,7 +1348,7 @@ public class RecordsCurrentActivity extends CustomStuAppCompatActivity implement
                                 showAdditionalRatingBtn.setEnabled(true);
                             }
                         });
-                    }else{
+                    } else {
                         if (visible) {
                             showAdditionalRatingBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_down_arrow_small));
                             showAdditionalRatingBtn.setEnabled(true);
@@ -1424,7 +1424,7 @@ public class RecordsCurrentActivity extends CustomStuAppCompatActivity implement
                                 moreInfoBtn.setEnabled(true);
                             }
                         });
-                    }else{
+                    } else {
                         if (visible) {
                             moreInfoBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_down_arrow_small));
                             moreInfoBtn.setEnabled(true);
@@ -1501,7 +1501,7 @@ public class RecordsCurrentActivity extends CustomStuAppCompatActivity implement
                                 reviewInfoBtn.setEnabled(true);
                             }
                         });
-                    }else{
+                    } else {
                         if (visible) {
                             reviewInfoBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_down_arrow_small));
                             reviewInfoBtn.setEnabled(true);
@@ -1575,7 +1575,7 @@ public class RecordsCurrentActivity extends CustomStuAppCompatActivity implement
                                 agreementInfoBtn.setEnabled(true);
                             }
                         });
-                    }else {
+                    } else {
                         if (visible) {
                             agreementInfoBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_down_arrow_small));
                             agreementInfoBtn.setEnabled(true);
@@ -1649,7 +1649,7 @@ public class RecordsCurrentActivity extends CustomStuAppCompatActivity implement
                                 achievementInfoBtn.setEnabled(true);
                             }
                         });
-                    }else {
+                    } else {
                         if (visible) {
                             achievementInfoBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_down_arrow_small));
                             achievementInfoBtn.setEnabled(true);
@@ -1724,7 +1724,7 @@ public class RecordsCurrentActivity extends CustomStuAppCompatActivity implement
                                 locationShowBtn.setEnabled(true);
                             }
                         });
-                    }else{
+                    } else {
                         if (visible) {
                             locationShowBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_down_arrow_small));
                             locationShowBtn.setEnabled(true);

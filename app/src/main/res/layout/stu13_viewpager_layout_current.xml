@@ -42,14 +42,18 @@
                     android:layout_height="50dp"
                     android:layout_marginBottom="1dp"
                     android:scaleType="centerCrop"
-                    app:srcCompat="@drawable/demo_default_avatar_dark"
                     app:carbon_cornerRadius="6dp"
-                    app:carbon_elevation="4dp" />
+                    app:carbon_elevation="4dp"
+                    app:srcCompat="@drawable/demo_default_avatar_dark" />
 
                 <TextView
                     android:id="@+id/student_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxWidth="110dp"
+                    android:maxLines="1"
+                    android:singleLine="true"
                     android:text="@string/demo_user_name"
                     android:textColor="@color/textColorPrimary"
                     android:textSize="16sp"
@@ -126,14 +130,18 @@
                     android:layout_height="50dp"
                     android:layout_marginBottom="1dp"
                     android:scaleType="centerCrop"
-                    app:srcCompat="@drawable/demo_default_avatar_dark"
                     app:carbon_cornerRadius="6dp"
-                    app:carbon_elevation="4dp" />
+                    app:carbon_elevation="4dp"
+                    app:srcCompat="@drawable/demo_default_avatar_dark" />
 
                 <TextView
                     android:id="@+id/mentor_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxWidth="110dp"
+                    android:maxLines="1"
+                    android:singleLine="true"
                     android:text="@string/demo_user_name"
                     android:textColor="@color/textColorPrimary"
                     android:textSize="16sp"
@@ -467,8 +475,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:visibility="gone"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="gone">
 
             <carbon.widget.LinearLayout
                 android:layout_width="match_parent"
@@ -671,9 +679,9 @@
                     android:layout_marginStart="2dp"
                     android:layout_marginLeft="2dp"
                     android:layout_marginTop="12dp"
-                    android:layout_marginBottom="6dp"
                     android:layout_marginEnd="2dp"
                     android:layout_marginRight="2dp"
+                    android:layout_marginBottom="6dp"
                     android:background="@drawable/round_btn_joaa"
                     android:text="Get direction"
                     android:textAllCaps="false"
@@ -691,14 +699,14 @@
                     android:drawableStart="@drawable/ic_keyboard_arrow_right_black_24dp"
                     android:drawableLeft="@drawable/ic_keyboard_arrow_right_black_24dp"
                     android:drawablePadding="6dp"
+                    android:ellipsize="end"
                     android:gravity="center_vertical"
+                    android:maxLines="1"
                     android:paddingTop="2dp"
                     android:paddingBottom="2dp"
+                    android:singleLine="true"
                     android:text="Address : "
                     android:textAllCaps="false"
-                    android:singleLine="true"
-                    android:maxLines="1"
-                    android:ellipsize="end"
                     android:textColor="@color/textColorPrimary"
                     android:textSize="13sp"
                     android:textStyle="normal"

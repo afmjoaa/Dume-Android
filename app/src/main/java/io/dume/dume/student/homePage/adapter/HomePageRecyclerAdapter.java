@@ -382,9 +382,18 @@ public class HomePageRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
     }
 
     public void addPromoToList(HomePageRecyclerData promoData) {
-        data.add(promoData);
-        notifyItemInserted(data.size() - 1);
-        notifyDataSetChanged();
+        Boolean add = true;
+        for (int i = 0; i < data.size(); i++) {
+            if(promoData.getPromo_code().equals(data.get(i).getPromo_code())){
+                add = false;
+                break;
+            }
+        }
+        if(add){
+            data.add(promoData);
+            notifyItemInserted(data.size() - 1);
+            notifyDataSetChanged();
+        }
     }
 
     private void removePromo(int position) {

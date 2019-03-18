@@ -41,7 +41,8 @@ public class SearchDataStore implements Serializable {
     public static String STATUSCURRENT = "Current";
     public static String STATUSCOMPLETED = "Completed";
     public static String STATUSREJECTED = "Rejected";
-
+    private Boolean recordStatusChanged = false;
+    private Integer fromPACCR = 0;
 
     private List<DocumentSnapshot> resultList;
     private Integer levelNum = 1;
@@ -50,6 +51,22 @@ public class SearchDataStore implements Serializable {
     private Boolean isFirstTime = true;
     private Boolean isFirstTimeEnam = true;
     private String selectedMentor = null;
+
+    public Integer getFromPACCR() {
+        return fromPACCR;
+    }
+
+    public void setFromPACCR(Integer fromPACCR) {
+        this.fromPACCR = fromPACCR;
+    }
+
+    public Boolean getRecordStatusChanged() {
+        return recordStatusChanged;
+    }
+
+    public void setRecordStatusChanged(Boolean recordStatusChanged) {
+        this.recordStatusChanged = recordStatusChanged;
+    }
 
     public String getSelectedMentor() {
         return selectedMentor;
