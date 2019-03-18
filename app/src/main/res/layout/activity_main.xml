@@ -53,6 +53,25 @@
         app:menu="@menu/activity_homepage_drawer">
 
         <include layout="@layout/stu_nav_header_homepage" />
+        <LinearLayout
+            android:id="@+id/dume_info_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:background="@color/white"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/dume_info"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:textSize="12sp"
+
+                android:text="Dume has 50000 mentors &amp; 100000 students accros" />
+
+        </LinearLayout>
 
     </android.support.design.widget.NavigationView>
 

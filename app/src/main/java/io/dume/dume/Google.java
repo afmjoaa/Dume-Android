@@ -28,6 +28,7 @@ public class Google {
     private String lastMsg;
     private int snapCounter = 0;
     private InboxActivity.PlaceholderFragment messageFragment;
+    private Integer totalStudent, totalMentor;
 
     public InboxActivity.PlaceholderFragment getMessageFragment() {
         return messageFragment;
@@ -66,6 +67,22 @@ public class Google {
 
 
         return accountMajor;
+    }
+
+    public Integer getTotalStudent() {
+        return totalStudent;
+    }
+
+    public void setTotalStudent(Integer totalStudent) {
+        this.totalStudent = totalStudent;
+    }
+
+    public Integer getTotalMentor() {
+        return totalMentor;
+    }
+
+    public void setTotalMentor(Integer totalMentor) {
+        this.totalMentor = totalMentor;
     }
 
     public void setAccountMajor(String accountMajor) {

@@ -13,6 +13,7 @@ import android.location.Geocoder;
 import android.location.LocationManager;
 import android.os.Build;
 import android.support.annotation.StringRes;
+import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
@@ -23,6 +24,7 @@ import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,11 +36,17 @@ import android.view.animation.Animation;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.ScaleAnimation;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 
 import java.io.IOException;
 import java.text.DateFormat;
@@ -46,6 +54,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -58,8 +67,10 @@ import java.util.regex.Pattern;
 import io.dume.dume.Google;
 import io.dume.dume.R;
 import io.dume.dume.inter_face.usefulListeners;
+import io.dume.dume.student.homePage.adapter.HomePageRecyclerData;
 import io.dume.dume.student.pojo.SearchDataStore;
 import io.dume.dume.student.recordsPage.Record;
+import io.dume.dume.teacher.homepage.TeacherContract;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 import static com.facebook.FacebookSdk.removeLoggingBehavior;
@@ -659,6 +670,51 @@ public class DumeUtils {
                 }
             }
         });
+    }
+
+    private static Button requestBTN;
+    private static BottomSheetDialog mMakeRequestBSD;
+    private static View cancelsheetRootView;
+    private static BottomSheetDialog mBackBSD;
+    private static View backsheetRootView;
+    private static TextView confirmMainText;
+    private static TextView confirmSubText;
+    private static Button comfirmYesBtn;
+    private static Button confirmNoBtn;
+
+
+    public static void notifyDialog(Context context, boolean cancelable, String title, String body, String positiveString, TeacherContract.Model.Listener<Boolean> listener) {
+        mMakeRequestBSD = new BottomSheetDialog(context);
+        cancelsheetRootView = LayoutInflater.from(context).inflate(R.layout.custom_bottom_sheet_dialogue_cancel, null);
+        mMakeRequestBSD.setContentView(cancelsheetRootView);
+        confirmMainText = mMakeRequestBSD.findViewById(R.id.main_text);
+        confirmSubText = mMakeRequestBSD.findViewById(R.id.sub_text);
+        comfirmYesBtn = mMakeRequestBSD.findViewById(R.id.cancel_yes_btn);
+        confirmNoBtn = mMakeRequestBSD.findViewById(R.id.cancel_no_btn);
+        if (confirmMainText != null && confirmSubText != null && comfirmYesBtn != null && confirmNoBtn != null) {
+            confirmMainText.setText(title);
+            confirmSubText.setText(body);
+            comfirmYesBtn.setText(positiveString);
+            confirmNoBtn.setText("No");
+
+            comfirmYesBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    listener.onSuccess(true);
+                }
+            });
+            confirmNoBtn.setEnabled(cancelable);
+            confirmNoBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    listener.onSuccess(false);
+
+                }
+            });
+            mMakeRequestBSD.show();
+            mMakeRequestBSD.setCancelable(false);
+            mMakeRequestBSD.setCanceledOnTouchOutside(false);
+        }
     }
 
 
