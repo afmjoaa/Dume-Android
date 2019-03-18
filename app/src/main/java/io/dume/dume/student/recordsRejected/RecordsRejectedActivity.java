@@ -3,26 +3,20 @@ package io.dume.dume.student.recordsRejected;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Animatable2;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.LayerDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialog;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.animation.FastOutLinearInInterpolator;
 import android.support.v4.view.animation.LinearOutSlowInInterpolator;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -33,11 +27,11 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.hadiidbouk.charts.BarData;
 import com.transitionseverywhere.Fade;
 import com.transitionseverywhere.Slide;
 import com.transitionseverywhere.Transition;
@@ -50,19 +44,17 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 
 import io.dume.dume.Google;
 import io.dume.dume.R;
 import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
 import io.dume.dume.student.pojo.SearchDataStore;
-import io.dume.dume.student.recordsCompleted.RecordsCompletedActivity;
 import io.dume.dume.student.recordsPage.Record;
+import io.dume.dume.teacher.homepage.TeacherContract;
 import io.dume.dume.util.DumeUtils;
-import io.dume.dume.util.Pred;
 import io.dume.dume.util.VisibleToggleClickListener;
 import me.zhanghai.android.materialratingbar.MaterialRatingBar;
-
-import static io.dume.dume.util.DumeUtils.getLast;
 
 public class RecordsRejectedActivity extends CustomStuAppCompatActivity implements RecordsRejectedContract.View {
 
@@ -71,6 +63,7 @@ public class RecordsRejectedActivity extends CustomStuAppCompatActivity implemen
     private ViewPager pager;
     private SectionsPagerAdapter myPagerAdapter;
     private String retriveAction;
+    private RecordsRejectedModel mModel;
 
 
     @Override
@@ -79,7 +72,8 @@ public class RecordsRejectedActivity extends CustomStuAppCompatActivity implemen
         setContentView(R.layout.stu10_activity_records_rejected);
         setActivityContext(this, fromFlag);
         findLoadView();
-        mPresenter = new RecordsRejectedPresenter(this, new RecordsRejectedModel());
+        mModel = new RecordsRejectedModel(this);
+        mPresenter = new RecordsRejectedPresenter(this, mModel);
         mPresenter.recordsRejectedEnqueue();
         DumeUtils.configureAppbar(this, "Rejected Requests");
         if (getIntent().getAction() != null) {
@@ -103,10 +97,21 @@ public class RecordsRejectedActivity extends CustomStuAppCompatActivity implemen
         pager.setAdapter(myPagerAdapter);
         Intent retrivedIntent = getIntent();
         int pageToOpen = retrivedIntent.getIntExtra(DumeUtils.RECORDTAB, -1);
-        if (pageToOpen != -1 && pageToOpen< Google.getInstance().getRecords().size()) {
+        String recordId = retrivedIntent.getStringExtra("recordId");
+
+        if (pageToOpen != -1 && pageToOpen< Objects.requireNonNull(pager.getAdapter()).getCount()) {
             // Open the right pager
             pager.setCurrentItem(pageToOpen,true);
+        }else if(recordId != null && !recordId.equals("")){
+        List<DocumentSnapshot> rejectedRecords = DumeUtils.filterList(Google.getInstance().getRecords(), "Rejected");
+        for (int i = 0; i < rejectedRecords.size(); i++) {
+            DocumentSnapshot record = rejectedRecords.get(i);
+            if (recordId.equals(record.getId())) {
+                pager.setCurrentItem(i, true);
+                break;
+            }
         }
+    }
     }
 
     @Override
@@ -171,6 +176,8 @@ public class RecordsRejectedActivity extends CustomStuAppCompatActivity implemen
         private Button rejectYesBtn;
         private Button rejectNoBtn;
         private int fragmentPosition;
+        private Button rejectedByBtn;
+        private SearchDataStore searchDataStore;
 
 
         public PlaceholderFragment() {
@@ -188,6 +195,7 @@ public class RecordsRejectedActivity extends CustomStuAppCompatActivity implemen
         @Override
         public void onCreate(@Nullable Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
+            searchDataStore = SearchDataStore.getInstance();
             mDensity = context.getResources().getDisplayMetrics().density;
         }
 
@@ -208,6 +216,7 @@ public class RecordsRejectedActivity extends CustomStuAppCompatActivity implemen
 
             View rootView = inflater.inflate(R.layout.stu10_viewpager_layout_rejected, container, false);
             salaryBtn = rootView.findViewById(R.id.show_salary_btn);
+            rejectedByBtn = rootView.findViewById(R.id.show_rejectedby_btn);//TODO
             agreementHostLayout = rootView.findViewById(R.id.agreement_term_host_linearlayout);
             agreementInfoBtn = rootView.findViewById(R.id.show_agreement_terms_btn);
             agreementHideable = rootView.findViewById(R.id.agreement_term_layout_vertical);
@@ -238,7 +247,6 @@ public class RecordsRejectedActivity extends CustomStuAppCompatActivity implemen
         public void onMentorSelect(DocumentSnapshot selectedMentor) {
             this.selectedMentor = selectedMentor;
             Map<String, Object> sp_info = (Map<String, Object>) selectedMentor.get("sp_info");
-
             //basic info input here
             String mentorName;
             String studentName;
@@ -270,7 +278,12 @@ public class RecordsRejectedActivity extends CustomStuAppCompatActivity implemen
             date = creation.toString();
             status = (String) documentData.get("record_status");
             Record record = new Record(mentorName, studentName, salaryInDemand, subjectExchange, creation, mentorDpUrl, studentDpUrl, studentRating, mentorRating, status, Record.DELIVERED, sGender, mGender);
-
+            String rejected_by = selectedMentor.getString("rejected_by");
+            if (DumeUtils.STUDENT.equals(rejected_by)) {
+                rejectedByBtn.setText(String.format("Rejected By : %s", studentName));
+            }else if(DumeUtils.TEACHER.equals(rejected_by) || DumeUtils.BOOTCAMP.equals(rejected_by)) {
+                rejectedByBtn.setText(String.format("Rejected By : %s", mentorName));
+            }
 
             mentorNameTV.setText(record.getMentorName());
             studentNameTV.setText(record.getStudentName());
@@ -396,7 +409,6 @@ public class RecordsRejectedActivity extends CustomStuAppCompatActivity implemen
         }
 
         public void toggleStatus() {
-
             //confirm bottom sheet
             Map<String, Object> documentData = record.getData();
             Map<String, Object> spMap = (Map<String, Object>) documentData.get("sp_info");
@@ -421,24 +433,53 @@ public class RecordsRejectedActivity extends CustomStuAppCompatActivity implemen
                 rejectYesBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        /*myThisActivity.showProgress();
-                        acceptContactBtn.setEnabled(false);
-                        cancelRequestBtn.setEnabled(false);
-                        myThisActivity.mModel.changeRecordStatus(record.getId(), "Rejected", new TeacherContract.Model.Listener<Void>() {
+                        mBottomSheetReject.dismiss();
+                        myThisActivity.showProgress();
+                        rejectYesBtn.setEnabled(false);
+                        rejectNoBtn.setEnabled(false);
+                        String key = "s_show_status";
+                        switch (myThisActivity.retriveAction) {
+                            case DumeUtils.STUDENT:
+                                key = "s_show_status";
+                                break;
+                            case DumeUtils.TEACHER:
+                                key = "t_show_status";
+                                break;
+                            case DumeUtils.BOOTCAMP:
+                                key = "t_show_status";
+                                break;
+                        }
+
+                        myThisActivity.mModel.changeRecordValues(record.getId(), key, false, new TeacherContract.Model.Listener<Void>() {
                             @Override
                             public void onSuccess(Void list) {
                                 myThisActivity.hideProgress();
-                                Toast.makeText(myThisActivity, "Status Changed To Rejected", Toast.LENGTH_SHORT).show();
+                                rejectYesBtn.setEnabled(true);
+                                rejectNoBtn.setEnabled(true);
+                                Toast.makeText(myThisActivity, "Rejected record deleted successfully...", Toast.LENGTH_SHORT).show();
+                                myThisActivity.mModel.getRecords(new TeacherContract.Model.Listener<List<Record>>() {
+                                    @Override
+                                    public void onSuccess(List<Record> list) {
+                                        Google.getInstance().setRecordList(list);
+                                        searchDataStore.setRecordStatusChanged(true);
+                                        searchDataStore.setFromPACCR(4);
+                                        myThisActivity.onBackPressed();
+                                    }
+                                    @Override
+                                    public void onError(String msg) {
+                                        Toast.makeText(myThisActivity, msg, Toast.LENGTH_SHORT).show();
+                                        myThisActivity.hideProgress();
+                                    }
+                                });
                             }
-
                             @Override
                             public void onError(String msg) {
-                                acceptContactBtn.setEnabled(true);
-                                cancelRequestBtn.setEnabled(true);
-                                myThisActivity.showProgress();
+                                rejectYesBtn.setEnabled(true);
+                                rejectNoBtn.setEnabled(true);
+                                myThisActivity.hideProgress();
                                 Toast.makeText(myThisActivity, msg, Toast.LENGTH_SHORT).show();
                             }
-                        });*/
+                        });
                     }
                 });
                 rejectNoBtn.setOnClickListener(new View.OnClickListener() {

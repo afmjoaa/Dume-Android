@@ -75,6 +75,7 @@ public class AuthRegisterActivity extends CustomStuAppCompatActivity {
         mentorFeild.put("obligation", false);
         mentorFeild.put("avatar", dataStore.getPhotoUri());
         mentorFeild.put("location", location);
+        mentorFeild.put("penalty", 0);
 
         mentorFeild.put("gender", "");
         mentorFeild.put("religion", "");
@@ -218,6 +219,7 @@ public class AuthRegisterActivity extends CustomStuAppCompatActivity {
         bootCampField.put("obligation", false);
         bootCampField.put("avatar", "");
         bootCampField.put("location", location);
+        bootCampField.put("penalty", 0);
 
         bootCampField.put("account_active", true);
         bootCampField.put("pro_com_%", "60");
@@ -297,6 +299,7 @@ public class AuthRegisterActivity extends CustomStuAppCompatActivity {
         stuProInfo.put("unread_noti", "0");
         stuProInfo.put("next_rp_write", "1");
         stuProInfo.put("next_rs_write", "1");
+        stuProInfo.put("penalty", 0);
 
         //GeoPoint current_address = new GeoPoint(84.9, -180);
         stuProInfo.put("current_address", null);

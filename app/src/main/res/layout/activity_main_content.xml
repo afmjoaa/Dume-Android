@@ -119,9 +119,7 @@
             android:paddingBottom="2dp"
             app:carbon_elevation="3dp"
             android:paddingTop="2dp"
-            android:visibility="invisible"
-
-            >
+            android:visibility="gone">
 
             <TextView
                 android:id="@+id/promotion_text"

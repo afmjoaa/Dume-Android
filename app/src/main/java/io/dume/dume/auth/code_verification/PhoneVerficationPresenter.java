@@ -412,6 +412,7 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
         mentorFeild.put("obligation", false);
         mentorFeild.put("avatar", dataStore.getPhotoUri());
         mentorFeild.put("location", location);
+        mentorFeild.put("penalty", 0);
 
         mentorFeild.put("daily_i", "0");
         mentorFeild.put("daily_r", "0");
@@ -517,6 +518,7 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
         bootCampField.put("obligation", false);
         bootCampField.put("avatar", "");
         bootCampField.put("location", location);
+        bootCampField.put("penalty", 0);
 
         bootCampField.put("daily_i", "0");
         bootCampField.put("daily_r", "0");
@@ -597,6 +599,8 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
         stuProInfo.put("unread_noti", "0");
         stuProInfo.put("next_rp_write", "1");
         stuProInfo.put("next_rs_write", "1");
+        stuProInfo.put("penalty", 0);
+
         //GeoPoint current_address = new GeoPoint(84.9, -180);
         stuProInfo.put("current_address", null);
 

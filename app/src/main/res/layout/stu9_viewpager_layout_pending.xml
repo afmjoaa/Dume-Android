@@ -54,6 +54,10 @@
                     android:text="Demo user"
                     android:textColor="@color/textColorPrimary"
                     android:textSize="16sp"
+                    android:ellipsize="end"
+                    android:maxWidth="110dp"
+                    android:singleLine="true"
+                    android:maxLines="1"
                     app:fontFamily="@font/cairo_regular" />
 
                 <me.zhanghai.android.materialratingbar.MaterialRatingBar
@@ -136,6 +140,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Demo user"
+                    android:ellipsize="end"
+                    android:maxWidth="110dp"
+                    android:singleLine="true"
+                    android:maxLines="1"
                     android:textColor="@color/textColorPrimary"
                     android:textSize="16sp"
                     app:fontFamily="@font/cairo_regular" />
