@@ -137,9 +137,20 @@ public class RecordsAcceptedActivity extends CustomStuAppCompatActivity implemen
         pager.setAdapter(myPagerAdapter);
         Intent retrivedIntent = getIntent();
         int pageToOpen = retrivedIntent.getIntExtra(DumeUtils.RECORDTAB, -1);
-        if (pageToOpen != -1 && pageToOpen< Google.getInstance().getRecords().size()) {
+        String recordId = retrivedIntent.getStringExtra("recordId");
+
+        if (pageToOpen != -1 && pageToOpen< Objects.requireNonNull(pager.getAdapter()).getCount()) {
             // Open the right pager
             pager.setCurrentItem(pageToOpen,true);
+        }else if(recordId != null && !recordId.equals("")){
+            List<DocumentSnapshot> acceptedRecords = DumeUtils.filterList(Google.getInstance().getRecords(), "Accepted");
+            for (int i = 0; i < acceptedRecords.size(); i++) {
+                DocumentSnapshot record = acceptedRecords.get(i);
+                if (recordId.equals(record.getId())) {
+                    pager.setCurrentItem(i, true);
+                    break;
+                }
+            }
         }
     }
 
@@ -803,7 +814,7 @@ public class RecordsAcceptedActivity extends CustomStuAppCompatActivity implemen
                         myThisActivity.showProgress();
                         acceptContactBtn.setEnabled(false);
                         cancelRequestBtn.setEnabled(false);
-                        myThisActivity.mModel.changeRecordStatus(record.getId(), "Rejected", new TeacherContract.Model.Listener<Void>() {
+                        myThisActivity.mModel.changeRecordStatus(record, "Rejected", null,new TeacherContract.Model.Listener<Void>() {
                             @Override
                             public void onSuccess(Void list) {
                                 myThisActivity.hideProgress();

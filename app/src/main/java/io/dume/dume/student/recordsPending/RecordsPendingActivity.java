@@ -67,7 +67,9 @@ import io.dume.dume.student.common.ReviewAdapter;
 import io.dume.dume.student.common.ReviewHighlightData;
 import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
 import io.dume.dume.student.pojo.SearchDataStore;
+import io.dume.dume.student.recordsAccepted.RecordsAcceptedActivity;
 import io.dume.dume.student.recordsPage.Record;
+import io.dume.dume.student.recordsRejected.RecordsRejectedActivity;
 import io.dume.dume.teacher.homepage.TeacherContract;
 import io.dume.dume.teacher.pojo.Academic;
 import io.dume.dume.util.DumeUtils;
@@ -127,16 +129,17 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
         Intent retrivedIntent = getIntent();
         int pageToOpen = retrivedIntent.getIntExtra(DumeUtils.RECORDTAB, -1);
         String recordId = retrivedIntent.getStringExtra("recordId");
+
         if (pageToOpen != -1 && pageToOpen < Objects.requireNonNull(pager.getAdapter()).getCount()) {
             // Open the right pager
             pager.setCurrentItem(pageToOpen, true);
-        }else if(recordId != null && !recordId.equals("")){
+        } else if (recordId != null && !recordId.equals("")) {
             List<DocumentSnapshot> pendingRecords = DumeUtils.filterList(Google.getInstance().getRecords(), "Pending");
             for (int i = 0; i < pendingRecords.size(); i++) {
                 DocumentSnapshot record = pendingRecords.get(i);
                 if (recordId.equals(record.getId())) {
                     pager.setCurrentItem(i, true);
-                   break;
+                    break;
                 }
             }
         }
@@ -293,6 +296,7 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
         public void onAttach(Context context) {
             super.onAttach(context);
             this.context = context;
+            myThisActivity = (RecordsPendingActivity) getActivity();
         }
 
         @Override
@@ -674,25 +678,6 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
         }
 
         public void toggleStatus() {
-            switch (myThisActivity.retriveAction) {
-                case DumeUtils.STUDENT:
-                    acceptBTN.setVisibility(View.GONE);
-                    divider.setVisibility(View.GONE);
-                    rejectBTN.setText("Cancel Request");
-                    stuMoreInfoHost.setVisibility(View.GONE);
-                    break;
-                case DumeUtils.TEACHER:
-                    stuMoreInfoHost.setVisibility(View.VISIBLE);
-                    showAdditionalRatingBtn.setText("Your Rating");
-                    achievementInfoBtn.setText("Your Achievements");
-                    moreInfoBtn.setText("Your Info");
-                    break;
-                case DumeUtils.BOOTCAMP:
-                    break;
-                default:
-                    break;
-            }
-
             //confirm bottom sheet
             Map<String, Object> documentData = record.getData();
             Map<String, Object> spMap = (Map<String, Object>) documentData.get("sp_info");
@@ -715,14 +700,33 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
                 comfirmYesBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        mBottomSheetDialog.dismiss();
                         rejectBTN.setEnabled(false);
                         acceptBTN.setEnabled(false);
                         myThisActivity.showProgress();
-                        myThisActivity.mModel.changeRecordStatus(record.getId(), "Accepted", new TeacherContract.Model.Listener<Void>() {
+                        myThisActivity.mModel.changeRecordStatus(record, "Accepted", null, new TeacherContract.Model.Listener<Void>() {
                             @Override
                             public void onSuccess(Void list) {
                                 Toast.makeText(myThisActivity, "Status Changed To Accepted", Toast.LENGTH_SHORT).show();
-                                myThisActivity.hideProgress();
+                                Intent intentMain = new Intent(context, RecordsAcceptedActivity.class).setAction(DumeUtils.TEACHER);
+                                intentMain.putExtra("recordId", record.getId());
+                                myThisActivity.mModel.getRecords(new TeacherContract.Model.Listener<List<Record>>() {
+                                    @Override
+                                    public void onSuccess(List<Record> list) {
+                                        Google.getInstance().setRecordList(list);
+                                        searchDataStore.setRecordStatusChanged(true);
+                                        searchDataStore.setFromPACCR(1);
+                                        startActivity(intentMain);
+                                        myThisActivity.finish();
+                                        myThisActivity.hideProgress();
+                                    }
+
+                                    @Override
+                                    public void onError(String msg) {
+                                        Toast.makeText(myThisActivity, msg, Toast.LENGTH_SHORT).show();
+                                        myThisActivity.hideProgress();
+                                    }
+                                });
                             }
 
                             @Override
@@ -753,20 +757,51 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
             rejectNoBtn = mBottomSheetReject.findViewById(R.id.cancel_no_btn);
             if (rejectMainText != null && rejectSubText != null && rejectYesBtn != null && rejectNoBtn != null) {
                 rejectMainText.setText("Reject Request");
-                rejectSubText.setText("By Rejecting you are making sure you are not willing to mentor " + studentName);
+                rejectSubText.setText("Dear " + mentorName + " if you reject requests repeatedly your accept ratio will decrease and so you search exposer...");
                 rejectYesBtn.setText("Yes, Reject");
                 rejectNoBtn.setText("No");
                 rejectYesBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        mBottomSheetReject.dismiss();
                         myThisActivity.showProgress();
                         rejectBTN.setEnabled(false);
                         acceptBTN.setEnabled(false);
-                        myThisActivity.mModel.changeRecordStatus(record.getId(), "Rejected", new TeacherContract.Model.Listener<Void>() {
+                        myThisActivity.mModel.changeRecordStatus(record, "Rejected", myThisActivity.retriveAction, new TeacherContract.Model.Listener<Void>() {
                             @Override
                             public void onSuccess(Void list) {
-                                myThisActivity.hideProgress();
                                 Toast.makeText(myThisActivity, "Status Changed To Rejected", Toast.LENGTH_SHORT).show();
+                                Intent intentMain = new Intent(context, RecordsRejectedActivity.class).setAction(DumeUtils.TEACHER);
+                                intentMain.putExtra("recordId", record.getId());
+
+                                //testing the penalty
+                                myThisActivity.mModel.getRecords(new TeacherContract.Model.Listener<List<Record>>() {
+                                    @Override
+                                    public void onSuccess(List<Record> list) {
+                                        myThisActivity.mModel.setPenalty(myThisActivity.retriveAction, 50, new TeacherContract.Model.Listener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void avoid) {
+                                                Google.getInstance().setRecordList(list);
+                                                searchDataStore.setRecordStatusChanged(true);
+                                                searchDataStore.setFromPACCR(4);
+                                                startActivity(intentMain);
+                                                myThisActivity.finish();
+                                                myThisActivity.hideProgress();
+                                            }
+
+                                            @Override
+                                            public void onError(String msg) {
+                                                myThisActivity.flush(msg);
+                                            }
+                                        });
+                                    }
+
+                                    @Override
+                                    public void onError(String msg) {
+                                        Toast.makeText(myThisActivity, msg, Toast.LENGTH_SHORT).show();
+                                        myThisActivity.hideProgress();
+                                    }
+                                });
                             }
 
                             @Override
@@ -793,6 +828,31 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
             rejectBTN.setOnClickListener(view -> {
                 mBottomSheetReject.show();
             });
+
+            switch (myThisActivity.retriveAction) {
+                case DumeUtils.STUDENT:
+                    acceptBTN.setVisibility(View.GONE);
+                    divider.setVisibility(View.GONE);
+                    rejectBTN.setText("Cancel Request");
+                    stuMoreInfoHost.setVisibility(View.GONE);
+                    rejectSubText.setTextColor(context.getResources().getColor(R.color.dark_light_red));
+                    rejectMainText.setText("Cancel Request");
+                    rejectSubText.setText("Dear " + studentName + " if you cancel now BDT 50 will be applied as penalty which you have to pay to next mentor...");
+                    rejectYesBtn.setText("Yes, Cancel");
+                    rejectNoBtn.setText("No");
+                    break;
+                case DumeUtils.TEACHER:
+                    stuMoreInfoHost.setVisibility(View.VISIBLE);
+                    showAdditionalRatingBtn.setText("Your Rating");
+                    achievementInfoBtn.setText("Your Achievements");
+                    moreInfoBtn.setText("Your Info");
+                    rejectSubText.setTextColor(context.getResources().getColor(R.color.dark_light_red));
+                    break;
+                case DumeUtils.BOOTCAMP:
+                    break;
+                default:
+                    break;
+            }
 
         }
 
@@ -1280,19 +1340,3 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
         }
     }
 }
-
-/*reviewRecyView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-@Override
-public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-super.onScrolled(recyclerView, dx, dy);
-}
-
-@Override
-public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-super.onScrollStateChanged(recyclerView, newState);
-if (!recyclerView.canScrollVertically(1) && scrollFirstTime) {
-    Toast.makeText(myThisActivity, "Last", Toast.LENGTH_SHORT).show();
-    scrollFirstTime = false;
-}
-}
-});*/

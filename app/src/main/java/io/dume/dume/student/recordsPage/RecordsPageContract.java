@@ -1,5 +1,7 @@
 package io.dume.dume.student.recordsPage;
 
+import com.google.firebase.firestore.DocumentSnapshot;
+
 import java.util.List;
 
 import io.dume.dume.teacher.homepage.TeacherContract;
@@ -38,6 +40,10 @@ public interface RecordsPageContract {
 
         void getRecords(TeacherContract.Model.Listener<List<Record>> listener);
 
-        void changeRecordStatus(String recordId, String status, TeacherContract.Model.Listener<Void> listener);
+        void changeRecordStatus(DocumentSnapshot recordId, String status, String rejectedBy, TeacherContract.Model.Listener<Void> listener);
+
+        void changeRecordValues(String recordId, String key, Boolean value, TeacherContract.Model.Listener<Void> listener);
+
+        void setPenalty(String acountMajor, Integer amount, TeacherContract.Model.Listener<Void> listener);
     }
 }

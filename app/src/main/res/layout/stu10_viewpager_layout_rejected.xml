@@ -8,7 +8,8 @@
     android:background="@color/recordsBgColor"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".student.recordsRejected.RecordsRejectedActivity$PlaceholderFragment"
-    tools:showIn="@layout/stu10_activity_records_rejected">
+    >
+    <!--tools:showIn="@layout/stu10_activity_records_rejected"-->
 
     <LinearLayout
         android:id="@+id/nested_host_linearlayout"
@@ -53,6 +54,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/demo_user_name"
+                    android:ellipsize="end"
+                    android:maxWidth="110dp"
+                    android:singleLine="true"
+                    android:maxLines="1"
                     android:textColor="@color/textColorPrimary"
                     android:textSize="16sp"
                     app:fontFamily="@font/cairo_regular" />
@@ -137,6 +142,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/demo_user_name"
+                    android:ellipsize="end"
+                    android:maxWidth="110dp"
+                    android:singleLine="true"
+                    android:maxLines="1"
                     android:textColor="@color/textColorPrimary"
                     android:textSize="16sp"
                     app:fontFamily="@font/cairo_regular" />
@@ -212,13 +221,46 @@
 
         </RelativeLayout>
 
+        <!--Rejected by  layout-->
+        <LinearLayout
+            android:id="@+id/rejectedby_host_linearlayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical">
+
+            <carbon.widget.LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_round_corner_rela_layout"
+                android:baselineAligned="false"
+                android:orientation="vertical"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp">
+
+                <Button
+                    android:id="@+id/show_rejectedby_btn"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="false"
+                    android:text="Rejected By : Demo User"
+                    android:textAllCaps="false"
+                    android:textColor="@color/highlight_red"
+                    android:textSize="16sp"
+                    app:fontFamily="@font/cairo_regular" />
+
+            </carbon.widget.LinearLayout>
+
+        </LinearLayout>
+
         <!--salary layout-->
         <LinearLayout
             android:id="@+id/salary_host_linearlayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:layout_marginTop="10dp"
             android:orientation="vertical">
 
             <carbon.widget.LinearLayout
@@ -238,7 +280,7 @@
                     android:clickable="false"
                     android:text="Salary : 10k BDT"
                     android:textAllCaps="false"
-                    android:textColor="@color/highlight_red"
+                    android:textColor="@color/textColorPrimary"
                     android:textSize="16sp"
                     app:fontFamily="@font/cairo_regular" />
 

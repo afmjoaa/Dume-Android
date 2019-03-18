@@ -14,10 +14,12 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebChromeClient;
+import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Toast;
 
 import io.dume.dume.R;
 import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
@@ -48,8 +50,6 @@ public class AboutUsActivity extends CustomStuAppCompatActivity implements About
     public void findView() {
         aboutView = findViewById(R.id.aboutWebView);
         aboutView.getSettings().setJavaScriptEnabled(true);
-        MyJavaScriptInterface myinterface = new MyJavaScriptInterface();
-        aboutView.addJavascriptInterface(new MyJavaScriptInterface(this), "HtmlViewer");
         aboutView.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
@@ -77,8 +77,29 @@ public class AboutUsActivity extends CustomStuAppCompatActivity implements About
             public void onProgressChanged(WebView view, int newProgress) {
                 super.onProgressChanged(view, newProgress);
             }
+
+
         });
-        aboutView.loadUrl("https://www.google.com/");
+        aboutView.setWebViewClient(new WebViewClient(){
+            @Override
+            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                super.onPageStarted(view, url, favicon);
+                showProgress();
+            }
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+                hideProgress();
+            }
+
+            @Override
+            public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
+                super.onReceivedError(view, request, error);
+                Toast.makeText(AboutUsActivity.this, "Network Error", Toast.LENGTH_SHORT).show();
+            }
+        });
+        aboutView.loadUrl("https://dume-2d063.firebaseapp.com/about");
     }
 
     @Override
@@ -105,23 +126,4 @@ public class AboutUsActivity extends CustomStuAppCompatActivity implements About
         super.onBackPressed();
     }
 
-    class MyJavaScriptInterface {
-
-        private Context ctx;
-
-        MyJavaScriptInterface(Context ctx) {
-            this.ctx = ctx;
-        }
-
-        public MyJavaScriptInterface() {
-
-        }
-
-        public void showHTML(String html) {
-            Log.w(TAG, "showHTML: " + html);
-            new AlertDialog.Builder(ctx).setTitle("HTML").setMessage(html)
-                    .setPositiveButton(android.R.string.ok, null).setCancelable(false).create().show();
-        }
-
-    }
 }

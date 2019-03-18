@@ -95,31 +95,39 @@ public class StudentHelpActivity extends CustomStuAppCompatActivity implements S
                     case 0:
                         Toast.makeText(StudentHelpActivity.this, "Coming soon", Toast.LENGTH_SHORT).show();
                         break;
+
                     case 1:
+                        String url = "https://dume-2d063.firebaseapp.com/home";
+                        Intent i = new Intent(Intent.ACTION_VIEW);
+                        i.setData(Uri.parse(url));
+                        startActivity(i);
+                        break;
+
+                    case 1+1:
                         helpContent.setVisibility(View.GONE);
                         configAppbarTittle(StudentHelpActivity.this, helpNameArr[position]);
                         appBarLayout.setExpanded(false);
-                        getFragmentManager().beginTransaction().replace(R.id.content, new NotificationPreferenceFragment()).commit();
+                        getFragmentManager().beginTransaction().replace(R.id.content, new HowToUseFragment()).commit();
                         break;
-                    case 2:
+                    case 2+1:
                         helpContent.setVisibility(View.GONE);
                         configAppbarTittle(StudentHelpActivity.this, helpNameArr[position]);
                         appBarLayout.setExpanded(false);
                         getSupportFragmentManager().beginTransaction().replace(R.id.content, new FAQFragment()).commit();
                         break;
-                    case 3:
+                    case 3+1:
                         helpContent.setVisibility(View.GONE);
                         configAppbarTittle(StudentHelpActivity.this, helpNameArr[position]);
                         appBarLayout.setExpanded(false);
                         getSupportFragmentManager().beginTransaction().replace(R.id.content, new ContactUsFragment()).commit();
                         break;
-                    case 4:
+                    case 4+1:
                         updateAppCalled();
                         break;
-                    case 5:
+                    case 5+1:
                         startActivity(new Intent(StudentHelpActivity.this, PrivacyPolicyActivity.class).setAction("fromHelp"));
                         break;
-                    case 6:
+                    case 6+1:
                         startActivity(new Intent(StudentHelpActivity.this, AppInfoActivity.class).setAction("fromHelp"));
                         break;
                 }
@@ -185,6 +193,7 @@ public class StudentHelpActivity extends CustomStuAppCompatActivity implements S
         int[] imageIcons = {
                 R.drawable.ic_help_whats_new,
                 R.drawable.ic_help_feature,
+                R.drawable.ic_help_feature,
                 R.drawable.ic_help_faq,
                 R.drawable.ic_help_contact_us,
                 R.drawable.ic_sync,
@@ -201,91 +210,7 @@ public class StudentHelpActivity extends CustomStuAppCompatActivity implements S
         return data;
     }
 
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public static class NotificationPreferenceFragment extends PreferenceFragment {
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.xml.pref_notification);
-            setHasOptionsMenu(true);
 
-            // Bind the summaries of EditText/List/Dialog/Ringtone preferences
-            // to their values. When their values change, their summaries are
-            // updated to reflect the new value, per the Android Design
-            // guidelines.
-            bindPreferenceSummaryToValue(findPreference("notifications_new_message_ringtone"));
-        }
-
-        @Override
-        public boolean onOptionsItemSelected(MenuItem item) {
-            int id = item.getItemId();
-            if (id == android.R.id.home) {
-                startActivity(new Intent(getActivity(), StudentHelpActivity.class));
-                return true;
-            }
-            return super.onOptionsItemSelected(item);
-        }
-    }
-
-    private static void bindPreferenceSummaryToValue(Preference preference) {
-        // Set the listener to watch for value changes.
-        preference.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
-
-        // Trigger the listener immediately with the preference's
-        // current value.
-        sBindPreferenceSummaryToValueListener.onPreferenceChange(preference,
-                PreferenceManager
-                        .getDefaultSharedPreferences(preference.getContext())
-                        .getString(preference.getKey(), ""));
-    }
-
-    private static Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = new Preference.OnPreferenceChangeListener() {
-        @Override
-        public boolean onPreferenceChange(Preference preference, Object value) {
-            String stringValue = value.toString();
-
-            if (preference instanceof ListPreference) {
-                // For list preferences, look up the correct display value in
-                // the preference's 'entries' list.
-                ListPreference listPreference = (ListPreference) preference;
-                int index = listPreference.findIndexOfValue(stringValue);
-
-                // Set the summary to reflect the new value.
-                preference.setSummary(
-                        index >= 0
-                                ? listPreference.getEntries()[index]
-                                : null);
-
-            } else if (preference instanceof RingtonePreference) {
-                // For ringtone preferences, look up the correct display value
-                // using RingtoneManager.
-                if (TextUtils.isEmpty(stringValue)) {
-                    // Empty values correspond to 'silent' (no ringtone).
-                    preference.setSummary(R.string.pref_ringtone_silent);
-
-                } else {
-                    Ringtone ringtone = RingtoneManager.getRingtone(
-                            preference.getContext(), Uri.parse(stringValue));
-
-                    if (ringtone == null) {
-                        // Clear the summary if there was a lookup error.
-                        preference.setSummary(null);
-                    } else {
-                        // Set the summary to reflect the new ringtone display
-                        // name.
-                        String name = ringtone.getTitle(preference.getContext());
-                        preference.setSummary(name);
-                    }
-                }
-
-            } else {
-                // For all other preferences, set the summary to the value's
-                // simple string representation.
-                preference.setSummary(stringValue);
-            }
-            return true;
-        }
-    };
 
     //testing the contact up
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
@@ -412,7 +337,7 @@ public class StudentHelpActivity extends CustomStuAppCompatActivity implements S
             View rootView = inflater.inflate(R.layout.custom_faq_fragment, container, false);
             webView = rootView.findViewById(R.id.activity_main_webview);
             webView.setWebViewClient(new WebViewClient());
-            webView.loadUrl("https://www.google.com/");
+            webView.loadUrl("https://dume-2d063.firebaseapp.com/faq");
             WebSettings webSettings = webView.getSettings();
             webSettings.setJavaScriptEnabled(true);
             return rootView;
@@ -433,5 +358,51 @@ public class StudentHelpActivity extends CustomStuAppCompatActivity implements S
         }
 
 
+    }
+
+    public static class HowToUseFragment extends android.app.Fragment {
+        private Context context;
+
+        private StudentHelpActivity myMainActivity;
+        private WebView webView;
+
+        @Override
+        public void onCreate(@Nullable Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            setHasOptionsMenu(true);
+        }
+
+        @Nullable
+        @Override
+        public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+            myMainActivity = (StudentHelpActivity) getActivity();
+            View rootView = inflater.inflate(R.layout.custom_faq_fragment, container, false);
+            webView = rootView.findViewById(R.id.activity_main_webview);
+            webView.setWebViewClient(new WebViewClient());
+            webView.loadUrl("https://dume-2d063.firebaseapp.com/hows");
+            WebSettings webSettings = webView.getSettings();
+            webSettings.setJavaScriptEnabled(true);
+            return rootView;
+        }
+
+        @Override
+        public boolean onOptionsItemSelected(MenuItem item) {
+            int id = item.getItemId();
+            if (id == android.R.id.home) {
+                if (webView.canGoBack()) {
+                    webView.goBack();
+                } else {
+                    startActivity(new Intent(getActivity(), StudentHelpActivity.class));
+                }
+                return true;
+            }
+            return super.onOptionsItemSelected(item);
+        }
+
+        @Override
+        public void onAttach(Context context) {
+            this.context = context;
+            super.onAttach(context);
+        }
     }
 }

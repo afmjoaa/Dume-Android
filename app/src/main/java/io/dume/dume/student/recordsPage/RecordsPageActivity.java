@@ -16,6 +16,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -123,6 +124,7 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
             public void onSuccess(Void list) {
                 //nothing to do
             }
+
             @Override
             public void onError(String msg) {
                 //already handled
@@ -133,6 +135,27 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
 
         if (getIntent().getAction() != null) {
             retriveAction = getIntent().getAction();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (searchDataStore.getRecordStatusChanged()) {
+            mPresenter.recordsPageLoadData(new TeacherContract.Model.Listener<Void>() {
+                @Override
+                public void onSuccess(Void list) {
+                    searchDataStore.setRecordStatusChanged(false);
+                    mViewPager.setCurrentItem(searchDataStore.getFromPACCR(), true);
+                    searchDataStore.setFromPACCR(0);
+                }
+
+                @Override
+                public void onError(String msg) {
+                    searchDataStore.setFromPACCR(0);
+                    searchDataStore.setRecordStatusChanged(false);
+                }
+            });
         }
     }
 
@@ -363,12 +386,12 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
             noItemText = rootView.findViewById(R.id.no_item_text);
             noDataBlock = rootView.findViewById(R.id.no_data_block);
 
-            swipeRefreshLayout.setColorSchemeResources( android.R.color.holo_green_light,android.R.color.holo_orange_light,
+            swipeRefreshLayout.setColorSchemeResources(android.R.color.holo_green_light, android.R.color.holo_orange_light,
                     android.R.color.holo_red_light, android.R.color.holo_blue_light);
             swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
                 public void onRefresh() {
-                    if(recordsRecyAdaRejected!= null){
+                    if (recordsRecyAdaRejected != null) {
                         myThisActivity.mPresenter.recordsPageLoadData(new TeacherContract.Model.Listener<Void>() {
                             @Override
                             public void onSuccess(Void list) {
@@ -440,13 +463,14 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
                                 }
                                 swipeRefreshLayout.setRefreshing(false);
                             }
+
                             @Override
                             public void onError(String msg) {
                                 //already handled
                                 swipeRefreshLayout.setRefreshing(false);
                             }
                         });
-                    }else {
+                    } else {
                         swipeRefreshLayout.setRefreshing(false);
                     }
                 }
@@ -482,6 +506,7 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
                                 }
                             }
                         }
+
                         @Override
                         void OnItemLongClicked(View v, int position) {
                             Toast.makeText(myThisActivity, "Pending Record aren't deletable", Toast.LENGTH_SHORT).show();

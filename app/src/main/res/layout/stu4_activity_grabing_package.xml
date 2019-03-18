@@ -134,6 +134,7 @@
                         android:translationY="4dp"
                         app:carbon_cornerRadius="30dp"
                         app:carbon_elevation="8dp"
+                        android:visibility="invisible"
                         app:srcCompat="@drawable/ic_percentage_off_badge_layer_list" />
 
                     <TextView
@@ -187,6 +188,7 @@
                         android:translationY="4dp"
                         app:carbon_cornerRadius="30dp"
                         app:carbon_elevation="0dp"
+                        android:visibility="invisible"
                         app:srcCompat="@drawable/ic_percentage_off_badge_layer_list_inactive" />
 
                     <TextView
@@ -243,6 +245,7 @@
                         android:translationY="4dp"
                         app:carbon_cornerRadius="30dp"
                         app:carbon_elevation="0dp"
+                        android:visibility="invisible"
                         app:srcCompat="@drawable/ic_percentage_off_badge_layer_list_inactive" />
 
                     <TextView

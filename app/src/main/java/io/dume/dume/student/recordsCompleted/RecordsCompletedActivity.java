@@ -56,6 +56,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -118,9 +119,9 @@ public class RecordsCompletedActivity extends CustomStuAppCompatActivity impleme
         pager.setAdapter(myPagerAdapter);
         Intent retrivedIntent = getIntent();
         int pageToOpen = retrivedIntent.getIntExtra(DumeUtils.RECORDTAB, -1);
-        if (pageToOpen != -1 && pageToOpen< Google.getInstance().getRecords().size()) {
+        if (pageToOpen != -1 && pageToOpen < Objects.requireNonNull(pager.getAdapter()).getCount()) {
             // Open the right pager
-            pager.setCurrentItem(pageToOpen,true);
+            pager.setCurrentItem(pageToOpen, true);
         }
     }
 
@@ -529,7 +530,7 @@ public class RecordsCompletedActivity extends CustomStuAppCompatActivity impleme
                                 showAdditionalRatingBtn.setEnabled(true);
                             }
                         });
-                    }else{
+                    } else {
                         if (visible) {
                             showAdditionalRatingBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_down_arrow_small));
                             showAdditionalRatingBtn.setEnabled(true);
@@ -603,7 +604,7 @@ public class RecordsCompletedActivity extends CustomStuAppCompatActivity impleme
                                 agreementInfoBtn.setEnabled(true);
                             }
                         });
-                    }else {
+                    } else {
                         if (visible) {
                             agreementInfoBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_down_arrow_small));
                             agreementInfoBtn.setEnabled(true);
@@ -677,7 +678,7 @@ public class RecordsCompletedActivity extends CustomStuAppCompatActivity impleme
                                 achievementInfoBtn.setEnabled(true);
                             }
                         });
-                    }else {
+                    } else {
                         if (visible) {
                             achievementInfoBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_down_arrow_small));
                             achievementInfoBtn.setEnabled(true);
@@ -778,6 +779,7 @@ public class RecordsCompletedActivity extends CustomStuAppCompatActivity impleme
     public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 
         private List<DocumentSnapshot> recordDataCompleted;
+
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
             recordDataCompleted = new ArrayList<>();
