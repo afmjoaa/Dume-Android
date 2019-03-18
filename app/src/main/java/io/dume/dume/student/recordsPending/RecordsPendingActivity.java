@@ -778,7 +778,7 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
                                 myThisActivity.mModel.getRecords(new TeacherContract.Model.Listener<List<Record>>() {
                                     @Override
                                     public void onSuccess(List<Record> list) {
-                                        myThisActivity.mModel.setPenalty(myThisActivity.retriveAction, 50, new TeacherContract.Model.Listener<Void>() {
+                                        myThisActivity.mModel.setPenalty(myThisActivity.retriveAction, 50,false, null, new TeacherContract.Model.Listener<Void>() {
                                             @Override
                                             public void onSuccess(Void avoid) {
                                                 Google.getInstance().setRecordList(list);

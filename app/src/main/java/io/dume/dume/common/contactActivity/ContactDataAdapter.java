@@ -115,7 +115,7 @@ public class ContactDataAdapter extends RecyclerView.Adapter<ContactDataAdapter.
                 stringHashMap1.put("name", sh_info.get("stu_name"));
                 stringHashMap1.put("active", true);
                 stringHashMap1.put("mute", false);
-                stringHashMap1.put("dp", (String) sp_info.get("stu_photo"));
+                stringHashMap1.put("dp", (String) sh_info.get("stu_photo"));
                 stringHashMap1.put("unread_msg", 0);
                 stringHashMap1.put("last_msg", "");
                 stringHashMap1.put("last_msg_time", new Date());

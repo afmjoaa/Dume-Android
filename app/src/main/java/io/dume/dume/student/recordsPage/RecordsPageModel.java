@@ -109,7 +109,7 @@ public class RecordsPageModel implements RecordsPageContract.Model {
                                 status = (String) data.get("record_status");
                                 Record record = new Record(mentorName, studentName, salaryInDemand, subjectExchange, creation, mentorDpUrl, studentDpUrl, studentRating, mentorRating, status, Record.DELIVERED, sGender, mGender);
                                 record.setRecordSnap(documents.get(i));
-                                if(documents.get(i).getBoolean(key)){
+                                if (documents.get(i).getBoolean(key)) {
                                     alteredDocuments.add(documents.get(i));
                                     recordList.add(record);
                                 }
@@ -117,7 +117,7 @@ public class RecordsPageModel implements RecordsPageContract.Model {
                             google.setRecords(alteredDocuments);
                             google.setRecordList(recordList);
                             listener.onSuccess(recordList);
-                        } else listener.onError("No record found.");
+                        } else listener.onSuccess(new ArrayList<>());
 
                     } else listener.onError("No record found.");
 
@@ -158,7 +158,7 @@ public class RecordsPageModel implements RecordsPageContract.Model {
     }
 
     @Override
-    public void changeRecordValues(String recordId, String key, Boolean value, TeacherContract.Model.Listener<Void> listener) {
+    public void changeRecordValues(String recordId, String key, boolean value, TeacherContract.Model.Listener<Void> listener) {
         firestore.document("records/" + recordId).update(key, value).addOnSuccessListener((Activity) context, new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
@@ -170,11 +170,10 @@ public class RecordsPageModel implements RecordsPageContract.Model {
                 listener.onError(e.getLocalizedMessage());
             }
         });
-
     }
 
     @Override
-    public void setPenalty(String acountMajor, Integer amount, TeacherContract.Model.Listener<Void> listener) {
+    public void setPenalty(String acountMajor, Integer amount, boolean ratingPenalty, String ratingVal, TeacherContract.Model.Listener<Void> listener) {
         String path = "/users/students/stu_pro_info";
         Number previousAmount = 0;
         Integer currentAmount = amount;
@@ -196,17 +195,32 @@ public class RecordsPageModel implements RecordsPageContract.Model {
         } else {
             currentAmount = 0 + currentAmount;
         }
-        firestore.collection(path).document(mAuth.getCurrentUser().getUid()).update("penalty", currentAmount).addOnSuccessListener((Activity) context, new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                listener.onSuccess(aVoid);
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                listener.onError("Network err !!");
-                Log.e("Tag", e.getLocalizedMessage());
-            }
-        });
+        if (ratingPenalty) {
+            firestore.collection(path).document(mAuth.getCurrentUser().getUid()).update("penalty", currentAmount, "self_rating.star_rating",ratingVal ).addOnSuccessListener((Activity) context, new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    listener.onSuccess(aVoid);
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    listener.onError("Network err !!");
+                    Log.e("Tag", e.getLocalizedMessage());
+                }
+            });
+        } else {
+            firestore.collection(path).document(mAuth.getCurrentUser().getUid()).update("penalty", currentAmount).addOnSuccessListener((Activity) context, new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    listener.onSuccess(aVoid);
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    listener.onError("Network err !!");
+                    Log.e("Tag", e.getLocalizedMessage());
+                }
+            });
+        }
     }
 }
