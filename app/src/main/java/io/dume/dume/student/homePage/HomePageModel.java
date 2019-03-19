@@ -115,6 +115,24 @@ public class HomePageModel extends StuBaseModel implements HomePageContract.Mode
         }
     }
 
+    @Override
+    public void removeAppliedPromo(HomePageRecyclerData promoData, TeacherContract.Model.Listener<Boolean> listener) {
+        String accountType = Google.getInstance().getAccountMajor();
+        String path;
+        if (accountType == DumeUtils.TEACHER) {
+            path = "/users/mentors/mentor_profile";
+        } else {
+            path = "/users/students/stu_pro_info";
+
+        }
+        firestore.collection(path).document(FirebaseAuth.getInstance().getUid())
+                .update("applied_promo", FieldValue.arrayRemove(promoData.getPromo_code()),
+                        promoData.getPromo_code(), FieldValue.delete()).addOnSuccessListener(aVoid -> listener.onSuccess(true)).addOnFailureListener(e -> listener.onError(e.getLocalizedMessage()));
+
+
+
+
+    }
 
     @Override
     public void hawwa() {

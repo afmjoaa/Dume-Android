@@ -96,6 +96,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
+import carbon.widget.EditText;
 import carbon.widget.ImageView;
 import io.dume.dume.Google;
 import io.dume.dume.R;
@@ -248,6 +249,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
     private Marker marker;
     private List<Marker> markerList;
     private HomePageModel homePageModel;
+    private EditText reqeustLetterET;
 
 
     @Override
@@ -443,12 +445,13 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
 
         //init the confirm dialogue
         mMakeRequestBSD = new BottomSheetDialog(this);
-        cancelsheetRootView = this.getLayoutInflater().inflate(R.layout.custom_bottom_sheet_dialogue_cancel, null);
+        cancelsheetRootView = this.getLayoutInflater().inflate(R.layout.bottomsheet_with_edit_text, null);
         mMakeRequestBSD.setContentView(cancelsheetRootView);
         confirmMainText = mMakeRequestBSD.findViewById(R.id.main_text);
         confirmSubText = mMakeRequestBSD.findViewById(R.id.sub_text);
         comfirmYesBtn = mMakeRequestBSD.findViewById(R.id.cancel_yes_btn);
         confirmNoBtn = mMakeRequestBSD.findViewById(R.id.cancel_no_btn);
+        reqeustLetterET = mMakeRequestBSD.findViewById(R.id.requestLetter);
         if (confirmMainText != null && confirmSubText != null && comfirmYesBtn != null && confirmNoBtn != null) {
             confirmMainText.setText("Confirm Request");
             confirmSubText.setText("By confirming request will be sent to ____...");
@@ -516,6 +519,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                     recordsData.put("record_status", SearchDataStore.STATUSPENDING);
                     recordsData.put("sp_uid", spUid);
                     recordsData.put("sh_uid", shUid);
+                    recordsData.put("request_letter",reqeustLetterET.getText().toString());
                     recordsData.put("t_rate_status", "dialog");
                     recordsData.put("s_rate_status", "dialog");
                     recordsData.put("t_show_status",true);

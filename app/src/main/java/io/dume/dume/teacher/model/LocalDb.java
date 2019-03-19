@@ -35,10 +35,10 @@ public class LocalDb {
     private final Map<String, List<String>> collegeBanglaMediumMap;
     private final Map<String, List<String>> collegeEnglishMediumMap;
     private final Map<String, List<String>> collegeEnglishVersionMap;
-    private final List<String> uniTestSub;
-    private final Map<String, List<String>> universityEngineerMap;
-    private final Map<String, List<String>> universityMedicalMap;
-    private final Map<String, List<String>> universityHonsMap;
+    //private final List<String> uniTestSub;
+    private final Map<String, List<String>> universityEngineerMap = null;
+    private final Map<String, List<String>> universityMedicalMap = null;
+    private final Map<String, List<String>> universityHonsMap = null;
     private final List<String> genderPreferencesList;
     public final List<String> crossCheck;
     public final List<String> payment;
@@ -511,7 +511,7 @@ public class LocalDb {
             }
         };
 
-        innerProgramming = new ArrayList<String>(Arrays.asList("C", "Java", "C++", "C#", "JavaScript", "Python")) {
+        innerProgramming = new ArrayList<String>(Arrays.asList("C", "Java", "C++", "C#", "JavaScript", "Python", "Web Development", "NodeJS", "Angular", "ReactJS", "VueJS", "Django", "Wordpress Development", "iOS Development", "Xamarin Cross Platform", "DotNet Framework", "Data Science", "Machine Learning")) {
             @Override
             public String toString() {
                 return " Language ";
@@ -576,19 +576,19 @@ public class LocalDb {
         innerUniversityEngineering = new ArrayList<String>(Arrays.asList("BME", "EEE", "AE", "CSE", "CE", "ME", "Architecture")) {
             @Override
             public String toString() {
-                return "Branch";
+                return "Course";
             }
         };
         innerUniversityMedical = new ArrayList<String>(Arrays.asList("Anatomy", "Biochemistry", "Physiology", "Community Medicine", "Forensic", "Microbiology", "Pathology", "Pharmacology", "Gynecology", "Surgery", "Psychiatry")) {
             @Override
             public String toString() {
-                return "Branch";
+                return "Course";
             }
         };
         innerUniversityOthers = new ArrayList<String>(Arrays.asList("Biotechnology", "Pharmacy", "Psychology", "BBA", "Economics", "Environmental Science", "Law(LLB)")) {
             @Override
             public String toString() {
-                return "Branch";
+                return "Course";
             }
         };
         //Admission Test
@@ -598,20 +598,20 @@ public class LocalDb {
                 return "Type";
             }
         };
-        innerOthers = new ArrayList<String>(Arrays.asList("BCS", "IELTS", "SAT", "GRE", "GMAT","Arabic (Quran)","Baby Sitting")) {
+        innerOthers = new ArrayList<String>(Arrays.asList("BCS", "IELTS", "SAT", "GRE", "GMAT", "Arabic (Quran)", "Baby Sitting")) {
             @Override
             public String toString() {
                 return "Item";
             }
         };
 
-        uniTestSub = new ArrayList<String>(Arrays.asList("Foo 1", "Foo 2", "Foo 2", "Foo 2", "Foo 2", "Foo 2",
+        /*uniTestSub = new ArrayList<String>(Arrays.asList("Foo 1", "Foo 2", "Foo 2", "Foo 2", "Foo 2", "Foo 2",
                 "Foo 2", "Foo 2", "Foo 2", "Foo 2", "Foo 2", "Foo 2", "Foo 2", "Foo 2", "Foo 2")) {
             @Override
             public String toString() {
                 return "Subject";
             }
-        };
+        };*/
 
         //Extra Data For Cross Check
 
@@ -645,8 +645,6 @@ public class LocalDb {
                 return "Field";
             }
         };
-
-
 
 
         levelOneMap = new HashMap<>(categories.size());
@@ -721,7 +719,7 @@ public class LocalDb {
         collegeEnglishVersionMap.put(innerCollegeEnglishVersion.get(1), innerCollegeEnglishVersionCommerce);
         collegeEnglishVersionMap.put(innerCollegeEnglishVersion.get(2), innerCollegeEnglishVersionArts);
 
-        universityEngineerMap = new HashMap<>();
+       /* universityEngineerMap = new HashMap<>();
         universityEngineerMap.put(innerUniversityEngineering.get(0), uniTestSub);
         universityEngineerMap.put(innerUniversityEngineering.get(0), uniTestSub);
         universityEngineerMap.put(innerUniversityEngineering.get(0), uniTestSub);
@@ -743,8 +741,7 @@ public class LocalDb {
         universityMedicalMap.put(innerUniversityMedical.get(8), uniTestSub);
         universityMedicalMap.put(innerUniversityMedical.get(9), uniTestSub);
         universityMedicalMap.put(innerUniversityMedical.get(10), uniTestSub);
-
-        universityHonsMap = new HashMap<>();
+        universityHonsMap = new HashMap<>();*/
 
 
     }
@@ -827,10 +824,13 @@ public class LocalDb {
             case "University":
                 switch (root) {
                     case "Engineering":
-                        list = universityEngineerMap.get(selected);
+                        //    list = universityEngineerMap.get(selected);
+                        list = null;
                         break;
                     case "Medical":
-                        list = universityMedicalMap.get(selected);
+                        // list = universityMedicalMap.get(selected);
+                        list = null;
+
                         break;
                     case "Hons":
                         list = null;

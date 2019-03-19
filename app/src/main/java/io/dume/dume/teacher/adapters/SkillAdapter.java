@@ -85,8 +85,7 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private Button backYesBtn;
     private Button backNoBtn;
     private String[] splitMainSsss;
-    private Integer likes = 0;
-    private Integer dislikes = 0;
+
 
 
     @Override
@@ -174,6 +173,8 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int i) {
+         Integer likes = 0;
+         Integer dislikes = 0;
         if (layoutSize == ACTIVITY) {
             SkillAVH myViewHolder = (SkillAVH) holder;
             ArrayList<KeyMap> detailList = new ArrayList<>();
@@ -453,8 +454,10 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             for (String splited : splitMainSsss) {
                 likes = likes + Integer.parseInt(skillList.get(i).getLikes().get(splited).toString());
                 dislikes = dislikes + Integer.parseInt(skillList.get(i).getDislikes().get(splited).toString());
+
             }
             myViewHolder.likeTV.setText((likes - splitMainSsss.length) + " likes");
+            likes=0;
 
         } else {//fragment start here
             SkillFVH myFragmentHolder = (SkillFVH) holder;

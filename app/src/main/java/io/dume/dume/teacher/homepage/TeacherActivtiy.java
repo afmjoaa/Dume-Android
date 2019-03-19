@@ -233,13 +233,29 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
 
     @Override
     public void loadHeadsUpPromo(HomePageRecyclerData promoData) {
+        Log.e(TAG, "loadHeadsUpPromo: " );
         if (promoData.getMax_dicount_percentage() > discount) {
             discount = promoData.getMax_dicount_percentage();
             Date expirity = promoData.getExpirity();
             Date now = new Date();
-            long leftMillis = expirity.getTime() - now.getTime();
-            int daysLeft = (int) (leftMillis / (1000 * 60 * 60 * 24));
-            setHeadsUpPromo(discount.toString(), (daysLeft > 1 ? daysLeft + " days" : "less than a day"), promoData.getPackageName() == null ? "" : promoData.getPackageName());
+            Log.e(TAG, "loadHeadsUpPromo: " + (now.getTime() > expirity.getTime()));
+            if (now.getTime() > expirity.getTime()) {
+                model.removeAppliedPromo(promoData, new TeacherContract.Model.Listener<Boolean>() {
+                    @Override
+                    public void onSuccess(Boolean deleted) {
+
+                    }
+
+                    @Override
+                    public void onError(String msg) {
+                        Log.e(TAG, "onError: " + msg);
+                    }
+                });
+            } else {
+                long leftMillis = expirity.getTime() - now.getTime();
+                int daysLeft = (int) (leftMillis / (1000 * 60 * 60 * 24));
+                setHeadsUpPromo(discount.toString(), (daysLeft > 1 ? daysLeft + " days" : "less than a day"), promoData.getPackageName() == null ? "" : promoData.getPackageName());
+            }
         }
     }
 
@@ -400,11 +416,11 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
 
     @Override
     public void configView() {
-        if (Google.getInstance().getTotalStudent()>0&& Google.getInstance().getTotalMentor()>0) {
+        if (Google.getInstance().getTotalStudent() > 0 && Google.getInstance().getTotalMentor() > 0) {
             dumeInfoContainer.setVisibility(View.VISIBLE);
-            dumeInfo.setText(Google.getInstance().getTotalStudent() +" students & "+Google.getInstance().getTotalMentor() +" mentors on dume network");
+            dumeInfo.setText(Google.getInstance().getTotalStudent() + " students & " + Google.getInstance().getTotalMentor() + " mentors on dume network");
 
-        }else {
+        } else {
             dumeInfoContainer.setVisibility(View.GONE);
         }
         mentorProfile.setVisible(false);

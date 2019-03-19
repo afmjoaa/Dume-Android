@@ -224,17 +224,36 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
         super.onDestroy();
 //       stopService(locationServiceIntent);
     }
+
     @Override
     public void loadHeadsUpPromo(HomePageRecyclerData promoData) {
+
         if (promoData.getMax_dicount_percentage() > discount) {
             discount = promoData.getMax_dicount_percentage();
             Date expirity = promoData.getExpirity();
             Date now = new Date();
-            long leftMillis = expirity.getTime() - now.getTime();
-            int daysLeft = (int) (leftMillis / (1000 * 60 * 60 * 24));
-            setHeadsUpPromo(discount.toString(), (daysLeft > 1 ? daysLeft + " days" : "less than a day"), promoData.getPackageName() == null ? "" : promoData.getPackageName());
+
+            if (now.getTime() > expirity.getTime()) {
+                mModel.removeAppliedPromo(promoData, new TeacherContract.Model.Listener<Boolean>() {
+                    @Override
+                    public void onSuccess(Boolean deleted) {
+
+                    }
+
+                    @Override
+                    public void onError(String msg) {
+                        Log.e(TAG, "onError: " + msg);
+                    }
+                });
+            } else {
+                long leftMillis = expirity.getTime() - now.getTime();
+                int daysLeft = (int) (leftMillis / (1000 * 60 * 60 * 24));
+                setHeadsUpPromo(discount.toString(), (daysLeft > 1 ? daysLeft + " days" : "less than a day"), promoData.getPackageName() == null ? "" : promoData.getPackageName());
+
+            }
         }
     }
+
     @Override
     public void loadPromoData(HomePageRecyclerData promoData) {
         hPageBSRcyclerAdapter.addPromoToList(promoData);
@@ -405,7 +424,6 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
         dumeInfoContainer = findViewById(R.id.dume_info_container);
 
 
-
     }
 
     @Override
@@ -419,11 +437,11 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
 
     @Override
     public void init() {
-        if (Google.getInstance().getTotalStudent()>0&& Google.getInstance().getTotalMentor()>0) {
+        if (Google.getInstance().getTotalStudent() > 0 && Google.getInstance().getTotalMentor() > 0) {
             dumeInfoContainer.setVisibility(View.VISIBLE);
-            dumeInfo.setText(Google.getInstance().getTotalStudent() +" students & "+Google.getInstance().getTotalMentor() +" mentors on dume network");
+            dumeInfo.setText(Google.getInstance().getTotalStudent() + " students & " + Google.getInstance().getTotalMentor() + " mentors on dume network");
 
-        }else {
+        } else {
             dumeInfoContainer.setVisibility(View.GONE);
         }
         menu = navigationView.getMenu();
