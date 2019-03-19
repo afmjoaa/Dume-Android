@@ -239,7 +239,7 @@ public class PerformanceFragment extends Fragment {
             }
 
             if (Integer.parseInt(currentCount) > 2 && Integer.parseInt(totalStudents) >= 4 && Float.parseFloat(rating) > 4.70f &&
-                    expertize >= 80 && behaviour >= 80 && accept_ratio >= 80) {
+                    expertize >= 80 && behaviour >= 80 && accept_ratio >= 60) {
                 //TOdo leading
                 String badgeName = "leading";
                 if (!leading) {
@@ -260,7 +260,7 @@ public class PerformanceFragment extends Fragment {
             }
 
             if (Integer.parseInt(currentCount) > 3 && Integer.parseInt(totalStudents) >= 6 && Float.parseFloat(rating) > 4.80f &&
-                    expertize >= 90 && behaviour >= 90 && accept_ratio >= 80) {
+                    expertize >= 90 && behaviour >= 90 && accept_ratio >= 70) {
                 //TOdo Premier
                 String badgeName = "premier";
                 if (!premier) {

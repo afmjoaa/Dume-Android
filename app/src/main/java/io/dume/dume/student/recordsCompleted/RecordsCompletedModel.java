@@ -1,6 +1,14 @@
 package io.dume.dume.student.recordsCompleted;
 
-public class RecordsCompletedModel implements RecordsCompletedContract.Model {
+import android.content.Context;
+
+import io.dume.dume.student.searchResult.SearchResultModel;
+
+public class RecordsCompletedModel extends SearchResultModel implements RecordsCompletedContract.Model {
+    public RecordsCompletedModel(Context context) {
+        super(context);
+    }
+
     @Override
     public void recordsCompletedHawwa() {
 

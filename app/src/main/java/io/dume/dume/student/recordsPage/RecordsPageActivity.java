@@ -147,15 +147,20 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
                 public void onSuccess(Void list) {
                     searchDataStore.setRecordStatusChanged(false);
                     mViewPager.setCurrentItem(searchDataStore.getFromPACCR(), true);
-                    searchDataStore.setFromPACCR(0);
+                    searchDataStore.setFromPACCR(-1);
                 }
 
                 @Override
                 public void onError(String msg) {
-                    searchDataStore.setFromPACCR(0);
+                    searchDataStore.setFromPACCR(-1);
                     searchDataStore.setRecordStatusChanged(false);
                 }
             });
+        }else{
+            if(searchDataStore.getFromPACCR() != -1){
+                mViewPager.setCurrentItem(searchDataStore.getFromPACCR(), true);
+                searchDataStore.setFromPACCR(-1);
+            }
         }
     }
 

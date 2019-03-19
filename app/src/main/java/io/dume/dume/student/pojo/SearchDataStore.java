@@ -42,7 +42,7 @@ public class SearchDataStore implements Serializable {
     public static String STATUSCOMPLETED = "Completed";
     public static String STATUSREJECTED = "Rejected";
     private Boolean recordStatusChanged = false;
-    private Integer fromPACCR = 0;
+    private Integer fromPACCR = -1;
 
     private List<DocumentSnapshot> resultList;
     private Integer levelNum = 1;

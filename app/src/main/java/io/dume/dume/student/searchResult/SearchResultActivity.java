@@ -500,8 +500,6 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                                             @Override
                                             public void onError(String msg) {
                                                 Log.w(TAG, msg );
-
-
                                             }
                                         });
                                     }

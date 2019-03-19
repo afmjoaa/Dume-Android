@@ -706,14 +706,14 @@ provided.Tap salary for details.  </string>
         \n•\tRatings >= 4.70 ★
         \n•\tExpertize >= 80%
         \n•\tBehaviour >= 80%
-        \n•\tAccept Ratio >= 80% ]]></item>
+        \n•\tAccept Ratio >= 60% ]]></item>
 
         <item><![CDATA[•\tTotal Students = 6
         \n•\tOngoing Dume = 3
         \n•\tRatings >= 4.80 ★
         \n•\tExpertize >= 90%
         \n•\tBehaviour >= 90%
-        \n•\tAccept Ratio >= 80% ]]></item>
+        \n•\tAccept Ratio >= 70% ]]></item>
     </string-array>
 
     <string-array name="congrats_value">

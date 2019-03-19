@@ -40,7 +40,11 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 import com.hadiidbouk.charts.BarData;
 import com.hadiidbouk.charts.ChartProgressBar;
 import com.jackandphantom.circularprogressbar.CircleProgressbar;
@@ -65,11 +69,15 @@ import io.dume.dume.R;
 import io.dume.dume.model.DumeModel;
 import io.dume.dume.student.common.ReviewAdapter;
 import io.dume.dume.student.common.ReviewHighlightData;
+import io.dume.dume.student.homePage.adapter.HomePageRecyclerData;
 import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
 import io.dume.dume.student.pojo.SearchDataStore;
 import io.dume.dume.student.recordsAccepted.RecordsAcceptedActivity;
 import io.dume.dume.student.recordsCurrent.RecordsCurrentActivity;
 import io.dume.dume.student.recordsPage.Record;
+import io.dume.dume.student.recordsPage.RecordsPageModel;
+import io.dume.dume.student.recordsPending.RecordsPendingActivity;
+import io.dume.dume.student.studentPayment.StudentPaymentActivity;
 import io.dume.dume.teacher.homepage.TeacherContract;
 import io.dume.dume.teacher.pojo.Academic;
 import io.dume.dume.util.DumeUtils;
@@ -85,6 +93,7 @@ public class RecordsCompletedActivity extends CustomStuAppCompatActivity impleme
     private ViewPager pager;
     private SectionsPagerAdapter myPagerAdapter;
     private String retriveAction;
+    private RecordsCompletedModel mModel;
 
 
     @Override
@@ -93,7 +102,8 @@ public class RecordsCompletedActivity extends CustomStuAppCompatActivity impleme
         setContentView(R.layout.stu11_activity_records_completed);
         setActivityContext(this, fromFlag);
         findLoadView();
-        mPresenter = new RecordsCompletedPresenter(this, new RecordsCompletedModel());
+        mModel = new RecordsCompletedModel(context);
+        mPresenter = new RecordsCompletedPresenter(this, mModel);
         mPresenter.recordsCompletedEnqueue();
         DumeUtils.configureAppbar(this, "Completed Records");
         if (getIntent().getAction() != null) {
@@ -149,6 +159,10 @@ public class RecordsCompletedActivity extends CustomStuAppCompatActivity impleme
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+    }
+
+    private void flush(String msg) {
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 
     //testing code goes here
@@ -693,12 +707,15 @@ public class RecordsCompletedActivity extends CustomStuAppCompatActivity impleme
 
         public void toggleStatus() {
             //confirm bottom sheet
-            Map<String, Object> documentData = record.getData();
-            Map<String, Object> spMap = (Map<String, Object>) documentData.get("sp_info");
-            Map<String, Object> forMap = (Map<String, Object>) documentData.get("for_whom");
+            Map<String, Object> sendDocumentData = record.getData();
+            Map<String, Object> spMap = (Map<String, Object>) sendDocumentData.get("sp_info");
+            Map<String, Object> forMap = (Map<String, Object>) sendDocumentData.get("for_whom");
             String mentorName = spMap.get("first_name") + " " + spMap.get("last_name");
             String studentName = (String) forMap.get("stu_name");
             Number salary = (Number) selectedMentor.get("salary");
+            String package_name = (String) sendDocumentData.get("package_name");
+            String thisSkillUid = (String) sendDocumentData.get("skill_uid");
+
 
             //cancel bottom sheet
             mBottomSheetReject = new BottomSheetDialog(context);
@@ -714,26 +731,116 @@ public class RecordsCompletedActivity extends CustomStuAppCompatActivity impleme
                 rejectYesBtn.setText("Yes, Request");
                 rejectNoBtn.setText("No");
                 rejectYesBtn.setOnClickListener(new View.OnClickListener() {
+
+                    private Intent foundIntent;
+                    private String record_status;
+
                     @Override
                     public void onClick(View view) {
-                        /*myThisActivity.showProgress();
-                        acceptContactBtn.setEnabled(false);
-                        cancelRequestBtn.setEnabled(false);
-                        myThisActivity.mModel.changeRecordStatus(record.getId(), "Rejected", new TeacherContract.Model.Listener<Void>() {
-                            @Override
-                            public void onSuccess(Void list) {
-                                myThisActivity.hideProgress();
-                                Toast.makeText(myThisActivity, "Status Changed To Rejected", Toast.LENGTH_SHORT).show();
+                        mBottomSheetReject.dismiss();
+                        myThisActivity.showProgress();
+
+                        if(myThisActivity.retriveAction.equals(DumeUtils.STUDENT)){
+                            String foundRecordId = null;
+                            List<DocumentSnapshot> existingRecords = Google.getInstance().getRecords();
+                            for (int i = 0; i < existingRecords.size(); i++) {
+                                record_status = existingRecords.get(i).getString("record_status");
+                                if (thisSkillUid.equals(existingRecords.get(i).getString("skill_uid")) &&
+                                        (SearchDataStore.STATUSPENDING.equals(record_status) ||
+                                                SearchDataStore.STATUSACCEPTED.equals(record_status) ||
+                                                SearchDataStore.STATUSCURRENT.equals(record_status)
+                                        )) {
+                                    foundRecordId = existingRecords.get(i).getId();
+                                    break;
+                                }
                             }
 
-                            @Override
-                            public void onError(String msg) {
-                                acceptContactBtn.setEnabled(true);
-                                cancelRequestBtn.setEnabled(true);
-                                myThisActivity.showProgress();
-                                Toast.makeText(myThisActivity, msg, Toast.LENGTH_SHORT).show();
+                            if (foundRecordId != null) {
+                                switch (record_status) {
+                                    case "Pending":
+                                        foundIntent = new Intent(context, RecordsPendingActivity.class).setAction(DumeUtils.STUDENT);
+                                        searchDataStore.setFromPACCR(0);
+                                        break;
+                                    case "Accepted":
+                                        foundIntent = new Intent(context, RecordsAcceptedActivity.class).setAction(DumeUtils.STUDENT);
+                                        searchDataStore.setFromPACCR(1);
+                                        break;
+                                    case "Current":
+                                        foundIntent = new Intent(context, RecordsCurrentActivity.class).setAction(DumeUtils.STUDENT);
+                                        searchDataStore.setFromPACCR(2);
+                                        break;
+                                }
+                                foundIntent.putExtra("recordId", foundRecordId);
+                                startActivity(foundIntent);
+                                myThisActivity.finish();
+                                myThisActivity.hideProgress();
+                            } else {
+                                //do the rise record here
+                                Map<String, Object> documentSnapshot = searchDataStore.getDocumentSnapshot();
+                                ArrayList<String> applied_promo = (ArrayList<String>) documentSnapshot.get("applied_promo");
+                                if (applied_promo.size() > 0) {
+                                    for (String applied : applied_promo) {
+                                        Log.w(TAG, "appliedPromo: " + applied);
+                                        Map<String, Object> promo_item = (Map<String, Object>) documentSnapshot.get(applied);
+                                        Gson gson = new Gson();
+                                        JsonElement jsonElement = gson.toJsonTree(promo_item);
+                                        HomePageRecyclerData homePageRecyclerData = gson.fromJson(jsonElement, HomePageRecyclerData.class);
+                                        if (homePageRecyclerData != null) {
+                                            if (package_name.equals(homePageRecyclerData.getPackageName())) {
+                                                if (!homePageRecyclerData.isExpired()) {
+                                                    Date date = new Date();
+                                                    if (homePageRecyclerData.getExpirity().getTime() > date.getTime()) {
+                                                        sendDocumentData.put("promo", promo_item);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                sendDocumentData.put("creation", FieldValue.serverTimestamp());
+                                sendDocumentData.put("record_status", SearchDataStore.STATUSPENDING);
+                                sendDocumentData.put("t_rate_status", "dialog");
+                                sendDocumentData.put("s_rate_status", "dialog");
+                                sendDocumentData.put("t_show_status", true);
+                                sendDocumentData.put("s_show_status", true);
+                                myThisActivity.mModel.riseNewRecords(sendDocumentData, new TeacherContract.Model.Listener<DocumentReference>() {
+                                    @Override
+                                    public void onSuccess(DocumentReference documentReference) {
+                                        RecordsPageModel recordsPageModel = new RecordsPageModel(context);
+                                        recordsPageModel.getRecords(new TeacherContract.Model.Listener<List<Record>>() {
+                                            @Override
+                                            public void onSuccess(List<Record> list) {
+                                                Google.getInstance().setRecordList(list);
+                                                searchDataStore.setRecordStatusChanged(true);
+                                                searchDataStore.setFromPACCR(0);
+                                                Intent intentMain = new Intent(context, RecordsPendingActivity.class).setAction(DumeUtils.STUDENT);
+                                                intentMain.putExtra("recordId", documentReference.getId());
+                                                startActivity(intentMain);
+                                                myThisActivity.finish();
+                                                myThisActivity.hideProgress();
+                                            }
+
+                                            @Override
+                                            public void onError(String msg) {
+                                                Toast.makeText(myThisActivity, msg, Toast.LENGTH_SHORT).show();
+                                                myThisActivity.hideProgress();
+                                            }
+                                        });
+                                    }
+
+                                    @Override
+                                    public void onError(String msg) {
+                                        myThisActivity.flush(msg);
+                                        myThisActivity.hideProgress();
+                                    }
+                                });
                             }
-                        });*/
+                        }else{
+                            //this is the from mentor onclick
+                            myThisActivity.hideProgress();
+                            startActivity(new Intent(context, StudentPaymentActivity.class));
+                        }
+
                     }
                 });
                 rejectNoBtn.setOnClickListener(new View.OnClickListener() {
@@ -743,7 +850,6 @@ public class RecordsCompletedActivity extends CustomStuAppCompatActivity impleme
                     }
                 });
             }
-
 
             switch (myThisActivity.retriveAction) {
                 case DumeUtils.STUDENT:

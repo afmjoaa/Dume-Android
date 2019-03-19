@@ -95,6 +95,7 @@ import java.util.concurrent.Executors;
 import io.dume.dume.Google;
 import io.dume.dume.R;
 import io.dume.dume.broadcastReceiver.MyAlarmBroadCast;
+import io.dume.dume.common.inboxActivity.InboxActivity;
 import io.dume.dume.model.DumeModel;
 import io.dume.dume.student.common.QualificationAdapter;
 import io.dume.dume.student.common.ReviewAdapter;
@@ -175,9 +176,20 @@ public class RecordsCurrentActivity extends CustomStuAppCompatActivity implement
         pager.setAdapter(myPagerAdapter);
         Intent retrivedIntent = getIntent();
         int pageToOpen = retrivedIntent.getIntExtra(DumeUtils.RECORDTAB, -1);
+        String recordId = retrivedIntent.getStringExtra("recordId");
+
         if (pageToOpen != -1 && pageToOpen < Objects.requireNonNull(pager.getAdapter()).getCount()) {
             // Open the right pager
             pager.setCurrentItem(pageToOpen, true);
+        }else if(recordId != null && !recordId.equals("")){
+            List<DocumentSnapshot> currentRecords = DumeUtils.filterList(Google.getInstance().getRecords(), "Current");
+            for (int i = 0; i < currentRecords.size(); i++) {
+                DocumentSnapshot record = currentRecords.get(i);
+                if (recordId.equals(record.getId())) {
+                    pager.setCurrentItem(i, true);
+                    break;
+                }
+            }
         }
     }
 
@@ -709,6 +721,8 @@ public class RecordsCurrentActivity extends CustomStuAppCompatActivity implement
             Map<String, Object> forMap = (Map<String, Object>) documentData.get("for_whom");
             String mentorName = spMap.get("first_name") + " " + spMap.get("last_name");
             String studentName = (String) forMap.get("stu_name");
+            String studentPhoneNum = (String) forMap.get("stu_phone_number");
+            String mentorPhoneNum = (String) spMap.get("phone_number");
 
             //cancel bottom sheet
             mBottomSheetReject = new BottomSheetDialog(context);
@@ -726,24 +740,6 @@ public class RecordsCurrentActivity extends CustomStuAppCompatActivity implement
                 rejectYesBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        /*myThisActivity.showProgress();
-                        acceptContactBtn.setEnabled(false);
-                        cancelRequestBtn.setEnabled(false);
-                        myThisActivity.mModel.changeRecordStatus(record.getId(), "Rejected", new TeacherContract.Model.Listener<Void>() {
-                            @Override
-                            public void onSuccess(Void list) {
-                                myThisActivity.hideProgress();
-                                Toast.makeText(myThisActivity, "Status Changed To Rejected", Toast.LENGTH_SHORT).show();
-                            }
-
-                            @Override
-                            public void onError(String msg) {
-                                acceptContactBtn.setEnabled(true);
-                                cancelRequestBtn.setEnabled(true);
-                                myThisActivity.showProgress();
-                                Toast.makeText(myThisActivity, msg, Toast.LENGTH_SHORT).show();
-                            }
-                        });*/
                     }
                 });
                 rejectNoBtn.setOnClickListener(new View.OnClickListener() {
@@ -768,21 +764,52 @@ public class RecordsCurrentActivity extends CustomStuAppCompatActivity implement
                 callBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
+                        mBottomSheetContactDialog.dismiss();
+                        Uri u = Uri.parse("tel:" + studentPhoneNum);
+                        switch (myThisActivity.retriveAction) {
+                            case DumeUtils.STUDENT:
+                                u = Uri.parse("tel:" + studentPhoneNum);
+                                break;
+                            case DumeUtils.TEACHER:
+                                u = Uri.parse("tel:" + mentorPhoneNum);
+                                break;
+                            case DumeUtils.BOOTCAMP:
+                                u = Uri.parse("tel:" + mentorPhoneNum);
+                                break;
+                        }
+                        Intent i = new Intent(Intent.ACTION_DIAL, u);
+                        context.startActivity(i);
                     }
                 });
 
                 offlineMsgBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
+                        mBottomSheetContactDialog.dismiss();
+                        Uri uri = Uri.parse("smsto:" + studentPhoneNum);
+                        switch (myThisActivity.retriveAction) {
+                            case DumeUtils.STUDENT:
+                                uri = Uri.parse("smsto:" + studentPhoneNum);
+                                break;
+                            case DumeUtils.TEACHER:
+                                uri = Uri.parse("smsto:" + mentorPhoneNum);
+                                break;
+                            case DumeUtils.BOOTCAMP:
+                                uri = Uri.parse("smsto:" + mentorPhoneNum);
+                                break;
+                        }
+                        Intent intent = new Intent(Intent.ACTION_SENDTO, uri);
+                        intent.putExtra("sms_body", "");
+                        startActivity(intent);
                     }
                 });
 
                 onlineMsgBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
+                        Intent inboxActivity = new Intent(context, InboxActivity.class);
+                        inboxActivity.setAction("from_record");
+                        startActivity(inboxActivity);
                     }
                 });
             }
