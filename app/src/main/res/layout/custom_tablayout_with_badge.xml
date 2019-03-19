@@ -26,7 +26,6 @@
             android:layout_width="wrap_content"
             android:layout_height="13dp"
             android:layout_gravity="center_horizontal"
-
             android:layout_marginStart="17dp"
             android:layout_marginLeft="17dp"
             android:adjustViewBounds="true"

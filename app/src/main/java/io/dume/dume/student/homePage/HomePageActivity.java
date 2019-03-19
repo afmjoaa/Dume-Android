@@ -217,6 +217,14 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
     private carbon.widget.LinearLayout headsUpPromoContainer;
     private TextView dumeInfo;
     private LinearLayout dumeInfoContainer;
+    private Button learnMoreBtnOne;
+    private Button startCouching;
+    private Button startTakingCouching;
+    private TextView referLearnMore;
+    private Button referMentorBtn;
+    private TextView how_invite_works;
+    private Button freeCashBack;
+    private Button startMentoringBtn;
 
 
     @Override
@@ -224,6 +232,7 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
         super.onDestroy();
 //       stopService(locationServiceIntent);
     }
+
     @Override
     public void loadHeadsUpPromo(HomePageRecyclerData promoData) {
         if (promoData.getMax_dicount_percentage() > discount) {
@@ -235,6 +244,7 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
             setHeadsUpPromo(discount.toString(), (daysLeft > 1 ? daysLeft + " days" : "less than a day"), promoData.getPackageName() == null ? "" : promoData.getPackageName());
         }
     }
+
     @Override
     public void loadPromoData(HomePageRecyclerData promoData) {
         hPageBSRcyclerAdapter.addPromoToList(promoData);
@@ -405,7 +415,91 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
         dumeInfoContainer = findViewById(R.id.dume_info_container);
 
 
+        learnMoreBtnOne = findViewById(R.id.learn_more_btn_one);
+        startCouching = findViewById(R.id.start_couching);
+        startTakingCouching = findViewById(R.id.start_taking_couching);
+        referLearnMore = findViewById(R.id.refer_learn_more_tv);
+        referMentorBtn = findViewById(R.id.refer_mentor_btn);
+        how_invite_works = findViewById(R.id.how_invite_works);
+        freeCashBack = findViewById(R.id.free_cashback_Btn);
+        startMentoringBtn = findViewById(R.id.start_learing_btn);
+        bottomSheetBtnCallback();
+    }
 
+    public void bottomSheetBtnCallback(){
+        learnMoreBtnOne.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, StudentHelpActivity.class);
+                intent.setAction("how_to_use");
+                startActivity(intent);
+            }
+        });
+        startCouching.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, StudentHelpActivity.class);
+                intent.setAction("whats_new");
+                startActivity(intent);
+            }
+        });
+        startTakingCouching.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, StudentHelpActivity.class);
+                intent.setAction("whats_new");
+                startActivity(intent);
+            }
+        });
+        referMentorBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                flush("Feature is under development...");
+            }
+        });
+        referLearnMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, StudentHelpActivity.class);
+                intent.setAction("faq");
+                startActivity(intent);
+            }
+        });
+        how_invite_works.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, StudentHelpActivity.class);
+                intent.setAction("faq");
+                startActivity(intent);
+            }
+        });
+        freeCashBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+               inviteAFriendCalled();
+            }
+        });
+        startMentoringBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                switchProfileDialog(DumeUtils.TEACHER);
+            }
+        });
+
+    }
+
+    private void inviteAFriendCalled() {
+        try {
+            Intent i = new Intent(Intent.ACTION_SEND);
+            i.setType("text/plain");
+            i.putExtra(Intent.EXTRA_TITLE, "Dume");
+            String strShareMessage = "Check out Dume, It's simple just share your skill and earn money.Get it for free from\n\n";
+            strShareMessage = strShareMessage + "https://play.google.com/store/apps/details?id=" + getPackageName();
+            i.putExtra(Intent.EXTRA_TEXT, strShareMessage);
+            startActivity(Intent.createChooser(i, "Share via"));
+        } catch (Exception e) {
+            Log.e(TAG, "inviteAFriendCalled: " + e.toString());
+        }
     }
 
     @Override
@@ -416,16 +510,14 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
         promotionExpireDate.setText(dayLeft);
     }
 
-
     @Override
     public void init() {
-        if (Google.getInstance().getTotalStudent()>0&& Google.getInstance().getTotalMentor()>0) {
+        /*if (Google.getInstance().getTotalStudent()>100&& Google.getInstance().getTotalMentor()>100) {
             dumeInfoContainer.setVisibility(View.VISIBLE);
-            dumeInfo.setText(Google.getInstance().getTotalStudent() +" students & "+Google.getInstance().getTotalMentor() +" mentors on dume network");
-
-        }else {
-            dumeInfoContainer.setVisibility(View.GONE);
-        }
+            //dumeInfo.setText(Google.getInstance().getTotalStudent() +" students & "+Google.getInstance().getTotalMentor() +" mentors on dume network");
+            dumeInfo.setText("Dume has "+Google.getInstance().getTotalStudent() +" student & "+Google.getInstance().getTotalMentor() +" mentor accros");
+        }*/
+        dumeInfoContainer.setVisibility(View.GONE);
         menu = navigationView.getMenu();
         navigationView.setNavigationItemSelectedListener(this);
         //initializing actionbar/toolbar
@@ -791,6 +883,8 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
                 //super.onBackPressed();
             }
             return true;
+        } else if (id == R.id.action_help) {
+            gotoHelpActivity();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -831,8 +925,6 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
                         public void run() {
                             bottomSheetNSV.fling(0);
                             bottomSheetNSV.smoothScrollTo(0, 0);
-                            //bottomSheetNSV.scrollTo(0, 0);
-                            //bottomSheetNSV.fling(-10000);
                         }
                     });
                     bottomSheetNSV.postDelayed(new Runnable() {

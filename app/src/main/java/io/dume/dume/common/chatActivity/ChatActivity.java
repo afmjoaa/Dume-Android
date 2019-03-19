@@ -132,12 +132,10 @@ public class ChatActivity extends DemoMessagesActivity implements ChatActivityCo
         this.messagesList = (MessagesList) findViewById(R.id.messagesList);
         this.messagesList.removeAllViews();
 
-
         initAdapter();
         if (!this.messagesAdapter.isEmpty()) {
             this.messagesAdapter.clear();
         }
-
         MessageInput input = (MessageInput) findViewById(R.id.input);
         input.setInputListener(this);
         input.setAttachmentsListener(this);

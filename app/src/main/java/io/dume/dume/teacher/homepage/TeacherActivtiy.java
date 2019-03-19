@@ -223,6 +223,14 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
     private carbon.widget.LinearLayout headerTab;
     private TextView dumeInfo;
     private LinearLayout dumeInfoContainer;
+    private Button learnMoreBtnOne;
+    private Button startCouching;
+    private Button startTakingCouching;
+    private TextView referLearnMore;
+    private Button referMentorBtn;
+    private TextView how_invite_works;
+    private Button freeCashBack;
+    private Button startMentoringBtn;
 
 
     @Override
@@ -353,6 +361,92 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         headerTab = findViewById(R.id.header_fuck);
         dumeInfo = findViewById(R.id.dume_info);
         dumeInfoContainer = findViewById(R.id.dume_info_container);
+
+        learnMoreBtnOne = findViewById(R.id.learn_more_btn_one);
+        startCouching = findViewById(R.id.start_couching);
+        startTakingCouching = findViewById(R.id.start_taking_couching);
+        referLearnMore = findViewById(R.id.refer_learn_more_tv);
+        referMentorBtn = findViewById(R.id.refer_mentor_btn);
+        how_invite_works = findViewById(R.id.how_invite_works);
+        freeCashBack = findViewById(R.id.free_cashback_Btn);
+        startMentoringBtn = findViewById(R.id.start_mentoring_btn);
+        bottomSheetBtnCallback();
+    }
+
+    public void bottomSheetBtnCallback(){
+        learnMoreBtnOne.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, StudentHelpActivity.class);
+                intent.setAction("how_to_use");
+                startActivity(intent);
+            }
+        });
+        startCouching.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, StudentHelpActivity.class);
+                intent.setAction("whats_new");
+                startActivity(intent);
+            }
+        });
+        startTakingCouching.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, StudentHelpActivity.class);
+                intent.setAction("whats_new");
+                startActivity(intent);
+            }
+        });
+        referMentorBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                flush("Feature is under development...");
+            }
+        });
+        referLearnMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, StudentHelpActivity.class);
+                intent.setAction("faq");
+                startActivity(intent);
+            }
+        });
+        how_invite_works.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, StudentHelpActivity.class);
+                intent.setAction("faq");
+                startActivity(intent);
+            }
+        });
+        freeCashBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                inviteAFriendCalled();
+            }
+        });
+        startMentoringBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                switchProfileDialog(DumeUtils.STUDENT);
+            }
+        });
+
+    }
+
+    private void inviteAFriendCalled() {
+        try {
+            Intent i = new Intent(Intent.ACTION_SEND);
+            i.setType("text/plain");
+            i.putExtra(Intent.EXTRA_TITLE, "Dume");
+            String strShareMessage = "Check out Dume, It's simple just share your skill and earn money.Get it for free from\n\n";
+            strShareMessage = strShareMessage + "https://play.google.com/store/apps/details?id=" + getPackageName();
+            i.putExtra(Intent.EXTRA_TEXT, strShareMessage);
+            startActivity(Intent.createChooser(i, "Share via"));
+        } catch (Exception e) {
+            Log.e(TAG, "inviteAFriendCalled: " + e.toString());
+        }
     }
 
     @Override
@@ -400,13 +494,11 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
 
     @Override
     public void configView() {
-        if (Google.getInstance().getTotalStudent()>0&& Google.getInstance().getTotalMentor()>0) {
+        /*if (Google.getInstance().getTotalStudent()>0&& Google.getInstance().getTotalMentor()>0) {
             dumeInfoContainer.setVisibility(View.VISIBLE);
             dumeInfo.setText(Google.getInstance().getTotalStudent() +" students & "+Google.getInstance().getTotalMentor() +" mentors on dume network");
-
-        }else {
-            dumeInfoContainer.setVisibility(View.GONE);
-        }
+        }*/
+        dumeInfoContainer.setVisibility(View.GONE);
         mentorProfile.setVisible(false);
         fab.setAlpha(0.90f);
         enamSnackbar = Snackbar.make(coordinatorLayout, "Replace with your own action", Snackbar.LENGTH_LONG);
@@ -787,7 +879,9 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
                     //super.onBackPressed();
                 }
                 break;
-
+            case R.id.action_help:
+                startActivity(new Intent(this, StudentHelpActivity.class));
+                break;
         }
         Drawable drawableGeneral = item.getIcon();
         if (drawableGeneral instanceof Animatable) {

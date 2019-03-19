@@ -4,51 +4,44 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.Typeface;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.ListPreference;
-import android.preference.Preference;
-import android.preference.PreferenceFragment;
-import android.preference.PreferenceManager;
-import android.preference.RingtonePreference;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.text.Editable;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebResourceError;
+import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.ybq.android.spinkit.sprite.Sprite;
+import com.github.ybq.android.spinkit.style.ChasingDots;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import io.dume.dume.Google;
 import io.dume.dume.R;
+import io.dume.dume.common.aboutUs.AboutUsActivity;
 import io.dume.dume.common.appInfoActivity.AppInfoActivity;
 import io.dume.dume.common.privacyPolicy.PrivacyPolicyActivity;
 import io.dume.dume.model.DumeModel;
@@ -56,9 +49,6 @@ import io.dume.dume.student.common.SettingData;
 import io.dume.dume.student.common.SettingsAdapter;
 import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
 import io.dume.dume.student.pojo.SearchDataStore;
-import io.dume.dume.student.studentSettings.SavedPlacesAdaData;
-import io.dume.dume.student.studentSettings.SavedPlacesAdapter;
-import io.dume.dume.student.studentSettings.StudentSettingsActivity;
 import io.dume.dume.teacher.homepage.TeacherContract;
 import io.dume.dume.teacher.homepage.TeacherDataStore;
 import io.dume.dume.util.AlertMsgDialogue;
@@ -75,6 +65,10 @@ public class StudentHelpActivity extends CustomStuAppCompatActivity implements S
     private RecyclerView helpRecyclerView;
     private AppBarLayout appBarLayout;
     private View helpContent;
+    private static String loadingURL;
+    private RelativeLayout loadingRl;
+    private ProgressBar progressBar;
+    private Sprite doubleBounce;
 
 
     @Override
@@ -87,33 +81,26 @@ public class StudentHelpActivity extends CustomStuAppCompatActivity implements S
         mPresenter.studentHelpEnqueue();
         configureAppbar(this, "Help");
 
+        loadingURL = "https://dume-2d063.firebaseapp.com/hows";
         //setting the recycler view
         SettingsAdapter helpAdapter = new SettingsAdapter(this, getFinalData()) {
             @Override
             protected void OnButtonClicked(View v, int position) {
                 switch (position) {
                     case 0:
-                        Toast.makeText(StudentHelpActivity.this, "Coming soon", Toast.LENGTH_SHORT).show();
+                        generalFrag(position, "https://dume-2d063.firebaseapp.com/whatsnew");
                         break;
-
                     case 1:
                         String url = "https://dume-2d063.firebaseapp.com/home";
                         Intent i = new Intent(Intent.ACTION_VIEW);
                         i.setData(Uri.parse(url));
                         startActivity(i);
                         break;
-
                     case 2:
-                        helpContent.setVisibility(View.GONE);
-                        configAppbarTittle(StudentHelpActivity.this, helpNameArr[position]);
-                        appBarLayout.setExpanded(false);
-                        getFragmentManager().beginTransaction().replace(R.id.content, new HowToUseFragment()).commit();
+                        generalFrag(position, "https://dume-2d063.firebaseapp.com/hows");
                         break;
                     case 3:
-                        helpContent.setVisibility(View.GONE);
-                        configAppbarTittle(StudentHelpActivity.this, helpNameArr[position]);
-                        appBarLayout.setExpanded(false);
-                        getSupportFragmentManager().beginTransaction().replace(R.id.content, new FAQFragment()).commit();
+                        faqFrag(position);
                         break;
                     case 4:
                         helpContent.setVisibility(View.GONE);
@@ -137,7 +124,34 @@ public class StudentHelpActivity extends CustomStuAppCompatActivity implements S
         helpRecyclerView.setAdapter(helpAdapter);
         helpRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        String action = getIntent().getAction();
+        if(action!=null){
+            if(action.equals("how_to_use")){
+                generalFrag(2, "https://dume-2d063.firebaseapp.com/hows");
+            } else if (action.equals("whats_new")) {
+                generalFrag(0, "https://dume-2d063.firebaseapp.com/whatsnew");
+            } else if (action.equals("faq")) {
+                faqFrag(3);
+            }
+        }
 
+    }
+
+    private void faqFrag(int position) {
+        helpContent.setVisibility(View.GONE);
+        configAppbarTittle(StudentHelpActivity.this, helpNameArr[position]);
+        appBarLayout.setExpanded(false);
+        showProgress();
+        getSupportFragmentManager().beginTransaction().replace(R.id.content, new FAQFragment()).commit();
+    }
+
+    private void generalFrag(int title, String s) {
+        helpContent.setVisibility(View.GONE);
+        configAppbarTittle(StudentHelpActivity.this, helpNameArr[title]);
+        appBarLayout.setExpanded(false);
+        showProgress();
+        loadingURL = s;
+        getSupportFragmentManager().beginTransaction().replace(R.id.content, new GeneralUrlLoaderFrag()).commit();
     }
 
     private void updateAppCalled() {
@@ -161,7 +175,11 @@ public class StudentHelpActivity extends CustomStuAppCompatActivity implements S
         helpRecyclerView = findViewById(R.id.help_recycler);
         appBarLayout = findViewById(R.id.app_bar);
         helpContent = findViewById(R.id.help_content);
-
+        loadingRl = findViewById(R.id.loadingPanel);
+        progressBar = findViewById(R.id.progress_bar);
+        doubleBounce = new ChasingDots();
+        doubleBounce.setColor(getResources().getColor(R.color.inbox_active_color));
+        progressBar.setIndeterminateDrawable(doubleBounce);
     }
 
     @Override
@@ -209,7 +227,6 @@ public class StudentHelpActivity extends CustomStuAppCompatActivity implements S
         }
         return data;
     }
-
 
 
     //testing the contact up
@@ -323,6 +340,8 @@ public class StudentHelpActivity extends CustomStuAppCompatActivity implements S
 
         private StudentHelpActivity myMainActivity;
         private WebView webView;
+        private Context context;
+        private StudentHelpActivity activity;
 
         @Override
         public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -336,7 +355,29 @@ public class StudentHelpActivity extends CustomStuAppCompatActivity implements S
             myMainActivity = (StudentHelpActivity) getActivity();
             View rootView = inflater.inflate(R.layout.custom_faq_fragment, container, false);
             webView = rootView.findViewById(R.id.activity_main_webview);
-            webView.setWebViewClient(new WebViewClient());
+            webView.setWebViewClient(new WebViewClient() {
+                @Override
+                public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                    super.onPageStarted(view, url, favicon);
+                    activity.showProgress();
+                    activity.progressBar.setVisibility(View.VISIBLE);
+                    activity.loadingRl.setVisibility(View.VISIBLE);
+                }
+
+                @Override
+                public void onPageFinished(WebView view, String url) {
+                    super.onPageFinished(view, url);
+                    activity.hideProgress();
+                    activity.progressBar.setVisibility(View.GONE);
+                    activity.loadingRl.setVisibility(View.GONE);
+                }
+
+                @Override
+                public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
+                    super.onReceivedError(view, request, error);
+                    Toast.makeText(getContext(), "Network Error", Toast.LENGTH_SHORT).show();
+                }
+            });
             webView.loadUrl("https://dume-2d063.firebaseapp.com/faq");
             WebSettings webSettings = webView.getSettings();
             webSettings.setJavaScriptEnabled(true);
@@ -357,12 +398,17 @@ public class StudentHelpActivity extends CustomStuAppCompatActivity implements S
             return super.onOptionsItemSelected(item);
         }
 
-
+        @Override
+        public void onAttach(Context context) {
+            super.onAttach(context);
+            this.context = context;
+            this.activity = (StudentHelpActivity) context;
+        }
     }
 
-    public static class HowToUseFragment extends android.app.Fragment {
+    public static class GeneralUrlLoaderFrag extends Fragment {
         private Context context;
-
+        private StudentHelpActivity activity;
         private StudentHelpActivity myMainActivity;
         private WebView webView;
 
@@ -379,7 +425,31 @@ public class StudentHelpActivity extends CustomStuAppCompatActivity implements S
             View rootView = inflater.inflate(R.layout.custom_faq_fragment, container, false);
             webView = rootView.findViewById(R.id.activity_main_webview);
             webView.setWebViewClient(new WebViewClient());
-            webView.loadUrl("https://dume-2d063.firebaseapp.com/hows");
+            webView.setWebViewClient(new WebViewClient() {
+                @Override
+                public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                    super.onPageStarted(view, url, favicon);
+                    activity.showProgress();
+                    activity.progressBar.setVisibility(View.VISIBLE);
+                    activity.loadingRl.setVisibility(View.VISIBLE);
+                }
+
+                @Override
+                public void onPageFinished(WebView view, String url) {
+                    super.onPageFinished(view, url);
+                    activity.hideProgress();
+                    activity.progressBar.setVisibility(View.GONE);
+                    activity.loadingRl.setVisibility(View.GONE);
+
+                }
+
+                @Override
+                public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
+                    super.onReceivedError(view, request, error);
+                    Toast.makeText(getContext(), "Network Error", Toast.LENGTH_SHORT).show();
+                }
+            });
+            webView.loadUrl(loadingURL);
             WebSettings webSettings = webView.getSettings();
             webSettings.setJavaScriptEnabled(true);
             return rootView;
@@ -402,7 +472,9 @@ public class StudentHelpActivity extends CustomStuAppCompatActivity implements S
         @Override
         public void onAttach(Context context) {
             this.context = context;
+            this.activity = (StudentHelpActivity) context;
             super.onAttach(context);
         }
     }
+
 }

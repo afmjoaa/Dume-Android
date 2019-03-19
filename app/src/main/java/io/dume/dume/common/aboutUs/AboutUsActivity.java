@@ -19,7 +19,12 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import com.github.ybq.android.spinkit.sprite.Sprite;
+import com.github.ybq.android.spinkit.style.ChasingDots;
+import com.github.ybq.android.spinkit.style.DoubleBounce;
 
 import io.dume.dume.R;
 import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
@@ -32,7 +37,8 @@ public class AboutUsActivity extends CustomStuAppCompatActivity implements About
     private static final String TAG = "AboutUsActivity";
     private static final int fromFlag = 13;
     private WebView aboutView;
-
+    private ProgressBar progressBar;
+    private Sprite doubleBounce;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,29 +55,15 @@ public class AboutUsActivity extends CustomStuAppCompatActivity implements About
     @Override
     public void findView() {
         aboutView = findViewById(R.id.aboutWebView);
+        progressBar = findViewById(R.id.progress_bar);
+        doubleBounce = new ChasingDots();
+        doubleBounce.setColor(getResources().getColor(R.color.inbox_active_color));
+        progressBar.setIndeterminateDrawable(doubleBounce);
+    }
+
+    @Override
+    public void initAboutUs() {
         aboutView.getSettings().setJavaScriptEnabled(true);
-        aboutView.setWebViewClient(new WebViewClient() {
-            @Override
-            public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                super.onPageStarted(view, url, favicon);
-            }
-
-            @Override
-            public void onPageFinished(WebView view, String url) {
-                super.onPageFinished(view, url);
-
-                Log.w(TAG, "onPageFinished: ");
-
-
-            }
-
-
-            @Nullable
-            @Override
-            public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
-                return super.shouldInterceptRequest(view, request);
-            }
-        });
         aboutView.setWebChromeClient(new WebChromeClient() {
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
@@ -91,6 +83,8 @@ public class AboutUsActivity extends CustomStuAppCompatActivity implements About
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
                 hideProgress();
+                progressBar.setVisibility(View.GONE);
+                aboutView.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -100,11 +94,6 @@ public class AboutUsActivity extends CustomStuAppCompatActivity implements About
             }
         });
         aboutView.loadUrl("https://dume-2d063.firebaseapp.com/about");
-    }
-
-    @Override
-    public void initAboutUs() {
-
     }
 
     @Override

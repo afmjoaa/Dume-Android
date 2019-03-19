@@ -65,4 +65,19 @@
 
     <include layout="@layout/common2_content_about_us" />
 
+    <RelativeLayout
+        android:id="@+id/loadingPanel"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:visibility="visible">
+
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            android:indeterminate="true"
+            android:padding="2dp" />
+    </RelativeLayout>
+
 </android.support.design.widget.CoordinatorLayout>

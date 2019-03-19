@@ -344,7 +344,7 @@
                         android:background="#3ca7a7a7" />
 
                     <Button
-                        android:id="@+id/loading_cancel_btn"
+                        android:id="@+id/learn_more_btn_one"
                         style="@style/Base.Widget.AppCompat.Button.Borderless"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -446,6 +446,7 @@
                         android:background="#3ca7a7a7" />
 
                     <Button
+                        android:id="@+id/start_couching"
                         style="@style/Base.Widget.AppCompat.Button.Borderless"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -461,6 +462,7 @@
                         android:background="#3ca7a7a7" />
 
                     <Button
+                        android:id="@+id/start_taking_couching"
                         style="@style/Base.Widget.AppCompat.Button.Borderless"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -510,6 +512,7 @@
                             app:fontFamily="@font/cairo_regular" />
 
                         <TextView
+                            android:id="@+id/refer_learn_more_tv"
                             android:layout_width="160dp"
                             android:layout_height="wrap_content"
                             android:layout_below="@+id/refer_mentor_intro"
@@ -552,6 +555,7 @@
                         android:background="#3ca7a7a7" />
 
                     <Button
+                        android:id="@+id/refer_mentor_btn"
                         style="@style/Base.Widget.AppCompat.Button.Borderless"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -607,6 +611,7 @@
                             app:fontFamily="@font/cairo_regular" />
 
                         <TextView
+                            android:id="@+id/how_invite_works"
                             android:layout_width="160dp"
                             android:layout_height="wrap_content"
                             android:layout_below="@+id/free_cashback_intro"
@@ -649,6 +654,7 @@
                         android:background="#3ca7a7a7" />
 
                     <Button
+                        android:id="@+id/free_cashback_Btn"
                         style="@style/Base.Widget.AppCompat.Button.Borderless"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -723,6 +729,7 @@
                         android:background="#3ca7a7a7" />
 
                     <Button
+                        android:id="@+id/start_learing_btn"
                         style="@style/Base.Widget.AppCompat.Button.Borderless"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

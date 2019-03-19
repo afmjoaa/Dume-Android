@@ -11,6 +11,7 @@
     <WebView
         android:id="@+id/aboutWebView"
         android:layout_width="match_parent"
+        android:visibility="invisible"
         android:layout_height="match_parent" />
 
 </android.support.v4.widget.NestedScrollView>
