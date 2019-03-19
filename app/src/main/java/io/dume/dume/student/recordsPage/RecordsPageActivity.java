@@ -171,12 +171,12 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(mSectionsPagerAdapter);
         recordListMain = Google.getInstance().getRecordList();
-        if (recordListMain.size() > 0) {
+        /*if (recordListMain.size() > 0) {
             noDataBlockMain.setVisibility(View.GONE);
         } else {
             noDataBlockMain.bringToFront();
             noDataBlockMain.setVisibility(View.VISIBLE);
-        }
+        }*/
         List<Record> recordDataPending = DumeUtils.filterRecord(recordListMain, "Pending");
         List<Record> recordDataAccepted = DumeUtils.filterRecord(recordListMain, "Accepted");
         List<Record> recordDataCurrent = DumeUtils.filterRecord(recordListMain, "Current");

@@ -103,31 +103,31 @@ public class StudentHelpActivity extends CustomStuAppCompatActivity implements S
                         startActivity(i);
                         break;
 
-                    case 1+1:
+                    case 2:
                         helpContent.setVisibility(View.GONE);
                         configAppbarTittle(StudentHelpActivity.this, helpNameArr[position]);
                         appBarLayout.setExpanded(false);
                         getFragmentManager().beginTransaction().replace(R.id.content, new HowToUseFragment()).commit();
                         break;
-                    case 2+1:
+                    case 3:
                         helpContent.setVisibility(View.GONE);
                         configAppbarTittle(StudentHelpActivity.this, helpNameArr[position]);
                         appBarLayout.setExpanded(false);
                         getSupportFragmentManager().beginTransaction().replace(R.id.content, new FAQFragment()).commit();
                         break;
-                    case 3+1:
+                    case 4:
                         helpContent.setVisibility(View.GONE);
                         configAppbarTittle(StudentHelpActivity.this, helpNameArr[position]);
                         appBarLayout.setExpanded(false);
                         getSupportFragmentManager().beginTransaction().replace(R.id.content, new ContactUsFragment()).commit();
                         break;
-                    case 4+1:
+                    case 5:
                         updateAppCalled();
                         break;
-                    case 5+1:
+                    case 6:
                         startActivity(new Intent(StudentHelpActivity.this, PrivacyPolicyActivity.class).setAction("fromHelp"));
                         break;
-                    case 6+1:
+                    case 7:
                         startActivity(new Intent(StudentHelpActivity.this, AppInfoActivity.class).setAction("fromHelp"));
                         break;
                 }
@@ -192,7 +192,7 @@ public class StudentHelpActivity extends CustomStuAppCompatActivity implements S
         List<SettingData> data = new ArrayList<>();
         int[] imageIcons = {
                 R.drawable.ic_help_whats_new,
-                R.drawable.ic_help_feature,
+                R.drawable.ic_dume_web,
                 R.drawable.ic_help_feature,
                 R.drawable.ic_help_faq,
                 R.drawable.ic_help_contact_us,

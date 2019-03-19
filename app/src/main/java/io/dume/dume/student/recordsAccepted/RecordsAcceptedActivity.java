@@ -78,6 +78,8 @@ import java.util.stream.Collectors;
 import carbon.widget.ImageView;
 import io.dume.dume.Google;
 import io.dume.dume.R;
+import io.dume.dume.common.contactActivity.ContactActivity;
+import io.dume.dume.common.inboxActivity.InboxActivity;
 import io.dume.dume.model.DumeModel;
 import io.dume.dume.student.common.QualificationAdapter;
 import io.dume.dume.student.common.QualificationData;
@@ -87,6 +89,7 @@ import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
 import io.dume.dume.student.pojo.SearchDataStore;
 import io.dume.dume.student.recordsPage.Record;
 import io.dume.dume.student.recordsPending.RecordsPendingActivity;
+import io.dume.dume.student.recordsRejected.RecordsRejectedActivity;
 import io.dume.dume.teacher.homepage.TeacherContract;
 import io.dume.dume.teacher.pojo.Academic;
 import io.dume.dume.util.DumeUtils;
@@ -286,6 +289,7 @@ public class RecordsAcceptedActivity extends CustomStuAppCompatActivity implemen
         private TextView addressTV;
         private static List<DocumentSnapshot> recordList;
         private int fragmentPosition;
+        private float mentorRating;
 
 
         public PlaceholderFragment() {
@@ -438,7 +442,6 @@ public class RecordsAcceptedActivity extends CustomStuAppCompatActivity implemen
             String mentorDpUrl;
             String studentDpUrl, sGender, mGender;
             float studentRating;
-            float mentorRating;
             String status;
             int deliveryStatus;
             Map<String, Object> documentData = selectedMentor.getData();
@@ -794,6 +797,9 @@ public class RecordsAcceptedActivity extends CustomStuAppCompatActivity implemen
             Map<String, Object> forMap = (Map<String, Object>) documentData.get("for_whom");
             String mentorName = spMap.get("first_name") + " " + spMap.get("last_name");
             String studentName = (String) forMap.get("stu_name");
+            String studentPhoneNum = (String) forMap.get("stu_phone_number");
+            String mentorPhoneNum = (String) spMap.get("phone_number");
+            float reducedMentorRating= mentorRating- 0.04f;
 
             //cancel bottom sheet
             mBottomSheetReject = new BottomSheetDialog(context);
@@ -804,21 +810,52 @@ public class RecordsAcceptedActivity extends CustomStuAppCompatActivity implemen
             rejectYesBtn = mBottomSheetReject.findViewById(R.id.cancel_yes_btn);
             rejectNoBtn = mBottomSheetReject.findViewById(R.id.cancel_no_btn);
             if (rejectMainText != null && rejectSubText != null && rejectYesBtn != null && rejectNoBtn != null) {
-                rejectMainText.setText("Reject Request");
-                rejectSubText.setText("By Rejecting you are making sure you are not willing to mentor " + studentName);
-                rejectYesBtn.setText("Yes, Reject");
+                rejectMainText.setText("Cancel Request");
+                rejectSubText.setTextColor(context.getResources().getColor(R.color.dark_light_red));
+                rejectSubText.setText("Dear " + mentorName + " if you cancel now BDT 100 will be applied as penalty which you have to pay to Dume authority & your rating will be deducted by 0.04 as well...");
+                rejectYesBtn.setText("Yes, Cancel");
                 rejectNoBtn.setText("No");
                 rejectYesBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        mBottomSheetReject.dismiss();
                         myThisActivity.showProgress();
                         acceptContactBtn.setEnabled(false);
                         cancelRequestBtn.setEnabled(false);
-                        myThisActivity.mModel.changeRecordStatus(record, "Rejected", null,new TeacherContract.Model.Listener<Void>() {
+                        myThisActivity.mModel.changeRecordStatus(record, "Rejected",  myThisActivity.retriveAction,new TeacherContract.Model.Listener<Void>() {
                             @Override
                             public void onSuccess(Void list) {
-                                myThisActivity.hideProgress();
                                 Toast.makeText(myThisActivity, "Status Changed To Rejected", Toast.LENGTH_SHORT).show();
+                                Intent intentMain = new Intent(context, RecordsRejectedActivity.class).setAction(DumeUtils.TEACHER);
+                                intentMain.putExtra("recordId", record.getId());
+
+                                myThisActivity.mModel.getRecords(new TeacherContract.Model.Listener<List<Record>>() {
+                                    @Override
+                                    public void onSuccess(List<Record> list) {
+                                        myThisActivity.mModel.setPenalty(myThisActivity.retriveAction, 100, true, reducedMentorRating+ "", new TeacherContract.Model.Listener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void avoid) {
+                                                Google.getInstance().setRecordList(list);
+                                                searchDataStore.setRecordStatusChanged(true);
+                                                searchDataStore.setFromPACCR(4);
+                                                startActivity(intentMain);
+                                                myThisActivity.finish();
+                                                myThisActivity.hideProgress();
+                                            }
+
+                                            @Override
+                                            public void onError(String msg) {
+                                                Toast.makeText(myThisActivity, msg, Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                                    }
+
+                                    @Override
+                                    public void onError(String msg) {
+                                        Toast.makeText(myThisActivity, msg, Toast.LENGTH_SHORT).show();
+                                        myThisActivity.hideProgress();
+                                    }
+                                });
                             }
 
                             @Override
@@ -853,21 +890,52 @@ public class RecordsAcceptedActivity extends CustomStuAppCompatActivity implemen
                 callBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
+                        mBottomSheetContactDialog.dismiss();
+                        Uri u = Uri.parse("tel:" + studentPhoneNum);
+                        switch (myThisActivity.retriveAction) {
+                            case DumeUtils.STUDENT:
+                                u = Uri.parse("tel:" + studentPhoneNum);
+                                break;
+                            case DumeUtils.TEACHER:
+                                u = Uri.parse("tel:" + mentorPhoneNum);
+                                break;
+                            case DumeUtils.BOOTCAMP:
+                                u = Uri.parse("tel:" + mentorPhoneNum);
+                                break;
+                        }
+                        Intent i = new Intent(Intent.ACTION_DIAL, u);
+                        context.startActivity(i);
                     }
                 });
 
                 offlineMsgBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
+                        mBottomSheetContactDialog.dismiss();
+                        Uri uri = Uri.parse("smsto:" + studentPhoneNum);
+                        switch (myThisActivity.retriveAction) {
+                            case DumeUtils.STUDENT:
+                                uri = Uri.parse("smsto:" + studentPhoneNum);
+                                break;
+                            case DumeUtils.TEACHER:
+                                uri = Uri.parse("smsto:" + mentorPhoneNum);
+                                break;
+                            case DumeUtils.BOOTCAMP:
+                                uri = Uri.parse("smsto:" + mentorPhoneNum);
+                                break;
+                        }
+                        Intent intent = new Intent(Intent.ACTION_SENDTO, uri);
+                        intent.putExtra("sms_body", "");
+                        startActivity(intent);
                     }
                 });
 
                 onlineMsgBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
+                        Intent inboxActivity = new Intent(context, InboxActivity.class);
+                        inboxActivity.setAction("from_record");
+                        startActivity(inboxActivity);
                     }
                 });
             }

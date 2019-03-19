@@ -18,6 +18,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.Pair;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -93,6 +94,7 @@ public class InboxActivity extends CustomStuAppCompatActivity implements InboxAc
 
         // Set up the ViewPager with the sections adapter.
         mViewPager.setAdapter(mSectionsPagerAdapter);
+        mViewPager.setOffscreenPageLimit(4);
         //making the custom tab here
         int[] wh = DumeUtils.getScreenSize(this);
         int tabMinWidth = ((wh[0] / 3) - (int) (24 * (getResources().getDisplayMetrics().density)));
@@ -150,11 +152,17 @@ public class InboxActivity extends CustomStuAppCompatActivity implements InboxAc
             TabLayout.Tab tab = tabLayout.getTabAt(tabToOpen);
             Objects.requireNonNull(tab).select();
         }
-
+        String retrieveAction = notiIntent.getAction();
+        if (retrieveAction != null && retrieveAction.equals("from_record")) {
+            flush("Press the bottom right corner floating btn to add participants..");
+        }
     }
 
     public void flush(String msg) {
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+        Toast toast = Toast.makeText(this, msg, Toast.LENGTH_SHORT);
+        TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
+        if( v != null) v.setGravity(Gravity.CENTER);
+        toast.show();
     }
 
     @Override
