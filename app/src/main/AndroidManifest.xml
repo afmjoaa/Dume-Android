@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="io.dume.dume">
-
     <!-- when a object needs internet to execute a job -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-    <!-- if any object needs to read local storage -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" /> <!-- if any object needs to read local storage -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
@@ -35,11 +33,9 @@
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/ic_notification_launcher" />
-        <meta-data android:name="com.google.firebase.messaging.default_notification_color"
-            android:resource="@color/inbox_active_color" />
-
-        <!-- google map api metadata -->
-
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/inbox_active_color" /> <!-- google map api metadata -->
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
@@ -53,9 +49,7 @@
         -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_maps_key" />
-        <!-- google map api metadata finishes here -->
-
+            android:value="@string/google_maps_key" /> <!-- google map api metadata finishes here -->
         <activity
             android:name=".teacher.homepage.TeacherActivtiy"
             android:label=""
@@ -85,9 +79,7 @@
         <activity
             android:name=".auth.social_init.SocialInitActivity"
             android:label="@string/title_activity_social_init"
-            android:theme="@style/MyStyle" />
-
-        <!-- facebook fucking metadata -->
+            android:theme="@style/MyStyle" /> <!-- facebook fucking metadata -->
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
@@ -107,13 +99,12 @@
 
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
-        </activity>
-        <!-- facebook finishes here -->
+        </activity> <!-- facebook finishes here -->
         <activity
             android:name=".student.homePage.HomePageActivity"
             android:label=""
-            android:windowSoftInputMode="adjustResize"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".student.homePage.MapsActivity"
             android:label="@string/title_activity_maps" />
@@ -286,7 +277,5 @@
             android:label="@string/title_activity_student_addvertise"
             android:theme="@style/AppTheme.NoActionBar.transparent.black" />
     </application>
-
-
 
 </manifest>

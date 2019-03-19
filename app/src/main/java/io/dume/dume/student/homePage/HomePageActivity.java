@@ -215,6 +215,8 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
     private TextView promotionExpireDate;
     private Integer discount = 0;
     private carbon.widget.LinearLayout headsUpPromoContainer;
+    private TextView dumeInfo;
+    private LinearLayout dumeInfoContainer;
 
 
     @Override
@@ -399,6 +401,10 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
         promotionTV = findViewById(R.id.promotion_text);
         promotionExpireDate = findViewById(R.id.promotion_validity_text);
         headsUpPromoContainer = findViewById(R.id.percent_off_block);
+        dumeInfo = findViewById(R.id.dume_info);
+        dumeInfoContainer = findViewById(R.id.dume_info_container);
+
+
 
     }
 
@@ -413,6 +419,13 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
 
     @Override
     public void init() {
+        if (Google.getInstance().getTotalStudent()>0&& Google.getInstance().getTotalMentor()>0) {
+            dumeInfoContainer.setVisibility(View.VISIBLE);
+            dumeInfo.setText(Google.getInstance().getTotalStudent() +" students & "+Google.getInstance().getTotalMentor() +" mentors on dume network");
+
+        }else {
+            dumeInfoContainer.setVisibility(View.GONE);
+        }
         menu = navigationView.getMenu();
         navigationView.setNavigationItemSelectedListener(this);
         //initializing actionbar/toolbar

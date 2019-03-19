@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.FirebaseTooManyRequestsException;
@@ -23,6 +24,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.Source;
 import com.google.firebase.internal.api.FirebaseNoSignedInUserException;
 
 import java.util.HashMap;
@@ -32,9 +34,11 @@ import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Nullable;
 
+import io.dume.dume.BuildConfig;
 import io.dume.dume.Google;
 import io.dume.dume.auth.auth.AuthContract;
 import io.dume.dume.auth.code_verification.PhoneVerificationContract;
+import io.dume.dume.splash.SplashActivity;
 import io.dume.dume.splash.SplashContract;
 import io.dume.dume.teacher.homepage.TeacherContract;
 import io.dume.dume.util.DumeUtils;
@@ -60,8 +64,8 @@ public class AuthModel implements AuthContract.Model, SplashContract.Model, Phon
         /*if (mIntent.getSerializableExtra("datastore") != null) {
             datastore = (DataStore) mIntent.getSerializableExtra("datastore");
         } else {*/
-            datastore = DataStore.getInstance();
-      /*  }*/
+        datastore = DataStore.getInstance();
+        /*  }*/
         firestore = FirebaseFirestore.getInstance();
         /*FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
                 .setTimestampsInSnapshotsEnabled(true)
@@ -358,4 +362,27 @@ public class AuthModel implements AuthContract.Model, SplashContract.Model, Phon
     }
 
 
+    @Override
+    public void hasUpdate(TeacherContract.Model.Listener<Boolean> listener) {
+        firestore.collection("app").document("dume_utils").get(Source.DEFAULT).addOnSuccessListener(documentSnapshot -> {
+            Log.w(TAG, "hasUpdate: ");
+            Number currentVersion = (Number) documentSnapshot.get("version_code");
+            String updateVersionName = (String) documentSnapshot.get("version_name");
+            String updateDescription = (String) documentSnapshot.get("version_description");
+            Number totalStudent = (Number) documentSnapshot.get("total_students");
+            Number totalMentors = (Number) documentSnapshot.get("total_mentors");
+            Google.getInstance().setTotalStudent(totalStudent == null ? 0 : totalStudent.intValue());
+            Google.getInstance().setTotalMentor(totalMentors == null ? 0 : totalMentors.intValue());
+            if (currentVersion != null) {
+                if (currentVersion.intValue() > BuildConfig.VERSION_CODE) {
+                    SplashActivity.updateVersionName = updateVersionName;
+                    SplashActivity.updateDescription = updateDescription;
+                    listener.onSuccess(true);
+                } else {
+                    listener.onSuccess(false);
+                }
+            } else listener.onSuccess(false);
+
+        }).addOnFailureListener(e -> listener.onError(e.getLocalizedMessage()));
+    }
 }

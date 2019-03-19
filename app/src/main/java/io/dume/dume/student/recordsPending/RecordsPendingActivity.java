@@ -704,7 +704,7 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
                         rejectBTN.setEnabled(false);
                         acceptBTN.setEnabled(false);
                         myThisActivity.showProgress();
-                        myThisActivity.mModel.changeRecordStatus(record.getId(), "Accepted", null, new TeacherContract.Model.Listener<Void>() {
+                        myThisActivity.mModel.changeRecordStatus(record, "Accepted", null, new TeacherContract.Model.Listener<Void>() {
                             @Override
                             public void onSuccess(Void list) {
                                 Toast.makeText(myThisActivity, "Status Changed To Accepted", Toast.LENGTH_SHORT).show();
@@ -767,7 +767,7 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
                         myThisActivity.showProgress();
                         rejectBTN.setEnabled(false);
                         acceptBTN.setEnabled(false);
-                        myThisActivity.mModel.changeRecordStatus(record.getId(), "Rejected", myThisActivity.retriveAction, new TeacherContract.Model.Listener<Void>() {
+                        myThisActivity.mModel.changeRecordStatus(record, "Rejected", myThisActivity.retriveAction, new TeacherContract.Model.Listener<Void>() {
                             @Override
                             public void onSuccess(Void list) {
                                 Toast.makeText(myThisActivity, "Status Changed To Rejected", Toast.LENGTH_SHORT).show();

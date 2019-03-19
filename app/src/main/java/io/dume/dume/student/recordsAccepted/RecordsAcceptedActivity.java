@@ -822,7 +822,7 @@ public class RecordsAcceptedActivity extends CustomStuAppCompatActivity implemen
                         myThisActivity.showProgress();
                         acceptContactBtn.setEnabled(false);
                         cancelRequestBtn.setEnabled(false);
-                        myThisActivity.mModel.changeRecordStatus(record.getId(), "Rejected",  myThisActivity.retriveAction,new TeacherContract.Model.Listener<Void>() {
+                        myThisActivity.mModel.changeRecordStatus(record, "Rejected",  myThisActivity.retriveAction,new TeacherContract.Model.Listener<Void>() {
                             @Override
                             public void onSuccess(Void list) {
                                 Toast.makeText(myThisActivity, "Status Changed To Rejected", Toast.LENGTH_SHORT).show();

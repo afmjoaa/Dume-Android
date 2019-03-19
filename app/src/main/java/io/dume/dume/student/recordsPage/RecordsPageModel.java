@@ -11,11 +11,15 @@ import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.WriteBatch;
+import com.google.firebase.firestore.model.value.ServerTimestampValue;
+import com.google.firestore.v1beta1.DocumentTransform;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -129,32 +133,52 @@ public class RecordsPageModel implements RecordsPageContract.Model {
     }
 
     @Override
-    public void changeRecordStatus(String recordId, String status, String rejectedBy, TeacherContract.Model.Listener<Void> listener) {
+    public void changeRecordStatus(DocumentSnapshot record, String status, String rejectedBy, TeacherContract.Model.Listener<Void> listener) {
         if (!status.equals("Rejected")) {
-            firestore.document("records/" + recordId).update("record_status", status).addOnSuccessListener((Activity) context, new OnSuccessListener<Void>() {
+            firestore.document("records/" + record.getId()).update("record_status", status).addOnSuccessListener((Activity) context, new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
+                    WriteBatch batch = firestore.batch();
+                    if (Google.getInstance().getAccountMajor().equals(DumeUtils.TEACHER)) {
+                        if (status.equals("Accepted") || status.equals("Rejected")) {
+                            Date requestTime = (Date) record.get("creation");
+                            long currentResponseTime = new Date().getTime() - requestTime.getTime();
+                            Map<String, Object> documentSnapshot = TeacherDataStore.getInstance().getDocumentSnapshot();
+                            Map<String, Object> selfRating = (Map<String, Object>) documentSnapshot.get("self_rating");
+                            Map<String, Object> unreadRecords = (Map<String, Object>) documentSnapshot.get("unread_records");
+                            String response = (String) selfRating.get("response_time");
+                            String accepted = (String) unreadRecords.get("accepted_count");
+                            String rejected = (String) unreadRecords.get("rejected_count");
+                            int responseTime = Integer.parseInt(response == null ? "0" : response);
+                            int acceptedCount = Integer.parseInt(accepted == null ? "0" : accepted);
+                            int rejectedCount = Integer.parseInt(rejected == null ? "0" : rejected);
+                            if (status.equals("Accepted")) {
+                                acceptedCount++;
+                            } else {
+                                rejectedCount++;
+                            }
+                            int foo = (int) (currentResponseTime / (1000 * 60 * 60));
+                            int finalResponseTime = (responseTime + foo) / (acceptedCount + rejectedCount);
+                            DocumentReference document = firestore.document("users/mentors/mentor_profile/" + FirebaseAuth.getInstance().getUid());
+                            batch.update(document, "self_rating.response_time", String.valueOf(finalResponseTime));
+                        }
+                    }
+                    batch.commit();
                     listener.onSuccess(aVoid);
+
+
                 }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    listener.onError(e.getLocalizedMessage());
-                }
-            });
+            }).addOnFailureListener(e -> listener.onError(e.getLocalizedMessage()));
         } else {
-            firestore.document("records/" + recordId).update("record_status", status, "rejected_by", rejectedBy).addOnSuccessListener((Activity) context, new OnSuccessListener<Void>() {
+            firestore.document("records/" + record.getId()).update("record_status", status, "rejected_by", rejectedBy).addOnSuccessListener((Activity) context, new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
                     listener.onSuccess(aVoid);
                 }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    listener.onError(e.getLocalizedMessage());
-                }
-            });
+            }).addOnFailureListener(e -> listener.onError(e.getLocalizedMessage()));
         }
+
+
     }
 
     @Override

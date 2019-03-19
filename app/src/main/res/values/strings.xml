@@ -495,7 +495,8 @@
 
     <string-array name="helpHeader">
         <item>What\'s new</item>
-        <item>Features</item>
+        <item>Dume Website</item>
+        <item>How to Use</item>
         <item>FAQ</item>
         <item>Contact us</item>
         <item>Check for update</item>
