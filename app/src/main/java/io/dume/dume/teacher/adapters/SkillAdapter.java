@@ -2,7 +2,6 @@ package io.dume.dume.teacher.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Animatable2;
@@ -12,7 +11,6 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.v4.view.animation.FastOutLinearInInterpolator;
 import android.support.v4.view.animation.LinearOutSlowInInterpolator;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
@@ -30,7 +28,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.firestore.DocumentReference;
 import com.transitionseverywhere.Fade;
 import com.transitionseverywhere.Slide;
 import com.transitionseverywhere.Transition;
@@ -40,7 +37,6 @@ import com.transitionseverywhere.TransitionSet;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -52,13 +48,12 @@ import io.dume.dume.R;
 import io.dume.dume.model.DumeModel;
 import io.dume.dume.student.common.ReviewAdapter;
 import io.dume.dume.student.common.ReviewHighlightData;
-import io.dume.dume.student.homePage.HomePageActivity;
-import io.dume.dume.student.searchResult.SearchResultActivity;
 import io.dume.dume.teacher.homepage.TeacherContract;
 import io.dume.dume.teacher.model.KeyMap;
 import io.dume.dume.teacher.model.LocalDb;
 import io.dume.dume.teacher.pojo.Skill;
 import io.dume.dume.teacher.skill.SkillActivity;
+import io.dume.dume.util.DumeUtils;
 import io.dume.dume.util.VisibleToggleClickListener;
 
 import static io.dume.dume.util.DumeUtils.getLast;
@@ -67,7 +62,7 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public static int FRAGMENT = 1;
     public static int ACTIVITY = 2;
     private int itemWidth;
-    private ArrayList<String> endOfNest = null;
+    private List<String> endOfNest = null;
     private int layoutSize;
     private ArrayList<Skill> skillList;
     private View inflate;
@@ -85,8 +80,7 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private Button backYesBtn;
     private Button backNoBtn;
     private String[] splitMainSsss;
-    private Integer likes = 0;
-    private Integer dislikes = 0;
+
 
 
     @Override
@@ -98,7 +92,7 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         this.skillList = new ArrayList<>();
         this.layoutSize = layoutSize;
         localDb = new LocalDb();
-        endOfNest = new ArrayList<>(Arrays.asList("Subject", "Field", "Software", "Language", "Flavour", "Type", "Course", " Language "));
+        endOfNest = DumeUtils.getEndOFNest();
         iconList = new HashMap<>();
         iconList.put(localDb.getCategories().get(0), R.drawable.education);
         iconList.put(localDb.getCategories().get(0 + 1), R.drawable.software);
@@ -115,7 +109,7 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         this.layoutSize = layoutSize;
         this.skillList = skillList;
         localDb = new LocalDb();
-        endOfNest = new ArrayList<>(Arrays.asList("Subject", "Field", "Software", "Language", "Flavour", "Type", "Course", " Language "));
+        endOfNest = DumeUtils.getEndOFNest();
         iconList = new HashMap<>();
         iconList.put(localDb.getCategories().get(0), R.drawable.education);
         iconList.put(localDb.getCategories().get(0 + 1), R.drawable.software);
@@ -135,7 +129,7 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         this.context = context;
         mDensity = context.getResources().getDisplayMetrics().density;
         localDb = new LocalDb();
-        endOfNest = new ArrayList<>(Arrays.asList("Subject", "Field", "Software", "Language", "Flavour", "Type", "Course", " Language "));
+        endOfNest = DumeUtils.getEndOFNest();
         iconList = new HashMap<>();
         iconList.put(localDb.getCategories().get(0), R.drawable.education);
         iconList.put(localDb.getCategories().get(0 + 1), R.drawable.software);
@@ -174,6 +168,8 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int i) {
+         Integer likes = 0;
+         Integer dislikes = 0;
         if (layoutSize == ACTIVITY) {
             SkillAVH myViewHolder = (SkillAVH) holder;
             ArrayList<KeyMap> detailList = new ArrayList<>();
@@ -265,7 +261,7 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                                                 new DumeModel(context).deleteSkill(skill.getId(), new TeacherContract.Model.Listener<Void>() {
                                                     @Override
                                                     public void onSuccess(Void list) {
-                                                        Toast.makeText(context, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
+                                                        Toast.makeText(context, "Removed", Toast.LENGTH_SHORT).show();
                                                     }
 
                                                     @Override
@@ -453,8 +449,10 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             for (String splited : splitMainSsss) {
                 likes = likes + Integer.parseInt(skillList.get(i).getLikes().get(splited).toString());
                 dislikes = dislikes + Integer.parseInt(skillList.get(i).getDislikes().get(splited).toString());
+
             }
             myViewHolder.likeTV.setText((likes - splitMainSsss.length) + " likes");
+            likes=0;
 
         } else {//fragment start here
             SkillFVH myFragmentHolder = (SkillFVH) holder;

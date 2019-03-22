@@ -46,10 +46,13 @@ import io.dume.dume.common.chatActivity.DemoModel;
 import io.dume.dume.common.chatActivity.Room;
 import io.dume.dume.common.contactActivity.ContactActivity;
 import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
+import io.dume.dume.student.studentHelp.StudentHelpActivity;
+import io.dume.dume.student.studentSettings.StudentSettingsActivity;
 import io.dume.dume.teacher.adapters.AcademicAdapter;
 import io.dume.dume.teacher.homepage.TeacherActivtiy;
 import io.dume.dume.teacher.homepage.TeacherContract;
 import io.dume.dume.teacher.homepage.fragments.AcademicFragment;
+import io.dume.dume.teacher.mentor_settings.AccountSettings;
 import io.dume.dume.teacher.mentor_settings.basicinfo.EditAccount;
 import io.dume.dume.util.DumeUtils;
 
@@ -178,21 +181,21 @@ public class InboxActivity extends CustomStuAppCompatActivity implements InboxAc
         switch (id) {
             case R.id.action_delete:
                 break;
-
             case R.id.action_settings:
+                if (Google.getInstance().getAccountMajor().equals(DumeUtils.STUDENT)) {
+                    startActivity(new Intent(this, StudentSettingsActivity.class));
+                }else if(Google.getInstance().getAccountMajor().equals(DumeUtils.TEACHER)){
+                    startActivity(new Intent(this, AccountSettings.class));
+                }
                 break;
-
             case R.id.action_mute:
                 break;
-
             case R.id.action_starred:
                 break;
             case android.R.id.home:
                 super.onBackPressed();
                 break;
         }
-
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -516,14 +519,24 @@ public class InboxActivity extends CustomStuAppCompatActivity implements InboxAc
                     demoModel.getNotification(FirebaseAuth.getInstance().getUid(), new TeacherContract.Model.Listener<List<InboxNotiData>>() {
                         @Override
                         public void onSuccess(List<InboxNotiData> list) {
-                            notiRecyAda = new InboxNotiAdapter(myThisActivity, list);
-                            InboxNotiAdapter notiRecyAda = new InboxNotiAdapter(myThisActivity, list);
-                            inboxRecyclerRecent.setAdapter(notiRecyAda);
-                            inboxRecyclerRecent.setLayoutManager(new LinearLayoutManager(myThisActivity));
-                            if (list.size() <= 0) {
-                                noDataBlockNoti.setVisibility(View.VISIBLE);
-                            } else {
-                                noDataBlockNoti.setVisibility(View.GONE);
+                            if (notiRecyAda!= null && notiRecyAda.getItemCount()!= list.size()) {
+                                notiRecyAda = new InboxNotiAdapter(myThisActivity, list);
+                                inboxRecyclerRecent.setAdapter(notiRecyAda);
+                                inboxRecyclerRecent.setLayoutManager(new LinearLayoutManager(myThisActivity));
+                                if (list.size() <= 0) {
+                                    noDataBlockNoti.setVisibility(View.VISIBLE);
+                                } else {
+                                    noDataBlockNoti.setVisibility(View.GONE);
+                                }
+                            }else if(notiRecyAda== null){
+                                notiRecyAda = new InboxNotiAdapter(myThisActivity, list);
+                                inboxRecyclerRecent.setAdapter(notiRecyAda);
+                                inboxRecyclerRecent.setLayoutManager(new LinearLayoutManager(myThisActivity));
+                                if (list.size() <= 0) {
+                                    noDataBlockNoti.setVisibility(View.VISIBLE);
+                                } else {
+                                    noDataBlockNoti.setVisibility(View.GONE);
+                                }
                             }
                         }
 

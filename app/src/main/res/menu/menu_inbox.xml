@@ -28,6 +28,7 @@
     <item
         android:id="@+id/action_starred"
         android:orderInCategory="100"
+        android:enabled="false"
         android:title="@string/starred_messages"
         app:showAsAction="never" />
 </menu>

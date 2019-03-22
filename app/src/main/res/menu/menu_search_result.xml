@@ -11,14 +11,7 @@
         app:showAsAction="always" />
 
     <item
-        android:id="@+id/action_search_set"
-        android:icon="@drawable/ic_search_settings"
-        android:orderInCategory="100"
-        android:title="Search Set"
-        app:showAsAction="never" />
-
-    <item
-        android:id="@+id/action_help"
+        android:id="@+id/action_help_main"
         android:icon="@drawable/ic_help_outline_black_24dp"
         android:orderInCategory="101"
         android:title="@string/help"

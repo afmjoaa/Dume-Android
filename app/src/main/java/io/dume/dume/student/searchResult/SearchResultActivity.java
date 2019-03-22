@@ -96,6 +96,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
+import carbon.widget.EditText;
 import carbon.widget.ImageView;
 import io.dume.dume.Google;
 import io.dume.dume.R;
@@ -113,11 +114,14 @@ import io.dume.dume.student.homePage.adapter.HomePageRecyclerData;
 import io.dume.dume.student.pojo.CusStuAppComMapActivity;
 import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
 import io.dume.dume.student.pojo.SearchDataStore;
+import io.dume.dume.student.recordsAccepted.RecordsAcceptedActivity;
+import io.dume.dume.student.recordsCurrent.RecordsCurrentActivity;
 import io.dume.dume.student.recordsPage.Record;
 import io.dume.dume.student.recordsPage.RecordsPageActivity;
 import io.dume.dume.student.recordsPage.RecordsPageModel;
 import io.dume.dume.student.recordsPending.RecordsPendingActivity;
 import io.dume.dume.student.searchResultTabview.SearchResultTabviewActivity;
+import io.dume.dume.student.studentHelp.StudentHelpActivity;
 import io.dume.dume.teacher.homepage.TeacherContract;
 import io.dume.dume.teacher.pojo.Academic;
 import io.dume.dume.util.DumeUtils;
@@ -248,6 +252,8 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
     private Marker marker;
     private List<Marker> markerList;
     private HomePageModel homePageModel;
+    private EditText reqeustLetterET;
+    private String foundRecordId;
 
 
     @Override
@@ -443,12 +449,13 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
 
         //init the confirm dialogue
         mMakeRequestBSD = new BottomSheetDialog(this);
-        cancelsheetRootView = this.getLayoutInflater().inflate(R.layout.custom_bottom_sheet_dialogue_cancel, null);
+        cancelsheetRootView = this.getLayoutInflater().inflate(R.layout.bottomsheet_with_edit_text, null);
         mMakeRequestBSD.setContentView(cancelsheetRootView);
         confirmMainText = mMakeRequestBSD.findViewById(R.id.main_text);
         confirmSubText = mMakeRequestBSD.findViewById(R.id.sub_text);
         comfirmYesBtn = mMakeRequestBSD.findViewById(R.id.cancel_yes_btn);
         confirmNoBtn = mMakeRequestBSD.findViewById(R.id.cancel_no_btn);
+        reqeustLetterET = mMakeRequestBSD.findViewById(R.id.requestLetter);
         if (confirmMainText != null && confirmSubText != null && comfirmYesBtn != null && confirmNoBtn != null) {
             confirmMainText.setText("Confirm Request");
             confirmSubText.setText("By confirming request will be sent to ____...");
@@ -456,6 +463,11 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
             confirmNoBtn.setText("No");
 
             comfirmYesBtn.setOnClickListener(new View.OnClickListener() {
+
+                private List<DocumentSnapshot> existingRecords;
+                private Intent foundIntent;
+                private String record_status;
+
                 @Override
                 public void onClick(View view) {
                     comfirmYesBtn.setEnabled(false);
@@ -476,30 +488,30 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                     //testing the promo data here
                     Map<String, Object> documentSnapshot = searchDataStore.getDocumentSnapshot();
                     ArrayList<String> applied_promo = (ArrayList<String>) documentSnapshot.get("applied_promo");
-                    if(applied_promo.size()>0){
+                    if (applied_promo.size() > 0) {
                         for (String applied : applied_promo) {
                             Log.w(TAG, "appliedPromo: " + applied);
                             Map<String, Object> promo_item = (Map<String, Object>) documentSnapshot.get(applied);
                             Gson gson = new Gson();
                             JsonElement jsonElement = gson.toJsonTree(promo_item);
                             HomePageRecyclerData homePageRecyclerData = gson.fromJson(jsonElement, HomePageRecyclerData.class);
-                            if(homePageRecyclerData!= null){
-                                if(searchDataStore.getPackageName().equals(homePageRecyclerData.getPackageName())){
-                                    if(!homePageRecyclerData.isExpired()){
+                            if (homePageRecyclerData != null) {
+                                if (searchDataStore.getPackageName().equals(homePageRecyclerData.getPackageName())) {
+                                    if (!homePageRecyclerData.isExpired()) {
                                         Date date = new Date();
-                                        if(homePageRecyclerData.getExpirity().getTime()>date.getTime()){
+                                        if (homePageRecyclerData.getExpirity().getTime() > date.getTime()) {
                                             recordsData.put("promo", promo_item);
                                         }
-                                    }else {
+                                    } else {
                                         homePageModel.updatePromo(homePageRecyclerData, new TeacherContract.Model.Listener<String>() {
                                             @Override
                                             public void onSuccess(String list) {
-                                                Log.w(TAG, "onSuccess: promo updated" );
+                                                Log.w(TAG, "onSuccess: promo updated");
                                             }
 
                                             @Override
                                             public void onError(String msg) {
-                                                Log.w(TAG, msg );
+                                                Log.w(TAG, msg);
                                             }
                                         });
                                     }
@@ -514,32 +526,162 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                     recordsData.put("record_status", SearchDataStore.STATUSPENDING);
                     recordsData.put("sp_uid", spUid);
                     recordsData.put("sh_uid", shUid);
+                    recordsData.put("request_letter", reqeustLetterET.getText().toString());
                     recordsData.put("t_rate_status", "dialog");
                     recordsData.put("s_rate_status", "dialog");
-                    recordsData.put("t_show_status",true);
-                    recordsData.put("s_show_status",true);
+                    recordsData.put("t_show_status", true);
+                    recordsData.put("s_show_status", true);
+                    recordsData.put("rejected_by", DumeUtils.TEACHER);
                     List<String> participants = new ArrayList<>();
                     participants.add((String) skillMap.get("mentor_uid"));
                     participants.add((String) searchDataStore.getUserUid());
                     recordsData.put("participants", participants);
-                    mModel.riseNewRecords(recordsData, new TeacherContract.Model.Listener<DocumentReference>() {
-                        @Override
-                        public void onSuccess(DocumentReference list) {
-                            goHome(list);
-                            Log.w("foo", "onSuccess: " + list.toString());
-                            hideProgressBS();
-                            comfirmYesBtn.setBackgroundColor(getResources().getColor(R.color.colorBlack));
-                            //comfirmYesBtn.setEnabled(true);
+                    //check if already available
+                    foundRecordId = null;
+                    if (Google.getInstance().getRecords() != null) {
+                        existingRecords = Google.getInstance().getRecords();
+                        for (int i = 0; i < existingRecords.size(); i++) {
+                            record_status = existingRecords.get(i).getString("record_status");
+                            if (selectedMentor.getId().equals(existingRecords.get(i).getString("skill_uid")) &&
+                                    (SearchDataStore.STATUSPENDING.equals(record_status) ||
+                                            SearchDataStore.STATUSACCEPTED.equals(record_status) ||
+                                            SearchDataStore.STATUSCURRENT.equals(record_status)
+                                    )) {
+                                foundRecordId = existingRecords.get(i).getId();
+                                break;
+                            }
                         }
+                        //now do work based on foundRecordID
+                        if (foundRecordId != null) {
+                            switch (record_status) {
+                                case "Pending":
+                                    foundIntent = new Intent(context, RecordsPendingActivity.class).setAction(DumeUtils.STUDENT);
+                                    searchDataStore.setFromPACCR(0);
+                                    break;
+                                case "Accepted":
+                                    foundIntent = new Intent(context, RecordsAcceptedActivity.class).setAction(DumeUtils.STUDENT);
+                                    searchDataStore.setFromPACCR(1);
+                                    break;
+                                case "Current":
+                                    foundIntent = new Intent(context, RecordsCurrentActivity.class).setAction(DumeUtils.STUDENT);
+                                    searchDataStore.setFromPACCR(2);
+                                    break;
+                            }
+                            foundIntent.putExtra("recordId", foundRecordId);
+                            startActivity(foundIntent);
+                            TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
 
-                        @Override
-                        public void onError(String msg) {
-                            flush(msg);
-                            comfirmYesBtn.setEnabled(true);
-                            comfirmYesBtn.setBackgroundColor(getResources().getColor(R.color.colorBlack));
+                            Intent mainActivityIntent = new Intent(SearchResultActivity.this, HomePageActivity.class);
+                            mainActivityIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+                            Intent recordPageActivityIntent = new Intent(SearchResultActivity.this, RecordsPageActivity.class).setAction(DumeUtils.STUDENT);
+
+                            stackBuilder.addNextIntent(mainActivityIntent);
+                            stackBuilder.addNextIntent(recordPageActivityIntent);
+                            stackBuilder.addNextIntent(foundIntent);
+                            stackBuilder.startActivities();
+                            finish();
                             hideProgressBS();
+                        } else {
+                            mModel.riseNewRecords(recordsData, new TeacherContract.Model.Listener<DocumentReference>() {
+                                @Override
+                                public void onSuccess(DocumentReference list) {
+                                    goHome(list);
+                                    Log.w("foo", "onSuccess: " + list.toString());
+                                    hideProgressBS();
+                                    comfirmYesBtn.setBackgroundColor(getResources().getColor(R.color.colorBlack));
+                                    //comfirmYesBtn.setEnabled(true);
+                                }
+
+                                @Override
+                                public void onError(String msg) {
+                                    flush(msg);
+                                    comfirmYesBtn.setEnabled(true);
+                                    comfirmYesBtn.setBackgroundColor(getResources().getColor(R.color.colorBlack));
+                                    hideProgressBS();
+                                }
+                            });
                         }
-                    });
+                    } else {
+                        RecordsPageModel recordsPageModel = new RecordsPageModel(context);
+                        recordsPageModel.getRecords(new TeacherContract.Model.Listener<List<Record>>() {
+                            @Override
+                            public void onSuccess(List<Record> list) {
+                                hideProgress();
+                                Google.getInstance().setRecordList(list);
+                                existingRecords = Google.getInstance().getRecords();
+                                //do the work here
+                                for (int i = 0; i < existingRecords.size(); i++) {
+                                    record_status = existingRecords.get(i).getString("record_status");
+                                    if (selectedMentor.getId().equals(existingRecords.get(i).getString("skill_uid")) &&
+                                            (SearchDataStore.STATUSPENDING.equals(record_status) ||
+                                                    SearchDataStore.STATUSACCEPTED.equals(record_status) ||
+                                                    SearchDataStore.STATUSCURRENT.equals(record_status)
+                                            )) {
+                                        foundRecordId = existingRecords.get(i).getId();
+                                        break;
+                                    }
+                                }
+                                //now do work based on foundRecordID
+                                if (foundRecordId != null) {
+                                    flush("found" + foundRecordId);
+                                    switch (record_status) {
+                                        case "Pending":
+                                            foundIntent = new Intent(context, RecordsPendingActivity.class).setAction(DumeUtils.STUDENT);
+                                            searchDataStore.setFromPACCR(0);
+                                            break;
+                                        case "Accepted":
+                                            foundIntent = new Intent(context, RecordsAcceptedActivity.class).setAction(DumeUtils.STUDENT);
+                                            searchDataStore.setFromPACCR(1);
+                                            break;
+                                        case "Current":
+                                            foundIntent = new Intent(context, RecordsCurrentActivity.class).setAction(DumeUtils.STUDENT);
+                                            searchDataStore.setFromPACCR(2);
+                                            break;
+                                    }
+                                    foundIntent.putExtra("recordId", foundRecordId);
+                                    startActivity(foundIntent);
+                                    TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+                                    Intent mainActivityIntent = new Intent(SearchResultActivity.this, HomePageActivity.class);
+                                    mainActivityIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                    Intent recordPageActivityIntent = new Intent(SearchResultActivity.this, RecordsPageActivity.class).setAction(DumeUtils.STUDENT);
+
+                                    stackBuilder.addNextIntent(mainActivityIntent);
+                                    stackBuilder.addNextIntent(recordPageActivityIntent);
+                                    stackBuilder.addNextIntent(foundIntent);
+                                    stackBuilder.startActivities();
+                                    finish();
+                                    hideProgressBS();
+                                } else {
+                                    mModel.riseNewRecords(recordsData, new TeacherContract.Model.Listener<DocumentReference>() {
+                                        @Override
+                                        public void onSuccess(DocumentReference list) {
+                                            goHome(list);
+                                            Log.w("foo", "onSuccess: " + list.toString());
+                                            hideProgressBS();
+                                            comfirmYesBtn.setBackgroundColor(getResources().getColor(R.color.colorBlack));
+                                            //comfirmYesBtn.setEnabled(true);
+                                        }
+
+                                        @Override
+                                        public void onError(String msg) {
+                                            flush(msg);
+                                            comfirmYesBtn.setEnabled(true);
+                                            comfirmYesBtn.setBackgroundColor(getResources().getColor(R.color.colorBlack));
+                                            hideProgressBS();
+                                        }
+                                    });
+                                }
+                            }
+
+                            @Override
+                            public void onError(String msg) {
+                                hideProgress();
+                                //hideProgressBS();
+                                flush(msg);
+                            }
+                        });
+                    }
                 }
             });
 
@@ -593,9 +735,9 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                         backNoBtn.setEnabled(false);
                     }
                     mBackBSD.dismiss();
-                    mModel.riseNewPushNoti(pushNotiData, new TeacherContract.Model.Listener<DocumentReference>() {
+                    mModel.riseNewPushNoti(new TeacherContract.Model.Listener<Void>() {
                         @Override
-                        public void onSuccess(DocumentReference list) {
+                        public void onSuccess(Void aVoid) {
                             setConfirmedOrCanceled(true);
                             if (getIntent().getAction().equals("from_HPA")) {
                                 searchDataStore.setFirstTime(false);
@@ -642,9 +784,9 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                         backYesBtn.setBackgroundColor(getResources().getColor(R.color.disable_color));
                         backYesBtn.setEnabled(false);
                         mBackBSD.dismiss();
-                        mModel.riseNewPushNoti(pushNotiData, new TeacherContract.Model.Listener<DocumentReference>() {
+                        mModel.riseNewPushNoti(new TeacherContract.Model.Listener<Void>() {
                             @Override
-                            public void onSuccess(DocumentReference list) {
+                            public void onSuccess(Void list) {
                                 setConfirmedOrCanceled(true);
                                 searchDataStore.setFirstTime(false);
                                 onBackPressed();
@@ -682,9 +824,9 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
     protected void onPause() {
         super.onPause();
         if (!isConfirmedOrCanceled()) {
-            mModel.riseNewPushNoti(pushNotiData, new TeacherContract.Model.Listener<DocumentReference>() {
+            mModel.riseNewPushNoti(new TeacherContract.Model.Listener<Void>() {
                 @Override
-                public void onSuccess(DocumentReference list) {
+                public void onSuccess(Void list) {
                     setConfirmedOrCanceled(true);
                 }
 
@@ -693,7 +835,6 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                     Log.e(TAG, "onError: " + msg);
                 }
             });
-
         }
     }
 
@@ -1606,11 +1747,12 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
         int id = item.getItemId();
 
         switch (id) {
-            case R.id.action_search_set:
+            case R.id.action_help_main:
                 //Toast.makeText(MainActivity.this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
+                //show toast here
                 break;
             case R.id.action_help:
-                //Toast.makeText(MainActivity.this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
+                //show dialouge here
                 break;
             case R.id.action_list_view:
                 //Toast.makeText(MainActivity.this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
@@ -1746,16 +1888,16 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
         for (int i = 0; i < markerList.size(); i++) {
             if (resultList.get(i).getId().equals(selectedMentor.getId())) {
                 if (swipeRight) {
-                    if(i== (resultList.size()-1)){
+                    if (i == (resultList.size() - 1)) {
                         onMarkerClick(markerList.get(0));
-                    }else{
-                        onMarkerClick(markerList.get(i+1));
+                    } else {
+                        onMarkerClick(markerList.get(i + 1));
                     }
                 } else {
-                    if(i == 0){
-                        onMarkerClick(markerList.get(markerList.size()-1));
-                    }else{
-                        onMarkerClick(markerList.get(i-1));
+                    if (i == 0) {
+                        onMarkerClick(markerList.get(markerList.size() - 1));
+                    } else {
+                        onMarkerClick(markerList.get(i - 1));
                     }
                 }
                 break;

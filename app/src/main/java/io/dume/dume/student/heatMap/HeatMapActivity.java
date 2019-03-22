@@ -1,6 +1,7 @@
 package io.dume.dume.student.heatMap;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Animatable2;
@@ -63,6 +64,7 @@ import io.dume.dume.customView.HorizontalLoadView;
 import io.dume.dume.student.pojo.CusStuAppComMapActivity;
 import io.dume.dume.student.pojo.DataSet;
 import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
+import io.dume.dume.student.studentHelp.StudentHelpActivity;
 import io.dume.dume.teacher.homepage.TeacherContract;
 import io.dume.dume.util.DumeUtils;
 import io.dume.dume.util.VisibleToggleClickListener;
@@ -482,7 +484,17 @@ public class HeatMapActivity extends CusStuAppComMapActivity implements OnMapRea
 
         for (int i = 0; i < accountTypeArr.length && i < imageIcons.length; i++) {
             AccountRecyData current = new AccountRecyData();
-            current.accouName = accountTypeArr[i];
+            switch (i) {
+                case 0://+ " ጰ"
+                    current.accouName = accountTypeArr[i] + " : " + Google.getInstance().getTotalStudent();
+                    break;
+                case 1:
+                    current.accouName = accountTypeArr[i] + " : " + Google.getInstance().getTotalMentor();
+                    break;
+                case 2:
+                    current.accouName = accountTypeArr[i];
+                    break;
+            }
             current.iconId = imageIcons[i];
             current.selectedOne = selectedItem;
             data.add(current);
@@ -517,7 +529,9 @@ public class HeatMapActivity extends CusStuAppComMapActivity implements OnMapRea
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_help) {
-            return true;
+            Intent intent = new Intent(context, StudentHelpActivity.class);
+            intent.setAction("how_to_use");
+            startActivity(intent);
         } else if (id == android.R.id.home) {
             if (viewMusk.getVisibility() == View.VISIBLE) {
                 chooseAccouTypeBtn.performClick();

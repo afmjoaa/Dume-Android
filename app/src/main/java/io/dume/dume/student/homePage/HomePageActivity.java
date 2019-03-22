@@ -235,13 +235,30 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
 
     @Override
     public void loadHeadsUpPromo(HomePageRecyclerData promoData) {
+
         if (promoData.getMax_dicount_percentage() > discount) {
             discount = promoData.getMax_dicount_percentage();
             Date expirity = promoData.getExpirity();
             Date now = new Date();
-            long leftMillis = expirity.getTime() - now.getTime();
-            int daysLeft = (int) (leftMillis / (1000 * 60 * 60 * 24));
-            setHeadsUpPromo(discount.toString(), (daysLeft > 1 ? daysLeft + " days" : "less than a day"), promoData.getPackageName() == null ? "" : promoData.getPackageName());
+
+            if (now.getTime() > expirity.getTime()) {
+                mModel.removeAppliedPromo(promoData, new TeacherContract.Model.Listener<Boolean>() {
+                    @Override
+                    public void onSuccess(Boolean deleted) {
+
+                    }
+
+                    @Override
+                    public void onError(String msg) {
+                        Log.e(TAG, "onError: " + msg);
+                    }
+                });
+            } else {
+                long leftMillis = expirity.getTime() - now.getTime();
+                int daysLeft = (int) (leftMillis / (1000 * 60 * 60 * 24));
+                setHeadsUpPromo(discount.toString(), (daysLeft > 1 ? daysLeft + " days" : "less than a day"), promoData.getPackageName() == null ? "" : promoData.getPackageName());
+
+            }
         }
     }
 
@@ -414,7 +431,6 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
         dumeInfo = findViewById(R.id.dume_info);
         dumeInfoContainer = findViewById(R.id.dume_info_container);
 
-
         learnMoreBtnOne = findViewById(R.id.learn_more_btn_one);
         startCouching = findViewById(R.id.start_couching);
         startTakingCouching = findViewById(R.id.start_taking_couching);
@@ -422,7 +438,7 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
         referMentorBtn = findViewById(R.id.refer_mentor_btn);
         how_invite_works = findViewById(R.id.how_invite_works);
         freeCashBack = findViewById(R.id.free_cashback_Btn);
-        startMentoringBtn = findViewById(R.id.start_learing_btn);
+        startMentoringBtn = findViewById(R.id.start_mentoring_btn);
         bottomSheetBtnCallback();
     }
 

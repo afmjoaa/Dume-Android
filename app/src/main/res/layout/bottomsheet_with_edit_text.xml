@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/fragment_history_menu_bottom"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#ffffff"
+    android:orientation="vertical"
+    android:paddingLeft="16dp"
+    android:paddingTop="10dp"
+    android:paddingRight="16dp"
+    android:paddingBottom="10dp"
+    app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
+
+    <TextView
+        android:id="@+id/main_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Cancel Requesting ?"
+        android:layout_marginBottom="10dp"
+        android:textAllCaps="false"
+        android:textColor="@color/colorBlack"
+        android:textSize="24sp"
+        app:fontFamily="@font/cairo_regular" />
+
+    <TextView
+        android:id="@+id/sub_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="We're almost finished finding your mentor."
+        android:textColor="@color/textColorPrimary"
+        android:textSize="14sp"
+        app:fontFamily="@font/cairo_regular" />
+
+    <carbon.widget.EditText
+        android:id="@+id/requestLetter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:carbon_cornerRadius="4dp"
+        android:minLines="4"
+        android:textSize="12sp"
+        android:hint="Write a Request Letter"
+        android:background="@color/white"
+        app:carbon_stroke="@color/black"
+        app:carbon_strokeWidth="2dp"
+        />
+
+    <LinearLayout
+        android:id="@+id/cancel_parent_host"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/cancel_no_btn"
+            style="@style/myButtonStyleWhite"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:layout_weight="1"
+            android:text="No"
+            android:textAllCaps="false"
+            android:textColor="@color/colorBlack"
+            android:textSize="16sp"
+            app:fontFamily="@font/cairo_regular" />
+
+        <Button
+            android:id="@+id/cancel_yes_btn"
+            style="@style/myButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginBottom="4dp"
+            android:layout_weight="1"
+            android:text="Yes, Cancel"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:fontFamily="@font/cairo_regular" />
+
+    </LinearLayout>
+
+</LinearLayout>

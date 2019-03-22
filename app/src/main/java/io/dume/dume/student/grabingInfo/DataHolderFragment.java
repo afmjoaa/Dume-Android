@@ -157,10 +157,12 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
 
             if (myMainActivity.retrivedAction.equals(DumeUtils.STUDENT)) {
                 rangeBar.setRangeBarEnabled(true);
+                min.setText("Min Salary = 1,000 ৳");
+                max.setText("Max Salary = 50,000 ৳");
             } else {
                 rangeBar.setRangeBarEnabled(false);
                 max.setVisibility(View.GONE);
-                min.setText("Salaray = " + rangeBar.getRightPinValue());
+                min.setText("Salary = 50,000 ৳");
             }
 
             rangeBar.setOnRangeBarChangeListener(new RangeBar.OnRangeBarChangeListener() {
@@ -171,13 +173,11 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
                     String format = currencyInstance.format(Integer.parseInt(leftPinValue) * 1000);
                     String format1 = currencyInstance.format(Integer.parseInt(rightPinValue) * 1000);
                     if (myMainActivity.retrivedAction.equals(DumeUtils.STUDENT)) {
-
-                        min.setText("Min Salary = " + format.substring(1, format.length() - 3) + " BDT");
-                        max.setText("Max Salary = " + format1.substring(1, format1.length() - 3) + " BDT");
+                        min.setText("Min Salary = " + format.substring(1, format.length() - 3) + " ৳");
+                        max.setText("Max Salary = " + format1.substring(1, format1.length() - 3) + " ৳");
                         salaryValue = leftPinValue + "k - " + rightPinValue + "k";
                     } else {
-
-                        min.setText("Salary = " + format1.substring(1, format1.length() - 3) + " BDT");
+                        min.setText("Salary = " + format1.substring(1, format1.length() - 3) + " ৳");
                         salaryValue = rightPinValue + "k";
                     }
                     AppCompatRadioButton rd = new AppCompatRadioButton(mContext);
@@ -243,7 +243,8 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
         } else if (list != null && (list.toString().equals("Subject") || list.toString().equals("Field")
                 || list.toString().equals("Software") || list.toString().equals("Language") ||
                 list.toString().equals("Flavour") || list.toString().equals("Type") ||
-                list.toString().equals("Course") || list.toString().equals(" Language "))) {
+                list.toString().equals("Course") || list.toString().equals(" Language ")
+                || list.toString().equals("Item"))) {
             //end of the nest so send different view here
             //Toast.makeText(mContext, "fucked the end of nest", Toast.LENGTH_SHORT).show();
             myMainActivity.fab.show();

@@ -11,6 +11,8 @@ public interface MentorAddvertiseContact {
         void configMentorAddvertise();
 
         void onAnimationImage();
+
+        void switchProfileDialog(String identify);
     }
 
     interface Presenter {

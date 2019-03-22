@@ -52,6 +52,7 @@ import io.dume.dume.student.grabingInfo.GrabingInfoActivity;
 import io.dume.dume.student.pojo.CusStuAppComMapActivity;
 import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
 import io.dume.dume.student.pojo.SearchDataStore;
+import io.dume.dume.student.studentHelp.StudentHelpActivity;
 import io.dume.dume.teacher.adapters.CategoryAdapter;
 import io.dume.dume.util.DumeUtils;
 import io.dume.dume.util.GridSpacingItemDecoration;
@@ -305,7 +306,9 @@ public class CrudSkillActivity extends CusStuAppComMapActivity implements CrudCo
 
         int id = item.getItemId();
         if (id == R.id.action_help) {
-            //add function here
+            Intent intent = new Intent(context, StudentHelpActivity.class);
+            intent.setAction("how_to_use");
+            startActivity(intent);
         } else if (id == android.R.id.home) {
             super.onBackPressed();
         }

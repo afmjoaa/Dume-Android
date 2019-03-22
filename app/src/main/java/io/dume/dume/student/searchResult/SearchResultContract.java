@@ -51,6 +51,6 @@ public interface SearchResultContract {
 
         void riseNewRecords(Map<String, Object> data, TeacherContract.Model.Listener<DocumentReference> listener);
 
-        void riseNewPushNoti(Map<String, Object> data, TeacherContract.Model.Listener<DocumentReference> listener);
+        void riseNewPushNoti(TeacherContract.Model.Listener<Void> listener);
     }
 }

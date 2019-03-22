@@ -158,6 +158,11 @@ public class SearchDataStore implements Serializable {
         return DumeUtils.generateQueryString(packageName, getQueryList(), getQueryListName());
     }
 
+    public Map<String, Object> getQueryMap() {
+
+        return DumeUtils.getQueryMap(packageName, getQueryList(), getQueryListName());
+    }
+
     public SearchDataStore() {
 
     }

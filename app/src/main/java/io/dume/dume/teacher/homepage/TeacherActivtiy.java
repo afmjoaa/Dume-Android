@@ -48,7 +48,6 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -130,7 +129,6 @@ import q.rorbin.verticaltablayout.VerticalTabLayout;
 import q.rorbin.verticaltablayout.widget.TabView;
 
 import static io.dume.dume.util.DumeUtils.animateImage;
-import static io.dume.dume.util.DumeUtils.showKeyboard;
 import static io.dume.dume.util.ImageHelper.getRoundedCornerBitmapSquare;
 
 
@@ -230,7 +228,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
     private Button referMentorBtn;
     private TextView how_invite_works;
     private Button freeCashBack;
-    private Button startMentoringBtn;
+    private Button startLearingBtn;
 
 
     @Override
@@ -241,13 +239,29 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
 
     @Override
     public void loadHeadsUpPromo(HomePageRecyclerData promoData) {
+        Log.e(TAG, "loadHeadsUpPromo: " );
         if (promoData.getMax_dicount_percentage() > discount) {
             discount = promoData.getMax_dicount_percentage();
             Date expirity = promoData.getExpirity();
             Date now = new Date();
-            long leftMillis = expirity.getTime() - now.getTime();
-            int daysLeft = (int) (leftMillis / (1000 * 60 * 60 * 24));
-            setHeadsUpPromo(discount.toString(), (daysLeft > 1 ? daysLeft + " days" : "less than a day"), promoData.getPackageName() == null ? "" : promoData.getPackageName());
+            Log.e(TAG, "loadHeadsUpPromo: " + (now.getTime() > expirity.getTime()));
+            if (now.getTime() > expirity.getTime()) {
+                model.removeAppliedPromo(promoData, new TeacherContract.Model.Listener<Boolean>() {
+                    @Override
+                    public void onSuccess(Boolean deleted) {
+
+                    }
+
+                    @Override
+                    public void onError(String msg) {
+                        Log.e(TAG, "onError: " + msg);
+                    }
+                });
+            } else {
+                long leftMillis = expirity.getTime() - now.getTime();
+                int daysLeft = (int) (leftMillis / (1000 * 60 * 60 * 24));
+                setHeadsUpPromo(discount.toString(), (daysLeft > 1 ? daysLeft + " days" : "less than a day"), promoData.getPackageName() == null ? "" : promoData.getPackageName());
+            }
         }
     }
 
@@ -369,7 +383,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         referMentorBtn = findViewById(R.id.refer_mentor_btn);
         how_invite_works = findViewById(R.id.how_invite_works);
         freeCashBack = findViewById(R.id.free_cashback_Btn);
-        startMentoringBtn = findViewById(R.id.start_mentoring_btn);
+        startLearingBtn = findViewById(R.id.start_learing_btn);
         bottomSheetBtnCallback();
     }
 
@@ -426,7 +440,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
                 inviteAFriendCalled();
             }
         });
-        startMentoringBtn.setOnClickListener(new View.OnClickListener() {
+        startLearingBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 switchProfileDialog(DumeUtils.STUDENT);
@@ -901,7 +915,6 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
                 break;
             case R.id.about_us:
                 startActivity(new Intent(this, AboutUsActivity.class));
-                FirebaseAuth.getInstance().signOut();
                 break;
             case R.id.help:
                 startActivity(new Intent(this, StudentHelpActivity.class));
@@ -939,7 +952,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
                 break;
             case R.id.boot_camp:
                 flush("Boot Camp Service is coming soon...");
-                switchProfileDialog(DumeUtils.BOOTCAMP);
+                //switchProfileDialog(DumeUtils.BOOTCAMP);
                 break;
 
         }

@@ -183,6 +183,8 @@ public interface HomePageContract {
 
         void updatePromo(HomePageRecyclerData promoData, TeacherContract.Model.Listener<String> listener);
 
+        void removeAppliedPromo(HomePageRecyclerData promoData, TeacherContract.Model.Listener<Boolean> listener);
+
         void hawwa();
 
 

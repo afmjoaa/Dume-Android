@@ -8,7 +8,6 @@
     android:layout_marginRight="10dp"
     android:layout_marginTop="10dp"
     app:carbon_cornerRadius="5dp"
-
     app:carbon_rippleColor="@color/colorAccent">
 
     <carbon.widget.FrameLayout
@@ -18,7 +17,7 @@
         android:background="@color/notificationItemColor"
         android:padding="7dp"
         app:carbon_cornerRadius="5dp"
-        app:carbon_elevation="3dp">
+        app:carbon_elevation="4dp">
         <!-- app:carbon_elevation="3dp"-->
 
         <carbon.widget.ImageView
@@ -62,26 +61,26 @@
 
                         <carbon.widget.ImageView
                             android:id="@+id/categoryAvaterIV"
-                            android:layout_width="38dp"
-                            android:layout_height="38dp"
+                            android:layout_width="42dp"
+                            android:layout_height="42dp"
                             android:layout_centerHorizontal="true"
                             android:layout_centerVertical="true"
                             android:clickable="false"
-                            android:padding="3dp"
-                            app:carbon_cornerRadius="25dp"
+                            android:scaleType="centerCrop"
+                            app:carbon_cornerRadius="21dp"
                             app:srcCompat="@drawable/ic_dume_admin" />
 
                         <com.jackandphantom.circularprogressbar.CircleProgressbar
                             android:id="@+id/selected_indicator"
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
                             android:layout_centerHorizontal="true"
                             android:layout_centerVertical="true"
                             app:cpb_backgroundProgressColor="@color/white"
-                            app:cpb_backgroundProgressWidth="10"
+                            app:cpb_backgroundProgressWidth="4"
                             app:cpb_clockwise="true"
                             app:cpb_foregroundProgressColor="@color/inbox_active_color"
-                            app:cpb_foregroundProgressWidth="4"
+                            app:cpb_foregroundProgressWidth="6"
                             app:cpb_progress="100"
                             app:cpb_roundedCorner="true" />
 
@@ -121,16 +120,15 @@
                         android:layout_width="200dp"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="4dp"
-                        android:layout_marginEnd="5dp"
+                        android:layout_marginEnd="15dp"
                         android:layout_marginLeft="5dp"
-                        android:layout_marginRight="5dp"
+                        android:layout_marginRight="15dp"
                         android:layout_marginStart="5dp"
                         android:layout_marginTop="2dp"
                         android:layout_weight="1"
                         android:ellipsize="end"
-                        android:maxLines="1"
-                        android:singleLine="true"
-                        android:text="Math, English,Phsysics"
+                        android:maxWidth="120dp"
+                        android:text="Math, English,Phsysics dgsfdfsdfsdffsdf"
                         android:textColor="@color/black"
                         android:textSize="16sp" />
 
@@ -172,7 +170,7 @@
 
     </LinearLayout>
 
-    <LinearLayout
+    <carbon.widget.LinearLayout
         android:id="@+id/recycle_hosting_linear"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -199,6 +197,6 @@
             android:text="Description here"
             android:textSize="14sp" />
 
-    </LinearLayout>
+    </carbon.widget.LinearLayout>
 
 </carbon.widget.RelativeLayout>

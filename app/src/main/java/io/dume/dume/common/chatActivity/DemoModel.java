@@ -314,7 +314,6 @@ public class DemoModel {
                     } else {
                         listener.onError("Unknown Error From Notification" + e.getMessage());
                         Log.w("foo", e.getMessage());
-
                     }
                 }
             });

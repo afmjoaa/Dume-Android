@@ -1,5 +1,6 @@
 package io.dume.dume.teacher.boot_camp_addvertise;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -7,12 +8,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 
 import io.dume.dume.R;
 import io.dume.dume.student.mentorAddvertise.MentorAddvertiseModel;
 import io.dume.dume.student.mentorAddvertise.MentorAddvertisePresenter;
 import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
+import io.dume.dume.student.studentHelp.StudentHelpActivity;
 
 import static io.dume.dume.util.DumeUtils.animateImage;
 import static io.dume.dume.util.DumeUtils.configureAppbar;
@@ -22,6 +25,8 @@ public class BootCampAdd extends CustomStuAppCompatActivity implements BootCampC
     private BootCampContract.Presenter mPresenter;
     private static final int fromFlag = 117;
     private ImageView startMentoringImageView;
+    private Button startCounching;
+    private Button startTakingCounching;
 
 
     @Override
@@ -42,6 +47,8 @@ public class BootCampAdd extends CustomStuAppCompatActivity implements BootCampC
     @Override
     public void findView() {
         startMentoringImageView = findViewById(R.id.start_mentoring_imageView);
+        startCounching = findViewById(R.id.start_couching);
+        startTakingCounching = findViewById(R.id.start_taking_couching);
     }
 
     @Override
@@ -51,7 +58,22 @@ public class BootCampAdd extends CustomStuAppCompatActivity implements BootCampC
 
     @Override
     public void configBootCampAdd() {
-
+        startCounching.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, StudentHelpActivity.class);
+                intent.setAction("whats_new");
+                startActivity(intent);
+            }
+        });
+        startTakingCounching.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, StudentHelpActivity.class);
+                intent.setAction("whats_new");
+                startActivity(intent);
+            }
+        });
     }
 
     @Override

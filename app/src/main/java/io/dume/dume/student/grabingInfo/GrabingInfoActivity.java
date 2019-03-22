@@ -91,6 +91,7 @@ import io.dume.dume.student.grabingPackage.GrabingPackageActivity;
 import io.dume.dume.student.pojo.CusStuAppComMapActivity;
 import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
 import io.dume.dume.student.pojo.SearchDataStore;
+import io.dume.dume.student.studentHelp.StudentHelpActivity;
 import io.dume.dume.teacher.homepage.TeacherContract;
 import io.dume.dume.teacher.homepage.TeacherDataStore;
 import io.dume.dume.teacher.model.LocalDb;
@@ -170,7 +171,7 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
     private static final int REQUEST_CODE_PICK_CONTACTS = 1;
     private Uri uriContact;
     private String contactID;     // contacts unique ID
-    private ArrayList<String> endOfNest;
+    private List<String> endOfNest;
     private String tempThreeHint;
     private Boolean contactPermissionGranted = false;
     private RelativeLayout secondContactLayout;
@@ -253,7 +254,7 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
         tabHintLayout = findViewById(R.id.tab_hint_layout);
         forMeWrapper = findViewById(R.id.formeWrapper);
         selectFromContact = findViewById(R.id.select_other_contact);
-        endOfNest = new ArrayList<>(Arrays.asList("Subject", "Field", "Software", "Language", "Flavour", "Type", "Course", " Language "));
+        endOfNest = DumeUtils.getEndOFNest();
 
         secondContactLayout = findViewById(R.id.second_contact);
         secondContactImageView = findViewById(R.id.account_icon_two);
@@ -1414,6 +1415,9 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
         int id = item.getItemId();
         if (id == R.id.action_help) {
             //add function here
+            Intent intent = new Intent(context, StudentHelpActivity.class);
+            intent.setAction("how_to_use");
+            startActivity(intent);
         } else if (id == android.R.id.home) {
             if (viewMusk.getVisibility() == View.VISIBLE) {
                 forMeBtn.performClick();

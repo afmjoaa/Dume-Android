@@ -5,10 +5,9 @@ import java.net.URL;
 import java.util.Date;
 
 public class InboxNotiData implements Serializable {
-    public static String WARN = "warn",
-            REQ_ACCEPTED = "accepted",
-            REQ_DENIED = "denied",
-            REQ_NEW = "new_req",
+    public static String RECORD = "record",
+            PROMO = "promo",
+            CANCEL = "cancel",
             GLOBAL = "global";
 
     String title;

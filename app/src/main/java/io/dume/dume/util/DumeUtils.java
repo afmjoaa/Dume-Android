@@ -524,7 +524,7 @@ public class DumeUtils {
 
     public static String generateQueryString(String packageName, List<String> queryList, List<String> queryListName) {
         StringBuilder mQuery = new StringBuilder();
-        endOfNest = new ArrayList<>(Arrays.asList("Subject", "Field", "Software", "Language", "Flavour", "Type", "Course", " Language "));
+        endOfNest = new ArrayList<>(Arrays.asList("Subject", "Field", "Software", "Language", "Flavour", "Type", "Course", " Language ", "Item"));
         mQuery.append(firstTwo(packageName));
 
 
@@ -545,6 +545,40 @@ public class DumeUtils {
             }
         }
         return mQuery.toString();
+    }
+
+    public static Map<String, Object> getQueryMap(String packageName, List<String> queryList, List<String> queryListName) {
+        StringBuilder mQuery = new StringBuilder();
+        Map<String, Object> queryMap = new HashMap<>();
+        endOfNest = new ArrayList<>(Arrays.asList("Subject", "Field", "Software", "Language", "Flavour", "Type", "Course", " Language ", "Item"));
+        mQuery.append(firstTwo(packageName));
+        ArrayList<String> subjectList = new ArrayList<>();
+
+        StringBuilder commonQuery = new StringBuilder();
+
+        int ignoredElement = 2;
+        if (packageName.equals(SearchDataStore.DUME_GANG)) {
+            ignoredElement++;
+        }
+        for (int i = 0; i < queryList.size() - ignoredElement; i++) {
+            if (endOfNest.contains(queryListName.get(i))) {
+                String s = queryList.get(i);
+                String trim = s.replaceAll("\\s", "");
+                String[] split = trim.split(",");
+                for (String aSplit : split) {
+                    mQuery.append(firstTwo(aSplit));
+                    subjectList.add(firstTwo(aSplit));
+                }
+            } else {
+                mQuery.append(firstTwo(queryList.get(i)));
+                commonQuery.append(firstTwo(queryList.get(i)));
+            }
+        }
+
+        queryMap.put("common_query", commonQuery.toString());
+        queryMap.put("query_string", mQuery.toString());
+        queryMap.put("subject_list", subjectList);
+        return queryMap;
     }
 
     public static List<DocumentSnapshot> filterList(List<DocumentSnapshot> list, String identifier) {
@@ -570,7 +604,7 @@ public class DumeUtils {
     }
 
     public static String getLast(Map<String, Object> jizz) {
-        endOfNest = new ArrayList<>(Arrays.asList("Subject", "Field", "Software", "Language", "Flavour", "Type", "Course", " Language "));
+        endOfNest = new ArrayList<>(Arrays.asList("Subject", "Field", "Software", "Language", "Flavour", "Type", "Course", " Language ", "Item"));
         for (int j = 0; j < endOfNest.size(); j++) {
             if (jizz.containsKey(endOfNest.get(j))) {
                 return (String) jizz.get(endOfNest.get(j));
@@ -580,7 +614,7 @@ public class DumeUtils {
     }
 
     public static List<String> getEndOFNest() {
-        endOfNest = new ArrayList<>(Arrays.asList("Subject", "Field", "Software", "Language", "Flavour", "Type", "Course", " Language "));
+        endOfNest = new ArrayList<>(Arrays.asList("Subject", "Field", "Software", "Language", "Flavour", "Type", "Course", " Language ", "Item"));
         return endOfNest;
     }
 

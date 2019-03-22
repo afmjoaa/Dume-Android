@@ -18,8 +18,8 @@ public class Google {
     private static Google instance = null;
     private List<String> roomIdList = null;
     private List<Room> rooms;
-    private List<Record> recordList;
-    private List<DocumentSnapshot> records;
+    private List<Record> recordList = null;
+    private List<DocumentSnapshot> records = null;
     private String accountPrefix;
     private String accountMajor;
     private String lastDocumentId;

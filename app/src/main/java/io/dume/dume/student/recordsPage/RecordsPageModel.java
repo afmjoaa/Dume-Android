@@ -14,6 +14,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -121,7 +122,11 @@ public class RecordsPageModel implements RecordsPageContract.Model {
                             google.setRecords(alteredDocuments);
                             google.setRecordList(recordList);
                             listener.onSuccess(recordList);
-                        } else listener.onSuccess(new ArrayList<>());
+                        } else {
+                            google.setRecords(new ArrayList<>());
+                            google.setRecordList(new ArrayList<>());
+                            listener.onSuccess(new ArrayList<>());
+                        }
 
                     } else listener.onError("No record found.");
 
@@ -135,7 +140,7 @@ public class RecordsPageModel implements RecordsPageContract.Model {
     @Override
     public void changeRecordStatus(DocumentSnapshot record, String status, String rejectedBy, TeacherContract.Model.Listener<Void> listener) {
         if (!status.equals("Rejected")) {
-            firestore.document("records/" + record.getId()).update("record_status", status).addOnSuccessListener((Activity) context, new OnSuccessListener<Void>() {
+            firestore.document("records/" + record.getId()).update("record_status", status, "status_modi_date" , FieldValue.serverTimestamp()).addOnSuccessListener((Activity) context, new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
                     WriteBatch batch = firestore.batch();
@@ -170,7 +175,7 @@ public class RecordsPageModel implements RecordsPageContract.Model {
                 }
             }).addOnFailureListener(e -> listener.onError(e.getLocalizedMessage()));
         } else {
-            firestore.document("records/" + record.getId()).update("record_status", status, "rejected_by", rejectedBy).addOnSuccessListener((Activity) context, new OnSuccessListener<Void>() {
+            firestore.document("records/" + record.getId()).update("record_status", status, "rejected_by", rejectedBy, "status_modi_date" , FieldValue.serverTimestamp()).addOnSuccessListener((Activity) context, new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
                     listener.onSuccess(aVoid);

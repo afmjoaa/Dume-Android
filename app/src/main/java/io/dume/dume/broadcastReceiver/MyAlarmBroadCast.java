@@ -72,7 +72,7 @@ public class MyAlarmBroadCast extends BroadcastReceiver {
             channel1.enableLights(true);
             channel1.setLightColor(Color.CYAN);
             channel1.enableVibration(true);
-            channel1.setVibrationPattern(new long[]{300, 500, 300, 500});
+            channel1.setVibrationPattern(new long[]{200, 500, 200, 500});
             channel1.setShowBadge(true);
             notificationManager.createNotificationChannel(channel1);
         }
@@ -102,8 +102,8 @@ public class MyAlarmBroadCast extends BroadcastReceiver {
                 .setOnlyAlertOnce(true)
                 .setAutoCancel(true)
                 .setDeleteIntent(actionPendingIntent)
-                .setLights(Color.CYAN, 1200, 1200)
-                .setVibrate(new long[]{ 300, 500, 300, 500})
+                .setLights(Color.CYAN, 2000, 2000)
+                .setVibrate(new long[]{200, 500, 200, 500})
                 .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
                 .addAction(R.drawable.ic_disable_notification, "Calm Down", actionPendingIntent)
                 .setTicker("Reminder")

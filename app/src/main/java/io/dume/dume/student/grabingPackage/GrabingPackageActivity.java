@@ -21,7 +21,6 @@ import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -74,12 +73,10 @@ import com.transitionseverywhere.Fade;
 import com.transitionseverywhere.Slide;
 import com.transitionseverywhere.TransitionManager;
 import com.transitionseverywhere.TransitionSet;
-import com.warkiz.widget.IndicatorSeekBar;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -88,12 +85,12 @@ import biz.laenger.android.vpbs.BottomSheetUtils;
 import biz.laenger.android.vpbs.ViewPagerBottomSheetBehavior;
 import io.dume.dume.R;
 import io.dume.dume.customView.HorizontalLoadViewTwo;
-import io.dume.dume.student.grabingLocation.GrabingLocationActivity;
 import io.dume.dume.student.homePage.adapter.HomePageRecyclerData;
 import io.dume.dume.student.pojo.CusStuAppComMapActivity;
 import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
 import io.dume.dume.student.pojo.SearchDataStore;
 import io.dume.dume.student.searchLoading.SearchLoadingActivity;
+import io.dume.dume.student.studentHelp.StudentHelpActivity;
 import io.dume.dume.util.DatePickerFragment;
 import io.dume.dume.util.DumeUtils;
 import io.dume.dume.util.TimePickerFragment;
@@ -984,7 +981,9 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
                 super.onBackPressed();
             }
         } else if (id == R.id.action_help) {
-            //add function here
+            Intent intent = new Intent(context, StudentHelpActivity.class);
+            intent.setAction("how_to_use");
+            startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
     }

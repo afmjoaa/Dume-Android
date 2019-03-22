@@ -20,6 +20,7 @@
         android:layout_marginEnd="10dp"
         android:layout_marginRight="10dp"
         android:src="@drawable/avatar"
+        android:scaleType="centerCrop"
         app:carbon_cornerRadius="35dp"
         app:carbon_elevation="3dp" />
 
@@ -47,7 +48,7 @@
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:singleLine="true"
-                android:maxWidth="170dp"
+                android:maxWidth="130dp"
                 android:textAppearance="@style/EnamTextAppearanceNormal"
                 android:textColor="@color/colorBlack" />
 
@@ -61,7 +62,7 @@
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:singleLine="true"
-                android:maxWidth="170dp"
+                android:maxWidth="130dp"
                 android:textAppearance="@style/EnamTextAppearanceNormal"
                 android:textColor="@color/colorBlack" />
 
@@ -74,7 +75,7 @@
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:singleLine="true"
-                android:maxWidth="170dp"
+                android:maxWidth="130dp"
                 android:textAppearance="@style/EnamTextAppearanceNormal"
                 android:textColor="@color/colorBlack" />
         </LinearLayout>

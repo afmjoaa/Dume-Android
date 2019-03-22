@@ -272,6 +272,7 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
         private TextView stuPreviousResultTV;
         private TextView stuCurrentStatusTV;
         private int position;
+        private TextView requestLetterTV;
 
         public PlaceholderFragment() {
         }
@@ -383,6 +384,7 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
             acceptBTN = rootView.findViewById(R.id.pendding_accept_btn);
             rejectBTN = rootView.findViewById(R.id.pendding_cancel_btn);
             divider = rootView.findViewById(R.id.divider1);
+            requestLetterTV = rootView.findViewById(R.id.reqeustLetterTV);
             //setting the qualification recycler view
             List<Academic> academicList = new ArrayList<>();
             qualificaitonRecyAda = new QualificationAdapter(myThisActivity, academicList);
@@ -418,6 +420,10 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
             String status;
             int deliveryStatus;
             Map<String, Object> documentData = selectedMentor.getData();
+            if (documentData != null) {
+                requestLetterTV.setText(documentData.get("request_letter") == null ? "":documentData.get("request_letter").toString());
+            }
+
             Map<String, Object> spMap = (Map<String, Object>) documentData.get("sp_info");
             mentorName = spMap.get("first_name") + " " + spMap.get("last_name");
             mentorDpUrl = (String) spMap.get("avatar");
@@ -778,7 +784,7 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
                                 myThisActivity.mModel.getRecords(new TeacherContract.Model.Listener<List<Record>>() {
                                     @Override
                                     public void onSuccess(List<Record> list) {
-                                        myThisActivity.mModel.setPenalty(myThisActivity.retriveAction, 50,false, null, new TeacherContract.Model.Listener<Void>() {
+                                        myThisActivity.mModel.setPenalty(myThisActivity.retriveAction, 50, false, null, new TeacherContract.Model.Listener<Void>() {
                                             @Override
                                             public void onSuccess(Void avoid) {
                                                 Google.getInstance().setRecordList(list);
