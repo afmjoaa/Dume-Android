@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="gone"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+            app:layout_behavior=  "@string/appbar_scrolling_view_behavior" />
 
         <LinearLayout
             android:id="@+id/hide_able_host"
@@ -48,9 +48,11 @@
                 android:textSize="13sp"
                 app:fontFamily="@font/cairo_regular" />
 
+            <include layout="@layout/payment_info" />
+
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/payment_method_recycler"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
             <RelativeLayout
