@@ -11,11 +11,17 @@ import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
+import android.util.Log;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.WriteBatch;
 
+import java.util.List;
 import java.util.Map;
 
 import io.dume.dume.R;
@@ -28,7 +34,7 @@ import io.dume.dume.util.DumeUtils;
 
 public class SearchResultModel extends StuBaseModel implements SearchResultContract.Model {
 
-
+    private static final String TAG = "SearchResultModel";
     public SearchResultModel(Context context) {
         super(context);
     }
@@ -68,11 +74,8 @@ public class SearchResultModel extends StuBaseModel implements SearchResultContr
             channel1.setShowBadge(true);
             notificationManager.createNotificationChannel(channel1);
         }
-        Intent resultIntent = new Intent(context, RecordsCurrentActivity.class).setAction(DumeUtils.STUDENT);
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
         stackBuilder.addParentStack(HomePageActivity.class);
-        stackBuilder.addNextIntent(resultIntent);
-        //final Intent[] intents = stackBuilder.getIntents();
 
         PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -97,6 +100,50 @@ public class SearchResultModel extends StuBaseModel implements SearchResultContr
             listener.onSuccess(null);
         }else {
             listener.onError("Error!!");
+        }
+    }
+
+
+    @Override
+    public void updateMentorDailys(List<String> imprssionUid, String requestUid, TeacherContract.Model.Listener<WriteBatch> listener) {
+        // Get a new write batch
+        WriteBatch batch = firestore.batch();
+        for (int i = 0; i < imprssionUid.size(); i++) {
+            //read first
+            DocumentReference mentorDocRef = firestore.collection("/users/mentors/mentor_profile").document(imprssionUid.get(i));
+            int finalI = i;
+            mentorDocRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        assert document != null;
+                        if (document.exists()) {
+                            //Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                            Integer dailyImpression = Integer.parseInt(document.getString("daily_i"));
+                            Integer dailyRequest = Integer.parseInt(document.getString("daily_r"));
+                            dailyImpression = dailyImpression+1;
+                            dailyRequest = dailyRequest + 1;
+                            if(requestUid!= null && requestUid == imprssionUid.get(finalI)){
+                                batch.update(mentorDocRef, "daily_i", dailyImpression.toString(), "daily_r", dailyRequest.toString());
+                            }else{
+                                batch.update(mentorDocRef, "daily_i", dailyImpression.toString());
+                            }
+                            if(finalI == imprssionUid.size()-1){
+                                listener.onSuccess(batch);
+                            }
+                        } else {
+                            Log.d(TAG, "No such document");
+                            if(finalI == imprssionUid.size()-1){
+                                listener.onError("Unknown err !!");
+                            }
+                        }
+                    } else {
+                        Log.d(TAG, "get failed with ", task.getException());
+                        listener.onError("Network err !!");
+                    }
+                }
+            });
         }
     }
 }

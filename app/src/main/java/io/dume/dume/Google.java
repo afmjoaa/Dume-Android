@@ -3,6 +3,7 @@ package io.dume.dume;
 import android.media.MediaPlayer;
 
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.Source;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -29,13 +30,31 @@ public class Google {
     private int snapCounter = 0;
     private InboxActivity.PlaceholderFragment messageFragment;
     private Integer totalStudent, totalMentor;
+    private boolean obligation;
+    private Source source = Source.DEFAULT;
 
     public InboxActivity.PlaceholderFragment getMessageFragment() {
         return messageFragment;
     }
 
+    public Source getSource() {
+        return source;
+    }
+
+    public void setSource(Source source) {
+        this.source = source;
+    }
+
     public void setMessageFragment(InboxActivity.PlaceholderFragment messageFragment) {
         this.messageFragment = messageFragment;
+    }
+
+    public boolean isObligation() {
+        return obligation;
+    }
+
+    public void setObligation(boolean obligation) {
+        this.obligation = obligation;
     }
 
     public int getSnapCounter() {

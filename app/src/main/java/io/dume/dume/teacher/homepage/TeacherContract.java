@@ -116,6 +116,8 @@ public interface TeacherContract {
         void hideProgressTwo();
 
         void showSingleBottomSheetRating(HomePageRatingData currentRatingDataList);
+
+        void updateAccountActive(boolean acountActive);
     }
 
 

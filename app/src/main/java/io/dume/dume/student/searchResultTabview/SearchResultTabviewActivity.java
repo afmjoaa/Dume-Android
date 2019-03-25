@@ -1,5 +1,6 @@
 package io.dume.dume.student.searchResultTabview;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.graphics.drawable.Animatable;
@@ -20,12 +21,14 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -71,6 +74,7 @@ public class SearchResultTabviewActivity extends CustomStuAppCompatActivity impl
     };
     private TabLayout tabLayout;
     private LinearLayout noDataBlock;
+    private Dialog dialog;
 
 
     @Override
@@ -411,14 +415,11 @@ public class SearchResultTabviewActivity extends CustomStuAppCompatActivity impl
         int id = item.getItemId();
 
         switch (id) {
-            case R.id.action_search_set:
-                //Toast.makeText(MainActivity.this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
-                break;
             case R.id.action_help:
                 //Toast.makeText(MainActivity.this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
+                testingCustomDialogue(R.string.search_result_tab_info);
                 break;
             case R.id.action_scatter_view:
-                //Toast.makeText(MainActivity.this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(this, SearchResultActivity.class));
                 break;
             case android.R.id.home:
@@ -432,4 +433,28 @@ public class SearchResultTabviewActivity extends CustomStuAppCompatActivity impl
     public void onBackPressed() {
         super.onBackPressed();
     }
+
+    public void testingCustomDialogue(int infoStringId) {
+        // custom dialog
+        dialog = new Dialog(context);
+        dialog.setContentView(R.layout.custom_obligation_dialogue);
+
+        //all find view here
+        Button dismissBtn = dialog.findViewById(R.id.dismiss_btn);
+        TextView dialogText = dialog.findViewById(R.id.dialog_text);
+        carbon.widget.ImageView dialogImage = dialog.findViewById(R.id.dialog_image);
+        dialogText.setGravity(Gravity.START);
+
+        dialogImage.setImageDrawable(getResources().getDrawable(R.drawable.ic_info_icon_green));
+        dialogText.setText(infoStringId);
+
+        dismissBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+    }
+
 }

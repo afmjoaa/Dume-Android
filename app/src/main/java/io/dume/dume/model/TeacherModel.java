@@ -14,6 +14,8 @@ public interface TeacherModel {
 
     void switchAccountStatus(boolean status, TeacherContract.Model.Listener<Void> listener);
 
+    void changeAllSkillStatus(ArrayList<Skill> skillArrayList, boolean status, TeacherContract.Model.Listener<Void> listener);
+
     void deleteSkill(String id, TeacherContract.Model.Listener<Void> listener);
 
     void loadReview(String id, String count, TeacherContract.Model.Listener<List<ReviewHighlightData>> listener);

@@ -3,6 +3,7 @@ package io.dume.dume.student.searchResult;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -69,10 +70,14 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.firestore.WriteBatch;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.maps.android.SphericalUtil;
@@ -254,13 +259,16 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
     private HomePageModel homePageModel;
     private EditText reqeustLetterET;
     private String foundRecordId;
-
+    private List<String> imprssionUid;
+    private String requestMentorUid;
+    private Dialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.stu6_activity_search_result);
         setActivityContextMap(this, fromFlag);
+        imprssionUid = new ArrayList<>();
         findLoadView();
         markerList = new ArrayList<>();
         mModel = new SearchResultModel(this);
@@ -480,6 +488,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                     Map<String, Object> skillMap = selectedMentor.getData();
                     String spUid = "T_" + skillMap.get("mentor_uid");
 
+                    requestMentorUid = (String) skillMap.get("mentor_uid");
                     Map<String, Object> searchMap = searchDataStore.genRetMainMap();
                     String shUid = "S_" + searchDataStore.getUserUid();
                     if (skillMap == null || searchMap == null) {
@@ -583,22 +592,43 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                             finish();
                             hideProgressBS();
                         } else {
-                            mModel.riseNewRecords(recordsData, new TeacherContract.Model.Listener<DocumentReference>() {
+                            mModel.updateMentorDailys(imprssionUid, requestMentorUid, new TeacherContract.Model.Listener<WriteBatch>() {
                                 @Override
-                                public void onSuccess(DocumentReference list) {
-                                    goHome(list);
-                                    Log.w("foo", "onSuccess: " + list.toString());
-                                    hideProgressBS();
-                                    comfirmYesBtn.setBackgroundColor(getResources().getColor(R.color.colorBlack));
-                                    //comfirmYesBtn.setEnabled(true);
+                                public void onSuccess(WriteBatch batch) {
+                                    batch.commit().addOnCompleteListener((Activity) context,new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            mModel.riseNewRecords(recordsData, new TeacherContract.Model.Listener<DocumentReference>() {
+                                                @Override
+                                                public void onSuccess(DocumentReference list) {
+                                                    goHome(list);
+                                                    Log.w("foo", "onSuccess: " + list.toString());
+                                                    hideProgressBS();
+                                                    comfirmYesBtn.setBackgroundColor(getResources().getColor(R.color.colorBlack));
+                                                    //comfirmYesBtn.setEnabled(true);
+                                                }
+
+                                                @Override
+                                                public void onError(String msg) {
+                                                    flush(msg);
+                                                    comfirmYesBtn.setEnabled(true);
+                                                    comfirmYesBtn.setBackgroundColor(getResources().getColor(R.color.colorBlack));
+                                                    hideProgressBS();
+                                                }
+                                            });
+                                        }
+                                    }).addOnFailureListener((Activity) context, new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            flush("Network err !!");
+                                        }
+                                    });
+
                                 }
 
                                 @Override
                                 public void onError(String msg) {
                                     flush(msg);
-                                    comfirmYesBtn.setEnabled(true);
-                                    comfirmYesBtn.setBackgroundColor(getResources().getColor(R.color.colorBlack));
-                                    hideProgressBS();
                                 }
                             });
                         }
@@ -653,22 +683,42 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                                     finish();
                                     hideProgressBS();
                                 } else {
-                                    mModel.riseNewRecords(recordsData, new TeacherContract.Model.Listener<DocumentReference>() {
+                                    mModel.updateMentorDailys(imprssionUid, requestMentorUid, new TeacherContract.Model.Listener<WriteBatch>() {
                                         @Override
-                                        public void onSuccess(DocumentReference list) {
-                                            goHome(list);
-                                            Log.w("foo", "onSuccess: " + list.toString());
-                                            hideProgressBS();
-                                            comfirmYesBtn.setBackgroundColor(getResources().getColor(R.color.colorBlack));
-                                            //comfirmYesBtn.setEnabled(true);
+                                        public void onSuccess(WriteBatch batch) {
+                                            batch.commit().addOnCompleteListener((Activity) context,new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    mModel.riseNewRecords(recordsData, new TeacherContract.Model.Listener<DocumentReference>() {
+                                                        @Override
+                                                        public void onSuccess(DocumentReference list) {
+                                                            goHome(list);
+                                                            Log.w("foo", "onSuccess: " + list.toString());
+                                                            hideProgressBS();
+                                                            comfirmYesBtn.setBackgroundColor(getResources().getColor(R.color.colorBlack));
+                                                            //comfirmYesBtn.setEnabled(true);
+                                                        }
+
+                                                        @Override
+                                                        public void onError(String msg) {
+                                                            flush(msg);
+                                                            comfirmYesBtn.setEnabled(true);
+                                                            comfirmYesBtn.setBackgroundColor(getResources().getColor(R.color.colorBlack));
+                                                            hideProgressBS();
+                                                        }
+                                                    });
+                                                }
+                                            }).addOnFailureListener((Activity) context, new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    flush("Network err !!");
+                                                }
+                                            });
                                         }
 
                                         @Override
                                         public void onError(String msg) {
                                             flush(msg);
-                                            comfirmYesBtn.setEnabled(true);
-                                            comfirmYesBtn.setBackgroundColor(getResources().getColor(R.color.colorBlack));
-                                            hideProgressBS();
                                         }
                                     });
                                 }
@@ -677,7 +727,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                             @Override
                             public void onError(String msg) {
                                 hideProgress();
-                                //hideProgressBS();
+                                hideProgressBS();
                                 flush(msg);
                             }
                         });
@@ -735,40 +785,60 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                         backNoBtn.setEnabled(false);
                     }
                     mBackBSD.dismiss();
-                    mModel.riseNewPushNoti(new TeacherContract.Model.Listener<Void>() {
+                    mModel.updateMentorDailys(imprssionUid, requestMentorUid, new TeacherContract.Model.Listener<WriteBatch>() {
                         @Override
-                        public void onSuccess(Void aVoid) {
-                            setConfirmedOrCanceled(true);
-                            if (getIntent().getAction().equals("from_HPA")) {
-                                searchDataStore.setFirstTime(false);
-                                onBackPressed();
-                            } else if (getIntent().getAction().equals("from_GPA")) {
-                                Intent intent = new Intent(SearchResultActivity.this, HomePageActivity.class);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                startActivity(intent);
-                            }
-                            hideProgressBS();
-                            comfirmYesBtn.setBackgroundColor(getResources().getColor(R.color.colorBlack));
-                            comfirmYesBtn.setEnabled(true);
+                        public void onSuccess(WriteBatch batch) {
+                            batch.commit().addOnCompleteListener((Activity) context,new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    mModel.riseNewPushNoti(new TeacherContract.Model.Listener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            setConfirmedOrCanceled(true);
+                                            if (getIntent().getAction().equals("from_HPA")) {
+                                                searchDataStore.setFirstTime(false);
+                                                onBackPressed();
+                                            } else if (getIntent().getAction().equals("from_GPA")) {
+                                                Intent intent = new Intent(SearchResultActivity.this, HomePageActivity.class);
+                                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                                startActivity(intent);
+                                            }
+                                            hideProgressBS();
+                                            comfirmYesBtn.setBackgroundColor(getResources().getColor(R.color.colorBlack));
+                                            comfirmYesBtn.setEnabled(true);
+                                        }
+
+                                        @Override
+                                        public void onError(String msg) {
+                                            Log.e(TAG, "onError: " + msg);
+                                            if (getIntent().getAction().equals("from_HPA")) {
+                                                searchDataStore.setFirstTime(false);
+                                                onBackPressed();
+                                            } else if (getIntent().getAction().equals("from_GPA")) {
+                                                Intent intent = new Intent(SearchResultActivity.this, HomePageActivity.class);
+                                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                                startActivity(intent);
+                                            }
+                                            hideProgressBS();
+                                            comfirmYesBtn.setBackgroundColor(getResources().getColor(R.color.colorBlack));
+                                            comfirmYesBtn.setEnabled(true);
+                                        }
+                                    });
+
+                                }
+                            }).addOnFailureListener((Activity) context, new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    flush("Network err !!");
+                                }
+                            });
                         }
 
                         @Override
                         public void onError(String msg) {
-                            Log.e(TAG, "onError: " + msg);
-                            if (getIntent().getAction().equals("from_HPA")) {
-                                searchDataStore.setFirstTime(false);
-                                onBackPressed();
-                            } else if (getIntent().getAction().equals("from_GPA")) {
-                                Intent intent = new Intent(SearchResultActivity.this, HomePageActivity.class);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                startActivity(intent);
-                            }
-                            hideProgressBS();
-                            comfirmYesBtn.setBackgroundColor(getResources().getColor(R.color.colorBlack));
-                            comfirmYesBtn.setEnabled(true);
+                            flush(msg);
                         }
                     });
-
                 }
             });
 
@@ -784,29 +854,49 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                         backYesBtn.setBackgroundColor(getResources().getColor(R.color.disable_color));
                         backYesBtn.setEnabled(false);
                         mBackBSD.dismiss();
-                        mModel.riseNewPushNoti(new TeacherContract.Model.Listener<Void>() {
+                        mModel.updateMentorDailys(imprssionUid, requestMentorUid, new TeacherContract.Model.Listener<WriteBatch>() {
                             @Override
-                            public void onSuccess(Void list) {
-                                setConfirmedOrCanceled(true);
-                                searchDataStore.setFirstTime(false);
-                                onBackPressed();
-                                hideProgressBS();
-                                backYesBtn.setBackgroundColor(getResources().getColor(R.color.colorBlack));
-                                backYesBtn.setEnabled(true);
-                                backNoBtn.setBackgroundColor(getResources().getColor(R.color.colorBlack));
-                                backNoBtn.setEnabled(true);
+                            public void onSuccess(WriteBatch batch) {
+                                batch.commit().addOnCompleteListener((Activity) context,new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        mModel.riseNewPushNoti(new TeacherContract.Model.Listener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void list) {
+                                                setConfirmedOrCanceled(true);
+                                                searchDataStore.setFirstTime(false);
+                                                onBackPressed();
+                                                hideProgressBS();
+                                                backYesBtn.setBackgroundColor(getResources().getColor(R.color.colorBlack));
+                                                backYesBtn.setEnabled(true);
+                                                backNoBtn.setBackgroundColor(getResources().getColor(R.color.colorBlack));
+                                                backNoBtn.setEnabled(true);
+                                            }
+
+                                            @Override
+                                            public void onError(String msg) {
+                                                Log.e(TAG, "onError: " + msg);
+                                                searchDataStore.setFirstTime(false);
+                                                onBackPressed();
+                                                hideProgressBS();
+                                                backYesBtn.setBackgroundColor(getResources().getColor(R.color.colorBlack));
+                                                backYesBtn.setEnabled(true);
+                                                backNoBtn.setBackgroundColor(getResources().getColor(R.color.colorBlack));
+                                                backNoBtn.setEnabled(true);
+                                            }
+                                        });
+                                    }
+                                }).addOnFailureListener((Activity) context, new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        flush("Network err !!");
+                                    }
+                                });
                             }
 
                             @Override
                             public void onError(String msg) {
-                                Log.e(TAG, "onError: " + msg);
-                                searchDataStore.setFirstTime(false);
-                                onBackPressed();
-                                hideProgressBS();
-                                backYesBtn.setBackgroundColor(getResources().getColor(R.color.colorBlack));
-                                backYesBtn.setEnabled(true);
-                                backNoBtn.setBackgroundColor(getResources().getColor(R.color.colorBlack));
-                                backNoBtn.setEnabled(true);
+                                flush(msg);
                             }
                         });
                     }
@@ -824,15 +914,35 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
     protected void onPause() {
         super.onPause();
         if (!isConfirmedOrCanceled()) {
-            mModel.riseNewPushNoti(new TeacherContract.Model.Listener<Void>() {
+            mModel.updateMentorDailys(imprssionUid, requestMentorUid, new TeacherContract.Model.Listener<WriteBatch>() {
                 @Override
-                public void onSuccess(Void list) {
-                    setConfirmedOrCanceled(true);
+                public void onSuccess(WriteBatch batch) {
+                    batch.commit().addOnCompleteListener((Activity) context,new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            mModel.riseNewPushNoti(new TeacherContract.Model.Listener<Void>() {
+                                @Override
+                                public void onSuccess(Void list) {
+                                    setConfirmedOrCanceled(true);
+                                }
+
+                                @Override
+                                public void onError(String msg) {
+                                    Log.e(TAG, "onError: " + msg);
+                                }
+                            });
+                        }
+                    }).addOnFailureListener((Activity) context, new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            flush("Network err !!");
+                        }
+                    });
                 }
 
                 @Override
                 public void onError(String msg) {
-                    Log.e(TAG, "onError: " + msg);
+                    flush(msg);
                 }
             });
         }
@@ -978,18 +1088,6 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
 
         ArrayList<BarData> dataList = new ArrayList<>();
         BarData data = new BarData("Comm.", 3.4f, "3.4€");
-        dataList.add(data);
-
-        data = new BarData("Behaviour", 7.3f, "7.3€");
-        dataList.add(data);
-
-        data = new BarData("Phy", 10f, "8€");
-        dataList.add(data);
-
-        data = new BarData("Chem", 6.2f, "6.2€");
-        dataList.add(data);
-
-        data = new BarData("Math", 3.3f, "3.3€");
         dataList.add(data);
 
         mChart.setDataList(dataList);
@@ -1374,6 +1472,10 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
 
     @Override
     public void pushProfile(DocumentSnapshot singleSkill) {
+        String skillHolderUid = singleSkill.getString("mentor_uid");
+        if (skillHolderUid != null) {
+            imprssionUid.add(skillHolderUid);
+        }
         Map<String, Object> sp_info = (Map<String, Object>) singleSkill.get("sp_info");
         Map<String, Object> selfRating = (Map<String, Object>) sp_info.get("self_rating");
         String avatar = (String) sp_info.get("avatar");
@@ -1503,8 +1605,8 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
         BarData data = new BarData("Comm.", comm_value, comm_text.toString().substring(0, comm_text.toString().length() - 2) + " %");
         dataList.add(data);
 
-        Float beha_value = (Float.parseFloat(self_rating.get("l_communication").toString()) /
-                Float.parseFloat(self_rating.get("l_communication").toString()) + Float.parseFloat(self_rating.get("dl_communication").toString())) * 10;
+        Float beha_value = (Float.parseFloat(self_rating.get("l_behaviour").toString()) /
+                Float.parseFloat(self_rating.get("l_behaviour").toString()) + Float.parseFloat(self_rating.get("dl_behaviour").toString())) * 10;
         Float baha_text = beha_value * 10;
         data = new BarData("Behaviour", beha_value, baha_text.toString().substring(0, baha_text.toString().length() - 2) + " %");
         dataList.add(data);
@@ -1512,7 +1614,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
         Map<String, Object> jizz = (Map<String, Object>) selectedMentor.get("jizz");
         if (getLast(jizz) != null) {
             String mainSsss = (String) jizz.get(getLast(jizz));
-            splitMainSsss = mainSsss.split("\\s*(=>|,|\\s)\\s*");
+            splitMainSsss = mainSsss.split("\\s*(=>|,)\\s*");
         }
         Map<String, Object> likes = (Map<String, Object>) selectedMentor.get("likes");
         Map<String, Object> dislikes = (Map<String, Object>) selectedMentor.get("dislikes");
@@ -1748,11 +1850,8 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
 
         switch (id) {
             case R.id.action_help_main:
-                //Toast.makeText(MainActivity.this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
-                //show toast here
-                break;
             case R.id.action_help:
-                //show dialouge here
+                testingCustomDialogue(R.string.confirm_info);
                 break;
             case R.id.action_list_view:
                 //Toast.makeText(MainActivity.this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
@@ -1768,8 +1867,30 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                 }
                 break;
         }
-
         return super.onOptionsItemSelected(item);
+    }
+
+    public void testingCustomDialogue(int infoStringId) {
+        // custom dialog
+        dialog = new Dialog(context);
+        dialog.setContentView(R.layout.custom_obligation_dialogue);
+
+        //all find view here
+        Button dismissBtn = dialog.findViewById(R.id.dismiss_btn);
+        TextView dialogText = dialog.findViewById(R.id.dialog_text);
+        carbon.widget.ImageView dialogImage = dialog.findViewById(R.id.dialog_image);
+        dialogText.setGravity(Gravity.START);
+
+        dialogImage.setImageDrawable(getResources().getDrawable(R.drawable.ic_info_icon_green));
+        dialogText.setText(infoStringId);
+
+        dismissBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
     }
 
     @Override

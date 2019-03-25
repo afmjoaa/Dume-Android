@@ -239,7 +239,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
 
     @Override
     public void loadHeadsUpPromo(HomePageRecyclerData promoData) {
-        Log.e(TAG, "loadHeadsUpPromo: " );
+        Log.e(TAG, "loadHeadsUpPromo: ");
         if (promoData.getMax_dicount_percentage() > discount) {
             discount = promoData.getMax_dicount_percentage();
             Date expirity = promoData.getExpirity();
@@ -353,6 +353,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         enhanceSkillImageView = findViewById(R.id.enhance_skill_imageview);
         freeCashBackImageView = findViewById(R.id.free_cashback_imageView);
         radioSegmentGroup = findViewById(R.id.segmentGroup);
+
         buttonActive = findViewById(R.id.buttonActive);
         buttonInActive = findViewById(R.id.buttonInActive);
         userName = findViewById(R.id.user_name);
@@ -387,7 +388,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         bottomSheetBtnCallback();
     }
 
-    public void bottomSheetBtnCallback(){
+    public void bottomSheetBtnCallback() {
         learnMoreBtnOne.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -1079,8 +1080,15 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
                 userName.setText(o1 + " " + o + "- Inactive");
                 buttonActive.setCompoundDrawablesWithIntrinsicBounds(R.drawable.state_active_inactive, 0, 0, 0);
                 buttonInActive.setCompoundDrawablesWithIntrinsicBounds(R.drawable.state_inactive_active, 0, 0, 0);
-                switchStatus(false);
-
+                boolean accountActive = (boolean) teacherDataStore.getDocumentSnapshot().get("account_active");
+                if (accountActive) {
+                    switchStatus(false);
+                }else{
+                    Toast toast = Toast.makeText(context, "Your account status is inactive. While you are inactive your skills are excluded from Dume queries...", Toast.LENGTH_LONG);
+                    TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
+                    if (v != null) v.setGravity(Gravity.CENTER);
+                    toast.show();
+                }
                 break;
             default:
                 // Nothing to do
@@ -1595,6 +1603,15 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         }
         hPageBSRcyclerAdapter.addNewData(currentRatingDataList);
 
+    }
+
+    @Override
+    public void updateAccountActive(boolean acountActive) {
+        if (acountActive) {
+            buttonActive.setChecked(true);
+        } else {
+            buttonInActive.setChecked(true);
+        }
     }
 
 }

@@ -10,12 +10,6 @@
         android:title="Scatter view"
         app:showAsAction="always" />
 
-    <item
-        android:id="@+id/action_search_set"
-        android:icon="@drawable/ic_search_settings"
-        android:title="Search Set"
-        android:orderInCategory="100"
-        app:showAsAction="never" />
 
     <item
         android:id="@+id/action_help"

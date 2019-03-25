@@ -454,8 +454,8 @@ public class RecordsCompletedActivity extends CustomStuAppCompatActivity impleme
             BarData data = new BarData("Comm.", comm_value, comm_text.toString().substring(0, comm_text.toString().length() - 2) + " %");
             dataList.add(data);
 
-            Float beha_value = (Float.parseFloat(self_rating.get("l_communication").toString()) /
-                    Float.parseFloat(self_rating.get("l_communication").toString()) + Float.parseFloat(self_rating.get("dl_communication").toString())) * 10;
+            Float beha_value = (Float.parseFloat(self_rating.get("l_behaviour").toString()) /
+                    Float.parseFloat(self_rating.get("l_behaviour").toString()) + Float.parseFloat(self_rating.get("dl_behaviour").toString())) * 10;
             Float baha_text = beha_value * 10;
             data = new BarData("Behaviour", beha_value, baha_text.toString().substring(0, baha_text.toString().length() - 2) + " %");
             dataList.add(data);
@@ -463,7 +463,7 @@ public class RecordsCompletedActivity extends CustomStuAppCompatActivity impleme
             Map<String, Object> jizz = (Map<String, Object>) selectedMentor.get("jizz");
             if (getLast(jizz) != null) {
                 String mainSsss = (String) getLast(jizz);
-                splitMainSsss = mainSsss.split("\\s*(=>|,|\\s)\\s*");
+                splitMainSsss = mainSsss.split("\\s*(=>|,)\\s*");
             }
             Map<String, Object> likes = (Map<String, Object>) selectedMentor.get("likes");
             Map<String, Object> dislikes = (Map<String, Object>) selectedMentor.get("dislikes");

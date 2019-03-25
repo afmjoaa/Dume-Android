@@ -3,6 +3,7 @@ package io.dume.dume.student.searchResult;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.WriteBatch;
 
 import java.util.List;
 import java.util.Map;
@@ -52,5 +53,7 @@ public interface SearchResultContract {
         void riseNewRecords(Map<String, Object> data, TeacherContract.Model.Listener<DocumentReference> listener);
 
         void riseNewPushNoti(TeacherContract.Model.Listener<Void> listener);
+
+        void updateMentorDailys(List<String> imprssionUid, String requestUid, TeacherContract.Model.Listener<WriteBatch> listener);
     }
 }

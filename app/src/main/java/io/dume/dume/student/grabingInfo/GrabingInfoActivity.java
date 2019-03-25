@@ -716,7 +716,7 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                         HashMap<String, Object> dislikes = new HashMap<>();
                         if (getLast(queryMap) != null) {
                             String mainSsss = (String) getLast(queryMap);
-                            splitMainSsss = mainSsss.split("\\s*(=>|,|\\s)\\s*");
+                            splitMainSsss = mainSsss.split("\\s*(=>|,)\\s*");
                         }
                         for (String splited : splitMainSsss) {
                             likes.put(splited, 1);

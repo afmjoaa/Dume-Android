@@ -44,11 +44,13 @@ import java.util.Locale;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import carbon.widget.RelativeLayout;
+import io.dume.dume.Google;
 import io.dume.dume.R;
 import io.dume.dume.model.DumeModel;
 import io.dume.dume.student.common.ReviewAdapter;
 import io.dume.dume.student.common.ReviewHighlightData;
 import io.dume.dume.teacher.homepage.TeacherContract;
+import io.dume.dume.teacher.homepage.TeacherDataStore;
 import io.dume.dume.teacher.model.KeyMap;
 import io.dume.dume.teacher.model.LocalDb;
 import io.dume.dume.teacher.pojo.Skill;
@@ -300,19 +302,30 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             myViewHolder.switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                    new DumeModel(context).swithSkillStatus(skill.getId(), b, new TeacherContract.Model.Listener<Void>() {
-                        @Override
-                        public void onSuccess(Void list) {
-                            String foo = b ? "Active" : "Inactive";
-                            Toast.makeText(context, "Skill Status Changed To " + foo, Toast.LENGTH_SHORT).show();
-                        }
+                    //testing here
+                    boolean obligation = Google.getInstance().isObligation();
+                    boolean accountActive = (boolean) TeacherDataStore.getInstance().getDocumentSnapshot().get("account_active");
+                    if(obligation){
+                        myViewHolder.switchCompat.setChecked(false);
+                        flush("Please pay your due obligation to dume to make your skill active again...");
+                    }else if(!accountActive){
+                        myViewHolder.switchCompat.setChecked(false);
+                        flush("Your account status is inactive.Please toggle your account status first to activate skill...");
+                    }else{
+                        new DumeModel(context).swithSkillStatus(skill.getId(), b, new TeacherContract.Model.Listener<Void>() {
+                            @Override
+                            public void onSuccess(Void list) {
+                                String foo = b ? "Active" : "Inactive";
+                                Toast.makeText(context, "Skill Status Changed To " + foo, Toast.LENGTH_SHORT).show();
+                            }
 
-                        @Override
-                        public void onError(String msg) {
-                            Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                            @Override
+                            public void onError(String msg) {
+                                Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+                            }
+                        });
 
+                    }
                 }
             });
             myViewHolder.publishDate.setText(dateString);
@@ -444,7 +457,7 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 myViewHolder.skillTitleTV.setText(o.toString() + " / " + jizz.get("Category"));
                 myViewHolder.categoryAvatar.setImageResource(iconList.get(jizz.get("Category")));
                 String mainSsss = o.toString();
-                splitMainSsss = mainSsss.split("\\s*(=>|,|\\s)\\s*");
+                splitMainSsss = mainSsss.split("\\s*(=>|,)\\s*");
             }
             for (String splited : splitMainSsss) {
                 likes = likes + Integer.parseInt(skillList.get(i).getLikes().get(splited).toString());
@@ -459,26 +472,39 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             myFragmentHolder.switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                    new DumeModel(context).swithSkillStatus(skillList.get(i).getId(), b, new TeacherContract.Model.Listener<Void>() {
-                        @Override
-                        public void onSuccess(Void list) {
-                            String foo = b ? "Active" : "Inactive";
-                            Toast.makeText(context, "Skill Status Changed To " + foo, Toast.LENGTH_SHORT).show();
+                    boolean obligation = Google.getInstance().isObligation();
+                    boolean accountActive = (boolean) TeacherDataStore.getInstance().getDocumentSnapshot().get("account_active");
+                    if(obligation){
+                        if (compoundButton.isChecked() != false || compoundButton.isChecked() != skillList.get(i).isStatus()) {
+                            myFragmentHolder.switchCompat.setChecked(false);
+                            flush("Please pay your due obligation to dume to make your skill active again...");
                         }
-
-                        @Override
-                        public void onError(String msg) {
-                            Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
-
+                    }else if(!accountActive){
+                        if (compoundButton.isChecked() != false || compoundButton.isChecked() != skillList.get(i).isStatus()) {
+                            myFragmentHolder.switchCompat.setChecked(false);
+                            flush("Your account status is inactive.Please toggle your account status first to activate skill...");
                         }
-                    });
+                    }else{
+                        if (compoundButton.isChecked() != false || compoundButton.isChecked() != skillList.get(i).isStatus()) {
+                            new DumeModel(context).swithSkillStatus(skillList.get(i).getId(), b, new TeacherContract.Model.Listener<Void>() {
+                                @Override
+                                public void onSuccess(Void list) {
+                                    String foo = b ? "Active" : "Inactive";
+                                    Toast.makeText(context, "Skill Status Changed To " + foo, Toast.LENGTH_SHORT).show();
+                                }
 
+                                @Override
+                                public void onError(String msg) {
+                                    Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
+                    }
                 }
             });
             myFragmentHolder.itemView.setOnClickListener(view -> {
                 context.startActivity(new Intent(context, SkillActivity.class));
             });
-
 
             //fixing width
             ViewGroup.LayoutParams layoutParams = myFragmentHolder.hostingRelative.getLayoutParams();
@@ -490,7 +516,7 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             if (getLast(jizz) != null) {
                 String o = getLast(jizz);
                 myFragmentHolder.skillTitleTV.setText(o + " / " + jizz.get("Category"));
-                splitMainSsss = o.split("\\s*(=>|,|\\s)\\s*");
+                splitMainSsss = o.split("\\s*(=>|,)\\s*");
             }
             myFragmentHolder.switchCompat.setChecked(skillList.get(i).isStatus());
             for (String splited : splitMainSsss) {
@@ -513,6 +539,13 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
 
         }
+    }
+
+    public void flush(String msg){
+        Toast toast = Toast.makeText(context, msg, Toast.LENGTH_SHORT);
+        TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
+        if( v != null) v.setGravity(Gravity.CENTER);
+        toast.show();
     }
 
    /* public String getLast(int i) {

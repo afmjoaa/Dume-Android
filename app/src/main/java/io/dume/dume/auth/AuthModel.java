@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -136,6 +137,8 @@ public class AuthModel implements AuthContract.Model, SplashContract.Model, Phon
 
                     if (documents.size() >= 1) {
                         datastore.setDocumentSnapshot(documents.get(0).getData());
+                        boolean obligation = (boolean) documents.get(0).getData().get("obligation");
+                        Google.getInstance().setObligation(obligation);
                         listener.onUserFound();
 
                     } else {
@@ -277,75 +280,91 @@ public class AuthModel implements AuthContract.Model, SplashContract.Model, Phon
     @Override
     public void onAccountTypeFound(FirebaseUser user, AuthGlobalContract.AccountTypeFoundListener listener) {
         listener.onStart();
-
         DocumentReference mini_users = firestore.collection("mini_users").document(user.getUid());
-        listenerRegistration = mini_users.addSnapshotListener((documentSnapshot, e) -> {
-            if (documentSnapshot != null) {
+        //Source source = Source.DEFAULT;
+        mini_users.get(Google.getInstance().getSource()).addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    // Document found in the offline cache
+                    DocumentSnapshot documentSnapshot = task.getResult();
+                    if (documentSnapshot != null) {
 
-                Log.w(TAG, "onAccountTypeFound: " + documentSnapshot.toString());
-                Log.e(TAG, "Fucked Here : " + documentSnapshot.toString());
+                        Log.w(TAG, "onAccountTypeFound: " + documentSnapshot.toString());
+                        Log.e(TAG, "Fucked Here : " + documentSnapshot.toString());
 
-                boolean foreignObligation = (boolean) documentSnapshot.getData().get("foreign_obligation");
-                detachListener();
-                Object o = documentSnapshot.get("account_major");
-                if (datastore != null && datastore.isBottomNavAccountMajor()) {
-                    if (datastore.getAccountManjor() != null) {
-                        datastore.setBottomNavAccountMajor(false);
-                        Map<String, Object> newMap = new HashMap<>();
-                        newMap.put("account_major", datastore.getAccountManjor());
-                        final Task<Void> mini_users1 = mini_users.update(newMap).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.e(TAG, "onFailure: Enam " + e.getLocalizedMessage());
+                        boolean foreignObligation = (boolean) documentSnapshot.getData().get("foreign_obligation");
+                        boolean obligation = (boolean) documentSnapshot.get("obligation");
+                        Google.getInstance().setObligation(obligation);
+                        detachListener();
+                        Object o = documentSnapshot.get("account_major");
+                        if (datastore != null && datastore.isBottomNavAccountMajor()) {
+                            if (datastore.getAccountManjor() != null) {
+                                datastore.setBottomNavAccountMajor(false);
+                                Map<String, Object> newMap = new HashMap<>();
+                                newMap.put("account_major", datastore.getAccountManjor());
+                                final Task<Void> mini_users1 = mini_users.update(newMap).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.e(TAG, "onFailure: Enam " + e.getLocalizedMessage());
+                                    }
+                                }).addOnCompleteListener(taskOne -> {
+
+                                    Log.e(TAG, "addOnCompleteListener: Enam ");
+                                    String account_major = "";
+                                    account_major = datastore.getAccountManjor();
+                                    assert account_major != null;
+                                    if (!foreignObligation) {
+                                        if (account_major.equals("student")) {
+                                            Google.getInstance().setAccountMajor(DumeUtils.STUDENT);
+                                            listener.onStudentFound();
+                                        } else {
+                                            Google.getInstance().setAccountMajor(DumeUtils.TEACHER);
+                                            listener.onTeacherFound();
+
+                                        }
+                                    } else {
+                                        listener.onForeignObligation();
+                                    }
+                                });
+
+                            } else {
+                                Log.w(TAG, "onAccountTypeFound: UnKnown Error");
                             }
-                        }).addOnCompleteListener(task -> {
 
-                            Log.e(TAG, "addOnCompleteListener: Enam ");
+                        } else {
                             String account_major = "";
-                            account_major = datastore.getAccountManjor();
+                            assert o != null;
+                            account_major = o.toString();
                             assert account_major != null;
                             if (!foreignObligation) {
                                 if (account_major.equals("student")) {
                                     Google.getInstance().setAccountMajor(DumeUtils.STUDENT);
+
                                     listener.onStudentFound();
                                 } else {
                                     Google.getInstance().setAccountMajor(DumeUtils.TEACHER);
                                     listener.onTeacherFound();
-
                                 }
                             } else {
                                 listener.onForeignObligation();
                             }
-                        });
 
-                    } else {
-                        Log.w(TAG, "onAccountTypeFound: UnKnown Error");
-                    }
-
-                } else {
-                    String account_major = "";
-                    assert o != null;
-                    account_major = o.toString();
-                    assert account_major != null;
-                    if (!foreignObligation) {
-                        if (account_major.equals("student")) {
-                            Google.getInstance().setAccountMajor(DumeUtils.STUDENT);
-
-                            listener.onStudentFound();
-                        } else {
-                            Google.getInstance().setAccountMajor(DumeUtils.TEACHER);
-                            listener.onTeacherFound();
                         }
+
                     } else {
-                        listener.onForeignObligation();
+                        listener.onFail("Does not found any user");
+                        Log.w(TAG, "onAccountTypeFound: document is not null");
                     }
-
+                } else {
+                    Log.d(TAG, "Cached get failed: ", task.getException());
                 }
-
-            } else {
-                listener.onFail("Does not found any user");
-                Log.w(TAG, "onAccountTypeFound: document is not null");
             }
+        });
+
+
+
+        listenerRegistration = mini_users.addSnapshotListener((documentSnapshot, e) -> {
         });
 
     }

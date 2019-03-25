@@ -25,7 +25,7 @@ class CustomOutcomingMessageViewHolder extends MessagesListAdapter.OutcomingMess
     public void onBind(Message message) {
         super.onBind(message);
         //time.setText(message.getStatus() + " " + time.getText());
-        timeTV.setText(timeTV.getText());
+        //timeTV.setText(timeTV.getText());
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(message.getCreatedAt());
         if (DateFormat.is24HourFormat(itemView.getContext())) {

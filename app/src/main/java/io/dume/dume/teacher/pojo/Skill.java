@@ -1,6 +1,5 @@
 package io.dume.dume.teacher.pojo;
 
-import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.PropertyName;
 
@@ -8,7 +7,6 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class Skill implements Serializable {
     @PropertyName("status")

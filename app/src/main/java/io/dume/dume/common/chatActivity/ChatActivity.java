@@ -58,7 +58,9 @@ import io.dume.dume.common.chatActivity.Used_Classes.MessagesFixtures;
 import io.dume.dume.common.chatActivity.Used_Classes.User;
 import io.dume.dume.student.pojo.SearchDataStore;
 import io.dume.dume.teacher.homepage.TeacherContract;
+import io.dume.dume.teacher.homepage.TeacherDataStore;
 import io.dume.dume.teacher.pojo.Letter;
+import io.dume.dume.util.DumeUtils;
 
 import static io.dume.dume.util.DumeUtils.configureAppbarWithoutColloapsing;
 
@@ -94,6 +96,8 @@ public class ChatActivity extends DemoMessagesActivity implements ChatActivityCo
     private RelativeLayout hideableTypingRelative;
     private ProgressBar progressBarTypingTwo;
     private LinearLayout noDataBlock;
+    private String avatar= null;
+    private ImageView typingAvatar;
 
     @Override
     protected void onPause() {
@@ -142,7 +146,21 @@ public class ChatActivity extends DemoMessagesActivity implements ChatActivityCo
         Google google = Google.getInstance();
         int i = google.getRoomIdList().indexOf(google.getCurrentRoom());
         title.setText(google.getRooms().get(i).getOpponentName());
-        name = google.getRooms().get(i).getOpponentName();
+        switch (google.getAccountMajor()) {
+            case DumeUtils.TEACHER:
+                name = TeacherDataStore.getInstance().gettUserName();
+                avatar = TeacherDataStore.getInstance().gettAvatarString();
+                break;
+            case DumeUtils.STUDENT:
+                name = SearchDataStore.getInstance().getUserName();
+                avatar = SearchDataStore.getInstance().getAvatarString();
+                break;
+            default://this is mainly the boot camp
+                name = SearchDataStore.getInstance().getUserName();
+                avatar = SearchDataStore.getInstance().getAvatarString();
+                break;
+        }
+        Glide.with(context).load(google.getRooms().get(i).getOpponentDP()).apply(new RequestOptions().placeholder(R.drawable.demo_default_avatar_dark)).into(typingAvatar);
         mModel.getToken(google.getRooms().get(i).getOpponentUid()
                 , new TeacherContract.Model.Listener<String>() {
                     @Override
@@ -168,7 +186,7 @@ public class ChatActivity extends DemoMessagesActivity implements ChatActivityCo
                     } else {
                         TYPE = RECIVER;
                     }
-                    Message message = new Message(list.get(i).getUid(), new User(TYPE + "", "Enam", SearchDataStore.DEFAULTMALEAVATER, true), list.get(i).getBody(), list.get(i).getTimestamp());
+                    Message message = new Message(list.get(i).getUid(), new User(TYPE + "", list.get(i).getName(), list.get(i).getAvatar(), true), list.get(i).getBody(), list.get(i).getTimestamp());
                     messages.add(message);
                     Log.w(TAG, "tttt " + list.get(i).getBody());
                 }
@@ -204,7 +222,7 @@ public class ChatActivity extends DemoMessagesActivity implements ChatActivityCo
 
                         } else {
                             ChatActivity.super.messagesAdapter
-                                    .addToStart(new Message(letter.getUid(), new User("" + TYPE, "Enam", SearchDataStore.DEFAULTMALEAVATER, true), letter.getBody(), letter.getTimestamp()), true);
+                                    .addToStart(new Message(letter.getUid(), new User("" + TYPE, letter.getName(), letter.getAvatar(), true), letter.getBody(), letter.getTimestamp()), true);
                             if (noDataBlock.getVisibility() == View.VISIBLE) {
                                 noDataBlock.setVisibility(View.GONE);
                             }
@@ -290,7 +308,7 @@ public class ChatActivity extends DemoMessagesActivity implements ChatActivityCo
                             } else {
                                 TYPE = RECIVER;
                             }
-                            Message message = new Message(list.get(i).getUid(), new User(TYPE + "", "Enam", SearchDataStore.DEFAULTMALEAVATER, true), list.get(i).getBody(), list.get(i).getTimestamp());
+                            Message message = new Message(list.get(i).getUid(), new User(TYPE + "", list.get(i).getName(), list.get(i).getAvatar(), true), list.get(i).getBody(), list.get(i).getTimestamp());
                             messages.add(message);
                         }
                         if (list.size() > 0) {
@@ -337,7 +355,9 @@ public class ChatActivity extends DemoMessagesActivity implements ChatActivityCo
         progressBarTypingTwo = findViewById(R.id.typing_progress_bar_one);
         hideableTypingRelative = findViewById(R.id.hideable_retative_typing);
         noDataBlock = findViewById(R.id.no_data_block);
+        typingAvatar = findViewById(R.id.messageUserAvatar);
     }
+
 
     @Override
     public void initChat() {
@@ -401,12 +421,12 @@ public class ChatActivity extends DemoMessagesActivity implements ChatActivityCo
             Letter letter = new Letter(FirebaseAuth.getInstance().getUid(), input.toString(), new Date());
             letter.setToken(token);
             letter.setName(name);
+            letter.setAvatar(avatar);
             mModel.addMessage(Google.getInstance().getCurrentRoom(), letter, new TeacherContract.Model.Listener<Void>() {
                 @Override
                 public void onSuccess(Void list) {
                     /*ChatActivity.super.messagesAdapter.addToStart(
                             MessagesFixtures.getTextMessage(input.toString()), true);*/
-
                 }
 
                 @Override

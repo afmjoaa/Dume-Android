@@ -20,7 +20,7 @@ public class TeacherDataStore implements Serializable {
     private String packName;
     private ArrayList<Skill> skillArrayList = null;
     private List<Boolean> badgeList;
-private DocumentSnapshot snapshot;
+    private DocumentSnapshot snapshot;
     private String tUserName;
     private String tUserNumber;
     private String tUserMail;

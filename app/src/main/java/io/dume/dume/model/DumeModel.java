@@ -2,11 +2,15 @@ package io.dume.dume.model;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -37,6 +41,8 @@ import io.dume.dume.teacher.homepage.TeacherContract;
 import io.dume.dume.teacher.homepage.TeacherDataStore;
 import io.dume.dume.teacher.pojo.Skill;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class DumeModel extends HomePageModel implements TeacherModel {
 
     private static final String TAG = "DumeModel";
@@ -46,6 +52,11 @@ public class DumeModel extends HomePageModel implements TeacherModel {
     private CollectionReference skillCollection;
     private final GeoFirestore geoFirestore;
     private WriteBatch batch;
+    private SharedPreferences.Editor editor;
+    private SharedPreferences prefs;
+    private static final String MY_PREFS_NAME = "welcome";
+    private Boolean modifiedStatus;
+
 
     public DumeModel(Context context) {
         super((Activity) context, context);
@@ -55,6 +66,9 @@ public class DumeModel extends HomePageModel implements TeacherModel {
         skillCollection = firebaseFirestore.collection("users").document("mentors").collection("skills");
         geoFirestore = new GeoFirestore(skillCollection);
         batch = firebaseFirestore.batch();
+        editor = context.getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE).edit();
+        prefs = context.getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
+
     }
 
     public void switchAcount(String to, TeacherContract.Model.Listener<Void> listener) {
@@ -140,7 +154,48 @@ public class DumeModel extends HomePageModel implements TeacherModel {
         firebaseFirestore.document("users/mentors/mentor_profile/" + FirebaseAuth.getInstance().getUid()).update("account_active", status).addOnSuccessListener((Activity) context, new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                listener.onSuccess(aVoid);
+                //listener.onSuccess(aVoid);
+                //TODO
+                //get all skills
+                //Change all skills status
+                ArrayList<Skill> skillArrayList = TeacherDataStore.getInstance().getSkillArrayList();
+                if (skillArrayList != null) {
+                    changeAllSkillStatus(skillArrayList, status, new TeacherContract.Model.Listener<Void>() {
+                        @Override
+                        public void onSuccess(Void list) {
+                            listener.onSuccess(aVoid);
+                        }
+
+                        @Override
+                        public void onError(String msg) {
+                            Toast.makeText(context, "Network err !!", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                } else {
+                    getSkill(new TeacherContract.Model.Listener<ArrayList<Skill>>() {
+                        @Override
+                        public void onSuccess(ArrayList<Skill> list) {
+                            Log.e(TAG, "onSuccess: " + list.size());
+                            TeacherDataStore.getInstance().setSkillArrayList(list);
+                            changeAllSkillStatus(list, status, new TeacherContract.Model.Listener<Void>() {
+                                @Override
+                                public void onSuccess(Void list) {
+                                    listener.onSuccess(aVoid);
+                                }
+
+                                @Override
+                                public void onError(String msg) {
+                                    Toast.makeText(context, "Network err !!", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void onError(String msg) {
+                            Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -149,6 +204,37 @@ public class DumeModel extends HomePageModel implements TeacherModel {
             }
         });
     }
+
+    @Override
+    public void changeAllSkillStatus(ArrayList<Skill> skillArrayList, boolean status, TeacherContract.Model.Listener<Void> listener) {
+        WriteBatch batch = firebaseFirestore.batch();
+
+        for (int i = 0; i < skillArrayList.size(); i++) {
+            DocumentReference skillRef = firebaseFirestore.collection("users/mentors/skills/").document(skillArrayList.get(i).getId());
+            if (status) {
+                boolean retrivedStatus = prefs.getBoolean(skillArrayList.get(i).getId(), true);
+                batch.update(skillRef, "status", retrivedStatus);
+            } else {//status == false
+                editor.putBoolean(skillArrayList.get(i).getId(), skillArrayList.get(i).isStatus());
+                editor.apply();
+                batch.update(skillRef, "status", false);
+            }
+            if (i == (skillArrayList.size() - 1)) {
+                batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        listener.onSuccess(null);
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        listener.onError(e.getLocalizedMessage());
+                    }
+                });
+            }
+        }
+    }
+
 
     @Override
     public void deleteSkill(String id, TeacherContract.Model.Listener<Void> listener) {
