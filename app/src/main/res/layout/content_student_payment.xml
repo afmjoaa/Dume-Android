@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="gone"
-            app:layout_behavior=  "@string/appbar_scrolling_view_behavior" />
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
         <LinearLayout
             android:id="@+id/hide_able_host"
@@ -35,12 +35,12 @@
                 android:background="#f5f5f5"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:paddingStart="16dp"
-                android:paddingLeft="16dp"
-                android:paddingTop="6dp"
-                android:paddingEnd="16dp"
-                android:paddingRight="16dp"
                 android:paddingBottom="6dp"
+                android:paddingEnd="16dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingStart="16dp"
+                android:paddingTop="6dp"
                 android:text="Payment Methods"
                 android:textAllCaps="false"
                 android:textAppearance="?android:attr/textAppearanceSmall"
@@ -49,6 +49,20 @@
                 app:fontFamily="@font/cairo_regular" />
 
             <include layout="@layout/payment_info" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="Choose Payment Method"
+                android:layout_margin="10dp"
+
+
+                />
+
+            <include layout="@layout/payment_options" />
+
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/payment_method_recycler"
@@ -61,13 +75,13 @@
                 android:layout_height="wrap_content"
                 android:clickable="true"
                 android:focusable="true"
-                android:onClick="onPaymentViewClicked"
                 android:foreground="?android:attr/selectableItemBackground"
+                android:onClick="onPaymentViewClicked"
                 android:orientation="vertical"
-                android:paddingStart="16dp"
-                android:paddingLeft="16dp"
                 android:paddingEnd="18dp"
-                android:paddingRight="18dp">
+                android:paddingLeft="16dp"
+                android:paddingRight="18dp"
+                android:paddingStart="16dp">
 
 
                 <carbon.widget.ImageView
@@ -89,8 +103,8 @@
                     android:layout_toEndOf="@id/add_payment_icon"
                     android:layout_toRightOf="@id/add_payment_icon"
                     android:orientation="vertical"
-                    android:paddingTop="15dp"
-                    android:paddingBottom="15dp">
+                    android:paddingBottom="15dp"
+                    android:paddingTop="15dp">
 
                     <TextView
                         android:id="@+id/add_payment_text"
@@ -99,8 +113,8 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginTop="3dp"
                         android:ellipsize="end"
-                        android:maxWidth="150dp"
                         android:maxLines="1"
+                        android:maxWidth="150dp"
                         android:singleLine="true"
                         android:text="Add Payment Method"
                         android:textAppearance="?android:attr/textAppearanceListItem"
@@ -119,12 +133,12 @@
                 android:background="#f5f5f5"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:paddingStart="16dp"
-                android:paddingLeft="16dp"
-                android:paddingTop="6dp"
-                android:paddingEnd="16dp"
-                android:paddingRight="16dp"
                 android:paddingBottom="6dp"
+                android:paddingEnd="16dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingStart="16dp"
+                android:paddingTop="6dp"
                 android:text="Obligations"
                 android:textAllCaps="false"
                 android:textAppearance="?android:attr/textAppearanceSmall"
@@ -141,10 +155,10 @@
                 android:foreground="?android:attr/selectableItemBackground"
                 android:onClick="onPaymentViewClicked"
                 android:orientation="vertical"
-                android:paddingStart="16dp"
-                android:paddingLeft="16dp"
                 android:paddingEnd="18dp"
-                android:paddingRight="18dp">
+                android:paddingLeft="16dp"
+                android:paddingRight="18dp"
+                android:paddingStart="16dp">
 
 
                 <carbon.widget.ImageView
@@ -166,8 +180,8 @@
                     android:layout_toEndOf="@id/obligation_or_claim_icon"
                     android:layout_toRightOf="@id/obligation_or_claim_icon"
                     android:orientation="vertical"
-                    android:paddingTop="15dp"
-                    android:paddingBottom="15dp">
+                    android:paddingBottom="15dp"
+                    android:paddingTop="15dp">
 
                     <TextView
                         android:id="@+id/obligation_or_claim_name"
@@ -176,8 +190,8 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginTop="3dp"
                         android:ellipsize="end"
-                        android:maxWidth="180dp"
                         android:maxLines="1"
+                        android:maxWidth="180dp"
                         android:singleLine="true"
                         android:text="Current Due Amount"
                         android:textAppearance="?android:attr/textAppearanceListItem"
@@ -194,8 +208,8 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:orientation="vertical"
-                    android:paddingTop="15dp"
-                    android:paddingBottom="15dp">
+                    android:paddingBottom="15dp"
+                    android:paddingTop="15dp">
 
                     <TextView
                         android:id="@+id/obligation_or_claim_value"
@@ -223,12 +237,12 @@
                 android:background="#f5f5f5"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:paddingStart="16dp"
-                android:paddingLeft="16dp"
-                android:paddingTop="6dp"
-                android:paddingEnd="16dp"
-                android:paddingRight="16dp"
                 android:paddingBottom="6dp"
+                android:paddingEnd="16dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingStart="16dp"
+                android:paddingTop="6dp"
                 android:text="Promotions"
                 android:textAllCaps="false"
                 android:textAppearance="?android:attr/textAppearanceSmall"
@@ -245,10 +259,10 @@
                 android:foreground="?android:attr/selectableItemBackground"
                 android:onClick="onPaymentViewClicked"
                 android:orientation="vertical"
-                android:paddingStart="16dp"
-                android:paddingLeft="16dp"
                 android:paddingEnd="18dp"
-                android:paddingRight="18dp">
+                android:paddingLeft="16dp"
+                android:paddingRight="18dp"
+                android:paddingStart="16dp">
 
 
                 <carbon.widget.ImageView
@@ -270,8 +284,8 @@
                     android:layout_toEndOf="@id/promotion_icon"
                     android:layout_toRightOf="@id/promotion_icon"
                     android:orientation="vertical"
-                    android:paddingTop="15dp"
-                    android:paddingBottom="15dp">
+                    android:paddingBottom="15dp"
+                    android:paddingTop="15dp">
 
                     <TextView
                         android:id="@+id/promotions_name_text"
@@ -280,8 +294,8 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginTop="3dp"
                         android:ellipsize="end"
-                        android:maxWidth="150dp"
                         android:maxLines="1"
+                        android:maxWidth="150dp"
                         android:singleLine="true"
                         android:text="Promotions"
                         android:textAppearance="?android:attr/textAppearanceListItem"
@@ -298,8 +312,8 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:orientation="vertical"
-                    android:paddingTop="15dp"
-                    android:paddingBottom="15dp">
+                    android:paddingBottom="15dp"
+                    android:paddingTop="15dp">
 
                     <TextView
                         android:id="@+id/promotion_value_text"
@@ -335,10 +349,10 @@
                 android:foreground="?android:attr/selectableItemBackground"
                 android:onClick="onPaymentViewClicked"
                 android:orientation="vertical"
-                android:paddingStart="16dp"
-                android:paddingLeft="16dp"
                 android:paddingEnd="18dp"
-                android:paddingRight="18dp">
+                android:paddingLeft="16dp"
+                android:paddingRight="18dp"
+                android:paddingStart="16dp">
 
 
                 <carbon.widget.ImageView
@@ -360,8 +374,8 @@
                     android:layout_toEndOf="@id/add_promotion_icon"
                     android:layout_toRightOf="@id/add_promotion_icon"
                     android:orientation="vertical"
-                    android:paddingTop="15dp"
-                    android:paddingBottom="15dp">
+                    android:paddingBottom="15dp"
+                    android:paddingTop="15dp">
 
                     <TextView
                         android:id="@+id/add_promotion_text"
@@ -370,8 +384,8 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginTop="3dp"
                         android:ellipsize="end"
-                        android:maxWidth="150dp"
                         android:maxLines="1"
+                        android:maxWidth="150dp"
                         android:singleLine="true"
                         android:text="Add Promo Code"
                         android:textAppearance="?android:attr/textAppearanceListItem"
@@ -390,12 +404,12 @@
                 android:background="#f5f5f5"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:paddingStart="16dp"
-                android:paddingLeft="16dp"
-                android:paddingTop="6dp"
-                android:paddingEnd="16dp"
-                android:paddingRight="16dp"
                 android:paddingBottom="6dp"
+                android:paddingEnd="16dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingStart="16dp"
+                android:paddingTop="6dp"
                 android:text="Transaction History"
                 android:textAllCaps="false"
                 android:textAppearance="?android:attr/textAppearanceSmall"
@@ -412,10 +426,10 @@
                 android:foreground="?android:attr/selectableItemBackground"
                 android:onClick="onPaymentViewClicked"
                 android:orientation="vertical"
-                android:paddingStart="16dp"
-                android:paddingLeft="16dp"
                 android:paddingEnd="18dp"
-                android:paddingRight="18dp">
+                android:paddingLeft="16dp"
+                android:paddingRight="18dp"
+                android:paddingStart="16dp">
 
 
                 <carbon.widget.ImageView
@@ -437,8 +451,8 @@
                     android:layout_toEndOf="@id/auto_image_icon"
                     android:layout_toRightOf="@id/auto_image_icon"
                     android:orientation="vertical"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp">
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp">
 
                     <TextView
                         android:id="@+id/text_one"
@@ -447,8 +461,8 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginTop="3dp"
                         android:ellipsize="end"
-                        android:maxWidth="150dp"
                         android:maxLines="1"
+                        android:maxWidth="150dp"
                         android:singleLine="true"
                         android:text="Dume count"
                         android:textAppearance="?android:attr/textAppearanceListItem"
@@ -462,8 +476,8 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginTop="2dp"
                         android:ellipsize="end"
-                        android:maxWidth="150dp"
                         android:maxLines="1"
+                        android:maxWidth="150dp"
                         android:singleLine="true"
                         android:text="Total spend"
                         android:textAppearance="?android:attr/textAppearanceSmall"
@@ -480,8 +494,8 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:orientation="vertical"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp">
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp">
 
                     <TextView
                         android:id="@+id/text_one_value"
@@ -520,10 +534,10 @@
             android:id="@+id/secondary_hide_able_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="18dp"
-            android:layout_marginRight="16dp"
             android:layout_marginBottom="10dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="18dp"
             android:orientation="vertical"
             android:visibility="gone">
 
@@ -541,23 +555,23 @@
                 android:id="@+id/id_block"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
                 android:background="@drawable/bg_round_corner_payment_green"
-                android:paddingLeft="6dp"
-                android:paddingTop="5dp"
-                android:paddingRight="8dp"
                 android:paddingBottom="3dp"
                 android:paddingEnd="8dp"
+                android:paddingLeft="6dp"
+                android:paddingRight="8dp"
                 android:paddingStart="6dp"
+                android:paddingTop="5dp"
                 android:visibility="gone">
 
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="6dp"
                     android:layout_marginLeft="6dp"
+                    android:layout_marginStart="6dp"
                     android:text="Bkash ID :"
                     android:textColor="@color/black"
                     app:fontFamily="@font/cairo_regular" />
@@ -587,19 +601,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_round_corner_payment_green"
-                android:paddingLeft="6dp"
-                android:paddingTop="5dp"
-                android:paddingRight="8dp"
                 android:paddingBottom="3dp"
-                android:paddingStart="6dp"
                 android:paddingEnd="8dp"
+                android:paddingLeft="6dp"
+                android:paddingRight="8dp"
+                android:paddingStart="6dp"
+                android:paddingTop="5dp"
                 android:visibility="gone">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="6dp"
                     android:layout_marginLeft="6dp"
+                    android:layout_marginStart="6dp"
                     android:text="Ref :"
                     android:textColor="@color/black"
                     app:fontFamily="@font/cairo_regular" />
@@ -628,11 +642,11 @@
                 android:id="@+id/sub_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:text="@string/cash_payment_detail"
                 android:textAllCaps="false"
                 android:textColor="@color/textColorPrimary"
                 android:textSize="16sp"
-                android:layout_marginTop="10dp"
                 app:fontFamily="@font/cairo_regular" />
 
         </LinearLayout>
