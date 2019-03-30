@@ -508,9 +508,8 @@ public class InboxActivity extends CustomStuAppCompatActivity implements InboxAc
                                     configToolbarTittle(myThisActivity, "1");*/
                                 }
                             };
-                            if (inboxRecycler.getAdapter() != null) {
+                            if (inboxRecycler.getAdapter() == null) {
                                 //recordsRecyAda.updateInboxChatData(list);
-                            } else {
                                 inboxRecycler.setAdapter(recordsRecyAda);
                             }
                             inboxRecycler.setLayoutManager(new LinearLayoutManager(myThisActivity));

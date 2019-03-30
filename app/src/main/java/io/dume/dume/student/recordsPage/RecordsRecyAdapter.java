@@ -91,10 +91,10 @@ public abstract class RecordsRecyAdapter extends RecyclerView.Adapter<RecordsRec
             String dateFormatted = java.text.DateFormat.getDateInstance(java.text.DateFormat.MEDIUM).format(current.getDate().getTime());
             holder.deliveryTime.setText(dateFormatted + " " + timeFormatted);
         }else{
-            calendar.setTime(current.getDate());
+            calendar.setTime(current.getModiDate());
             String timeFormatted  = null;
             if (android.text.format.DateFormat.is24HourFormat(context)) {
-                timeFormatted=DateFormatter.format(current.getDate(), DateFormatter.Template.TIME);
+                timeFormatted=DateFormatter.format(current.getModiDate(), DateFormatter.Template.TIME);
             } else {
                 final int intHour = calendar.get(Calendar.HOUR);
                 final int intMinute = calendar.get(Calendar.MINUTE);
