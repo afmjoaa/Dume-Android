@@ -82,11 +82,23 @@ public class InboxFragment extends Fragment {
         String acceptedCount = (String) unreadRecords.get("accepted_count");
         String currentCount = (String) unreadRecords.get("current_count");
         ArrayList<Inbox> arrayList = new ArrayList<>();
-        arrayList.add(new Inbox(false, "Unread Messages", Integer.parseInt(unreadMsg)));
-        arrayList.add(new Inbox(false, "Unread Notification", Integer.parseInt(unreadNoti)));
-        arrayList.add(new Inbox(true, "Pending Request", Integer.parseInt(pendingCount)));
-        arrayList.add(new Inbox(true, "Accepted Request", Integer.parseInt(acceptedCount)));
-        arrayList.add(new Inbox(true, "Ongoing Dume", Integer.parseInt(currentCount)));
+        arrayList.add(new Inbox(true, "Unread Messages", Integer.parseInt(unreadMsg)));
+        arrayList.add(new Inbox(true, "Unread Notification", Integer.parseInt(unreadNoti)));
+        if(Integer.parseInt(pendingCount)>0){
+            arrayList.add(new Inbox(true, "Pending Request", Integer.parseInt(pendingCount)));
+        }else {
+            arrayList.add(new Inbox(false, "Pending Request", Integer.parseInt(pendingCount)));
+        }
+        if(Integer.parseInt(acceptedCount)>0){
+            arrayList.add(new Inbox(true, "Accepted Request", Integer.parseInt(acceptedCount)));
+        }else {
+            arrayList.add(new Inbox(false, "Accepted Request", Integer.parseInt(acceptedCount)));
+        }
+        if(Integer.parseInt(currentCount)>0){
+            arrayList.add(new Inbox(true, "Current Dume", Integer.parseInt(currentCount)));
+        }else {
+            arrayList.add(new Inbox(false, "Current Dume", Integer.parseInt(currentCount)));
+        }
         showInbox(arrayList);
 
     }

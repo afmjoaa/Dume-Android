@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.view.View;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -30,6 +31,8 @@ import java.util.Map;
 import javax.annotation.Nullable;
 
 import io.dume.dume.Google;
+import io.dume.dume.common.chatActivity.Used_Classes.Message;
+import io.dume.dume.common.chatActivity.Used_Classes.User;
 import io.dume.dume.common.contactActivity.ContactActivityModel;
 import io.dume.dume.common.contactActivity.ContactData;
 import io.dume.dume.common.inboxActivity.InboxCallData;
@@ -45,7 +48,10 @@ public class DemoModel {
     private final Context context;
     private ListenerRegistration listenerRegistration;
     private static final String TAG = "DemoModel";
-
+    private String opUid, opDP = "", opName, unreadMsgString;
+    private Number unreadMsg;
+    private Date lastMsgTime;
+    boolean mute = false;
 
     public DemoModel(Context context) {
 
@@ -220,7 +226,7 @@ public class DemoModel {
                     if (letter != null) {
                         messageListener.onSuccess(letter);
                     } else messageListener.onError("null found");
-                }else {
+                } else {
                     messageListener.onError("null found");
                 }
 
@@ -310,7 +316,7 @@ public class DemoModel {
                                 }
                             }
                             listener.onSuccess(list);
-                        } else  listener.onSuccess(list);
+                        } else listener.onSuccess(list);
                     } else {
                         listener.onError("Unknown Error From Notification" + e.getMessage());
                         Log.w("foo", e.getMessage());
@@ -333,26 +339,57 @@ public class DemoModel {
                     for (int i = 0; i < documents.size(); i++) {
                         DocumentSnapshot snapshot = documents.get(i);
                         Map<String, Object> map = snapshot.getData();
-                        String opUid, opDP = "", opName, unreadMsgString;
-                        Number unreadMsg;
-                        Date lastMsgTime;
-                        boolean mute = false;
                         if (map != null) {
                             List<String> participants = (List<String>) map.get("participants");
                             opUid = opponentUid(participants);
-
                             Map<String, Object> opMap = (Map<String, Object>) map.get(opUid);
                             opName = (String) opMap.get("name");
-                            opDP= (String)opMap.get("dp");
+                            opDP = (String) opMap.get("dp");
                             mute = (Boolean) opMap.get("mute");
                             unreadMsg = (Number) opMap.get("unread_msg");
                             unreadMsgString = (String) opMap.get("last_msg");
                             lastMsgTime = (Date) opMap.get("last_msg_time");
+                            roomList.add(new Room(snapshot.getId(), opUid, opDP, opName, lastMsgTime, mute, unreadMsgString, unreadMsg.intValue()));
+
+                            //testing get the last msg here
+                            int finalI = i;
+                            Google.getInstance().setCurrentRoom(snapshot.getId());
+                            onInboxChange(new TeacherContract.Model.Listener<Letter>() {
+                                @Override
+                                public void onSuccess(Letter letter) {
+                                    if (letter.getUid().equals(FirebaseAuth.getInstance().getUid())) {
+                                        //TYPE = SENDER == myself;
+                                        unreadMsg = 1;
+                                    } else {
+                                        //TYPE = RECIVER == opponent;
+                                        unreadMsg = 2;
+                                    }
+                                    unreadMsgString = letter.getBody();
+                                    lastMsgTime = letter.getTimestamp();
+
+                                    for (int j = 0; j < roomList.size(); j++) {
+                                        if (roomList.get(j).getRoomId() == snapshot.getId()) {
+                                            roomList.remove(j);
+                                            roomList.add(j, new Room(snapshot.getId(), opUid, opDP, opName, lastMsgTime, mute, unreadMsgString, unreadMsg.intValue()));
+                                        }
+                                    }
+                                    //roomList.add(new Room(snapshot.getId(), opUid, opDP, opName, lastMsgTime, mute, unreadMsgString, unreadMsg.intValue()));
+                                    if(finalI == (documents.size()-1)){
+                                        listener.onSuccess(roomList);
+
+                                    }
+                                }
+
+                                @Override
+                                public void onError(String msg) {
+                                    if(finalI == (documents.size()-1)){
+                                        listener.onError("Network err !!");
+                                    }
+                                }
+                            });
 
                         } else return;
-                        roomList.add(new Room(snapshot.getId(), opUid, opDP, opName, lastMsgTime, mute, unreadMsgString, unreadMsg.intValue()));
                     }
-                    listener.onSuccess(roomList);
                 }
 
             });

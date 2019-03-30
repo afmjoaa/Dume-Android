@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.media.AudioAttributes;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.provider.Settings;
@@ -38,11 +39,9 @@ public class MyNotification extends FirebaseMessagingService {
     private final FirebaseFirestore firestore;
     private String type = "";
 
-
     public MyNotification() {
         super();
         firestore = FirebaseFirestore.getInstance();
-
     }
 
     private void sendNotification(String messageTitle, String messageBody) {
@@ -56,10 +55,14 @@ public class MyNotification extends FirebaseMessagingService {
             NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID, name, importance);
             mChannel.setDescription(Description);
             mChannel.enableLights(true);
-            mChannel.setLightColor(Color.WHITE);
+            mChannel.setLightColor(Color.CYAN);
             mChannel.enableVibration(true);
-            mChannel.setVibrationPattern(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
-            mChannel.setShowBadge(false);
+            mChannel.setVibrationPattern(new long[]{200, 500, 200, 500});
+            mChannel.setShowBadge(true);
+            mChannel.setSound(Settings.System.DEFAULT_NOTIFICATION_URI,new AudioAttributes.Builder()
+                    .setUsage(AudioAttributes.USAGE_MEDIA)
+                    .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                    .build());
             notificationManager.createNotificationChannel(mChannel);
         }
 
@@ -71,8 +74,8 @@ public class MyNotification extends FirebaseMessagingService {
                 .setCategory(NotificationCompat.CATEGORY_MESSAGE)
                 .setOnlyAlertOnce(true)
                 .setAutoCancel(true)
-                .setLights(Color.WHITE, 800, 800)
-                .setVibrate(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400})
+                .setLights(Color.CYAN, 1000, 2000)
+                .setVibrate(new long[]{200, 500, 200, 500})
                 .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
                 .setColor(getResources().getColor(R.color.noti_color));
 
@@ -91,7 +94,6 @@ public class MyNotification extends FirebaseMessagingService {
     public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
         if (remoteMessage != null) {
-
             Map<String, String> data = remoteMessage.getData();
             if (data.get("type") != null) {
                 type = data.get("type");
@@ -101,9 +103,9 @@ public class MyNotification extends FirebaseMessagingService {
                 if (!ChatActivity.isActivityLive) {
                     sendNotification(remoteMessage.getNotification().getTitle(), remoteMessage.getNotification().getBody());
                 }
-            } else
+            } else{
                 sendNotification(remoteMessage.getNotification().getTitle(), remoteMessage.getNotification().getBody());
-
+            }
         }
         Log.w("foo", "messageReceived: " + remoteMessage.getData().toString());
     }
@@ -124,7 +126,6 @@ public class MyNotification extends FirebaseMessagingService {
         super.onSendError(s, e);
     }
 
-
     @Override
     public void onNewToken(String s) {
         super.onNewToken(s);
@@ -133,7 +134,6 @@ public class MyNotification extends FirebaseMessagingService {
     }
 
     public static String getToken(Context context) {
-
         token = context.getSharedPreferences("dume", MODE_PRIVATE).getString("fcm_token", "undefined").equals("undefined") ? FirebaseInstanceId.getInstance().getToken()
                 == null ? "undefined" : FirebaseInstanceId.getInstance().getToken() : context.getSharedPreferences("dume", MODE_PRIVATE).getString("fcm_token", "undefined");
         return token;

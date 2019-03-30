@@ -3,17 +3,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="io.dume.dume.student.recordsPage.RecordsPageActivity">
 
-    <item
+    <!--<item
         android:id="@+id/action_sync_now"
         android:icon="@drawable/ic_sync"
         android:orderInCategory="100"
         android:title="@string/sync_now"
-        app:showAsAction="never" />
+        app:showAsAction="never" />-->
 
     <item
         android:id="@+id/action_help"
         android:icon="@drawable/ic_help_outline_black_24dp"
-        android:orderInCategory="101"
+        android:orderInCategory="100"
         android:title="@string/help"
         app:showAsAction="never" />
 

@@ -14,6 +14,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.TabLayout;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -22,6 +23,9 @@ import android.support.v4.view.animation.FastOutLinearInInterpolator;
 import android.support.v4.view.animation.LinearOutSlowInInterpolator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StrikethroughSpan;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -38,9 +42,12 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 import com.hadiidbouk.charts.BarData;
 import com.hadiidbouk.charts.ChartProgressBar;
 import com.jackandphantom.circularprogressbar.CircleProgressbar;
+import com.stfalcon.chatkit.utils.DateFormatter;
 import com.transitionseverywhere.Fade;
 import com.transitionseverywhere.Slide;
 import com.transitionseverywhere.Transition;
@@ -51,6 +58,7 @@ import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -65,11 +73,13 @@ import io.dume.dume.model.DumeModel;
 import io.dume.dume.student.common.QualificationAdapter;
 import io.dume.dume.student.common.ReviewAdapter;
 import io.dume.dume.student.common.ReviewHighlightData;
+import io.dume.dume.student.homePage.adapter.HomePageRecyclerData;
 import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
 import io.dume.dume.student.pojo.SearchDataStore;
 import io.dume.dume.student.recordsAccepted.RecordsAcceptedActivity;
 import io.dume.dume.student.recordsPage.Record;
 import io.dume.dume.student.recordsRejected.RecordsRejectedActivity;
+import io.dume.dume.student.studentHelp.StudentHelpActivity;
 import io.dume.dume.teacher.homepage.TeacherContract;
 import io.dume.dume.teacher.pojo.Academic;
 import io.dume.dume.util.DumeUtils;
@@ -164,6 +174,9 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
         switch (id) {
             case R.id.action_help:
                 //Toast.makeText(MainActivity.this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(context, StudentHelpActivity.class);
+                intent.setAction("how_to_use");
+                startActivity(intent);
                 break;
             case android.R.id.home:
                 super.onBackPressed();
@@ -272,7 +285,13 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
         private TextView stuPreviousResultTV;
         private TextView stuCurrentStatusTV;
         private int position;
-        private TextView requestLetterTV;
+        private carbon.widget.TextView requestLetterTV;
+        private RelativeLayout rlHolder;
+        private android.widget.ImageView saleImageView;
+        private Integer max_dicount_percentage = null;
+        private Integer max_discount_credit = null;
+        private int validDiscount;
+        private String salaryFormatted;
 
         public PlaceholderFragment() {
         }
@@ -343,6 +362,7 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
             stuCurrentStatusTV = rootView.findViewById(R.id.stu_textview_current_status);
 
             //testing anything can happen
+            saleImageView = rootView.findViewById(R.id.sale_image);
             salaryBtn = rootView.findViewById(R.id.show_salary_btn);
             joinedBadge = rootView.findViewById(R.id.achievement_joined_image);
             inauguralBadge = rootView.findViewById(R.id.achievement_inaugural_image);
@@ -385,6 +405,7 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
             rejectBTN = rootView.findViewById(R.id.pendding_cancel_btn);
             divider = rootView.findViewById(R.id.divider1);
             requestLetterTV = rootView.findViewById(R.id.reqeustLetterTV);
+            rlHolder = rootView.findViewById(R.id.rl_holder);
             //setting the qualification recycler view
             List<Academic> academicList = new ArrayList<>();
             qualificaitonRecyAda = new QualificationAdapter(myThisActivity, academicList);
@@ -421,7 +442,13 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
             int deliveryStatus;
             Map<String, Object> documentData = selectedMentor.getData();
             if (documentData != null) {
-                requestLetterTV.setText(documentData.get("request_letter") == null ? "":documentData.get("request_letter").toString());
+                String requestLetter = (String) documentData.get("request_letter");
+                if (requestLetter == null || requestLetter.equals("")) {
+                    //hide the block
+                    rlHolder.setVisibility(View.GONE);
+                } else {
+                    requestLetterTV.setText("Request Letter : " + requestLetter);
+                }
             }
 
             Map<String, Object> spMap = (Map<String, Object>) documentData.get("sp_info");
@@ -451,12 +478,27 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
             salaryInDemandTV.setText(salaryInDemand.substring(1, salaryInDemand.length() - 3) + " BDT");
             subjectInDemand.setText(record.getSubjectExchange());
 
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+            //SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(record.getDate());
+            String timeFormatted = null;
+            if (android.text.format.DateFormat.is24HourFormat(context)) {
+                timeFormatted = DateFormatter.format(record.getDate(), DateFormatter.Template.TIME);
+            } else {
+                final int intHour = calendar.get(Calendar.HOUR);
+                final int intMinute = calendar.get(Calendar.MINUTE);
+                final int intAMPM = calendar.get(Calendar.AM_PM);
 
-            DateFormat formatter = new SimpleDateFormat("hh:mm aaa");
-            formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
-            String timeFormatted = formatter.format(record.getDate());
-            deliveryTime.setText(simpleDateFormat.format(record.getDate()) + " " + timeFormatted);
+                String AM_PM;
+                if (intAMPM == 0) {
+                    AM_PM = "AM";
+                } else {
+                    AM_PM = "PM";
+                }
+                timeFormatted = String.format("%d:%d %s", intHour, intMinute, AM_PM);
+            }
+            String dateFormatted = java.text.DateFormat.getDateInstance(java.text.DateFormat.MEDIUM).format(record.getDate().getTime());
+            deliveryTime.setText(dateFormatted + " " + timeFormatted);
 
             if (record.getStudentDpUrl() != null && !record.getStudentDpUrl().equals("")) {
                 Glide.with(context).load(record.getStudentDpUrl()).apply(new RequestOptions().override((int) (50 * mDensity), (int) (50 * mDensity)).placeholder(R.drawable.demo_default_avatar_dark)).into(studentDisplayPic)
@@ -479,8 +521,34 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
             //fill up all info of the mentor
             NumberFormat currencyInstance = NumberFormat.getCurrencyInstance(Locale.US);
             Number salary = (Number) selectedMentor.get("salary");
-            String format1 = currencyInstance.format(salary);
-            salaryBtn.setText("Salary : " + format1.substring(1, format1.length() - 3) + " BDT");
+
+            Map<String, Object> promo = (Map<String, Object>) selectedMentor.get("promo");
+            if(promo!= null){
+                Gson gson = new Gson();
+                JsonElement jsonElement = gson.toJsonTree(promo);
+                HomePageRecyclerData homePageRecyclerData = gson.fromJson(jsonElement, HomePageRecyclerData.class);
+                if (homePageRecyclerData != null) {
+                        max_dicount_percentage = homePageRecyclerData.getMax_dicount_percentage();
+                        max_discount_credit = homePageRecyclerData.getMax_discount_credit();
+
+                }
+            }
+            if (max_dicount_percentage != null && max_discount_credit != null) {
+                Number calculatedCreditOff = salary.intValue() * max_dicount_percentage * 0.01;
+                validDiscount = Math.min(max_discount_credit, calculatedCreditOff.intValue());
+                String perviousSalaryFormatted = currencyInstance.format(salary.intValue());
+                salaryFormatted = currencyInstance.format(salary.intValue() - validDiscount);
+                SpannableString text = new SpannableString("Salary : " + perviousSalaryFormatted.substring(1, perviousSalaryFormatted.length() - 3) + " BDT " + salaryFormatted.substring(1, salaryFormatted.length() - 3) + " BDT");
+                text.setSpan(new ForegroundColorSpan(context.getResources().getColor(R.color.textColorPrimary)), 9, 9 + (perviousSalaryFormatted.length()), 0);
+                text.setSpan(new StrikethroughSpan(), 9, 9 + (perviousSalaryFormatted.length()), 0);
+                salaryBtn.setText(text);
+                saleImageView.setVisibility(View.VISIBLE);
+
+            } else {
+                saleImageView.setVisibility(View.GONE);
+                salaryFormatted = currencyInstance.format(salary);
+                salaryBtn.setText("Salary : " + salaryFormatted.substring(1, salaryFormatted.length() - 3) + " BDT");
+            }
 
             loadQualificationData(sp_info);
             //setting the achievements badge

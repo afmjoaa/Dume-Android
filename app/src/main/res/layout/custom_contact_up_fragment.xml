@@ -42,12 +42,15 @@
         android:id="@+id/limitTV"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="10dp"
         android:gravity="end"
         android:text="0/200"
+        android:layout_marginTop="6dp"
+        android:layout_marginStart="18dp"
+        android:layout_marginLeft="18dp"
+        android:layout_marginEnd="18dp"
+        android:layout_marginRight="18dp"
         android:textColor="@color/gray"
-        android:textSize="10sp"
-        android:layout_marginRight="15dp" />
+        android:textSize="10sp" />
 
     <LinearLayout
         android:id="@+id/hosting_btn_layout"

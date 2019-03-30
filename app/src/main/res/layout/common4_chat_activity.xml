@@ -195,7 +195,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="Sorry, no contacts to show right now..."
+                android:text="Sorry, no messages to show right now..."
                 android:textAlignment="center"
                 android:textAllCaps="false"
                 android:textColor="@color/textColorSecondary"
@@ -470,6 +470,7 @@
                     android:layout_marginRight="8dp"
                     app:carbon_cornerRadius="12dp"
                     app:carbon_elevation="2dp"
+                    android:scaleType="centerCrop"
                     app:srcCompat="@drawable/demo_default_avatar_dark" />
 
                 <TextView

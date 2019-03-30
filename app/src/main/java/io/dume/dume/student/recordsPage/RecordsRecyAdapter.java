@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.stfalcon.chatkit.utils.DateFormatter;
 
 import java.text.DateFormat;
 import java.text.NumberFormat;
@@ -68,13 +69,47 @@ public abstract class RecordsRecyAdapter extends RecyclerView.Adapter<RecordsRec
         salaryInDemand = NumberFormat.getCurrencyInstance(Locale.US).format(Double.parseDouble(salaryInDemand));
         holder.salaryInDemand.setText(salaryInDemand.substring(1, salaryInDemand.length() - 3) + " BDT");
         holder.subjectInDemand.setText(current.getSubjectExchange());
+        Calendar calendar = Calendar.getInstance();
+        if (current.getStatus().equals("Pending")) {
+            calendar.setTime(current.getDate());
+            String timeFormatted  = null;
+            if (android.text.format.DateFormat.is24HourFormat(context)) {
+                timeFormatted=DateFormatter.format(current.getDate(), DateFormatter.Template.TIME);
+            } else {
+                final int intHour = calendar.get(Calendar.HOUR);
+                final int intMinute = calendar.get(Calendar.MINUTE);
+                final int intAMPM = calendar.get(Calendar.AM_PM);
 
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
-
-        DateFormat formatter = new SimpleDateFormat("hh:mm aaa");
-        formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
-        String timeFormatted = formatter.format(current.getDate());
-        holder.deliveryTime.setText(simpleDateFormat.format(current.getDate()) + " " + timeFormatted);
+                String AM_PM;
+                if (intAMPM == 0) {
+                    AM_PM = "AM";
+                } else {
+                    AM_PM = "PM";
+                }
+                timeFormatted=String.format("%d:%d %s", intHour, intMinute, AM_PM);
+            }
+            String dateFormatted = java.text.DateFormat.getDateInstance(java.text.DateFormat.MEDIUM).format(current.getDate().getTime());
+            holder.deliveryTime.setText(dateFormatted + " " + timeFormatted);
+        }else{
+            calendar.setTime(current.getDate());
+            String timeFormatted  = null;
+            if (android.text.format.DateFormat.is24HourFormat(context)) {
+                timeFormatted=DateFormatter.format(current.getDate(), DateFormatter.Template.TIME);
+            } else {
+                final int intHour = calendar.get(Calendar.HOUR);
+                final int intMinute = calendar.get(Calendar.MINUTE);
+                final int intAMPM = calendar.get(Calendar.AM_PM);
+                String AM_PM;
+                if (intAMPM == 0) {
+                    AM_PM = "AM";
+                } else {
+                    AM_PM = "PM";
+                }
+                timeFormatted=String.format("%d:%d %s", intHour, intMinute, AM_PM);
+            }
+            String dateFormatted = java.text.DateFormat.getDateInstance(java.text.DateFormat.MEDIUM).format(current.getModiDate().getTime());
+            holder.deliveryTime.setText(dateFormatted + " " + timeFormatted);
+        }
         holder.relativeHostLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -105,8 +140,6 @@ public abstract class RecordsRecyAdapter extends RecyclerView.Adapter<RecordsRec
 
         holder.mentorRatingBar.setRating(current.getMentorRating());
         holder.studentRatingBar.setRating(current.getStudentRating());
-
-
     }
 
     @Override
