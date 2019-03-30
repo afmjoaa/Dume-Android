@@ -193,6 +193,7 @@
         <activity
             android:name=".student.searchResult.SearchResultActivity"
             android:label=""
+            android:windowSoftInputMode="stateHidden|adjustResize"
             android:theme="@style/AppTheme.NoActionBar.transparent" />
         <activity
             android:name=".student.searchLoading.SearchLoadingActivity"

@@ -39,6 +39,7 @@ import io.dume.dume.student.recordsCompleted.RecordsCompletedActivity;
 import io.dume.dume.student.recordsCurrent.RecordsCurrentActivity;
 import io.dume.dume.student.recordsPending.RecordsPendingActivity;
 import io.dume.dume.student.recordsRejected.RecordsRejectedActivity;
+import io.dume.dume.student.studentHelp.StudentHelpActivity;
 import io.dume.dume.teacher.homepage.TeacherContract;
 import io.dume.dume.util.DumeUtils;
 
@@ -123,6 +124,12 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
             @Override
             public void onSuccess(Void list) {
                 //nothing to do
+                int tabToOpen = getIntent().getIntExtra("seletedTab", -1);
+                if (tabToOpen != -1) {
+                    // Open the right tab
+                    TabLayout.Tab tab = tabLayout.getTabAt(tabToOpen);
+                    Objects.requireNonNull(tab).select();
+                }
             }
 
             @Override
@@ -332,8 +339,9 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
         int id = item.getItemId();
         switch (id) {
             case R.id.action_help:
-                break;
-            case R.id.action_sync_now:
+                Intent intent = new Intent(context, StudentHelpActivity.class);
+                intent.setAction("how_to_use");
+                startActivity(intent);
                 break;
             case android.R.id.home:
                 super.onBackPressed();

@@ -313,12 +313,9 @@ public class ChatActivity extends DemoMessagesActivity implements ChatActivityCo
                         }
                         if (list.size() > 0) {
                             Google.getInstance().setLastDocumentOfMessage(list.get(list.size() - 1).getDoc());
-
                         }
                         isDataExists = list.size() == 30;
                         ChatActivity.super.messagesAdapter.addToEnd(messages, false);
-
-
                     }
 
                     @Override

@@ -1,6 +1,7 @@
 package io.dume.dume.student.studentHelp;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -56,6 +57,7 @@ import io.dume.dume.util.DumeUtils;
 
 import static io.dume.dume.util.DumeUtils.configAppbarTittle;
 import static io.dume.dume.util.DumeUtils.configureAppbar;
+import static io.dume.dume.util.DumeUtils.showKeyboard;
 
 public class StudentHelpActivity extends CustomStuAppCompatActivity implements StudentHelpContract.View {
 
@@ -264,8 +266,8 @@ public class StudentHelpActivity extends CustomStuAppCompatActivity implements S
             queryTextView.setOnFocusChangeListener((v, hasFocus) -> {
                 if (hasFocus) {
                     queryTextView.setHint("Please describe your problem");
-                } else {
-                    queryTextView.setHint("Please describe your problem");
+                    limit.setTextColor(context.getResources().getColor(R.color.loader_color_one));
+                    showKeyboard((Activity) context);
                 }
             });
 
@@ -284,8 +286,12 @@ public class StudentHelpActivity extends CustomStuAppCompatActivity implements S
                 public void afterTextChanged(Editable editable) {
                     if (editable.toString().length() >= 200) {
                         limit.setText(editable.toString().length() + "/200");
-                        limit.setTextColor(Color.RED);
-                    } else {
+                        //limit.setTextColor(Color.RED);
+                        limit.setTextColor(context.getResources().getColor(R.color.light_red));
+                    } else if(editable.toString().length() >= 1){
+                        limit.setText(editable.toString().length() + "/200");
+                        limit.setTextColor(context.getResources().getColor(R.color.loader_color_one));
+                    }else {
                         limit.setText(editable.toString().length() + "/200");
                         limit.setTextColor(Color.BLACK);
                     }
@@ -310,15 +316,15 @@ public class StudentHelpActivity extends CustomStuAppCompatActivity implements S
                             myMainActivity.hideProgress();
                             Toast.makeText(myMainActivity, msg, Toast.LENGTH_SHORT).show();
                             submitBTN.setEnabled(true);
-
-
                         }
                     });
                 }
                 queryTextView.getText().clear();
             });
             readFaqBTN.setOnClickListener(view -> {
-
+                Intent intent = new Intent(context, StudentHelpActivity.class);
+                intent.setAction("faq");
+                startActivity(intent);
             });
             return rootView;
         }
