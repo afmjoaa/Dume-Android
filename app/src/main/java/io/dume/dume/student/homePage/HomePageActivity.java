@@ -5,6 +5,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -225,6 +226,7 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
     private TextView how_invite_works;
     private Button freeCashBack;
     private Button startMentoringBtn;
+    private SharedPreferences sharedPreferences;
 
 
     @Override
@@ -290,6 +292,9 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
             mPresenter.getDataFromDB();
             searchDataStore.setProfileChanged(false);
         }
+
+        sharedPreferences = context.getSharedPreferences(UNREAD_MESSAGE, MODE_PRIVATE);
+        updateChatBadge(sharedPreferences.getInt("unread", 0));
     }
 
     @Override
@@ -1514,10 +1519,12 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
             updateProfileBadge('%');
         }
     }
-
+    public static String UNREAD_MESSAGE = "unread_message";
     @Override
     public void setUnreadMsg(String unreadMsg) {
         updateChatBadge(Integer.parseInt(unreadMsg));
+        sharedPreferences = context.getSharedPreferences(UNREAD_MESSAGE, MODE_PRIVATE);
+        updateChatBadge(sharedPreferences.getInt("unread", 0));
     }
 
     @Override

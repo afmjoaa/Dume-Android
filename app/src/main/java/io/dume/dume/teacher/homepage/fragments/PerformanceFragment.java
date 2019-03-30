@@ -147,7 +147,9 @@ public class PerformanceFragment extends Fragment {
             String rating = (String) teacherDataStore.getSelfRating().get("star_rating");
             arrayList.add(new KeyValueModel("Ratings", rating + " ★ /" + totalReview));
             String responseTime = (String) teacherDataStore.getSelfRating().get("response_time");
-            arrayList.add(new KeyValueModel("Response Time", responseTime));
+
+            arrayList.add(new KeyValueModel("Response Time", Integer.parseInt(responseTime) > 2 ? responseTime.concat(" hours") : "Great"));
+
             String totalStudents = (String) teacherDataStore.getSelfRating().get("student_guided");
             arrayList.add(new KeyValueModel("Total Students", totalStudents));
             String likeExpertize = (String) teacherDataStore.getSelfRating().get("l_expertise");
@@ -348,37 +350,37 @@ public class PerformanceFragment extends Fragment {
             });
             switch (badgeName) {
                 case "joined":
-                    if(badgeStatus){
+                    if (badgeStatus) {
                         dialogTitleText.setText("Congrats " + TeacherDataStore.getInstance().gettUserName());
                         dialogText.setText(congratsValue[0]);
-                    }else {
+                    } else {
                         dialogTitleText.setText(R.string.unlock_recipe);
                         dialogText.setText(unlockRecipeValue[0]);
                     }
                     break;
                 case "inaugural":
-                    if(badgeStatus){
+                    if (badgeStatus) {
                         dialogTitleText.setText("Congrats " + TeacherDataStore.getInstance().gettUserName());
                         dialogText.setText(congratsValue[1]);
-                    }else {
+                    } else {
                         dialogTitleText.setText(R.string.unlock_recipe);
                         dialogText.setText(unlockRecipeValue[1]);
                     }
                     break;
                 case "leading":
-                    if(badgeStatus){
+                    if (badgeStatus) {
                         dialogTitleText.setText("Congrats " + TeacherDataStore.getInstance().gettUserName());
                         dialogText.setText(congratsValue[2]);
-                    }else {
+                    } else {
                         dialogTitleText.setText(R.string.unlock_recipe);
                         dialogText.setText(unlockRecipeValue[2]);
                     }
                     break;
                 case "premier":
-                    if(badgeStatus){
+                    if (badgeStatus) {
                         dialogTitleText.setText("Congrats " + TeacherDataStore.getInstance().gettUserName());
                         dialogText.setText(congratsValue[3]);
-                    }else {
+                    } else {
                         dialogTitleText.setText(R.string.unlock_recipe);
                         dialogText.setText(unlockRecipeValue[3]);
                     }

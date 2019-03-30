@@ -3,6 +3,7 @@ package io.dume.dume.common.inboxActivity;
 import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
@@ -78,6 +79,8 @@ public class InboxActivity extends CustomStuAppCompatActivity implements InboxAc
     private Intent contactFromIntent;
     private Toolbar myToolbar;
     private static InboxChatAdapter recordsRecyAda;
+    public static String UNREAD_MESSAGE = "unread_message";
+
     public Context context;
 
 
@@ -119,6 +122,10 @@ public class InboxActivity extends CustomStuAppCompatActivity implements InboxAc
 
             // finally publish this custom view to navigation tab
             Objects.requireNonNull(tabLayout.getTabAt(i)).setCustomView(tab);
+            SharedPreferences sharedPreferences = getSharedPreferences(UNREAD_MESSAGE, MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putInt("unread", 0);
+            editor.apply();
         }
         // finishes here ................
 

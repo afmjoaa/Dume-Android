@@ -112,7 +112,13 @@ public class TeacherPresenter implements TeacherContract.Presenter {
                 teachearDataStore.setDocumentSnapshot(documentSnapshot.getData());
                 teachearDataStore.setSnapshot(documentSnapshot);
                 String unread_msg = documentSnapshot.getString("unread_msg");
+
+
+
                 view.setUnreadMsg(unread_msg);
+
+
+
                 String unread_noti = documentSnapshot.getString("unread_noti");
                 view.setUnreadNoti(unread_noti);
                 Map<String, Object> unread_records = (Map<String, Object>) documentSnapshot.get("unread_records");
