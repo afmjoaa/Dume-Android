@@ -1,32 +1,22 @@
 package io.dume.dume.service;
 
-import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.media.AudioAttributes;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.provider.Settings;
-import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.InstanceIdResult;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import io.dume.dume.R;
@@ -105,7 +95,10 @@ public class MyNotification extends FirebaseMessagingService {
                 }
             } else{
                 sendNotification(remoteMessage.getNotification().getTitle(), remoteMessage.getNotification().getBody());
+                // do your work here
+
             }
+
         }
         Log.w("foo", "messageReceived: " + remoteMessage.getData().toString());
     }

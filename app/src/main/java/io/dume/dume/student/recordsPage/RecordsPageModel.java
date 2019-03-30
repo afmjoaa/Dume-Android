@@ -5,8 +5,10 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
@@ -24,6 +26,7 @@ import com.google.firestore.v1beta1.DocumentTransform;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -42,6 +45,7 @@ public class RecordsPageModel implements RecordsPageContract.Model {
     private CollectionReference records;
     private final FirebaseAuth mAuth;
     private String key;
+    private static final String TAG = "RecordsPageModel";
 
     public RecordsPageModel(Context context) {
         this.context = context;
@@ -113,7 +117,7 @@ public class RecordsPageModel implements RecordsPageContract.Model {
                                 Date creation = (Date) data.get("creation");
 
                                 Object status_modi_date = data.get("status_modi_date");
-                                if(status_modi_date!= null){
+                                if (status_modi_date != null) {
                                     modi_creation = (Date) status_modi_date;
                                 }
                                 date = creation.toString();
@@ -143,8 +147,10 @@ public class RecordsPageModel implements RecordsPageContract.Model {
 
     @Override
     public void changeRecordStatus(DocumentSnapshot record, String status, String rejectedBy, TeacherContract.Model.Listener<Void> listener) {
+        String studentUid = record.getString("user_uid");
+        String mentorUid = record.getString("mentor_uid");
         if (!status.equals("Rejected")) {
-            firestore.document("records/" + record.getId()).update("record_status", status, "status_modi_date" , FieldValue.serverTimestamp()).addOnSuccessListener((Activity) context, new OnSuccessListener<Void>() {
+            firestore.document("records/" + record.getId()).update("record_status", status, "status_modi_date", FieldValue.serverTimestamp()).addOnSuccessListener((Activity) context, new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
                     WriteBatch batch = firestore.batch();
@@ -158,31 +164,181 @@ public class RecordsPageModel implements RecordsPageContract.Model {
                             String response = (String) selfRating.get("response_time");
                             String accepted = (String) unreadRecords.get("accepted_count");
                             String rejected = (String) unreadRecords.get("rejected_count");
+                            String current = (String) unreadRecords.get("current_count");
+                            String completed = (String) unreadRecords.get("completed_count");
+                            String pending = (String) unreadRecords.get("pending_count");
                             int responseTime = Integer.parseInt(response == null ? "0" : response);
+
+                            int pendingCount = Integer.parseInt(pending == null ? "0" : pending);
                             int acceptedCount = Integer.parseInt(accepted == null ? "0" : accepted);
+                            int currentCount = Integer.parseInt(current == null ? "0" : current);
+                            int completedCount = Integer.parseInt(completed == null ? "0" : completed);
                             int rejectedCount = Integer.parseInt(rejected == null ? "0" : rejected);
                             if (status.equals("Accepted")) {
                                 acceptedCount++;
+                                pendingCount--;
                             } else {
                                 rejectedCount++;
+                                pendingCount--;
                             }
                             int foo = (int) (currentResponseTime / (1000 * 60 * 60));
-                            int finalResponseTime = (responseTime + foo) / (acceptedCount + rejectedCount);
+                            int finalResponseTime = (responseTime + foo) / (acceptedCount + rejectedCount + completedCount + currentCount);
                             DocumentReference document = firestore.document("users/mentors/mentor_profile/" + FirebaseAuth.getInstance().getUid());
-                            batch.update(document, "self_rating.response_time", String.valueOf(finalResponseTime));
+                            batch.update(document, "self_rating.response_time", String.valueOf(finalResponseTime), "unread_records.pending_count", pendingCount + "", "unread_records.accepted_count", acceptedCount + "");
+
+                            //testing here
+                            DocumentReference studentDocRef = firestore.collection("/users/students/stu_pro_info").document(studentUid);//todo
+                            studentDocRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                    if (task.isSuccessful()) {
+                                        DocumentSnapshot studentDocument = task.getResult();
+                                        assert studentDocument != null;
+                                        if (studentDocument.exists()) {
+                                            Map<String, Object> stuUnreadRecords = (Map<String, Object>) studentDocument.get("unread_records");
+                                            String accepted = (String) stuUnreadRecords.get("accepted_count");
+                                            String rejected = (String) stuUnreadRecords.get("rejected_count");
+                                            String pending = (String) stuUnreadRecords.get("pending_count");
+                                            int stuPendingCount = Integer.parseInt(pending == null ? "0" : pending);
+                                            int stuAcceptedCount = Integer.parseInt(accepted == null ? "0" : accepted);
+                                            int stuRejectedCount = Integer.parseInt(rejected == null ? "0" : rejected);
+                                            if (status.equals("Accepted")) {
+                                                stuAcceptedCount++;
+                                                stuPendingCount--;
+                                            } else {
+                                                stuRejectedCount++;
+                                                stuPendingCount--;
+                                            }
+                                            batch.update(studentDocRef, "unread_records.pending_count", stuPendingCount + "", "unread_records.accepted_count", stuAcceptedCount + "");
+                                            batch.commit();
+                                            listener.onSuccess(aVoid);
+                                        } else {
+                                            Log.d(TAG, "No such document");
+                                        }
+                                    } else {
+                                        listener.onError("Network err !!");
+                                    }
+                                }
+                            });
                         }
                     }
-                    batch.commit();
-                    listener.onSuccess(aVoid);
-
-
                 }
             }).addOnFailureListener(e -> listener.onError(e.getLocalizedMessage()));
         } else {
-            firestore.document("records/" + record.getId()).update("record_status", status, "rejected_by", rejectedBy, "status_modi_date" , FieldValue.serverTimestamp()).addOnSuccessListener((Activity) context, new OnSuccessListener<Void>() {
+            firestore.document("records/" + record.getId()).update("record_status", status, "rejected_by", rejectedBy, "status_modi_date", FieldValue.serverTimestamp()).addOnSuccessListener((Activity) context, new OnSuccessListener<Void>() {
+
+                private int responseTime;
+
                 @Override
                 public void onSuccess(Void aVoid) {
-                    listener.onSuccess(aVoid);
+                    WriteBatch batch = firestore.batch();
+                    Date requestTime = (Date) record.get("creation");
+                    long currentResponseTime = new Date().getTime() - requestTime.getTime();
+                    Map<String, Object> documentSnapshot = new HashMap<>();
+                    if(rejectedBy.equals(DumeUtils.TEACHER)){
+                        documentSnapshot = TeacherDataStore.getInstance().getDocumentSnapshot();
+                        Map<String, Object> selfRating = (Map<String, Object>) documentSnapshot.get("self_rating");
+                        String response = (String) selfRating.get("response_time");
+                        responseTime = Integer.parseInt(response == null ? "0" : response);
+                    }else{
+                        documentSnapshot = SearchDataStore.getInstance().getDocumentSnapshot();
+                    }
+                    Map<String, Object> unreadRecords = (Map<String, Object>) documentSnapshot.get("unread_records");
+                    String accepted = (String) unreadRecords.get("accepted_count");
+                    String rejected = (String) unreadRecords.get("rejected_count");
+                    String current = (String) unreadRecords.get("current_count");
+                    String completed = (String) unreadRecords.get("completed_count");
+                    String pending = (String) unreadRecords.get("pending_count");
+                    int pendingCount = Integer.parseInt(pending == null ? "0" : pending);
+                    int acceptedCount = Integer.parseInt(accepted == null ? "0" : accepted);
+                    int currentCount = Integer.parseInt(current == null ? "0" : current);
+                    int completedCount = Integer.parseInt(completed == null ? "0" : completed);
+                    int rejectedCount = Integer.parseInt(rejected == null ? "0" : rejected);
+                    if (status.equals("Accepted")) {
+                        acceptedCount++;
+                        pendingCount--;
+                    } else {
+                        rejectedCount++;
+                        pendingCount--;
+                    }
+                    if(rejectedBy.equals(DumeUtils.TEACHER)){
+                        int foo = (int) (currentResponseTime / (1000 * 60 * 60));
+                        int finalResponseTime = (responseTime + foo) / (acceptedCount + rejectedCount + completedCount + currentCount);
+                        DocumentReference document = firestore.document("users/mentors/mentor_profile/" + FirebaseAuth.getInstance().getUid());
+                        batch.update(document, "self_rating.response_time", String.valueOf(finalResponseTime), "unread_records.pending_count", pendingCount + "", "unread_records.accepted_count", acceptedCount + "");
+                        //testing here
+                        DocumentReference studentDocRef = firestore.collection("/users/students/stu_pro_info").document(studentUid);//todo
+                        studentDocRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    DocumentSnapshot studentDocument = task.getResult();
+                                    assert studentDocument != null;
+                                    if (studentDocument.exists()) {
+                                        Map<String, Object> stuUnreadRecords = (Map<String, Object>) studentDocument.get("unread_records");
+                                        String accepted = (String) stuUnreadRecords.get("accepted_count");
+                                        String rejected = (String) stuUnreadRecords.get("rejected_count");
+                                        String pending = (String) stuUnreadRecords.get("pending_count");
+                                        int stuPendingCount = Integer.parseInt(pending == null ? "0" : pending);
+                                        int stuAcceptedCount = Integer.parseInt(accepted == null ? "0" : accepted);
+                                        int stuRejectedCount = Integer.parseInt(rejected == null ? "0" : rejected);
+                                        if (status.equals("Accepted")) {
+                                            stuAcceptedCount++;
+                                            stuPendingCount--;
+                                        } else {
+                                            stuRejectedCount++;
+                                            stuPendingCount--;
+                                        }
+                                        batch.update(studentDocRef, "unread_records.pending_count", stuPendingCount + "", "unread_records.accepted_count", stuAcceptedCount + "");
+                                        batch.commit();
+                                        listener.onSuccess(aVoid);
+                                    } else {
+                                        Log.d(TAG, "No such document");
+                                    }
+                                } else {
+                                    listener.onError("Network err !!");
+                                }
+                            }
+                        });
+                    }else{
+                        DocumentReference document = firestore.document("/users/students/stu_pro_info" + FirebaseAuth.getInstance().getUid());
+                        batch.update(document, "unread_records.pending_count", pendingCount + "", "unread_records.accepted_count", acceptedCount + "");
+                        //testing here
+                        DocumentReference studentDocRef = firestore.collection("users/mentors/mentor_profile/").document(mentorUid);//todo
+                        studentDocRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    DocumentSnapshot studentDocument = task.getResult();
+                                    assert studentDocument != null;
+                                    if (studentDocument.exists()) {
+                                        Map<String, Object> stuUnreadRecords = (Map<String, Object>) studentDocument.get("unread_records");
+                                        String accepted = (String) stuUnreadRecords.get("accepted_count");
+                                        String rejected = (String) stuUnreadRecords.get("rejected_count");
+                                        String pending = (String) stuUnreadRecords.get("pending_count");
+                                        int stuPendingCount = Integer.parseInt(pending == null ? "0" : pending);
+                                        int stuAcceptedCount = Integer.parseInt(accepted == null ? "0" : accepted);
+                                        int stuRejectedCount = Integer.parseInt(rejected == null ? "0" : rejected);
+                                        if (status.equals("Accepted")) {
+                                            stuAcceptedCount++;
+                                            stuPendingCount--;
+                                        } else {
+                                            stuRejectedCount++;
+                                            stuPendingCount--;
+                                        }
+                                        batch.update(studentDocRef, "unread_records.pending_count", stuPendingCount + "", "unread_records.accepted_count", stuAcceptedCount + "");
+                                        batch.commit();
+                                        listener.onSuccess(aVoid);
+                                    } else {
+                                        Log.d(TAG, "No such document");
+                                    }
+                                } else {
+                                    listener.onError("Network err !!");
+                                }
+                            }
+                        });
+                    }
+                    //listener.onSuccess(aVoid);
                 }
             }).addOnFailureListener(e -> listener.onError(e.getLocalizedMessage()));
         }
@@ -227,7 +383,7 @@ public class RecordsPageModel implements RecordsPageContract.Model {
             currentAmount = 0 + currentAmount;
         }
         if (ratingPenalty) {
-            firestore.collection(path).document(mAuth.getCurrentUser().getUid()).update("penalty", currentAmount, "self_rating.star_rating",ratingVal ).addOnSuccessListener((Activity) context, new OnSuccessListener<Void>() {
+            firestore.collection(path).document(mAuth.getCurrentUser().getUid()).update("penalty", currentAmount, "self_rating.star_rating", ratingVal).addOnSuccessListener((Activity) context, new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
                     listener.onSuccess(aVoid);

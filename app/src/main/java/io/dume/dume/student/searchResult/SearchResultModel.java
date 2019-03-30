@@ -17,6 +17,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.WriteBatch;
@@ -120,12 +121,21 @@ public class SearchResultModel extends StuBaseModel implements SearchResultContr
                         assert document != null;
                         if (document.exists()) {
                             //Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                            Map<String, Object> unreadRecords = (Map<String, Object>) document.get("unread_records");
                             Integer dailyImpression = Integer.parseInt(document.getString("daily_i"));
                             Integer dailyRequest = Integer.parseInt(document.getString("daily_r"));
+                            Integer pendingCount = Integer.parseInt(unreadRecords.get("pending_count").toString());
+                            pendingCount = pendingCount+1;
                             dailyImpression = dailyImpression+1;
                             dailyRequest = dailyRequest + 1;
                             if(requestUid!= null && requestUid == imprssionUid.get(finalI)){
-                                batch.update(mentorDocRef, "daily_i", dailyImpression.toString(), "daily_r", dailyRequest.toString());
+                                batch.update(mentorDocRef, "daily_i", dailyImpression.toString(), "daily_r", dailyRequest.toString(), "unread_records.pending_count",pendingCount.toString());
+
+                                DocumentReference studentProfile =firestore.collection("/users/students/stu_pro_info").document(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                                Map<String, Object> myDocumentSnap = SearchDataStore.getInstance().getDocumentSnapshot();
+                                Map<String, Object> myUnreadRecords = (Map<String, Object>) myDocumentSnap.get("unread_records");
+                                Integer myPendingCount = Integer.parseInt(myUnreadRecords.get("pending_count").toString());
+                                batch.update(studentProfile,  "unread_records.pending_count",myPendingCount.toString());
                             }else{
                                 batch.update(mentorDocRef, "daily_i", dailyImpression.toString());
                             }

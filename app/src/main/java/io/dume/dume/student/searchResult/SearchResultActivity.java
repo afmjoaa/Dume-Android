@@ -274,7 +274,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
     private Integer max_discount_credit = null;
     private int validDiscount;
     private String salaryFormatted;
-    private ImageView saleImageView;
+    private android.widget.ImageView saleImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
