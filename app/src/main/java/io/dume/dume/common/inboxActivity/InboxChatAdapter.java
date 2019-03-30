@@ -12,8 +12,14 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.jackandphantom.circularprogressbar.CircleProgressbar;
+import com.stfalcon.chatkit.utils.DateFormatter;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.TimeZone;
 
 import carbon.widget.ImageView;
 import io.dume.dume.R;
@@ -42,13 +48,66 @@ public abstract class InboxChatAdapter extends RecyclerView.Adapter<InboxChatAda
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        holder.chatUserName.setText(data.get(position).getOpponentName());
-        Glide.with(context).load(data.get(position).getOpponentDP()).apply(new RequestOptions().placeholder(R.drawable.avatar)).into(holder.chatUserDP);
-        switch (position) {
+        Room room = data.get(position);
+        holder.chatUserName.setText(room.getOpponentName());
+        Glide.with(context).load(room.getOpponentDP()).apply(new RequestOptions().placeholder(R.drawable.avatar)).into(holder.chatUserDP);
+        holder.lastMessage.setText(room.getUnreadMsgString());
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(room.getLastMsgTime());
+
+        if (android.text.format.DateFormat.is24HourFormat(context)) {
+            if(room.getLastMsgTime()!= null)
+            holder.deliveryTime.setText(DateFormatter.format(room.getLastMsgTime(), DateFormatter.Template.TIME));
+        } else {
+            final int intHour = calendar.get(Calendar.HOUR);
+            final int intMinute = calendar.get(Calendar.MINUTE);
+            final int intAMPM = calendar.get(Calendar.AM_PM);
+
+            String AM_PM;
+            if (intAMPM == 0) {
+                AM_PM = "AM";
+            } else {
+                AM_PM = "PM";
+            }
+            if(room.getLastMsgTime()!= null)
+            holder.deliveryTime.setText(String.format("%d:%d %s", intHour, intMinute, AM_PM));
+        }
+
+        if(room.getLastMsgTime()!= null){
+            holder.deliveryTime.setVisibility(View.VISIBLE);
+        }else{
+            holder.deliveryTime.setVisibility(View.GONE);
+        }
+
+        switch (room.getUnreadMsg()){
+            case 0:
+                holder.unreadCount.setVisibility(View.GONE);
+                holder.deliveryImageAndGroupPersonImage.setVisibility(View.GONE);
+                break;
+            case 1:
+                holder.unreadCount.setVisibility(View.VISIBLE);
+                holder.deliveryImageAndGroupPersonImage.setVisibility(View.VISIBLE);
+                holder.deliveryImageAndGroupPersonImage.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_sms_delivered));
+                break;
+            case 2:
+                holder.unreadCount.setVisibility(View.VISIBLE);
+                holder.deliveryImageAndGroupPersonImage.setVisibility(View.VISIBLE);
+                Glide.with(context).load(room.getOpponentDP()).apply(new RequestOptions().placeholder(R.drawable.avatar)).into(holder.deliveryImageAndGroupPersonImage);
+                break;
+        }
+
+        if(room.isMute()){
+            holder.muteCheckerImage.setVisibility(View.VISIBLE);
+        }else {
+            holder.muteCheckerImage.setVisibility(View.GONE);
+        }
+
+        holder.onlineIndicator.setVisibility(View.VISIBLE);
+        holder.offlineIndicator.setVisibility(View.GONE);
+       /* switch (position) {
             case 1:
                 //testing offline
-                holder.onlineIndicator.setVisibility(View.GONE);
-                holder.offlineIndicator.setVisibility(View.VISIBLE);
                 break;
             case 2:
                 //testing selected item
@@ -57,7 +116,7 @@ public abstract class InboxChatAdapter extends RecyclerView.Adapter<InboxChatAda
                 break;
             case 4:
                 break;
-        }
+        }*/
 
         holder.hostRelativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override

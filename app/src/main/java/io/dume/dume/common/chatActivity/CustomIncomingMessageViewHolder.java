@@ -42,6 +42,7 @@ class CustomIncomingMessageViewHolder extends MessagesListAdapter.IncomingMessag
         calendar.setTime(message.getCreatedAt());
 
         if (DateFormat.is24HourFormat(itemView.getContext())) {
+            //time.setText(DateFormatter.format(message.getCreatedAt(), DateFormatter.Template.TIME));
             timeTV.setText(timeTV.getText());
             //calendar.get(Calendar.HOUR_OF_DAY); // gets hour in 24h format
         } else {

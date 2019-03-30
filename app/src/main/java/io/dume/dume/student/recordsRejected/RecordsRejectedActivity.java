@@ -17,6 +17,9 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.animation.FastOutLinearInInterpolator;
 import android.support.v4.view.animation.LinearOutSlowInInterpolator;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StrikethroughSpan;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -32,6 +35,8 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 import com.transitionseverywhere.Fade;
 import com.transitionseverywhere.Slide;
 import com.transitionseverywhere.Transition;
@@ -48,9 +53,11 @@ import java.util.Objects;
 
 import io.dume.dume.Google;
 import io.dume.dume.R;
+import io.dume.dume.student.homePage.adapter.HomePageRecyclerData;
 import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
 import io.dume.dume.student.pojo.SearchDataStore;
 import io.dume.dume.student.recordsPage.Record;
+import io.dume.dume.student.studentHelp.StudentHelpActivity;
 import io.dume.dume.teacher.homepage.TeacherContract;
 import io.dume.dume.util.DumeUtils;
 import io.dume.dume.util.VisibleToggleClickListener;
@@ -126,7 +133,9 @@ public class RecordsRejectedActivity extends CustomStuAppCompatActivity implemen
         int id = item.getItemId();
         switch (id) {
             case R.id.action_help:
-                //Toast.makeText(MainActivity.this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(context, StudentHelpActivity.class);
+                intent.setAction("how_to_use");
+                startActivity(intent);
                 break;
             case android.R.id.home:
                 super.onBackPressed();
@@ -178,6 +187,11 @@ public class RecordsRejectedActivity extends CustomStuAppCompatActivity implemen
         private int fragmentPosition;
         private Button rejectedByBtn;
         private SearchDataStore searchDataStore;
+        private android.widget.ImageView saleImageView;
+        private Integer max_dicount_percentage = null;
+        private Integer max_discount_credit = null;
+        private int validDiscount;
+        private String salaryFormatted;
 
 
         public PlaceholderFragment() {
@@ -216,7 +230,8 @@ public class RecordsRejectedActivity extends CustomStuAppCompatActivity implemen
 
             View rootView = inflater.inflate(R.layout.stu10_viewpager_layout_rejected, container, false);
             salaryBtn = rootView.findViewById(R.id.show_salary_btn);
-            rejectedByBtn = rootView.findViewById(R.id.show_rejectedby_btn);//TODO
+            saleImageView = rootView.findViewById(R.id.sale_image);
+            rejectedByBtn = rootView.findViewById(R.id.show_rejectedby_btn);
             agreementHostLayout = rootView.findViewById(R.id.agreement_term_host_linearlayout);
             agreementInfoBtn = rootView.findViewById(R.id.show_agreement_terms_btn);
             agreementHideable = rootView.findViewById(R.id.agreement_term_layout_vertical);
@@ -313,8 +328,34 @@ public class RecordsRejectedActivity extends CustomStuAppCompatActivity implemen
             //fill up all info of the mentor
             NumberFormat currencyInstance = NumberFormat.getCurrencyInstance(Locale.US);
             Number salary = (Number) selectedMentor.get("salary");
-            String format1 = currencyInstance.format(salary);
-            salaryBtn.setText("Salary : " + format1.substring(1, format1.length() - 3) + " BDT");
+
+            Map<String, Object> promo = (Map<String, Object>) selectedMentor.get("promo");
+            if(promo!= null){
+                Gson gson = new Gson();
+                JsonElement jsonElement = gson.toJsonTree(promo);
+                HomePageRecyclerData homePageRecyclerData = gson.fromJson(jsonElement, HomePageRecyclerData.class);
+                if (homePageRecyclerData != null) {
+                    max_dicount_percentage = homePageRecyclerData.getMax_dicount_percentage();
+                    max_discount_credit = homePageRecyclerData.getMax_discount_credit();
+
+                }
+            }
+            if (max_dicount_percentage != null && max_discount_credit != null) {
+                Number calculatedCreditOff = salary.intValue() * max_dicount_percentage * 0.01;
+                validDiscount = Math.min(max_discount_credit, calculatedCreditOff.intValue());
+                String perviousSalaryFormatted = currencyInstance.format(salary.intValue());
+                salaryFormatted = currencyInstance.format(salary.intValue() - validDiscount);
+                SpannableString text = new SpannableString("Salary : " + perviousSalaryFormatted.substring(1, perviousSalaryFormatted.length() - 3) + " BDT " + salaryFormatted.substring(1, salaryFormatted.length() - 3) + " BDT");
+                text.setSpan(new ForegroundColorSpan(context.getResources().getColor(R.color.textColorPrimary)), 9, 9 + (perviousSalaryFormatted.length()), 0);
+                text.setSpan(new StrikethroughSpan(), 9, 9 + (perviousSalaryFormatted.length()), 0);
+                salaryBtn.setText(text);
+                saleImageView.setVisibility(View.VISIBLE);
+
+            } else {
+                saleImageView.setVisibility(View.GONE);
+                salaryFormatted = currencyInstance.format(salary);
+                salaryBtn.setText("Salary : " + salaryFormatted.substring(1, salaryFormatted.length() - 3) + " BDT");
+            }
 
             //fixing the agreement terms now
             Map<String, Object> self_rating = (Map<String, Object>) sp_info.get("self_rating");

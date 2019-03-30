@@ -102,7 +102,7 @@ public class MyAlarmBroadCast extends BroadcastReceiver {
                 .setOnlyAlertOnce(true)
                 .setAutoCancel(true)
                 .setDeleteIntent(actionPendingIntent)
-                .setLights(Color.CYAN, 2000, 2000)
+                .setLights(Color.CYAN, 1000, 2000)
                 .setVibrate(new long[]{200, 500, 200, 500})
                 .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
                 .addAction(R.drawable.ic_disable_notification, "Calm Down", actionPendingIntent)

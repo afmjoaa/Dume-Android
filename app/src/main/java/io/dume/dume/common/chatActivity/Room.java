@@ -12,9 +12,6 @@ public class Room {
     Date lastMsgTime;
     Integer unreadMsg;
 
-
-
-
     public String getRoomId() {
         return roomId;
     }
@@ -89,4 +86,5 @@ public class Room {
     public void setUnreadMsg(Integer unreadMsg) {
         this.unreadMsg = unreadMsg;
     }
+
 }

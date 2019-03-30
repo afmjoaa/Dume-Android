@@ -24,6 +24,9 @@ import android.support.v4.view.animation.FastOutLinearInInterpolator;
 import android.support.v4.view.animation.LinearOutSlowInInterpolator;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StrikethroughSpan;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -77,6 +80,7 @@ import io.dume.dume.student.recordsCurrent.RecordsCurrentActivity;
 import io.dume.dume.student.recordsPage.Record;
 import io.dume.dume.student.recordsPage.RecordsPageModel;
 import io.dume.dume.student.recordsPending.RecordsPendingActivity;
+import io.dume.dume.student.studentHelp.StudentHelpActivity;
 import io.dume.dume.student.studentPayment.StudentPaymentActivity;
 import io.dume.dume.teacher.homepage.TeacherContract;
 import io.dume.dume.teacher.pojo.Academic;
@@ -148,6 +152,9 @@ public class RecordsCompletedActivity extends CustomStuAppCompatActivity impleme
         switch (id) {
             case R.id.action_help:
                 //Toast.makeText(MainActivity.this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(context, StudentHelpActivity.class);
+                intent.setAction("how_to_use");
+                startActivity(intent);
                 break;
             case android.R.id.home:
                 super.onBackPressed();
@@ -225,6 +232,11 @@ public class RecordsCompletedActivity extends CustomStuAppCompatActivity impleme
         private Button rejectNoBtn;
         private View divider;
         private int fragmentPosition;
+        private android.widget.ImageView saleImageView;
+        private Integer max_dicount_percentage = null;
+        private Integer max_discount_credit = null;
+        private int validDiscount;
+        private String salaryFormatted;
 
 
         public PlaceholderFragment() {
@@ -278,6 +290,7 @@ public class RecordsCompletedActivity extends CustomStuAppCompatActivity impleme
             onlyRatingContainer = rootView.findViewById(R.id.rating_layout_vertical);
 
             //testing anything can happen
+            saleImageView = rootView.findViewById(R.id.sale_image);
             salaryBtn = rootView.findViewById(R.id.show_salary_btn);
             joinedBadge = rootView.findViewById(R.id.achievement_joined_image);
             inauguralBadge = rootView.findViewById(R.id.achievement_inaugural_image);
@@ -380,8 +393,35 @@ public class RecordsCompletedActivity extends CustomStuAppCompatActivity impleme
             //fill up all info of the mentor
             NumberFormat currencyInstance = NumberFormat.getCurrencyInstance(Locale.US);
             Number salary = (Number) selectedMentor.get("salary");
-            String format1 = currencyInstance.format(salary);
-            salaryBtn.setText("Salary : " + format1.substring(1, format1.length() - 3) + " BDT");
+
+            Map<String, Object> promo = (Map<String, Object>) selectedMentor.get("promo");
+            if(promo!= null){
+                Gson gson = new Gson();
+                JsonElement jsonElement = gson.toJsonTree(promo);
+                HomePageRecyclerData homePageRecyclerData = gson.fromJson(jsonElement, HomePageRecyclerData.class);
+                if (homePageRecyclerData != null) {
+                    max_dicount_percentage = homePageRecyclerData.getMax_dicount_percentage();
+                    max_discount_credit = homePageRecyclerData.getMax_discount_credit();
+
+                }
+            }
+            if (max_dicount_percentage != null && max_discount_credit != null) {
+                Number calculatedCreditOff = salary.intValue() * max_dicount_percentage * 0.01;
+                validDiscount = Math.min(max_discount_credit, calculatedCreditOff.intValue());
+                String perviousSalaryFormatted = currencyInstance.format(salary.intValue());
+                salaryFormatted = currencyInstance.format(salary.intValue() - validDiscount);
+                SpannableString text = new SpannableString("Salary : " + perviousSalaryFormatted.substring(1, perviousSalaryFormatted.length() - 3) + " BDT " + salaryFormatted.substring(1, salaryFormatted.length() - 3) + " BDT");
+                text.setSpan(new ForegroundColorSpan(context.getResources().getColor(R.color.textColorPrimary)), 9, 9 + (perviousSalaryFormatted.length()), 0);
+                text.setSpan(new StrikethroughSpan(), 9, 9 + (perviousSalaryFormatted.length()), 0);
+                salaryBtn.setText(text);
+                saleImageView.setVisibility(View.VISIBLE);
+
+            } else {
+                saleImageView.setVisibility(View.GONE);
+                salaryFormatted = currencyInstance.format(salary);
+                salaryBtn.setText("Salary : " + salaryFormatted.substring(1, salaryFormatted.length() - 3) + " BDT");
+            }
+
 
             //setting the achievements badge
             Map<String, Object> achievements = (Map<String, Object>) sp_info.get("achievements");

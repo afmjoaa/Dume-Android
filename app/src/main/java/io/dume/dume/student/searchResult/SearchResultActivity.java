@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.graphics.drawable.Animatable;
@@ -37,6 +38,11 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.SpannableString;
+import android.text.TextWatcher;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StrikethroughSpan;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -133,6 +139,7 @@ import io.dume.dume.util.DumeUtils;
 import io.dume.dume.util.OnSwipeTouchListener;
 import io.dume.dume.util.VisibleToggleClickListener;
 
+import static io.dume.dume.util.DumeUtils.showKeyboard;
 import static io.dume.dume.util.ImageHelper.getRoundedCornerBitmap;
 
 public class SearchResultActivity extends CusStuAppComMapActivity implements OnMapReadyCallback,
@@ -257,11 +264,17 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
     private Marker marker;
     private List<Marker> markerList;
     private HomePageModel homePageModel;
-    private EditText reqeustLetterET;
+    private carbon.widget.EditText reqeustLetterET;
     private String foundRecordId;
     private List<String> imprssionUid;
     private String requestMentorUid;
     private Dialog dialog;
+    private TextView limit;
+    private Integer max_dicount_percentage = null;
+    private Integer max_discount_credit = null;
+    private int validDiscount;
+    private String salaryFormatted;
+    private ImageView saleImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -354,6 +367,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
         bottomSheetNSV = findViewById(R.id.bottom_sheet_scroll_view);
         loadViewBS = findViewById(R.id.loadViewTwo);
 
+        saleImageView = findViewById(R.id.sale_image);
         salaryBtn = findViewById(R.id.show_salary_btn);
         joinedBadge = findViewById(R.id.achievement_joined_image);
         inauguralBadge = findViewById(R.id.achievement_inaugural_image);
@@ -463,12 +477,49 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
         confirmSubText = mMakeRequestBSD.findViewById(R.id.sub_text);
         comfirmYesBtn = mMakeRequestBSD.findViewById(R.id.cancel_yes_btn);
         confirmNoBtn = mMakeRequestBSD.findViewById(R.id.cancel_no_btn);
+        limit = mMakeRequestBSD.findViewById(R.id.limitTV);
         reqeustLetterET = mMakeRequestBSD.findViewById(R.id.requestLetter);
+
         if (confirmMainText != null && confirmSubText != null && comfirmYesBtn != null && confirmNoBtn != null) {
             confirmMainText.setText("Confirm Request");
             confirmSubText.setText("By confirming request will be sent to ____...");
             comfirmYesBtn.setText("Yes, Confirm");
             confirmNoBtn.setText("No");
+            reqeustLetterET.setOnFocusChangeListener((v, hasFocus) -> {
+                if (hasFocus) {
+                    reqeustLetterET.setHint("Anything you wanna mention to your mentor...");
+                    limit.setTextColor(context.getResources().getColor(R.color.colorAccent));
+                    showKeyboard((Activity) context);
+                }
+            });
+
+            reqeustLetterET.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+                    if (editable.toString().length() >= 120) {
+                        limit.setText(editable.toString().length() + "/120");
+                        //limit.setTextColor(Color.RED);
+                        limit.setTextColor(context.getResources().getColor(R.color.light_red));
+                    } else if(editable.toString().length() >= 1){
+                        limit.setText(editable.toString().length() + "/120");
+                        limit.setTextColor(context.getResources().getColor(R.color.colorAccent));
+                    }else {
+                        limit.setText(editable.toString().length() + "/120");
+                        limit.setTextColor(Color.BLACK);
+                    }
+                }
+            });
+
 
             comfirmYesBtn.setOnClickListener(new View.OnClickListener() {
 
@@ -541,6 +592,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                     recordsData.put("t_show_status", true);
                     recordsData.put("s_show_status", true);
                     recordsData.put("rejected_by", DumeUtils.TEACHER);
+                    recordsData.put("payment_added", false);
                     List<String> participants = new ArrayList<>();
                     participants.add((String) skillMap.get("mentor_uid"));
                     participants.add((String) searchDataStore.getUserUid());
@@ -623,7 +675,6 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                                             flush("Network err !!");
                                         }
                                     });
-
                                 }
 
                                 @Override
@@ -1468,6 +1519,28 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                 }
             }
         });
+        //config promo
+        configPromo();
+    }
+
+    public void configPromo(){
+        Map<String, Object> documentSnapshot = searchDataStore.getDocumentSnapshot();
+        ArrayList<String> applied_promo = (ArrayList<String>) documentSnapshot.get("applied_promo");
+        if(applied_promo.size()>0){
+            for (String applied : applied_promo) {
+                Log.w(TAG, "appliedPromo: " + applied);
+                Map<String, Object> promo_item = (Map<String, Object>) documentSnapshot.get(applied);
+                Gson gson = new Gson();
+                JsonElement jsonElement = gson.toJsonTree(promo_item);
+                HomePageRecyclerData homePageRecyclerData = gson.fromJson(jsonElement, HomePageRecyclerData.class);
+                if(homePageRecyclerData!= null){
+                    if(homePageRecyclerData.getPackageName().equals(searchDataStore.getPackageName())){
+                        max_dicount_percentage = homePageRecyclerData.getMax_dicount_percentage();
+                        max_discount_credit = homePageRecyclerData.getMax_discount_credit();
+                    }
+                }
+            }
+        }
     }
 
     @Override
@@ -1525,8 +1598,24 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
         //fill up all info of the mentor TODO
         NumberFormat currencyInstance = NumberFormat.getCurrencyInstance(Locale.US);
         Number salary = (Number) selectedMentor.get("salary");
-        String format1 = currencyInstance.format(salary);
-        salaryBtn.setText("Salary : " + format1.substring(1, format1.length() - 3) + " BDT");
+
+        if (max_dicount_percentage != null && max_discount_credit != null) {
+            Number calculatedCreditOff = salary.intValue()*max_dicount_percentage*0.01;
+            validDiscount = Math.min(max_discount_credit, calculatedCreditOff.intValue());
+            String perviousSalaryFormatted = currencyInstance.format(salary.intValue());
+            salaryFormatted = currencyInstance.format(salary.intValue()-validDiscount);
+            SpannableString text = new SpannableString("Salary : " + perviousSalaryFormatted.substring(1, perviousSalaryFormatted.length() - 3) + " BDT " + salaryFormatted.substring(1, salaryFormatted.length() - 3) + " BDT");
+            text.setSpan(new ForegroundColorSpan(context.getResources().getColor(R.color.textColorPrimary)), 9, 9+(perviousSalaryFormatted.length()), 0);
+            text.setSpan(new StrikethroughSpan(), 9, 9+(perviousSalaryFormatted.length()), 0);
+            salaryBtn.setText(text);
+            saleImageView.setVisibility(View.VISIBLE);
+
+        }else{
+            saleImageView.setVisibility(View.GONE);
+            salaryFormatted = currencyInstance.format(salary);
+            salaryBtn.setText("Salary : " + salaryFormatted.substring(1, salaryFormatted.length() - 3) + " BDT");
+        }
+        //salaryBtn.setPaintFlags(salaryBtn.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         //setting the achievements badge
         Map<String, Object> achievements = (Map<String, Object>) sp_info.get("achievements");
         if ((boolean) achievements.get("joined")) {

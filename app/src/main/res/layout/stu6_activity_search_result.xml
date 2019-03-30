@@ -226,7 +226,7 @@
                     android:layout_marginBottom="10dp"
                     android:orientation="vertical">
 
-                    <carbon.widget.LinearLayout
+                    <carbon.widget.RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/bg_round_corner_rela_layout"
@@ -235,10 +235,22 @@
                         android:paddingLeft="16dp"
                         android:paddingRight="16dp">
 
+                        <ImageView
+                            android:id="@+id/sale_image"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_toLeftOf="@+id/show_salary_btn"
+                            app:srcCompat="@drawable/sale_icon"
+                            android:translationX="5dp"
+                            android:visibility="gone"
+                            android:layout_toStartOf="@+id/show_salary_btn" />
+
                         <Button
                             android:id="@+id/show_salary_btn"
                             style="@style/Widget.AppCompat.Button.Borderless"
-                            android:layout_width="match_parent"
+                            android:layout_width="wrap_content"
+                            android:layout_centerHorizontal="true"
                             android:layout_height="wrap_content"
                             android:clickable="false"
                             android:text="Salary : 10k BDT"
@@ -247,7 +259,7 @@
                             android:textSize="16sp"
                             app:fontFamily="@font/cairo_regular" />
 
-                    </carbon.widget.LinearLayout>
+                    </carbon.widget.RelativeLayout>
 
                 </LinearLayout>
 

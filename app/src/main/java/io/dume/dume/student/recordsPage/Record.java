@@ -14,6 +14,7 @@ public class Record {
     String salaryInDemand;
     String subjectExchange;
     Date date;
+    Date modiDate;
     String mentorDpUrl;
     String studentDpUrl;
     float studentRating;
@@ -48,6 +49,14 @@ public class Record {
         this.deliveryStatus = deliveryStatus;
         this.sGender = studentGender;
         this.mGender = mentorGender;
+    }
+
+    public Date getModiDate() {
+        return modiDate;
+    }
+
+    public void setModiDate(Date modiDate) {
+        this.modiDate = modiDate;
     }
 
     public String getT_rate_status() {

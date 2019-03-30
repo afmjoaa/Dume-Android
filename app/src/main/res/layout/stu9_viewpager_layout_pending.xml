@@ -188,6 +188,7 @@
                     android:id="@+id/delivery_status_image_view"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
+                    android:visibility="gone"
                     android:contentDescription="ic_delivery"
                     app:srcCompat="@drawable/ic_sms_seen" />
 
@@ -256,7 +257,7 @@
             android:layout_marginBottom="10dp"
             android:orientation="vertical">
 
-            <carbon.widget.LinearLayout
+            <carbon.widget.RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_round_corner_rela_layout"
@@ -265,19 +266,31 @@
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp">
 
+                <ImageView
+                    android:id="@+id/sale_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@+id/show_salary_btn"
+                    app:srcCompat="@drawable/sale_icon"
+                    android:translationX="6dp"
+                    android:visibility="gone"
+                    android:layout_toStartOf="@+id/show_salary_btn" />
+
                 <Button
                     android:id="@+id/show_salary_btn"
                     style="@style/Widget.AppCompat.Button.Borderless"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:clickable="false"
+                    android:layout_centerHorizontal="true"
                     android:text="Salary : 10k BDT"
                     android:textAllCaps="false"
                     android:textColor="@color/highlight_red"
                     android:textSize="16sp"
                     app:fontFamily="@font/cairo_regular" />
 
-            </carbon.widget.LinearLayout>
+            </carbon.widget.RelativeLayout>
 
         </LinearLayout>
 
@@ -328,41 +341,44 @@
                 android:paddingBottom="8dp"
                 android:translationY="-2dp">
 
-                <carbon.widget.TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_margin="0dp"
-                    android:drawableStart="@drawable/letter_black_24dp"
-                    android:drawableLeft="@drawable/letter_black_24dp"
-
-                    android:gravity="center_vertical"
-                    android:drawablePadding="5sp"
-                    android:paddingTop="2dp"
-                    android:paddingBottom="2dp"
-                    android:text="Request Letter"
-                    android:textAllCaps="false"
-                  android:scaleType="centerCrop"
-                    android:textColor="@color/textColorPrimary"
-                    android:textSize="13sp"
-                    android:textStyle="normal"
-                    app:fontFamily="@font/cairo_regular" />
-
-                <TextView
-                    android:id="@+id/reqeustLetterTV"
+                <RelativeLayout
+                    android:id="@+id/rl_holder"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:minLines="3"
-                    android:paddingTop="2dp"
-                    android:paddingBottom="2dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_height="wrap_content">
 
-                    android:text="N/A"
-                    android:textAllCaps="false"
-                    android:textColor="@color/textColorPrimary"
-                    android:textSize="13sp"
-                    android:textStyle="normal"
-                    app:fontFamily="@font/cairo_regular" />
+                    <carbon.widget.ImageView
+                        android:id="@+id/testing_iv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="3dp"
+                        android:layout_marginRight="3dp"
+                        android:layout_marginLeft="1dp"
+                        android:layout_marginStart="1dp"
+                        android:padding="1dp"
+                        android:translationY="1dp"
+                        app:srcCompat="@drawable/letter_accent_24dp" />
+
+                    <carbon.widget.TextView
+                        android:id="@+id/reqeustLetterTV"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:layout_toEndOf="@+id/testing_iv"
+                        android:layout_toRightOf="@+id/testing_iv"
+                        android:clickable="false"
+                        android:inputType="textMultiLine"
+                        android:maxLength="120"
+                        android:padding="4dp"
+                        android:textSize="13sp"
+                        app:carbon_cornerRadius="4dp"
+                        android:text="testing"
+                        android:textColor="@color/textColorPrimary"
+                        app:fontFamily="@font/cairo_regular" />
+
+                </RelativeLayout>
+                <!--android:background="@drawable/accent_border_bg"-->
 
                 <TextView
                     android:id="@+id/textview_starting_time"
@@ -371,7 +387,7 @@
                     android:layout_margin="0dp"
                     android:drawableStart="@drawable/ic_keyboard_arrow_right_black_24dp"
                     android:drawableLeft="@drawable/ic_keyboard_arrow_right_black_24dp"
-                    android:drawablePadding="6dp"
+                    android:drawablePadding="8dp"
                     android:gravity="center_vertical"
                     android:paddingTop="2dp"
                     android:paddingBottom="2dp"
@@ -390,7 +406,7 @@
                     android:layout_margin="0dp"
                     android:drawableStart="@drawable/ic_keyboard_arrow_right_black_24dp"
                     android:drawableLeft="@drawable/ic_keyboard_arrow_right_black_24dp"
-                    android:drawablePadding="6dp"
+                    android:drawablePadding="8dp"
                     android:gravity="center_vertical"
                     android:paddingTop="2dp"
                     android:paddingBottom="2dp"
@@ -409,7 +425,7 @@
                     android:layout_margin="0dp"
                     android:drawableStart="@drawable/ic_keyboard_arrow_right_black_24dp"
                     android:drawableLeft="@drawable/ic_keyboard_arrow_right_black_24dp"
-                    android:drawablePadding="6dp"
+                    android:drawablePadding="8dp"
                     android:ellipsize="end"
                     android:gravity="center_vertical"
                     android:maxLines="1"
@@ -430,7 +446,7 @@
                     android:layout_margin="0dp"
                     android:drawableStart="@drawable/ic_keyboard_arrow_right_black_24dp"
                     android:drawableLeft="@drawable/ic_keyboard_arrow_right_black_24dp"
-                    android:drawablePadding="6dp"
+                    android:drawablePadding="8dp"
                     android:paddingTop="2dp"
                     android:paddingBottom="2dp"
                     android:singleLine="true"

@@ -344,7 +344,7 @@ public class InboxActivity extends CustomStuAppCompatActivity implements InboxAc
             return fragment;
         }
 
-        @Override
+        /*@Override
         public void setUserVisibleHint(boolean isVisibleToUser) {
             super.setUserVisibleHint(isVisibleToUser);
             if (isVisibleToUser) {
@@ -427,7 +427,7 @@ public class InboxActivity extends CustomStuAppCompatActivity implements InboxAc
             } else {
                 //nothing to do here
             }
-        }
+        }*/
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -488,14 +488,18 @@ public class InboxActivity extends CustomStuAppCompatActivity implements InboxAc
 
                                 @Override
                                 void OnItemLongClicked(View v, int position) {
-                                    Toast.makeText(myThisActivity, "Inbox Chat long click", Toast.LENGTH_SHORT).show();
+                                    /*Toast.makeText(myThisActivity, "Inbox Chat long click", Toast.LENGTH_SHORT).show();
                                     chatUserDP1 = v.findViewById(R.id.chat_user_display_pic);
                                     chatUserDP1.setHeight((int) (44 * myThisActivity.getResources().getDisplayMetrics().density));
                                     chatUserDP1.setWidth((int) (44 * myThisActivity.getResources().getDisplayMetrics().density));
-                                    configToolbarTittle(myThisActivity, "1");
+                                    configToolbarTittle(myThisActivity, "1");*/
                                 }
                             };
-                            inboxRecycler.setAdapter(recordsRecyAda);
+                            if (inboxRecycler.getAdapter() != null) {
+                                //recordsRecyAda.updateInboxChatData(list);
+                            } else {
+                                inboxRecycler.setAdapter(recordsRecyAda);
+                            }
                             inboxRecycler.setLayoutManager(new LinearLayoutManager(myThisActivity));
                             if (list.size() <= 0) {
                                 noDataBlockMsg.setVisibility(View.VISIBLE);
@@ -625,11 +629,11 @@ public class InboxActivity extends CustomStuAppCompatActivity implements InboxAc
 
                         @Override
                         void OnItemLongClicked(View v, int position) {
-                            Toast.makeText(myThisActivity, "Inbox Chat long click", Toast.LENGTH_SHORT).show();
+                            /*Toast.makeText(myThisActivity, "Inbox Chat long click", Toast.LENGTH_SHORT).show();
                             chatUserDP1 = v.findViewById(R.id.chat_user_display_pic);
                             chatUserDP1.setHeight((int) (44 * myThisActivity.getResources().getDisplayMetrics().density));
                             chatUserDP1.setWidth((int) (44 * myThisActivity.getResources().getDisplayMetrics().density));
-                            configToolbarTittle(myThisActivity, "1");
+                            configToolbarTittle(myThisActivity, "1");*/
                         }
                     };
                     inboxRecycler.setAdapter(recordsRecyAda);

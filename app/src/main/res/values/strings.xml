@@ -695,14 +695,13 @@ provided.Tap salary for details.  </string>
     <string name="status_achievement">Status/Achievement</string>
     <string name="clear_obligation">Your have been accused of creating multiple account without paying the due amount of your previous account.\n Please pay the previous account due amount to clear the obligation</string>
     <string name="academic_info"><![CDATA[•\tSetting false info is strictly prohibited & if you are found guilty your account will be obligated for false info.\n•\tPrimarily add your board exam institution as School/O Level & College/A Level.\n•\tYou can add multiple School/O Level, College/A Level, Under Graduation & Post Graduation according to your associated time and achievement. (optional)]]></string>
-    <string name="confirm_info"><![CDATA[If you confirm any tuition we will send a request to your selected mentor on your behalf provided you are informed about all agreement term & mentor details.Considering you are willing to take the service in return of the salary mentioned underneath…]]></string>
+    <string name="confirm_info"><![CDATA[If you confirm any tuition Dume will send a request to your selected mentor on your behalf provided you are informed about all agreement term & mentor details.Considering you are willing to take the service in return of the salary mentioned underneath…]]></string>
 
     <string name="search_result_tab_info"><![CDATA[Your queried mentor are shown in descending order based on the following categories…
     \n•\tSalary
     \n•\tPerformance
     \n•\tExpertise
     \n•\tAccept-ratio]]></string>
-    <!--TODO-->
 
     <string-array name="unlock_recipe_value">
         <item><![CDATA[•\tJoined = true]]></item>
@@ -778,5 +777,6 @@ provided.Tap salary for details.  </string>
     <string name="action_share">Share</string>
     <string name="action_reply">Reply</string>
     <string name="unlock_recipe">Unlock Recipe</string>
+    <string name="request_letter">Request Letter</string>
 
 </resources>

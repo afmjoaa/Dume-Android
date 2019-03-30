@@ -89,6 +89,7 @@ public class RecordsPageModel implements RecordsPageContract.Model {
                                 String subjectExchange;
                                 String date;
                                 String mentorDpUrl;
+                                Date modi_creation = null;
                                 String studentDpUrl, sGender, mGender;
                                 float studentRating;
                                 float mentorRating;
@@ -110,10 +111,16 @@ public class RecordsPageModel implements RecordsPageContract.Model {
                                 mGender = (String) spMap.get("gender");
                                 subjectExchange = DumeUtils.getLast((Map<String, Object>) data.get("jizz"));
                                 Date creation = (Date) data.get("creation");
+
+                                Object status_modi_date = data.get("status_modi_date");
+                                if(status_modi_date!= null){
+                                    modi_creation = (Date) status_modi_date;
+                                }
                                 date = creation.toString();
                                 status = (String) data.get("record_status");
                                 Record record = new Record(mentorName, studentName, salaryInDemand, subjectExchange, creation, mentorDpUrl, studentDpUrl, studentRating, mentorRating, status, Record.DELIVERED, sGender, mGender);
                                 record.setRecordSnap(documents.get(i));
+                                record.setModiDate(modi_creation);
                                 if (documents.get(i).getBoolean(key)) {
                                     alteredDocuments.add(documents.get(i));
                                     recordList.add(record);
@@ -129,10 +136,7 @@ public class RecordsPageModel implements RecordsPageContract.Model {
                         }
 
                     } else listener.onError("No record found.");
-
                 }
-
-
             }
         });
     }
@@ -182,8 +186,6 @@ public class RecordsPageModel implements RecordsPageContract.Model {
                 }
             }).addOnFailureListener(e -> listener.onError(e.getLocalizedMessage()));
         }
-
-
     }
 
     @Override

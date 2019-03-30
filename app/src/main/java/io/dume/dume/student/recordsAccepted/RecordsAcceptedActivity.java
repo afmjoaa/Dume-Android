@@ -27,6 +27,9 @@ import android.support.v4.view.animation.FastOutLinearInInterpolator;
 import android.support.v4.view.animation.LinearOutSlowInInterpolator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StrikethroughSpan;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -53,6 +56,8 @@ import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.GeoPoint;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 import com.hadiidbouk.charts.BarData;
 import com.hadiidbouk.charts.ChartProgressBar;
 import com.jackandphantom.circularprogressbar.CircleProgressbar;
@@ -85,11 +90,13 @@ import io.dume.dume.student.common.QualificationAdapter;
 import io.dume.dume.student.common.QualificationData;
 import io.dume.dume.student.common.ReviewAdapter;
 import io.dume.dume.student.common.ReviewHighlightData;
+import io.dume.dume.student.homePage.adapter.HomePageRecyclerData;
 import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
 import io.dume.dume.student.pojo.SearchDataStore;
 import io.dume.dume.student.recordsPage.Record;
 import io.dume.dume.student.recordsPending.RecordsPendingActivity;
 import io.dume.dume.student.recordsRejected.RecordsRejectedActivity;
+import io.dume.dume.student.studentHelp.StudentHelpActivity;
 import io.dume.dume.teacher.homepage.TeacherContract;
 import io.dume.dume.teacher.pojo.Academic;
 import io.dume.dume.util.DumeUtils;
@@ -174,7 +181,9 @@ public class RecordsAcceptedActivity extends CustomStuAppCompatActivity implemen
         int id = item.getItemId();
         switch (id) {
             case R.id.action_help:
-                //Toast.makeText(MainActivity.this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(context, StudentHelpActivity.class);
+                intent.setAction("how_to_use");
+                startActivity(intent);
                 break;
             case android.R.id.home:
                 super.onBackPressed();
@@ -290,6 +299,11 @@ public class RecordsAcceptedActivity extends CustomStuAppCompatActivity implemen
         private static List<DocumentSnapshot> recordList;
         private int fragmentPosition;
         private float mentorRating;
+        private android.widget.ImageView saleImageView;
+        private Integer max_dicount_percentage = null;
+        private Integer max_discount_credit = null;
+        private int validDiscount;
+        private String salaryFormatted;
 
 
         public PlaceholderFragment() {
@@ -397,6 +411,7 @@ public class RecordsAcceptedActivity extends CustomStuAppCompatActivity implemen
             mentorRatingBar = rootView.findViewById(R.id.mentor_rating_bar);
             subjectInDemand = rootView.findViewById(R.id.subject_in_demand);
             salaryInDemandTV = rootView.findViewById(R.id.salary_in_demand);
+            saleImageView = rootView.findViewById(R.id.sale_image);
 
             acceptContactBtn = rootView.findViewById(R.id.accepted_contact_btn);
             cancelRequestBtn = rootView.findViewById(R.id.pendding_cancel_btn);
@@ -493,8 +508,35 @@ public class RecordsAcceptedActivity extends CustomStuAppCompatActivity implemen
             //fill up all info of the mentor
             NumberFormat currencyInstance = NumberFormat.getCurrencyInstance(Locale.US);
             Number salary = (Number) selectedMentor.get("salary");
-            String format1 = currencyInstance.format(salary);
-            salaryBtn.setText("Salary : " + format1.substring(1, format1.length() - 3) + " BDT");
+
+            Map<String, Object> promo = (Map<String, Object>) selectedMentor.get("promo");
+            if(promo!= null){
+                Gson gson = new Gson();
+                JsonElement jsonElement = gson.toJsonTree(promo);
+                HomePageRecyclerData homePageRecyclerData = gson.fromJson(jsonElement, HomePageRecyclerData.class);
+                if (homePageRecyclerData != null) {
+                    max_dicount_percentage = homePageRecyclerData.getMax_dicount_percentage();
+                    max_discount_credit = homePageRecyclerData.getMax_discount_credit();
+
+                }
+            }
+            if (max_dicount_percentage != null && max_discount_credit != null) {
+                Number calculatedCreditOff = salary.intValue() * max_dicount_percentage * 0.01;
+                validDiscount = Math.min(max_discount_credit, calculatedCreditOff.intValue());
+                String perviousSalaryFormatted = currencyInstance.format(salary.intValue());
+                salaryFormatted = currencyInstance.format(salary.intValue() - validDiscount);
+                SpannableString text = new SpannableString("Salary : " + perviousSalaryFormatted.substring(1, perviousSalaryFormatted.length() - 3) + " BDT " + salaryFormatted.substring(1, salaryFormatted.length() - 3) + " BDT");
+                text.setSpan(new ForegroundColorSpan(context.getResources().getColor(R.color.textColorPrimary)), 9, 9 + (perviousSalaryFormatted.length()), 0);
+                text.setSpan(new StrikethroughSpan(), 9, 9 + (perviousSalaryFormatted.length()), 0);
+                salaryBtn.setText(text);
+                saleImageView.setVisibility(View.VISIBLE);
+
+            } else {
+                saleImageView.setVisibility(View.GONE);
+                salaryFormatted = currencyInstance.format(salary);
+                salaryBtn.setText("Salary : " + salaryFormatted.substring(1, salaryFormatted.length() - 3) + " BDT");
+            }
+
             loadQualificationData(sp_info);
 
             //fuck the location data here
