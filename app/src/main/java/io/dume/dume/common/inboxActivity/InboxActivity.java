@@ -164,7 +164,7 @@ public class InboxActivity extends CustomStuAppCompatActivity implements InboxAc
     public void flush(String msg) {
         Toast toast = Toast.makeText(this, msg, Toast.LENGTH_SHORT);
         TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
-        if( v != null) v.setGravity(Gravity.CENTER);
+        if (v != null) v.setGravity(Gravity.CENTER);
         toast.show();
     }
 
@@ -184,7 +184,7 @@ public class InboxActivity extends CustomStuAppCompatActivity implements InboxAc
             case R.id.action_settings:
                 if (Google.getInstance().getAccountMajor().equals(DumeUtils.STUDENT)) {
                     startActivity(new Intent(this, StudentSettingsActivity.class));
-                }else if(Google.getInstance().getAccountMajor().equals(DumeUtils.TEACHER)){
+                } else if (Google.getInstance().getAccountMajor().equals(DumeUtils.TEACHER)) {
                     startActivity(new Intent(this, AccountSettings.class));
                 }
                 break;
@@ -344,6 +344,7 @@ public class InboxActivity extends CustomStuAppCompatActivity implements InboxAc
             return fragment;
         }
 
+
         @Override
         public void setUserVisibleHint(boolean isVisibleToUser) {
             super.setUserVisibleHint(isVisibleToUser);
@@ -429,6 +430,8 @@ public class InboxActivity extends CustomStuAppCompatActivity implements InboxAc
             }
         }
 
+
+        //enam in upppercase 😄 😂 😄 😂 😄 😂   😄    😂 😄   😂 😄 😂 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             myThisActivity = (InboxActivity) getActivity();
@@ -519,7 +522,7 @@ public class InboxActivity extends CustomStuAppCompatActivity implements InboxAc
                     demoModel.getNotification(FirebaseAuth.getInstance().getUid(), new TeacherContract.Model.Listener<List<InboxNotiData>>() {
                         @Override
                         public void onSuccess(List<InboxNotiData> list) {
-                            if (notiRecyAda!= null && notiRecyAda.getItemCount()!= list.size()) {
+                            if (notiRecyAda != null && notiRecyAda.getItemCount() != list.size()) {
                                 notiRecyAda = new InboxNotiAdapter(myThisActivity, list);
                                 inboxRecyclerRecent.setAdapter(notiRecyAda);
                                 inboxRecyclerRecent.setLayoutManager(new LinearLayoutManager(myThisActivity));
@@ -528,7 +531,7 @@ public class InboxActivity extends CustomStuAppCompatActivity implements InboxAc
                                 } else {
                                     noDataBlockNoti.setVisibility(View.GONE);
                                 }
-                            }else if(notiRecyAda== null){
+                            } else if (notiRecyAda == null) {
                                 notiRecyAda = new InboxNotiAdapter(myThisActivity, list);
                                 inboxRecyclerRecent.setAdapter(notiRecyAda);
                                 inboxRecyclerRecent.setLayoutManager(new LinearLayoutManager(myThisActivity));

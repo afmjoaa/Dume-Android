@@ -356,7 +356,6 @@
                     android:minLines="3"
                     android:paddingTop="2dp"
                     android:paddingBottom="2dp"
-
                     android:text="N/A"
                     android:textAllCaps="false"
                     android:textColor="@color/textColorPrimary"

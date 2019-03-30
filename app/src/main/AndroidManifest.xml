@@ -29,6 +29,9 @@
         android:roundIcon="@mipmap/icon_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".common.nexuspay.NexusPay"></activity>
+        <activity android:name=".common.bkash_otp.BkashOTP" />
+        <activity android:name=".common.bkash_transection.BkashTransectionActivity" />
 
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"

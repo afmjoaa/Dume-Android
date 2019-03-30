@@ -367,4 +367,11 @@
         <item name="android:textColor">@color/white</item>
         <item name="android:fontFamily" tools:targetApi="jelly_bean">@font/cairo_regular</item>
     </style>
+
+    <style name="BkashButton" parent="Widget.AppCompat.Button.Colored">
+
+        <item name="colorButtonNormal">#EEE42D76</item>
+        <item name="android:textColor">@color/colorWhite</item>
+
+    </style>
 </resources>

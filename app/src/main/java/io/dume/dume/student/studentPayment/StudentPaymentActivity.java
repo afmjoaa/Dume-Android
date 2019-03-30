@@ -22,6 +22,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -37,6 +38,7 @@ import java.util.Map;
 
 import io.dume.dume.Google;
 import io.dume.dume.R;
+import io.dume.dume.common.bkash_transection.BkashTransectionActivity;
 import io.dume.dume.student.grabingLocation.MenualRecyclerData;
 import io.dume.dume.student.grabingLocation.PlaceMenualRecyAda;
 import io.dume.dume.student.homePage.HomePageModel;
@@ -76,6 +78,7 @@ public class StudentPaymentActivity extends CustomStuAppCompatActivity implement
     private RelativeLayout refBlock;
     private String[] paymentMethodArr;
     private FrameLayout content;
+    private Button bkashTransection;
 
 
     @Override
@@ -106,6 +109,10 @@ public class StudentPaymentActivity extends CustomStuAppCompatActivity implement
         };
         paymentRecycleView.setAdapter(paymentAdapter);
         paymentRecycleView.setLayoutManager(new LinearLayoutManager(this));
+        bkashTransection.setOnClickListener(v -> {
+            startActivity(new Intent(getApplicationContext(), BkashTransectionActivity.class));
+        });
+
 
     }
 
@@ -145,6 +152,7 @@ public class StudentPaymentActivity extends CustomStuAppCompatActivity implement
         refBlock = findViewById(R.id.ref_block);
         content = findViewById(R.id.content);
         paymentMethodArr = this.getResources().getStringArray(R.array.add_payment_methods);
+        bkashTransection = findViewById(R.id.bkashTransection);
 
     }
 
