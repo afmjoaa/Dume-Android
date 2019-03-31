@@ -88,7 +88,7 @@ public class SearchResultModel extends StuBaseModel implements SearchResultContr
                 .setCategory(NotificationCompat.CATEGORY_MESSAGE)
                 .setOnlyAlertOnce(true)
                 .setAutoCancel(true)
-                .setLights(Color.CYAN, 2000, 2000)
+                .setLights(Color.CYAN, 1200, 2000)
                 .setVibrate(new long[]{200, 500, 200, 500})
                 .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
                 .setTicker("Reminder")
@@ -135,6 +135,7 @@ public class SearchResultModel extends StuBaseModel implements SearchResultContr
                                 Map<String, Object> myDocumentSnap = SearchDataStore.getInstance().getDocumentSnapshot();
                                 Map<String, Object> myUnreadRecords = (Map<String, Object>) myDocumentSnap.get("unread_records");
                                 Integer myPendingCount = Integer.parseInt(myUnreadRecords.get("pending_count").toString());
+                                myPendingCount = myPendingCount+1;
                                 batch.update(studentProfile,  "unread_records.pending_count",myPendingCount.toString());
                             }else{
                                 batch.update(mentorDocRef, "daily_i", dailyImpression.toString());
