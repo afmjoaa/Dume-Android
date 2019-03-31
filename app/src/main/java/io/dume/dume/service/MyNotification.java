@@ -1,10 +1,12 @@
 package io.dume.dume.service;
-
+import android.annotation.SuppressLint;
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.media.AudioAttributes;
 import android.provider.Settings;
@@ -28,10 +30,15 @@ public class MyNotification extends FirebaseMessagingService {
     private static String token;
     private final FirebaseFirestore firestore;
     private String type = "";
+    public static String UNREAD_MESSAGE = "unread_message";
 
+
+    @SuppressLint("CommitPrefEdits")
     public MyNotification() {
         super();
         firestore = FirebaseFirestore.getInstance();
+
+
     }
 
     private void sendNotification(String messageTitle, String messageBody) {
@@ -49,7 +56,7 @@ public class MyNotification extends FirebaseMessagingService {
             mChannel.enableVibration(true);
             mChannel.setVibrationPattern(new long[]{200, 500, 200, 500});
             mChannel.setShowBadge(true);
-            mChannel.setSound(Settings.System.DEFAULT_NOTIFICATION_URI,new AudioAttributes.Builder()
+            mChannel.setSound(Settings.System.DEFAULT_NOTIFICATION_URI, new AudioAttributes.Builder()
                     .setUsage(AudioAttributes.USAGE_MEDIA)
                     .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
                     .build());
@@ -92,8 +99,14 @@ public class MyNotification extends FirebaseMessagingService {
             if (type.equals("message")) {
                 if (!ChatActivity.isActivityLive) {
                     sendNotification(remoteMessage.getNotification().getTitle(), remoteMessage.getNotification().getBody());
+                    SharedPreferences sharedPreferences = getSharedPreferences(UNREAD_MESSAGE, MODE_PRIVATE);
+                    int unread = sharedPreferences.getInt("unread", 0);
+                    unread++;
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putInt("unread", unread);
+                    editor.apply();
                 }
-            } else{
+            } else {
                 sendNotification(remoteMessage.getNotification().getTitle(), remoteMessage.getNotification().getBody());
                 // do your work here
 

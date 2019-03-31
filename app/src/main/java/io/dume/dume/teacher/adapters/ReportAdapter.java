@@ -19,7 +19,7 @@ import io.dume.dume.teacher.model.KeyValueModel;
 public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ReportVH> {
     private final Context context;
     private final int itemWidth;
-    private ArrayList<KeyValueModel> arrayList=null;
+    private ArrayList<KeyValueModel> arrayList = null;
 
     public ReportAdapter(Context context, int itemWidth, ArrayList<KeyValueModel> arrayList) {
         this.arrayList = arrayList;

@@ -21,6 +21,7 @@ public class ExampleUnitTest {
     @Test
     public void isMultiplyCorrect() {
         assertEquals(5, multiply(3, 2));
+
     }
 
     public int multiply(int x, int y)

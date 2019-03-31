@@ -157,6 +157,7 @@ public class RecordsPageModel implements RecordsPageContract.Model {
                     if (Google.getInstance().getAccountMajor().equals(DumeUtils.TEACHER)) {
                         if (status.equals("Accepted") || status.equals("Rejected")) {
                             Date requestTime = (Date) record.get("creation");
+
                             long currentResponseTime = new Date().getTime() - requestTime.getTime();
                             Map<String, Object> documentSnapshot = TeacherDataStore.getInstance().getDocumentSnapshot();
                             Map<String, Object> selfRating = (Map<String, Object>) documentSnapshot.get("self_rating");

@@ -3,6 +3,7 @@ package io.dume.dume.teacher.homepage;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -229,6 +230,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
     private TextView how_invite_works;
     private Button freeCashBack;
     private Button startLearingBtn;
+    private SharedPreferences sharedPreferences;
 
 
     @Override
@@ -467,6 +469,8 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
     @Override
     protected void onResume() {
         super.onResume();
+        sharedPreferences = context.getSharedPreferences(UNREAD_MESSAGE, MODE_PRIVATE);
+        updateChatBadge(sharedPreferences.getInt("unread", 0));
         switch (viewPager.getCurrentItem()) {
             case 0:
                 break;
@@ -1083,7 +1087,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
                 boolean accountActive = (boolean) teacherDataStore.getDocumentSnapshot().get("account_active");
                 if (accountActive) {
                     switchStatus(false);
-                }else{
+                } else {
                     Toast toast = Toast.makeText(context, "Your account status is inactive. While you are inactive your skills are excluded from Dume queries...", Toast.LENGTH_LONG);
                     TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
                     if (v != null) v.setGravity(Gravity.CENTER);
@@ -1388,9 +1392,13 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         }
     }
 
+    public static String UNREAD_MESSAGE = "unread_message";
+
     @Override
     public void setUnreadMsg(String unreadMsg) {
         updateChatBadge(Integer.parseInt(unreadMsg));
+        sharedPreferences = context.getSharedPreferences(UNREAD_MESSAGE, MODE_PRIVATE);
+        updateChatBadge(sharedPreferences.getInt("unread", 0));
     }
 
     @Override
