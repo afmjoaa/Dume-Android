@@ -118,6 +118,8 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
             tab_label.setLayoutParams(textParam);
             // finally publish this custom view to navigation tab
             Objects.requireNonNull(tabLayout.getTabAt(i)).setCustomView(tab);
+
+
         }
         // finishes here ................
         mPresenter.recordsPageLoadData(new TeacherContract.Model.Listener<Void>() {
@@ -129,6 +131,10 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
                     // Open the right tab
                     TabLayout.Tab tab = tabLayout.getTabAt(tabToOpen);
                     Objects.requireNonNull(tab).select();
+                }
+
+                if (mViewPager != null) {
+                    mViewPager.setCurrentItem(getIntent().getIntExtra("tab_number", 0));
                 }
             }
 
@@ -163,8 +169,8 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
                     searchDataStore.setRecordStatusChanged(false);
                 }
             });
-        }else{
-            if(searchDataStore.getFromPACCR() != -1){
+        } else {
+            if (searchDataStore.getFromPACCR() != -1) {
                 mViewPager.setCurrentItem(searchDataStore.getFromPACCR(), true);
                 searchDataStore.setFromPACCR(-1);
             }

@@ -1,4 +1,5 @@
 package io.dume.dume.service;
+
 import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -13,6 +14,7 @@ import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.provider.Settings;
@@ -29,7 +31,11 @@ import java.util.Map;
 
 import io.dume.dume.R;
 import io.dume.dume.common.chatActivity.ChatActivity;
+import io.dume.dume.common.inboxActivity.InboxActivity;
+import io.dume.dume.splash.SplashActivity;
 import io.dume.dume.student.homePage.HomePageActivity;
+import io.dume.dume.student.recordsPage.RecordsPageActivity;
+import io.dume.dume.student.studentPayment.StudentPaymentActivity;
 import io.dume.dume.util.DumeUtils;
 
 public class MyNotification extends FirebaseMessagingService {
@@ -39,14 +45,42 @@ public class MyNotification extends FirebaseMessagingService {
     private String type = "";
     public static String UNREAD_MESSAGE = "unread_message";
     private SharedPreferences prefs;
-
+    private int TAB_NUMBER;
+    private static final String TAG = "MyNotification";
     @SuppressLint("CommitPrefEdits")
     public MyNotification() {
         super();
         firestore = FirebaseFirestore.getInstance();
+
     }
 
-    private void sendNotification(String messageTitle, String messageBody) {
+    private void sendNotification(String messageTitle, String messageBody, String type) {
+
+        Class intentClass = SplashActivity.class;
+        Bundle bundle = new Bundle();
+        if (type.equals("message")) {
+            intentClass = InboxActivity.class;
+        } else if (type.equals("payment")) {
+            intentClass = StudentPaymentActivity.class;
+        } else if (type.equals("pending")) {
+            intentClass = RecordsPageActivity.class;
+            TAB_NUMBER = 0;
+        } else if (type.equals("accepted")) {
+            intentClass = RecordsPageActivity.class;
+            TAB_NUMBER = 1;
+        } else if (type.equals("current")) {
+            intentClass = RecordsPageActivity.class;
+            TAB_NUMBER = 2;
+        } else if (type.equals("completed")) {
+            intentClass = RecordsPageActivity.class;
+            TAB_NUMBER = 3;
+        } else if (type.equals("rejected")) {
+            intentClass = RecordsPageActivity.class;
+            TAB_NUMBER = 4;
+        }
+        Log.w(TAG, "sendNotification: "+intentClass.toString() );
+
+
         int NOTIFICATION_ID = 234;
         prefs = getSharedPreferences(DumeUtils.SETTING_PREFERENCE, MODE_PRIVATE);
         String ringToneString = prefs.getString("notifications_ringtone", null);
@@ -69,20 +103,20 @@ public class MyNotification extends FirebaseMessagingService {
             mChannel.canShowBadge();
             mChannel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
 
-            if(ringToneString!= null){
+            if (ringToneString != null) {
                 Ringtone ringtone = RingtoneManager.getRingtone(this, Uri.parse(ringToneString));
-                if(ringtone!= null){
+                if (ringtone != null) {
                     mChannel.setSound(Uri.parse(ringToneString), new AudioAttributes.Builder()
                             .setUsage(AudioAttributes.USAGE_MEDIA)
                             .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
                             .build());
-                }else{
+                } else {
                     mChannel.setSound(Settings.System.DEFAULT_NOTIFICATION_URI, new AudioAttributes.Builder()
                             .setUsage(AudioAttributes.USAGE_MEDIA)
                             .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
                             .build());
                 }
-            }else{
+            } else {
                 mChannel.setSound(Settings.System.DEFAULT_NOTIFICATION_URI, new AudioAttributes.Builder()
                         .setUsage(AudioAttributes.USAGE_MEDIA)
                         .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
@@ -105,21 +139,19 @@ public class MyNotification extends FirebaseMessagingService {
                 .setColor(getResources().getColor(R.color.noti_color))
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                 .setOngoing(true);
-        if(ringToneString!= null){
+        if (ringToneString != null) {
             Ringtone ringtone = RingtoneManager.getRingtone(this, Uri.parse(ringToneString));
-            if(ringtone!= null){
+            if (ringtone != null) {
                 builder.setSound(Uri.parse(ringToneString));
             }
         }
-
-        Intent resultIntent = new Intent(this, HomePageActivity.class);
+        Intent resultIntent = new Intent(this, intentClass);
+        resultIntent.putExtra("tab_number", TAB_NUMBER);
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
         stackBuilder.addParentStack(HomePageActivity.class);
         stackBuilder.addNextIntent(resultIntent);
         PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
-
         builder.setContentIntent(resultPendingIntent);
-
         notificationManager.notify(NOTIFICATION_ID, builder.build());
     }
 
@@ -134,7 +166,7 @@ public class MyNotification extends FirebaseMessagingService {
 
             if (type.equals("message")) {
                 if (!ChatActivity.isActivityLive) {
-                    sendNotification(remoteMessage.getNotification().getTitle(), remoteMessage.getNotification().getBody());
+                    sendNotification(remoteMessage.getNotification().getTitle(), remoteMessage.getNotification().getBody(), type);
                     SharedPreferences sharedPreferences = getSharedPreferences(UNREAD_MESSAGE, MODE_PRIVATE);
                     int unread = sharedPreferences.getInt("unread", 0);
                     unread++;
@@ -143,7 +175,7 @@ public class MyNotification extends FirebaseMessagingService {
                     editor.apply();
                 }
             } else {
-                sendNotification(remoteMessage.getNotification().getTitle(), remoteMessage.getNotification().getBody());
+                sendNotification(remoteMessage.getNotification().getTitle(), remoteMessage.getNotification().getBody(), type);
             }
 
         }

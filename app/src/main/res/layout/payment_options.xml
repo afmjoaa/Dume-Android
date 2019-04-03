@@ -3,65 +3,74 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal">
-    <Button
-        android:id="@+id/bkashTransection"
-        android:theme="@style/BkashButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:drawableLeft="@drawable/ic_bkash_icon"
 
-        android:text="Bkash Trans ID"
-        android:textAllCaps="false" />
-
-    <Button
-        android:id="@+id/bkashOTP"
-
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:drawableLeft="@drawable/ic_bkash_icon"
-
-        android:text="Bkash OTP"
-        android:textAllCaps="false"
-        android:theme="@style/BkashButton"
-        />
-
-</LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/bkashTransection"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableLeft="@drawable/ic_bkash_icon"
+            android:text="Bkash Trans ID"
+
+            android:textAllCaps="false"
+            android:theme="@style/BkashButton" />
+
+        <Button
+            android:id="@+id/bkashOTP"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableLeft="@drawable/ic_bkash_icon"
+            android:enabled="false"
+            android:text="Bkash OTP"
+            android:textAllCaps="false"
+          />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
         <Button
             android:id="@+id/nexusPay"
-            style="@style/Widget.AppCompat.Button.Colored"
+
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:drawableLeft="@drawable/ic_nexus_pay_icon"
-
+            android:enabled="false"
             android:text="Nexus Pay"
             android:textAllCaps="false" />
 
         <Button
             android:id="@+id/wireTransfer"
-
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:drawableLeft="@drawable/ic_bank_black_24dp"
+            android:enabled="false"
             android:gravity="center"
             android:text="Bank Transfer"
             android:textAllCaps="false"
 
             />
 
+
     </LinearLayout>
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:textSize="12sp"
+        android:text="** Right now some payment methods is not available. please wait until the next version gets release." />
 
 
 </LinearLayout>
