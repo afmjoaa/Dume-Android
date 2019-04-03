@@ -630,7 +630,6 @@ public class StudentSettingsActivity extends CustomStuAppCompatActivity
                     return false;
                 }
             });
-
         }
 
         @Override

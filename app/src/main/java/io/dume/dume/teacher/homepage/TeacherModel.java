@@ -52,6 +52,7 @@ public class TeacherModel extends HomePageModel implements TeacherContract.Model
     public void addShapShotListener(EventListener<DocumentSnapshot> updateViewListener) {
         userStudentProInfo.addSnapshotListener((Activity) context, updateViewListener);
     }
+
     @Override
     public void getFeedBack(Listener listener) {
         ArrayList<Feedback> list = new ArrayList<>();
@@ -92,22 +93,25 @@ public class TeacherModel extends HomePageModel implements TeacherContract.Model
                         //TODO make arraylist of entry here
                         ArrayList<Entry> entries = new ArrayList<>();
                         ArrayList<Entry> entries1 = new ArrayList<>();
+                        int flag = stat.size() - 1;
                         for (int i = 1; i < 31; i++) {
-                            if (stat.size() >= i) {
-                                entries.add(new Entry(i, Float.parseFloat(stat.get(i - 1).getRequest_i())));
-                                entries1.add(new Entry(i, Float.parseFloat(stat.get(i - 1).getRequest_r())));
+                            if (i == 30) {
+                                entries.add(new Entry(i, Float.parseFloat(teacherDataStore.getTodayStatList().get(0).getRequest_i())));
+                                entries1.add(new Entry(i, Float.parseFloat(teacherDataStore.getTodayStatList().get(0).getRequest_r())));
+                            }else if (i >= (30 - stat.size())) {
+                                entries.add(new Entry(i, Float.parseFloat(stat.get(flag).getRequest_i())));
+                                entries1.add(new Entry(i, Float.parseFloat(stat.get(flag).getRequest_r())));
+                                flag--;
                             } else {
                                 entries.add(new Entry(i, 0));
                                 entries1.add(new Entry(i, 0));
-
                             }
                         }
 
                         List<ArrayList<Entry>> lists = new ArrayList<>();
-                        lists.add(entries1);
                         lists.add(entries);
+                        lists.add(entries1);
                         listener.onSuccess(lists);
-
 
                     } else listener.onError("No review");
                 }
@@ -124,19 +128,23 @@ public class TeacherModel extends HomePageModel implements TeacherContract.Model
             //TOdo same thing here as well
             ArrayList<Entry> entries = new ArrayList<>();
             ArrayList<Entry> entries1 = new ArrayList<>();
+            int flag = stat.size() - 1;
             for (int i = 1; i < 31; i++) {
-                if (stat.size() >= i) {
-                    entries.add(new Entry(i, Float.parseFloat(stat.get(i - 1).getRequest_i())));
-                    entries1.add(new Entry(i, Float.parseFloat(stat.get(i - 1).getRequest_r())));
+                if (i == 30) {
+                    entries.add(new Entry(i, Float.parseFloat(teacherDataStore.getTodayStatList().get(0).getRequest_i())));
+                    entries1.add(new Entry(i, Float.parseFloat(teacherDataStore.getTodayStatList().get(0).getRequest_r())));
+                } else if (i >= (30 - stat.size())) {
+                    entries.add(new Entry(i, Float.parseFloat(stat.get(flag).getRequest_i())));
+                    entries1.add(new Entry(i, Float.parseFloat(stat.get(flag).getRequest_r())));
+                    flag--;
                 } else {
                     entries.add(new Entry(i, 0));
                     entries1.add(new Entry(i, 0));
-
                 }
             }
             List<ArrayList<Entry>> lists = new ArrayList<>();
-            lists.add(entries1);
             lists.add(entries);
+            lists.add(entries1);
             listener.onSuccess(lists);
         }
     }

@@ -6,8 +6,12 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.media.MediaPlayer;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
@@ -22,6 +26,8 @@ import io.dume.dume.student.homePage.StudentActivity;
 import io.dume.dume.student.recordsCurrent.RecordsCurrentActivity;
 import io.dume.dume.util.DumeUtils;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class MyAlarmBroadCast extends BroadcastReceiver {
 
     public static final String CHANNEL_1_ID = "Informative";
@@ -31,15 +37,16 @@ public class MyAlarmBroadCast extends BroadcastReceiver {
     private NotificationManager notificationManager = null;
     private int notification_id = 234;
     private static final String TAG = "MyAlarmBroadCast";
+    private SharedPreferences prefs;
 
     public MyAlarmBroadCast() {
         super();
     }
 
-
     @Override
     public void onReceive(Context context, Intent intent) {
-
+        prefs = context.getSharedPreferences(DumeUtils.SETTING_PREFERENCE, MODE_PRIVATE);
+        String ringToneString = prefs.getString("reminder_ringtone", null);
         Log.w(TAG, "onReceive: " + intent.getAction());
 
         String action = intent.getAction() == null ? "" : intent.getAction();
@@ -55,6 +62,13 @@ public class MyAlarmBroadCast extends BroadcastReceiver {
             return;
         }
         mediaPlayer = MediaPlayer.create(context, Settings.System.DEFAULT_ALARM_ALERT_URI);
+
+        if(ringToneString!= null){
+            Ringtone ringtone = RingtoneManager.getRingtone(context, Uri.parse(ringToneString));
+            if(ringtone!= null){
+                mediaPlayer = MediaPlayer.create(context, Uri.parse(ringToneString));
+            }
+        }
         mediaPlayer.start();
         Google.getInstance().setmMediaPlayer(mediaPlayer);
 

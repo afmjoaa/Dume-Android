@@ -47,8 +47,6 @@ public class SplashPresenter implements SplashContract.Presenter {
                             @Override
                             public void onStart() {
                                 Log.w(TAG, "onStart: ");
-
-
                             }
 
                             @Override

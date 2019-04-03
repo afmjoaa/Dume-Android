@@ -9,6 +9,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.media.AudioAttributes;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
+import android.os.Build;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
@@ -24,6 +30,7 @@ import java.util.Map;
 import io.dume.dume.R;
 import io.dume.dume.common.chatActivity.ChatActivity;
 import io.dume.dume.student.homePage.HomePageActivity;
+import io.dume.dume.util.DumeUtils;
 
 public class MyNotification extends FirebaseMessagingService {
 
@@ -31,35 +38,56 @@ public class MyNotification extends FirebaseMessagingService {
     private final FirebaseFirestore firestore;
     private String type = "";
     public static String UNREAD_MESSAGE = "unread_message";
-
+    private SharedPreferences prefs;
 
     @SuppressLint("CommitPrefEdits")
     public MyNotification() {
         super();
         firestore = FirebaseFirestore.getInstance();
-
-
     }
 
     private void sendNotification(String messageTitle, String messageBody) {
         int NOTIFICATION_ID = 234;
+        prefs = getSharedPreferences(DumeUtils.SETTING_PREFERENCE, MODE_PRIVATE);
+        String ringToneString = prefs.getString("notifications_ringtone", null);
         NotificationManager notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             String CHANNEL_ID = "my_channel_01";
             CharSequence name = "my_channel";
-            String Description = "This is my channel";
+            String Description = "Urgent notifications";
             int importance = NotificationManager.IMPORTANCE_HIGH;
             NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID, name, importance);
             mChannel.setDescription(Description);
-            mChannel.enableLights(true);
-            mChannel.setLightColor(Color.CYAN);
             mChannel.enableVibration(true);
             mChannel.setVibrationPattern(new long[]{200, 500, 200, 500});
             mChannel.setShowBadge(true);
-            mChannel.setSound(Settings.System.DEFAULT_NOTIFICATION_URI, new AudioAttributes.Builder()
-                    .setUsage(AudioAttributes.USAGE_MEDIA)
-                    .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-                    .build());
+            mChannel.enableLights(true);
+            mChannel.setLightColor(Color.CYAN);
+            mChannel.shouldShowLights();
+            mChannel.shouldVibrate();
+            mChannel.setImportance(NotificationManager.IMPORTANCE_HIGH);
+            mChannel.canShowBadge();
+            mChannel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
+
+            if(ringToneString!= null){
+                Ringtone ringtone = RingtoneManager.getRingtone(this, Uri.parse(ringToneString));
+                if(ringtone!= null){
+                    mChannel.setSound(Uri.parse(ringToneString), new AudioAttributes.Builder()
+                            .setUsage(AudioAttributes.USAGE_MEDIA)
+                            .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                            .build());
+                }else{
+                    mChannel.setSound(Settings.System.DEFAULT_NOTIFICATION_URI, new AudioAttributes.Builder()
+                            .setUsage(AudioAttributes.USAGE_MEDIA)
+                            .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                            .build());
+                }
+            }else{
+                mChannel.setSound(Settings.System.DEFAULT_NOTIFICATION_URI, new AudioAttributes.Builder()
+                        .setUsage(AudioAttributes.USAGE_MEDIA)
+                        .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                        .build());
+            }
             notificationManager.createNotificationChannel(mChannel);
         }
 
@@ -67,14 +95,22 @@ public class MyNotification extends FirebaseMessagingService {
                 .setSmallIcon(R.drawable.ic_notification_launcher)
                 .setContentTitle(messageTitle)
                 .setContentText(messageBody)
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setPriority(NotificationCompat.PRIORITY_MAX)
                 .setCategory(NotificationCompat.CATEGORY_MESSAGE)
                 .setOnlyAlertOnce(true)
                 .setAutoCancel(true)
                 .setLights(Color.CYAN, 1000, 2000)
                 .setVibrate(new long[]{200, 500, 200, 500})
                 .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
-                .setColor(getResources().getColor(R.color.noti_color));
+                .setColor(getResources().getColor(R.color.noti_color))
+                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                .setOngoing(true);
+        if(ringToneString!= null){
+            Ringtone ringtone = RingtoneManager.getRingtone(this, Uri.parse(ringToneString));
+            if(ringtone!= null){
+                builder.setSound(Uri.parse(ringToneString));
+            }
+        }
 
         Intent resultIntent = new Intent(this, HomePageActivity.class);
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
@@ -108,14 +144,11 @@ public class MyNotification extends FirebaseMessagingService {
                 }
             } else {
                 sendNotification(remoteMessage.getNotification().getTitle(), remoteMessage.getNotification().getBody());
-                // do your work here
-
             }
 
         }
         Log.w("foo", "messageReceived: " + remoteMessage.getData().toString());
     }
-
 
     @Override
     public void onDeletedMessages() {
@@ -150,3 +183,29 @@ public class MyNotification extends FirebaseMessagingService {
         super.onRebind(intent);
     }
 }
+
+/*// do your work here
+                prefs = getSharedPreferences(DumeUtils.SETTING_PREFERENCE, MODE_PRIVATE);
+                String ringToneString = prefs.getString("notifications_ringtone", null);
+                if(ringToneString!= null){
+                    Ringtone ringtone = RingtoneManager.getRingtone(
+                            this, Uri.parse(ringToneString));
+                    if(ringtone!= null){
+                        //TODO play
+                        try {
+                            ringtone.play();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                }else{
+                    //TODO play default
+                    try {
+                        Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                        Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
+                        r.play();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }*/

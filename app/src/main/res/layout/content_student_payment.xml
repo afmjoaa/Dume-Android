@@ -27,6 +27,8 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <include layout="@layout/payment_info" />
+
             <!--payment method start-->
             <TextView
                 android:id="@+id/payment_methods"
@@ -48,21 +50,15 @@
                 android:textSize="13sp"
                 app:fontFamily="@font/cairo_regular" />
 
-            <include layout="@layout/payment_info" />
-
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="Choose Payment Method"
-                android:layout_margin="10dp"
-
-
-                />
+                android:layout_margin="10dp" />
 
             <include layout="@layout/payment_options" />
-
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/payment_method_recycler"

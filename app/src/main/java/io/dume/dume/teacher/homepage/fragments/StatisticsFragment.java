@@ -73,38 +73,6 @@ public class StatisticsFragment extends Fragment {
         ButterKnife.bind(this, root);
         fragmentActivity = (TeacherActivtiy) getActivity();
         mViewModel = new StatisticsViewModel(context);
-        mViewModel.getChartEntry(new TeacherContract.Model.Listener<List<ArrayList<Entry>>>() {
-            @Override
-            public void onSuccess(List<ArrayList<Entry>> entrieslist) {
-                List<ILineDataSet> dataSets = new ArrayList<>();
-                for (int i = 0; i < entrieslist.size(); i++) {
-                    LineDataSet lineDataSet = null;
-                    lineDataSet = new LineDataSet(entrieslist.get(i), "Impressions");
-                    lineDataSet.setDrawFilled(true);
-                    lineDataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
-                    lineDataSet.setFillColor(getResources().getColor(R.color.impression));
-                    lineDataSet.setColor(getResources().getColor(R.color.impression));
-                    if (i == 1) {
-                        lineDataSet = new LineDataSet(entrieslist.get(i), "Views");
-                        lineDataSet.setDrawFilled(true);
-                        lineDataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
-                        lineDataSet.setFillColor(getResources().getColor(R.color.view));
-                        lineDataSet.setColor(getResources().getColor(R.color.view));
-                    }
-                    lineDataSet.setLineWidth(0.0f);
-                    lineDataSet.setDrawValues(false);
-                    dataSets.add(lineDataSet);
-                }
-                LineData lineData = new LineData(dataSets);
-                showChart(lineData);
-
-            }
-
-            @Override
-            public void onError(String msg) {
-
-            }
-        });
 
         //testing
         assert container != null;
@@ -122,6 +90,38 @@ public class StatisticsFragment extends Fragment {
                 fragmentActivity.presenter.loadProfile(new TeacherContract.Model.Listener<Void>() {
                     @Override
                     public void onSuccess(Void list) {
+                        mViewModel.getChartEntry(new TeacherContract.Model.Listener<List<ArrayList<Entry>>>() {
+                            @Override
+                            public void onSuccess(List<ArrayList<Entry>> entrieslist) {
+                                List<ILineDataSet> dataSets = new ArrayList<>();
+                                for (int i = 0; i < entrieslist.size(); i++) {
+                                    LineDataSet lineDataSet = null;
+                                    lineDataSet = new LineDataSet(entrieslist.get(i), "Impressions");
+                                    lineDataSet.setDrawFilled(true);
+                                    lineDataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
+                                    lineDataSet.setFillColor(context.getResources().getColor(R.color.impression));
+                                    lineDataSet.setColor(context.getResources().getColor(R.color.impression));
+                                    if (i == 1) {
+                                        lineDataSet = new LineDataSet(entrieslist.get(i), "Requests");
+                                        lineDataSet.setDrawFilled(true);
+                                        lineDataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
+                                        lineDataSet.setFillColor(context.getResources().getColor(R.color.view));
+                                        lineDataSet.setColor(context.getResources().getColor(R.color.view));
+                                    }
+                                    lineDataSet.setLineWidth(0.0f);
+                                    lineDataSet.setDrawValues(false);
+                                    dataSets.add(lineDataSet);
+                                }
+                                LineData lineData = new LineData(dataSets);
+                                showChart(lineData);
+
+                            }
+
+                            @Override
+                            public void onError(String msg) {
+
+                            }
+                        });
                         if (recyclerView.getAdapter() != null) {
                             statAdapter.update(teacherDataStore.getTodayStatList());
                         } else {
@@ -140,6 +140,38 @@ public class StatisticsFragment extends Fragment {
                     }
                 });
             } else {
+                mViewModel.getChartEntry(new TeacherContract.Model.Listener<List<ArrayList<Entry>>>() {
+                    @Override
+                    public void onSuccess(List<ArrayList<Entry>> entrieslist) {
+                        List<ILineDataSet> dataSets = new ArrayList<>();
+                        for (int i = 0; i < entrieslist.size(); i++) {
+                            LineDataSet lineDataSet = null;
+                            lineDataSet = new LineDataSet(entrieslist.get(i), "Impressions");
+                            lineDataSet.setDrawFilled(true);
+                            lineDataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
+                            lineDataSet.setFillColor(context.getResources().getColor(R.color.impression));
+                            lineDataSet.setColor(context.getResources().getColor(R.color.impression));
+                            if (i == 1) {
+                                lineDataSet = new LineDataSet(entrieslist.get(i), "Requests");
+                                lineDataSet.setDrawFilled(true);
+                                lineDataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
+                                lineDataSet.setFillColor(context.getResources().getColor(R.color.view));
+                                lineDataSet.setColor(context.getResources().getColor(R.color.view));
+                            }
+                            lineDataSet.setLineWidth(0.0f);
+                            lineDataSet.setDrawValues(false);
+                            dataSets.add(lineDataSet);
+                        }
+                        LineData lineData = new LineData(dataSets);
+                        showChart(lineData);
+
+                    }
+
+                    @Override
+                    public void onError(String msg) {
+
+                    }
+                });
                 if (recyclerView.getAdapter() != null) {
                     statAdapter.update(teacherDataStore.getTodayStatList());
                 } else {
@@ -209,6 +241,8 @@ public class StatisticsFragment extends Fragment {
         lineChart.setPinchZoom(true);
         lineChart.enableScroll();
         lineChart.invalidate();
+        //lineChart.moveViewToX(23f);
+        lineChart.moveViewToAnimated(23f, 0f,YAxis.AxisDependency.RIGHT , 1000);
         lineChart.animateY(3000, Easing.EasingOption.EaseInOutElastic);
     }
 

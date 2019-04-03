@@ -51,7 +51,7 @@
             android:layout_above="@+id/Aditional_info"
             android:layout_centerHorizontal="true"
             android:gravity="center"
-            android:text="Licenses"
+            android:text="Licensed"
             android:textAllCaps="true"
             android:textColor="@color/colorLink"
             android:textSize="18sp"

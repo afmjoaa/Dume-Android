@@ -47,13 +47,13 @@ public abstract class StatAdapter extends RecyclerView.Adapter<StatAdapter.FeedB
         holder.valueTitleTV.setText(String.format("%s", position == 0 ? "Profile Impressions" : "Profile Request"));
         switch (position) {
             case 0:
-                Float valueStatTVValueI = (Float.parseFloat(stat.get(0).getRequest_i()) - Float.parseFloat(stat.get(1).getRequest_i()) /
-                        Float.parseFloat(stat.get(1).getRequest_i())) * 100;
+                Integer valueStatTVValueI = (100 * (Integer.parseInt(stat.get(0).getRequest_i()) - Integer.parseInt(stat.get(1).getRequest_i())) /
+                        Integer.parseInt(stat.get(1).getRequest_i()));
                 holder.valueStatTV.setText(String.format("  (%s%%)", valueStatTVValueI.toString()));
                 break;
             case 1:
-                Float valueStatTVValueR = (Float.parseFloat(stat.get(0).getRequest_r()) - Float.parseFloat(stat.get(1).getRequest_r()) /
-                        Float.parseFloat(stat.get(1).getRequest_r())) * 100;
+                Integer valueStatTVValueR = (100 * (Integer.parseInt(stat.get(0).getRequest_r()) - Integer.parseInt(stat.get(1).getRequest_r())) /
+                        Integer.parseInt(stat.get(1).getRequest_r()));
                 holder.valueStatTV.setText(String.format("  (%s%%)", valueStatTVValueR.toString()));
                 break;
             default:

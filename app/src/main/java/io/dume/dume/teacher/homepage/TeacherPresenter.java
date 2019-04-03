@@ -1,14 +1,8 @@
 package io.dume.dume.teacher.homepage;
 
-import android.graphics.Color;
 import android.util.Log;
 import android.view.View;
 
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
-import com.google.android.gms.dynamic.ObjectWrapper;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.GeoPoint;
@@ -17,7 +11,6 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -25,12 +18,9 @@ import java.util.Map;
 import java.util.Objects;
 
 import io.dume.dume.R;
-import io.dume.dume.student.common.ReviewHighlightData;
 import io.dume.dume.student.homePage.adapter.HomePageRatingData;
 import io.dume.dume.student.homePage.adapter.HomePageRecyclerData;
 import io.dume.dume.student.recordsPage.Record;
-import io.dume.dume.teacher.pojo.Feedback;
-import io.dume.dume.teacher.pojo.Inbox;
 import io.dume.dume.teacher.pojo.Stat;
 
 public class TeacherPresenter implements TeacherContract.Presenter {
@@ -91,7 +81,8 @@ public class TeacherPresenter implements TeacherContract.Presenter {
                 todayStatList.add(todayStat);
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTime(date);
-                calendar.add(Calendar.DAY_OF_MONTH, 1);
+
+                calendar.add(Calendar.DAY_OF_MONTH, -1);
                 todayStat = new Stat(pDailyI, pDailyR, calendar.getTime(), FirebaseAuth.getInstance().getUid());
                 todayStatList.add(todayStat);
                 teachearDataStore.setTodayStatList(todayStatList);
@@ -378,8 +369,8 @@ public class TeacherPresenter implements TeacherContract.Presenter {
                     stat.add(currentStat);
                 }
                 if (list.size() > 0) {
-                    listener.onSuccess(stat);
                     teachearDataStore.setStat(stat);
+                    listener.onSuccess(stat);
                 } else listener.onError("No review");
             }
 

@@ -383,7 +383,7 @@ public class AuthModel implements AuthContract.Model, SplashContract.Model, Phon
 
     @Override
     public void hasUpdate(TeacherContract.Model.Listener<Boolean> listener) {
-        firestore.collection("app").document("dume_utils").get(Source.DEFAULT).addOnSuccessListener(documentSnapshot -> {
+        firestore.collection("app").document("dume_utils").get().addOnSuccessListener(documentSnapshot -> {
             Log.w(TAG, "hasUpdate: ");
             Number currentVersion = (Number) documentSnapshot.get("version_code");
             String updateVersionName = (String) documentSnapshot.get("version_name");

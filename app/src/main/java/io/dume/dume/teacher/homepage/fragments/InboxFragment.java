@@ -2,6 +2,7 @@ package io.dume.dume.teacher.homepage.fragments;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -27,6 +28,8 @@ import io.dume.dume.teacher.pojo.Inbox;
 import io.dume.dume.util.DumeUtils;
 import io.dume.dume.util.GridSpacingItemDecoration;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class InboxFragment extends Fragment {
 
     private InboxViewModel mViewModel;
@@ -35,6 +38,8 @@ public class InboxFragment extends Fragment {
     private TeacherActivtiy teacherActivtiy;
     private static InboxFragment inboxFragment = null;
     private Context context;
+    private SharedPreferences sharedPreferences;
+    public static String UNREAD_MESSAGE = "unread_message";
 
 
     public static InboxFragment getInstance() {
@@ -75,28 +80,40 @@ public class InboxFragment extends Fragment {
     }
 
     private void explodeData() {
-        String unreadMsg = (String) teacherActivtiy.teacherDataStore.getDocumentSnapshot().get("unread_msg");
+        sharedPreferences = context.getSharedPreferences(UNREAD_MESSAGE, MODE_PRIVATE);
+        int unreadMsg = sharedPreferences.getInt("unread", 0);
         String unreadNoti = (String) teacherActivtiy.teacherDataStore.getDocumentSnapshot().get("unread_noti");
         Map<String, Object> unreadRecords = (Map<String, Object>) teacherActivtiy.teacherDataStore.getDocumentSnapshot().get("unread_records");
         String pendingCount = (String) unreadRecords.get("pending_count");
         String acceptedCount = (String) unreadRecords.get("accepted_count");
         String currentCount = (String) unreadRecords.get("current_count");
         ArrayList<Inbox> arrayList = new ArrayList<>();
-        arrayList.add(new Inbox(true, "Unread Messages", Integer.parseInt(unreadMsg)));
-        arrayList.add(new Inbox(true, "Unread Notification", Integer.parseInt(unreadNoti)));
-        if(Integer.parseInt(pendingCount)>0){
+        if (unreadMsg > 0) {
+            arrayList.add(new Inbox(true, "Unread Messages", unreadMsg));
+        } else {
+            arrayList.add(new Inbox(false, "Unread Messages", unreadMsg));
+        }
+
+        if (Integer.parseInt(unreadNoti) > 0) {
+            arrayList.add(new Inbox(true, "Unread Notification", Integer.parseInt(unreadNoti)));
+        } else {
+            arrayList.add(new Inbox(false, "Unread Notification", Integer.parseInt(unreadNoti)));
+        }
+
+
+        if (Integer.parseInt(pendingCount) > 0) {
             arrayList.add(new Inbox(true, "Pending Request", Integer.parseInt(pendingCount)));
-        }else {
+        } else {
             arrayList.add(new Inbox(false, "Pending Request", Integer.parseInt(pendingCount)));
         }
-        if(Integer.parseInt(acceptedCount)>0){
+        if (Integer.parseInt(acceptedCount) > 0) {
             arrayList.add(new Inbox(true, "Accepted Request", Integer.parseInt(acceptedCount)));
-        }else {
+        } else {
             arrayList.add(new Inbox(false, "Accepted Request", Integer.parseInt(acceptedCount)));
         }
-        if(Integer.parseInt(currentCount)>0){
+        if (Integer.parseInt(currentCount) > 0) {
             arrayList.add(new Inbox(true, "Current Dume", Integer.parseInt(currentCount)));
-        }else {
+        } else {
             arrayList.add(new Inbox(false, "Current Dume", Integer.parseInt(currentCount)));
         }
         showInbox(arrayList);
@@ -113,7 +130,7 @@ public class InboxFragment extends Fragment {
 
     public void showInbox(ArrayList<Inbox> list) {
         // feedBackRV.setLayoutManager(new GridLayoutManager(this, 3));
-        inboxRv.setAdapter(new InboxAdapter(context,list));
+        inboxRv.setAdapter(new InboxAdapter(context, list));
     }
 
     @Override
