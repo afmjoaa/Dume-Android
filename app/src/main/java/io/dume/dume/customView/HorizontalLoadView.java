@@ -40,17 +40,18 @@ public class HorizontalLoadView extends View implements ValueAnimator.AnimatorUp
         int[] mDisplayWidth = DumeUtils.getScreenSize(context);
         int startPoint = (int) (8 * (getResources().getDisplayMetrics().density));
         int selfWidth = (int) (20 * (getResources().getDisplayMetrics().density));
-        valueAnimator = ValueAnimator.ofInt(startPoint, (mDisplayWidth[0] - (startPoint+selfWidth)));
+        valueAnimator = ValueAnimator.ofInt(startPoint, (mDisplayWidth[0] - (startPoint + selfWidth)));
         valueAnimator.setRepeatMode(ValueAnimator.REVERSE);
         valueAnimator.setRepeatCount(ValueAnimator.INFINITE);
         valueAnimator.setDuration(750);
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         paint.setStyle(Paint.Style.FILL);
-        if (attr != null) {
+       /* if (attr != null) {
             TypedArray typedArray = context.obtainStyledAttributes(attr, R.styleable.HorizontalLoadView);
-            paint.setColor(typedArray.getColor(R.styleable.HorizontalLoadView_rect_color, Color.BLACK));
+            paint.setColor(typedArray.getColor(R.styleable.HorizontalLoadView_rect_color, context.getResources().getColor(R.color.transparent)));
             typedArray.recycle();
-        } else paint.setColor(Color.BLACK);
+        } else*/
+        paint.setColor(Color.TRANSPARENT);
         widthRight = (int) (15 * (getResources().getDisplayMetrics().density));
         rectangle = new Rect(0, 0, widthRight, (int) (8 * (getResources().getDisplayMetrics().density)));
 

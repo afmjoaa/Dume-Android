@@ -60,8 +60,7 @@
         android:translationY="2dp"
         android:visibility="gone"
         app:layout_anchor="@id/app_bar"
-        app:layout_anchorGravity="bottom"
-        app:rect_color="@color/transparent" />
+        app:layout_anchorGravity="bottom" />
 
     <include layout="@layout/content_student_payment" />
 

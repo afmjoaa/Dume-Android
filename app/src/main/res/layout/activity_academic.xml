@@ -21,8 +21,7 @@
         android:translationY="2dp"
         android:visibility="gone"
         app:layout_anchor="@id/included_appber"
-        app:layout_anchorGravity="bottom"
-        app:rect_color="@color/transparent" />
+        app:layout_anchorGravity="bottom" />
 
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/academicScroll"

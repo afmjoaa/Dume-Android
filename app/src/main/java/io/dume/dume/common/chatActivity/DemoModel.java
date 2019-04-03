@@ -23,6 +23,7 @@ import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.firestore.Source;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -217,6 +218,10 @@ public class DemoModel {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 List<DocumentSnapshot> documents = null;
+                if (e != null) {
+                    messageListener.onError(e.getCode() + e.getMessage());
+                    return;
+                }
                 if (queryDocumentSnapshots != null) {
                     documents = queryDocumentSnapshots.getDocuments();
                 }
@@ -228,10 +233,6 @@ public class DemoModel {
                     } else messageListener.onError("null found");
                 } else {
                     messageListener.onError("null found");
-                }
-
-                if (e != null) {
-                    messageListener.onError(e.getCode() + e.getMessage());
                 }
             }
         });
@@ -368,22 +369,35 @@ public class DemoModel {
                                     lastMsgTime = letter.getTimestamp();
 
                                     for (int j = 0; j < roomList.size(); j++) {
-                                        if (roomList.get(j).getRoomId() == snapshot.getId()) {
+                                        if (roomList.get(j).getRoomId().equals(snapshot.getId())) {
                                             roomList.remove(j);
                                             roomList.add(j, new Room(snapshot.getId(), opUid, opDP, opName, lastMsgTime, mute, unreadMsgString, unreadMsg.intValue()));
                                         }
                                     }
                                     //roomList.add(new Room(snapshot.getId(), opUid, opDP, opName, lastMsgTime, mute, unreadMsgString, unreadMsg.intValue()));
-                                    if(finalI == (documents.size()-1)){
+                                    if (finalI == (documents.size() - 1)) {
                                         listener.onSuccess(roomList);
-
                                     }
                                 }
 
                                 @Override
                                 public void onError(String msg) {
-                                    if(finalI == (documents.size()-1)){
-                                        listener.onError("Network err !!");
+                                    if (finalI == (documents.size() - 1)) {
+                                        if (msg.equals("null found")) {
+                                            unreadMsg = 0;
+                                            unreadMsgString = "";
+                                            lastMsgTime = Calendar.getInstance().getTime();
+                                            for (int j = 0; j < roomList.size(); j++) {
+                                                if (roomList.get(j).getRoomId().equals(snapshot.getId())) {
+                                                    roomList.remove(j);
+                                                    roomList.add(j, new Room(snapshot.getId(), opUid, opDP, opName, lastMsgTime, mute, unreadMsgString, unreadMsg.intValue()));
+                                                }
+                                            }
+                                            //roomList.add(new Room(snapshot.getId(), opUid, opDP, opName, lastMsgTime, mute, unreadMsgString, unreadMsg.intValue()));
+                                            listener.onSuccess(roomList);
+                                        } else {
+                                            listener.onError("Network err !!");
+                                        }
                                     }
                                 }
                             });

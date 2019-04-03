@@ -86,8 +86,7 @@
         android:translationY="-2dp"
         android:visibility="gone"
         app:layout_anchor="@id/homeBottomSheet"
-        app:layout_anchorGravity="top"
-        app:rect_color="@color/transparent" />
+        app:layout_anchorGravity="top"/>
 
     <io.dume.dume.customView.HorizontalLoadView
         android:id="@+id/loadView"
@@ -98,8 +97,7 @@
         android:translationY="2dp"
         android:visibility="gone"
         app:layout_anchor="@id/secondary_Appbar"
-        app:layout_anchorGravity="bottom"
-        app:rect_color="@color/transparent" />
+        app:layout_anchorGravity="bottom" />
 
     <include
         layout="@layout/stu_content_homepage"

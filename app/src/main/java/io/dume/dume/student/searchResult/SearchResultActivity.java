@@ -143,8 +143,7 @@ import static io.dume.dume.util.DumeUtils.showKeyboard;
 import static io.dume.dume.util.ImageHelper.getRoundedCornerBitmap;
 
 public class SearchResultActivity extends CusStuAppComMapActivity implements OnMapReadyCallback,
-        SearchResultContract.View, MyGpsLocationChangeListener, GoogleMap.OnMarkerClickListener, GoogleMap.OnInfoWindowClickListener,
-        RoutingListener {
+        SearchResultContract.View, MyGpsLocationChangeListener, GoogleMap.OnMarkerClickListener, GoogleMap.OnInfoWindowClickListener{
 
     private GoogleMap mMap;
     private SearchResultContract.Presenter mPresenter;
@@ -644,35 +643,25 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                             finish();
                             hideProgressBS();
                         } else {
-                            mModel.updateMentorDailys(imprssionUid, requestMentorUid, new TeacherContract.Model.Listener<WriteBatch>() {
+                            mModel.updateMentorDailys(imprssionUid, requestMentorUid, new TeacherContract.Model.Listener<Void>() {
                                 @Override
-                                public void onSuccess(WriteBatch batch) {
-                                    batch.commit().addOnCompleteListener((Activity) context,new OnCompleteListener<Void>() {
+                                public void onSuccess(Void batch) {
+                                    mModel.riseNewRecords(recordsData, new TeacherContract.Model.Listener<DocumentReference>() {
                                         @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
-                                            mModel.riseNewRecords(recordsData, new TeacherContract.Model.Listener<DocumentReference>() {
-                                                @Override
-                                                public void onSuccess(DocumentReference list) {
-                                                    goHome(list);
-                                                    Log.w("foo", "onSuccess: " + list.toString());
-                                                    hideProgressBS();
-                                                    comfirmYesBtn.setBackgroundColor(getResources().getColor(R.color.colorBlack));
-                                                    //comfirmYesBtn.setEnabled(true);
-                                                }
-
-                                                @Override
-                                                public void onError(String msg) {
-                                                    flush(msg);
-                                                    comfirmYesBtn.setEnabled(true);
-                                                    comfirmYesBtn.setBackgroundColor(getResources().getColor(R.color.colorBlack));
-                                                    hideProgressBS();
-                                                }
-                                            });
+                                        public void onSuccess(DocumentReference list) {
+                                            goHome(list);
+                                            Log.w("foo", "onSuccess: " + list.toString());
+                                            hideProgressBS();
+                                            comfirmYesBtn.setBackgroundColor(getResources().getColor(R.color.colorBlack));
+                                            //comfirmYesBtn.setEnabled(true);
                                         }
-                                    }).addOnFailureListener((Activity) context, new OnFailureListener() {
+
                                         @Override
-                                        public void onFailure(@NonNull Exception e) {
-                                            flush("Network err !!");
+                                        public void onError(String msg) {
+                                            flush(msg);
+                                            comfirmYesBtn.setEnabled(true);
+                                            comfirmYesBtn.setBackgroundColor(getResources().getColor(R.color.colorBlack));
+                                            hideProgressBS();
                                         }
                                     });
                                 }
@@ -734,35 +723,25 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                                     finish();
                                     hideProgressBS();
                                 } else {
-                                    mModel.updateMentorDailys(imprssionUid, requestMentorUid, new TeacherContract.Model.Listener<WriteBatch>() {
+                                    mModel.updateMentorDailys(imprssionUid, requestMentorUid, new TeacherContract.Model.Listener<Void>() {
                                         @Override
-                                        public void onSuccess(WriteBatch batch) {
-                                            batch.commit().addOnCompleteListener((Activity) context,new OnCompleteListener<Void>() {
+                                        public void onSuccess(Void batch) {
+                                            mModel.riseNewRecords(recordsData, new TeacherContract.Model.Listener<DocumentReference>() {
                                                 @Override
-                                                public void onComplete(@NonNull Task<Void> task) {
-                                                    mModel.riseNewRecords(recordsData, new TeacherContract.Model.Listener<DocumentReference>() {
-                                                        @Override
-                                                        public void onSuccess(DocumentReference list) {
-                                                            goHome(list);
-                                                            Log.w("foo", "onSuccess: " + list.toString());
-                                                            hideProgressBS();
-                                                            comfirmYesBtn.setBackgroundColor(getResources().getColor(R.color.colorBlack));
-                                                            //comfirmYesBtn.setEnabled(true);
-                                                        }
-
-                                                        @Override
-                                                        public void onError(String msg) {
-                                                            flush(msg);
-                                                            comfirmYesBtn.setEnabled(true);
-                                                            comfirmYesBtn.setBackgroundColor(getResources().getColor(R.color.colorBlack));
-                                                            hideProgressBS();
-                                                        }
-                                                    });
+                                                public void onSuccess(DocumentReference list) {
+                                                    goHome(list);
+                                                    Log.w("foo", "onSuccess: " + list.toString());
+                                                    hideProgressBS();
+                                                    comfirmYesBtn.setBackgroundColor(getResources().getColor(R.color.colorBlack));
+                                                    //comfirmYesBtn.setEnabled(true);
                                                 }
-                                            }).addOnFailureListener((Activity) context, new OnFailureListener() {
+
                                                 @Override
-                                                public void onFailure(@NonNull Exception e) {
-                                                    flush("Network err !!");
+                                                public void onError(String msg) {
+                                                    flush(msg);
+                                                    comfirmYesBtn.setEnabled(true);
+                                                    comfirmYesBtn.setBackgroundColor(getResources().getColor(R.color.colorBlack));
+                                                    hideProgressBS();
                                                 }
                                             });
                                         }
@@ -836,51 +815,40 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                         backNoBtn.setEnabled(false);
                     }
                     mBackBSD.dismiss();
-                    mModel.updateMentorDailys(imprssionUid, requestMentorUid, new TeacherContract.Model.Listener<WriteBatch>() {
+                    mModel.updateMentorDailys(imprssionUid, requestMentorUid, new TeacherContract.Model.Listener<Void>() {
                         @Override
-                        public void onSuccess(WriteBatch batch) {
-                            batch.commit().addOnCompleteListener((Activity) context,new OnCompleteListener<Void>() {
+                        public void onSuccess(Void batch) {
+                            mModel.riseNewPushNoti(new TeacherContract.Model.Listener<Void>() {
                                 @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    mModel.riseNewPushNoti(new TeacherContract.Model.Listener<Void>() {
-                                        @Override
-                                        public void onSuccess(Void aVoid) {
-                                            setConfirmedOrCanceled(true);
-                                            if (getIntent().getAction().equals("from_HPA")) {
-                                                searchDataStore.setFirstTime(false);
-                                                onBackPressed();
-                                            } else if (getIntent().getAction().equals("from_GPA")) {
-                                                Intent intent = new Intent(SearchResultActivity.this, HomePageActivity.class);
-                                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                                startActivity(intent);
-                                            }
-                                            hideProgressBS();
-                                            comfirmYesBtn.setBackgroundColor(getResources().getColor(R.color.colorBlack));
-                                            comfirmYesBtn.setEnabled(true);
-                                        }
-
-                                        @Override
-                                        public void onError(String msg) {
-                                            Log.e(TAG, "onError: " + msg);
-                                            if (getIntent().getAction().equals("from_HPA")) {
-                                                searchDataStore.setFirstTime(false);
-                                                onBackPressed();
-                                            } else if (getIntent().getAction().equals("from_GPA")) {
-                                                Intent intent = new Intent(SearchResultActivity.this, HomePageActivity.class);
-                                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                                startActivity(intent);
-                                            }
-                                            hideProgressBS();
-                                            comfirmYesBtn.setBackgroundColor(getResources().getColor(R.color.colorBlack));
-                                            comfirmYesBtn.setEnabled(true);
-                                        }
-                                    });
-
+                                public void onSuccess(Void aVoid) {
+                                    setConfirmedOrCanceled(true);
+                                    if (getIntent().getAction().equals("from_HPA")) {
+                                        searchDataStore.setFirstTime(false);
+                                        onBackPressed();
+                                    } else if (getIntent().getAction().equals("from_GPA")) {
+                                        Intent intent = new Intent(SearchResultActivity.this, HomePageActivity.class);
+                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                        startActivity(intent);
+                                    }
+                                    hideProgressBS();
+                                    comfirmYesBtn.setBackgroundColor(getResources().getColor(R.color.colorBlack));
+                                    comfirmYesBtn.setEnabled(true);
                                 }
-                            }).addOnFailureListener((Activity) context, new OnFailureListener() {
+
                                 @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    flush("Network err !!");
+                                public void onError(String msg) {
+                                    Log.e(TAG, "onError: " + msg);
+                                    if (getIntent().getAction().equals("from_HPA")) {
+                                        searchDataStore.setFirstTime(false);
+                                        onBackPressed();
+                                    } else if (getIntent().getAction().equals("from_GPA")) {
+                                        Intent intent = new Intent(SearchResultActivity.this, HomePageActivity.class);
+                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                        startActivity(intent);
+                                    }
+                                    hideProgressBS();
+                                    comfirmYesBtn.setBackgroundColor(getResources().getColor(R.color.colorBlack));
+                                    comfirmYesBtn.setEnabled(true);
                                 }
                             });
                         }
@@ -905,42 +873,32 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                         backYesBtn.setBackgroundColor(getResources().getColor(R.color.disable_color));
                         backYesBtn.setEnabled(false);
                         mBackBSD.dismiss();
-                        mModel.updateMentorDailys(imprssionUid, requestMentorUid, new TeacherContract.Model.Listener<WriteBatch>() {
+                        mModel.updateMentorDailys(imprssionUid, requestMentorUid, new TeacherContract.Model.Listener<Void>() {
                             @Override
-                            public void onSuccess(WriteBatch batch) {
-                                batch.commit().addOnCompleteListener((Activity) context,new OnCompleteListener<Void>() {
+                            public void onSuccess(Void batch) {
+                                mModel.riseNewPushNoti(new TeacherContract.Model.Listener<Void>() {
                                     @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-                                        mModel.riseNewPushNoti(new TeacherContract.Model.Listener<Void>() {
-                                            @Override
-                                            public void onSuccess(Void list) {
-                                                setConfirmedOrCanceled(true);
-                                                searchDataStore.setFirstTime(false);
-                                                onBackPressed();
-                                                hideProgressBS();
-                                                backYesBtn.setBackgroundColor(getResources().getColor(R.color.colorBlack));
-                                                backYesBtn.setEnabled(true);
-                                                backNoBtn.setBackgroundColor(getResources().getColor(R.color.colorBlack));
-                                                backNoBtn.setEnabled(true);
-                                            }
-
-                                            @Override
-                                            public void onError(String msg) {
-                                                Log.e(TAG, "onError: " + msg);
-                                                searchDataStore.setFirstTime(false);
-                                                onBackPressed();
-                                                hideProgressBS();
-                                                backYesBtn.setBackgroundColor(getResources().getColor(R.color.colorBlack));
-                                                backYesBtn.setEnabled(true);
-                                                backNoBtn.setBackgroundColor(getResources().getColor(R.color.colorBlack));
-                                                backNoBtn.setEnabled(true);
-                                            }
-                                        });
+                                    public void onSuccess(Void list) {
+                                        setConfirmedOrCanceled(true);
+                                        searchDataStore.setFirstTime(false);
+                                        onBackPressed();
+                                        hideProgressBS();
+                                        backYesBtn.setBackgroundColor(getResources().getColor(R.color.colorBlack));
+                                        backYesBtn.setEnabled(true);
+                                        backNoBtn.setBackgroundColor(getResources().getColor(R.color.colorBlack));
+                                        backNoBtn.setEnabled(true);
                                     }
-                                }).addOnFailureListener((Activity) context, new OnFailureListener() {
+
                                     @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        flush("Network err !!");
+                                    public void onError(String msg) {
+                                        Log.e(TAG, "onError: " + msg);
+                                        searchDataStore.setFirstTime(false);
+                                        onBackPressed();
+                                        hideProgressBS();
+                                        backYesBtn.setBackgroundColor(getResources().getColor(R.color.colorBlack));
+                                        backYesBtn.setEnabled(true);
+                                        backNoBtn.setBackgroundColor(getResources().getColor(R.color.colorBlack));
+                                        backNoBtn.setEnabled(true);
                                     }
                                 });
                             }
@@ -965,28 +923,18 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
     protected void onPause() {
         super.onPause();
         if (!isConfirmedOrCanceled()) {
-            mModel.updateMentorDailys(imprssionUid, requestMentorUid, new TeacherContract.Model.Listener<WriteBatch>() {
+            mModel.updateMentorDailys(imprssionUid, requestMentorUid, new TeacherContract.Model.Listener<Void>() {
                 @Override
-                public void onSuccess(WriteBatch batch) {
-                    batch.commit().addOnCompleteListener((Activity) context,new OnCompleteListener<Void>() {
+                public void onSuccess(Void batch) {
+                    mModel.riseNewPushNoti(new TeacherContract.Model.Listener<Void>() {
                         @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            mModel.riseNewPushNoti(new TeacherContract.Model.Listener<Void>() {
-                                @Override
-                                public void onSuccess(Void list) {
-                                    setConfirmedOrCanceled(true);
-                                }
-
-                                @Override
-                                public void onError(String msg) {
-                                    Log.e(TAG, "onError: " + msg);
-                                }
-                            });
+                        public void onSuccess(Void list) {
+                            setConfirmedOrCanceled(true);
                         }
-                    }).addOnFailureListener((Activity) context, new OnFailureListener() {
+
                         @Override
-                        public void onFailure(@NonNull Exception e) {
-                            flush("Network err !!");
+                        public void onError(String msg) {
+                            Log.e(TAG, "onError: " + msg);
                         }
                     });
                 }
@@ -2233,7 +2181,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
         isConfirmedOrCanceled = confirmedOrCanceled;
     }
 
-    private void getRouteBetweenMarker(LatLng One, LatLng Two) {
+   /* private void getRouteBetweenMarker(LatLng One, LatLng Two) {
         Routing routing = new Routing.Builder()
                 .travelMode(AbstractRouting.TravelMode.DRIVING)
                 .withListener(this)
@@ -2293,7 +2241,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
     @Override
     public void onRoutingCancelled() {
 
-    }
+    }*/
 }
 
 //testing the swipe here

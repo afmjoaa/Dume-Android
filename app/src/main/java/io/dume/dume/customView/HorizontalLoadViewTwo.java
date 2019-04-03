@@ -46,11 +46,11 @@ public class HorizontalLoadViewTwo extends View implements ValueAnimator.Animato
         valueAnimator.setDuration(750);
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         paint.setStyle(Paint.Style.FILL);
-        if (attr != null) {
+       /* if (attr != null) {
             TypedArray typedArray = context.obtainStyledAttributes(attr, R.styleable.HorizontalLoadView);
             paint.setColor(typedArray.getColor(R.styleable.HorizontalLoadView_rect_color, Color.BLACK));
             typedArray.recycle();
-        } else paint.setColor(Color.BLACK);
+        } else*/ paint.setColor(context.getResources().getColor(R.color.transparent));
         widthRight = (int) (15 * (getResources().getDisplayMetrics().density));
         rectangle = new Rect(0, 0, widthRight, (int) (8 * (getResources().getDisplayMetrics().density)));
 

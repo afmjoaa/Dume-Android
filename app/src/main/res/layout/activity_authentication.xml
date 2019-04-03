@@ -95,7 +95,7 @@
         app:layout_anchor="@id/appbarLayout"
         android:visibility="gone"
         app:layout_anchorGravity="bottom"
-        app:rect_color="@color/transparent" />
+       />
 
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/scroll_view"

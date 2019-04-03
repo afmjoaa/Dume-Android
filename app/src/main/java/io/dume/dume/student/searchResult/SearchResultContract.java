@@ -54,6 +54,6 @@ public interface SearchResultContract {
 
         void riseNewPushNoti(TeacherContract.Model.Listener<Void> listener);
 
-        void updateMentorDailys(List<String> imprssionUid, String requestUid, TeacherContract.Model.Listener<WriteBatch> listener);
+        void updateMentorDailys(List<String> imprssionUid, String requestUid, TeacherContract.Model.Listener<Void> listener);
     }
 }
