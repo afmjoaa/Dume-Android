@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.location.places.AutocompletePrediction;
 
@@ -47,13 +48,25 @@ public abstract class StatAdapter extends RecyclerView.Adapter<StatAdapter.FeedB
         holder.valueTitleTV.setText(String.format("%s", position == 0 ? "Profile Impressions" : "Profile Request"));
         switch (position) {
             case 0:
+                Integer i = Integer.parseInt(stat.get(1).getRequest_i());
+                if(i== null || i == 0){
+                    i =1;
+                }else{
+                    i = Integer.parseInt(stat.get(1).getRequest_i());
+                }
                 Integer valueStatTVValueI = (100 * (Integer.parseInt(stat.get(0).getRequest_i()) - Integer.parseInt(stat.get(1).getRequest_i())) /
-                        Integer.parseInt(stat.get(1).getRequest_i()));
+                        i);
                 holder.valueStatTV.setText(String.format("  (%s%%)", valueStatTVValueI.toString()));
                 break;
             case 1:
+                Integer ii = Integer.parseInt(stat.get(1).getRequest_r()) ;
+                if(ii == null || ii ==0){
+                    ii = 1;
+                }else{
+                    ii = Integer.parseInt(stat.get(1).getRequest_r());
+                }
                 Integer valueStatTVValueR = (100 * (Integer.parseInt(stat.get(0).getRequest_r()) - Integer.parseInt(stat.get(1).getRequest_r())) /
-                        Integer.parseInt(stat.get(1).getRequest_r()));
+                        ii);
                 holder.valueStatTV.setText(String.format("  (%s%%)", valueStatTVValueR.toString()));
                 break;
             default:

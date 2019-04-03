@@ -69,8 +69,7 @@
         <activity android:name=".student.homePage.StudentActivity" />
         <activity
             android:name=".auth.auth.AuthActivity"
-            android:theme="@style/LoginTheme"
-            android:windowSoftInputMode="stateHidden|adjustResize" />
+            android:theme="@style/LoginTheme"    />
         <activity
             android:name=".auth.code_verification.PhoneVerificationActivity"
             android:theme="@style/MyStyle" />

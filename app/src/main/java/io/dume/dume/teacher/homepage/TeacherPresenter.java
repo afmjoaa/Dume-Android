@@ -2,14 +2,12 @@ package io.dume.dume.teacher.homepage;
 
 import android.util.Log;
 import android.view.View;
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -30,12 +28,10 @@ public class TeacherPresenter implements TeacherContract.Presenter {
     private TeacherModel model;
     private TeacherDataStore teachearDataStore;
 
-
     public TeacherPresenter(TeacherContract.View view, TeacherModel model) {
         this.view = view;
         this.model = model;
         teachearDataStore = TeacherDataStore.getInstance();
-
     }
 
     @Override
@@ -406,6 +402,4 @@ public class TeacherPresenter implements TeacherContract.Presenter {
                 break;
         }
     }
-
-
 }

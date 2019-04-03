@@ -44,8 +44,7 @@
         android:translationY="3dp"
         android:visibility="gone"
         app:layout_anchor="@id/packageBottomSheet"
-        app:layout_anchorGravity="top"
-        app:rect_color="@color/transparent" />
+        app:layout_anchorGravity="top" />
 
     <carbon.widget.LinearLayout
         android:id="@+id/packageBottomSheet"

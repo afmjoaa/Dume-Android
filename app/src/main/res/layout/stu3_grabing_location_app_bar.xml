@@ -129,8 +129,7 @@
         android:translationY="2dp"
         android:visibility="gone"
         app:layout_anchor="@id/my_appbarLayout_cardView"
-        app:layout_anchorGravity="bottom"
-        app:rect_color="@color/transparent" />
+        app:layout_anchorGravity="bottom"/>
 
     <LinearLayout
         android:layout_width="wrap_content"

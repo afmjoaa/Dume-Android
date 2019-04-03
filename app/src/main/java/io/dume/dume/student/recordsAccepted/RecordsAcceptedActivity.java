@@ -936,13 +936,13 @@ public class RecordsAcceptedActivity extends CustomStuAppCompatActivity implemen
                         Uri u = Uri.parse("tel:" + studentPhoneNum);
                         switch (myThisActivity.retriveAction) {
                             case DumeUtils.STUDENT:
-                                u = Uri.parse("tel:" + studentPhoneNum);
+                                u = Uri.parse("tel:" + mentorPhoneNum);
                                 break;
                             case DumeUtils.TEACHER:
-                                u = Uri.parse("tel:" + mentorPhoneNum);
+                                u = Uri.parse("tel:" + studentPhoneNum);
                                 break;
                             case DumeUtils.BOOTCAMP:
-                                u = Uri.parse("tel:" + mentorPhoneNum);
+                                u = Uri.parse("tel:" + studentPhoneNum);
                                 break;
                         }
                         Intent i = new Intent(Intent.ACTION_DIAL, u);
@@ -957,13 +957,13 @@ public class RecordsAcceptedActivity extends CustomStuAppCompatActivity implemen
                         Uri uri = Uri.parse("smsto:" + studentPhoneNum);
                         switch (myThisActivity.retriveAction) {
                             case DumeUtils.STUDENT:
-                                uri = Uri.parse("smsto:" + studentPhoneNum);
+                                uri = Uri.parse("smsto:" + mentorPhoneNum);
                                 break;
                             case DumeUtils.TEACHER:
-                                uri = Uri.parse("smsto:" + mentorPhoneNum);
+                                uri = Uri.parse("smsto:" + studentPhoneNum);
                                 break;
                             case DumeUtils.BOOTCAMP:
-                                uri = Uri.parse("smsto:" + mentorPhoneNum);
+                                uri = Uri.parse("smsto:" + studentPhoneNum);
                                 break;
                         }
                         Intent intent = new Intent(Intent.ACTION_SENDTO, uri);

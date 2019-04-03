@@ -132,7 +132,6 @@ import q.rorbin.verticaltablayout.widget.TabView;
 import static io.dume.dume.util.DumeUtils.animateImage;
 import static io.dume.dume.util.ImageHelper.getRoundedCornerBitmapSquare;
 
-
 public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherContract.View,
         NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback, MyGpsLocationChangeListener,
         RadioGroup.OnCheckedChangeListener {
@@ -1264,6 +1263,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
             public void onSuccess(Void list) {
                 radioSegmentGroup.setEnabled(true);
                 hideProgress();
+                hideProgressTwo();
                 String foo = active ? "Active" : "Inactive";
                 flush("Account Status Changed To : " + foo);
             }
@@ -1272,6 +1272,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
             public void onError(String msg) {
                 radioSegmentGroup.setEnabled(true);
                 hideProgress();
+                hideProgressTwo();
                 flush(msg);
             }
         });

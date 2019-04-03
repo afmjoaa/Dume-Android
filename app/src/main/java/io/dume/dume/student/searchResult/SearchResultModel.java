@@ -106,7 +106,7 @@ public class SearchResultModel extends StuBaseModel implements SearchResultContr
 
 
     @Override
-    public void updateMentorDailys(List<String> imprssionUid, String requestUid, TeacherContract.Model.Listener<WriteBatch> listener) {
+    public void updateMentorDailys(List<String> imprssionUid, String requestUid, TeacherContract.Model.Listener<Void> listener) {
         // Get a new write batch
         WriteBatch batch = firestore.batch();
         for (int i = 0; i < imprssionUid.size(); i++) {
@@ -141,7 +141,8 @@ public class SearchResultModel extends StuBaseModel implements SearchResultContr
                                 batch.update(mentorDocRef, "daily_i", dailyImpression.toString());
                             }
                             if(finalI == imprssionUid.size()-1){
-                                listener.onSuccess(batch);
+                                batch.commit();
+                                listener.onSuccess(null);
                             }
                         } else {
                             Log.d(TAG, "No such document");

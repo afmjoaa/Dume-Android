@@ -439,8 +439,6 @@ public class InboxActivity extends CustomStuAppCompatActivity implements InboxAc
                 //nothing to do here
             }
         }*/
-
-
         //enam in upppercase 😄 😂 😄 😂 😄 😂   😄    😂 😄   😂 😄 😂 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -457,8 +455,11 @@ public class InboxActivity extends CustomStuAppCompatActivity implements InboxAc
                     demoModel.getRoom(FirebaseAuth.getInstance().getUid(), new TeacherContract.Model.Listener<List<Room>>() {
                         @Override
                         public void onSuccess(List<Room> list) {
-
                             myThisActivity.hideProgress();
+                            if(list== null){
+                                noDataBlockMsg.setVisibility(View.VISIBLE);
+                                return;
+                            }
                             if (list.size() < 1) {
                                 noDataBlockMsg.setVisibility(View.VISIBLE);
                                 return;

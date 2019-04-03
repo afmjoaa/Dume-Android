@@ -148,8 +148,7 @@
             android:translationY="-8dp"
             android:visibility="gone"
             app:layout_anchor="@id/my_appbarLayout"
-            app:layout_anchorGravity="bottom"
-            app:rect_color="@color/transparent" />
+            app:layout_anchorGravity="bottom"/>
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab"

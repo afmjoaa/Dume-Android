@@ -37,6 +37,8 @@ import javax.annotation.Nullable;
 import io.dume.dume.Google;
 import io.dume.dume.student.common.ReviewHighlightData;
 import io.dume.dume.student.homePage.HomePageModel;
+import io.dume.dume.student.pojo.StuBaseModel;
+import io.dume.dume.teacher.homepage.TeacherActivtiy;
 import io.dume.dume.teacher.homepage.TeacherContract;
 import io.dume.dume.teacher.homepage.TeacherDataStore;
 import io.dume.dume.teacher.pojo.Skill;
@@ -160,6 +162,11 @@ public class DumeModel extends HomePageModel implements TeacherModel {
                 //Change all skills status
                 ArrayList<Skill> skillArrayList = TeacherDataStore.getInstance().getSkillArrayList();
                 if (skillArrayList != null) {
+                    if (skillArrayList.size() <= 0){
+                        TeacherActivtiy activtiy = (TeacherActivtiy) context;
+                        activtiy.hideProgress();
+                        activtiy.hideProgressTwo();
+                    }
                     changeAllSkillStatus(skillArrayList, status, new TeacherContract.Model.Listener<Void>() {
                         @Override
                         public void onSuccess(Void list) {
@@ -175,7 +182,12 @@ public class DumeModel extends HomePageModel implements TeacherModel {
                     getSkill(new TeacherContract.Model.Listener<ArrayList<Skill>>() {
                         @Override
                         public void onSuccess(ArrayList<Skill> list) {
-                            Log.e(TAG, "onSuccess: " + list.size());
+                            if (list != null && list.size() <= 0){
+                                TeacherActivtiy activtiy = (TeacherActivtiy) context;
+                                activtiy.hideProgress();
+                                activtiy.hideProgressTwo();
+                            }
+                                Log.e(TAG, "onSuccess: " + list.size());
                             TeacherDataStore.getInstance().setSkillArrayList(list);
                             changeAllSkillStatus(list, status, new TeacherContract.Model.Listener<Void>() {
                                 @Override
@@ -189,7 +201,6 @@ public class DumeModel extends HomePageModel implements TeacherModel {
                                 }
                             });
                         }
-
                         @Override
                         public void onError(String msg) {
                             Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();

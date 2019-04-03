@@ -58,7 +58,7 @@
         app:layout_anchor="@id/app_bar"
         android:visibility="gone"
         app:layout_anchorGravity="bottom"
-        app:rect_color="@color/transparent" />
+        />
 
     <include layout="@layout/content_auth_final" />
 
