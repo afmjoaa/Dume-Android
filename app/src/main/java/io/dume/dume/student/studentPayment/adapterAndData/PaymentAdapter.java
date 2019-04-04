@@ -1,13 +1,21 @@
 package io.dume.dume.student.studentPayment.adapterAndData;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.text.SpannableString;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StrikethroughSpan;
+import android.text.style.URLSpan;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -47,11 +55,18 @@ public abstract class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter
         myViewHolder.mainText.setText(current.primaryText);
         myViewHolder.mainIcon.setImageResource(current.imageSrc);
 
-        if (current.secondaryValue == 1) {
+        if((data.size()-1)== position){
+            myViewHolder.devider.setVisibility(View.GONE);
+        }
+
+        if (current.secondaryValue == 0) {
             myViewHolder.subText.setVisibility(View.VISIBLE);
+            myViewHolder.subText.setText("Coming soon...");
             params.setMargins(0, (int) (10 * (context.getResources().getDisplayMetrics().density)), 0, (int) (10 * (context.getResources().getDisplayMetrics().density)));
             myViewHolder.textContainer.setLayoutParams(params);
-        } else {
+            myViewHolder.moreVertIcon.setVisibility(View.GONE);
+            //myViewHolder.hostingLayout.setBackgroundColor(context.getResources().getColor(R.color.disable_color));
+        }else{
             myViewHolder.subText.setVisibility(View.GONE);
             params.setMargins(0, (int) (15 * (context.getResources().getDisplayMetrics().density)), 0, (int) (15 * (context.getResources().getDisplayMetrics().density)));
             myViewHolder.textContainer.setLayoutParams(params);
@@ -61,33 +76,47 @@ public abstract class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter
         myViewHolder.moreVertIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(myViewHolder.getAdapterPosition() == 0){
-                    PopupMenu popup = new PopupMenu(context, view);
-                    popup.inflate(R.menu.menu_payment_method_cash_only);
-                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(MenuItem menuItem) {
-                            int itemId = menuItem.getItemId();
-                            Toast.makeText(context, "fucked it.....", Toast.LENGTH_SHORT).show();
-                            return false;
+                PopupMenu popup = new PopupMenu(context, view);
+                popup.inflate(R.menu.menu_payment_method_cash_only);
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem menuItem) {
+                        int itemId = menuItem.getItemId();
+                        if(itemId == R.id.how){
+                            testingCustomDialogue(R.string.payment_info);
                         }
-                    });
-                    popup.show();
-                }else{
-                    PopupMenu popup = new PopupMenu(context, view);
-                    popup.inflate(R.menu.menu_payment_method_red);
-                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(MenuItem menuItem) {
-                            int itemId = menuItem.getItemId();
-                            Toast.makeText(context, "fucked it.....", Toast.LENGTH_SHORT).show();
-                            return false;
-                        }
-                    });
-                    popup.show();
-                }
+                        return false;
+                    }
+                });
+                popup.show();
             }
         });
+    }
+
+    public void testingCustomDialogue(int infoStringId) {
+        // custom dialog
+        Dialog dialog = new Dialog(context);
+        dialog.setContentView(R.layout.custom_obligation_dialogue);
+
+        //all find view here
+        Button dismissBtn = dialog.findViewById(R.id.dismiss_btn);
+        TextView dialogText = dialog.findViewById(R.id.dialog_text);
+        carbon.widget.ImageView dialogImage = dialog.findViewById(R.id.dialog_image);
+        dialogText.setGravity(Gravity.START);
+
+        dialogImage.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_info_icon_green));
+        SpannableString text = new SpannableString(context.getResources().getString(R.string.payment_info));
+        text.setSpan(new ForegroundColorSpan(context.getResources().getColor(R.color.colorLink)), text.length()-9, (text.length()), 0);
+        text.setSpan(new URLSpan("https://dume-2d063.firebaseapp.com/home"), text.length()-9, (text.length()), 0);
+        dialogText.setMovementMethod(LinkMovementMethod.getInstance());
+        dialogText.setText(text, TextView.BufferType.SPANNABLE);
+        dismissBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
     }
 
     protected abstract void OnButtonClicked(View v, String methodName);
@@ -116,7 +145,6 @@ public abstract class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter
             moreVertIcon = itemView.findViewById(R.id.more_vertical_icon);
             devider = itemView.findViewById(R.id.divider2);
             textContainer = itemView.findViewById(R.id.vertical_textview_container);
-
         }
     }
 }

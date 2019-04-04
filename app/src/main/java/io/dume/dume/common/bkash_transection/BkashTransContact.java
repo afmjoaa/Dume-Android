@@ -17,6 +17,7 @@ public interface BkashTransContact {
 
         void stopLoad();
 
+        void setEnable();
     }
 
     interface Presenter {

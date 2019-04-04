@@ -1,22 +1,16 @@
 package io.dume.dume.student.studentPayment;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
-import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,10 +20,8 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
-
-import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -39,25 +31,18 @@ import java.util.Map;
 import io.dume.dume.Google;
 import io.dume.dume.R;
 import io.dume.dume.common.bkash_transection.BkashTransectionActivity;
-import io.dume.dume.student.grabingLocation.MenualRecyclerData;
-import io.dume.dume.student.grabingLocation.PlaceMenualRecyAda;
-import io.dume.dume.student.homePage.HomePageModel;
-import io.dume.dume.student.homePage.adapter.HomePageRatingData;
 import io.dume.dume.student.homePage.adapter.HomePageRecyclerData;
 import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
 import io.dume.dume.student.pojo.SearchDataStore;
-import io.dume.dume.student.studentHelp.StudentHelpActivity;
 import io.dume.dume.student.studentPayment.adapterAndData.ObligationAndClaimAdapter;
 import io.dume.dume.student.studentPayment.adapterAndData.ObligationAndClaimData;
 import io.dume.dume.student.studentPayment.adapterAndData.PaymentAdapter;
 import io.dume.dume.student.studentPayment.adapterAndData.PaymentData;
 import io.dume.dume.student.studentPayment.adapterAndData.PromotionAdapter;
-import io.dume.dume.student.studentPayment.adapterAndData.PromotionData;
 import io.dume.dume.student.studentPayment.adapterAndData.TransactionData;
 import io.dume.dume.student.studentPayment.adapterAndData.TransactionHistoryAdapter;
 import io.dume.dume.teacher.homepage.TeacherDataStore;
 import io.dume.dume.util.DumeUtils;
-import io.dume.dume.util.RadioBtnDialogue;
 
 import static io.dume.dume.util.DumeUtils.configAppbarTittle;
 import static io.dume.dume.util.DumeUtils.configureAppbar;
@@ -76,10 +61,7 @@ public class StudentPaymentActivity extends CustomStuAppCompatActivity implement
     private LinearLayout secondaryHideAbleLayout;
     private RelativeLayout idBlock;
     private RelativeLayout refBlock;
-    private String[] paymentMethodArr;
     private FrameLayout content;
-    private Button bkashTransection;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,25 +77,26 @@ public class StudentPaymentActivity extends CustomStuAppCompatActivity implement
             @Override
             protected void OnButtonClicked(View v, String methodName) {
                 switch (methodName) {
-                    case "Cash":
+                    case "Cash Payment":
                         onCashClicked();
                         break;
-                    case "Bkash":
-                        onBkashClicked();
+                    case "Bkash Transaction ID":
+                        startActivity(new Intent(getApplicationContext(), BkashTransectionActivity.class));
+                        break;
+                    case "Bkash OTP":
+                        flush("Payment method is under development...");
                         break;
                     case "NexusPay/Rocket":
-                        onNexusPayClicked();
+                        flush("Payment method is under development...");
+                        break;
+                    case "Card Transfer":
+                        flush("Payment method is under development...");
                         break;
                 }
             }
         };
         paymentRecycleView.setAdapter(paymentAdapter);
         paymentRecycleView.setLayoutManager(new LinearLayoutManager(this));
-        bkashTransection.setOnClickListener(v -> {
-            startActivity(new Intent(getApplicationContext(), BkashTransectionActivity.class));
-        });
-
-
     }
 
     private void onCashClicked() {
@@ -140,6 +123,15 @@ public class StudentPaymentActivity extends CustomStuAppCompatActivity implement
         configAppbarTittle(StudentPaymentActivity.this, paymentName[2]);
     }
 
+    public void flush(String msg){
+        Toast toast = Toast.makeText(this, msg, Toast.LENGTH_SHORT);
+        TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
+        if( v != null) {
+            v.setGravity(Gravity.CENTER);
+        }
+        toast.show();
+    }
+
     @Override
     public void findView() {
         paymentRecycleView = findViewById(R.id.payment_method_recycler);
@@ -151,9 +143,6 @@ public class StudentPaymentActivity extends CustomStuAppCompatActivity implement
         idBlock = findViewById(R.id.id_block);
         refBlock = findViewById(R.id.ref_block);
         content = findViewById(R.id.content);
-        paymentMethodArr = this.getResources().getStringArray(R.array.add_payment_methods);
-        bkashTransection = findViewById(R.id.bkashTransection);
-
     }
 
     @Override
@@ -199,23 +188,6 @@ public class StudentPaymentActivity extends CustomStuAppCompatActivity implement
     }
 
     @Override
-    public void onAddPaymentMethod() {
-        Bundle pRargs = new Bundle();
-        pRargs.putString("title", "Select payment method");
-        pRargs.putStringArray("radioOptions", paymentMethodArr);
-        RadioBtnDialogue addPaymentDialogue = new RadioBtnDialogue();
-        addPaymentDialogue.setItemChoiceListener(new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                // selectGenderTextView.setText(genderSelcetionArr[i]);
-                Toast.makeText(StudentPaymentActivity.this, "fucked that", Toast.LENGTH_SHORT).show();
-            }
-        });
-        addPaymentDialogue.setArguments(pRargs);
-        addPaymentDialogue.show(getSupportFragmentManager(), "payment_method_dialogue");
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
@@ -240,11 +212,12 @@ public class StudentPaymentActivity extends CustomStuAppCompatActivity implement
     public List<PaymentData> getFinalData() {
         List<PaymentData> data = new ArrayList<>();
         int[] imageIcons = {
-                R.drawable.ic_cash_pay_icon,
                 R.drawable.ic_bkash_icon,
-                R.drawable.ic_nexus_pay_icon
+                R.drawable.ic_bkash_icon,
+                R.drawable.ic_nexus_pay_icon,
+                R.drawable.ic_pay_credit_bank
         };
-        int[] paymentDefaultValue = {1, 0, 0};
+        int[] paymentDefaultValue = {1, 0, 0,0};
 
         for (int i = 0; i < paymentName.length; i++) {
             PaymentData current = new PaymentData();

@@ -1046,7 +1046,7 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
 
     @Override
     public void gotoPaymentActivity() {
-        startActivity(new Intent(this, StudentPaymentActivity.class));
+        startActivity(new Intent(this, StudentPaymentActivity.class).setAction(DumeUtils.STUDENT));
     }
 
     @Override

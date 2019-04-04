@@ -42,10 +42,6 @@ public class StudentPaymentPresenter implements StudentPaymentContract.Presenter
             case R.id.obligation_or_claim_layout:
                 mView.onObligtionClaimClicked();
                 break;
-            case R.id.add_payment_layout:
-                mView.onAddPaymentMethod();
-                break;
-
         }
     }
 }

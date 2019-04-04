@@ -26,7 +26,6 @@ public class PayAdapter extends RecyclerView.Adapter<PayAdapter.PayVH> {
         this.itemWidth = itemWidth;
     }
 
-
     @NonNull
     @Override
     public PayVH onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
@@ -44,16 +43,11 @@ public class PayAdapter extends RecyclerView.Adapter<PayAdapter.PayVH> {
             if (payArrayList.get(i).isHaveDiscount()) {
                 viewHolder.title.setText(payArrayList.get(i).getBuckTitle());
                 viewHolder.afterDis.setText("$"+(payArrayList.get(i).getBucks() * payArrayList.get(i).getDiscount()) / 100  + "");
-                viewHolder.beforeDis.setText("$"+payArrayList.get(i).getBucks() + "");
             }
         }else {
             viewHolder.title.setText(payArrayList.get(i).getBuckTitle());
             viewHolder.afterDis.setText("$"+payArrayList.get(i).getBucks());
-            viewHolder.redCut.setVisibility(View.GONE);
-            viewHolder.beforeDis.setVisibility(View.GONE);
        }
-
-
     }
 
     @Override
@@ -61,22 +55,15 @@ public class PayAdapter extends RecyclerView.Adapter<PayAdapter.PayVH> {
         return payArrayList.size();
     }
 
-
     class PayVH extends RecyclerView.ViewHolder {
-        private TextView beforeDis, afterDis, title, discount;
+        private TextView afterDis, title;
         private final RelativeLayout hostingRelative;
-        private final View redCut;
 
         PayVH(@NonNull View itemView) {
             super(itemView);
             hostingRelative = itemView.findViewById(R.id.hosting_relative_layout);
             title = itemView.findViewById(R.id.reportTitle);
-            beforeDis = itemView.findViewById(R.id.beforeDiscount);
             afterDis = itemView.findViewById(R.id.afterDiscount);
-            discount = itemView.findViewById(R.id.discountTV);
-            redCut = itemView.findViewById(R.id.red_cut);
         }
     }
-
-
 }

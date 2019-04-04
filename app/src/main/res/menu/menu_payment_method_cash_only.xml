@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="io.dume.dume.student.studentPayment.StudentPaymentActivity">
     <item
-        android:id="@+id/action_made_default"
+        android:id="@+id/how"
         android:orderInCategory="100"
-        android:title="@string/set_default"
+        android:title="@string/how_it_works"
         app:showAsAction="never" />
 </menu>

@@ -924,7 +924,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
                 startActivity(new Intent(this, StudentHelpActivity.class));
                 break;
             case R.id.payments:
-                startActivity(new Intent(this, StudentPaymentActivity.class));
+                startActivity(new Intent(this, StudentPaymentActivity.class).setAction(DumeUtils.TEACHER));
                 break;
             case R.id.forum:
                 Toast.makeText(context, "Coming soon", Toast.LENGTH_SHORT).show();

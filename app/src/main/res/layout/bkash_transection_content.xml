@@ -1,88 +1,144 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".student.studentPayment.StudentPaymentActivity">
 
     <LinearLayout
-        android:id="@+id/transContainer"
+        android:id="@+id/hosting_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="16dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="10dp"
         android:orientation="vertical">
 
         <RelativeLayout
+            android:id="@+id/transContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/abcd"
+                android:id="@+id/info_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/bkash_transection_info" />
+                android:gravity="start"
+                android:text="@string/transaction_info_text"
+                android:textAlignment="viewStart"
+                android:textColor="@color/textColorPrimary" />
 
-            <TextView
+            <RelativeLayout
+                android:id="@+id/id_block"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/abcd"
-                android:gravity="center"
-                android:text="Marchant Number : +88 01551604161"
-                android:textSize="18sp" />
-        </RelativeLayout>
+                android:layout_below="@+id/info_text"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/bg_round_corner_payment_green"
+                android:paddingStart="6dp"
+                android:paddingLeft="6dp"
+                android:paddingTop="8dp"
+                android:paddingEnd="8dp"
+                android:paddingRight="8dp"
+                android:paddingBottom="6dp"
+                android:visibility="visible">
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:text="Bkash Num :"
+                    android:textColor="@color/black"
+                    app:fontFamily="@font/cairo_regular" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:gravity="center_horizontal"
+                    android:text="----->"
+                    android:textColor="@color/black"
+                    app:fontFamily="@font/cairo_regular" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginEnd="2dp"
+                    android:layout_marginRight="2dp"
+                    android:text="+88 01551604161"
+                    android:textColor="@color/black"
+                    app:fontFamily="@font/cairo_regular" />
+
+            </RelativeLayout>
 
             <android.support.design.widget.TextInputLayout
+                android:id="@+id/transaction_id_name"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/id_block">
 
                 <EditText
                     android:id="@+id/trans_id"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Enter Bkash Transection ID" />
+                    android:hint="@string/transaction_id"
+                    android:inputType="textNoSuggestions" />
+
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
+                android:id="@+id/amount_name"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_below="@id/transaction_id_name">
 
                 <EditText
                     android:id="@+id/amount"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="number"
-                    android:hint="Amount in BDT" />
+                    android:hint="@string/amount"
+                    android:inputType="number" />
+
             </android.support.design.widget.TextInputLayout>
 
             <Button
                 android:id="@+id/submitTransID"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="end"
+                android:layout_below="@+id/amount_name"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
                 android:text="Submit" />
-        </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/inprogress"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/submitTransID"
+                android:gravity="center"
+                android:visibility="invisible">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:drawableStart="@drawable/ic_cached_black_24dp"
+                    android:drawableLeft="@drawable/ic_cached_black_24dp"
+                    android:gravity="center"
+                    android:text="Payment Verficaiton is Under Process. You will be notified after it gets successful payment transection."
+                    android:textColor="@color/colorLink" />
+            </RelativeLayout>
+
+        </RelativeLayout>
+
     </LinearLayout>
-    <RelativeLayout
-        android:id="@+id/inprogress"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:visibility="invisible">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:drawableStart="@drawable/ic_cached_black_24dp"
-            android:gravity="center"
-            android:textColor="@color/colorLink"
-            android:text="Payment Verficaiton is Under Process. You will be notified after it gets successful payment transection."
-            android:drawableLeft="@drawable/ic_cached_black_24dp" />
-    </RelativeLayout>
-
-</android.support.design.widget.CoordinatorLayout>
+</android.support.v4.widget.NestedScrollView>

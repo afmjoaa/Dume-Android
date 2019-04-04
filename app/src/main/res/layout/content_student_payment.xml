@@ -43,84 +43,48 @@
                 android:paddingRight="16dp"
                 android:paddingStart="16dp"
                 android:paddingTop="6dp"
-                android:text="Payment Methods"
+                android:text="Choose Payment Method"
                 android:textAllCaps="false"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="@color/colorAccent"
                 android:textSize="13sp"
                 app:fontFamily="@font/cairo_regular" />
 
+            <!--<include layout="@layout/payment_options" />-->
+
+            <FrameLayout
+                android:id="@+id/frameLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/payment_method_recycler"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:clipToPadding="false" />
+
+                <View
+                    android:id="@+id/overlay"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:clickable="true"
+                    android:visibility="gone"
+                    android:focusable="true" />
+            </FrameLayout>
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:text="Choose Payment Method"
-                android:layout_margin="10dp" />
-
-            <include layout="@layout/payment_options" />
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/payment_method_recycler"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone"/>
-
-            <RelativeLayout
-                android:id="@+id/add_payment_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:focusable="true"
-                android:foreground="?android:attr/selectableItemBackground"
-                android:onClick="onPaymentViewClicked"
-                android:orientation="vertical"
-                android:paddingEnd="18dp"
+                android:textSize="12sp"
+                android:textAlignment="center"
                 android:paddingLeft="16dp"
-                android:paddingRight="18dp"
-                android:paddingStart="16dp">
-
-
-                <carbon.widget.ImageView
-                    android:id="@+id/add_payment_icon"
-                    android:layout_width="42dp"
-                    android:layout_height="42dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginEnd="18dp"
-                    android:layout_marginRight="18dp"
-                    android:contentDescription="@string/autocomplete_image"
-                    app:srcCompat="@drawable/ic_add_round_icon" />
-
-                <!--name holder -->
-                <LinearLayout
-                    android:id="@+id/add_payment_layout_one"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_toEndOf="@id/add_payment_icon"
-                    android:layout_toRightOf="@id/add_payment_icon"
-                    android:orientation="vertical"
-                    android:paddingBottom="15dp"
-                    android:paddingTop="15dp">
-
-                    <TextView
-                        android:id="@+id/add_payment_text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginTop="3dp"
-                        android:ellipsize="end"
-                        android:maxLines="1"
-                        android:maxWidth="150dp"
-                        android:singleLine="true"
-                        android:text="Add Payment Method"
-                        android:textAppearance="?android:attr/textAppearanceListItem"
-                        android:textColor="@color/linkColorDark"
-                        app:fontFamily="@font/cairo_regular" />
-
-                </LinearLayout>
-
-            </RelativeLayout>
+                android:paddingRight="16dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:text="** Right now some payment methods is not available. please wait until the next version gets release.**" />
 
             <!--obligations or claim start-->
             <TextView

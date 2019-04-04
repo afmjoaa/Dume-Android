@@ -137,5 +137,6 @@
     <color name="notificationItemColor">#edfffe</color>
     <color name="snack_action">#90caf9</color>
     <color name="colorGrey">#EEDAD6D6</color>
+    <color name="light_sky">#e8f6ff</color>
 
 </resources>

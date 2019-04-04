@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -17,68 +16,22 @@
         android:layout_alignParentBottom="true"
         android:orientation="vertical">
 
-        <FrameLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|right"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="4dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginStart="10dp">
-
-            <android.support.design.widget.FloatingActionButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:src="@android:color/transparent"
-                app:fabCustomSize="60dp"
-                android:layout_marginBottom="6dp"
-                app:fabSize="normal" />
-
-            <carbon.widget.LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:orientation="vertical"
-                app:carbon_elevation="6dp">
-
-
-                <carbon.widget.ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="30dp"
-                    android:layout_gravity="center"
-                    android:tint="@color/white"
-                    android:translationY="5dp"
-                    app:carbon_elevation="1dp"
-                    app:srcCompat="@drawable/pay" />
-
-                <carbon.widget.TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:text="Pay"
-                    android:textColor="@android:color/white" />
-            </carbon.widget.LinearLayout>
-
-        </FrameLayout>
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginLeft="10dp"
+            android:layout_marginStart="13dp"
+            android:layout_marginLeft="13dp"
             android:layout_marginTop="0dp"
             android:layout_marginEnd="10dp"
             android:layout_marginRight="10dp"
-            android:layout_marginBottom="2dp"
-            android:text="Supported Payment System"
-            android:textSize="16sp" />
+            android:text="Choose Payment Method"
+            android:textSize="14sp" />
 
-        <carbon.widget.LinearLayout
+        <include layout="@layout/payment_options" />
+
+    </LinearLayout>
+
+    <!--<carbon.widget.LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginEnd="7dp"
@@ -87,7 +40,6 @@
             android:layout_marginStart="7dp"
             android:baselineAligned="true"
             android:gravity="end">
-
 
             <carbon.widget.ImageView
                 android:layout_width="40dp"
@@ -127,6 +79,19 @@
                 app:carbon_cornerRadius="6dp"
                 app:carbon_elevation="1dp"
                 app:srcCompat="@drawable/ic_nexus_pay_icon" />
-        </carbon.widget.LinearLayout>
-    </LinearLayout>
+
+            <carbon.widget.ImageView
+                android:clickable="true"
+                android:focusable="true"
+                app:carbon_rippleColor="@color/colorRippleDefault"
+                android:layout_width="40dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:layout_margin="5dp"
+                android:background="@color/white"
+                app:carbon_cornerRadius="6dp"
+                app:carbon_elevation="1dp"
+                app:srcCompat="@drawable/ic_pay_credit_bank" />
+
+        </carbon.widget.LinearLayout>-->
 </RelativeLayout>

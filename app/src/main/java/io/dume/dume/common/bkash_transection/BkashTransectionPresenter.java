@@ -14,7 +14,6 @@ public class BkashTransectionPresenter implements BkashTransContact.Presenter {
         this.model = model;
     }
 
-
     @Override
     public void enqueue() {
         view.init();
@@ -28,13 +27,14 @@ public class BkashTransectionPresenter implements BkashTransContact.Presenter {
             public void onSuccess(Void list) {
                 view.stopLoad();
                 view.onVerificaitonProgress("Dummy");
+                view.setEnable();
             }
 
             @Override
             public void onError(String msg) {
                 view.flush(msg);
                 view.stopLoad();
-
+                view.setEnable();
             }
         });
     }

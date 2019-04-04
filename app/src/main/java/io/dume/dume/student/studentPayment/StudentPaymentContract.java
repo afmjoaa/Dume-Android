@@ -17,7 +17,6 @@ public interface StudentPaymentContract {
 
         void onObligtionClaimClicked();
 
-        void onAddPaymentMethod();
     }
 
     interface Presenter {

@@ -64,6 +64,4 @@
 
     <include layout="@layout/bkash_transection_content" />
 
-
-
 </android.support.design.widget.CoordinatorLayout>

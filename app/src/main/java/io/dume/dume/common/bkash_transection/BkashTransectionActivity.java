@@ -1,7 +1,7 @@
 package io.dume.dume.common.bkash_transection;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -11,25 +11,28 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FieldValue;
-import com.google.firestore.v1beta1.DocumentTransform;
-import com.google.firestore.v1beta1.FirestoreGrpc;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import io.dume.dume.R;
-import io.dume.dume.customView.HorizontalLoadView;
+import io.dume.dume.student.homePage.HomePageActivity;
 import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
+import io.dume.dume.student.studentPayment.StudentPaymentActivity;
+
+import static io.dume.dume.util.DumeUtils.configAppbarTittle;
+import static io.dume.dume.util.DumeUtils.configureAppbar;
+import static io.dume.dume.util.DumeUtils.showKeyboard;
 
 public class BkashTransectionActivity extends CustomStuAppCompatActivity implements BkashTransContact.View {
 
     private Button submitBTN;
     private EditText transET;
-
     private BkashTransContact.Presenter presenter;
     private EditText amountET;
-    private LinearLayout transContainer;
+    private RelativeLayout transContainer;
     private RelativeLayout onProgress;
+    private static final String TAG = "BkashTransectionActivit";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +40,7 @@ public class BkashTransectionActivity extends CustomStuAppCompatActivity impleme
         setContentView(R.layout.activity_bkash_transection);
         setActivityContext(this, 254585545);
         findLoadView();
+        configureAppbar(this, "Bkash Transaction With ID");
         presenter = new BkashTransectionPresenter(this, new BkashTransModel(this));
         presenter.enqueue();
         submitBTN.setOnClickListener(v -> {
@@ -54,12 +58,13 @@ public class BkashTransectionActivity extends CustomStuAppCompatActivity impleme
                 data.put("payment_method", "bkash_transection");
                 data.put("amount", amountET.getText().toString());
                 presenter.handleTransection(data);
-            } else {
+            } else if(transET.getText().toString().equals("")) {
                 transET.setError("Enter Transection Id");
+            }else{
+                amountET.setError("Enter Bkashed Amount");
             }
         });
     }
-
 
     @Override
     public void init() {
@@ -68,13 +73,31 @@ public class BkashTransectionActivity extends CustomStuAppCompatActivity impleme
         amountET = findViewById(R.id.amount);
         transContainer = findViewById(R.id.transContainer);
         onProgress = findViewById(R.id.inprogress);
+        transET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    transET.setHint("Enter Bksah Transaction Id");
+                    showKeyboard(BkashTransectionActivity.this);
+                }else{
+                    transET.setHint("");
+                }
+            }
+        });
+        amountET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    amountET.setHint("Enter Amount in BDT");
+                    showKeyboard(BkashTransectionActivity.this);
+                }else{
+                    amountET.setHint("");
 
-
+                }
+            }
+        });
     }
 
     @Override
     public void flush(String msg) {
-        submitBTN.setEnabled(true);
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 
@@ -94,5 +117,24 @@ public class BkashTransectionActivity extends CustomStuAppCompatActivity impleme
         hideProgress();
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            super.onBackPressed();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
+
+    @Override
+    public void setEnable(){
+        submitBTN.setEnabled(true);
+    }
 
 }
