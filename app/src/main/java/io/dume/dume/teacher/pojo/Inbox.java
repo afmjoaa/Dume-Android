@@ -1,6 +1,8 @@
 package io.dume.dume.teacher.pojo;
 
-public class Inbox {
+import java.io.Serializable;
+
+public class Inbox implements Serializable {
     private boolean unread;
     private String title;
     private int unreadNumber;

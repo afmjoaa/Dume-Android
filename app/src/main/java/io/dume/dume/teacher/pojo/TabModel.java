@@ -1,6 +1,8 @@
 package io.dume.dume.teacher.pojo;
 
-public class TabModel {
+import java.io.Serializable;
+
+public class TabModel implements Serializable {
    private int  normalIcon;
     private int selectedIcon;
     private int badge;

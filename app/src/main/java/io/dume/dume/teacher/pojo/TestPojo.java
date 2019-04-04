@@ -1,6 +1,8 @@
 package io.dume.dume.teacher.pojo;
 
-public class TestPojo {
+import java.io.Serializable;
+
+public class TestPojo implements Serializable {
     private String name;
     private int age;
 

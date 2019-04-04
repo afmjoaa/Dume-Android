@@ -2,9 +2,10 @@ package io.dume.dume.teacher.pojo;
 
 import com.google.firebase.firestore.DocumentSnapshot;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Letter {
+public class Letter implements Serializable {
 
     String uid;
     String body;
