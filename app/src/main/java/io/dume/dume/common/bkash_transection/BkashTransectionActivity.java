@@ -58,9 +58,9 @@ public class BkashTransectionActivity extends CustomStuAppCompatActivity impleme
                 data.put("payment_method", "bkash_transection");
                 data.put("amount", amountET.getText().toString());
                 presenter.handleTransection(data);
-            } else if(transET.getText().toString().equals("")) {
+            } else if (transET.getText().toString().equals("")) {
                 transET.setError("Enter Transection Id");
-            }else{
+            } else {
                 amountET.setError("Enter Bkashed Amount");
             }
         });
@@ -78,7 +78,7 @@ public class BkashTransectionActivity extends CustomStuAppCompatActivity impleme
                 if (hasFocus) {
                     transET.setHint("Enter Bksah Transaction Id");
                     showKeyboard(BkashTransectionActivity.this);
-                }else{
+                } else {
                     transET.setHint("");
                 }
             }
@@ -88,7 +88,7 @@ public class BkashTransectionActivity extends CustomStuAppCompatActivity impleme
                 if (hasFocus) {
                     amountET.setHint("Enter Amount in BDT");
                     showKeyboard(BkashTransectionActivity.this);
-                }else{
+                } else {
                     amountET.setHint("");
 
                 }
@@ -133,8 +133,14 @@ public class BkashTransectionActivity extends CustomStuAppCompatActivity impleme
     }
 
     @Override
-    public void setEnable(){
+    public void setEnable() {
         submitBTN.setEnabled(true);
+    }
+
+    @Override
+    public void setError(String error) {
+        transET.setError(error);
+        setEnable();
     }
 
 }

@@ -2,6 +2,7 @@ package io.dume.dume.teacher.homepage.fragments;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,6 +13,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -20,6 +22,7 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.dume.dume.R;
+import io.dume.dume.common.bkash_transection.BkashTransectionActivity;
 import io.dume.dume.teacher.adapters.PayAdapter;
 import io.dume.dume.teacher.homepage.TeacherActivtiy;
 import io.dume.dume.teacher.homepage.TeacherContract;
@@ -36,6 +39,7 @@ public class PayFragment extends Fragment {
     private static PayFragment payFragment = null;
     private int itemWidth;
     private TeacherDataStore teacherDataStore;
+    private Context context;
 
     public static PayFragment getInstance() {
         if (payFragment == null) {
@@ -82,6 +86,10 @@ public class PayFragment extends Fragment {
                 loadPaymentData();
             }
         }
+        (root.findViewById(R.id.bkashTransection)).setOnClickListener(v -> {
+            context.startActivity(new Intent(getContext(), BkashTransectionActivity.class));
+        });
+
         return root;
     }
 
@@ -92,14 +100,34 @@ public class PayFragment extends Fragment {
 
     private void loadPaymentData() {
         Map<String, Object> payments = (Map<String, Object>) activtiy.teacherDataStore.getDocumentSnapshot().get("payments");
+        boolean haveDiscount = false;
+        float discount = 0.0f;
+        if (payments != null) {
+            Boolean hd = (Boolean) payments.get("have_discount");
+            String dc = (String) payments.get("have_discount");
+
+            if (hd != null) {
+                haveDiscount = hd;
+            }
+            if (dc != null) {
+                discount = Float.parseFloat(dc);
+            }
+
+
+        } else {
+            return;
+        }
+
+
         ArrayList<Pay> payArrayList = new ArrayList<>();
-        payArrayList.add(new Pay(payments != null ? Integer.parseInt(payments.get("obligation_amount").toString()) : 0, "Due", 0, false, 0.0f));
+        payArrayList.add(new Pay(payments != null ? Integer.parseInt(payments.get("obligation_amount").toString()) : 0, "Due Amount", 0, haveDiscount, discount));
         payArrayList.add(new Pay(payments != null ? Integer.parseInt(payments.get("total_paid").toString()) : 0, "Total Paid", 0, false, 0.0f));
         payRv.setAdapter(new PayAdapter(getContext(), itemWidth, payArrayList));
     }
 
     @Override
     public void onAttach(Context context) {
+        this.context = context;
         super.onAttach(context);
         activtiy = (TeacherActivtiy) context;
     }

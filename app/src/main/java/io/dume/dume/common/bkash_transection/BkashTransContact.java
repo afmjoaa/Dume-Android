@@ -18,6 +18,8 @@ public interface BkashTransContact {
         void stopLoad();
 
         void setEnable();
+
+        void setError(String error);
     }
 
     interface Presenter {
@@ -29,6 +31,8 @@ public interface BkashTransContact {
 
     interface Model {
         void pushTransection(Map<String, Object> transData, TeacherContract.Model.Listener<Void> listener);
+
+        void isTransectionIdExists(String id, TeacherContract.Model.Listener<Boolean> listener);
     }
 
 }

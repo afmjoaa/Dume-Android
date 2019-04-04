@@ -119,24 +119,25 @@
                 android:layout_alignParentRight="true"
                 android:text="Submit" />
 
-            <RelativeLayout
-                android:id="@+id/inprogress"
+
+
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/inprogress"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/submitTransID"
+            android:gravity="center"
+            android:visibility="gone">
+
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@+id/submitTransID"
+                android:drawableStart="@drawable/ic_cached_black_24dp"
+                android:drawableLeft="@drawable/ic_cached_black_24dp"
                 android:gravity="center"
-                android:visibility="invisible">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:drawableStart="@drawable/ic_cached_black_24dp"
-                    android:drawableLeft="@drawable/ic_cached_black_24dp"
-                    android:gravity="center"
-                    android:text="Payment Verficaiton is Under Process. You will be notified after it gets successful payment transection."
-                    android:textColor="@color/colorLink" />
-            </RelativeLayout>
-
+                android:text="Payment Verficaiton is Under Process. You will be notified after it gets successful payment transection."
+                android:textColor="@color/colorLink" />
         </RelativeLayout>
 
     </LinearLayout>

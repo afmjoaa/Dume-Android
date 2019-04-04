@@ -16,12 +16,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AutoCompleteTextView;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -31,6 +32,7 @@ import java.util.Map;
 import io.dume.dume.Google;
 import io.dume.dume.R;
 import io.dume.dume.common.bkash_transection.BkashTransectionActivity;
+import io.dume.dume.model.DumeModel;
 import io.dume.dume.student.homePage.adapter.HomePageRecyclerData;
 import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
 import io.dume.dume.student.pojo.SearchDataStore;
@@ -39,8 +41,9 @@ import io.dume.dume.student.studentPayment.adapterAndData.ObligationAndClaimData
 import io.dume.dume.student.studentPayment.adapterAndData.PaymentAdapter;
 import io.dume.dume.student.studentPayment.adapterAndData.PaymentData;
 import io.dume.dume.student.studentPayment.adapterAndData.PromotionAdapter;
-import io.dume.dume.student.studentPayment.adapterAndData.TransactionData;
-import io.dume.dume.student.studentPayment.adapterAndData.TransactionHistoryAdapter;
+import io.dume.dume.student.studentPayment.adapterAndData.PaymentHistory;
+import io.dume.dume.student.studentPayment.adapterAndData.PaymentHistoryAdapter;
+import io.dume.dume.teacher.homepage.TeacherContract;
 import io.dume.dume.teacher.homepage.TeacherDataStore;
 import io.dume.dume.util.DumeUtils;
 
@@ -62,6 +65,10 @@ public class StudentPaymentActivity extends CustomStuAppCompatActivity implement
     private RelativeLayout idBlock;
     private RelativeLayout refBlock;
     private FrameLayout content;
+    private TextView dueAmount;
+    private TextView dueAmountTile;
+    private TextView discountTitle;
+    private TextView discountAmount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,10 +130,10 @@ public class StudentPaymentActivity extends CustomStuAppCompatActivity implement
         configAppbarTittle(StudentPaymentActivity.this, paymentName[2]);
     }
 
-    public void flush(String msg){
+    public void flush(String msg) {
         Toast toast = Toast.makeText(this, msg, Toast.LENGTH_SHORT);
         TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
-        if( v != null) {
+        if (v != null) {
             v.setGravity(Gravity.CENTER);
         }
         toast.show();
@@ -143,6 +150,12 @@ public class StudentPaymentActivity extends CustomStuAppCompatActivity implement
         idBlock = findViewById(R.id.id_block);
         refBlock = findViewById(R.id.ref_block);
         content = findViewById(R.id.content);
+        dueAmountTile = findViewById(R.id.reportTitle);
+        dueAmount = findViewById(R.id.afterDiscount);
+        discountTitle = findViewById(R.id.reportTitle_one);
+        discountAmount = findViewById(R.id.afterDiscount_one);
+
+
     }
 
     @Override
@@ -188,6 +201,28 @@ public class StudentPaymentActivity extends CustomStuAppCompatActivity implement
     }
 
     @Override
+    public void configurePaymentInformation() {
+        Map<String, Object> payments = (Map<String, Object>) TeacherDataStore.getInstance().getDocumentSnapshot().get("payments");
+        int discount = 0;
+        if (payments != null) {
+            Boolean hd = (Boolean) payments.get("have_discount");
+            String dc = (String) payments.get("discount");
+            if (hd != null) {
+
+            }
+            if (dc != null) {
+                discount = Integer.parseInt(dc);
+            }
+            dueAmount.setText(Integer.parseInt(payments.get("obligation_amount").toString()) < 0 ? Math.abs(Integer.parseInt(payments.get("obligation_amount").toString())) + " ৳" : payments.get("obligation_amount").toString() + " ৳");
+            dueAmountTile.setText(Integer.parseInt(payments.get("obligation_amount").toString()) < 0 ? "Advance Paid" : "Due Amount");
+            discountAmount.setText(discount + " ৳");
+            discountTitle.setText("Discount on Pay");
+
+
+        }
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
@@ -217,7 +252,7 @@ public class StudentPaymentActivity extends CustomStuAppCompatActivity implement
                 R.drawable.ic_nexus_pay_icon,
                 R.drawable.ic_pay_credit_bank
         };
-        int[] paymentDefaultValue = {1, 0, 0,0};
+        int[] paymentDefaultValue = {1, 0, 0, 0};
 
         for (int i = 0; i < paymentName.length; i++) {
             PaymentData current = new PaymentData();
@@ -349,9 +384,9 @@ public class StudentPaymentActivity extends CustomStuAppCompatActivity implement
                 homePageRecyclerData.setCriteria((Map<String, Object>) promoMap.get("criteria"));
                 homePageRecyclerData.setPromo_for(promoMap.get("promo_for").toString());
                 Object promo_image = promoMap.get("promo_image");
-                if(promo_image == null){
+                if (promo_image == null) {
                     homePageRecyclerData.setPromo_image(null);
-                }else{
+                } else {
                     homePageRecyclerData.setPromo_image(promo_image.toString());
                 }
                 homePageRecyclerData.setSub_description(promoMap.get("sub_description").toString());
@@ -390,11 +425,19 @@ public class StudentPaymentActivity extends CustomStuAppCompatActivity implement
 
         private StudentPaymentActivity myMainActivity;
         private RecyclerView pCustomRecyclerView;
+        private Context context;
 
         @Override
         public void onCreate(@Nullable Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             setHasOptionsMenu(true);
+        }
+
+        @Override
+        public void onAttach(Context context) {
+            this.context = context;
+            super.onAttach(context);
+
         }
 
         @Nullable
@@ -405,9 +448,31 @@ public class StudentPaymentActivity extends CustomStuAppCompatActivity implement
             pCustomRecyclerView = rootView.findViewById(R.id.p_recycler_view);
 
             //menual one
-            List<TransactionData> transactionData = new ArrayList<>();
-            TransactionHistoryAdapter transactionHistoryAdapter = new TransactionHistoryAdapter(myMainActivity, transactionData);
-            pCustomRecyclerView.setAdapter(transactionHistoryAdapter);
+            StudentPaymentActivity activity = (StudentPaymentActivity) context;
+            activity.showProgress();
+
+            new DumeModel(context).getPaymentHistory(FirebaseAuth.getInstance().getUid(), new TeacherContract.Model.Listener<List<PaymentHistory>>() {
+                @Override
+                public void onSuccess(List<PaymentHistory> histories) {
+                    activity.hideProgress();
+                    if (histories.size() > 0) {
+                        rootView.findViewById(R.id.hostRelativeLayout).setVisibility(View.VISIBLE);
+                        PaymentHistoryAdapter historyAdapter = new PaymentHistoryAdapter(myMainActivity, histories);
+                        pCustomRecyclerView.setAdapter(historyAdapter);
+                    } else {
+                        rootView.findViewById(R.id.notFoundTV).setVisibility(View.VISIBLE);
+                    }
+
+                }
+
+                @Override
+                public void onError(String msg) {
+                    activity.hideProgress();
+                    Toast.makeText(activity, msg, Toast.LENGTH_SHORT).show();
+                }
+            });
+
+
             pCustomRecyclerView.setLayoutManager(new LinearLayoutManager(myMainActivity));
             return rootView;
         }

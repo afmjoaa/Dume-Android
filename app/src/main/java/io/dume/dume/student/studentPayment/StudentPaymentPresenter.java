@@ -23,6 +23,7 @@ public class StudentPaymentPresenter implements StudentPaymentContract.Presenter
     @Override
     public void studentPaymentEnqueue() {
         mView.findView();
+        mView.configurePaymentInformation();
         mView.initStudentPayment();
         mView.configStudentPayment();
     }

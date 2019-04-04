@@ -38,6 +38,7 @@ import io.dume.dume.Google;
 import io.dume.dume.student.common.ReviewHighlightData;
 import io.dume.dume.student.homePage.HomePageModel;
 import io.dume.dume.student.pojo.StuBaseModel;
+import io.dume.dume.student.studentPayment.adapterAndData.PaymentHistory;
 import io.dume.dume.teacher.homepage.TeacherActivtiy;
 import io.dume.dume.teacher.homepage.TeacherContract;
 import io.dume.dume.teacher.homepage.TeacherDataStore;
@@ -162,7 +163,7 @@ public class DumeModel extends HomePageModel implements TeacherModel {
                 //Change all skills status
                 ArrayList<Skill> skillArrayList = TeacherDataStore.getInstance().getSkillArrayList();
                 if (skillArrayList != null) {
-                    if (skillArrayList.size() <= 0){
+                    if (skillArrayList.size() <= 0) {
                         TeacherActivtiy activtiy = (TeacherActivtiy) context;
                         activtiy.hideProgress();
                         activtiy.hideProgressTwo();
@@ -182,12 +183,12 @@ public class DumeModel extends HomePageModel implements TeacherModel {
                     getSkill(new TeacherContract.Model.Listener<ArrayList<Skill>>() {
                         @Override
                         public void onSuccess(ArrayList<Skill> list) {
-                            if (list != null && list.size() <= 0){
+                            if (list != null && list.size() <= 0) {
                                 TeacherActivtiy activtiy = (TeacherActivtiy) context;
                                 activtiy.hideProgress();
                                 activtiy.hideProgressTwo();
                             }
-                                Log.e(TAG, "onSuccess: " + list.size());
+                            Log.e(TAG, "onSuccess: " + list.size());
                             TeacherDataStore.getInstance().setSkillArrayList(list);
                             changeAllSkillStatus(list, status, new TeacherContract.Model.Listener<Void>() {
                                 @Override
@@ -201,6 +202,7 @@ public class DumeModel extends HomePageModel implements TeacherModel {
                                 }
                             });
                         }
+
                         @Override
                         public void onError(String msg) {
                             Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
@@ -344,6 +346,27 @@ public class DumeModel extends HomePageModel implements TeacherModel {
 
         /* write to self-profile */
 
+    }
+
+
+    public void getPaymentHistory(String uid, TeacherContract.Model.Listener<List<PaymentHistory>> listener) {
+        firebaseFirestore.collection("payments").whereEqualTo("uid", uid).addSnapshotListener((Activity) context, (queryDocumentSnapshots, e) -> {
+            if (e != null) {
+                listener.onError("Error : " + e.getLocalizedMessage());
+                return;
+            }
+            List<PaymentHistory> histories = new ArrayList<>();
+            if (queryDocumentSnapshots != null) {
+                List<DocumentSnapshot> documents = queryDocumentSnapshots.getDocuments();
+                for (int i = 0; i < documents.size(); i++) {
+                    PaymentHistory paymentHistory = documents.get(i).toObject(PaymentHistory.class);
+                    histories.add(paymentHistory);
+                }
+                listener.onSuccess(histories);
+            } else {
+                listener.onError("Error : No Payment History Found");
+            }
+        });
     }
 
 

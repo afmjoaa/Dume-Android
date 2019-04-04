@@ -1,6 +1,7 @@
 package io.dume.dume.teacher.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,11 +15,13 @@ import java.util.ArrayList;
 import carbon.widget.RelativeLayout;
 import io.dume.dume.R;
 import io.dume.dume.teacher.pojo.Pay;
+import io.dume.dume.util.DumeUtils;
 
 public class PayAdapter extends RecyclerView.Adapter<PayAdapter.PayVH> {
     private final Context context;
     private final int itemWidth;
     ArrayList<Pay> payArrayList;
+    private Pay pay;
 
     public PayAdapter(Context context, int itemWidth, ArrayList<Pay> payArrayList) {
         this.payArrayList = payArrayList;
@@ -34,20 +37,18 @@ public class PayAdapter extends RecyclerView.Adapter<PayAdapter.PayVH> {
 
     @Override
     public void onBindViewHolder(@NonNull PayVH viewHolder, int i) {
-
+        pay = payArrayList.get(i);
         ViewGroup.LayoutParams layoutParams = viewHolder.hostingRelative.getLayoutParams();
         layoutParams.width = (itemWidth);
         viewHolder.hostingRelative.setLayoutParams(layoutParams);
+        viewHolder.title.setText(pay.getBuckTitle());
+        if (payArrayList.get(i).getBucks() < 0) {
+            viewHolder.title.setText("Advance Paid");
+            viewHolder.afterDis.setText(Math.abs(pay.getBucks()) + " ৳");
+        } else viewHolder.afterDis.setText(payArrayList.get(i).getBucks() + " ৳");
 
-        if (i == 0) {
-            if (payArrayList.get(i).isHaveDiscount()) {
-                viewHolder.title.setText(payArrayList.get(i).getBuckTitle());
-                viewHolder.afterDis.setText("$"+(payArrayList.get(i).getBucks() * payArrayList.get(i).getDiscount()) / 100  + "");
-            }
-        }else {
-            viewHolder.title.setText(payArrayList.get(i).getBuckTitle());
-            viewHolder.afterDis.setText("$"+payArrayList.get(i).getBucks());
-       }
+
+
     }
 
     @Override
@@ -56,7 +57,9 @@ public class PayAdapter extends RecyclerView.Adapter<PayAdapter.PayVH> {
     }
 
     class PayVH extends RecyclerView.ViewHolder {
-        private TextView afterDis, title;
+        private TextView afterDis;
+        private View itemView;
+        private TextView title;
         private final RelativeLayout hostingRelative;
 
         PayVH(@NonNull View itemView) {
@@ -64,6 +67,7 @@ public class PayAdapter extends RecyclerView.Adapter<PayAdapter.PayVH> {
             hostingRelative = itemView.findViewById(R.id.hosting_relative_layout);
             title = itemView.findViewById(R.id.reportTitle);
             afterDis = itemView.findViewById(R.id.afterDiscount);
+            this.itemView = itemView;
         }
     }
 }

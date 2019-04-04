@@ -43,7 +43,7 @@
             android:layout_marginTop="2dp"
             android:layout_marginBottom="2dp"
             android:gravity="center"
-            android:text="10.00k ‎৳"
+            android:text="0 ‎৳"
             android:textAlignment="center"
             android:textColor="@color/colorLink"
             android:textSize="14sp" />
@@ -87,7 +87,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="2dp"
             android:gravity="center"
-            android:text="10.00k ‎৳"
+            android:text="0 ‎৳"
             android:textColor="@color/colorLink"
             android:textSize="14sp" />
 
