@@ -119,9 +119,8 @@
                 android:layout_alignParentRight="true"
                 android:text="Submit" />
 
-
-
         </RelativeLayout>
+
         <RelativeLayout
             android:id="@+id/inprogress"
             android:layout_width="match_parent"
@@ -130,14 +129,22 @@
             android:gravity="center"
             android:visibility="gone">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:drawableStart="@drawable/ic_cached_black_24dp"
-                android:drawableLeft="@drawable/ic_cached_black_24dp"
-                android:gravity="center"
-                android:text="Payment Verficaiton is Under Process. You will be notified after it gets successful payment transection."
-                android:textColor="@color/colorLink" />
+                <carbon.widget.ImageView
+                    android:id="@+id/waiting_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:carbon_elevation="3dp"
+                    android:layout_centerHorizontal="true"
+                    app:srcCompat="@drawable/ic_waiting_icon" />
+
+                <TextView
+                    android:layout_below="@+id/waiting_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="Payment Verficaiton is Under Process. You will be notified after it gets varified by Dume authority."
+                    android:textColor="@color/colorLink" />
+
         </RelativeLayout>
 
     </LinearLayout>

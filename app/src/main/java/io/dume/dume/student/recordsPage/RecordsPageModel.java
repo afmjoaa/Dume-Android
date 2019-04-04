@@ -22,7 +22,6 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.WriteBatch;
 import com.google.firebase.firestore.model.value.ServerTimestampValue;
-import com.google.firestore.v1beta1.DocumentTransform;
 
 import java.util.ArrayList;
 import java.util.Date;

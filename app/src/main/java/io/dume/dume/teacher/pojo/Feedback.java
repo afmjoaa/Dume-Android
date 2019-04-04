@@ -1,6 +1,8 @@
 package io.dume.dume.teacher.pojo;
 
-public class Feedback {
+import java.io.Serializable;
+
+public class Feedback implements Serializable {
     private String value;
     private String valueTitle;
 

@@ -1,6 +1,8 @@
 package io.dume.dume.teacher.pojo;
 
-public class Education {
+import java.io.Serializable;
+
+public class Education implements Serializable {
     private int from, to;
     private String title, degree, description;
 

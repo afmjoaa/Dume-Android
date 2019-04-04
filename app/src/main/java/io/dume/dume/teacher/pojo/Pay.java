@@ -1,6 +1,8 @@
 package io.dume.dume.teacher.pojo;
 
-public class Pay {
+import java.io.Serializable;
+
+public class Pay implements Serializable {
     private int bucks;
     private String buckTitle;
     private int refer;
