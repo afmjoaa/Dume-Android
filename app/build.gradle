@@ -19,7 +19,7 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -60,16 +60,10 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-    //  Adding dependencies -> JOAA
-    //  Dagger 2
-    implementation "com.google.dagger:dagger:$daggerVersion"
-    annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
     //  Retrofit 2
     implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
     implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
     implementation 'com.google.code.gson:gson:2.8.5'
-    //  just for debugging the http requests
-    implementation 'com.squareup.okhttp3:logging-interceptor:3.10.0'
     //  Butterknife
     implementation "com.jakewharton:butterknife:$butterKnife"
     annotationProcessor "com.jakewharton:butterknife-compiler:$butterKnife"
@@ -79,25 +73,25 @@ dependencies {
     implementation "io.reactivex.rxjava2:rxjava:$rxJava"
     implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion"
     //  firebase
-    implementation 'com.google.firebase:firebase-core:16.0.6'
+    implementation 'com.google.firebase:firebase-core:16.0.8'
     /*Android Slider for Login Screen*/
     implementation 'com.nineoldandroids:library:2.4.0'
     implementation 'com.daimajia.slider:library:1.1.5@aar'
     /*Image Loading Library*/
     implementation 'com.squareup.picasso:picasso:2.3.2'
-    implementation 'com.google.firebase:firebase-auth:16.1.0'
+    implementation 'com.google.firebase:firebase-auth:16.2.0'
     /*implementation 'com.github.d-max:spots-dialog:1.1@aar'*/
     implementation 'com.google.android.gms:play-services-auth:16.0.1'
     implementation 'com.facebook.android:facebook-android-sdk:4.35.0'
-    implementation 'com.squareup.okhttp:okhttp:2.7.2'
+    implementation 'com.squareup.okhttp:okhttp:2.7.5'
     implementation 'com.squareup.okhttp:okhttp-urlconnection:1.6.0'
-    implementation 'com.google.firebase:firebase-firestore:17.1.5'
+    implementation 'com.google.firebase:firebase-firestore:18.2.0'
     implementation 'com.android.support:multidex:1.0.3'
 
 //    google play services
-    implementation 'com.google.android.gms:play-services-gcm:16.0.0'
+    implementation 'com.google.android.gms:play-services-gcm:16.1.0'
     implementation 'com.google.android.gms:play-services-location:16.0.0'
-    implementation 'com.google.android.gms:play-services-maps:16.0.0'
+    implementation 'com.google.android.gms:play-services-maps:16.1.0'
     implementation 'com.google.android.gms:play-services-places:16.0.0'
 //    implementation 'com.google.android.gms:play-services-nearby:15.0.1'
 //    implementation 'com.google.android.gms:play-services:12.0.1'
@@ -108,7 +102,7 @@ dependencies {
     //implementation 'de.hdodenhof:circleimageview:2.2.0'
     implementation 'com.andkulikov:transitionseverywhere:1.8.0'
     implementation 'com.tomergoldst.android:tooltips:1.0.10'
-    implementation 'com.google.firebase:firebase-storage:16.0.5'
+    implementation 'com.google.firebase:firebase-storage:16.1.0'
     implementation 'com.github.bumptech.glide:glide:4.7.1'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
 
@@ -160,7 +154,7 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.7.3'
     //implementation 'com.firebase:geofire-android:2.3.1'
     implementation 'com.github.imperiumlabs:GeoFirestore-Android:v1.1.1'
-    implementation 'com.google.firebase:firebase-messaging:17.3.4'
+    implementation 'com.google.firebase:firebase-messaging:17.5.0'
     implementation 'com.github.amalChandran:trail-android:v1.2'
     implementation 'com.github.ybq:Android-SpinKit:1.2.0'
 }

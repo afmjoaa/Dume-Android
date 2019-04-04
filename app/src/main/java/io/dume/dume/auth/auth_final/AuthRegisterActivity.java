@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -43,10 +44,12 @@ import io.dume.dume.auth.DataStore;
 import io.dume.dume.auth.auth.AuthActivity;
 import io.dume.dume.auth.auth.AuthContract;
 import io.dume.dume.auth.code_verification.PhoneVerificationActivity;
+import io.dume.dume.common.privacyPolicy.PrivacyPolicyActivity;
 import io.dume.dume.customView.HorizontalLoadView;
 import io.dume.dume.obligation.foreignObli.PayActivity;
 import io.dume.dume.student.homePage.HomePageActivity;
 import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
+import io.dume.dume.student.studentHelp.StudentHelpActivity;
 import io.dume.dume.teacher.homepage.TeacherActivtiy;
 import io.dume.dume.util.DumeUtils;
 
@@ -64,6 +67,7 @@ public class AuthRegisterActivity extends CustomStuAppCompatActivity {
     private Context context;
     private HorizontalLoadView loadView;
     private FirebaseUser model;
+    private CheckBox privacyCB;
 
     private void configMentorProfile(DataStore dataStore) {
         Map<String, Object> mentorFeild = new HashMap<>();
@@ -415,6 +419,7 @@ public class AuthRegisterActivity extends CustomStuAppCompatActivity {
         email = findViewById(R.id.input_email);
         phoneNumber = findViewById(R.id.phoneNumberEditText);
         loadView = findViewById(R.id.loadView);
+        privacyCB = findViewById(R.id.privacyCB);
         model = FirebaseAuth.getInstance().getCurrentUser();
         fireStore = FirebaseFirestore.getInstance();
         ArrayList<String> emailAddress = getEmailAddress();
@@ -461,7 +466,10 @@ public class AuthRegisterActivity extends CustomStuAppCompatActivity {
         switch (view.getId()) {
             case R.id.floating_button:
                 if (firstname.getText().toString().isEmpty() || lastName.getText().toString().isEmpty() || phoneNumber.getText().toString().isEmpty() || email.getText().toString().isEmpty()) {
-                    Toast.makeText(this, "Hey Man !!! Fill up all the data.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Hey Man !!! Fill up all the data...", Toast.LENGTH_SHORT).show();
+                    return;
+                }else if(!privacyCB.isChecked()){
+                    Toast.makeText(this, "Please check the confirmation box...", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 String phoneStr = this.phoneNumber.getText().toString();
@@ -624,10 +632,8 @@ public class AuthRegisterActivity extends CustomStuAppCompatActivity {
                                 intent.putExtra("datastore", dataStore);
                                 startActivity(intent);
                                 finish();
-
                             }
                         });
-
                     }
 
                     @Override
@@ -638,10 +644,8 @@ public class AuthRegisterActivity extends CustomStuAppCompatActivity {
                 });
                 break;
             case R.id.hiperlink_privacy_text:
-
-                break;
             case R.id.hiperlink_terms_text:
-
+                startActivity(new Intent(AuthRegisterActivity.this, PrivacyPolicyActivity.class).setAction("fromHelp"));
                 break;
         }
     }
