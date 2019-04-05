@@ -478,6 +478,7 @@ public class StudentPaymentActivity extends CustomStuAppCompatActivity implement
         private StudentPaymentActivity myMainActivity;
         private RecyclerView pCustomRecyclerView;
         private Context context;
+        private LinearLayout noDataBlock;
 
         @Override
         public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -491,6 +492,7 @@ public class StudentPaymentActivity extends CustomStuAppCompatActivity implement
             myMainActivity = (StudentPaymentActivity) getActivity();
             View rootView = inflater.inflate(R.layout.p_custom_recycler_row, container, false);
             pCustomRecyclerView = rootView.findViewById(R.id.p_recycler_view);
+            noDataBlock = rootView.findViewById(R.id.no_data_block);
 
             //menual one
             List<HomePageRecyclerData> promotionData = new ArrayList<>();
@@ -545,6 +547,11 @@ public class StudentPaymentActivity extends CustomStuAppCompatActivity implement
                 homePageRecyclerData.setPromo_code(promoMap.get("promo_code").toString());
                 homePageRecyclerData.setExpired((Boolean) promoMap.get("expired"));
                 promotionAdapter.addPromoToList(homePageRecyclerData);
+            }
+            if (promotionAdapter.getItemCount()<=0) {
+                noDataBlock.setVisibility(View.VISIBLE);
+            }else {
+                noDataBlock.setVisibility(View.GONE);
             }
             return rootView;
         }
@@ -644,6 +651,8 @@ public class StudentPaymentActivity extends CustomStuAppCompatActivity implement
         private StudentPaymentActivity myMainActivity;
         private RecyclerView pCustomRecyclerView;
         private Context context;
+        private LinearLayout noDataBlock;
+        private TextView noDataTV;
 
         @Override
         public void onAttach(Context context) {
@@ -661,9 +670,11 @@ public class StudentPaymentActivity extends CustomStuAppCompatActivity implement
         @Override
         public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
             myMainActivity = (StudentPaymentActivity) getActivity();
-            View rootView = inflater.inflate(R.layout.p_custom_recycler_row, container, false);
+            View rootView = inflater.inflate(R.layout.obligation_fragment_layout, container, false);
             pCustomRecyclerView = rootView.findViewById(R.id.p_recycler_view);
-
+            noDataBlock = rootView.findViewById(R.id.no_data_block);
+            noDataTV = rootView.findViewById(R.id.no_item_text);
+            noDataTV.setText("Sorry, no obligation to show right now ...");
             //menual one
             List<ObligationAndClaimData> transactionData = new ArrayList<>();
             ObligationAndClaimAdapter obligationAndClaimAdapter = new ObligationAndClaimAdapter(myMainActivity, transactionData);

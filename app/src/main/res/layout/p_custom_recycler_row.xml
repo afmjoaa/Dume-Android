@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/dialog_hosting_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -79,6 +80,33 @@
         android:layout_centerInParent="true"
         android:visibility="gone"
         android:text="No Payment History Found" />
+
+    <LinearLayout
+        android:id="@+id/no_data_block"
+        android:layout_width="match_parent"
+        android:layout_height="320dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <carbon.widget.ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:carbon_elevation="3dp"
+            app:srcCompat="@drawable/no_data_wallpaper" />
+
+        <TextView
+            android:id="@+id/no_item_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Sorry, no promotion to show right now ..."
+            android:textAlignment="center"
+            android:textAllCaps="false"
+            android:textColor="@color/textColorSecondary"
+            android:textSize="16sp" />
+
+    </LinearLayout>
 
 
 </RelativeLayout>

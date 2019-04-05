@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/dialog_hosting_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_round_corner_rela_layout"
+    android:paddingBottom="16dp">
+
+    <carbon.widget.RelativeLayout
+        android:id="@+id/hosting_relative_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        app:carbon_cornerRadius="5dp"
+        app:carbon_rippleColor="@color/colorRippleDefault">
+
+        <carbon.widget.FrameLayout
+            android:id="@+id/primary_framelayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/notificationItemColor"
+            android:padding="7dp"
+            app:carbon_elevation="4dp"
+            app:carbon_cornerRadius="5dp">
+            <!-- app:carbon_elevation="4dp"-->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <carbon.widget.RelativeLayout
+                    android:id="@+id/sum_due_block"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="6dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginRight="6dp"
+                    android:layout_marginBottom="6dp"
+                    android:background="@color/payment_red"
+                    android:paddingLeft="6dp"
+                    app:carbon_cornerRadius="5dp"
+                    android:paddingTop="5dp"
+                    android:paddingRight="6dp"
+                    android:paddingBottom="3dp">
+
+                    <carbon.widget.ImageView
+                        android:id="@+id/sum_image"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:translationY="-2dp"
+                        app:srcCompat="@drawable/ic_sum_round_icon" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="6dp"
+                        android:layout_marginLeft="6dp"
+                        android:layout_toEndOf="@+id/sum_image"
+                        android:layout_toRightOf="@+id/sum_image"
+                        android:text="Due Penalty"
+                        android:textColor="@color/black"
+                        app:fontFamily="@font/cairo_regular" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:gravity="center_horizontal"
+                        android:text="----->"
+                        android:textColor="@color/black"
+                        app:fontFamily="@font/cairo_regular" />
+
+                    <TextView
+                        android:id="@+id/due_penalty_amount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:text="0 ‎৳"
+                        android:textColor="@color/black"
+                        app:fontFamily="@font/cairo_regular" />
+
+                </carbon.widget.RelativeLayout>
+
+                <carbon.widget.RelativeLayout
+                    android:id="@+id/sum_paid_block"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="6dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginRight="6dp"
+                    android:layout_marginBottom="6dp"
+                    android:background="@color/payment_green"
+                    android:paddingLeft="6dp"
+                    app:carbon_cornerRadius="5dp"
+                    android:paddingTop="5dp"
+                    android:paddingRight="6dp"
+                    android:paddingBottom="3dp">
+
+                    <carbon.widget.ImageView
+                        android:id="@+id/sum_paid_image"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:translationY="-2dp"
+                        app:srcCompat="@drawable/ic_sum_round_icon" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="6dp"
+                        android:layout_marginLeft="6dp"
+                        android:layout_toEndOf="@+id/sum_paid_image"
+                        android:layout_toRightOf="@+id/sum_paid_image"
+                        android:text="Paid Penalty"
+                        android:textColor="@color/black"
+                        app:fontFamily="@font/cairo_regular" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:gravity="center_horizontal"
+                        android:text="----->"
+                        android:textColor="@color/black"
+                        app:fontFamily="@font/cairo_regular" />
+
+                    <TextView
+                        android:id="@+id/paid_penalty_amount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:text="0 ‎৳"
+                        android:textColor="@color/black"
+                        app:fontFamily="@font/cairo_regular" />
+
+                </carbon.widget.RelativeLayout>
+
+
+            </LinearLayout>
+
+        </carbon.widget.FrameLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/primary_framelayout"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/bottom_round_light_green_bg"
+            android:orientation="vertical"
+            android:paddingBottom="8dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingTop="8dp"
+            android:translationY="-2dp">
+
+        </LinearLayout>
+
+        <carbon.widget.LinearLayout
+            android:id="@+id/recycle_hosting_linear"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/primary_framelayout"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/bottom_round_light_green_bg"
+            android:orientation="vertical"
+            android:paddingBottom="8dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingTop="8dp"
+            android:translationY="-2dp"
+            android:visibility="gone">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/item_descriptions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </carbon.widget.LinearLayout>
+
+    </carbon.widget.RelativeLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/p_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/hosting_relative_layout" />
+
+    <LinearLayout
+        android:id="@+id/no_data_block"
+        android:layout_width="match_parent"
+        android:layout_height="320dp"
+        android:gravity="center"
+        android:layout_below="@+id/hosting_relative_layout"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <carbon.widget.ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:carbon_elevation="3dp"
+            app:srcCompat="@drawable/no_data_wallpaper" />
+
+        <TextView
+            android:id="@+id/no_item_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Sorry, no obligations to show right now ..."
+            android:textAlignment="center"
+            android:textAllCaps="false"
+            android:textColor="@color/textColorSecondary"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+
+
+</RelativeLayout>

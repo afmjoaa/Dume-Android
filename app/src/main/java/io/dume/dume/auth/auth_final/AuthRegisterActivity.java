@@ -129,6 +129,7 @@ public class AuthRegisterActivity extends CustomStuAppCompatActivity {
         paymentMap.put("obligation_amount", "0");
         paymentMap.put("obligation_currency", "BDT");
         paymentMap.put("total_paid", "0");
+        paymentMap.put("penalty_paid", "0");
         mentorFeild.put("payments", paymentMap);
 
 
