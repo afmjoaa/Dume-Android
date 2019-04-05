@@ -1,21 +1,28 @@
 package io.dume.dume.student.studentPayment;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -33,9 +40,12 @@ import io.dume.dume.Google;
 import io.dume.dume.R;
 import io.dume.dume.common.bkash_transection.BkashTransectionActivity;
 import io.dume.dume.model.DumeModel;
+import io.dume.dume.student.homePage.HomePageModel;
+import io.dume.dume.student.homePage.HomePagePresenter;
 import io.dume.dume.student.homePage.adapter.HomePageRecyclerData;
 import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
 import io.dume.dume.student.pojo.SearchDataStore;
+import io.dume.dume.student.studentHelp.StudentHelpActivity;
 import io.dume.dume.student.studentPayment.adapterAndData.ObligationAndClaimAdapter;
 import io.dume.dume.student.studentPayment.adapterAndData.ObligationAndClaimData;
 import io.dume.dume.student.studentPayment.adapterAndData.PaymentAdapter;
@@ -43,12 +53,14 @@ import io.dume.dume.student.studentPayment.adapterAndData.PaymentData;
 import io.dume.dume.student.studentPayment.adapterAndData.PromotionAdapter;
 import io.dume.dume.student.studentPayment.adapterAndData.PaymentHistory;
 import io.dume.dume.student.studentPayment.adapterAndData.PaymentHistoryAdapter;
+import io.dume.dume.teacher.homepage.TeacherActivtiy;
 import io.dume.dume.teacher.homepage.TeacherContract;
 import io.dume.dume.teacher.homepage.TeacherDataStore;
 import io.dume.dume.util.DumeUtils;
 
 import static io.dume.dume.util.DumeUtils.configAppbarTittle;
 import static io.dume.dume.util.DumeUtils.configureAppbar;
+import static io.dume.dume.util.DumeUtils.showKeyboard;
 
 public class StudentPaymentActivity extends CustomStuAppCompatActivity implements StudentPaymentContract.View {
 
@@ -69,6 +81,8 @@ public class StudentPaymentActivity extends CustomStuAppCompatActivity implement
     private TextView dueAmountTile;
     private TextView discountTitle;
     private TextView discountAmount;
+    private TextView promotionNumberTV;
+    private String retriveAction;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,6 +118,7 @@ public class StudentPaymentActivity extends CustomStuAppCompatActivity implement
         };
         paymentRecycleView.setAdapter(paymentAdapter);
         paymentRecycleView.setLayoutManager(new LinearLayoutManager(this));
+        retriveAction = getIntent().getAction();
     }
 
     private void onCashClicked() {
@@ -154,13 +169,24 @@ public class StudentPaymentActivity extends CustomStuAppCompatActivity implement
         dueAmount = findViewById(R.id.afterDiscount);
         discountTitle = findViewById(R.id.reportTitle_one);
         discountAmount = findViewById(R.id.afterDiscount_one);
-
+        promotionNumberTV = findViewById(R.id.promotion_value_text);
 
     }
 
     @Override
     public void initStudentPayment() {
-
+        List<String> appliedPromoList;
+        if (Google.getInstance().getAccountMajor() == DumeUtils.TEACHER) {
+            Map<String, Object> documentSnapshot = TeacherDataStore.getInstance().getDocumentSnapshot();
+            appliedPromoList = (ArrayList) documentSnapshot.get("applied_promo");
+        } else {
+            Map<String, Object> documentSnapshot = SearchDataStore.getInstance().getDocumentSnapshot();
+            appliedPromoList = (ArrayList) documentSnapshot.get("applied_promo");
+        }
+        if (appliedPromoList == null) {
+            appliedPromoList = new ArrayList<>();
+        }
+        promotionNumberTV.setText("" + appliedPromoList.size());
     }
 
     @Override
@@ -241,7 +267,15 @@ public class StudentPaymentActivity extends CustomStuAppCompatActivity implement
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        if (mainLayoutContent.getVisibility() == View.VISIBLE) {
+            super.onBackPressed();
+        } else {
+            configAppbarTittle(StudentPaymentActivity.this, "Payment");
+            mainLayoutContent.setVisibility(View.VISIBLE);
+            secondaryHideAbleLayout.setVisibility(View.GONE);
+            content.setVisibility(View.GONE);
+        }
+        //super.onBackPressed();
     }
 
     public List<PaymentData> getFinalData() {
@@ -274,6 +308,18 @@ public class StudentPaymentActivity extends CustomStuAppCompatActivity implement
 
         private StudentPaymentActivity myMainActivity;
         private AutoCompleteTextView queryTextView;
+        private Button skipBtn;
+        private Button submitBtn;
+        private TextView limit;
+        private TextInputLayout textInputLayout;
+        private Map<String, Object> documentSnapshot;
+        private Context context;
+
+        @Override
+        public void onAttach(Context context) {
+            super.onAttach(context);
+            this.context = context;
+        }
 
         @Override
         public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -287,13 +333,127 @@ public class StudentPaymentActivity extends CustomStuAppCompatActivity implement
             myMainActivity = (StudentPaymentActivity) getActivity();
             View rootView = inflater.inflate(R.layout.custom_contact_up_fragment, container, false);
             queryTextView = rootView.findViewById(R.id.feedback_textview);
+            skipBtn = rootView.findViewById(R.id.skip_btn);
+            submitBtn = rootView.findViewById(R.id.submit_btn);
+            limit = rootView.findViewById(R.id.limitTV);
+            skipBtn.setText("How to use...");
+            textInputLayout = (TextInputLayout) rootView.findViewById(R.id.input_layout_firstname);
+            textInputLayout.setHint("Promo code");
+
+            skipBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(context, StudentHelpActivity.class);
+                    intent.setAction("how_to_use");
+                    startActivity(intent);
+                }
+            });
+            submitBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    view.setEnabled(false);
+                    myMainActivity.showProgress();
+                    switch (myMainActivity.retriveAction) {
+                        case DumeUtils.TEACHER:
+                            documentSnapshot = TeacherDataStore.getInstance().getDocumentSnapshot();
+                            break;
+                        case DumeUtils.STUDENT:
+                            documentSnapshot = SearchDataStore.getInstance().getDocumentSnapshot();
+                            break;
+                        case DumeUtils.BOOTCAMP:
+                            documentSnapshot = TeacherDataStore.getInstance().getDocumentSnapshot();
+                            break;
+                    }
+                    ArrayList<String> available_promo = (ArrayList<String>) documentSnapshot.get("available_promo");
+                    ArrayList<String> applied_promo = (ArrayList<String>) documentSnapshot.get("applied_promo");
+                    final String writtenCode = queryTextView.getText().toString();
+
+                    if (writtenCode.length() <= 0) {
+                        queryTextView.setError("Please enter a promo code...");
+                        view.setEnabled(true);
+                        myMainActivity.hideProgress();
+                    } else if (applied_promo != null && applied_promo.contains(writtenCode)) {
+                        queryTextView.setText("");
+                        Toast.makeText(myMainActivity, "Promo already applied...", Toast.LENGTH_SHORT).show();
+                        view.setEnabled(true);
+                        myMainActivity.hideProgress();
+                    } else if (available_promo != null && available_promo.contains(writtenCode)) {
+                        HomePageModel homePageModel = new HomePageModel((Activity) context, context);
+
+                        homePageModel.getPromo(writtenCode, new TeacherContract.Model.Listener<HomePageRecyclerData>() {
+                            @Override
+                            public void onSuccess(HomePageRecyclerData list) {
+                                homePageModel.applyPromo(list, writtenCode, Google.getInstance().getAccountMajor(), new TeacherContract.Model.Listener<String>() {
+                                    @Override
+                                    public void onSuccess(String list) {
+                                        Toast.makeText(context, list, Toast.LENGTH_SHORT).show();
+                                        view.setEnabled(true);
+                                        myMainActivity.hideProgress();
+                                    }
+
+                                    @Override
+                                    public void onError(String msg) {
+                                        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+                                        view.setEnabled(true);
+                                        myMainActivity.hideProgress();
+                                    }
+                                });
+                            }
+                            @Override
+                            public void onError(String msg) {
+                                Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+                                view.setEnabled(true);
+                                myMainActivity.hideProgress();
+                            }
+                        });
+                    } else {
+                        queryTextView.setError("Promo not valid for you...");
+                        Toast.makeText(myMainActivity, "Promo not valid for you...", Toast.LENGTH_SHORT).show();
+                        view.setEnabled(true);
+                        myMainActivity.hideProgress();
+                    }
+                }
+            });
 
             queryTextView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 public void onFocusChange(View v, boolean hasFocus) {
                     if (hasFocus) {
-                        queryTextView.setHint("Please describe your problem");
+                        queryTextView.setHint("Enter your promo code");
+                        limit.setTextColor(getResources().getColor(R.color.loader_color_one));
+                        showKeyboard(myMainActivity);
                     } else {
-                        queryTextView.setHint("Please describe your problem");
+                        queryTextView.setHint("");
+                    }
+                }
+            });
+            queryTextView.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    if (!s.equals("")) {
+                        submitBtn.setEnabled(true);
+                    } else {
+                        submitBtn.setEnabled(false);
+                    }
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    if (s.toString().equals("")) {
+                        submitBtn.setEnabled(false);
+                    }
+                    if (s.toString().length() >= 120) {
+                        limit.setText(s.toString().length() + "/120");
+                        limit.setTextColor(getResources().getColor(R.color.light_red));
+                    } else if (s.toString().length() >= 1) {
+                        limit.setText(s.toString().length() + "/120");
+                        limit.setTextColor(getResources().getColor(R.color.loader_color_one));
+                    } else {
+                        limit.setText(s.toString().length() + "/120");
+                        limit.setTextColor(Color.BLACK);
                     }
                 }
             });
@@ -343,12 +503,9 @@ public class StudentPaymentActivity extends CustomStuAppCompatActivity implement
             if (Google.getInstance().getAccountMajor() == DumeUtils.TEACHER) {
                 Map<String, Object> documentSnapshot = TeacherDataStore.getInstance().getDocumentSnapshot();
                 appliedPromoList = (ArrayList) documentSnapshot.get("applied_promo");
-
-
             } else {
                 Map<String, Object> documentSnapshot = SearchDataStore.getInstance().getDocumentSnapshot();
                 appliedPromoList = (ArrayList) documentSnapshot.get("applied_promo");
-
             }
             if (appliedPromoList == null) {
                 appliedPromoList = new ArrayList<>();
@@ -356,18 +513,13 @@ public class StudentPaymentActivity extends CustomStuAppCompatActivity implement
 
 
             for (String promo_code : appliedPromoList) {
-
                 Map<String, Object> promoMap;
-
                 if (Google.getInstance().getAccountMajor() == DumeUtils.TEACHER) {
                     Map<String, Object> documentSnapshot = TeacherDataStore.getInstance().getDocumentSnapshot();
                     promoMap = (Map<String, Object>) documentSnapshot.get(promo_code);
-
-
                 } else {
                     Map<String, Object> documentSnapshot = SearchDataStore.getInstance().getDocumentSnapshot();
                     promoMap = (Map<String, Object>) documentSnapshot.get(promo_code);
-
                 }
                 HomePageRecyclerData homePageRecyclerData = new HomePageRecyclerData();
                 homePageRecyclerData.setTitle(promoMap.get("title").toString());
@@ -393,11 +545,7 @@ public class StudentPaymentActivity extends CustomStuAppCompatActivity implement
                 homePageRecyclerData.setPromo_code(promoMap.get("promo_code").toString());
                 homePageRecyclerData.setExpired((Boolean) promoMap.get("expired"));
                 promotionAdapter.addPromoToList(homePageRecyclerData);
-
             }
-            //
-
-
             return rootView;
         }
 
@@ -495,6 +643,13 @@ public class StudentPaymentActivity extends CustomStuAppCompatActivity implement
 
         private StudentPaymentActivity myMainActivity;
         private RecyclerView pCustomRecyclerView;
+        private Context context;
+
+        @Override
+        public void onAttach(Context context) {
+            super.onAttach(context);
+            this.context = context;
+        }
 
         @Override
         public void onCreate(@Nullable Bundle savedInstanceState) {

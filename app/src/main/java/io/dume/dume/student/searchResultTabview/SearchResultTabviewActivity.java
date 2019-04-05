@@ -420,7 +420,8 @@ public class SearchResultTabviewActivity extends CustomStuAppCompatActivity impl
                 testingCustomDialogue(R.string.search_result_tab_info);
                 break;
             case R.id.action_scatter_view:
-                startActivity(new Intent(this, SearchResultActivity.class));
+                searchDataStore.setSelectedMentor("select_0");
+                onBackPressed();
                 break;
             case android.R.id.home:
                 super.onBackPressed();

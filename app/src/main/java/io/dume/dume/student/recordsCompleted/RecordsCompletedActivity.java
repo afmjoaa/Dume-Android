@@ -43,6 +43,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
@@ -359,7 +360,8 @@ public class RecordsCompletedActivity extends CustomStuAppCompatActivity impleme
             sGender = (String) forMap.get("request_gender");
             mGender = (String) spMap.get("gender");
             subjectExchange = DumeUtils.getLast((Map<String, Object>) documentData.get("jizz"));
-            Date creation = (Date) documentData.get("creation");
+            Timestamp timestampCreation = (Timestamp) documentData.get("creation");
+            Date creation = timestampCreation.toDate();
             date = creation.toString();
             status = (String) documentData.get("record_status");
             Record record = new Record(mentorName, studentName, salaryInDemand, subjectExchange, creation, mentorDpUrl, studentDpUrl, studentRating, mentorRating, status, Record.DELIVERED, sGender, mGender);
@@ -395,7 +397,7 @@ public class RecordsCompletedActivity extends CustomStuAppCompatActivity impleme
             Number salary = (Number) selectedMentor.get("salary");
 
             Map<String, Object> promo = (Map<String, Object>) selectedMentor.get("promo");
-            if(promo!= null){
+            if (promo != null) {
                 Gson gson = new Gson();
                 JsonElement jsonElement = gson.toJsonTree(promo);
                 HomePageRecyclerData homePageRecyclerData = gson.fromJson(jsonElement, HomePageRecyclerData.class);
@@ -772,6 +774,7 @@ public class RecordsCompletedActivity extends CustomStuAppCompatActivity impleme
                 rejectNoBtn.setText("No");
                 rejectYesBtn.setOnClickListener(new View.OnClickListener() {
 
+                    private boolean penaltyChanged = false;
                     private Intent foundIntent;
                     private String record_status;
 
@@ -780,7 +783,7 @@ public class RecordsCompletedActivity extends CustomStuAppCompatActivity impleme
                         mBottomSheetReject.dismiss();
                         myThisActivity.showProgress();
 
-                        if(myThisActivity.retriveAction.equals(DumeUtils.STUDENT)){
+                        if (myThisActivity.retriveAction.equals(DumeUtils.STUDENT)) {
                             String foundRecordId = null;
                             List<DocumentSnapshot> existingRecords = Google.getInstance().getRecords();
                             for (int i = 0; i < existingRecords.size(); i++) {
@@ -837,13 +840,20 @@ public class RecordsCompletedActivity extends CustomStuAppCompatActivity impleme
                                         }
                                     }
                                 }
+                                Number salary = (Number) sendDocumentData.get("salary");
+                                Number penalty = (Number) searchDataStore.getDocumentSnapshot().get("penalty");
+                                if (penalty != null && penalty.intValue() != 0) {
+                                    penaltyChanged = true;
+                                    salary = salary.intValue() + penalty.intValue();
+                                }
+                                sendDocumentData.put("salary", salary);
                                 sendDocumentData.put("creation", FieldValue.serverTimestamp());
                                 sendDocumentData.put("record_status", SearchDataStore.STATUSPENDING);
                                 sendDocumentData.put("t_rate_status", "dialog");
                                 sendDocumentData.put("s_rate_status", "dialog");
                                 sendDocumentData.put("t_show_status", true);
                                 sendDocumentData.put("s_show_status", true);
-                                myThisActivity.mModel.riseNewRecords(sendDocumentData, new TeacherContract.Model.Listener<DocumentReference>() {
+                                myThisActivity.mModel.riseNewRecords(sendDocumentData, penaltyChanged, new TeacherContract.Model.Listener<DocumentReference>() {
                                     @Override
                                     public void onSuccess(DocumentReference documentReference) {
                                         RecordsPageModel recordsPageModel = new RecordsPageModel(context);
@@ -875,7 +885,7 @@ public class RecordsCompletedActivity extends CustomStuAppCompatActivity impleme
                                     }
                                 });
                             }
-                        }else{
+                        } else {
                             //this is the from mentor onclick
                             myThisActivity.hideProgress();
                             startActivity(new Intent(context, StudentPaymentActivity.class));

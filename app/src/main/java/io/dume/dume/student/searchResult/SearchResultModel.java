@@ -14,28 +14,29 @@ import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.WriteBatch;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import io.dume.dume.R;
+import io.dume.dume.inter_face.usefulListeners;
 import io.dume.dume.student.homePage.HomePageActivity;
 import io.dume.dume.student.pojo.SearchDataStore;
 import io.dume.dume.student.pojo.StuBaseModel;
-import io.dume.dume.student.recordsCurrent.RecordsCurrentActivity;
 import io.dume.dume.teacher.homepage.TeacherContract;
-import io.dume.dume.util.DumeUtils;
 
 public class SearchResultModel extends StuBaseModel implements SearchResultContract.Model {
 
     private static final String TAG = "SearchResultModel";
+    private int flag;
+
     public SearchResultModel(Context context) {
         super(context);
     }
@@ -45,15 +46,34 @@ public class SearchResultModel extends StuBaseModel implements SearchResultContr
     }
 
     @Override
-    public void riseNewRecords(Map<String, Object> data, TeacherContract.Model.Listener<DocumentReference> listener) {
+    public void riseNewRecords(Map<String, Object> data, boolean penaltyChanged, TeacherContract.Model.Listener<DocumentReference> listener) {
 
-        firestore.collection("records").add(data).addOnSuccessListener(documentReference -> {
-            listener.onSuccess(documentReference);
-        }).addOnFailureListener(e -> {
-            listener.onError(e.getLocalizedMessage());
-        });
+        if(penaltyChanged){
+            Map<String, Object> map = new HashMap<>();
+            Number penaltyValue = 0;
+            map.put("penalty", penaltyValue);
+            updateStuProfile(map, new usefulListeners.uploadToDBListerer() {
+                @Override
+                public void onSuccessDB(Object obj) {
+                    firestore.collection("records").add(data).addOnSuccessListener((Activity) context, documentReference -> {
+                        listener.onSuccess(documentReference);
+                    }).addOnFailureListener(e -> {
+                        listener.onError(e.getLocalizedMessage());
+                    });
+                }
 
-
+                @Override
+                public void onFailDB(Object obj) {
+                    listener.onError(obj.toString());
+                }
+            });
+        }else {
+            firestore.collection("records").add(data).addOnSuccessListener((Activity) context, documentReference -> {
+                listener.onSuccess(documentReference);
+            }).addOnFailureListener(e -> {
+                listener.onError(e.getLocalizedMessage());
+            });
+        }
     }
 
     @Override
@@ -75,10 +95,13 @@ public class SearchResultModel extends StuBaseModel implements SearchResultContr
             channel1.setShowBadge(true);
             notificationManager.createNotificationChannel(channel1);
         }
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
-        stackBuilder.addParentStack(HomePageActivity.class);
 
-        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+        Intent intent = new Intent(context,HomePageActivity.class);
+        Random generator = new Random();
+        PendingIntent resultPendingIntent=PendingIntent.getActivity(context, generator.nextInt(), intent,PendingIntent.FLAG_UPDATE_CURRENT);
+        //TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+        //stackBuilder.addParentStack(HomePageActivity.class);
+        //PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_1_ID)
                 .setSmallIcon(R.drawable.ic_notification_launcher)
@@ -109,6 +132,7 @@ public class SearchResultModel extends StuBaseModel implements SearchResultContr
     public void updateMentorDailys(List<String> imprssionUid, String requestUid, TeacherContract.Model.Listener<Void> listener) {
         // Get a new write batch
         WriteBatch batch = firestore.batch();
+        flag = 0;
         for (int i = 0; i < imprssionUid.size(); i++) {
             //read first
             DocumentReference mentorDocRef = firestore.collection("/users/mentors/mentor_profile").document(imprssionUid.get(i));
@@ -140,18 +164,21 @@ public class SearchResultModel extends StuBaseModel implements SearchResultContr
                             }else{
                                 batch.update(mentorDocRef, "daily_i", dailyImpression.toString());
                             }
-                            if(finalI == imprssionUid.size()-1){
+                            flag++;
+                            if (flag == imprssionUid.size()) {
                                 batch.commit();
                                 listener.onSuccess(null);
                             }
                         } else {
                             Log.d(TAG, "No such document");
-                            if(finalI == imprssionUid.size()-1){
+                            flag++;
+                            if (flag == imprssionUid.size()) {
                                 listener.onError("Unknown err !!");
                             }
                         }
                     } else {
                         Log.d(TAG, "get failed with ", task.getException());
+                        flag++;
                         listener.onError("Network err !!");
                     }
                 }
