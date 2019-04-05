@@ -50,7 +50,7 @@ public interface SearchResultContract {
 
         void searchResultHawwa();
 
-        void riseNewRecords(Map<String, Object> data, TeacherContract.Model.Listener<DocumentReference> listener);
+        void riseNewRecords(Map<String, Object> data, boolean penaltyChanged, TeacherContract.Model.Listener<DocumentReference> listener);
 
         void riseNewPushNoti(TeacherContract.Model.Listener<Void> listener);
 

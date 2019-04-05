@@ -20,6 +20,7 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.Source;
@@ -272,9 +273,32 @@ public class DumeModel extends HomePageModel implements TeacherModel {
         if (oldid == null) {
             //do nothing
         } else query = query.startAfter(oldid);
-
-
-        query.addSnapshotListener((Activity) context, (queryDocumentSnapshots, e) -> {
+        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    QuerySnapshot queryDocumentSnapshots = task.getResult();
+                    if (queryDocumentSnapshots != null) {
+                        List<DocumentSnapshot> documents = queryDocumentSnapshots.getDocuments();
+                        List<ReviewHighlightData> list = new ArrayList<>();
+                        for (int i = 0; i < documents.size(); i++) {
+                            ReviewHighlightData reviewHighlightData = documents.get(i).toObject(ReviewHighlightData.class);
+                            reviewHighlightData.setDoc_id(documents.get(i).getId());
+                            list.add(reviewHighlightData);
+                        }
+                        if (list.size() > 0) {
+                            listener.onSuccess(list);
+                        } else listener.onError("No review");
+                    } else {
+                        listener.onError("Empty Response");
+                    }
+                } else {
+                    listener.onError("Network Err !!");
+                    //Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
+        /*query.addSnapshotListener((queryDocumentSnapshots, e) -> {
             if (queryDocumentSnapshots != null) {
                 List<DocumentSnapshot> documents = queryDocumentSnapshots.getDocuments();
                 List<ReviewHighlightData> list = new ArrayList<>();
@@ -286,13 +310,10 @@ public class DumeModel extends HomePageModel implements TeacherModel {
                 if (list.size() > 0) {
                     listener.onSuccess(list);
                 } else listener.onError("No review");
-
-
             } else {
                 listener.onError("Empty Response");
             }
-
-        });
+        });*/
     }
 
     @Override
@@ -328,27 +349,6 @@ public class DumeModel extends HomePageModel implements TeacherModel {
 
 
     }
-
-    public void rateStudent(String realRating, String student_uid, String feedback, Map<String, Boolean> inputLikesOrDislikes, TeacherContract.Model.Listener<Void> listener) {
-
-        /*write to student profile */
-
-        /* write to self-profile */
-    }
-
-    public void rateMentor(String realRating, String mentor_uid, String feedback, Map<String, Boolean> inputLikesOrDislikes, TeacherContract.Model.Listener<Void> listener) {
-
-
-        DocumentReference mentorProfRef = firebaseFirestore.collection("users/mentors/mentor_profile").document(mentor_uid);
-        /*write to mentor Profile */
-
-        /*write to skill */
-
-
-        /* write to self-profile */
-
-    }
-
 
     public void getPaymentHistory(String uid, TeacherContract.Model.Listener<List<PaymentHistory>> listener) {
         firebaseFirestore.collection("payments").whereEqualTo("uid", uid).get(Source.DEFAULT).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {

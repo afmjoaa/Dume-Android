@@ -113,11 +113,12 @@ public class RecordsPageModel implements RecordsPageContract.Model {
                                 sGender = (String) forMap.get("request_gender");
                                 mGender = (String) spMap.get("gender");
                                 subjectExchange = DumeUtils.getLast((Map<String, Object>) data.get("jizz"));
-                                Date creation = (Date) data.get("creation");
+                                Timestamp timestampCreation = (Timestamp) data.get("creation");
+                                Date creation = timestampCreation.toDate();
 
-                                Object status_modi_date = data.get("status_modi_date");
+                                Timestamp status_modi_date = (Timestamp) data.get("status_modi_date");
                                 if (status_modi_date != null) {
-                                    modi_creation = (Date) status_modi_date;
+                                    modi_creation = status_modi_date.toDate();
                                 }
                                 date = creation.toString();
                                 status = (String) data.get("record_status");

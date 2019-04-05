@@ -274,6 +274,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
     private int validDiscount;
     private String salaryFormatted;
     private android.widget.ImageView saleImageView;
+    private boolean penaltyChanged = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -579,6 +580,13 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                         }
                     }
                     recordsData.putAll(searchMap);
+                    Number salary = (Number) skillMap.get("salary");
+                    Number penalty = (Number) searchDataStore.getDocumentSnapshot().get("penalty");
+                    if (penalty != null && penalty.intValue()!= 0) {
+                        penaltyChanged = true;
+                        salary = salary.intValue()+penalty.intValue();
+                    }
+                    skillMap.put("salary", salary);
                     recordsData.putAll(skillMap);
                     recordsData.put("creation", FieldValue.serverTimestamp());
                     recordsData.put("skill_uid", selectedMentor.getId());
@@ -646,7 +654,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                             mModel.updateMentorDailys(imprssionUid, requestMentorUid, new TeacherContract.Model.Listener<Void>() {
                                 @Override
                                 public void onSuccess(Void batch) {
-                                    mModel.riseNewRecords(recordsData, new TeacherContract.Model.Listener<DocumentReference>() {
+                                    mModel.riseNewRecords(recordsData,penaltyChanged, new TeacherContract.Model.Listener<DocumentReference>() {
                                         @Override
                                         public void onSuccess(DocumentReference list) {
                                             goHome(list);
@@ -726,7 +734,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                                     mModel.updateMentorDailys(imprssionUid, requestMentorUid, new TeacherContract.Model.Listener<Void>() {
                                         @Override
                                         public void onSuccess(Void batch) {
-                                            mModel.riseNewRecords(recordsData, new TeacherContract.Model.Listener<DocumentReference>() {
+                                            mModel.riseNewRecords(recordsData,penaltyChanged, new TeacherContract.Model.Listener<DocumentReference>() {
                                                 @Override
                                                 public void onSuccess(DocumentReference list) {
                                                     goHome(list);
@@ -1546,6 +1554,10 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
         //fill up all info of the mentor TODO
         NumberFormat currencyInstance = NumberFormat.getCurrencyInstance(Locale.US);
         Number salary = (Number) selectedMentor.get("salary");
+        Number penalty = (Number) searchDataStore.getDocumentSnapshot().get("penalty");
+        if (penalty != null && penalty.intValue()!= 0) {
+            salary = salary.intValue()+penalty.intValue();
+        }
 
         if (max_dicount_percentage != null && max_discount_credit != null) {
             Number calculatedCreditOff = salary.intValue()*max_dicount_percentage*0.01;
@@ -1557,7 +1569,6 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
             text.setSpan(new StrikethroughSpan(), 9, 9+(perviousSalaryFormatted.length()), 0);
             salaryBtn.setText(text);
             saleImageView.setVisibility(View.VISIBLE);
-
         }else{
             saleImageView.setVisibility(View.GONE);
             salaryFormatted = currencyInstance.format(salary);

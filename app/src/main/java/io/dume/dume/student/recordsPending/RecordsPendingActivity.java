@@ -41,6 +41,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
@@ -465,7 +466,8 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
             sGender = (String) forMap.get("request_gender");
             mGender = (String) spMap.get("gender");
             subjectExchange = DumeUtils.getLast((Map<String, Object>) documentData.get("jizz"));
-            Date creation = (Date) documentData.get("creation");
+            Timestamp timestampCreation = (Timestamp) documentData.get("creation");
+            Date creation = timestampCreation.toDate();
             date = creation.toString();
             status = (String) documentData.get("record_status");
             Record record = new Record(mentorName, studentName, salaryInDemand, subjectExchange, creation, mentorDpUrl, studentDpUrl, studentRating, mentorRating, status, Record.DELIVERED, sGender, mGender);
@@ -657,7 +659,7 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
             mChart.build();
 
             //now fixing the review data
-            new DumeModel(getContext()).loadReview(selectedMentor.getId(), null, new TeacherContract.Model.Listener<List<ReviewHighlightData>>() {
+            new DumeModel(context).loadReview(selectedMentor.getId(), null, new TeacherContract.Model.Listener<List<ReviewHighlightData>>() {
                 @Override
                 public void onSuccess(List<ReviewHighlightData> list) {
                     lastReviewData = list.get(list.size() - 1);

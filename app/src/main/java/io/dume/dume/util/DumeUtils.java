@@ -594,10 +594,12 @@ public class DumeUtils {
 
     public static List<Record> filterRecord(List<Record> list, String identifier) {
         List<Record> returnList = new ArrayList<>();
-        for (int i = 0; i < list.size(); i++) {
-            Record record = list.get(i);
-            if (identifier.equals(record.getStatus())) {
-                returnList.add(record);
+        if(list!= null){
+            for (int i = 0; i < list.size(); i++) {
+                Record record = list.get(i);
+                if (identifier.equals(record.getStatus())) {
+                    returnList.add(record);
+                }
             }
         }
         return returnList;
