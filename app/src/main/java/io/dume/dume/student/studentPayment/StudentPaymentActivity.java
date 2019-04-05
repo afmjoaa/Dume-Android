@@ -202,6 +202,11 @@ public class StudentPaymentActivity extends CustomStuAppCompatActivity implement
 
     @Override
     public void configurePaymentInformation() {
+
+
+        if (TeacherDataStore.getInstance().getDocumentSnapshot()==null) {
+            return;
+        }
         Map<String, Object> payments = (Map<String, Object>) TeacherDataStore.getInstance().getDocumentSnapshot().get("payments");
         int discount = 0;
         if (payments != null) {
