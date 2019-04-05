@@ -254,10 +254,15 @@ public class HomePagePresenter implements HomePageContract.Presenter {
             Map<String, Object> promo_item = (Map<String, Object>) documentSnapshot.get(applied);
             Gson gson = new Gson();
             JsonElement jsonElement = gson.toJsonTree(promo_item);
-            HomePageRecyclerData homePageRecyclerData = gson.fromJson(jsonElement, HomePageRecyclerData.class);
-            if(homePageRecyclerData!= null){
-                mView.loadHeadsUpPromo(homePageRecyclerData);
+            try {
+                HomePageRecyclerData homePageRecyclerData = gson.fromJson(jsonElement, HomePageRecyclerData.class);
+                if (homePageRecyclerData != null) {
+                    mView.loadHeadsUpPromo(homePageRecyclerData);
+                }
+            } catch (Exception e) {
+                mView.flush(e.getMessage());
             }
+
         }
     }
 
@@ -266,10 +271,9 @@ public class HomePagePresenter implements HomePageContract.Presenter {
         mModel.addShapShotListener((documentSnapshot, e) -> {
             if (documentSnapshot != null) {
                 ArrayList<String> available_promo = (ArrayList<String>) documentSnapshot.get("available_promo");
-
                 appliedPromo(documentSnapshot);
-
                 ArrayList<String> tempList = new ArrayList<>();
+
                 for (String promoCode : available_promo) {
                     if (!tempList.contains(promoCode)) {
                         tempList.add(promoCode);

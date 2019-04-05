@@ -23,6 +23,7 @@ import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.Source;
 import com.google.firebase.firestore.Transaction;
 import com.google.firebase.firestore.WriteBatch;
 
@@ -350,21 +351,29 @@ public class DumeModel extends HomePageModel implements TeacherModel {
     }
 
     public void getPaymentHistory(String uid, TeacherContract.Model.Listener<List<PaymentHistory>> listener) {
-        firebaseFirestore.collection("payments").whereEqualTo("uid", uid).addSnapshotListener((Activity) context, (queryDocumentSnapshots, e) -> {
-            if (e != null) {
-                listener.onError("Error : " + e.getLocalizedMessage());
-                return;
-            }
-            List<PaymentHistory> histories = new ArrayList<>();
-            if (queryDocumentSnapshots != null) {
-                List<DocumentSnapshot> documents = queryDocumentSnapshots.getDocuments();
-                for (int i = 0; i < documents.size(); i++) {
-                    PaymentHistory paymentHistory = documents.get(i).toObject(PaymentHistory.class);
-                    histories.add(paymentHistory);
+        firebaseFirestore.collection("payments").whereEqualTo("uid", uid).get(Source.DEFAULT).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                List<PaymentHistory> histories = new ArrayList<>();
+                if (task.getException() != null) {
+                    listener.onError(task.getException().getMessage());
+                    return;
                 }
-                listener.onSuccess(histories);
-            } else {
-                listener.onError("Error : No Payment History Found");
+                if (task.isComplete()) {
+                    if (task.getResult() != null) {
+                        List<DocumentSnapshot> documents = task.getResult().getDocuments();
+                        for (int i = 0; i < documents.size(); i++) {
+                            PaymentHistory paymentHistory = documents.get(i).toObject(PaymentHistory.class);
+                            histories.add(paymentHistory);
+                        }
+                        listener.onSuccess(histories);
+                    }
+
+
+                } else {
+                    listener.onError(task.getException().getMessage());
+                }
+
             }
         });
     }
