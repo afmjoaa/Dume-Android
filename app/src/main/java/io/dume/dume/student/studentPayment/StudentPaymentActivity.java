@@ -229,9 +229,13 @@ public class StudentPaymentActivity extends CustomStuAppCompatActivity implement
 
     @Override
     public void configurePaymentInformation() {
+        String action = getIntent().getAction();
+        if (action != null && action.equals(DumeUtils.TEACHER)) {
+            findViewById(R.id.pay_info).setVisibility(View.VISIBLE);
+            findViewById(R.id.bal).setVisibility(View.VISIBLE);
+        }
 
-
-        if (TeacherDataStore.getInstance().getDocumentSnapshot()==null) {
+        if (TeacherDataStore.getInstance().getDocumentSnapshot() == null) {
             return;
         }
         Map<String, Object> payments = (Map<String, Object>) TeacherDataStore.getInstance().getDocumentSnapshot().get("payments");
@@ -405,6 +409,7 @@ public class StudentPaymentActivity extends CustomStuAppCompatActivity implement
                                     }
                                 });
                             }
+
                             @Override
                             public void onError(String msg) {
                                 Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
