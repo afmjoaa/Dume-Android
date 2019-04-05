@@ -50,20 +50,22 @@
                 android:visibility="visible">
 
                 <TextView
+                    android:id="@id/nm"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
                     android:layout_marginLeft="5dp"
                     android:text="Bkash Num :"
+
                     android:textColor="@color/black"
                     app:fontFamily="@font/cairo_regular" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
+                    android:layout_toRightOf="@+id/nm"
                     android:gravity="center_horizontal"
-                    android:text="----->"
+                    android:text="        -->"
                     android:textColor="@color/black"
                     app:fontFamily="@font/cairo_regular" />
 
@@ -74,7 +76,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_marginEnd="2dp"
                     android:layout_marginRight="2dp"
-                    android:text="+88 01551604161"
+                    android:text="01551604161  or  01536100076"
                     android:textColor="@color/black"
                     app:fontFamily="@font/cairo_regular" />
 
@@ -126,25 +128,26 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/submitTransID"
-            android:gravity="center"
             android:layout_marginTop="100dp"
+            android:gravity="center"
             android:visibility="gone">
 
-                <carbon.widget.ImageView
-                    android:id="@+id/waiting_image"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:carbon_elevation="3dp"
-                    android:layout_centerHorizontal="true"
-                    app:srcCompat="@drawable/ic_waiting_icon" />
+            <carbon.widget.ImageView
+                android:id="@+id/waiting_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                app:carbon_elevation="3dp"
+                app:srcCompat="@drawable/ic_waiting_icon" />
 
-                <TextView
-                    android:layout_below="@+id/waiting_image"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:text="Payment Verficaiton is Under Process. You will be notified after it gets varified by Dume authority."
-                    android:textColor="@color/colorLink" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/waiting_image"
+                android:gravity="center"
+
+                android:text="Payment Verficaiton is Under Process. You will be notified after it gets varified by Dume authority."
+                android:textColor="@color/colorLink" />
 
         </RelativeLayout>
 

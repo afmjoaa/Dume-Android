@@ -152,6 +152,7 @@ public class StudentPaymentActivity extends CustomStuAppCompatActivity implement
             v.setGravity(Gravity.CENTER);
         }
         toast.show();
+
     }
 
     @Override
