@@ -1,7 +1,9 @@
 package io.dume.dume.teacher.pojo;
 
+import android.support.annotation.Keep;
 import java.io.Serializable;
 
+@Keep
 public class Education implements Serializable {
     private int from, to;
     private String title, degree, description;

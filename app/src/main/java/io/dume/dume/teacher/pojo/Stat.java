@@ -1,8 +1,10 @@
 package io.dume.dume.teacher.pojo;
 
+import android.support.annotation.Keep;
+
 import java.io.Serializable;
 import java.util.Date;
-
+@Keep
 public class Stat implements Serializable {
     private String request_i;
     private String request_r;

@@ -174,7 +174,7 @@
 -dontwarn org.imperiumlabs.**
 -keep class org.imperiumlabs.**
 -keep interface org.imperiumlabs.**
-
+-keep class org.imperiumlabs.geofirestore.GeoFirestore.** { *; }
 #firebase
 # Keep custom model classes
 -keep class com.google.firebase.example.fireeats.java.model.** { *; }
@@ -186,4 +186,15 @@
 -dontnote retrofit2.Platform$IOS$MainThreadExecutor
 -keep class android.support.v7.widget.RecyclerView { *; }
 #keep all serializable
--keep public class * implements Serializable
+-keep public class io.dume.dume.teacher.pojo.**{
+public void set*(***);
+public *** get*();
+public *** is*();
+}
+-keepclasseswithmembernames class io.dume.dume.teacher.pojo.**{
+void set*(***);
+*** get*();
+*** is*();
+}
+-keepattributes *Annotation*, Signature, Exception
+-keepattributes SourceFile, LineNumberTable

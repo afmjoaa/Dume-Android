@@ -19,8 +19,8 @@
         android:layout_height="wrap_content"
         android:background="@drawable/accent_bg_border"
         android:padding="7dp"
-        app:carbon_elevation="3dp"
         app:carbon_cornerRadius="5dp">
+        <!--  app:carbon_elevation="3dp"-->
 
             <RelativeLayout
                 android:id="@+id/hostRelativeLayout"
@@ -55,7 +55,8 @@
                             android:layout_width="50dp"
                             android:layout_height="50dp"
                             android:layout_marginBottom="1dp"
-                            android:src="@drawable/demo_testing_image"
+                            android:scaleType="centerCrop"
+                            app:srcCompat="@drawable/demo_default_avatar_dark"
                             app:carbon_cornerRadius="6dp"
                             app:carbon_elevation="4dp" />
 
@@ -63,7 +64,7 @@
                             android:id="@+id/student_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="dony"
+                            android:text="demo_user"
                             android:textColor="@color/textColorPrimary"
                             android:textSize="16sp"
                             app:fontFamily="@font/cairo_regular" />
@@ -138,7 +139,8 @@
                             android:layout_width="50dp"
                             android:layout_height="50dp"
                             android:layout_marginBottom="1dp"
-                            android:src="@drawable/demo_testing_image"
+                            android:scaleType="centerCrop"
+                            app:srcCompat="@drawable/demo_default_avatar_dark"
                             app:carbon_cornerRadius="6dp"
                             app:carbon_elevation="4dp" />
 
@@ -146,7 +148,7 @@
                             android:id="@+id/mentor_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Fatema"
+                            android:text="demo_user"
                             android:textColor="@color/textColorPrimary"
                             android:textSize="16sp"
                             app:fontFamily="@font/cairo_regular" />

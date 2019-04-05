@@ -1,7 +1,10 @@
 package io.dume.dume.teacher.pojo;
 
+import android.support.annotation.Keep;
+
 import java.io.Serializable;
 
+@Keep
 public class Feedback implements Serializable {
     private String value;
     private String valueTitle;

@@ -1,10 +1,12 @@
 package io.dume.dume.teacher.pojo;
 
+import android.support.annotation.Keep;
+
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.io.Serializable;
 import java.util.Date;
-
+@Keep
 public class Letter implements Serializable {
 
     String uid;

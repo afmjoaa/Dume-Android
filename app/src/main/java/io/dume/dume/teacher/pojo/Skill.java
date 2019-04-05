@@ -1,5 +1,7 @@
 package io.dume.dume.teacher.pojo;
 
+import android.support.annotation.Keep;
+
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.PropertyName;
 
@@ -7,7 +9,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-
+@Keep
 public class Skill implements Serializable {
     @PropertyName("status")
     boolean status = true;
