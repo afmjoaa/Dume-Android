@@ -59,14 +59,10 @@ public class DumeModel extends HomePageModel implements TeacherModel {
     private SharedPreferences prefs;
     private static final String MY_PREFS_NAME = "welcome";
     private Boolean modifiedStatus;
-    private Application.ActivityLifecycleCallbacks lifecycleCallbacks;
-    private Application app;
-
 
     public DumeModel(Context context) {
         super((Activity) context, context);
         this.context = context;
-        app = ((Activity) context).getApplication();
         firebaseFirestore = FirebaseFirestore.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
         skillCollection = firebaseFirestore.collection("users").document("mentors").collection("skills");
@@ -74,48 +70,7 @@ public class DumeModel extends HomePageModel implements TeacherModel {
         batch = firebaseFirestore.batch();
         editor = context.getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE).edit();
         prefs = context.getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
-        lifecycleCallbacks = new Application.ActivityLifecycleCallbacks() {
-            @Override
-            public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
-                Toast.makeText(context, "onActivityCreated", Toast.LENGTH_SHORT).show();
-            }
 
-            @Override
-            public void onActivityStarted(Activity activity) {
-                Toast.makeText(context, "onActivityCreated", Toast.LENGTH_SHORT).show();
-
-            }
-
-            @Override
-            public void onActivityResumed(Activity activity) {
-                Toast.makeText(context, "onActivityResumed", Toast.LENGTH_SHORT).show();
-
-            }
-
-            @Override
-            public void onActivityPaused(Activity activity) {
-                Toast.makeText(context, "onActivityPaused", Toast.LENGTH_SHORT).show();
-
-            }
-
-            @Override
-            public void onActivityStopped(Activity activity) {
-                Toast.makeText(context, "onActivityCreated", Toast.LENGTH_SHORT).show();
-
-            }
-
-            @Override
-            public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
-                Toast.makeText(context, "onActivityCreated", Toast.LENGTH_SHORT).show();
-
-            }
-
-            @Override
-            public void onActivityDestroyed(Activity activity) {
-
-            }
-        };
-        app.registerActivityLifecycleCallbacks(lifecycleCallbacks);
 
 
     }
