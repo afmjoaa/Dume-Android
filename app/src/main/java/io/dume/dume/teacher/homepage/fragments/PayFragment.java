@@ -104,7 +104,7 @@ public class PayFragment extends Fragment {
         float discount = 0.0f;
         if (payments != null) {
             Boolean hd = (Boolean) payments.get("have_discount");
-            String dc = (String) payments.get("have_discount");
+            String dc = (String) payments.get("discount");
 
             if (hd != null) {
                 haveDiscount = hd;
