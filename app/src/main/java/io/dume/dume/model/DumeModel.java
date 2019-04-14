@@ -1,8 +1,10 @@
 package io.dume.dume.model;
 
 import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
@@ -20,11 +22,9 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.GeoPoint;
-import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.Source;
-import com.google.firebase.firestore.Transaction;
 import com.google.firebase.firestore.WriteBatch;
 
 import org.imperiumlabs.geofirestore.GeoFirestore;
@@ -32,14 +32,12 @@ import org.imperiumlabs.geofirestore.GeoFirestore;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.Nullable;
 
 import io.dume.dume.Google;
 import io.dume.dume.student.common.ReviewHighlightData;
 import io.dume.dume.student.homePage.HomePageModel;
-import io.dume.dume.student.pojo.StuBaseModel;
 import io.dume.dume.student.studentPayment.adapterAndData.PaymentHistory;
 import io.dume.dume.teacher.homepage.TeacherActivtiy;
 import io.dume.dume.teacher.homepage.TeacherContract;
@@ -62,7 +60,6 @@ public class DumeModel extends HomePageModel implements TeacherModel {
     private static final String MY_PREFS_NAME = "welcome";
     private Boolean modifiedStatus;
 
-
     public DumeModel(Context context) {
         super((Activity) context, context);
         this.context = context;
@@ -73,6 +70,8 @@ public class DumeModel extends HomePageModel implements TeacherModel {
         batch = firebaseFirestore.batch();
         editor = context.getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE).edit();
         prefs = context.getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
+
+
 
     }
 

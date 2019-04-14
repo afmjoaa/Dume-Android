@@ -1,5 +1,7 @@
 package io.dume.dume.student.homePage;
 
+import android.app.Activity;
+import android.app.Application;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -45,6 +47,12 @@ public class StudentActivity extends AppCompatActivity implements StudentContrac
     StudentContract.Presenter presenter;
     private static final int REQUEST_CODE_PICK_CONTACTS = 1;
     private FirebaseFirestore db;
+
+    public void test()
+    {
+
+
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

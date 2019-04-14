@@ -141,7 +141,9 @@ public class HomePageModel extends StuBaseModel implements HomePageContract.Mode
 
     @Override
     public void getPromo(String promoCode, TeacherContract.Model.Listener<HomePageRecyclerData> listener) {
-        firestore.collection("promo").whereEqualTo("promo_code", promoCode).addSnapshotListener((Activity) context, new EventListener<QuerySnapshot>() {
+
+
+        ListenerRegistration listenerRegistration = firestore.collection("promo").whereEqualTo("promo_code", promoCode).addSnapshotListener((Activity) context, new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 if (queryDocumentSnapshots == null) {
@@ -159,6 +161,7 @@ public class HomePageModel extends StuBaseModel implements HomePageContract.Mode
 
             }
         });
+        listenerRegistration.remove();
     }
 
 
