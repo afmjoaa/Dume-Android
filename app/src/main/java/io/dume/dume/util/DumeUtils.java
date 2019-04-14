@@ -12,6 +12,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.LocationManager;
 import android.os.Build;
+import android.support.annotation.Keep;
 import android.support.annotation.StringRes;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -38,6 +39,7 @@ import android.view.animation.ScaleAnimation;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -75,6 +77,7 @@ import io.dume.dume.teacher.homepage.TeacherContract;
 import static com.facebook.FacebookSdk.getApplicationContext;
 import static com.facebook.FacebookSdk.removeLoggingBehavior;
 
+@Keep
 public class DumeUtils {
     public static final String TEACHER = "teacher";
     public static final String BOOTCAMP = "bootcamp";
@@ -719,7 +722,7 @@ public class DumeUtils {
     private static Button confirmNoBtn;
 
 
-    public static void notifyDialog(Context context, boolean cancelable, String title, String body, String positiveString, TeacherContract.Model.Listener<Boolean> listener) {
+    public static void notifyDialog(Context context, boolean hideBtn , boolean cancelable, String title, String body, String positiveString, TeacherContract.Model.Listener<Boolean> listener) {
         mMakeRequestBSD = new BottomSheetDialog(context);
         cancelsheetRootView = LayoutInflater.from(context).inflate(R.layout.custom_bottom_sheet_dialogue_cancel, null);
         mMakeRequestBSD.setContentView(cancelsheetRootView);
@@ -737,6 +740,7 @@ public class DumeUtils {
                 @Override
                 public void onClick(View view) {
                     listener.onSuccess(true);
+                    mMakeRequestBSD.dismiss();
                 }
             });
             confirmNoBtn.setEnabled(cancelable);
@@ -744,9 +748,15 @@ public class DumeUtils {
                 @Override
                 public void onClick(View view) {
                     listener.onSuccess(false);
-
+                    mMakeRequestBSD.dismiss();
                 }
             });
+            confirmNoBtn.setText("No");
+            if(hideBtn){
+                comfirmYesBtn.setVisibility(View.GONE);
+                confirmNoBtn.setTextColor(context.getResources().getColor(R.color.percent_off_active_color));
+                confirmNoBtn.setText("Retry");
+            }
             mMakeRequestBSD.show();
             mMakeRequestBSD.setCancelable(false);
             mMakeRequestBSD.setCanceledOnTouchOutside(false);

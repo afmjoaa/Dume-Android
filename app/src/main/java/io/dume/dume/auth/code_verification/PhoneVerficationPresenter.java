@@ -553,6 +553,12 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
         selfRating.put("response_time", "0");
         selfRating.put("student_guided", "0");
         bootCampField.put("self_rating", selfRating);
+        Map<String, Object> paymentMap = new HashMap<>();
+        paymentMap.put("obligation_amount", "0");
+        paymentMap.put("obligation_currency", "BDT");
+        paymentMap.put("total_paid", "0");
+        paymentMap.put("penalty_paid", "0");
+        bootCampField.put("payments", paymentMap);
 
         List<String> appliedPromoList = new ArrayList<>();
         bootCampField.put("applied_promo", appliedPromoList);
@@ -630,7 +636,12 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
         unreadRecords.put("completed_count", "0");
         unreadRecords.put("rejected_count", "0");
         stuProInfo.put("unread_records", unreadRecords);
-
+        Map<String, Object> paymentMap = new HashMap<>();
+        paymentMap.put("obligation_amount", "0");
+        paymentMap.put("obligation_currency", "BDT");
+        paymentMap.put("total_paid", "0");
+        paymentMap.put("penalty_paid", "0");
+        stuProInfo.put("payments", paymentMap);
         Map<String, Map<String, Object>> favorites = new HashMap<>();
         stuProInfo.put("favourite_places", favorites);
         Map<String, Map<String, Object>> savedPlaces = new HashMap<>();

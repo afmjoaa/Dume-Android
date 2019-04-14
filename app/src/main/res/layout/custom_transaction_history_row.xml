@@ -1,58 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/hostRelativeLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginStart="6dp"
+    android:layout_marginLeft="6dp"
+    android:layout_marginEnd="6dp"
+    android:layout_marginRight="6dp"
     android:background="@drawable/bg_white_round_corner"
     android:clickable="true"
     android:focusable="true"
     android:foreground="?android:attr/selectableItemBackground">
 
-    <TextView
+    <carbon.widget.TextView
         android:id="@+id/dateTV"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         android:layout_weight="1"
+        android:ellipsize="end"
         android:gravity="center"
-        android:text="Date" />
+        android:maxLines="1"
+        android:paddingTop="1dp"
+        android:paddingBottom="1dp"
+        android:text="Date"
+        app:carbon_cornerRadius="5dp" />
 
-    <TextView
+    <carbon.widget.TextView
         android:id="@+id/amountTV"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        android:layout_toRightOf="@id/dateTV"
-
         android:layout_weight="1"
+        android:ellipsize="end"
         android:gravity="center"
+        android:maxLines="1"
+        android:paddingTop="1dp"
+        android:paddingBottom="1dp"
+        android:text="Amount"
+        app:carbon_cornerRadius="5dp" />
 
-        android:text="Amount" />
-
-    <TextView
+    <carbon.widget.TextView
         android:id="@+id/statusTV"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:layout_toRightOf="@id/amountTV"
-
+        android:layout_marginStart="7dp"
+        android:layout_marginLeft="7dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="7dp"
+        android:layout_marginRight="7dp"
+        android:layout_marginBottom="5dp"
         android:layout_weight="1"
+        android:ellipsize="end"
         android:gravity="center"
+        android:maxLines="1"
+        android:paddingTop="1dp"
+        android:paddingBottom="1dp"
+        android:text="Status"
+        app:carbon_cornerRadius="5dp" />
 
-        android:text="Status" />
-
-    <TextView
+    <carbon.widget.TextView
         android:id="@+id/methodTV"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
-        android:layout_centerInParent="true"
         android:layout_margin="5dp"
-
-        android:layout_toRightOf="@id/statusTV"
         android:layout_weight="1"
+        android:ellipsize="end"
         android:gravity="center"
-        android:text="Method" />
+        android:maxLines="1"
+        android:paddingTop="1dp"
+        android:paddingBottom="1dp"
+        android:text="Method"
+        app:carbon_cornerRadius="5dp" />
 
 </LinearLayout>

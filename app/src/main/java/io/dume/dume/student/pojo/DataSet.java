@@ -1,15 +1,17 @@
 package io.dume.dume.student.pojo;
 
+import android.support.annotation.Keep;
+
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 
-public  class DataSet {
+@Keep
+public class DataSet {
     private ArrayList<LatLng> mDataset;
     private String mUrl;
 
-    public DataSet()
-    {
+    public DataSet() {
 
     }
 

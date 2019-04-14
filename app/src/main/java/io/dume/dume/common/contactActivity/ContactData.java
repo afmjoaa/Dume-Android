@@ -1,9 +1,12 @@
 package io.dume.dume.common.contactActivity;
 
 
+import android.support.annotation.Keep;
+
 import java.util.Map;
 import java.util.Objects;
 
+@Keep
 public class ContactData {
     //1 == Pending
 //2 == Accepted

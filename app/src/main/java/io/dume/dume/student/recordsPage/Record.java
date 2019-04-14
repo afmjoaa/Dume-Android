@@ -1,9 +1,12 @@
 package io.dume.dume.student.recordsPage;
 
+import android.support.annotation.Keep;
+
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.Date;
 
+@Keep
 public class Record {
     public static int DELIVERED = 2, NOT_DELIVERED = 1, DELIVERED_SEEN = 3;
     public static final String DIALOG =  "dialog", BOTTOM_SHEET = "bottom_sheet", DONE = "done";

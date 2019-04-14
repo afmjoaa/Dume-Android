@@ -1,7 +1,10 @@
 package io.dume.dume.common.chatActivity;
 
+import android.support.annotation.Keep;
+
 import java.util.Date;
 
+@Keep
 public class Room {
     String roomId;
     String opponentUid;

@@ -25,8 +25,6 @@ public class AccountSettingsPresenter implements AccountSettingsContract.Present
     public void enqueue() {
         view.setViewConfig();
         view.initJoaaRV();
-
-
     }
 
     @Override
@@ -42,16 +40,9 @@ public class AccountSettingsPresenter implements AccountSettingsContract.Present
             case R.id.accountEditButton:
                 view.editAccount();
                 break;
-            case R.id.addLocationBTN:
-                view.addLocation();
-                break;
-            case R.id.updateBTN:
-                view.updateLocation();
-                break;
 
             default:
-
-
+                break;
         }
     }
 

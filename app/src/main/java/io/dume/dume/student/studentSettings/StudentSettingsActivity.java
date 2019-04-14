@@ -576,12 +576,13 @@ public class StudentSettingsActivity extends CustomStuAppCompatActivity
 
         private Context context;
         private Activity activity;
+        private StudentSettingsActivity myMainActivity;
 
         @Override
         public void onAttach(Context context) {
             super.onAttach(context);
             this.context = context;
-            this.activity = (Activity)context;
+            this.activity = (Activity) context;
         }
 
         @Override
@@ -589,8 +590,14 @@ public class StudentSettingsActivity extends CustomStuAppCompatActivity
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.pref_notification);
             setHasOptionsMenu(true);
-            SharedPreferences.Editor editor = context.getSharedPreferences(DumeUtils.SETTING_PREFERENCE, MODE_PRIVATE).edit();
+        }
 
+        @Override
+        public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+            myMainActivity = (StudentSettingsActivity) getActivity();
+
+            SharedPreferences.Editor editor = myMainActivity.context.getSharedPreferences(DumeUtils.SETTING_PREFERENCE, MODE_PRIVATE).edit();
             bindPreferenceSummaryToValue(findPreference("notifications_ringtone"));
             bindPreferenceSummaryToValue(findPreference("reminder_ringtone"));
             bindPreferenceSummaryToValue(findPreference("search_radius"));
@@ -602,10 +609,10 @@ public class StudentSettingsActivity extends CustomStuAppCompatActivity
             notificationSwitch.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object o) {
-                    if(notificationSwitch.isChecked()){
+                    if (notificationSwitch.isChecked()) {
                         // Checked the switch programmatically
                         notificationSwitch.setChecked(false);
-                    }else {
+                    } else {
                         // Unchecked the switch programmatically
                         notificationSwitch.setChecked(true);
                     }
@@ -618,10 +625,10 @@ public class StudentSettingsActivity extends CustomStuAppCompatActivity
             reminderSwitch.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object o) {
-                    if(reminderSwitch.isChecked()){
+                    if (reminderSwitch.isChecked()) {
                         // Checked the switch programmatically
                         reminderSwitch.setChecked(false);
-                    }else {
+                    } else {
                         // Unchecked the switch programmatically
                         reminderSwitch.setChecked(true);
                     }
@@ -630,6 +637,9 @@ public class StudentSettingsActivity extends CustomStuAppCompatActivity
                     return false;
                 }
             });
+
+
+            return super.onCreateView(inflater, container, savedInstanceState);
         }
 
         @Override

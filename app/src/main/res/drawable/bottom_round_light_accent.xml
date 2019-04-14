@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <solid android:color="#e0f7fa" />
+    <solid android:color="@color/payment_item_bg" />
     <corners
         android:bottomLeftRadius="5dp"
         android:bottomRightRadius="5dp"

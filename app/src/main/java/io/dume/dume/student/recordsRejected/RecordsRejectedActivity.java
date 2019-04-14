@@ -290,9 +290,9 @@ public class RecordsRejectedActivity extends CustomStuAppCompatActivity implemen
             sGender = (String) forMap.get("request_gender");
             mGender = (String) spMap.get("gender");
             subjectExchange = DumeUtils.getLast((Map<String, Object>) documentData.get("jizz"));
-            Timestamp timestampCreation = (Timestamp) documentData.get("creation");
-            Date creation = timestampCreation.toDate();
-            date = creation.toString();
+
+            Date creation = (Date) documentData.get("creation");
+
             status = (String) documentData.get("record_status");
             Record record = new Record(mentorName, studentName, salaryInDemand, subjectExchange, creation, mentorDpUrl, studentDpUrl, studentRating, mentorRating, status, Record.DELIVERED, sGender, mGender);
             String rejected_by = selectedMentor.getString("rejected_by");

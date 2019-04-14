@@ -157,12 +157,14 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
 
             if (myMainActivity.retrivedAction.equals(DumeUtils.STUDENT)) {
                 rangeBar.setRangeBarEnabled(true);
+                rangeBar.setRangePinsByIndices(0,9);
                 min.setText("Min Salary = 1,000 ৳");
-                max.setText("Max Salary = 50,000 ৳");
+                max.setText("Max Salary = 10,000 ৳");
             } else {
+                rangeBar.setSeekPinByIndex(4);
                 rangeBar.setRangeBarEnabled(false);
                 max.setVisibility(View.GONE);
-                min.setText("Salary = 50,000 ৳");
+                min.setText("Salary = 5,000 ৳");
             }
 
             rangeBar.setOnRangeBarChangeListener(new RangeBar.OnRangeBarChangeListener() {

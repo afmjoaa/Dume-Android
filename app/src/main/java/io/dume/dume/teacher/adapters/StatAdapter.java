@@ -54,7 +54,7 @@ public abstract class StatAdapter extends RecyclerView.Adapter<StatAdapter.FeedB
                 }else{
                     i = Integer.parseInt(stat.get(1).getRequest_i());
                 }
-                Integer valueStatTVValueI = (100 * (Integer.parseInt(stat.get(0).getRequest_i()) - Integer.parseInt(stat.get(1).getRequest_i())) /
+                Integer valueStatTVValueI = ((100 * (Integer.parseInt(stat.get(0).getRequest_i()))) /
                         i);
                 holder.valueStatTV.setText(String.format("  (%s%%)", valueStatTVValueI.toString()));
                 break;
@@ -65,7 +65,7 @@ public abstract class StatAdapter extends RecyclerView.Adapter<StatAdapter.FeedB
                 }else{
                     ii = Integer.parseInt(stat.get(1).getRequest_r());
                 }
-                Integer valueStatTVValueR = (100 * (Integer.parseInt(stat.get(0).getRequest_r()) - Integer.parseInt(stat.get(1).getRequest_r())) /
+                Integer valueStatTVValueR = ((100 * (Integer.parseInt(stat.get(0).getRequest_r()) )) /
                         ii);
                 holder.valueStatTV.setText(String.format("  (%s%%)", valueStatTVValueR.toString()));
                 break;

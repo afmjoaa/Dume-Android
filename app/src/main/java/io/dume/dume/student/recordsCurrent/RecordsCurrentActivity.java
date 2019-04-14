@@ -895,8 +895,9 @@ public class RecordsCurrentActivity extends CustomStuAppCompatActivity implement
             sGender = (String) forMap.get("request_gender");
             mGender = (String) spMap.get("gender");
             subjectExchange = DumeUtils.getLast((Map<String, Object>) documentData.get("jizz"));
-            Timestamp timestampCreation = (Timestamp) documentData.get("creation");
-            Date creation = timestampCreation.toDate();
+
+            Date creation = (Date) documentData.get("creation");
+
             status = (String) documentData.get("record_status");
             Record record = new Record(mentorName, studentName, salaryInDemand, subjectExchange, creation, mentorDpUrl, studentDpUrl, studentRating, mentorRating, status, Record.DELIVERED, sGender, mGender);
 
@@ -908,16 +909,14 @@ public class RecordsCurrentActivity extends CustomStuAppCompatActivity implement
             subjectInDemand.setText(record.getSubjectExchange());
 
             if (record.getStudentDpUrl() != null && !record.getStudentDpUrl().equals("")) {
-                Glide.with(context).load(record.getStudentDpUrl()).apply(new RequestOptions().override((int) (50 * mDensity), (int) (50 * mDensity)).placeholder(R.drawable.demo_default_avatar_dark)).into(studentDisplayPic)
-                ;
+                Glide.with(context).load(record.getStudentDpUrl()).apply(new RequestOptions().override((int) (50 * mDensity), (int) (50 * mDensity)).placeholder(R.drawable.demo_default_avatar_dark)).into(studentDisplayPic);
             } else {
                 if (record.getsGender() != null || record.getsGender().equals("Male") || record.getsGender().equals("")) {
                     defaultUrl = SearchDataStore.DEFAULTMALEAVATER;
                 } else {
                     defaultUrl = SearchDataStore.DEFAULTFEMALEAVATER;
                 }
-                Glide.with(context).load(defaultUrl).apply(new RequestOptions().override((int) (50 * mDensity), (int) (50 * mDensity)).placeholder(R.drawable.demo_default_avatar_dark)).into(studentDisplayPic)
-                ;
+                Glide.with(context).load(defaultUrl).apply(new RequestOptions().override((int) (50 * mDensity), (int) (50 * mDensity)).placeholder(R.drawable.demo_default_avatar_dark)).into(studentDisplayPic);
             }
 
             Glide.with(context).load(record.getMentorDpUrl()).into(mentorDisplayPic);

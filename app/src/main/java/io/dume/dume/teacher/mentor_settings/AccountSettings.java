@@ -26,7 +26,6 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.NestedScrollView;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -46,7 +45,6 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.google.firebase.auth.FirebaseAuth;
 import com.tomergoldst.tooltips.ToolTipsManager;
 import com.transitionseverywhere.ChangeBounds;
 import com.transitionseverywhere.Recolor;
@@ -60,7 +58,6 @@ import java.util.List;
 import java.util.Map;
 
 import io.dume.dume.R;
-import io.dume.dume.auth.auth.AuthActivity;
 import io.dume.dume.customView.HorizontalLoadView;
 import io.dume.dume.model.DumeModel;
 import io.dume.dume.student.common.SettingData;
@@ -68,21 +65,16 @@ import io.dume.dume.student.common.SettingsAdapter;
 import io.dume.dume.student.heatMap.AccountRecyData;
 import io.dume.dume.student.heatMap.HeatMapAccountRecyAda;
 import io.dume.dume.student.homePage.HomePageActivity;
-import io.dume.dume.student.homePage.MapsActivity;
 import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
-import io.dume.dume.student.studentSettings.SavedPlacesAdapter;
-import io.dume.dume.student.studentSettings.StudentSettingsActivity;
 import io.dume.dume.teacher.adapters.BasicInfoAdapter;
 import io.dume.dume.teacher.homepage.TeacherActivtiy;
 import io.dume.dume.teacher.homepage.TeacherContract;
 import io.dume.dume.teacher.mentor_settings.basicinfo.EditAccount;
 import io.dume.dume.teacher.model.KeyValueModel;
-import io.dume.dume.teacher.pojo.Education;
 import io.dume.dume.util.AlertMsgDialogue;
 import io.dume.dume.util.DumeUtils;
 
 import static io.dume.dume.util.DumeUtils.configAppbarTittle;
-import static io.dume.dume.util.DumeUtils.showToast;
 
 public class AccountSettings extends CustomStuAppCompatActivity implements AccountSettingsContract.MentorView {
     private CoordinatorLayout transitionContainer;
@@ -90,7 +82,7 @@ public class AccountSettings extends CustomStuAppCompatActivity implements Accou
     private HorizontalLoadView horizontalLoadView;
     private AccountSettingsContract.Presenter presenter;
 
-    private RecyclerView basicRecyclerView, badgeRV;
+    private RecyclerView basicRecyclerView;
     private Animation slideDown;
     private LinearLayout profileContainer, profileSec;
     private ImageView indicator;
@@ -98,11 +90,9 @@ public class AccountSettings extends CustomStuAppCompatActivity implements Accou
     private static final String TAG = "AccountSettings";
     private ToolTipsManager toolTipsManager;
     private TextView profileSecTxtm, userName, userPhone, userMail;
-    private RecyclerView academicRV;
     private Map<String, Object> data;
     private carbon.widget.ImageView avatarIV;
 
-    private TextView academicError;
     private RecyclerView joarBaccha;
     private SettingsAdapter settingsAdapter;
     private String[] settingNameArr;
@@ -131,14 +121,11 @@ public class AccountSettings extends CustomStuAppCompatActivity implements Accou
         indicator = findViewById(R.id.indicatorImg);
         frameLayout = findViewById(R.id.framLayout);
         basicRecyclerView = findViewById(R.id.basicInfoRecyclerView);
-        academicRV = findViewById(R.id.academic_list);
-        badgeRV = findViewById(R.id.badgeRecyclerView);
         joarBaccha = findViewById(R.id.joaarBacca);
         userName = findViewById(R.id.userNameTV);
         userMail = findViewById(R.id.userMailTV);
         userPhone = findViewById(R.id.userPhoneTV);
         profileSec = findViewById(R.id.profile_container);
-        academicError = findViewById(R.id.itemSubTextView);
         avatarIV = findViewById(R.id.avatarImageView);
         scrollView = findViewById(R.id.accountScrolling);
 
@@ -263,15 +250,7 @@ public class AccountSettings extends CustomStuAppCompatActivity implements Accou
         startActivity(new Intent(this, EditAccount.class).putExtra("user_data", bundle));
     }
 
-    @Override
-    public void addLocation() {
-        startActivity(new Intent(this, MapsActivity.class));
-    }
 
-    @Override
-    public void updateLocation() {
-
-    }
 
     public List<SettingData> getFinalData() {
         List<SettingData> data = new ArrayList<>();

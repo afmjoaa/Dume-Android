@@ -16,6 +16,15 @@ public class Letter implements Serializable {
     String token;
     String name;
     String avatar;
+    int identifier;
+
+    public int getIdentifier() {
+        return identifier;
+    }
+
+    public void setIdentifier(int identifier) {
+        this.identifier = identifier;
+    }
 
     public String getAvatar() {
         return avatar;

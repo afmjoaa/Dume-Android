@@ -19,6 +19,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/accent_bg_border"
         android:padding="7dp"
+        app:carbon_elevation="3dp"
         app:carbon_cornerRadius="5dp">
         <!--  app:carbon_elevation="3dp"-->
 
@@ -67,6 +68,10 @@
                             android:text="demo_user"
                             android:textColor="@color/textColorPrimary"
                             android:textSize="16sp"
+                            android:ellipsize="end"
+                            android:maxWidth="110dp"
+                            android:singleLine="true"
+                            android:maxLines="1"
                             app:fontFamily="@font/cairo_regular" />
 
                         <me.zhanghai.android.materialratingbar.MaterialRatingBar
@@ -151,6 +156,10 @@
                             android:text="demo_user"
                             android:textColor="@color/textColorPrimary"
                             android:textSize="16sp"
+                            android:ellipsize="end"
+                            android:maxWidth="110dp"
+                            android:singleLine="true"
+                            android:maxLines="1"
                             app:fontFamily="@font/cairo_regular" />
 
                         <me.zhanghai.android.materialratingbar.MaterialRatingBar
@@ -204,6 +213,7 @@
                         app:srcCompat="@drawable/ic_sum_round_icon" />
 
                     <TextView
+                        android:id="@+id/due_amount_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="6dp"
@@ -224,6 +234,7 @@
                         app:fontFamily="@font/cairo_regular" />
 
                     <TextView
+                        android:id="@+id/due_amount_value"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
@@ -243,7 +254,7 @@
                     android:layout_marginRight="10dp"
                     android:layout_marginBottom="10dp"
                     app:carbon_cornerRadius="5dp"
-                    android:background="@color/payment_green"
+                    android:background="@color/payment_green_one"
                     android:paddingLeft="6dp"
                     android:paddingTop="5dp"
                     android:paddingRight="6dp"
@@ -277,6 +288,7 @@
                         app:fontFamily="@font/cairo_regular" />
 
                     <TextView
+                        android:id="@+id/paid_amount_value"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
@@ -297,7 +309,7 @@
         android:layout_below="@+id/primary_framelayout"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
-        android:background="@drawable/bottom_round_light_green_bg"
+        android:background="@drawable/bottom_round_light_accent"
         android:orientation="vertical"
         android:paddingLeft="8dp"
         android:paddingTop="8dp"
@@ -327,7 +339,6 @@
             android:id="@+id/salary_due_block"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/divider_two"
             android:layout_marginLeft="18dp"
             android:layout_marginTop="10dp"
             android:layout_marginRight="18dp"
@@ -346,11 +357,12 @@
                 android:text="----->" />
 
             <TextView
+                android:id="@+id/salary_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:text="10k BDt" />
+                android:text="0 ৳" />
 
         </RelativeLayout>
 
@@ -358,7 +370,6 @@
             android:id="@+id/product_name_block"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/salary_due_block"
             android:layout_marginLeft="18dp"
             android:layout_marginRight="18dp"
             android:layout_marginBottom="8dp">
@@ -376,6 +387,7 @@
                 android:text="----->" />
 
             <TextView
+                android:id="@+id/product_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
@@ -385,10 +397,39 @@
         </RelativeLayout>
 
         <RelativeLayout
+            android:id="@+id/category_block"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="18dp"
+            android:layout_marginRight="18dp"
+            android:layout_marginBottom="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Category" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:gravity="center_horizontal"
+                android:text="----->" />
+
+            <TextView
+                android:id="@+id/category_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:text="Education" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
             android:id="@+id/starting_date_block"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/product_name_block"
             android:layout_marginLeft="18dp"
             android:layout_marginRight="18dp"
             android:layout_marginBottom="8dp">
@@ -406,6 +447,7 @@
                 android:text="----->" />
 
             <TextView
+                android:id="@+id/staring_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
@@ -418,10 +460,9 @@
             android:id="@+id/finishing_date_block"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/starting_date_block"
             android:layout_marginLeft="18dp"
             android:layout_marginRight="18dp"
-            android:layout_marginBottom="8dp">
+            android:layout_marginBottom="12dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -436,6 +477,7 @@
                 android:text="----->" />
 
             <TextView
+                android:id="@+id/finishing_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
@@ -444,35 +486,7 @@
 
         </RelativeLayout>
 
-        <RelativeLayout
-            android:id="@+id/duration_block"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/finishing_date_block"
-            android:layout_marginLeft="18dp"
-            android:layout_marginRight="18dp"
-            android:layout_marginBottom="12dp">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Duration" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:gravity="center_horizontal"
-                android:text="----->" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:text="One month" />
-
-        </RelativeLayout>
 
     </carbon.widget.LinearLayout>
 

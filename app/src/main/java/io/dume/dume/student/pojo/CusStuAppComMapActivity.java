@@ -548,14 +548,14 @@ public class CusStuAppComMapActivity extends CustomStuAppCompatActivity implemen
                         .addOnSuccessListener(new OnSuccessListener<Location>() {
                             @Override
                             public void onSuccess(Location location) {
-                                CameraPosition cameraPosition = new CameraPosition.Builder()
-                                        .target(new LatLng(location.getLatitude(), location.getLongitude()))
-                                        .zoom(zoomOne)
-                                        .bearing(0)
-                                        .tilt(0)
-                                        .build();
                                 if (location != null) {
-                                    mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition),new GoogleMap.CancelableCallback() {
+                                    CameraPosition cameraPosition = new CameraPosition.Builder()
+                                            .target(new LatLng(location.getLatitude(), location.getLongitude()))
+                                            .zoom(zoomOne)
+                                            .bearing(0)
+                                            .tilt(0)
+                                            .build();
+                                    mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), new GoogleMap.CancelableCallback() {
                                         @Override
                                         public void onFinish() {
                                             //nothing to do

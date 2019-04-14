@@ -1,22 +1,19 @@
 package io.dume.dume.student.pojo;
 
-import android.graphics.Bitmap;
+import android.support.annotation.Keep;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.GeoPoint;
-import com.touchboarder.weekdaysbuttons.WeekdaysDataItem;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import io.dume.dume.util.DumeUtils;
 
-import static io.dume.dume.student.grabingPackage.GrabingPackageActivity.PlaceholderFragment.getSelectedDaysFromWeekdaysData;
-
+@Keep
 public class SearchDataStore implements Serializable {
     public static String TEACHER = "teacher";
     public static String STUDENT = "student";

@@ -84,7 +84,7 @@
                 android:paddingEnd="16dp"
                 android:paddingTop="8dp"
                 android:paddingBottom="8dp"
-                android:text="** Right now some payment methods is not available. please wait until the next version gets release.**" />
+                android:text="** Right now some payment methods is not available. please wait until the next version gets released.**" />
 
             <!--obligations or claim start-->
             <TextView
@@ -181,7 +181,7 @@
                         android:ellipsize="end"
                         android:maxLines="1"
                         android:singleLine="true"
-                        android:text="BDT 10k"
+                        android:text="BDT 0 ৳"
                         android:textAppearance="?android:attr/textAppearanceListItem"
                         android:textSize="13sp"
                         app:fontFamily="@font/cairo_regular" />
@@ -285,7 +285,7 @@
                         android:ellipsize="end"
                         android:maxLines="1"
                         android:singleLine="true"
-                        android:text="2"
+                        android:text="0"
                         android:textAppearance="?android:attr/textAppearanceListItem"
                         android:textSize="13sp"
                         app:fontFamily="@font/cairo_regular" />
@@ -419,8 +419,8 @@
                         android:layout_toEndOf="@id/auto_image_icon"
                         android:layout_toRightOf="@id/auto_image_icon"
                         android:orientation="vertical"
-                        android:paddingBottom="10dp"
-                        android:paddingTop="10dp">
+                        android:paddingBottom="15dp"
+                        android:paddingTop="15dp">
 
                         <TextView
                             android:id="@+id/text_one"
@@ -432,23 +432,8 @@
                             android:maxLines="1"
                             android:maxWidth="150dp"
                             android:singleLine="true"
-                            android:text="Dume count"
+                            android:text="Total Paid Amount"
                             android:textAppearance="?android:attr/textAppearanceListItem"
-                            app:fontFamily="@font/cairo_regular" />
-                        <!--Total earned-->
-
-                        <TextView
-                            android:id="@+id/text_two"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginTop="2dp"
-                            android:ellipsize="end"
-                            android:maxLines="1"
-                            android:maxWidth="150dp"
-                            android:singleLine="true"
-                            android:text="Total spend"
-                            android:textAppearance="?android:attr/textAppearanceSmall"
                             app:fontFamily="@font/cairo_regular" />
                         <!--Total obligation paid-->
                     </LinearLayout>
@@ -474,7 +459,7 @@
                             android:ellipsize="end"
                             android:maxLines="1"
                             android:singleLine="true"
-                            android:text="10"
+                            android:text="BDT 0 ৳"
                             android:textAppearance="?android:attr/textAppearanceListItem"
                             android:textSize="13sp"
                             app:fontFamily="@font/cairo_regular" />
@@ -488,7 +473,8 @@
                             android:ellipsize="end"
                             android:maxLines="1"
                             android:singleLine="true"
-                            android:text="BDT 10k"
+                            android:text="BDT 0 ৳"
+                            android:visibility="gone"
                             android:textAppearance="?android:attr/textAppearanceSmall"
                             android:textSize="12sp"
                             app:fontFamily="@font/cairo_regular" />
@@ -497,7 +483,6 @@
                 </RelativeLayout>
 
             </LinearLayout>
-
 
         </LinearLayout>
 

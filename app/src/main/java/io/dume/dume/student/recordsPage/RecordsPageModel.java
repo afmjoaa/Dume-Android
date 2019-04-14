@@ -113,13 +113,9 @@ public class RecordsPageModel implements RecordsPageContract.Model {
                                 sGender = (String) forMap.get("request_gender");
                                 mGender = (String) spMap.get("gender");
                                 subjectExchange = DumeUtils.getLast((Map<String, Object>) data.get("jizz"));
-                                Timestamp timestampCreation = (Timestamp) data.get("creation");
-                                Date creation = timestampCreation.toDate();
+                                Date creation = (Date) data.get("creation");
+                                modi_creation = (Date) data.get("status_modi_date");
 
-                                Timestamp status_modi_date = (Timestamp) data.get("status_modi_date");
-                                if (status_modi_date != null) {
-                                    modi_creation = status_modi_date.toDate();
-                                }
                                 date = creation.toString();
                                 status = (String) data.get("record_status");
                                 Record record = new Record(mentorName, studentName, salaryInDemand, subjectExchange, creation, mentorDpUrl, studentDpUrl, studentRating, mentorRating, status, Record.DELIVERED, sGender, mGender);
@@ -236,12 +232,12 @@ public class RecordsPageModel implements RecordsPageContract.Model {
                     Date requestTime = (Date) record.get("creation");
                     long currentResponseTime = new Date().getTime() - requestTime.getTime();
                     Map<String, Object> documentSnapshot = new HashMap<>();
-                    if(rejectedBy.equals(DumeUtils.TEACHER)){
+                    if (rejectedBy.equals(DumeUtils.TEACHER)) {
                         documentSnapshot = TeacherDataStore.getInstance().getDocumentSnapshot();
                         Map<String, Object> selfRating = (Map<String, Object>) documentSnapshot.get("self_rating");
                         String response = (String) selfRating.get("response_time");
                         responseTime = Integer.parseInt(response == null ? "0" : response);
-                    }else{
+                    } else {
                         documentSnapshot = SearchDataStore.getInstance().getDocumentSnapshot();
                     }
                     Map<String, Object> unreadRecords = (Map<String, Object>) documentSnapshot.get("unread_records");
@@ -262,7 +258,7 @@ public class RecordsPageModel implements RecordsPageContract.Model {
                         rejectedCount++;
                         pendingCount--;
                     }
-                    if(rejectedBy.equals(DumeUtils.TEACHER)){
+                    if (rejectedBy.equals(DumeUtils.TEACHER)) {
                         int foo = (int) (currentResponseTime / (1000 * 60 * 60));
                         int finalResponseTime = (responseTime + foo) / (acceptedCount + rejectedCount + completedCount + currentCount);
                         DocumentReference document = firestore.document("users/mentors/mentor_profile/" + FirebaseAuth.getInstance().getUid());
@@ -301,8 +297,8 @@ public class RecordsPageModel implements RecordsPageContract.Model {
                                 }
                             }
                         });
-                    }else{
-                        DocumentReference document = firestore.document("/users/students/stu_pro_info" + FirebaseAuth.getInstance().getUid());
+                    } else {
+                        DocumentReference document = firestore.document("/users/students/stu_pro_info/" + FirebaseAuth.getInstance().getUid());
                         batch.update(document, "unread_records.pending_count", pendingCount + "", "unread_records.accepted_count", acceptedCount + "");
                         //testing here
                         DocumentReference studentDocRef = firestore.collection("users/mentors/mentor_profile/").document(mentorUid);//todo

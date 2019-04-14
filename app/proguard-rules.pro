@@ -171,10 +171,11 @@
 -keepnames class okhttp3.internal.publicsuffix.PublicSuffixDatabase
 
 #geoFirestore
--dontwarn org.imperiumlabs.**
--keep class org.imperiumlabs.**
--keep interface org.imperiumlabs.**
--keep class org.imperiumlabs.geofirestore.GeoFirestore.** { *; }
+#-dontwarn org.imperiumlabs.**
+#-keep class org.imperiumlabs.**
+#-keep interface org.imperiumlabs.**
+#-keep class org.imperiumlabs.geofirestore.GeoFirestore.** { *; }
+
 #firebase
 # Keep custom model classes
 -keep class com.google.firebase.example.fireeats.java.model.** { *; }
@@ -196,5 +197,20 @@ void set*(***);
 *** get*();
 *** is*();
 }
+
+#linechart
+-keep public class com.github.mikephil.charting.animation.* {
+    public protected *;
+    void set*(***);
+    *** get*();
+    *** is*();
+}
+-keep public class com.github.mikephil.** {
+     public protected *;
+     void set*(***);
+     *** get*();
+     *** is*();
+}
+
 -keepattributes *Annotation*, Signature, Exception
 -keepattributes SourceFile, LineNumberTable

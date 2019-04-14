@@ -108,9 +108,6 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".student.homePage.MapsActivity"
-            android:label="@string/title_activity_maps" />
-        <activity
             android:name=".teacher.mentor_settings.AccountSettings"
             android:theme="@style/AppTheme.NoActionBar.transparent.black" />
         <activity
@@ -121,9 +118,6 @@
             android:name=".teacher.mentor_settings.academic.AcademicActivity"
             android:theme="@style/AppTheme.NoActionBar.transparent.black"
             android:windowSoftInputMode="adjustResize" />
-        <activity
-            android:name=".teacher.mentor_settings.LocationPicker"
-            android:label="@string/title_activity_location_picker" />
         <activity
             android:name=".student.profilePage.ProfilePageActivity"
             android:label="@string/title_activity_profile_page"

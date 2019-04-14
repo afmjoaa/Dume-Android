@@ -9,6 +9,8 @@ public interface SplashContract {
     interface View extends AuthGlobalContract.View {
         void foundUpdates();
 
+        void foundErr(String msg);
+
         void gotoLoginActivity();
     }
 

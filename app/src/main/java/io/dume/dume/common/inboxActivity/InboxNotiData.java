@@ -1,9 +1,12 @@
 package io.dume.dume.common.inboxActivity;
 
+import android.support.annotation.Keep;
+
 import java.io.Serializable;
 import java.net.URL;
 import java.util.Date;
 
+@Keep
 public class InboxNotiData implements Serializable {
     public static String RECORD = "record",
             PROMO = "promo",
@@ -20,8 +23,7 @@ public class InboxNotiData implements Serializable {
     String doc_id;
     String token;
     String uid;
-    Date date;
-
+    Date date = new Date();
 
     public Date getTimestapm() {
         return date;

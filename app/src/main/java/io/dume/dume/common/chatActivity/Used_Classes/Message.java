@@ -1,5 +1,7 @@
 package io.dume.dume.common.chatActivity.Used_Classes;
 
+import android.support.annotation.Keep;
+
 import com.stfalcon.chatkit.commons.models.IMessage;
 import com.stfalcon.chatkit.commons.models.MessageContentType;
 
@@ -8,6 +10,7 @@ import java.util.Date;
 /*
  * Created by troy379 on 04.04.17.
  */
+@Keep
 public class Message implements IMessage,
         MessageContentType.Image, /*this is for default image messages implementation*/
         MessageContentType /*and this one is for custom content type (in this case - voice message)*/ {

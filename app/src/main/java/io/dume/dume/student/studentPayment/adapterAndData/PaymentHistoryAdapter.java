@@ -42,18 +42,17 @@ public class PaymentHistoryAdapter extends RecyclerView.Adapter<PaymentHistoryAd
         holder.status.setText(paymentHistory.getStatus());
         switch (paymentHistory.getStatus()) {
             case "Accepted":
-                holder.status.setBackgroundColor(Color.GREEN);
-                holder.status.setTextColor(Color.WHITE);
+                holder.status.setBackgroundColor(context.getResources().getColor(R.color.payment_green));
+                holder.status.setTextColor(Color.BLACK);
                 break;
             case "Rejected":
-                holder.status.setBackgroundColor(Color.RED);
-                holder.status.setTextColor(Color.WHITE);
+                holder.status.setBackgroundColor(context.getResources().getColor(R.color.payment_red));
+                holder.status.setTextColor(Color.BLACK);
 
                 break;
             case "Pending":
                 holder.status.setBackgroundColor(Color.GRAY);
                 holder.status.setTextColor(Color.WHITE);
-
                 break;
         }
         switch (paymentHistory.getPayment_method()) {
@@ -77,7 +76,7 @@ public class PaymentHistoryAdapter extends RecyclerView.Adapter<PaymentHistoryAd
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView date, status, method, amount;
+        carbon.widget.TextView date, status, method, amount;
 
         public MyViewHolder(View itemView) {
             super(itemView);

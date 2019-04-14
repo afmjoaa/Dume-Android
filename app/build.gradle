@@ -19,7 +19,7 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -85,16 +85,15 @@ dependencies {
     implementation 'com.facebook.android:facebook-android-sdk:4.35.0'
     implementation 'com.squareup.okhttp:okhttp:2.7.5'
     implementation 'com.squareup.okhttp:okhttp-urlconnection:1.6.0'
-    implementation 'com.google.firebase:firebase-firestore:18.2.0'
+    //don't update firestore as 18 is still incompatible with geofirestore
+    implementation 'com.google.firebase:firebase-firestore:17.1.5'
     implementation 'com.android.support:multidex:1.0.3'
 
-//    google play services
+    // google play services
     implementation 'com.google.android.gms:play-services-gcm:16.1.0'
     implementation 'com.google.android.gms:play-services-location:16.0.0'
     implementation 'com.google.android.gms:play-services-maps:16.1.0'
     implementation 'com.google.android.gms:play-services-places:16.0.0'
-//    implementation 'com.google.android.gms:play-services-nearby:15.0.1'
-//    implementation 'com.google.android.gms:play-services:12.0.1'
     //for seek bar modification added by joaa
     implementation 'com.github.warkiz.widget:indicatorseekbar:2.0.9'
     implementation 'tk.zielony:carbon:0.15.3'

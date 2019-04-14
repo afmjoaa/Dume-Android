@@ -439,7 +439,6 @@ public class InboxActivity extends CustomStuAppCompatActivity implements InboxAc
                 //nothing to do here
             }
         }*/
-        //enam in upppercase 😄 😂 😄 😂 😄 😂   😄    😂 😄   😂 😄 😂 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             myThisActivity = (InboxActivity) getActivity();

@@ -25,7 +25,6 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
-import com.tomergoldst.tooltips.ToolTip;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,16 +32,13 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.dume.dume.R;
-import io.dume.dume.teacher.adapters.AcademicAdapter;
 import io.dume.dume.teacher.adapters.StatAdapter;
 import io.dume.dume.teacher.homepage.TeacherActivtiy;
 import io.dume.dume.teacher.homepage.TeacherContract;
 import io.dume.dume.teacher.homepage.TeacherDataStore;
-import io.dume.dume.teacher.pojo.Stat;
 import io.dume.dume.util.DumeUtils;
 import io.dume.dume.util.GridSpacingItemDecoration;
 
-@Keep
 public class StatisticsFragment extends Fragment {
     @BindView(R.id.statChart)
     LineChart lineChart;

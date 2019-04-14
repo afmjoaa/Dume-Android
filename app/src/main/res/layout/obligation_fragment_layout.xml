@@ -21,7 +21,7 @@
             android:id="@+id/primary_framelayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/notificationItemColor"
+            android:background="@color/payment_item_bg"
             android:padding="7dp"
             app:carbon_elevation="4dp"
             app:carbon_cornerRadius="5dp">
@@ -94,7 +94,7 @@
                     android:layout_marginTop="6dp"
                     android:layout_marginRight="6dp"
                     android:layout_marginBottom="6dp"
-                    android:background="@color/payment_green"
+                    android:background="@color/payment_green_one"
                     android:paddingLeft="6dp"
                     app:carbon_cornerRadius="5dp"
                     android:paddingTop="5dp"

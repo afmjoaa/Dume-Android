@@ -1,7 +1,10 @@
 package io.dume.dume.student.searchResultTabview;
 
+import android.support.annotation.Keep;
+
 import java.io.Serializable;
 
+@Keep
 public class SearchResultTabData implements Serializable {
 
     String mentorDPUrl;

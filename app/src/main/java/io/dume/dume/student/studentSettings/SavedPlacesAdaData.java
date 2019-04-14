@@ -1,5 +1,7 @@
 package io.dume.dume.student.studentSettings;
 
+import android.support.annotation.Keep;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.firebase.firestore.GeoPoint;
@@ -7,6 +9,7 @@ import com.google.firebase.firestore.GeoPoint;
 import java.io.Serializable;
 
 @JsonIgnoreProperties
+@Keep
 public class SavedPlacesAdaData implements Serializable {
 
     @JsonProperty("primary_text")

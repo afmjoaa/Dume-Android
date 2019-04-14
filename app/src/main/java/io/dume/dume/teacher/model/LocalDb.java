@@ -1,11 +1,14 @@
 package io.dume.dume.teacher.model;
 
+import android.support.annotation.Keep;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Keep
 public class LocalDb {
     private final List<String> categories, innerLevel, innerSchool, innerSchoolBanglaMedium, innerSchoolEnglishMedium,
             innerSchoolBanglaMediumClassOne, innerSchoolBanglaMediumClassTwo, innerSchoolBanglaMediumClassThree,

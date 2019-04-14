@@ -72,9 +72,9 @@ public abstract class RecordsRecyAdapter extends RecyclerView.Adapter<RecordsRec
         Calendar calendar = Calendar.getInstance();
         if (current.getStatus().equals("Pending")) {
             calendar.setTime(current.getDate());
-            String timeFormatted  = null;
+            String timeFormatted = null;
             if (android.text.format.DateFormat.is24HourFormat(context)) {
-                timeFormatted=DateFormatter.format(current.getDate(), DateFormatter.Template.TIME);
+                timeFormatted = DateFormatter.format(current.getDate(), DateFormatter.Template.TIME);
             } else {
                 final int intHour = calendar.get(Calendar.HOUR);
                 final int intMinute = calendar.get(Calendar.MINUTE);
@@ -86,15 +86,16 @@ public abstract class RecordsRecyAdapter extends RecyclerView.Adapter<RecordsRec
                 } else {
                     AM_PM = "PM";
                 }
-                timeFormatted=String.format("%d:%d %s", intHour, intMinute, AM_PM);
+                timeFormatted = String.format("%d:%d %s", intHour, intMinute, AM_PM);
             }
             String dateFormatted = java.text.DateFormat.getDateInstance(java.text.DateFormat.MEDIUM).format(current.getDate().getTime());
             holder.deliveryTime.setText(dateFormatted + " " + timeFormatted);
-        }else{
-            calendar.setTime(current.getModiDate());
-            String timeFormatted  = null;
+        } else {
+
+            calendar.setTime(current.getModiDate() == null ? new Date() : current.getModiDate());
+            String timeFormatted = null;
             if (android.text.format.DateFormat.is24HourFormat(context)) {
-                timeFormatted=DateFormatter.format(current.getModiDate(), DateFormatter.Template.TIME);
+                timeFormatted = DateFormatter.format(current.getModiDate(), DateFormatter.Template.TIME);
             } else {
                 final int intHour = calendar.get(Calendar.HOUR);
                 final int intMinute = calendar.get(Calendar.MINUTE);
@@ -105,7 +106,7 @@ public abstract class RecordsRecyAdapter extends RecyclerView.Adapter<RecordsRec
                 } else {
                     AM_PM = "PM";
                 }
-                timeFormatted=String.format("%d:%d %s", intHour, intMinute, AM_PM);
+                timeFormatted = String.format("%d:%d %s", intHour, intMinute, AM_PM);
             }
             String dateFormatted = java.text.DateFormat.getDateInstance(java.text.DateFormat.MEDIUM).format(current.getModiDate().getTime());
             holder.deliveryTime.setText(dateFormatted + " " + timeFormatted);
