@@ -2,12 +2,14 @@ package io.dume.dume.teacher.homepage;
 
 import android.util.Log;
 import android.view.View;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -101,9 +103,7 @@ public class TeacherPresenter implements TeacherContract.Presenter {
                 String unread_msg = documentSnapshot.getString("unread_msg");
 
 
-
                 view.setUnreadMsg(unread_msg);
-
 
 
                 String unread_noti = documentSnapshot.getString("unread_noti");
@@ -129,6 +129,21 @@ public class TeacherPresenter implements TeacherContract.Presenter {
                     view.showPercentSnackBar(documentSnapshot.getString("pro_com_%"));
                 }
                 listener.onSuccess(null);
+                Map<String, Object> ds = TeacherDataStore.getInstance().getDocumentSnapshot();
+                if (ds != null) {
+                    Map<String, Object> payments = (Map<String, Object>) ds.get("payments");
+                    if (payments != null) {
+                        String totalPaid = (String) payments.get("total_paid");
+                        String obligationAmount = (String) payments.get("obligation_amount");
+                        if (obligationAmount != null && Integer.parseInt(obligationAmount) >= 500) {
+                            if (!view.isDialogShowing()) {
+                                view.showPaymentDialogue();
+                            }
+                        }
+                    }
+                }
+
+
             }
 
             @Override
@@ -148,7 +163,7 @@ public class TeacherPresenter implements TeacherContract.Presenter {
                 Gson gson = new Gson();
                 JsonElement jsonElement = gson.toJsonTree(promo_item);
                 HomePageRecyclerData homePageRecyclerData = gson.fromJson(jsonElement, HomePageRecyclerData.class);
-                if(homePageRecyclerData!= null){
+                if (homePageRecyclerData != null) {
                     view.loadHeadsUpPromo(homePageRecyclerData);
                 }
             }
@@ -190,12 +205,13 @@ public class TeacherPresenter implements TeacherContract.Presenter {
                         view.flush("Does not found any user");
                     }
                 }
+
                 @Override
                 public void onError(String msg) {
                     view.flush(msg);
                 }
             });
-        }else {
+        } else {
             Map<String, Object> documentSnapshot = TeacherDataStore.getInstance().getDocumentSnapshot();
             if (documentSnapshot != null) {
                 ArrayList<String> available_promo = (ArrayList<String>) documentSnapshot.get("available_promo");
@@ -213,6 +229,7 @@ public class TeacherPresenter implements TeacherContract.Presenter {
                         public void onSuccess(HomePageRecyclerData list) {
                             view.loadPromoData(list);
                         }
+
                         @Override
                         public void onError(String msg) {
                             Log.w(TAG, "onError: " + msg);

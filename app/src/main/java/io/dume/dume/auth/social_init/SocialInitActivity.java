@@ -2,8 +2,8 @@ package io.dume.dume.auth.social_init;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Keep;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
@@ -36,10 +36,12 @@ import io.dume.dume.R;
 import io.dume.dume.auth.DataStore;
 import io.dume.dume.auth.auth_final.AuthRegisterActivity;
 import io.dume.dume.customView.HorizontalLoadView;
+import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
 
 import static io.dume.dume.util.DumeUtils.configureAppbar;
 
-public class SocialInitActivity extends AppCompatActivity {
+@Keep
+public class SocialInitActivity extends CustomStuAppCompatActivity {
 
     FirebaseAuth mAuth;
     GoogleSignInClient mGoogleSignInClient;
@@ -52,7 +54,6 @@ public class SocialInitActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        mAuth.addAuthStateListener(mAuthListener);
     }
 
     @Override
@@ -60,19 +61,27 @@ public class SocialInitActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_social_init);
         configureAppbar(this, "Choose an account", true);
+        setActivityContext(this, 1607);
         loadView = findViewById(R.id.loadView);
         init();
         mAuthListener = new FirebaseAuth.AuthStateListener() {
+
+            private String[] splited;
+
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
+
                 if (user != null) {
                     Toast.makeText(SocialInitActivity.this, "success", Toast.LENGTH_SHORT).show();
                     String str = user.getDisplayName();
-                    String[] splited = str.split(" ");
+                    if (str != null) {
+                        splited = str.split(" ");
+                    }
+
                     dataStore.setEmail(user.getEmail());
-                    dataStore.setFirstName(splited[0]);
-                    dataStore.setLastName(splited[1]);
+                    dataStore.setFirstName(splited[0]== null ? "" : splited[0]);
+                    dataStore.setLastName(splited[1] == null ? "" : splited[1]);
                     dataStore.setPhoneNumber(user.getPhoneNumber());
                     dataStore.setPhotoUri(Objects.requireNonNull(user.getPhotoUrl()).toString());
 
@@ -80,9 +89,11 @@ public class SocialInitActivity extends AppCompatActivity {
                     passToNextActivity();
                 } else {
                     // doing nothing here no
+                    //Toast.makeText(context, "No User Found...", Toast.LENGTH_SHORT).show();
                 }
             }
         };
+        mAuth.addAuthStateListener(mAuthListener);
     }
 
 
@@ -96,9 +107,11 @@ public class SocialInitActivity extends AppCompatActivity {
             try {
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = task.getResult(ApiException.class);
+
                 firebaseAuthWithGoogle(account);
             } catch (ApiException e) {
                 hideProgress();
+              //  Toast.makeText(context, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                 //  Log.w("Tag", "Google sign in failed due to canceling", e);
             }
         }
@@ -107,6 +120,7 @@ public class SocialInitActivity extends AppCompatActivity {
         mCallbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
+    @Keep
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
 
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
@@ -115,7 +129,7 @@ public class SocialInitActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-//                            Log.d("Tag", "signInWithCredential:success");
+                          //  Toast.makeText(context, "Auth Complete Called", Toast.LENGTH_LONG).show();
                         } else {
                             hideProgress();
 //                            Log.w("Tag", "signInWithCredential:failure", task.getException());
@@ -127,6 +141,7 @@ public class SocialInitActivity extends AppCompatActivity {
     }
 
     //    facebook success error methods
+    @Keep
     private void handleFacebookAccessToken(AccessToken token) {
 
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
@@ -147,6 +162,7 @@ public class SocialInitActivity extends AppCompatActivity {
     }
 
     //################################## My part enqueue here###########################
+    @Keep
     private void init() {
         dataStore = DataStore.getInstance();
         // google initialization part
@@ -197,8 +213,9 @@ public class SocialInitActivity extends AppCompatActivity {
 
     }
 
+    @Keep
     public void passToNextActivity() {
-        Intent intent = new Intent(getApplicationContext(), AuthRegisterActivity.class);
+        Intent intent = new Intent(this, AuthRegisterActivity.class);
         intent.putExtra("datastore", dataStore);
         startActivity(intent);
         hideProgress();

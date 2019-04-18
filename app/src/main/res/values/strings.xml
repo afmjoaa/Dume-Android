@@ -569,8 +569,8 @@ provided.Tap salary for details.  </string>
     <string name="set_default">Set default</string>
 
     <string-array name="primaryPromoText">
-        <item>Affortable nearby couching-centers specific to the topic</item>
-        <item>Affortable nearby monthly mentors specific to the topic</item>
+        <item>Affordable nearby couching-centers specific to the topic</item>
+        <item>Affordable nearby monthly mentors specific to the topic</item>
         <item>Professional weekly mentors specific to the topic</item>
     </string-array>
 

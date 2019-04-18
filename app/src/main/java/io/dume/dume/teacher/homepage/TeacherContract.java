@@ -46,6 +46,10 @@ public interface TeacherContract {
 
         void showSnackBar(String messages, String actionName);
 
+        boolean isDialogShowing();
+
+        void showPaymentDialogue();
+
         //testing the customDialogue
         void testingCustomDialogue(HomePageRatingData myData, Record record);
 

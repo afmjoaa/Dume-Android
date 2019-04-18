@@ -98,7 +98,7 @@ public class TeacherModel extends HomePageModel implements TeacherContract.Model
                             if (i == 30) {
                                 entries.add(new Entry(i, Float.parseFloat(teacherDataStore.getTodayStatList().get(0).getRequest_i())));
                                 entries1.add(new Entry(i, Float.parseFloat(teacherDataStore.getTodayStatList().get(0).getRequest_r())));
-                            }else if (i >= (30 - stat.size())) {
+                            } else if (i >= (30 - stat.size())) {
                                 entries.add(new Entry(i, Float.parseFloat(stat.get(flag).getRequest_i())));
                                 entries1.add(new Entry(i, Float.parseFloat(stat.get(flag).getRequest_r())));
                                 flag--;
@@ -196,5 +196,20 @@ public class TeacherModel extends HomePageModel implements TeacherContract.Model
                 listener.onError("Network error !!");
             }
         });
+    }
+
+    public void toggleObligation(boolean status, Listener<Void> listener) {
+        String uid = firebaseAuth.getUid();
+        if (uid != null) {
+            firestore.collection("mini_users").document(uid).update("obligation", status).addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    listener.onSuccess(aVoid);
+                }
+            }).addOnFailureListener(e -> listener.onError("Error : " + e.getLocalizedMessage()));
+        } else {
+            listener.onError("Session Expired. Please log in");
+        }
+
     }
 }

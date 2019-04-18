@@ -89,6 +89,7 @@ import io.dume.dume.Google;
 import io.dume.dume.R;
 import io.dume.dume.bootCamp.bootCampHomePage.BootCampHomePageActivity;
 import io.dume.dume.common.aboutUs.AboutUsActivity;
+import io.dume.dume.common.bkash_transection.BkashTransectionActivity;
 import io.dume.dume.common.chatActivity.DemoModel;
 import io.dume.dume.common.inboxActivity.InboxActivity;
 import io.dume.dume.common.privacyPolicy.PrivacyPolicyActivity;
@@ -230,6 +231,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
     private Button freeCashBack;
     private Button startLearingBtn;
     private SharedPreferences sharedPreferences;
+    private Dialog paymentDialog;
 
 
     @Override
@@ -237,6 +239,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         Log.w(TAG, "loadPromoData: ");
         hPageBSRcyclerAdapter.addPromoToList(promoData);
     }
+
 
     @Override
     public void loadHeadsUpPromo(HomePageRecyclerData promoData) {
@@ -468,6 +471,23 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
     @Override
     protected void onResume() {
         super.onResume();
+
+        Map<String, Object> documentSnapshot = TeacherDataStore.getInstance().getDocumentSnapshot();
+        if (documentSnapshot != null) {
+            Map<String, Object> payments = (Map<String, Object>) documentSnapshot.get("payments");
+            if (payments != null) {
+                String totalPaid = (String) payments.get("total_paid");
+                String obligationAmount = (String) payments.get("obligation_amount");
+                if (obligationAmount != null && Integer.parseInt(obligationAmount) >= 500) {
+                    if (!isDialogShowing()) {
+                        showPaymentDialogue();
+
+                    }
+                }
+            }
+        }
+
+
         sharedPreferences = context.getSharedPreferences(UNREAD_MESSAGE, MODE_PRIVATE);
         updateChatBadge(sharedPreferences.getInt("unread", 0));
         switch (viewPager.getCurrentItem()) {
@@ -1134,6 +1154,74 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         }
     }
 
+    @Override
+    public boolean isDialogShowing() {
+        if (paymentDialog != null) {
+            return paymentDialog.isShowing();
+        } else return false;
+    }
+
+
+    @Override
+    public void showPaymentDialogue() {
+        paymentDialog = new Dialog(context);
+        paymentDialog.setContentView(R.layout.payment_dialogue);
+        paymentDialog.setCanceledOnTouchOutside(false);
+        TextView primaryText = paymentDialog.findViewById(R.id.rating_primary_text);
+        TextView subText = paymentDialog.findViewById(R.id.sub_text);
+        Button bkashTransection = paymentDialog.findViewById(R.id.bkashTransection);
+        primaryText.setText("Dear " + TeacherDataStore.getInstance().gettUserName() + ", it's time to pay...");
+        subText.setText("You have crossed your threshold(500 ৳) obligation. Please pay your due obligation to continue uninterrupted dume service... ");
+        TextView obligationAmountTV = paymentDialog.findViewById(R.id.afterDiscount);
+        TextView totalPaidTV = paymentDialog.findViewById(R.id.afterDiscount_one);
+
+        Map<String, Object> payments = (Map<String, Object>) TeacherDataStore.getInstance().getDocumentSnapshot().get("payments");
+        if (payments != null) {
+            String totalPaid = (String) payments.get("total_paid");
+            String obligationAmount = (String) payments.get("obligation_amount");
+            if (obligationAmount != null && totalPaid != null) {
+                obligationAmountTV.setText(Integer.parseInt(obligationAmount) + " ৳");
+                totalPaidTV.setText(totalPaid + " ৳");
+                if (Integer.parseInt(obligationAmount) >= 1000) {
+                    if (!Google.getInstance().isObligation()) {
+                        model.toggleObligation(true, new TeacherContract.Model.Listener<Void>() {
+                            @Override
+                            public void onSuccess(Void list) {
+                                //handled already
+                            }
+
+                            @Override
+                            public void onError(String msg) {
+                                //handled already
+                            }
+                        });
+                    }
+                    paymentDialog.setCancelable(false);
+                    paymentDialog.setCanceledOnTouchOutside(false);
+                    if (!buttonActive.isChecked()) {
+                        buttonInActive.setChecked(true);
+                    }
+                } else {
+                    paymentDialog.setCancelable(true);
+                    paymentDialog.setCanceledOnTouchOutside(true);
+
+                }
+            }
+
+        }
+
+
+        bkashTransection.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(), BkashTransectionActivity.class));
+            }
+        });
+        paymentDialog.show();
+
+
+    }
+
     //testing the customDialogue
     @Override
     public void testingCustomDialogue(HomePageRatingData myData, Record record) {
@@ -1208,6 +1296,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
                 }
             }
         });
+
 
         SubmitBtn.setOnClickListener(new View.OnClickListener() {
             @Override

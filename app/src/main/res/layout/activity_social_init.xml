@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/parent_coor_layout"
     tools:context=".auth.social_init.SocialInitActivity">
 
     <android.support.design.widget.AppBarLayout
