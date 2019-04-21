@@ -117,13 +117,14 @@ public class CusStuAppComMapActivity extends CustomStuAppCompatActivity implemen
     private CameraPosition cameraPosition;
     private int time;
     private long delayTime = 100L;
-    private static final LatLngBounds LAT_LNG_BOUNDS = new LatLngBounds(new LatLng(19, 87), new LatLng(27, 93));
+    private static LatLngBounds LAT_LNG_BOUNDS = new LatLngBounds(new LatLng(19, 87), new LatLng(27, 93));
 
 
     public void setActivityContextMap(Context context, int i) {
         setActivityContext(context, i);
         this.context = context;
         this.activity = (Activity) context;
+        LAT_LNG_BOUNDS = new LatLngBounds(new LatLng(19, 87), new LatLng(27, 93));
         try {
             myGpsLocationChangeListener = (MyGpsLocationChangeListener) context;
         } catch (ClassCastException e) {
