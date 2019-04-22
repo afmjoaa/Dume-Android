@@ -1,5 +1,6 @@
 package io.dume.dume.teacher.homepage;
 
+import android.content.Context;
 import android.view.View;
 
 import com.github.mikephil.charting.data.Entry;
@@ -25,6 +26,8 @@ public interface TeacherContract {
         void loadPromoData(HomePageRecyclerData promoData);
 
         void loadHeadsUpPromo(HomePageRecyclerData promoData);
+
+        Context getContext();
 
         void updateBadge(String badgeNumber);
 

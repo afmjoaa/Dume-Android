@@ -595,7 +595,7 @@ public class DumeUtils {
 
     public static List<Record> filterRecord(List<Record> list, String identifier) {
         List<Record> returnList = new ArrayList<>();
-        if(list!= null){
+        if (list != null) {
             for (int i = 0; i < list.size(); i++) {
                 Record record = list.get(i);
                 if (identifier.equals(record.getStatus())) {
@@ -720,7 +720,7 @@ public class DumeUtils {
     private static Button confirmNoBtn;
 
 
-    public static void notifyDialog(Context context, boolean hideBtn , boolean cancelable, String title, String body, String positiveString, TeacherContract.Model.Listener<Boolean> listener) {
+    public static void notifyDialog(Context context, boolean hideBtn, boolean cancelable, String title, String body, String positiveString, TeacherContract.Model.Listener<Boolean> listener) {
         mMakeRequestBSD = new BottomSheetDialog(context);
         cancelsheetRootView = LayoutInflater.from(context).inflate(R.layout.custom_bottom_sheet_dialogue_cancel, null);
         mMakeRequestBSD.setContentView(cancelsheetRootView);
@@ -750,15 +750,22 @@ public class DumeUtils {
                 }
             });
             confirmNoBtn.setText("No");
+<<<<<<< HEAD
             setMargins(confirmNoBtn,0,0, (int) (10*context.getResources().getDisplayMetrics().density), (int) (4*context.getResources().getDisplayMetrics().density));
             if(hideBtn){
                 comfirmYesBtn.setVisibility(View.GONE);
                 confirmNoBtn.setTextColor(context.getResources().getColor(R.color.percent_off_active_color));
                 setMargins(confirmNoBtn,0,0,0, (int) (4*context.getResources().getDisplayMetrics().density));
                 confirmNoBtn.setText("Retry");
+=======
+            if (hideBtn) {
+                comfirmYesBtn.setVisibility(View.GONE);
+                confirmNoBtn.setTextColor(context.getResources().getColor(R.color.percent_off_active_color));
+                confirmNoBtn.setText(positiveString);
+>>>>>>> f965007727289a7f53fa0044beb75a1379a6c575
             }
             mMakeRequestBSD.show();
-            mMakeRequestBSD.setCancelable(false);
+            mMakeRequestBSD.setCancelable(cancelable);
             mMakeRequestBSD.setCanceledOnTouchOutside(false);
         }
     }

@@ -11,6 +11,8 @@ import io.dume.dume.auth.DataStore;
 
 public interface AuthContract {
     interface View extends AuthGlobalContract.View {
+        boolean isAccountDefined();
+
         void init();
 
         void initActionBar();

@@ -236,6 +236,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
     private Dialog paymentDialog;
     private static String FACEBOOK_URL = "https://www.facebook.com/groups/1623868617935891/";
     private static String FACEBOOK_PAGE_ID = "1623868617935891";
+    public static boolean ISSKILLDIALOGSHOWING = false;
 
     @Override
     public void loadPromoData(HomePageRecyclerData promoData) {
@@ -278,6 +279,11 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         headerTab.setBackground(getResources().getDrawable(R.drawable.bg_white_bottom_round_6));
         promotionTextView.setText(discount + "% off " + packageName);
         promotionExpireDate.setText(dayLeft);
+    }
+
+    @Override
+    public Context getContext() {
+        return this;
     }
 
     @Override
@@ -503,13 +509,17 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
             case 3:
                 break;
             case 4:
+
                 SkillFragment skillFragment = SkillFragment.getInstance();
                 ArrayList<Skill> skillArrayList = TeacherDataStore.getInstance().getSkillArrayList();
                 if (skillArrayList != null) {
+
+
                     skillFragment.skillAdapter = new SkillAdapter(TeacherActivtiy.this, SkillAdapter.FRAGMENT, skillFragment.itemWidth, teacherDataStore.getSkillArrayList());
                     skillFragment.skillRV.setAdapter(skillFragment.skillAdapter);
                     if (skillArrayList.size() == 0) {
                         skillFragment.noDataBlock.setVisibility(View.VISIBLE);
+
                     } else {
                         skillFragment.noDataBlock.setVisibility(View.GONE);
                     }

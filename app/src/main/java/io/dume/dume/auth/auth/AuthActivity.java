@@ -23,6 +23,7 @@ import android.text.Editable;
 import android.text.SpannableString;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -73,6 +74,8 @@ public class AuthActivity extends CustomStuAppCompatActivity implements AuthCont
     private Intent fromIntent;
     private String fromIntentAction;
     private DataStore dataStore;
+    private boolean isAccountDefined = false;
+    private int accountDefinedFlag = 0;
 
 
     @Override
@@ -121,6 +124,10 @@ public class AuthActivity extends CustomStuAppCompatActivity implements AuthCont
         });
     }
 
+    @Override
+    public boolean isAccountDefined() {
+        return isAccountDefined;
+    }
 
     @Override
     public void init() {
@@ -129,7 +136,6 @@ public class AuthActivity extends CustomStuAppCompatActivity implements AuthCont
         changingTextArray = getResources().getStringArray(R.array.changing_text_array);
         sliderLayout.setCustomIndicator(findViewById(R.id.page_indicator));
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
-        bottomNavigationView.setSelectedItemId(R.id.student_nav);
         phoneEditText.setOnEditorActionListener(this);
         appBar.addOnOffsetChangedListener(new AppbarStateChangeListener() {
             @Override
@@ -195,6 +201,8 @@ public class AuthActivity extends CustomStuAppCompatActivity implements AuthCont
         changingTextView = findViewById(R.id.changingText);
         socialConnect = findViewById(R.id.socialConnect);
         loadView = findViewById(R.id.loadView);
+        bottomNavigationView.setItemIconTintList(getResources().getColorStateList(R.drawable.color_state_list_pre));
+        bottomNavigationView.setItemTextColor(getResources().getColorStateList(R.drawable.color_state_list_pre));
 
     }
 
@@ -307,8 +315,11 @@ public class AuthActivity extends CustomStuAppCompatActivity implements AuthCont
     }
 
     @Override
-    public void showToast(String toast) {
-        Toast.makeText(this, toast, Toast.LENGTH_SHORT).show();
+    public void showToast(String msg) {
+        Toast toast = Toast.makeText(this, msg, Toast.LENGTH_SHORT);
+        TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
+        if( v != null) v.setGravity(Gravity.CENTER);
+        toast.show();
     }
 
     @Override
@@ -320,10 +331,14 @@ public class AuthActivity extends CustomStuAppCompatActivity implements AuthCont
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        isAccountDefined = true;
+        bottomNavigationView.setItemIconTintList(getResources().getColorStateList(R.drawable.color_state_list));
+        bottomNavigationView.setItemTextColor(getResources().getColorStateList(R.drawable.color_state_list));
+
         switch (item.getItemId()) {
             case R.id.bootcamp_nav:
                 showToast("Boot Camp Service is coming soon...");
-                bottomNavigationView.setSelectedItemId(1);
+                bottomNavigationView.setSelectedItemId(R.id.teacher_nav);
                 return false;
             default:
                 presenter.onBottomNavChange(item);
