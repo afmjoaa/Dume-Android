@@ -86,6 +86,8 @@ public class DumeModel extends HomePageModel implements TeacherModel {
             @Override
             public void onFailure(@NonNull Exception e) {
                 listener.onError(e.getLocalizedMessage());
+
+
             }
         });
     }
