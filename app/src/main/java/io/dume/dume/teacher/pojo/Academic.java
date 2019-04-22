@@ -1,7 +1,10 @@
 package io.dume.dume.teacher.pojo;
 
+import android.support.annotation.Keep;
+
 import java.io.Serializable;
 
+@Keep
 public class Academic implements Serializable {
 
     String institute;

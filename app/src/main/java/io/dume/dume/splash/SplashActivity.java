@@ -45,12 +45,11 @@ public class SplashActivity extends AppCompatActivity implements SplashContract.
         makeFullScreen(this);
         presenter.init(this);
 
-
     }
 
     @Override
     public void foundUpdates() {
-        DumeUtils.notifyDialog(this, false, "Mandatory Update", updateDescription, "Update", new TeacherContract.Model.Listener<Boolean>() {
+        DumeUtils.notifyDialog(this, false,false, "Mandatory Update", updateDescription, "Update", new TeacherContract.Model.Listener<Boolean>() {
             @Override
             public void onSuccess(Boolean yes) {
                 if (yes) {
@@ -71,9 +70,25 @@ public class SplashActivity extends AppCompatActivity implements SplashContract.
                 Log.w(TAG, "onError: " + msg);
             }
         });
-
     }
 
+    @Override
+    public void foundErr(String msg){
+        DumeUtils.notifyDialog(this, true,false, "No Internet...", msg, "Retry", new TeacherContract.Model.Listener<Boolean>() {
+            @Override
+            public void onSuccess(Boolean yes) {
+                //already handled
+                presenter.enqueue();
+            }
+
+            @Override
+            public void onError(String msg) {
+                //already handled
+                Toast.makeText(SplashActivity.this, "Something went wrong...", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
 
     @Override
     public void gotoLoginActivity() {

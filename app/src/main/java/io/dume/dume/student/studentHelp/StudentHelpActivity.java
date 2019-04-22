@@ -299,15 +299,14 @@ public class StudentHelpActivity extends CustomStuAppCompatActivity implements S
             });
             submitBTN.setOnClickListener(view -> {
                 submitBTN.setEnabled(false);
-
                 myMainActivity.showProgress();
-                if (!queryTextView.getText().toString().equals("")) {
+                if (queryTextView.getText() != null && !queryTextView.getText().toString().equals("")) {
                     dumeModel.reportIssue(Google.getInstance().getAccountMajor().equals(DumeUtils.STUDENT) ? SearchDataStore.getInstance().getUserMail() : TeacherDataStore.getInstance().gettUserMail(), queryTextView.getText().toString(), new TeacherContract.Model.Listener<Void>() {
                         @Override
                         public void onSuccess(Void list) {
                             submitBTN.setEnabled(true);
-
-                            Toast.makeText(myMainActivity, "Your message is sent to Dume authority. You will be notified by your email : " + SearchDataStore.getInstance().getUserMail(), Toast.LENGTH_LONG).show();
+                            String email = Google.getInstance().getAccountMajor().equals(DumeUtils.STUDENT) ? SearchDataStore.getInstance().getUserMail() : TeacherDataStore.getInstance().gettUserMail();
+                            Toast.makeText(myMainActivity, "Your message is sent to Dume authority. You will be notified by your email : " + email, Toast.LENGTH_LONG).show();
                             myMainActivity.hideProgress();
                         }
 
@@ -318,6 +317,10 @@ public class StudentHelpActivity extends CustomStuAppCompatActivity implements S
                             submitBTN.setEnabled(true);
                         }
                     });
+                }else{
+                    submitBTN.setEnabled(true);
+                    myMainActivity.hideProgress();
+                    queryTextView.setError("Please fill in your query...");
                 }
                 queryTextView.getText().clear();
             });

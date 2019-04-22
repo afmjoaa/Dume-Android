@@ -1,7 +1,10 @@
 package io.dume.dume.student.grabingLocation;
 
+import android.support.annotation.Keep;
+
 import com.google.firebase.firestore.GeoPoint;
 
+@Keep
 public class MenualRecyclerData {
     String primaryText;
     String secondaryText;

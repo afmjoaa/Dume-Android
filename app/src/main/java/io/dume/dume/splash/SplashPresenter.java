@@ -80,7 +80,7 @@ public class SplashPresenter implements SplashContract.Presenter {
 
                             @Override
                             public void onFail(String exeption) {
-
+                                view.foundErr(exeption);
                             }
                         });
 
@@ -93,6 +93,7 @@ public class SplashPresenter implements SplashContract.Presenter {
 
             @Override
             public void onError(String msg) {
+                view.foundErr(msg);
                 Log.w(TAG, "onError: "+msg );
             }
         });

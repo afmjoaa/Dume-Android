@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.annotation.Keep;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -24,7 +25,6 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
-import com.tomergoldst.tooltips.ToolTip;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,12 +32,10 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.dume.dume.R;
-import io.dume.dume.teacher.adapters.AcademicAdapter;
 import io.dume.dume.teacher.adapters.StatAdapter;
 import io.dume.dume.teacher.homepage.TeacherActivtiy;
 import io.dume.dume.teacher.homepage.TeacherContract;
 import io.dume.dume.teacher.homepage.TeacherDataStore;
-import io.dume.dume.teacher.pojo.Stat;
 import io.dume.dume.util.DumeUtils;
 import io.dume.dume.util.GridSpacingItemDecoration;
 

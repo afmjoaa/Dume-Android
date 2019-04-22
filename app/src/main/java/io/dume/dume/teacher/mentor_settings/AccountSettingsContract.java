@@ -29,10 +29,6 @@ public interface AccountSettingsContract {
 
         void editAccount();
 
-        void addLocation();
-
-        void updateLocation();
-
         void initJoaaRV();
 
         void updateUserInfo(Map<String, Object> data);

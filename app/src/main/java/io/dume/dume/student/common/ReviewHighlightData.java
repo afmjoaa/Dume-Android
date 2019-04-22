@@ -1,11 +1,11 @@
 package io.dume.dume.student.common;
 
-import android.net.Uri;
+import android.support.annotation.Keep;
 
 import java.io.Serializable;
-import java.net.URL;
 import java.util.Date;
 
+@Keep
 public class ReviewHighlightData implements Serializable {
     public String name;
     public String body;

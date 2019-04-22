@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/dialog_hosting_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_round_corner_rela_layout"
     android:paddingBottom="16dp">
 
-
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-
+    <LinearLayout
         android:id="@+id/hostRelativeLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -16,52 +15,60 @@
         android:clickable="true"
         android:focusable="true"
         android:visibility="gone"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="4dp"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"
+        android:layout_marginStart="6dp"
+        android:layout_marginEnd="6dp"
         android:foreground="?android:attr/selectableItemBackground">
 
         <TextView
             android:id="@+id/dateTV"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:layout_weight="1"
             android:gravity="center"
+            android:paddingTop="3dp"
+            android:paddingBottom="3dp"
+            android:background="@drawable/bg_rating_tittle"
             android:text="Date" />
 
         <TextView
             android:id="@+id/amountTV"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:layout_toRightOf="@id/dateTV"
-
+            android:paddingTop="3dp"
+            android:paddingBottom="3dp"
             android:layout_weight="1"
+            android:background="@drawable/bg_rating_tittle"
             android:gravity="center"
-
             android:text="Amount" />
 
         <TextView
             android:id="@+id/statusTV"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:layout_toRightOf="@id/amountTV"
-
             android:layout_weight="1"
+            android:paddingTop="3dp"
+            android:paddingBottom="3dp"
+            android:background="@drawable/bg_rating_tittle"
             android:gravity="center"
-
             android:text="Status" />
 
         <TextView
             android:id="@+id/methodTV"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
-            android:layout_centerInParent="true"
             android:layout_margin="5dp"
-
-            android:layout_toRightOf="@id/statusTV"
             android:layout_weight="1"
             android:gravity="center"
+            android:paddingTop="3dp"
+            android:paddingBottom="3dp"
+            android:background="@drawable/bg_rating_tittle"
             android:text="Method" />
 
     </LinearLayout>
@@ -72,13 +79,32 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/hostRelativeLayout" />
 
-    <TextView
-        android:id="@+id/notFoundTV"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:visibility="gone"
-        android:text="No Payment History Found" />
+    <LinearLayout
+        android:id="@+id/no_data_block"
+        android:layout_width="match_parent"
+        android:layout_height="320dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <carbon.widget.ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:carbon_elevation="3dp"
+            app:srcCompat="@drawable/no_data_wallpaper" />
+
+        <TextView
+            android:id="@+id/no_item_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Sorry, no promotion to show right now ..."
+            android:textAlignment="center"
+            android:textAllCaps="false"
+            android:textColor="@color/textColorSecondary"
+            android:textSize="16sp" />
+
+    </LinearLayout>
 
 
 </RelativeLayout>

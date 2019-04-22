@@ -1,5 +1,6 @@
 package io.dume.dume.teacher.homepage;
 
+import android.content.Context;
 import android.view.View;
 
 import com.github.mikephil.charting.data.Entry;
@@ -26,6 +27,8 @@ public interface TeacherContract {
 
         void loadHeadsUpPromo(HomePageRecyclerData promoData);
 
+        Context getContext();
+
         void updateBadge(String badgeNumber);
 
         void init();
@@ -45,6 +48,10 @@ public interface TeacherContract {
         void enhanceVIewImageClicked();
 
         void showSnackBar(String messages, String actionName);
+
+        boolean isDialogShowing();
+
+        void showPaymentDialogue();
 
         //testing the customDialogue
         void testingCustomDialogue(HomePageRatingData myData, Record record);

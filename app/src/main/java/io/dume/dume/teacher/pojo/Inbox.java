@@ -1,7 +1,9 @@
 package io.dume.dume.teacher.pojo;
 
-import java.io.Serializable;
+import android.support.annotation.Keep;
 
+import java.io.Serializable;
+@Keep
 public class Inbox implements Serializable {
     private boolean unread;
     private String title;

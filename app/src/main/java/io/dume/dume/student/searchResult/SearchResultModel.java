@@ -48,26 +48,32 @@ public class SearchResultModel extends StuBaseModel implements SearchResultContr
     @Override
     public void riseNewRecords(Map<String, Object> data, boolean penaltyChanged, TeacherContract.Model.Listener<DocumentReference> listener) {
 
-        if(penaltyChanged){
+        if (penaltyChanged) {
             Map<String, Object> map = new HashMap<>();
             Number penaltyValue = 0;
             map.put("penalty", penaltyValue);
-            updateStuProfile(map, new usefulListeners.uploadToDBListerer() {
-                @Override
-                public void onSuccessDB(Object obj) {
-                    firestore.collection("records").add(data).addOnSuccessListener((Activity) context, documentReference -> {
-                        listener.onSuccess(documentReference);
-                    }).addOnFailureListener(e -> {
-                        listener.onError(e.getLocalizedMessage());
-                    });
-                }
+            Number currentPenalty = (Number) SearchDataStore.getInstance().getDocumentSnapshot().get("penalty");
+            Map<String, Object> payments = (Map<String, Object>) SearchDataStore.getInstance().getDocumentSnapshot().get("payments");
+            String penalty_paid = (String) payments.get("penalty_paid");
 
-                @Override
-                public void onFailDB(Object obj) {
-                    listener.onError(obj.toString());
-                }
-            });
-        }else {
+
+            map.put("payments.penalty_paid", currentPenalty == null ? Integer.parseInt(penalty_paid) + 0 + "": Integer.parseInt(penalty_paid)+currentPenalty.intValue()+"");
+                    updateStuProfile(map, new usefulListeners.uploadToDBListerer() {
+                        @Override
+                        public void onSuccessDB(Object obj) {
+                            firestore.collection("records").add(data).addOnSuccessListener((Activity) context, documentReference -> {
+                                listener.onSuccess(documentReference);
+                            }).addOnFailureListener(e -> {
+                                listener.onError(e.getLocalizedMessage());
+                            });
+                        }
+
+                        @Override
+                        public void onFailDB(Object obj) {
+                            listener.onError(obj.toString());
+                        }
+                    });
+        } else {
             firestore.collection("records").add(data).addOnSuccessListener((Activity) context, documentReference -> {
                 listener.onSuccess(documentReference);
             }).addOnFailureListener(e -> {
@@ -96,9 +102,9 @@ public class SearchResultModel extends StuBaseModel implements SearchResultContr
             notificationManager.createNotificationChannel(channel1);
         }
 
-        Intent intent = new Intent(context,HomePageActivity.class);
+        Intent intent = new Intent(context, HomePageActivity.class);
         Random generator = new Random();
-        PendingIntent resultPendingIntent=PendingIntent.getActivity(context, generator.nextInt(), intent,PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent resultPendingIntent = PendingIntent.getActivity(context, generator.nextInt(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
         //TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
         //stackBuilder.addParentStack(HomePageActivity.class);
         //PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -122,7 +128,7 @@ public class SearchResultModel extends StuBaseModel implements SearchResultContr
         if (notificationManager != null) {
             notificationManager.notify(notification_id, builder.build());
             listener.onSuccess(null);
-        }else {
+        } else {
             listener.onError("Error!!");
         }
     }
@@ -149,19 +155,19 @@ public class SearchResultModel extends StuBaseModel implements SearchResultContr
                             Integer dailyImpression = Integer.parseInt(document.getString("daily_i"));
                             Integer dailyRequest = Integer.parseInt(document.getString("daily_r"));
                             Integer pendingCount = Integer.parseInt(unreadRecords.get("pending_count").toString());
-                            pendingCount = pendingCount+1;
-                            dailyImpression = dailyImpression+1;
+                            pendingCount = pendingCount + 1;
+                            dailyImpression = dailyImpression + 1;
                             dailyRequest = dailyRequest + 1;
-                            if(requestUid!= null && requestUid == imprssionUid.get(finalI)){
-                                batch.update(mentorDocRef, "daily_i", dailyImpression.toString(), "daily_r", dailyRequest.toString(), "unread_records.pending_count",pendingCount.toString());
+                            if (requestUid != null && requestUid == imprssionUid.get(finalI)) {
+                                batch.update(mentorDocRef, "daily_i", dailyImpression.toString(), "daily_r", dailyRequest.toString(), "unread_records.pending_count", pendingCount.toString());
 
-                                DocumentReference studentProfile =firestore.collection("/users/students/stu_pro_info").document(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                                DocumentReference studentProfile = firestore.collection("/users/students/stu_pro_info").document(FirebaseAuth.getInstance().getCurrentUser().getUid());
                                 Map<String, Object> myDocumentSnap = SearchDataStore.getInstance().getDocumentSnapshot();
                                 Map<String, Object> myUnreadRecords = (Map<String, Object>) myDocumentSnap.get("unread_records");
                                 Integer myPendingCount = Integer.parseInt(myUnreadRecords.get("pending_count").toString());
-                                myPendingCount = myPendingCount+1;
-                                batch.update(studentProfile,  "unread_records.pending_count",myPendingCount.toString());
-                            }else{
+                                myPendingCount = myPendingCount + 1;
+                                batch.update(studentProfile, "unread_records.pending_count", myPendingCount.toString());
+                            } else {
                                 batch.update(mentorDocRef, "daily_i", dailyImpression.toString());
                             }
                             flag++;

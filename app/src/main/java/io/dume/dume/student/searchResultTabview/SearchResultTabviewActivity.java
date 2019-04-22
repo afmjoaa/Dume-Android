@@ -457,5 +457,4 @@ public class SearchResultTabviewActivity extends CustomStuAppCompatActivity impl
         });
         dialog.show();
     }
-
 }

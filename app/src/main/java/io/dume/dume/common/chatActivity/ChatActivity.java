@@ -206,7 +206,7 @@ public class ChatActivity extends DemoMessagesActivity implements ChatActivityCo
                     noDataBlock.setVisibility(View.GONE);
                 }
 
-                mModel.onInboxChange(new TeacherContract.Model.Listener<Letter>() {
+                mModel.onInboxChange(-1,new TeacherContract.Model.Listener<Letter>() {
                     @Override
                     public void onSuccess(Letter letter) {
                         if (letter.getUid().equals(FirebaseAuth.getInstance().getUid())) {

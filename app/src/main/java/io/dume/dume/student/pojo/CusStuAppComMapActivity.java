@@ -117,13 +117,14 @@ public class CusStuAppComMapActivity extends CustomStuAppCompatActivity implemen
     private CameraPosition cameraPosition;
     private int time;
     private long delayTime = 100L;
-    private static final LatLngBounds LAT_LNG_BOUNDS = new LatLngBounds(new LatLng(19, 87), new LatLng(27, 93));
+    private static LatLngBounds LAT_LNG_BOUNDS = new LatLngBounds(new LatLng(19, 87), new LatLng(27, 93));
 
 
     public void setActivityContextMap(Context context, int i) {
         setActivityContext(context, i);
         this.context = context;
         this.activity = (Activity) context;
+        LAT_LNG_BOUNDS = new LatLngBounds(new LatLng(19, 87), new LatLng(27, 93));
         try {
             myGpsLocationChangeListener = (MyGpsLocationChangeListener) context;
         } catch (ClassCastException e) {
@@ -548,14 +549,14 @@ public class CusStuAppComMapActivity extends CustomStuAppCompatActivity implemen
                         .addOnSuccessListener(new OnSuccessListener<Location>() {
                             @Override
                             public void onSuccess(Location location) {
-                                CameraPosition cameraPosition = new CameraPosition.Builder()
-                                        .target(new LatLng(location.getLatitude(), location.getLongitude()))
-                                        .zoom(zoomOne)
-                                        .bearing(0)
-                                        .tilt(0)
-                                        .build();
                                 if (location != null) {
-                                    mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition),new GoogleMap.CancelableCallback() {
+                                    CameraPosition cameraPosition = new CameraPosition.Builder()
+                                            .target(new LatLng(location.getLatitude(), location.getLongitude()))
+                                            .zoom(zoomOne)
+                                            .bearing(0)
+                                            .tilt(0)
+                                            .build();
+                                    mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), new GoogleMap.CancelableCallback() {
                                         @Override
                                         public void onFinish() {
                                             //nothing to do

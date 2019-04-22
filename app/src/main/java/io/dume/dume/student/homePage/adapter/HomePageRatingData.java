@@ -1,10 +1,13 @@
 package io.dume.dume.student.homePage.adapter;
 
+import android.support.annotation.Keep;
+
 import java.io.Serializable;
 import java.util.List;
 
 import io.dume.dume.student.recordsPage.Record;
 
+@Keep
 public class HomePageRatingData implements Serializable {
     List<String> ratingNameList;
     String name;

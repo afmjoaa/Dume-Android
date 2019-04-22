@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:layout_marginStart="7dp"
     android:layout_marginLeft="7dp"
     android:layout_marginTop="4dp"
@@ -25,7 +25,7 @@
             android:layout_weight="1"
             android:drawableStart="@drawable/ic_bkash_icon"
             android:drawableLeft="@drawable/ic_bkash_icon"
-            android:text="Bkash Trans ID"
+            android:text="Bkash ID"
             android:textAllCaps="false"
             android:textColor="@color/textColorPrimary" />
         <!--android:theme="@style/BkashButton"-->
@@ -77,7 +77,7 @@
             android:drawableLeft="@drawable/ic_pay_credit_bank"
             android:enabled="false"
             android:gravity="center"
-            android:text="Card Transfer"
+            android:text="Cre-Card"
             android:textAllCaps="false" />
 
     </LinearLayout>

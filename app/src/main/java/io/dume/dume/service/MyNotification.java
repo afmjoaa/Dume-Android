@@ -99,7 +99,6 @@ public class MyNotification extends FirebaseMessagingService {
             mChannel.setLightColor(Color.CYAN);
             mChannel.shouldShowLights();
             mChannel.shouldVibrate();
-            mChannel.setImportance(NotificationManager.IMPORTANCE_HIGH);
             mChannel.canShowBadge();
             mChannel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
 
@@ -122,6 +121,12 @@ public class MyNotification extends FirebaseMessagingService {
                         .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
                         .build());
             }
+            if (type.equals("message") || type.equals("payment")) {
+                mChannel.setImportance(NotificationManager.IMPORTANCE_DEFAULT);
+            }else {
+                mChannel.setImportance(NotificationManager.IMPORTANCE_HIGH);
+            }
+            assert notificationManager != null;
             notificationManager.createNotificationChannel(mChannel);
         }
 
@@ -129,7 +134,6 @@ public class MyNotification extends FirebaseMessagingService {
                 .setSmallIcon(R.drawable.ic_notification_launcher)
                 .setContentTitle(messageTitle)
                 .setContentText(messageBody)
-                .setPriority(NotificationCompat.PRIORITY_MAX)
                 .setCategory(NotificationCompat.CATEGORY_MESSAGE)
                 .setOnlyAlertOnce(true)
                 .setAutoCancel(true)
@@ -144,6 +148,11 @@ public class MyNotification extends FirebaseMessagingService {
             if (ringtone != null) {
                 builder.setSound(Uri.parse(ringToneString));
             }
+        }
+        if (type.equals("message") || type.equals("payment")) {
+            builder.setPriority(NotificationCompat.PRIORITY_HIGH);
+        }else {
+            builder.setPriority(NotificationCompat.PRIORITY_MAX);
         }
         Intent resultIntent = new Intent(this, intentClass);
         resultIntent.putExtra("tab_number", TAB_NUMBER);
@@ -164,7 +173,7 @@ public class MyNotification extends FirebaseMessagingService {
                 type = data.get("type");
             }
 
-            if (type.equals("message")) {
+            if ("message".equals(type)) {
                 if (!ChatActivity.isActivityLive) {
                     sendNotification(remoteMessage.getNotification().getTitle(), remoteMessage.getNotification().getBody(), type);
                     SharedPreferences sharedPreferences = getSharedPreferences(UNREAD_MESSAGE, MODE_PRIVATE);

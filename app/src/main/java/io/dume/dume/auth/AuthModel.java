@@ -336,7 +336,6 @@ public class AuthModel implements AuthContract.Model, SplashContract.Model, Phon
                             String account_major = "";
                             assert o != null;
                             account_major = o.toString();
-                            assert account_major != null;
                             if (!foreignObligation) {
                                 if (account_major.equals("student")) {
                                     Google.getInstance().setAccountMajor(DumeUtils.STUDENT);

@@ -1,6 +1,7 @@
 package io.dume.dume;
 
 import android.media.MediaPlayer;
+import android.support.annotation.Keep;
 
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Source;
@@ -14,6 +15,7 @@ import io.dume.dume.common.inboxActivity.InboxActivity;
 import io.dume.dume.student.recordsPage.Record;
 import io.dume.dume.util.DumeUtils;
 
+@Keep
 public class Google {
     private String currentRoom = null;
     private static Google instance = null;

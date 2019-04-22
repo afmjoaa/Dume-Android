@@ -86,6 +86,11 @@ public class AuthPresenter implements AuthContract.Presenter {
             view.onValidationFailed("Should be 11 Digits");
             view.hideProgress();
             return;
+        } else if (!view.isAccountDefined()) {
+            DumeUtils.hideKeyboard((Activity) context);
+            view.showToast("Are you Teacher or Student? Choose One");
+            view.hideProgress();
+            return;
         }
 
         model.isExistingUser(phoneNumber, new AuthGlobalContract.OnExistingUserCallback() {

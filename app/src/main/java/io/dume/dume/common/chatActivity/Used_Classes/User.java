@@ -1,10 +1,13 @@
 package io.dume.dume.common.chatActivity.Used_Classes;
 
+import android.support.annotation.Keep;
+
 import com.stfalcon.chatkit.commons.models.IUser;
 
 /*
  * Created by troy379 on 04.04.17.
  */
+@Keep
 public class User implements IUser {
 
     public String id;

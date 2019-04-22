@@ -113,7 +113,6 @@ public class PayFragment extends Fragment {
                 discount = Float.parseFloat(dc);
             }
 
-
         } else {
             return;
         }

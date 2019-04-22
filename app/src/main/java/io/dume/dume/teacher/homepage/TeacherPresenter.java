@@ -1,13 +1,20 @@
 package io.dume.dume.teacher.homepage;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -16,22 +23,27 @@ import java.util.Map;
 import java.util.Objects;
 
 import io.dume.dume.R;
+import io.dume.dume.model.DumeModel;
 import io.dume.dume.student.homePage.adapter.HomePageRatingData;
 import io.dume.dume.student.homePage.adapter.HomePageRecyclerData;
 import io.dume.dume.student.recordsPage.Record;
+import io.dume.dume.teacher.adapters.SkillAdapter;
+import io.dume.dume.teacher.pojo.Skill;
 import io.dume.dume.teacher.pojo.Stat;
+import io.dume.dume.teacher.skill.SkillActivity;
+import io.dume.dume.util.DumeUtils;
 
 public class TeacherPresenter implements TeacherContract.Presenter {
 
     private static final String TAG = TeacherPresenter.class.getSimpleName().toString();
     private TeacherContract.View view;
     private TeacherModel model;
-    private TeacherDataStore teachearDataStore;
+    private TeacherDataStore teacherDataStore;
 
     public TeacherPresenter(TeacherContract.View view, TeacherModel model) {
         this.view = view;
         this.model = model;
-        teachearDataStore = TeacherDataStore.getInstance();
+        teacherDataStore = TeacherDataStore.getInstance();
     }
 
     @Override
@@ -81,7 +93,7 @@ public class TeacherPresenter implements TeacherContract.Presenter {
                 calendar.add(Calendar.DAY_OF_MONTH, -1);
                 todayStat = new Stat(pDailyI, pDailyR, calendar.getTime(), FirebaseAuth.getInstance().getUid());
                 todayStatList.add(todayStat);
-                teachearDataStore.setTodayStatList(todayStatList);
+                teacherDataStore.setTodayStatList(todayStatList);
 
                 view.setRating((Map<String, Object>) documentSnapshot.get("self_rating"));
                 /*Enams Code Goes Here*/
@@ -93,17 +105,15 @@ public class TeacherPresenter implements TeacherContract.Presenter {
                     badgeStatus.add((boolean) achievements.get("leading"));
                     badgeStatus.add((boolean) achievements.get("premier"));
                 }
-                teachearDataStore.setBadgeList(badgeStatus);
+                teacherDataStore.setBadgeList(badgeStatus);
                 final Map<String, Object> selfRating = (Map<String, Object>) documentSnapshot.get("self_rating");
-                teachearDataStore.setSelfRating(selfRating);
-                teachearDataStore.setDocumentSnapshot(documentSnapshot.getData());
-                teachearDataStore.setSnapshot(documentSnapshot);
+                teacherDataStore.setSelfRating(selfRating);
+                teacherDataStore.setDocumentSnapshot(documentSnapshot.getData());
+                teacherDataStore.setSnapshot(documentSnapshot);
                 String unread_msg = documentSnapshot.getString("unread_msg");
 
 
-
                 view.setUnreadMsg(unread_msg);
-
 
 
                 String unread_noti = documentSnapshot.getString("unread_noti");
@@ -129,6 +139,92 @@ public class TeacherPresenter implements TeacherContract.Presenter {
                     view.showPercentSnackBar(documentSnapshot.getString("pro_com_%"));
                 }
                 listener.onSuccess(null);
+                Map<String, Object> ds = TeacherDataStore.getInstance().getDocumentSnapshot();
+                if (ds != null) {
+                    Map<String, Object> payments = (Map<String, Object>) ds.get("payments");
+                    if (payments != null) {
+                        String totalPaid = (String) payments.get("total_paid");
+                        String obligationAmount = (String) payments.get("obligation_amount");
+                        if (obligationAmount != null && Integer.parseInt(obligationAmount) >= 500) {
+                            if (!view.isDialogShowing()) {
+                                view.showPaymentDialogue();
+                            }
+                        }
+                    }
+                }
+                if (!TeacherActivtiy.ISSKILLDIALOGSHOWING) {
+                    TeacherActivtiy.ISSKILLDIALOGSHOWING = true;
+                    if (teacherDataStore != null) {
+                        if (teacherDataStore.getSkillArrayList() == null) {
+                            new DumeModel(view.getContext()).getSkill(new TeacherContract.Model.Listener<ArrayList<Skill>>() {
+                                @Override
+                                public void onSuccess(ArrayList<Skill> list) {
+                                    teacherDataStore.setSkillArrayList(list);
+
+                                    if (list.size() == 0) {
+                                        Handler handler = new Handler(Looper.getMainLooper());
+                                        handler.postDelayed(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                DumeUtils.notifyDialog(view.getContext(), false, true, "Add your skill to get Student !!", "Right now you do not have any skill. To get students nearest you, You should add your skill right now. If you do not add skill, You will never get tution offer from student.", "Add Skill", new TeacherContract.Model.Listener<Boolean>() {
+                                                    @Override
+                                                    public void onSuccess(Boolean yes) {
+                                                        if (yes) {
+                                                            view.getContext().startActivity(new Intent(view.getContext(), SkillActivity.class));
+                                                        }
+                                                    }
+
+                                                    @Override
+                                                    public void onError(String msg) {
+                                                        Toast.makeText(view.getContext(), msg, Toast.LENGTH_SHORT).show();
+
+                                                    }
+                                                });
+
+                                            }
+                                        }, 3000);
+                                    } else {
+
+                                    }
+                                }
+
+                                @Override
+                                public void onError(String msg) {
+                                    Toast.makeText(view.getContext(), msg, Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        } else {
+                            if (teacherDataStore.getSkillArrayList().size() == 0) {
+                                Handler handler = new Handler(Looper.getMainLooper());
+                                handler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        DumeUtils.notifyDialog(view.getContext(), false, true, "Add your skill to get Student !!", "Right now you do not have any skill. To get students nearest you, You should add your skill right now. If you do not add skill, You will never get tution offer from student.", "Add Skill", new TeacherContract.Model.Listener<Boolean>() {
+                                            @Override
+                                            public void onSuccess(Boolean yes) {
+                                                if (yes) {
+                                                    view.getContext().startActivity(new Intent(view.getContext(), SkillActivity.class));
+                                                }
+                                            }
+
+                                            @Override
+                                            public void onError(String msg) {
+                                                Toast.makeText(view.getContext(), msg, Toast.LENGTH_SHORT).show();
+
+                                            }
+                                        });
+
+                                    }
+                                }, 3000);
+                            } else {
+
+                            }
+                            //loadData();
+                        }
+
+
+                    }
+                }
             }
 
             @Override
@@ -148,7 +244,7 @@ public class TeacherPresenter implements TeacherContract.Presenter {
                 Gson gson = new Gson();
                 JsonElement jsonElement = gson.toJsonTree(promo_item);
                 HomePageRecyclerData homePageRecyclerData = gson.fromJson(jsonElement, HomePageRecyclerData.class);
-                if(homePageRecyclerData!= null){
+                if (homePageRecyclerData != null) {
                     view.loadHeadsUpPromo(homePageRecyclerData);
                 }
             }
@@ -190,12 +286,13 @@ public class TeacherPresenter implements TeacherContract.Presenter {
                         view.flush("Does not found any user");
                     }
                 }
+
                 @Override
                 public void onError(String msg) {
                     view.flush(msg);
                 }
             });
-        }else {
+        } else {
             Map<String, Object> documentSnapshot = TeacherDataStore.getInstance().getDocumentSnapshot();
             if (documentSnapshot != null) {
                 ArrayList<String> available_promo = (ArrayList<String>) documentSnapshot.get("available_promo");
@@ -213,6 +310,7 @@ public class TeacherPresenter implements TeacherContract.Presenter {
                         public void onSuccess(HomePageRecyclerData list) {
                             view.loadPromoData(list);
                         }
+
                         @Override
                         public void onError(String msg) {
                             Log.w(TAG, "onError: " + msg);
@@ -365,7 +463,7 @@ public class TeacherPresenter implements TeacherContract.Presenter {
                     stat.add(currentStat);
                 }
                 if (list.size() > 0) {
-                    teachearDataStore.setStat(stat);
+                    teacherDataStore.setStat(stat);
                     listener.onSuccess(stat);
                 } else listener.onError("No review");
             }

@@ -1,7 +1,9 @@
 package io.dume.dume.teacher.pojo;
 
-import java.io.Serializable;
+import android.support.annotation.Keep;
 
+import java.io.Serializable;
+@Keep
 public class TabModel implements Serializable {
    private int  normalIcon;
     private int selectedIcon;

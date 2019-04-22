@@ -139,4 +139,8 @@
     <color name="colorGrey">#EEDAD6D6</color>
     <color name="light_sky">#e8f6ff</color>
 
+    <color name="payment_red">#ff8881</color>
+    <color name="payment_green_one">#88d68c</color>
+    <color name="payment_item_bg">#e9f8ff</color>
+    <color name="payment_wage">#80deea</color>
 </resources>

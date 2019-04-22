@@ -1,8 +1,9 @@
 package io.dume.dume.teacher.pojo;
 
-import java.io.Serializable;
+import android.support.annotation.Keep;
 
-public class TestPojo implements Serializable {
+@Keep
+public class TestPojo {
     private String name;
     private int age;
 

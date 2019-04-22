@@ -68,34 +68,26 @@ import com.transitionseverywhere.Transition;
 import com.transitionseverywhere.TransitionManager;
 import com.transitionseverywhere.TransitionSet;
 
-import java.text.DateFormat;
 import java.text.NumberFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
-import java.util.TimeZone;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 import carbon.widget.ImageView;
 import io.dume.dume.Google;
 import io.dume.dume.R;
-import io.dume.dume.common.contactActivity.ContactActivity;
 import io.dume.dume.common.inboxActivity.InboxActivity;
 import io.dume.dume.model.DumeModel;
 import io.dume.dume.student.common.QualificationAdapter;
-import io.dume.dume.student.common.QualificationData;
 import io.dume.dume.student.common.ReviewAdapter;
 import io.dume.dume.student.common.ReviewHighlightData;
 import io.dume.dume.student.homePage.adapter.HomePageRecyclerData;
 import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
 import io.dume.dume.student.pojo.SearchDataStore;
 import io.dume.dume.student.recordsPage.Record;
-import io.dume.dume.student.recordsPending.RecordsPendingActivity;
 import io.dume.dume.student.recordsRejected.RecordsRejectedActivity;
 import io.dume.dume.student.studentHelp.StudentHelpActivity;
 import io.dume.dume.teacher.homepage.TeacherContract;
@@ -150,10 +142,10 @@ public class RecordsAcceptedActivity extends CustomStuAppCompatActivity implemen
         int pageToOpen = retrivedIntent.getIntExtra(DumeUtils.RECORDTAB, -1);
         String recordId = retrivedIntent.getStringExtra("recordId");
 
-        if (pageToOpen != -1 && pageToOpen< Objects.requireNonNull(pager.getAdapter()).getCount()) {
+        if (pageToOpen != -1 && pageToOpen < Objects.requireNonNull(pager.getAdapter()).getCount()) {
             // Open the right pager
-            pager.setCurrentItem(pageToOpen,true);
-        }else if(recordId != null && !recordId.equals("")){
+            pager.setCurrentItem(pageToOpen, true);
+        } else if (recordId != null && !recordId.equals("")) {
             List<DocumentSnapshot> acceptedRecords = DumeUtils.filterList(Google.getInstance().getRecords(), "Accepted");
             for (int i = 0; i < acceptedRecords.size(); i++) {
                 DocumentSnapshot record = acceptedRecords.get(i);
@@ -475,9 +467,9 @@ public class RecordsAcceptedActivity extends CustomStuAppCompatActivity implemen
             sGender = (String) forMap.get("request_gender");
             mGender = (String) spMap.get("gender");
             subjectExchange = DumeUtils.getLast((Map<String, Object>) documentData.get("jizz"));
-            Timestamp timestampCreation = (Timestamp) documentData.get("creation");
-            Date creation = timestampCreation.toDate();
-            date = creation.toString();
+
+            Date creation = (Date) documentData.get("creation");
+
             status = (String) documentData.get("record_status");
             Record record = new Record(mentorName, studentName, salaryInDemand, subjectExchange, creation, mentorDpUrl, studentDpUrl, studentRating, mentorRating, status, Record.DELIVERED, sGender, mGender);
 
@@ -512,7 +504,7 @@ public class RecordsAcceptedActivity extends CustomStuAppCompatActivity implemen
             Number salary = (Number) selectedMentor.get("salary");
 
             Map<String, Object> promo = (Map<String, Object>) selectedMentor.get("promo");
-            if(promo!= null){
+            if (promo != null) {
                 Gson gson = new Gson();
                 JsonElement jsonElement = gson.toJsonTree(promo);
                 HomePageRecyclerData homePageRecyclerData = gson.fromJson(jsonElement, HomePageRecyclerData.class);
@@ -843,7 +835,7 @@ public class RecordsAcceptedActivity extends CustomStuAppCompatActivity implemen
             String studentName = (String) forMap.get("stu_name");
             String studentPhoneNum = (String) forMap.get("stu_phone_number");
             String mentorPhoneNum = (String) spMap.get("phone_number");
-            float reducedMentorRating= mentorRating- 0.04f;
+            float reducedMentorRating = mentorRating - 0.04f;
 
             //cancel bottom sheet
             mBottomSheetReject = new BottomSheetDialog(context);
@@ -866,7 +858,7 @@ public class RecordsAcceptedActivity extends CustomStuAppCompatActivity implemen
                         myThisActivity.showProgress();
                         acceptContactBtn.setEnabled(false);
                         cancelRequestBtn.setEnabled(false);
-                        myThisActivity.mModel.changeRecordStatus(record, "Rejected",  myThisActivity.retriveAction,new TeacherContract.Model.Listener<Void>() {
+                        myThisActivity.mModel.changeRecordStatus(record, "Rejected", myThisActivity.retriveAction, new TeacherContract.Model.Listener<Void>() {
                             @Override
                             public void onSuccess(Void list) {
                                 Toast.makeText(myThisActivity, "Status Changed To Rejected", Toast.LENGTH_SHORT).show();
@@ -876,7 +868,7 @@ public class RecordsAcceptedActivity extends CustomStuAppCompatActivity implemen
                                 myThisActivity.mModel.getRecords(new TeacherContract.Model.Listener<List<Record>>() {
                                     @Override
                                     public void onSuccess(List<Record> list) {
-                                        myThisActivity.mModel.setPenalty(myThisActivity.retriveAction, 100, true, reducedMentorRating+ "", new TeacherContract.Model.Listener<Void>() {
+                                        myThisActivity.mModel.setPenalty(myThisActivity.retriveAction, 100, true, reducedMentorRating + "", new TeacherContract.Model.Listener<Void>() {
                                             @Override
                                             public void onSuccess(Void avoid) {
                                                 Google.getInstance().setRecordList(list);
@@ -1080,7 +1072,7 @@ public class RecordsAcceptedActivity extends CustomStuAppCompatActivity implemen
                                 stuMoreInfoBtn.setEnabled(true);
                             }
                         });
-                    }else{
+                    } else {
                         if (visible) {
                             stuMoreInfoBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_down_arrow_small));
                             stuMoreInfoBtn.setEnabled(true);
@@ -1158,7 +1150,7 @@ public class RecordsAcceptedActivity extends CustomStuAppCompatActivity implemen
                                 showAdditionalRatingBtn.setEnabled(true);
                             }
                         });
-                    }else{
+                    } else {
                         if (visible) {
                             showAdditionalRatingBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_down_arrow_small));
                             showAdditionalRatingBtn.setEnabled(true);
@@ -1234,7 +1226,7 @@ public class RecordsAcceptedActivity extends CustomStuAppCompatActivity implemen
                                 moreInfoBtn.setEnabled(true);
                             }
                         });
-                    }else{
+                    } else {
                         if (visible) {
                             moreInfoBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_down_arrow_small));
                             moreInfoBtn.setEnabled(true);
@@ -1311,7 +1303,7 @@ public class RecordsAcceptedActivity extends CustomStuAppCompatActivity implemen
                                 reviewInfoBtn.setEnabled(true);
                             }
                         });
-                    }else{
+                    } else {
                         if (visible) {
                             reviewInfoBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_down_arrow_small));
                             reviewInfoBtn.setEnabled(true);
@@ -1385,7 +1377,7 @@ public class RecordsAcceptedActivity extends CustomStuAppCompatActivity implemen
                                 agreementInfoBtn.setEnabled(true);
                             }
                         });
-                    }else {
+                    } else {
                         if (visible) {
                             agreementInfoBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_down_arrow_small));
                             agreementInfoBtn.setEnabled(true);
@@ -1459,7 +1451,7 @@ public class RecordsAcceptedActivity extends CustomStuAppCompatActivity implemen
                                 achievementInfoBtn.setEnabled(true);
                             }
                         });
-                    }else {
+                    } else {
                         if (visible) {
                             achievementInfoBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_down_arrow_small));
                             achievementInfoBtn.setEnabled(true);
@@ -1534,7 +1526,7 @@ public class RecordsAcceptedActivity extends CustomStuAppCompatActivity implemen
                                 locationShowBtn.setEnabled(true);
                             }
                         });
-                    }else{
+                    } else {
                         if (visible) {
                             locationShowBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_down_arrow_small));
                             locationShowBtn.setEnabled(true);
@@ -1618,7 +1610,7 @@ public class RecordsAcceptedActivity extends CustomStuAppCompatActivity implemen
 
         @Override
         public Fragment getItem(int position) {
-            return PlaceholderFragment.newInstance(position,recordDataAccepted);
+            return PlaceholderFragment.newInstance(position, recordDataAccepted);
         }
 
         @Override

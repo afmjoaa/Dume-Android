@@ -1,9 +1,12 @@
 package io.dume.dume.student.homePage.adapter;
 
+import android.support.annotation.Keep;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Map;
 
+@Keep
 public class HomePageRecyclerData implements Serializable {
     String title;
     String description;

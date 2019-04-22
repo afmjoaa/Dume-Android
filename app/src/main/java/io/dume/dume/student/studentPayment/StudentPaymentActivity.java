@@ -15,7 +15,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -30,10 +29,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import io.dume.dume.Google;
@@ -41,19 +46,19 @@ import io.dume.dume.R;
 import io.dume.dume.common.bkash_transection.BkashTransectionActivity;
 import io.dume.dume.model.DumeModel;
 import io.dume.dume.student.homePage.HomePageModel;
-import io.dume.dume.student.homePage.HomePagePresenter;
 import io.dume.dume.student.homePage.adapter.HomePageRecyclerData;
 import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
 import io.dume.dume.student.pojo.SearchDataStore;
+import io.dume.dume.student.recordsPage.Record;
+import io.dume.dume.student.recordsPage.RecordsPageModel;
 import io.dume.dume.student.studentHelp.StudentHelpActivity;
 import io.dume.dume.student.studentPayment.adapterAndData.ObligationAndClaimAdapter;
 import io.dume.dume.student.studentPayment.adapterAndData.ObligationAndClaimData;
 import io.dume.dume.student.studentPayment.adapterAndData.PaymentAdapter;
 import io.dume.dume.student.studentPayment.adapterAndData.PaymentData;
-import io.dume.dume.student.studentPayment.adapterAndData.PromotionAdapter;
 import io.dume.dume.student.studentPayment.adapterAndData.PaymentHistory;
 import io.dume.dume.student.studentPayment.adapterAndData.PaymentHistoryAdapter;
-import io.dume.dume.teacher.homepage.TeacherActivtiy;
+import io.dume.dume.student.studentPayment.adapterAndData.PromotionAdapter;
 import io.dume.dume.teacher.homepage.TeacherContract;
 import io.dume.dume.teacher.homepage.TeacherDataStore;
 import io.dume.dume.util.DumeUtils;
@@ -83,6 +88,9 @@ public class StudentPaymentActivity extends CustomStuAppCompatActivity implement
     private TextView discountAmount;
     private TextView promotionNumberTV;
     private String retriveAction;
+    private TextView currentDueAmountTV;
+    private TextView totalPaidAmountTV;
+    private TextView obligationAndClaimTV;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +101,7 @@ public class StudentPaymentActivity extends CustomStuAppCompatActivity implement
         mPresenter = new StudentPaymentPresenter(this, new StudentPaymentModel());
         mPresenter.studentPaymentEnqueue();
         configureAppbar(this, "Payment");
+        retriveAction = getIntent().getAction();
         //payment method recycler
         paymentAdapter = new PaymentAdapter(this, getFinalData()) {
             @Override
@@ -118,7 +127,7 @@ public class StudentPaymentActivity extends CustomStuAppCompatActivity implement
         };
         paymentRecycleView.setAdapter(paymentAdapter);
         paymentRecycleView.setLayoutManager(new LinearLayoutManager(this));
-        retriveAction = getIntent().getAction();
+
     }
 
     private void onCashClicked() {
@@ -126,7 +135,7 @@ public class StudentPaymentActivity extends CustomStuAppCompatActivity implement
         secondaryHideAbleLayout.setVisibility(View.VISIBLE);
         idBlock.setVisibility(View.GONE);
         refBlock.setVisibility(View.GONE);
-        configAppbarTittle(StudentPaymentActivity.this, paymentName[0]);
+        configAppbarTittle(StudentPaymentActivity.this, "Cash Payment");
     }
 
     private void onBkashClicked() {
@@ -171,23 +180,61 @@ public class StudentPaymentActivity extends CustomStuAppCompatActivity implement
         discountTitle = findViewById(R.id.reportTitle_one);
         discountAmount = findViewById(R.id.afterDiscount_one);
         promotionNumberTV = findViewById(R.id.promotion_value_text);
+        currentDueAmountTV = findViewById(R.id.obligation_or_claim_value);
+        totalPaidAmountTV = findViewById(R.id.text_one_value);
+        obligationAndClaimTV = findViewById(R.id.obligation_or_claim_name);
 
     }
 
     @Override
     public void initStudentPayment() {
         List<String> appliedPromoList;
-        if (Google.getInstance().getAccountMajor() == DumeUtils.TEACHER) {
+        String totalPaidAmount;
+        Number totalObligationAmount = 0;
+        String obligationAmount;
+        Number penalty;
+        if (Google.getInstance().getAccountMajor().equals(DumeUtils.TEACHER)) {
+            obligationAndClaimTV.setText("Current Due Amount");
             Map<String, Object> documentSnapshot = TeacherDataStore.getInstance().getDocumentSnapshot();
+            Map<String, Object> payments = (Map<String, Object>) documentSnapshot.get("payments");
+            totalPaidAmount = (String) payments.get("total_paid");
+            obligationAmount = (String) payments.get("obligation_amount");
+            penalty = (Number) documentSnapshot.get("penalty");
+            if (obligationAmount != null && penalty != null) {
+                totalObligationAmount = Integer.parseInt(obligationAmount) + penalty.intValue();
+            }
             appliedPromoList = (ArrayList) documentSnapshot.get("applied_promo");
+
+            if (totalPaidAmount != null && Integer.parseInt(totalPaidAmount) > 1000) {
+                totalPaidAmountTV.setText(String.format("BDT %sK ৳", Float.parseFloat(totalPaidAmount) / 1000));
+            } else {
+                totalPaidAmountTV.setText("BDT " + totalPaidAmount + " ৳");
+            }
+            if (totalObligationAmount.intValue() > 1000) {
+                currentDueAmountTV.setVisibility(View.VISIBLE);
+                currentDueAmountTV.setText(String.format("BDT %sK ৳", totalObligationAmount.floatValue() / 1000));
+            } else {
+                currentDueAmountTV.setVisibility(View.VISIBLE);
+                currentDueAmountTV.setText("BDT " + totalObligationAmount + " ৳");
+            }
         } else {
+            obligationAndClaimTV.setText("Your Tuitions");
             Map<String, Object> documentSnapshot = SearchDataStore.getInstance().getDocumentSnapshot();
+            Map<String, Object> payments = (Map<String, Object>) documentSnapshot.get("payments");
+            totalPaidAmount = (String) payments.get("total_paid");
+            obligationAmount = (String) payments.get("obligation_amount");
+            penalty = (Number) documentSnapshot.get("penalty");
+            if (obligationAmount != null && penalty != null) {
+                totalObligationAmount = Integer.parseInt(obligationAmount) + penalty.intValue();
+            }
             appliedPromoList = (ArrayList) documentSnapshot.get("applied_promo");
+            currentDueAmountTV.setVisibility(View.INVISIBLE);
         }
         if (appliedPromoList == null) {
             appliedPromoList = new ArrayList<>();
         }
         promotionNumberTV.setText("" + appliedPromoList.size());
+
     }
 
     @Override
@@ -215,7 +262,7 @@ public class StudentPaymentActivity extends CustomStuAppCompatActivity implement
     public void onTransactionHistoryClicked() {
         mainLayoutContent.setVisibility(View.GONE);
         content.setVisibility(View.VISIBLE);
-        configAppbarTittle(StudentPaymentActivity.this, "Your History");
+        configAppbarTittle(StudentPaymentActivity.this, "Transaction History");
         getSupportFragmentManager().beginTransaction().replace(R.id.content, new ViewTransactionHistoryFragment()).commit();
     }
 
@@ -289,23 +336,48 @@ public class StudentPaymentActivity extends CustomStuAppCompatActivity implement
     }
 
     public List<PaymentData> getFinalData() {
-        List<PaymentData> data = new ArrayList<>();
-        int[] imageIcons = {
-                R.drawable.ic_bkash_icon,
-                R.drawable.ic_bkash_icon,
-                R.drawable.ic_nexus_pay_icon,
-                R.drawable.ic_pay_credit_bank
-        };
-        int[] paymentDefaultValue = {1, 0, 0, 0};
+        if (retriveAction.equals(DumeUtils.STUDENT)) {
+            List<PaymentData> data = new ArrayList<>();
+            int[] imageIcons = {
+                    R.drawable.ic_cash_pay_icon,
+                    R.drawable.ic_bkash_icon,
+                    R.drawable.ic_bkash_icon,
+                    R.drawable.ic_nexus_pay_icon,
+                    R.drawable.ic_pay_credit_bank
+            };
+            int[] paymentDefaultValue = {1, 1, 0, 0, 0};
 
-        for (int i = 0; i < paymentName.length; i++) {
-            PaymentData current = new PaymentData();
-            current.primaryText = paymentName[i];
-            current.secondaryValue = paymentDefaultValue[i];
-            current.imageSrc = imageIcons[i];
-            data.add(current);
+            for (int i = 0; i < paymentName.length + 1; i++) {
+                PaymentData current = new PaymentData();
+                if (i == 0) {
+                    current.primaryText = "Cash Payment";
+                } else {
+                    current.primaryText = paymentName[i-1];
+                }
+                current.secondaryValue = paymentDefaultValue[i];
+                current.imageSrc = imageIcons[i];
+                data.add(current);
+            }
+            return data;
+        } else {
+            List<PaymentData> data = new ArrayList<>();
+            int[] imageIcons = {
+                    R.drawable.ic_bkash_icon,
+                    R.drawable.ic_bkash_icon,
+                    R.drawable.ic_nexus_pay_icon,
+                    R.drawable.ic_pay_credit_bank
+            };
+            int[] paymentDefaultValue = {1, 0, 0, 0};
+
+            for (int i = 0; i < paymentName.length; i++) {
+                PaymentData current = new PaymentData();
+                current.primaryText = paymentName[i];
+                current.secondaryValue = paymentDefaultValue[i];
+                current.imageSrc = imageIcons[i];
+                data.add(current);
+            }
+            return data;
         }
-        return data;
     }
 
     public void onPaymentViewClicked(View view) {
@@ -489,6 +561,7 @@ public class StudentPaymentActivity extends CustomStuAppCompatActivity implement
         private StudentPaymentActivity myMainActivity;
         private RecyclerView pCustomRecyclerView;
         private Context context;
+        private LinearLayout noDataBlock;
 
         @Override
         public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -502,6 +575,7 @@ public class StudentPaymentActivity extends CustomStuAppCompatActivity implement
             myMainActivity = (StudentPaymentActivity) getActivity();
             View rootView = inflater.inflate(R.layout.p_custom_recycler_row, container, false);
             pCustomRecyclerView = rootView.findViewById(R.id.p_recycler_view);
+            noDataBlock = rootView.findViewById(R.id.no_data_block);
 
             //menual one
             List<HomePageRecyclerData> promotionData = new ArrayList<>();
@@ -557,6 +631,11 @@ public class StudentPaymentActivity extends CustomStuAppCompatActivity implement
                 homePageRecyclerData.setExpired((Boolean) promoMap.get("expired"));
                 promotionAdapter.addPromoToList(homePageRecyclerData);
             }
+            if (promotionAdapter.getItemCount() <= 0) {
+                noDataBlock.setVisibility(View.VISIBLE);
+            } else {
+                noDataBlock.setVisibility(View.GONE);
+            }
             return rootView;
         }
 
@@ -585,6 +664,8 @@ public class StudentPaymentActivity extends CustomStuAppCompatActivity implement
         private StudentPaymentActivity myMainActivity;
         private RecyclerView pCustomRecyclerView;
         private Context context;
+        private LinearLayout noDataBlock;
+        private TextView noDataTV;
 
         @Override
         public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -605,6 +686,8 @@ public class StudentPaymentActivity extends CustomStuAppCompatActivity implement
             myMainActivity = (StudentPaymentActivity) getActivity();
             View rootView = inflater.inflate(R.layout.p_custom_recycler_row, container, false);
             pCustomRecyclerView = rootView.findViewById(R.id.p_recycler_view);
+            noDataBlock = rootView.findViewById(R.id.no_data_block);
+            noDataTV = rootView.findViewById(R.id.no_item_text);
 
             //menual one
             StudentPaymentActivity activity = (StudentPaymentActivity) context;
@@ -619,7 +702,8 @@ public class StudentPaymentActivity extends CustomStuAppCompatActivity implement
                         PaymentHistoryAdapter historyAdapter = new PaymentHistoryAdapter(myMainActivity, histories);
                         pCustomRecyclerView.setAdapter(historyAdapter);
                     } else {
-                        rootView.findViewById(R.id.notFoundTV).setVisibility(View.VISIBLE);
+                        noDataBlock.setVisibility(View.VISIBLE);
+                        noDataTV.setText("Sorry, no payment history to show ...");
                     }
 
                 }
@@ -655,6 +739,14 @@ public class StudentPaymentActivity extends CustomStuAppCompatActivity implement
         private StudentPaymentActivity myMainActivity;
         private RecyclerView pCustomRecyclerView;
         private Context context;
+        private LinearLayout noDataBlock;
+        private TextView noDataTV;
+        private TextView penaltyDueAmount;
+        private TextView penaltyPaidAmount;
+        private carbon.widget.RelativeLayout duePenaltyBlock;
+        private carbon.widget.RelativeLayout paidPenaltyBlock;
+        private Integer obligationPaidRemaining;
+        private ObligationAndClaimAdapter obligationAndClaimAdapter;
 
         @Override
         public void onAttach(Context context) {
@@ -672,14 +764,501 @@ public class StudentPaymentActivity extends CustomStuAppCompatActivity implement
         @Override
         public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
             myMainActivity = (StudentPaymentActivity) getActivity();
-            View rootView = inflater.inflate(R.layout.p_custom_recycler_row, container, false);
+            View rootView = inflater.inflate(R.layout.obligation_fragment_layout, container, false);
             pCustomRecyclerView = rootView.findViewById(R.id.p_recycler_view);
-
+            noDataBlock = rootView.findViewById(R.id.no_data_block);
+            noDataTV = rootView.findViewById(R.id.no_item_text);
+            noDataTV.setText("Sorry, no obligation to show right now ...");
+            penaltyDueAmount = rootView.findViewById(R.id.due_penalty_amount);
+            penaltyPaidAmount = rootView.findViewById(R.id.paid_penalty_amount);
+            duePenaltyBlock = rootView.findViewById(R.id.sum_due_block);
+            paidPenaltyBlock = rootView.findViewById(R.id.sum_paid_block);
             //menual one
-            List<ObligationAndClaimData> transactionData = new ArrayList<>();
-            ObligationAndClaimAdapter obligationAndClaimAdapter = new ObligationAndClaimAdapter(myMainActivity, transactionData);
-            pCustomRecyclerView.setAdapter(obligationAndClaimAdapter);
-            pCustomRecyclerView.setLayoutManager(new LinearLayoutManager(myMainActivity));
+            if (myMainActivity.retriveAction.equals(DumeUtils.STUDENT)) {
+                Map<String, Object> studentProfile = SearchDataStore.getInstance().getDocumentSnapshot();
+                Map<String, Object> payments = (Map<String, Object>) studentProfile.get("payments");
+                String paidPenalty = (String) payments.get("penalty_paid");
+                Number penalty = (Number) studentProfile.get("penalty");
+                penaltyDueAmount.setText(penalty == null ? "0 ৳" : penalty.toString() + " ৳");
+                penaltyPaidAmount.setText(String.format("%s ৳", paidPenalty));
+                //TODO set the adapter
+                //Testing here
+                //TODO get the paid obligation amount
+                String totalPaid = (String) payments.get("total_paid");
+                Integer obligationPaid = Integer.parseInt(totalPaid) - Integer.parseInt(paidPenalty);
+                obligationPaidRemaining = obligationPaid;
+                List<ObligationAndClaimData> transactionData = new ArrayList<>();
+                //TODO get all current and completed records
+                if (Google.getInstance().getRecords() != null) {
+                    List<DocumentSnapshot> currentRecords = DumeUtils.filterList(Google.getInstance().getRecords(), "Current");
+                    List<DocumentSnapshot> completedRecords = DumeUtils.filterList(Google.getInstance().getRecords(), "Completed");
+                    Collections.sort(currentRecords, new Comparator<DocumentSnapshot>() {
+                        @Override
+                        public int compare(DocumentSnapshot t1, DocumentSnapshot t2) {
+                            Date date1, date2;
+                            date1 = (Date) t1.get("creation");
+                            date2 = (Date) t2.get("creation");
+                            return (int) (date2.getTime() - date1.getTime());
+                        }
+                    });
+                    Collections.sort(completedRecords, new Comparator<DocumentSnapshot>() {
+                        @Override
+                        public int compare(DocumentSnapshot t1, DocumentSnapshot t2) {
+                            Date date1, date2;
+                            date1 = (Date) t1.get("creation");
+                            date2 = (Date) t2.get("creation");
+                            return (int) (date2.getTime() - date1.getTime());
+                        }
+                    });
+
+                    for (DocumentSnapshot doc : completedRecords) {
+                        Map<String, Object> spMap = (Map<String, Object>) doc.get("sp_info");
+                        Map<String, Object> bal = (Map<String, Object>) spMap.get("self_rating");
+                        Map<String, Object> forMap = (Map<String, Object>) doc.get("for_whom");
+                        Map<String, Object> shMap = (Map<String, Object>) forMap.get("request_sr");
+                        String mentorName = spMap.get("first_name") + " " + spMap.get("last_name");
+                        String mentorDpUrl = (String) spMap.get("avatar");
+                        float mentorRating = Float.parseFloat((String) bal.get("star_rating"));
+                        float studentRating = Float.parseFloat((String) shMap.get("star_rating"));
+                        String studentName = (String) forMap.get("stu_name");
+                        String studentDpUrl = (String) forMap.get("request_avatar");
+                        Map<String, Object> jizz = (Map<String, Object>) doc.get("jizz");
+                        String subjectExchange = DumeUtils.getLast(jizz);
+                        String salaryInDemand = String.valueOf(doc.get("salary"));
+                        salaryInDemand = NumberFormat.getCurrencyInstance(Locale.US).format(Double.parseDouble(salaryInDemand));
+                        salaryInDemand = (salaryInDemand.substring(1, salaryInDemand.length() - 3) + " BDT");
+                        Map<String, Object> start_date = (Map<String, Object>) doc.get("start_date");
+                        String startingDate = (String) start_date.get("date_string");
+                        Calendar calendar = Calendar.getInstance();
+                        Date creation = (Date) doc.get("status_modi_date");
+                        calendar.setTime(creation);
+                        calendar.add(Calendar.MONTH, 1);
+                        String finishingDate = java.text.DateFormat.getDateInstance(java.text.DateFormat.MEDIUM).format(calendar.getTime());
+                        String category = (String) jizz.get("Category");
+                        String packageName = (String) doc.get("package_name");
+
+                        Number salary = (Number) doc.get("salary");
+                        int salaryInteger = salary.intValue();
+                        ObligationAndClaimData obligationAndClaimData = new ObligationAndClaimData(studentName, mentorName, salaryInDemand, subjectExchange, studentRating, mentorRating
+                                , studentDpUrl, mentorDpUrl, salaryInteger, -1, startingDate, finishingDate, packageName, category, salaryInteger);
+                        transactionData.add(obligationAndClaimData);
+                    }
+
+                    for (DocumentSnapshot doc : currentRecords) {
+                        Map<String, Object> spMap = (Map<String, Object>) doc.get("sp_info");
+                        Map<String, Object> bal = (Map<String, Object>) spMap.get("self_rating");
+                        Map<String, Object> forMap = (Map<String, Object>) doc.get("for_whom");
+                        Map<String, Object> shMap = (Map<String, Object>) forMap.get("request_sr");
+                        String mentorName = spMap.get("first_name") + " " + spMap.get("last_name");
+                        String mentorDpUrl = (String) spMap.get("avatar");
+                        float mentorRating = Float.parseFloat((String) bal.get("star_rating"));
+                        float studentRating = Float.parseFloat((String) shMap.get("star_rating"));
+                        String studentName = (String) forMap.get("stu_name");
+                        String studentDpUrl = (String) forMap.get("request_avatar");
+                        Map<String, Object> jizz = (Map<String, Object>) doc.get("jizz");
+                        String subjectExchange = DumeUtils.getLast(jizz);
+                        String salaryInDemand = String.valueOf(doc.get("salary"));
+                        salaryInDemand = NumberFormat.getCurrencyInstance(Locale.US).format(Double.parseDouble(salaryInDemand));
+                        salaryInDemand = (salaryInDemand.substring(1, salaryInDemand.length() - 3) + " BDT");
+                        Map<String, Object> start_date = (Map<String, Object>) doc.get("start_date");
+                        String startingDate = (String) start_date.get("date_string");
+                        Calendar calendar = Calendar.getInstance();
+                        Date creation = (Date) doc.get("status_modi_date");
+                        calendar.setTime(creation);
+                        calendar.add(Calendar.MONTH, 1);
+                        String finishingDate = java.text.DateFormat.getDateInstance(java.text.DateFormat.MEDIUM).format(calendar.getTime());
+                        String category = (String) jizz.get("Category");
+                        String packageName = (String) doc.get("package_name");
+
+                        Number salary = (Number) doc.get("salary");
+                        int salaryInteger = salary.intValue();
+                        ObligationAndClaimData obligationAndClaimData = new ObligationAndClaimData(studentName, mentorName, salaryInDemand, subjectExchange, studentRating, mentorRating
+                                , studentDpUrl, mentorDpUrl, salaryInteger, -1, startingDate, finishingDate, packageName, category, salaryInteger);
+                        transactionData.add(obligationAndClaimData);
+                    }
+                    obligationAndClaimAdapter = new ObligationAndClaimAdapter(myMainActivity, transactionData);
+                    pCustomRecyclerView.setAdapter(obligationAndClaimAdapter);
+                    pCustomRecyclerView.setLayoutManager(new LinearLayoutManager(myMainActivity));
+                } else {
+                    RecordsPageModel recordsPageModel = new RecordsPageModel(context);
+                    recordsPageModel.getRecords(new TeacherContract.Model.Listener<List<Record>>() {
+                        @Override
+                        public void onSuccess(List<Record> list) {
+                            List<DocumentSnapshot> currentRecords = DumeUtils.filterList(Google.getInstance().getRecords(), "Current");
+                            List<DocumentSnapshot> completedRecords = DumeUtils.filterList(Google.getInstance().getRecords(), "Completed");
+                            Collections.sort(currentRecords, new Comparator<DocumentSnapshot>() {
+                                @Override
+                                public int compare(DocumentSnapshot t1, DocumentSnapshot t2) {
+                                    Date date1, date2;
+                                    date1 = (Date) t1.get("creation");
+                                    date2 = (Date) t2.get("creation");
+                                    return (int) (date2.getTime() - date1.getTime());
+                                }
+                            });
+                            Collections.sort(completedRecords, new Comparator<DocumentSnapshot>() {
+                                @Override
+                                public int compare(DocumentSnapshot t1, DocumentSnapshot t2) {
+                                    Date date1, date2;
+                                    date1 = (Date) t1.get("creation");
+                                    date2 = (Date) t2.get("creation");
+                                    return (int) (date2.getTime() - date1.getTime());
+                                }
+                            });
+
+                            for (DocumentSnapshot doc : completedRecords) {
+                                Map<String, Object> spMap = (Map<String, Object>) doc.get("sp_info");
+                                Map<String, Object> bal = (Map<String, Object>) spMap.get("self_rating");
+                                Map<String, Object> forMap = (Map<String, Object>) doc.get("for_whom");
+                                Map<String, Object> shMap = (Map<String, Object>) forMap.get("request_sr");
+                                String mentorName = spMap.get("first_name") + " " + spMap.get("last_name");
+                                String mentorDpUrl = (String) spMap.get("avatar");
+                                float mentorRating = Float.parseFloat((String) bal.get("star_rating"));
+                                float studentRating = Float.parseFloat((String) shMap.get("star_rating"));
+                                String studentName = (String) forMap.get("stu_name");
+                                String studentDpUrl = (String) forMap.get("request_avatar");
+                                Map<String, Object> jizz = (Map<String, Object>) doc.get("jizz");
+                                String subjectExchange = DumeUtils.getLast(jizz);
+                                String salaryInDemand = String.valueOf(doc.get("salary"));
+                                salaryInDemand = NumberFormat.getCurrencyInstance(Locale.US).format(Double.parseDouble(salaryInDemand));
+                                salaryInDemand = (salaryInDemand.substring(1, salaryInDemand.length() - 3) + " BDT");
+                                Map<String, Object> start_date = (Map<String, Object>) doc.get("start_date");
+                                String startingDate = (String) start_date.get("date_string");
+                                Calendar calendar = Calendar.getInstance();
+                                Date creation = (Date) doc.get("status_modi_date");
+                                calendar.setTime(creation);
+                                calendar.add(Calendar.MONTH, 1);
+                                String finishingDate = java.text.DateFormat.getDateInstance(java.text.DateFormat.MEDIUM).format(calendar.getTime());
+                                String category = (String) jizz.get("Category");
+                                String packageName = (String) doc.get("package_name");
+
+                                Number salary = (Number) doc.get("salary");
+                                int salaryInteger = salary.intValue();
+                                ObligationAndClaimData obligationAndClaimData = new ObligationAndClaimData(studentName, mentorName, salaryInDemand, subjectExchange, studentRating, mentorRating
+                                        , studentDpUrl, mentorDpUrl, salaryInteger, -1, startingDate, finishingDate, packageName, category, salaryInteger);
+                                transactionData.add(obligationAndClaimData);
+                            }
+
+                            for (DocumentSnapshot doc : currentRecords) {
+                                Map<String, Object> spMap = (Map<String, Object>) doc.get("sp_info");
+                                Map<String, Object> bal = (Map<String, Object>) spMap.get("self_rating");
+                                Map<String, Object> forMap = (Map<String, Object>) doc.get("for_whom");
+                                Map<String, Object> shMap = (Map<String, Object>) forMap.get("request_sr");
+                                String mentorName = spMap.get("first_name") + " " + spMap.get("last_name");
+                                String mentorDpUrl = (String) spMap.get("avatar");
+                                float mentorRating = Float.parseFloat((String) bal.get("star_rating"));
+                                float studentRating = Float.parseFloat((String) shMap.get("star_rating"));
+                                String studentName = (String) forMap.get("stu_name");
+                                String studentDpUrl = (String) forMap.get("request_avatar");
+                                Map<String, Object> jizz = (Map<String, Object>) doc.get("jizz");
+                                String subjectExchange = DumeUtils.getLast(jizz);
+                                String salaryInDemand = String.valueOf(doc.get("salary"));
+                                salaryInDemand = NumberFormat.getCurrencyInstance(Locale.US).format(Double.parseDouble(salaryInDemand));
+                                salaryInDemand = (salaryInDemand.substring(1, salaryInDemand.length() - 3) + " BDT");
+                                Map<String, Object> start_date = (Map<String, Object>) doc.get("start_date");
+                                String startingDate = (String) start_date.get("date_string");
+                                Calendar calendar = Calendar.getInstance();
+                                Date creation = (Date) doc.get("status_modi_date");
+                                calendar.setTime(creation);
+                                calendar.add(Calendar.MONTH, 1);
+                                String finishingDate = java.text.DateFormat.getDateInstance(java.text.DateFormat.MEDIUM).format(calendar.getTime());
+                                String category = (String) jizz.get("Category");
+                                String packageName = (String) doc.get("package_name");
+
+
+                                Number salary = (Number) doc.get("salary");
+                                int salaryInteger = salary.intValue();
+                                ObligationAndClaimData obligationAndClaimData = new ObligationAndClaimData(studentName, mentorName, salaryInDemand, subjectExchange, studentRating, mentorRating
+                                        , studentDpUrl, mentorDpUrl, salaryInteger, -1, startingDate, finishingDate, packageName, category, salaryInteger);
+                                transactionData.add(obligationAndClaimData);
+                            }
+                            obligationAndClaimAdapter = new ObligationAndClaimAdapter(myMainActivity, transactionData);
+                            pCustomRecyclerView.setAdapter(obligationAndClaimAdapter);
+                            pCustomRecyclerView.setLayoutManager(new LinearLayoutManager(myMainActivity));
+                        }
+
+                        @Override
+                        public void onError(String msg) {
+                            myMainActivity.flush(msg);
+                        }
+                    });
+                }
+            } else if (myMainActivity.retriveAction.equals(DumeUtils.TEACHER)) {
+                Map<String, Object> mentorProfile = TeacherDataStore.getInstance().getDocumentSnapshot();
+                Map<String, Object> payments = (Map<String, Object>) mentorProfile.get("payments");
+                String paidPenalty = (String) payments.get("penalty_paid");
+                Number penalty = (Number) mentorProfile.get("penalty");
+                penaltyDueAmount.setText(penalty == null ? "0 ৳" : penalty.toString() + " ৳");
+                penaltyPaidAmount.setText(String.format("%s ৳", paidPenalty));
+                //TODO get the paid obligation amount
+                String totalPaid = (String) payments.get("total_paid");
+                Integer obligationPaid = Integer.parseInt(totalPaid) - Integer.parseInt(paidPenalty);
+                obligationPaidRemaining = obligationPaid;
+                List<ObligationAndClaimData> transactionData = new ArrayList<>();
+                //TODO get all current and completed records
+                if (Google.getInstance().getRecords() != null) {
+                    List<DocumentSnapshot> currentRecords = DumeUtils.filterList(Google.getInstance().getRecords(), "Current");
+                    List<DocumentSnapshot> completedRecords = DumeUtils.filterList(Google.getInstance().getRecords(), "Completed");
+                    Collections.sort(currentRecords, new Comparator<DocumentSnapshot>() {
+                        @Override
+                        public int compare(DocumentSnapshot t1, DocumentSnapshot t2) {
+                            Date date1, date2;
+                            date1 = (Date) t1.get("creation");
+                            date2 = (Date) t2.get("creation");
+                            return (int) (date2.getTime() - date1.getTime());
+                        }
+                    });
+                    Collections.sort(completedRecords, new Comparator<DocumentSnapshot>() {
+                        @Override
+                        public int compare(DocumentSnapshot t1, DocumentSnapshot t2) {
+                            Date date1, date2;
+                            date1 = (Date) t1.get("creation");
+                            date2 = (Date) t2.get("creation");
+                            return (int) (date2.getTime() - date1.getTime());
+                        }
+                    });
+
+                    for (DocumentSnapshot doc : completedRecords) {
+                        Map<String, Object> spMap = (Map<String, Object>) doc.get("sp_info");
+                        Map<String, Object> bal = (Map<String, Object>) spMap.get("self_rating");
+                        Map<String, Object> forMap = (Map<String, Object>) doc.get("for_whom");
+                        Map<String, Object> shMap = (Map<String, Object>) forMap.get("request_sr");
+                        String mentorName = spMap.get("first_name") + " " + spMap.get("last_name");
+                        String mentorDpUrl = (String) spMap.get("avatar");
+                        float mentorRating = Float.parseFloat((String) bal.get("star_rating"));
+                        float studentRating = Float.parseFloat((String) shMap.get("star_rating"));
+                        String studentName = (String) forMap.get("stu_name");
+                        String studentDpUrl = (String) forMap.get("request_avatar");
+                        Map<String, Object> jizz = (Map<String, Object>) doc.get("jizz");
+                        String subjectExchange = DumeUtils.getLast(jizz);
+                        String salaryInDemand = String.valueOf(doc.get("salary"));
+                        salaryInDemand = NumberFormat.getCurrencyInstance(Locale.US).format(Double.parseDouble(salaryInDemand));
+                        salaryInDemand = (salaryInDemand.substring(1, salaryInDemand.length() - 3) + " BDT");
+                        Map<String, Object> start_date = (Map<String, Object>) doc.get("start_date");
+                        String startingDate = (String) start_date.get("date_string");
+                        Calendar calendar = Calendar.getInstance();
+                        Date creation = (Date) doc.get("status_modi_date");
+                        calendar.setTime(creation);
+                        calendar.add(Calendar.MONTH, 1);
+                        String finishingDate = java.text.DateFormat.getDateInstance(java.text.DateFormat.MEDIUM).format(calendar.getTime());
+                        String category = (String) jizz.get("Category");
+                        String packageName = (String) doc.get("package_name");
+
+
+                        Number salary = (Number) doc.get("salary");
+                        int salaryInteger = salary.intValue();
+                        int currentItemObligation = (int) ((salaryInteger * 25) / 100);
+                        if (obligationPaidRemaining >= currentItemObligation) {//paid block
+                            obligationPaidRemaining = obligationPaidRemaining - currentItemObligation;
+                            ObligationAndClaimData obligationAndClaimData = new ObligationAndClaimData(studentName, mentorName, salaryInDemand, subjectExchange, studentRating, mentorRating
+                                    , studentDpUrl, mentorDpUrl, 0, currentItemObligation, startingDate, finishingDate, packageName, category, salaryInteger);
+                            transactionData.add(obligationAndClaimData);
+
+                        } else {//not totally paid block
+                            if (obligationPaidRemaining <= 0) {
+                                ObligationAndClaimData obligationAndClaimData = new ObligationAndClaimData(studentName, mentorName, salaryInDemand, subjectExchange, studentRating, mentorRating
+                                        , studentDpUrl, mentorDpUrl, currentItemObligation, 0, startingDate, finishingDate, packageName, category, salaryInteger);
+                                transactionData.add(obligationAndClaimData);
+                            } else {
+                                Number dueAmount = currentItemObligation - obligationPaidRemaining;
+                                ObligationAndClaimData obligationAndClaimData = new ObligationAndClaimData(studentName, mentorName, salaryInDemand, subjectExchange, studentRating, mentorRating
+                                        , studentDpUrl, mentorDpUrl, dueAmount, obligationPaidRemaining, startingDate, finishingDate, packageName, category, salaryInteger);
+                                obligationPaidRemaining = 0;
+                                transactionData.add(obligationAndClaimData);
+                            }
+                        }
+                    }
+
+                    for (DocumentSnapshot doc : currentRecords) {
+                        Map<String, Object> spMap = (Map<String, Object>) doc.get("sp_info");
+                        Map<String, Object> bal = (Map<String, Object>) spMap.get("self_rating");
+                        Map<String, Object> forMap = (Map<String, Object>) doc.get("for_whom");
+                        Map<String, Object> shMap = (Map<String, Object>) forMap.get("request_sr");
+                        String mentorName = spMap.get("first_name") + " " + spMap.get("last_name");
+                        String mentorDpUrl = (String) spMap.get("avatar");
+                        float mentorRating = Float.parseFloat((String) bal.get("star_rating"));
+                        float studentRating = Float.parseFloat((String) shMap.get("star_rating"));
+                        String studentName = (String) forMap.get("stu_name");
+                        String studentDpUrl = (String) forMap.get("request_avatar");
+                        Map<String, Object> jizz = (Map<String, Object>) doc.get("jizz");
+                        String subjectExchange = DumeUtils.getLast(jizz);
+                        String salaryInDemand = String.valueOf(doc.get("salary"));
+                        salaryInDemand = NumberFormat.getCurrencyInstance(Locale.US).format(Double.parseDouble(salaryInDemand));
+                        salaryInDemand = (salaryInDemand.substring(1, salaryInDemand.length() - 3) + " BDT");
+                        Map<String, Object> start_date = (Map<String, Object>) doc.get("start_date");
+                        String startingDate = (String) start_date.get("date_string");
+                        Calendar calendar = Calendar.getInstance();
+                        Date creation = (Date) doc.get("status_modi_date");
+                        calendar.setTime(creation);
+                        calendar.add(Calendar.MONTH, 1);
+                        String finishingDate = java.text.DateFormat.getDateInstance(java.text.DateFormat.MEDIUM).format(calendar.getTime());
+                        String category = (String) jizz.get("Category");
+                        String packageName = (String) doc.get("package_name");
+
+                        Number salary = (Number) doc.get("salary");
+                        int salaryInteger = salary.intValue();
+                        int currentItemObligation = (int) ((salaryInteger * 25) / 100);
+                        if (obligationPaidRemaining >= currentItemObligation) {//paid block
+                            obligationPaidRemaining = obligationPaidRemaining - currentItemObligation;
+                            ObligationAndClaimData obligationAndClaimData = new ObligationAndClaimData(studentName, mentorName, salaryInDemand, subjectExchange, studentRating, mentorRating
+                                    , studentDpUrl, mentorDpUrl, 0, currentItemObligation, startingDate, finishingDate, packageName, category, salaryInteger);
+                            transactionData.add(obligationAndClaimData);
+
+                        } else {//not totally paid block
+                            if (obligationPaidRemaining <= 0) {
+                                ObligationAndClaimData obligationAndClaimData = new ObligationAndClaimData(studentName, mentorName, salaryInDemand, subjectExchange, studentRating, mentorRating
+                                        , studentDpUrl, mentorDpUrl, currentItemObligation, 0, startingDate, finishingDate, packageName, category, salaryInteger);
+                                transactionData.add(obligationAndClaimData);
+                            } else {
+                                Number dueAmount = currentItemObligation - obligationPaidRemaining;
+                                ObligationAndClaimData obligationAndClaimData = new ObligationAndClaimData(studentName, mentorName, salaryInDemand, subjectExchange, studentRating, mentorRating
+                                        , studentDpUrl, mentorDpUrl, dueAmount, obligationPaidRemaining, startingDate, finishingDate, packageName, category, salaryInteger);
+                                obligationPaidRemaining = 0;
+                                transactionData.add(obligationAndClaimData);
+                            }
+                        }
+                    }
+                    obligationAndClaimAdapter = new ObligationAndClaimAdapter(myMainActivity, transactionData);
+                    pCustomRecyclerView.setAdapter(obligationAndClaimAdapter);
+                    pCustomRecyclerView.setLayoutManager(new LinearLayoutManager(myMainActivity));
+                } else {
+                    RecordsPageModel recordsPageModel = new RecordsPageModel(context);
+                    recordsPageModel.getRecords(new TeacherContract.Model.Listener<List<Record>>() {
+                        @Override
+                        public void onSuccess(List<Record> list) {
+                            List<DocumentSnapshot> currentRecords = DumeUtils.filterList(Google.getInstance().getRecords(), "Current");
+                            List<DocumentSnapshot> completedRecords = DumeUtils.filterList(Google.getInstance().getRecords(), "Completed");
+                            Collections.sort(currentRecords, new Comparator<DocumentSnapshot>() {
+                                @Override
+                                public int compare(DocumentSnapshot t1, DocumentSnapshot t2) {
+                                    Date date1, date2;
+                                    date1 = (Date) t1.get("creation");
+                                    date2 = (Date) t2.get("creation");
+                                    return (int) (date2.getTime() - date1.getTime());
+                                }
+                            });
+                            Collections.sort(completedRecords, new Comparator<DocumentSnapshot>() {
+                                @Override
+                                public int compare(DocumentSnapshot t1, DocumentSnapshot t2) {
+                                    Date date1, date2;
+                                    date1 = (Date) t1.get("creation");
+                                    date2 = (Date) t2.get("creation");
+                                    return (int) (date2.getTime() - date1.getTime());
+                                }
+                            });
+
+                            for (DocumentSnapshot doc : completedRecords) {
+                                Map<String, Object> spMap = (Map<String, Object>) doc.get("sp_info");
+                                Map<String, Object> bal = (Map<String, Object>) spMap.get("self_rating");
+                                Map<String, Object> forMap = (Map<String, Object>) doc.get("for_whom");
+                                Map<String, Object> shMap = (Map<String, Object>) forMap.get("request_sr");
+                                String mentorName = spMap.get("first_name") + " " + spMap.get("last_name");
+                                String mentorDpUrl = (String) spMap.get("avatar");
+                                float mentorRating = Float.parseFloat((String) bal.get("star_rating"));
+                                float studentRating = Float.parseFloat((String) shMap.get("star_rating"));
+                                String studentName = (String) forMap.get("stu_name");
+                                String studentDpUrl = (String) forMap.get("request_avatar");
+                                Map<String, Object> jizz = (Map<String, Object>) doc.get("jizz");
+                                String subjectExchange = DumeUtils.getLast(jizz);
+                                String salaryInDemand = String.valueOf(doc.get("salary"));
+                                salaryInDemand = NumberFormat.getCurrencyInstance(Locale.US).format(Double.parseDouble(salaryInDemand));
+                                salaryInDemand = (salaryInDemand.substring(1, salaryInDemand.length() - 3) + " BDT");
+                                Map<String, Object> start_date = (Map<String, Object>) doc.get("start_date");
+                                String startingDate = (String) start_date.get("date_string");
+                                Calendar calendar = Calendar.getInstance();
+                                Date creation = (Date) doc.get("status_modi_date");
+                                calendar.setTime(creation);
+                                calendar.add(Calendar.MONTH, 1);
+                                String finishingDate = java.text.DateFormat.getDateInstance(java.text.DateFormat.MEDIUM).format(calendar.getTime());
+                                String category = (String) jizz.get("Category");
+                                String packageName = (String) doc.get("package_name");
+
+
+                                Number salary = (Number) doc.get("salary");
+                                int salaryInteger = salary.intValue();
+                                int currentItemObligation = (int) ((salaryInteger * 25) / 100);
+                                if (obligationPaidRemaining >= currentItemObligation) {//paid block
+                                    obligationPaidRemaining = obligationPaidRemaining - currentItemObligation;
+                                    ObligationAndClaimData obligationAndClaimData = new ObligationAndClaimData(studentName, mentorName, salaryInDemand, subjectExchange, studentRating, mentorRating
+                                            , studentDpUrl, mentorDpUrl, 0, currentItemObligation, startingDate, finishingDate, packageName, category, salaryInteger);
+                                    transactionData.add(obligationAndClaimData);
+
+                                } else {//not totally paid block
+                                    if (obligationPaidRemaining <= 0) {
+                                        ObligationAndClaimData obligationAndClaimData = new ObligationAndClaimData(studentName, mentorName, salaryInDemand, subjectExchange, studentRating, mentorRating
+                                                , studentDpUrl, mentorDpUrl, currentItemObligation, 0, startingDate, finishingDate, packageName, category, salaryInteger);
+                                        transactionData.add(obligationAndClaimData);
+                                    } else {
+                                        Number dueAmount = currentItemObligation - obligationPaidRemaining;
+                                        ObligationAndClaimData obligationAndClaimData = new ObligationAndClaimData(studentName, mentorName, salaryInDemand, subjectExchange, studentRating, mentorRating
+                                                , studentDpUrl, mentorDpUrl, dueAmount, obligationPaidRemaining, startingDate, finishingDate, packageName, category, salaryInteger);
+                                        obligationPaidRemaining = 0;
+                                        transactionData.add(obligationAndClaimData);
+                                    }
+                                }
+                            }
+
+                            for (DocumentSnapshot doc : currentRecords) {
+                                Map<String, Object> spMap = (Map<String, Object>) doc.get("sp_info");
+                                Map<String, Object> bal = (Map<String, Object>) spMap.get("self_rating");
+                                Map<String, Object> forMap = (Map<String, Object>) doc.get("for_whom");
+                                Map<String, Object> shMap = (Map<String, Object>) forMap.get("request_sr");
+                                String mentorName = spMap.get("first_name") + " " + spMap.get("last_name");
+                                String mentorDpUrl = (String) spMap.get("avatar");
+                                float mentorRating = Float.parseFloat((String) bal.get("star_rating"));
+                                float studentRating = Float.parseFloat((String) shMap.get("star_rating"));
+                                String studentName = (String) forMap.get("stu_name");
+                                String studentDpUrl = (String) forMap.get("request_avatar");
+                                Map<String, Object> jizz = (Map<String, Object>) doc.get("jizz");
+                                String subjectExchange = DumeUtils.getLast(jizz);
+                                String salaryInDemand = String.valueOf(doc.get("salary"));
+                                salaryInDemand = NumberFormat.getCurrencyInstance(Locale.US).format(Double.parseDouble(salaryInDemand));
+                                salaryInDemand = (salaryInDemand.substring(1, salaryInDemand.length() - 3) + " BDT");
+                                Map<String, Object> start_date = (Map<String, Object>) doc.get("start_date");
+                                String startingDate = (String) start_date.get("date_string");
+                                Calendar calendar = Calendar.getInstance();
+                                Date creation = (Date) doc.get("status_modi_date");
+                                calendar.setTime(creation);
+                                calendar.add(Calendar.MONTH, 1);
+                                String finishingDate = java.text.DateFormat.getDateInstance(java.text.DateFormat.MEDIUM).format(calendar.getTime());
+                                String category = (String) jizz.get("Category");
+                                String packageName = (String) doc.get("package_name");
+
+
+                                Number salary = (Number) doc.get("salary");
+                                int salaryInteger = salary.intValue();
+                                int currentItemObligation = (int) ((salaryInteger * 25) / 100);
+                                if (obligationPaidRemaining >= currentItemObligation) {//paid block
+                                    obligationPaidRemaining = obligationPaidRemaining - currentItemObligation;
+                                    ObligationAndClaimData obligationAndClaimData = new ObligationAndClaimData(studentName, mentorName, salaryInDemand, subjectExchange, studentRating, mentorRating
+                                            , studentDpUrl, mentorDpUrl, 0, currentItemObligation, startingDate, finishingDate, packageName, category, salaryInteger);
+                                    transactionData.add(obligationAndClaimData);
+
+                                } else {//not totally paid block
+                                    if (obligationPaidRemaining <= 0) {
+                                        ObligationAndClaimData obligationAndClaimData = new ObligationAndClaimData(studentName, mentorName, salaryInDemand, subjectExchange, studentRating, mentorRating
+                                                , studentDpUrl, mentorDpUrl, currentItemObligation, 0, startingDate, finishingDate, packageName, category, salaryInteger);
+                                        transactionData.add(obligationAndClaimData);
+                                    } else {
+                                        Number dueAmount = currentItemObligation - obligationPaidRemaining;
+                                        ObligationAndClaimData obligationAndClaimData = new ObligationAndClaimData(studentName, mentorName, salaryInDemand, subjectExchange, studentRating, mentorRating
+                                                , studentDpUrl, mentorDpUrl, dueAmount, obligationPaidRemaining, startingDate, finishingDate, packageName, category, salaryInteger);
+                                        obligationPaidRemaining = 0;
+                                        transactionData.add(obligationAndClaimData);
+                                    }
+                                }
+                            }
+                            obligationAndClaimAdapter = new ObligationAndClaimAdapter(myMainActivity, transactionData);
+                            pCustomRecyclerView.setAdapter(obligationAndClaimAdapter);
+                            pCustomRecyclerView.setLayoutManager(new LinearLayoutManager(myMainActivity));
+                        }
+
+                        @Override
+                        public void onError(String msg) {
+                            myMainActivity.flush(msg);
+                        }
+                    });
+                }
+            }
             return rootView;
         }
 

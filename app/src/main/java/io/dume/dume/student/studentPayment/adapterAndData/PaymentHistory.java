@@ -1,7 +1,10 @@
 package io.dume.dume.student.studentPayment.adapterAndData;
 
+import android.support.annotation.Keep;
+
 import java.util.Date;
 
+@Keep
 public class PaymentHistory {
     private String amount;
     private String uid;

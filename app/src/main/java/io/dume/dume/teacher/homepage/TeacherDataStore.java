@@ -1,5 +1,7 @@
 package io.dume.dume.teacher.homepage;
 
+import android.support.annotation.Keep;
+
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.io.Serializable;
@@ -10,7 +12,7 @@ import java.util.Map;
 import io.dume.dume.student.pojo.SearchDataStore;
 import io.dume.dume.teacher.pojo.Skill;
 import io.dume.dume.teacher.pojo.Stat;
-
+@Keep
 public class TeacherDataStore implements Serializable {
     private Map<String, Object> selfRating = null;
     private Map<String, Object> documentSnapshot;

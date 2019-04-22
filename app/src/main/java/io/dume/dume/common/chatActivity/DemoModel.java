@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
-import android.view.View;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -32,16 +31,9 @@ import java.util.Map;
 import javax.annotation.Nullable;
 
 import io.dume.dume.Google;
-import io.dume.dume.common.chatActivity.Used_Classes.Message;
-import io.dume.dume.common.chatActivity.Used_Classes.User;
-import io.dume.dume.common.contactActivity.ContactActivityModel;
-import io.dume.dume.common.contactActivity.ContactData;
 import io.dume.dume.common.inboxActivity.InboxCallData;
 import io.dume.dume.common.inboxActivity.InboxNotiData;
-import io.dume.dume.common.inboxActivity.Notif;
-import io.dume.dume.student.recordsPage.RecordsPageModel;
 import io.dume.dume.teacher.homepage.TeacherContract;
-import io.dume.dume.teacher.homepage.TeacherModel;
 import io.dume.dume.teacher.pojo.Letter;
 
 public class DemoModel {
@@ -53,11 +45,14 @@ public class DemoModel {
     private Number unreadMsg;
     private Date lastMsgTime;
     boolean mute = false;
+    private int flag = 0;
 
     public DemoModel(Context context) {
-
         this.context = context;
         firestore = FirebaseFirestore.getInstance();
+        unreadMsg = 0;
+        unreadMsgString = "";
+        lastMsgTime = Calendar.getInstance().getTime();
     }
 
 
@@ -213,7 +208,7 @@ public class DemoModel {
         });
     }
 
-    public void onInboxChange(TeacherContract.Model.Listener<Letter> messageListener) {
+    public void onInboxChange(int identifier, TeacherContract.Model.Listener<Letter> messageListener) {
         firestore.collection("messages").document(Google.getInstance().getCurrentRoom()).collection("chatbox").orderBy("timestamp", Query.Direction.DESCENDING).limit(1).addSnapshotListener((Activity) context, new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
@@ -229,6 +224,7 @@ public class DemoModel {
                 if (documents != null && documents.size() > 0) {
                     letter = documents.get(0).toObject(Letter.class);
                     if (letter != null) {
+                        letter.setIdentifier(identifier);
                         messageListener.onSuccess(letter);
                     } else messageListener.onError("null found");
                 } else {
@@ -332,9 +328,9 @@ public class DemoModel {
         if (uid != null && !uid.equals("")) {
             Query query = firestore.collection("messages").whereArrayContains("participants", uid);
             query.addSnapshotListener((Activity) context, (queryDocumentSnapshots, e) -> {
-                if (e != null || queryDocumentSnapshots == null)
+                if (e != null || queryDocumentSnapshots == null) {
                     listener.onError(e != null ? e.getMessage() : "No Message History Found. Click Message Button To Create New One");
-                else {
+                } else {
                     List<DocumentSnapshot> documents = queryDocumentSnapshots.getDocuments();
                     List<Room> roomList = new ArrayList<>();
                     for (int i = 0; i < documents.size(); i++) {
@@ -352,10 +348,8 @@ public class DemoModel {
                             lastMsgTime = (Date) opMap.get("last_msg_time");
                             roomList.add(new Room(snapshot.getId(), opUid, opDP, opName, lastMsgTime, mute, unreadMsgString, unreadMsg.intValue()));
 
-                            //testing get the last msg here
-                            int finalI = i;
                             Google.getInstance().setCurrentRoom(snapshot.getId());
-                            onInboxChange(new TeacherContract.Model.Listener<Letter>() {
+                            onInboxChange(i,new TeacherContract.Model.Listener<Letter>() {
                                 @Override
                                 public void onSuccess(Letter letter) {
                                     if (letter.getUid().equals(FirebaseAuth.getInstance().getUid())) {
@@ -369,30 +363,24 @@ public class DemoModel {
                                     lastMsgTime = letter.getTimestamp();
 
                                     for (int j = 0; j < roomList.size(); j++) {
-                                        if (roomList.get(j).getRoomId().equals(snapshot.getId())) {
+                                        if (roomList.get(j).getRoomId().equals(documents.get(letter.getIdentifier()).getId())) {
+                                            Room updatedRoom = new Room(roomList.get(j).getRoomId(), roomList.get(j).getOpponentUid(), roomList.get(j).getOpponentDP(), roomList.get(j).getOpponentName(), lastMsgTime, mute, unreadMsgString, unreadMsg.intValue());
                                             roomList.remove(j);
-                                            roomList.add(j, new Room(snapshot.getId(), opUid, opDP, opName, lastMsgTime, mute, unreadMsgString, unreadMsg.intValue()));
+                                            roomList.add(j, updatedRoom);
                                         }
                                     }
+                                    flag++;
                                     //roomList.add(new Room(snapshot.getId(), opUid, opDP, opName, lastMsgTime, mute, unreadMsgString, unreadMsg.intValue()));
-                                    if (finalI == (documents.size() - 1)) {
+                                    if (flag == (documents.size())) {
                                         listener.onSuccess(roomList);
                                     }
                                 }
 
                                 @Override
                                 public void onError(String msg) {
-                                    if (finalI == (documents.size() - 1)) {
+                                    flag++;
+                                    if (flag == (documents.size())) {
                                         if (msg.equals("null found")) {
-                                            unreadMsg = 0;
-                                            unreadMsgString = "";
-                                            lastMsgTime = Calendar.getInstance().getTime();
-                                            for (int j = 0; j < roomList.size(); j++) {
-                                                if (roomList.get(j).getRoomId().equals(snapshot.getId())) {
-                                                    roomList.remove(j);
-                                                    roomList.add(j, new Room(snapshot.getId(), opUid, opDP, opName, lastMsgTime, mute, unreadMsgString, unreadMsg.intValue()));
-                                                }
-                                            }
                                             //roomList.add(new Room(snapshot.getId(), opUid, opDP, opName, lastMsgTime, mute, unreadMsgString, unreadMsg.intValue()));
                                             listener.onSuccess(roomList);
                                         } else {
@@ -403,6 +391,9 @@ public class DemoModel {
                             });
 
                         } else return;
+                    }
+                    if (documents.size() <= 0) {
+                        listener.onSuccess(roomList);
                     }
                 }
 

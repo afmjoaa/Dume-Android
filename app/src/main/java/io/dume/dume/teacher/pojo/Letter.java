@@ -1,10 +1,12 @@
 package io.dume.dume.teacher.pojo;
 
+import android.support.annotation.Keep;
+
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.io.Serializable;
 import java.util.Date;
-
+@Keep
 public class Letter implements Serializable {
 
     String uid;
@@ -14,6 +16,15 @@ public class Letter implements Serializable {
     String token;
     String name;
     String avatar;
+    int identifier;
+
+    public int getIdentifier() {
+        return identifier;
+    }
+
+    public void setIdentifier(int identifier) {
+        this.identifier = identifier;
+    }
 
     public String getAvatar() {
         return avatar;

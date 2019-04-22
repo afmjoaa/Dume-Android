@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/dialog_hosting_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_alignParentTop="true"
+    android:layout_marginBottom="10dp"
+    android:background="@drawable/bg_round_corner_rela_layout"
+    android:descendantFocusability="beforeDescendants">
+
+    <carbon.widget.ImageView
+        android:id="@+id/rated_mentor_dp"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="10dp"
+        android:scaleType="centerCrop"
+        app:carbon_cornerRadius="40dp"
+        app:srcCompat="@drawable/pay_info_ic" />
+
+    <TextView
+        android:id="@+id/rating_primary_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rated_mentor_dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"
+        android:text="Dear It's time to pay..."
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:textSize="22sp" />
+
+    <TextView
+        android:id="@+id/sub_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/rating_primary_text"
+        android:layout_marginStart="12dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginRight="12dp"
+        android:text=""
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:textSize="16sp" />
+
+    <LinearLayout
+        android:id="@+id/pay_info"
+        android:layout_below="@id/sub_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:baselineAligned="false">
+
+        <carbon.widget.RelativeLayout
+            android:id="@+id/hosting_relative_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="6dp"
+            android:layout_weight="1"
+            android:background="@color/white"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="10dp"
+            app:carbon_cornerRadius="6dp"
+            app:carbon_elevation="2dp"
+            app:carbon_rippleColor="@color/colorRippleDefault">
+
+            <TextView
+                android:id="@+id/reportTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="Due / Obligation"
+                android:textAllCaps="false"
+                android:textSize="14sp" />
+
+
+            <TextView
+                android:id="@+id/afterDiscount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/reportTitle"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
+                android:gravity="center"
+                android:text="0 ‎৳"
+                android:textAlignment="center"
+                android:textColor="@color/payment_red"
+                android:textSize="14sp" />
+
+
+        </carbon.widget.RelativeLayout>
+
+        <carbon.widget.RelativeLayout
+            android:id="@+id/hosting_relative_layout_one"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="6dp"
+            android:layout_weight="1"
+            android:background="@color/white"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="10dp"
+            app:carbon_cornerRadius="6dp"
+            app:carbon_elevation="2dp"
+            app:carbon_rippleColor="@color/colorRippleDefault">
+
+            <TextView
+                android:id="@+id/reportTitle_one"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="Total Paid"
+                android:textAllCaps="false"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/afterDiscount_one"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/reportTitle_one"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="2dp"
+                android:gravity="center"
+                android:text="0 ‎৳"
+                android:textColor="@color/payment_green"
+                android:textSize="14sp" />
+
+        </carbon.widget.RelativeLayout>
+
+    </LinearLayout>
+
+    <include
+        android:id="@+id/pay_buttons"
+        layout="@layout/payment_options"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/pay_info"
+        android:layout_marginStart="12dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginRight="12dp" />
+
+</RelativeLayout>

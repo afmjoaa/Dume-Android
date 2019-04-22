@@ -674,7 +674,7 @@ public class ProfilePageActivity extends CustomStuAppCompatActivity implements P
 
     @Override
     public void discardChangesClicked() {
-        super.onBackPressed();
+        onBackPressed();
     }
 
     @Override
@@ -755,6 +755,11 @@ public class ProfilePageActivity extends CustomStuAppCompatActivity implements P
     public void goBack() {
         searchDataStore.setProfileChanged(true);
         hideKeyboard(activity);
+        onBackPressed();
+    }
+
+    @Override
+    public void onBackPressed() {
         super.onBackPressed();
     }
 

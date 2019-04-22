@@ -83,7 +83,11 @@ public abstract class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter
                     public boolean onMenuItemClick(MenuItem menuItem) {
                         int itemId = menuItem.getItemId();
                         if(itemId == R.id.how){
-                            testingCustomDialogue(R.string.payment_info);
+                            if(current.primaryText.equals("Cash Payment")){
+                                testingCustomDialogue(R.string.cash_info, current.primaryText);
+                            }else {
+                                testingCustomDialogue(R.string.payment_info, current.primaryText);
+                            }
                         }
                         return false;
                     }
@@ -93,11 +97,12 @@ public abstract class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter
         });
     }
 
-    public void testingCustomDialogue(int infoStringId) {
+    public void testingCustomDialogue(int infoStringId , String primaryText) {
         // custom dialog
         Dialog dialog = new Dialog(context);
         dialog.setContentView(R.layout.custom_obligation_dialogue);
 
+        //Toast.makeText(context, primaryText, Toast.LENGTH_SHORT).show();
         //all find view here
         Button dismissBtn = dialog.findViewById(R.id.dismiss_btn);
         TextView dialogText = dialog.findViewById(R.id.dialog_text);
@@ -105,7 +110,7 @@ public abstract class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter
         dialogText.setGravity(Gravity.START);
 
         dialogImage.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_info_icon_green));
-        SpannableString text = new SpannableString(context.getResources().getString(R.string.payment_info));
+        SpannableString text = new SpannableString(context.getResources().getString(infoStringId));
         text.setSpan(new ForegroundColorSpan(context.getResources().getColor(R.color.colorLink)), text.length()-9, (text.length()), 0);
         text.setSpan(new URLSpan("https://dume-2d063.firebaseapp.com/home"), text.length()-9, (text.length()), 0);
         dialogText.setMovementMethod(LinkMovementMethod.getInstance());
