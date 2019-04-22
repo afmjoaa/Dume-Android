@@ -890,10 +890,10 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
 
         mMap = googleMap;
         onMapReadyListener(mMap);
-        onMapReadyGeneralConfig();
         mMap.setPadding((int) (10 * (getResources().getDisplayMetrics().density)), 0, 0, (int) (400 * (getResources().getDisplayMetrics().density)));
         mMap.getUiSettings().setCompassEnabled(false);
         mMap.setMyLocationEnabled(false);
+        onMapReadyGeneralConfig();
         addCustomMarkerFromURL(searchDataStore.getAvatarString(), searchDataStore.getAnchorPoint());
         alwaysViewMusk.postDelayed(new Runnable() {
             @Override

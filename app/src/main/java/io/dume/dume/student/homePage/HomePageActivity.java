@@ -447,7 +447,9 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
         bottomSheetBtnCallback();
     }
 
-    public void bottomSheetBtnCallback(){
+    public void bottomSheetBtnCallback() {
+
+
         learnMoreBtnOne.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -497,7 +499,7 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
         freeCashBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               inviteAFriendCalled();
+                inviteAFriendCalled();
             }
         });
         startMentoringBtn.setOnClickListener(new View.OnClickListener() {
@@ -1119,9 +1121,15 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
 
         mMap = googleMap;
         onMapReadyListener(mMap);
-        onMapReadyGeneralConfig();
         mMap.setPadding((int) (10 * (getResources().getDisplayMetrics().density)), 0, 0, (int) (72 * (getResources().getDisplayMetrics().density)));
+        onMapReadyGeneralConfig();
         getDeviceLocation(mMap);
+       /* mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+            @Override
+            public void onMapLoaded() {
+
+            }
+        });*/
     }
 
     public void navigationTogglerConfig() {
@@ -1496,6 +1504,8 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
     @Override
     public void setMsgName(String msgName) {
         userAddressingTextView.setText(msgName);
+        referMentorBtn.setText(msgName.toLowerCase());
+        freeCashBack.setText(msgName.toLowerCase());
     }
 
     //TODO
@@ -1519,7 +1529,9 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
             updateProfileBadge('%');
         }
     }
+
     public static String UNREAD_MESSAGE = "unread_message";
+
     @Override
     public void setUnreadMsg(String unreadMsg) {
         updateChatBadge(Integer.parseInt(unreadMsg));

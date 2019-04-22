@@ -35,11 +35,14 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.Calendar;
 
+import io.dume.dume.Google;
 import io.dume.dume.R;
 import io.dume.dume.auth.auth.AuthActivity;
 import io.dume.dume.broadcastReceiver.MyConnectivityHandler;
 import io.dume.dume.broadcastReceiver.NetworkChangeReceiver;
 import io.dume.dume.customView.HorizontalLoadView;
+import io.dume.dume.splash.SplashActivity;
+import io.dume.dume.student.heatMap.HeatMapActivity;
 import io.dume.dume.student.homePage.HomePageContract;
 import io.dume.dume.util.MyApplication;
 import io.dume.dume.util.NetworkUtil;
@@ -114,8 +117,6 @@ public class CustomStuAppCompatActivity extends AppCompatActivity implements MyC
 
                 }
             }).start();
-
-
         }
     }
 
@@ -135,8 +136,15 @@ public class CustomStuAppCompatActivity extends AppCompatActivity implements MyC
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        String accountMajor = Google.getInstance().getAccountMajor();
+        if(accountMajor == null){
+            Intent returnIntent = new Intent(this, SplashActivity.class);
+            returnIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(returnIntent);
+            //finish();
+            System.exit(0);
+        }
         init();
-
         // Create an IntentFilter instance.
         IntentFilter intentFilter = new IntentFilter();
         // Add network connectivity change action.

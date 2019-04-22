@@ -7,11 +7,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 
+import io.dume.dume.Google;
 import io.dume.dume.R;
 import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
+import io.dume.dume.student.pojo.SearchDataStore;
 import io.dume.dume.student.studentHelp.StudentHelpActivity;
+import io.dume.dume.teacher.homepage.TeacherDataStore;
+import io.dume.dume.util.DumeUtils;
 
 import static io.dume.dume.util.DumeUtils.animateImage;
 import static io.dume.dume.util.DumeUtils.configureAppbar;
@@ -24,6 +29,7 @@ public class FreeCashBackActivity extends CustomStuAppCompatActivity implements 
     private ImageView freeCashbackImageView;
     private TextView howInviteWork;
     private Button freeCashBtn;
+    private String userName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +51,15 @@ public class FreeCashBackActivity extends CustomStuAppCompatActivity implements 
 
     @Override
     public void initFreeCashBack() {
-
+        String accountMajor = Google.getInstance().getAccountMajor();
+        if(accountMajor != null){
+            if (accountMajor.equals(DumeUtils.STUDENT)) {
+                userName = SearchDataStore.getInstance().getUserName();
+            } else if (accountMajor.equals(DumeUtils.TEACHER)) {
+                userName = TeacherDataStore.getInstance().gettUserName();
+            }
+        }
+        freeCashBtn.setText(String.format("@%s", userName.toLowerCase().replaceAll("\\s","")));
     }
 
     @Override

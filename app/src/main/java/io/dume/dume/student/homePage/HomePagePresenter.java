@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -47,6 +49,23 @@ public class HomePagePresenter implements HomePageContract.Presenter {
     private int mRecPendingCount = 0, mRecAcceptedCount = 0, mRecCurrentCount = 0;
     private Map<String, Object> documentSnapshot;
     private int percentage;
+    private static String FACEBOOK_URL = "https://www.facebook.com/groups/1623868617935891/";
+    private static String FACEBOOK_PAGE_ID = "1623868617935891";
+
+    //method to get the right URL to use in the intent
+    public String getFacebookPageURL(Context context) {
+        PackageManager packageManager = context.getPackageManager();
+        try {
+            int versionCode = packageManager.getPackageInfo("com.facebook.katana", 0).versionCode;
+            if (versionCode >= 3002850) { //newer versions of fb app
+                return "fb://facewebmodal/f?href=" + FACEBOOK_URL;
+            } else { //older versions of fb app
+                return "fb://page/" + FACEBOOK_PAGE_ID;
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            return FACEBOOK_URL; //normal web url
+        }
+    }
 
     public HomePagePresenter(Context context, HomePageContract.Model mModel) {
         this.context = context;
@@ -160,7 +179,12 @@ public class HomePagePresenter implements HomePageContract.Presenter {
                 mView.gotoPaymentActivity();
                 break;
             case R.id.forum:
-                Toast.makeText(context, "Coming soon", Toast.LENGTH_SHORT).show();
+                //TODO
+                Intent facebookIntent = new Intent(Intent.ACTION_VIEW);
+                String facebookUrl = getFacebookPageURL(context);
+                facebookIntent.setData(Uri.parse(facebookUrl));
+                context.startActivity(facebookIntent);
+                //Toast.makeText(context, "Coming soon", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.messages:
                 mView.gotoInboxActivity();

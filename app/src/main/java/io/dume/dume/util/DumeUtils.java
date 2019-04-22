@@ -432,8 +432,6 @@ public class DumeUtils {
         if (isDualSIM) {
             imeiList.add(imeiSIM2);
         }
-
-
         return imeiList;
     }
 
@@ -505,7 +503,7 @@ public class DumeUtils {
         //StatusBarUtil.setColor(Activity activity, int color)
     }
 
-    private static void setWindowFlag(Activity activity, final int bits, boolean on) {
+    private static void setWindowFlag(Activity activity, int bits, boolean on) {
         Window win = activity.getWindow();
         WindowManager.LayoutParams winParams = win.getAttributes();
         if (on) {
@@ -518,7 +516,7 @@ public class DumeUtils {
 
     //make transparent status bar icon color dark
     public static void setDarkStatusBarIcon(Activity activity) {
-        final View decorView = activity.getWindow().getDecorView();
+        View decorView = activity.getWindow().getDecorView();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         }
@@ -752,9 +750,11 @@ public class DumeUtils {
                 }
             });
             confirmNoBtn.setText("No");
+            setMargins(confirmNoBtn,0,0, (int) (10*context.getResources().getDisplayMetrics().density), (int) (4*context.getResources().getDisplayMetrics().density));
             if(hideBtn){
                 comfirmYesBtn.setVisibility(View.GONE);
                 confirmNoBtn.setTextColor(context.getResources().getColor(R.color.percent_off_active_color));
+                setMargins(confirmNoBtn,0,0,0, (int) (4*context.getResources().getDisplayMetrics().density));
                 confirmNoBtn.setText("Retry");
             }
             mMakeRequestBSD.show();

@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -12,6 +13,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -232,7 +234,8 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
     private Button startLearingBtn;
     private SharedPreferences sharedPreferences;
     private Dialog paymentDialog;
-
+    private static String FACEBOOK_URL = "https://www.facebook.com/groups/1623868617935891/";
+    private static String FACEBOOK_PAGE_ID = "1623868617935891";
 
     @Override
     public void loadPromoData(HomePageRecyclerData promoData) {
@@ -892,6 +895,21 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         return super.onCreateOptionsMenu(menu);
     }
 
+    //method to get the right URL to use in the intent
+    public String getFacebookPageURL(Context context) {
+        PackageManager packageManager = context.getPackageManager();
+        try {
+            int versionCode = packageManager.getPackageInfo("com.facebook.katana", 0).versionCode;
+            if (versionCode >= 3002850) { //newer versions of fb app
+                return "fb://facewebmodal/f?href=" + FACEBOOK_URL;
+            } else { //older versions of fb app
+                return "fb://page/" + FACEBOOK_PAGE_ID;
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            return FACEBOOK_URL; //normal web url
+        }
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -947,7 +965,11 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
                 startActivity(new Intent(this, StudentPaymentActivity.class).setAction(DumeUtils.TEACHER));
                 break;
             case R.id.forum:
-                Toast.makeText(context, "Coming soon", Toast.LENGTH_SHORT).show();
+                Intent facebookIntent = new Intent(Intent.ACTION_VIEW);
+                String facebookUrl = getFacebookPageURL(context);
+                facebookIntent.setData(Uri.parse(facebookUrl));
+                context.startActivity(facebookIntent);
+                //Toast.makeText(context, "Coming soon", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.messages:
                 startActivity(new Intent(this, InboxActivity.class));
@@ -1054,7 +1076,6 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
 
     @Override
     public void onMyGpsLocationChanged(Location location) {
-
     }
 
     /*
@@ -1458,6 +1479,8 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
     @Override
     public void setMsgName(String msgName) {
         userAddressingTextView.setText(msgName);
+        referMentorBtn.setText(msgName.toLowerCase());
+        freeCashBack.setText(msgName.toLowerCase());
     }
 
     //TODO

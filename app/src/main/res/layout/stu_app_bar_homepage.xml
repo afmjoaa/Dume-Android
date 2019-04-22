@@ -138,7 +138,7 @@
                     android:id="@+id/homePage_bottomSheet_recycler"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:visibility="visible"></android.support.v7.widget.RecyclerView>
+                    android:visibility="visible" />
 
                 <LinearLayout
                     android:id="@+id/dume_bangladesh_block"

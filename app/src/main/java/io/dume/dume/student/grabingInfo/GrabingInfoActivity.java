@@ -678,8 +678,8 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                 switch (retrivedAction) {
                     case DumeUtils.TEACHER:
                     case DumeUtils.BOOTCAMP:
-                    case "frag_" +DumeUtils.BOOTCAMP:
-                    case "frag_" +DumeUtils.TEACHER:
+                    case "frag_" + DumeUtils.BOOTCAMP:
+                    case "frag_" + DumeUtils.TEACHER:
                         HashMap<String, Object> queryMap = new HashMap<>();
                         for (int i = 0; i < queryList.size(); i++) {
                             queryMap.put(queryListName.get(i), queryList.get(i));
@@ -694,14 +694,14 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                         for (Skill item : skillArrayList) {
                             if (item.getQuery_string().equals(queryString)) {
                                 flush("Skill Already Exists");
-                                if(retrivedAction.startsWith("frag")){
+                                if (retrivedAction.startsWith("frag")) {
                                     hideProgress();
                                     Intent intent = new Intent(GrabingInfoActivity.this, SkillActivity.class);
                                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                                     //finishAffinity();
                                     startActivity(intent);
                                     finish();
-                                }else{
+                                } else {
                                     hideProgress();
                                     Intent intent = new Intent(GrabingInfoActivity.this, SkillActivity.class);
                                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -730,14 +730,14 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                         teacherModel.saveSkill(skill, new TeacherContract.Model.Listener<Void>() {
                             @Override
                             public void onSuccess(Void list) {
-                                if(retrivedAction.startsWith("frag")){
+                                if (retrivedAction.startsWith("frag")) {
                                     hideProgress();
                                     Intent intent = new Intent(GrabingInfoActivity.this, SkillActivity.class).setAction("skill_added");
                                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                                     //finishAffinity();
                                     startActivity(intent);
                                     finish();
-                                }else{
+                                } else {
                                     //| Intent.FLAG_ACTIVITY_CLEAR_TASK
                                     hideProgress();
                                     Intent intent = new Intent(GrabingInfoActivity.this, SkillActivity.class).setAction("skill_added");
@@ -840,14 +840,12 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
         MapStyleOptions style = MapStyleOptions.loadRawResourceStyle(
                 this, R.raw.map_style_default_no_landmarks);
         googleMap.setMapStyle(style);
-
         mMap = googleMap;
         onMapReadyListener(mMap);
-        onMapReadyGeneralConfig();
         mMap.setPadding((int) (10 * (getResources().getDisplayMetrics().density)), (int) (250 * (getResources().getDisplayMetrics().density)), 0, (int) (6 * (getResources().getDisplayMetrics().density)));
         mMap.getUiSettings().setCompassEnabled(false);
         mMap.setMyLocationEnabled(false);
-
+        onMapReadyGeneralConfig();
         switch (Objects.requireNonNull(getIntent().getAction())) {
             case DumeUtils.STUDENT:
                 addCustomMarkerFromURL(searchDataStore.getAvatarString(), searchDataStore.getAnchorPoint());
@@ -901,8 +899,6 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                         }
                     });
         }
-
-
         iconFactory.setStyle(IconGenerator.STYLE_DEFAULT);
         iconFactory.setTextAppearance(this, R.style.MyCustomInfoWindowTextApp);
         iconFactory.setBackground(getResources().getDrawable(R.drawable.custom_info_window_vector));

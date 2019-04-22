@@ -243,9 +243,10 @@ public class PhoneVerificationActivity extends CustomStuAppCompatActivity implem
         this.finish();
     }
 
+
     @Override
     public void onBackPressed() {
-
+        super.onBackPressed();
     }
 
     public void onPhoneEdit(View view) {

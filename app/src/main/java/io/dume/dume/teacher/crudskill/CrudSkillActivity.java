@@ -3,6 +3,7 @@ package io.dume.dume.teacher.crudskill;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -38,6 +39,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.gson.Gson;
 import com.google.maps.android.ui.IconGenerator;
 
 import java.util.List;
@@ -195,12 +197,12 @@ public class CrudSkillActivity extends CusStuAppComMapActivity implements CrudCo
         googleMap.setMapStyle(style);
         mMap = googleMap;
         onMapReadyListener(mMap);
-        onMapReadyGeneralConfig();
         mMap.setPadding((int) (10 * (getResources().getDisplayMetrics().density)), (int) (250 * (getResources().getDisplayMetrics().density)), 0, (int) (6 * (getResources().getDisplayMetrics().density)));
         mMap.getUiSettings().setCompassEnabled(false);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             mMap.setMyLocationEnabled(false);
         }
+        onMapReadyGeneralConfig();
         if (fromWhere != null) {
             switch (fromWhere) {
                 case DumeUtils.STUDENT:
@@ -209,7 +211,17 @@ public class CrudSkillActivity extends CusStuAppComMapActivity implements CrudCo
                         @Override
                         public void run() {
                             //give anchor point here
-                            moveCamera(searchDataStore.getAnchorPoint(), DEFAULT_ZOOM, "Device Location", mMap);
+                            if (searchDataStore.getAnchorPoint() == null) {
+                                SharedPreferences prefs = getSharedPreferences("DUME", MODE_PRIVATE);
+                                String restoredText = prefs.getString("location", null);
+                                if (restoredText != null) {
+                                    Gson gson1 = new Gson();
+                                    LatLng latLng = gson1.fromJson(restoredText, LatLng.class);
+                                    moveCamera(latLng, DEFAULT_ZOOM, "Device Location", mMap);
+                                }
+                            } else {
+                                moveCamera(searchDataStore.getAnchorPoint(), DEFAULT_ZOOM, "Device Location", mMap);
+                            }
                         }
                     }, 0L);
                     break;

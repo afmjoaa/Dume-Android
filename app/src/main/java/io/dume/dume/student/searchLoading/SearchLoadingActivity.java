@@ -302,14 +302,14 @@ public class SearchLoadingActivity extends CusStuAppComMapActivity implements On
         homePageBtn = mNoResultBSD.findViewById(R.id.cancel_no_btn);
         mNoResultBSD.setCancelable(false);
         mNoResultBSD.setCanceledOnTouchOutside(false);
-        if (goBackEditBtn != null && homePageBtn != null && noResultMainText != null  && noResultSubText != null) {
+        if (goBackEditBtn != null && homePageBtn != null && noResultMainText != null && noResultSubText != null) {
             noResultMainText.setText("Sorry !!!");
             noResultSubText.setText("No mentor available for your specific query...");
             homePageBtn.setText("Goto, Homepage");
             goBackEditBtn.setText("Edit, Query");
 
             if (retrivedAction != null) {
-                switch (retrivedAction){
+                switch (retrivedAction) {
                     case "from_HPA":
                         homePageBtn.setVisibility(View.VISIBLE);
                         goBackEditBtn.setVisibility(View.GONE);
@@ -323,11 +323,11 @@ public class SearchLoadingActivity extends CusStuAppComMapActivity implements On
             homePageBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(retrivedAction.equals("from_HPA")){
+                    if (retrivedAction.equals("from_HPA")) {
                         searchDataStore.setFirstTime(false);
                         onBackPressed();
                         mNoResultBSD.dismiss();
-                    }else{
+                    } else {
                         Intent intent = new Intent(SearchLoadingActivity.this, HomePageActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
@@ -413,7 +413,6 @@ public class SearchLoadingActivity extends CusStuAppComMapActivity implements On
         });
     }
 
-
     @Override
     public void onMapReady(GoogleMap googleMap) {
         MapStyleOptions style = MapStyleOptions.loadRawResourceStyle(
@@ -421,25 +420,30 @@ public class SearchLoadingActivity extends CusStuAppComMapActivity implements On
         googleMap.setMapStyle(style);
         mMap = googleMap;
         onMapReadyListener(mMap);
-        onMapReadyGeneralConfig();
         mMap.setPadding((int) (10 * (getResources().getDisplayMetrics().density)), 0, 0, (int) (72 * (getResources().getDisplayMetrics().density)));
         mMap.getUiSettings().setCompassEnabled(false);
         mMap.setMyLocationEnabled(false);
-        addCustomMarkerFromURL(searchDataStore.getAvatarString(), searchDataStore.getAnchorPoint());
-        mMap.addCircle(new CircleOptions()
-                .center(searchDataStore.getAnchorPoint())
-                .radius(1400)//meter radius
-                .strokeColor(0xFF0277bd)
-                .fillColor(0x0c64b5f6)
-                .strokeWidth(1.5f)
-        );
-        viewMuskOne.postDelayed(new Runnable() {
+        mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
             @Override
-            public void run() {
-                //give anchor point here
-                moveSearchLoadingCamera(searchDataStore.getAnchorPoint(), DEFAULT_ZOOM, "Device Location", mMap);
+            public void onMapLoaded() {
+                onMapReadyGeneralConfig();
+                addCustomMarkerFromURL(searchDataStore.getAvatarString(), searchDataStore.getAnchorPoint());
+                mMap.addCircle(new CircleOptions()
+                        .center(searchDataStore.getAnchorPoint())
+                        .radius(1400)//meter radius
+                        .strokeColor(0xFF0277bd)
+                        .fillColor(0x0c64b5f6)
+                        .strokeWidth(1.5f)
+                );
+                viewMuskOne.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        //give anchor point here
+                        moveSearchLoadingCamera(searchDataStore.getAnchorPoint(), DEFAULT_ZOOM, "Device Location", mMap);
+                    }
+                }, 50L);
             }
-        }, 50L);
+        });
     }
 
     @Override
@@ -453,7 +457,6 @@ public class SearchLoadingActivity extends CusStuAppComMapActivity implements On
     public void gotoSearchResult() {
         startActivity(new Intent(this, SearchResultActivity.class));
     }
-
 
     @Override
     public void noResultDialogue() {
@@ -554,7 +557,7 @@ public class SearchLoadingActivity extends CusStuAppComMapActivity implements On
         iconFactory.setTextAppearance(this, R.style.MyCustomInfoWindowTextApp);
         iconFactory.setBackground(getResources().getDrawable(R.drawable.custom_info_window_vector));
         iconFactory.setContentPadding((int) (27 * (getResources().getDisplayMetrics().density)), (int) (2 * (getResources().getDisplayMetrics().density)), 0, (int) (6 * (getResources().getDisplayMetrics().density)));
-        addCustomInfoWindow(iconFactory, makeCharSequence("Radius",   "2 km") , lattitudeLongitude);
+        addCustomInfoWindow(iconFactory, makeCharSequence("Radius", "2 km"), lattitudeLongitude);
     }
 
     @Override

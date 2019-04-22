@@ -203,9 +203,10 @@ public class SkillFragment extends Fragment {
             public void onClick(View view) {
                 documentSnapshot = TeacherDataStore.getInstance().getDocumentSnapshot();
                 final Map<String, Boolean> achievements = (Map<String, Boolean>) documentSnapshot.get("achievements");
+                assert achievements != null;
                 Boolean premier = achievements.get("premier");
                 if (isProfileOK()) {
-                    if (premier) {
+                    if (premier!= null && premier) {
                         goToCrudActivity("frag_" + DumeUtils.TEACHER);
                     } else {
                         tips("Unlocking Premier Badge is must...");
@@ -290,23 +291,27 @@ public class SkillFragment extends Fragment {
 
     public void changeAddSkillBtnColor() {
         documentSnapshot = TeacherDataStore.getInstance().getDocumentSnapshot();
-        final Map<String, Boolean> achievements = (Map<String, Boolean>) documentSnapshot.get("achievements");
-        Boolean premier = achievements.get("premier");
-        if (premier) {
-            addInstantDBtn.setImageDrawable(context.getResources().getDrawable(R.drawable.dume_instant_image));
-        } else {
-            addInstantDBtn.setImageDrawable(context.getResources().getDrawable(R.drawable.dume_instant_grayscale_image));
+        Map<String, Boolean> achievements = (Map<String, Boolean>) TeacherDataStore.getInstance().getDocumentSnapshot().get("achievements");
+        Boolean premier;
+        if (achievements != null) {
+            premier = achievements.get("premier");
+            if (premier!= null && premier) {
+                addInstantDBtn.setImageDrawable(context.getResources().getDrawable(R.drawable.dume_instant_image));
+            } else {
+                addInstantDBtn.setImageDrawable(context.getResources().getDrawable(R.drawable.dume_instant_grayscale_image));
 
-        }
-        String beh = (String) documentSnapshot.get("pro_com_%");
-        int percentage = Integer.parseInt(beh);
-        if (percentage >= 95) {
-            addRegularDBtn.setImageDrawable(context.getResources().getDrawable(R.drawable.dume_regular_image));
-            addDumeGangBtn.setImageDrawable(context.getResources().getDrawable(R.drawable.dume_gang_image));
-        } else {
-            addRegularDBtn.setImageDrawable(context.getResources().getDrawable(R.drawable.dume_regular_grayscale_image));
-            addDumeGangBtn.setImageDrawable(context.getResources().getDrawable(R.drawable.dume_gang_grayscale_image));
+            }
+            String beh = (String) documentSnapshot.get("pro_com_%");
+            assert beh != null;
+            int percentage = Integer.parseInt(beh);
+            if (percentage >= 95) {
+                addRegularDBtn.setImageDrawable(context.getResources().getDrawable(R.drawable.dume_regular_image));
+                addDumeGangBtn.setImageDrawable(context.getResources().getDrawable(R.drawable.dume_gang_image));
+            } else {
+                addRegularDBtn.setImageDrawable(context.getResources().getDrawable(R.drawable.dume_regular_grayscale_image));
+                addDumeGangBtn.setImageDrawable(context.getResources().getDrawable(R.drawable.dume_gang_grayscale_image));
 
+            }
         }
     }
 }

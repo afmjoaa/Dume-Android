@@ -3,6 +3,7 @@ package io.dume.dume.student.grabingLocation;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
@@ -51,6 +52,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.GeoPoint;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -66,7 +68,6 @@ import carbon.widget.RelativeLayout;
 import io.dume.dume.R;
 import io.dume.dume.student.pojo.CusStuAppComMapActivity;
 import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
-import io.dume.dume.student.pojo.SearchDataStore;
 import io.dume.dume.student.profilePage.ProfilePageActivity;
 import io.dume.dume.student.studentSettings.SavedPlacesAdaData;
 import io.dume.dume.student.studentSettings.StudentSettingsActivity;
@@ -81,7 +82,6 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 import static io.dume.dume.util.DumeUtils.configToolbarTittle;
-import static io.dume.dume.util.DumeUtils.getAddress;
 import static io.dume.dume.util.DumeUtils.hideKeyboard;
 import static io.dume.dume.util.DumeUtils.showKeyboard;
 
@@ -173,7 +173,7 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
                             @Override
                             public void onResult(PlaceBuffer places) {
                                 if (places.getStatus().isSuccess()) {
-                                    final Place myPlace = places.get(0);
+                                    Place myPlace = places.get(0);
                                     queriedLocation = myPlace.getLatLng();
                                     Log.e(TAG, " " + queriedLocation.latitude);
                                     Log.e(TAG, " " + queriedLocation.longitude);
@@ -422,7 +422,7 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
         }
         if (s.equals("Permanent address") || s.equals("permanent") || s.equals("Permanent") || s.equals("permanent address")) {
             if (documentSnapshot != null) {
-                final GeoPoint current_address = documentSnapshot.getGeoPoint("current_address");
+                GeoPoint current_address = documentSnapshot.getGeoPoint("current_address");
                 if (current_address != null) {
                     MenualRecyclerData currentSavedPlace = new MenualRecyclerData();
                     String address = getAddress(current_address.getLatitude(), current_address.getLongitude());
@@ -496,7 +496,7 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
             }
         }
         if (documentSnapshot != null) {
-            final GeoPoint current_address = documentSnapshot.getGeoPoint("current_address");
+            GeoPoint current_address = documentSnapshot.getGeoPoint("current_address");
             if (current_address != null) {
                 if (geoPoint.equals(current_address)) {
                     found = true;
@@ -758,10 +758,16 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
 
         mMap = googleMap;
         onMapReadyListener(mMap);
-        onMapReadyGeneralConfig();
         mMap.setPadding((int) (10 * (getResources().getDisplayMetrics().density)), 0, 0, (int) (72 * (getResources().getDisplayMetrics().density)));
-        getDeviceLocation(mMap);
+        /*mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+            @Override
+            public void onMapLoaded() {
 
+            }
+        });*/
+
+        onMapReadyGeneralConfig();
+        getDeviceLocation(mMap);
         mMap.setOnCameraMoveStartedListener(new GoogleMap.OnCameraMoveStartedListener() {
             @Override
             public void onCameraMoveStarted(int i) {
@@ -849,6 +855,12 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
             locationDoneBtn.setEnabled(false);
             locationDoneBtn.setBackgroundColor(getResources().getColor(R.color.disable_color));
             LatLng target = mMap.getCameraPosition().target;
+            //TSP testing share preference
+            SharedPreferences.Editor editor = getSharedPreferences("DUME", MODE_PRIVATE).edit();
+            Gson gson = new Gson();
+            String mLoc = gson.toJson(target);
+            editor.putString("location", mLoc);
+            editor.apply();
             searchDataStore.setAnchorPoint(target);
             GeoPoint targetGeopoint = new GeoPoint(target.latitude, target.longitude);
             if (!checkIfInDB(targetGeopoint)) {
@@ -924,7 +936,7 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
 
             // Submit the query to the autocomplete API and retrieve a PendingResult that will
             // contain the results when the query completes.
-            final PendingResult<AutocompletePredictionBuffer> results =
+            PendingResult<AutocompletePredictionBuffer> results =
                     Places.GeoDataApi
                             .getAutocompletePredictions(mGoogleApiClient, constraint.toString(),
                                     LAT_LNG_BOUNDS, null);
@@ -933,7 +945,7 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
             // for a result from the API.
             Callable<AutocompletePredictionBuffer> callable = () -> {
                 AutocompletePredictionBuffer autocompletePredictions = results.await(60, TimeUnit.SECONDS);
-                final Status status = autocompletePredictions.getStatus();
+                Status status = autocompletePredictions.getStatus();
                 if (!status.isSuccess()) {
                     //Toast.makeText(GrabingLocationActivity.this, "Error contacting API: " + status.toString(), Toast.LENGTH_SHORT).show();
                     Log.e(TAG, "Error getting autocomplete prediction API call: " + status.toString());
@@ -1063,7 +1075,7 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
     @Override
     public void setCurrentAddress(GeoPoint currentAddress) {
         userLocation = currentAddress;
-        final String address = getAddress(currentAddress.getLatitude(), currentAddress.getLongitude());
+        String address = getAddress(currentAddress.getLatitude(), currentAddress.getLongitude());
         //secondaryText[1] = "fuck fuck";
         //recyclerMenualAdapter.update(getFinalData());
     }

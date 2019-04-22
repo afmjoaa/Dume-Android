@@ -300,6 +300,8 @@ public class RecordsRejectedActivity extends CustomStuAppCompatActivity implemen
                 rejectedByBtn.setText(String.format("Rejected By : %s", studentName));
             }else if(DumeUtils.TEACHER.equals(rejected_by) || DumeUtils.BOOTCAMP.equals(rejected_by)) {
                 rejectedByBtn.setText(String.format("Rejected By : %s", mentorName));
+            }else{
+                rejectedByBtn.setText(String.format("Rejected By : Dume(For Inactivity)", mentorName));
             }
 
             mentorNameTV.setText(record.getMentorName());

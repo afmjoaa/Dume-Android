@@ -9,7 +9,6 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.graphics.drawable.Animatable;
@@ -60,11 +59,6 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
-import com.directions.route.AbstractRouting;
-import com.directions.route.Route;
-import com.directions.route.RouteException;
-import com.directions.route.Routing;
-import com.directions.route.RoutingListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -75,15 +69,10 @@ import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
-import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.GeoPoint;
-import com.google.firebase.firestore.WriteBatch;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.maps.android.SphericalUtil;
@@ -107,7 +96,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
-import carbon.widget.EditText;
 import carbon.widget.ImageView;
 import io.dume.dume.Google;
 import io.dume.dume.R;
@@ -132,7 +120,6 @@ import io.dume.dume.student.recordsPage.RecordsPageActivity;
 import io.dume.dume.student.recordsPage.RecordsPageModel;
 import io.dume.dume.student.recordsPending.RecordsPendingActivity;
 import io.dume.dume.student.searchResultTabview.SearchResultTabviewActivity;
-import io.dume.dume.student.studentHelp.StudentHelpActivity;
 import io.dume.dume.teacher.homepage.TeacherContract;
 import io.dume.dume.teacher.pojo.Academic;
 import io.dume.dume.util.DumeUtils;
@@ -143,7 +130,7 @@ import static io.dume.dume.util.DumeUtils.showKeyboard;
 import static io.dume.dume.util.ImageHelper.getRoundedCornerBitmap;
 
 public class SearchResultActivity extends CusStuAppComMapActivity implements OnMapReadyCallback,
-        SearchResultContract.View, MyGpsLocationChangeListener, GoogleMap.OnMarkerClickListener, GoogleMap.OnInfoWindowClickListener{
+        SearchResultContract.View, MyGpsLocationChangeListener, GoogleMap.OnMarkerClickListener, GoogleMap.OnInfoWindowClickListener {
 
     private GoogleMap mMap;
     private SearchResultContract.Presenter mPresenter;
@@ -510,10 +497,10 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                         limit.setText(editable.toString().length() + "/120");
                         //limit.setTextColor(Color.RED);
                         limit.setTextColor(context.getResources().getColor(R.color.light_red));
-                    } else if(editable.toString().length() >= 1){
+                    } else if (editable.toString().length() >= 1) {
                         limit.setText(editable.toString().length() + "/120");
                         limit.setTextColor(context.getResources().getColor(R.color.colorAccent));
-                    }else {
+                    } else {
                         limit.setText(editable.toString().length() + "/120");
                         limit.setTextColor(Color.BLACK);
                     }
@@ -582,9 +569,9 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                     recordsData.putAll(searchMap);
                     Number salary = (Number) skillMap.get("salary");
                     Number penalty = (Number) searchDataStore.getDocumentSnapshot().get("penalty");
-                    if (penalty != null && penalty.intValue()!= 0) {
+                    if (penalty != null && penalty.intValue() != 0) {
                         penaltyChanged = true;
-                        salary = salary.intValue()+penalty.intValue();
+                        salary = salary.intValue() + penalty.intValue();
                     }
                     skillMap.put("salary", salary);
                     recordsData.putAll(skillMap);
@@ -654,7 +641,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                             mModel.updateMentorDailys(imprssionUid, requestMentorUid, new TeacherContract.Model.Listener<Void>() {
                                 @Override
                                 public void onSuccess(Void batch) {
-                                    mModel.riseNewRecords(recordsData,penaltyChanged, new TeacherContract.Model.Listener<DocumentReference>() {
+                                    mModel.riseNewRecords(recordsData, penaltyChanged, new TeacherContract.Model.Listener<DocumentReference>() {
                                         @Override
                                         public void onSuccess(DocumentReference list) {
                                             goHome(list);
@@ -734,7 +721,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                                     mModel.updateMentorDailys(imprssionUid, requestMentorUid, new TeacherContract.Model.Listener<Void>() {
                                         @Override
                                         public void onSuccess(Void batch) {
-                                            mModel.riseNewRecords(recordsData,penaltyChanged, new TeacherContract.Model.Listener<DocumentReference>() {
+                                            mModel.riseNewRecords(recordsData, penaltyChanged, new TeacherContract.Model.Listener<DocumentReference>() {
                                                 @Override
                                                 public void onSuccess(DocumentReference list) {
                                                     goHome(list);
@@ -1479,18 +1466,18 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
         configPromo();
     }
 
-    public void configPromo(){
+    public void configPromo() {
         Map<String, Object> documentSnapshot = searchDataStore.getDocumentSnapshot();
         ArrayList<String> applied_promo = (ArrayList<String>) documentSnapshot.get("applied_promo");
-        if(applied_promo.size()>0){
+        if (applied_promo.size() > 0) {
             for (String applied : applied_promo) {
                 Log.w(TAG, "appliedPromo: " + applied);
                 Map<String, Object> promo_item = (Map<String, Object>) documentSnapshot.get(applied);
                 Gson gson = new Gson();
                 JsonElement jsonElement = gson.toJsonTree(promo_item);
                 HomePageRecyclerData homePageRecyclerData = gson.fromJson(jsonElement, HomePageRecyclerData.class);
-                if(homePageRecyclerData!= null){
-                    if(homePageRecyclerData.getPackageName().equals(searchDataStore.getPackageName())){
+                if (homePageRecyclerData != null) {
+                    if (homePageRecyclerData.getPackageName().equals(searchDataStore.getPackageName())) {
                         max_dicount_percentage = homePageRecyclerData.getMax_dicount_percentage();
                         max_discount_credit = homePageRecyclerData.getMax_discount_credit();
                     }
@@ -1555,21 +1542,21 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
         NumberFormat currencyInstance = NumberFormat.getCurrencyInstance(Locale.US);
         Number salary = (Number) selectedMentor.get("salary");
         Number penalty = (Number) searchDataStore.getDocumentSnapshot().get("penalty");
-        if (penalty != null && penalty.intValue()!= 0) {
-            salary = salary.intValue()+penalty.intValue();
+        if (penalty != null && penalty.intValue() != 0) {
+            salary = salary.intValue() + penalty.intValue();
         }
 
         if (max_dicount_percentage != null && max_discount_credit != null) {
-            Number calculatedCreditOff = salary.intValue()*max_dicount_percentage*0.01;
+            Number calculatedCreditOff = salary.intValue() * max_dicount_percentage * 0.01;
             validDiscount = Math.min(max_discount_credit, calculatedCreditOff.intValue());
             String perviousSalaryFormatted = currencyInstance.format(salary.intValue());
-            salaryFormatted = currencyInstance.format(salary.intValue()-validDiscount);
+            salaryFormatted = currencyInstance.format(salary.intValue() - validDiscount);
             SpannableString text = new SpannableString("Salary : " + perviousSalaryFormatted.substring(1, perviousSalaryFormatted.length() - 3) + " BDT " + salaryFormatted.substring(1, salaryFormatted.length() - 3) + " BDT");
-            text.setSpan(new ForegroundColorSpan(context.getResources().getColor(R.color.textColorPrimary)), 9, 9+(perviousSalaryFormatted.length()), 0);
-            text.setSpan(new StrikethroughSpan(), 9, 9+(perviousSalaryFormatted.length()), 0);
+            text.setSpan(new ForegroundColorSpan(context.getResources().getColor(R.color.textColorPrimary)), 9, 9 + (perviousSalaryFormatted.length()), 0);
+            text.setSpan(new StrikethroughSpan(), 9, 9 + (perviousSalaryFormatted.length()), 0);
             salaryBtn.setText(text);
             saleImageView.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             saleImageView.setVisibility(View.GONE);
             salaryFormatted = currencyInstance.format(salary);
             salaryBtn.setText("Salary : " + salaryFormatted.substring(1, salaryFormatted.length() - 3) + " BDT");
@@ -1773,8 +1760,13 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
         mMap = googleMap;
         //config the map here
         onMapReadyListener(mMap);
-        onMapReadyGeneralConfig();
         mMap.setPadding((int) (6 * (getResources().getDisplayMetrics().density)), 0, 0, (int) (150 * (getResources().getDisplayMetrics().density)));
+        mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+            @Override
+            public void onMapLoaded() {
+                onMapReadyGeneralConfig();
+            }
+        });
         mMap.setOnMarkerClickListener(this);
         mMap.setOnInfoWindowClickListener(this);
         //mMap.getUiSettings().setZoomGesturesEnabled(false);

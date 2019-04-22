@@ -587,9 +587,13 @@ public class CusStuAppComMapActivity extends CustomStuAppCompatActivity implemen
         //TODO: setting up the parent map activity
         if (MLOCATIONPERMISSIONGRANTED) {
             //TODO: centering the current location not default
-            mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(LAT_LNG_BOUNDS, 10));
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                    && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            try{
+                mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(LAT_LNG_BOUNDS, 10));
+            } catch (Exception e) {
+                Log.e(TAG, "getDeviceLocation: SecurityException: " + e.getMessage());
+            }
+            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                    && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 // TODO: Consider calling
                 getLocationPermission(mapFragment);
                 return;
@@ -637,6 +641,7 @@ public class CusStuAppComMapActivity extends CustomStuAppCompatActivity implemen
                 }
             }
         }
+
     }
 
     @Override

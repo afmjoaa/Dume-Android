@@ -714,7 +714,8 @@ public class EditAccount extends CustomStuAppCompatActivity implements EditContr
             setProfileComPercent(profileComPercent.toString());
         }
 
-        if (!databaseComPercent.equals(getProfileComPercent())) {
+
+        if (databaseComPercent != null && !databaseComPercent.equals(getProfileComPercent())) {
             someThingChanged(true);
         }
 
