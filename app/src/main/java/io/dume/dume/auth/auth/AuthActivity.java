@@ -268,7 +268,7 @@ public class AuthActivity extends CustomStuAppCompatActivity implements AuthCont
         DataStore.setSTATION(1);
         Intent intent = new Intent(this, PhoneVerificationActivity.class);
         startActivity(intent);
-        finish();
+
     }
 
     @Override
@@ -291,7 +291,7 @@ public class AuthActivity extends CustomStuAppCompatActivity implements AuthCont
         dataStore.setBottomNavAccountMajor(true);
 
         startActivity(intent);
-        finish();
+
     }
 
     @Override

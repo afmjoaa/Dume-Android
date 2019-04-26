@@ -548,6 +548,47 @@ public class DumeUtils {
         return mQuery.toString();
     }
 
+
+    public static boolean isCommonMatched(List<String> localQueryList, List<String> dbQueryList, int threshold) {
+        for (int i = 0; i < localQueryList.size() - threshold; i++) {
+            if (!localQueryList.get(i).equals(dbQueryList.get(i))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static boolean isAMinimalMatch(List<String> localQueryList, List<String> dbQueryList, int threshold) {
+
+        String localSB = localQueryList.get(localQueryList.size() - threshold);
+        String dbSB = dbQueryList.get(dbQueryList.size() - threshold);
+        Log.e(TAG, "isAMinimalMatch: " + localSB + " : " + dbSB);
+
+        String localtrim = localSB.replaceAll("\\s", "");
+        String dbtrim = dbSB.replaceAll("\\s", "");
+        String[] localsplit = localtrim.split(",");
+        //     String[] dbsplit = dbtrim.split(",");
+        for (String aLocalsplit : localsplit) {
+            if (!dbtrim.contains(aLocalsplit)) {
+                return false;
+            }
+        }
+
+
+        return true;
+
+
+
+      /*  for (int i = 0; i < subject.size(); i++) {
+            Log.e("bar", subject.get(i) + " contains " + queryStringFromDb + " = " + queryStringFromDb.contains(subject.get(i)));
+            if (!queryStringFromDb.contains(subject.get(i))) {
+                return false;
+            }
+        }*/
+
+
+    }
+
     public static Map<String, Object> getQueryMap(String packageName, List<String> queryList, List<String> queryListName) {
         StringBuilder mQuery = new StringBuilder();
         Map<String, Object> queryMap = new HashMap<>();
@@ -575,7 +616,7 @@ public class DumeUtils {
                 commonQuery.append(firstTwo(queryList.get(i)));
             }
         }
-
+        Log.e("bar", "Common Query : " + commonQuery.toString());
         queryMap.put("common_query", commonQuery.toString());
         queryMap.put("query_string", mQuery.toString());
         queryMap.put("subject_list", subjectList);
@@ -733,7 +774,7 @@ public class DumeUtils {
             confirmSubText.setText(body);
             confirmNoBtn.setText("No");
             comfirmYesBtn.setText(positiveString);
-            if(positiveString.equals("Add Skill")){
+            if (positiveString.equals("Add Skill")) {
                 confirmNoBtn.setText("Not Now");
             }
 
@@ -745,7 +786,7 @@ public class DumeUtils {
                 }
             });
             confirmNoBtn.setEnabled(cancelable);
-            if(!cancelable){
+            if (!cancelable) {
                 confirmNoBtn.setTextColor(context.getResources().getColor(R.color.disable_color));
             }
             confirmNoBtn.setOnClickListener(new View.OnClickListener() {
@@ -756,11 +797,11 @@ public class DumeUtils {
                 }
             });
 
-            setMargins(confirmNoBtn,0,0, (int) (10*context.getResources().getDisplayMetrics().density), (int) (4*context.getResources().getDisplayMetrics().density));
-            if(hideBtn){
+            setMargins(confirmNoBtn, 0, 0, (int) (10 * context.getResources().getDisplayMetrics().density), (int) (4 * context.getResources().getDisplayMetrics().density));
+            if (hideBtn) {
                 comfirmYesBtn.setVisibility(View.GONE);
                 confirmNoBtn.setTextColor(context.getResources().getColor(R.color.percent_off_active_color));
-                setMargins(confirmNoBtn,0,0,0, (int) (4*context.getResources().getDisplayMetrics().density));
+                setMargins(confirmNoBtn, 0, 0, 0, (int) (4 * context.getResources().getDisplayMetrics().density));
                 confirmNoBtn.setText("Retry");
                 confirmNoBtn.setEnabled(true);
             }

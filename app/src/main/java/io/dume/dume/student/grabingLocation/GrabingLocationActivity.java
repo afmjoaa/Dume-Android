@@ -26,11 +26,13 @@ import android.text.TextWatcher;
 import android.text.style.CharacterStyle;
 import android.text.style.StyleSpan;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -820,19 +822,32 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
     //not interested right now
     @Override
     public void onLocationDoneBtnClicked() {
+
         if (Objects.requireNonNull(retrivedAction).equals("fromPPA")) {
             //testing
+            if (mCenterLatLong==null) {
+                flush("Please move map marker to select location...");
+                return;
+            }
             Intent goBackToPPAIntent = new Intent(this, ProfilePageActivity.class);
             goBackToPPAIntent.putExtra("selected_location", mCenterLatLong);
             setResult(RESULT_OK, goBackToPPAIntent);
             finish();
             //GeoPoint selectedLocation = new GeoPoint(mCenterLatLong.latitude, mCenterLatLong.longitude);
         } else if (Objects.requireNonNull(retrivedAction).equals("fromMPA")) {
+            if (mCenterLatLong==null) {
+                flush("Please move map marker to select location...");
+                return;
+            }
             Intent mpaIntent = new Intent(this, EditAccount.class);
             mpaIntent.putExtra("selected_location", mCenterLatLong);
             setResult(RESULT_OK, mpaIntent);
             finish();
         } else if (Objects.requireNonNull(retrivedAction).startsWith("fromSPA")) {
+            if (mCenterLatLong==null) {
+                flush("Please move map marker to select location...");
+                return;
+            }
             Intent goBackToPPAIntent = new Intent(this, StudentSettingsActivity.class);
             goBackToPPAIntent.putExtra("selected_location", mCenterLatLong);
             if (Objects.requireNonNull(retrivedAction).equals("fromSPASN")) {
@@ -841,11 +856,19 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
             setResult(RESULT_OK, goBackToPPAIntent);
             finish();
         } else if (Objects.requireNonNull(retrivedAction).startsWith("fromGLA")) {
+            if (mCenterLatLong==null) {
+                flush("Please move map marker to select location...");
+                return;
+            }
             Intent goBackToGLAIntent = new Intent(this, StudentSettingsActivity.class);
             goBackToGLAIntent.putExtra("selected_location", mCenterLatLong);
             setResult(RESULT_OK, goBackToGLAIntent);
             finish();
         } else if (Objects.requireNonNull(retrivedAction).startsWith("fromSA")) {
+            if (mCenterLatLong==null) {
+                flush("Please move map marker to select location...");
+                return;
+            }
             Intent intent = new Intent();
             intent.putExtra("selected_location", mCenterLatLong);
             setResult(RESULT_OK, intent);
@@ -855,6 +878,11 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
             locationDoneBtn.setEnabled(false);
             locationDoneBtn.setBackgroundColor(getResources().getColor(R.color.disable_color));
             LatLng target = mMap.getCameraPosition().target;
+
+            if(target== null){
+                flush("Please move map marker to select location...");
+                return;
+            }
             //TSP testing share preference
             SharedPreferences.Editor editor = getSharedPreferences("DUME", MODE_PRIVATE).edit();
             Gson gson = new Gson();
@@ -1102,8 +1130,11 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
     }
 
     @Override
-    public void flush(String msg) {
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+    public void flush(String msg){
+        Toast toast = Toast.makeText(this, msg, Toast.LENGTH_SHORT);
+        TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
+        if( v != null) v.setGravity(Gravity.CENTER);
+        toast.show();
     }
 
     @Override

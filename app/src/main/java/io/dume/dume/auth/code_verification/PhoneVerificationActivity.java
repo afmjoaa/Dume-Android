@@ -138,19 +138,25 @@ public class PhoneVerificationActivity extends CustomStuAppCompatActivity implem
 
     @Override
     public void gotoTeacherActivity() {
-        startActivity(new Intent(this, TeacherActivtiy.class));
+        Intent intent = new Intent(this, TeacherActivtiy.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
         finish();
     }
 
     @Override
     public void gotoStudentActivity() {
-        startActivity(new Intent(this, HomePageActivity.class));
+        Intent intent = new Intent(this, HomePageActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
         finish();
     }
 
     @Override
     public void gotoForeignObligation() {
-        startActivity(new Intent(this, PayActivity.class));
+        Intent intent = new Intent(this, PayActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
         finish();
     }
 

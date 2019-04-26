@@ -48,15 +48,6 @@ public class SearchLoadingModel extends StuBaseModel implements SearchLoadingCon
         instructorList = new ArrayList<>();
     }
 
-    public boolean isMatch(ArrayList<String> subject, String queryStringFromDb) {
-        for (int i = 0; i < subject.size(); i++) {
-            if (!queryStringFromDb.contains(subject.get(i))) {
-                return false;
-            }
-        }
-
-        return true;
-    }
 
     @Override
     public void search(double lat, double lon, double radius, String queryString, TeacherContract.Model.Listener<List<DocumentSnapshot>> listener) {
@@ -72,9 +63,15 @@ public class SearchLoadingModel extends StuBaseModel implements SearchLoadingCon
                 rejectedRecordIds.add(recordDataRejected.get(i).getString("skill_uid"));
             }
             geoQuery.addGeoQueryDataEventListener(new GeoQueryDataEventListener() {
+
+                private SearchDataStore searchDataStore;
+
                 @Override
                 public void onDocumentEntered(DocumentSnapshot documentSnapshot, GeoPoint location) {
                     String queryStringFromDb = (String) documentSnapshot.get("query_string");
+                    String dbPackageName = (String) documentSnapshot.get("package_name");
+                    List<String> dbQueryList = (List<String>) documentSnapshot.get("query_list");
+
                     Boolean status = documentSnapshot.getBoolean("status");
                     Map<String, Object> sp_info = (Map<String, Object>) documentSnapshot.get("sp_info");
                     Map<String, Object> self_rating = (Map<String, Object>) sp_info.get("self_rating");
@@ -94,41 +91,40 @@ public class SearchLoadingModel extends StuBaseModel implements SearchLoadingCon
                     Float beha_value = (Float.parseFloat(self_rating.get("l_behaviour").toString()) /
                             Float.parseFloat(self_rating.get("l_behaviour").toString()) + Float.parseFloat(self_rating.get("dl_behaviour").toString())) * 100;
 
-
-                    Map<String, Object> queryMap = SearchDataStore.getInstance().getQueryMap();
-                    ArrayList<String> subjectList = (ArrayList<String>) queryMap.get("subject_list");
-                    String commonQuery = (String) queryMap.get("common_query");
+                    Log.e("bar", "Document Entered" + queryStringFromDb);
 
                     //validating valid mentors
-                    if (queryStringFromDb != null && status!= null && status && a_ratio_value >= 40 && starRating>=2.2 && expertise_value>=40 && beha_value>= 40 ) {
-                            if (queryStringFromDb.equals(queryString)) {
-                                if (!SearchDataStore.getInstance().getUserUid().equals(documentSnapshot.getString("mentor_uid"))) {
-                                    String skillId = documentSnapshot.getId();
-                                    if (rejectedRecordIds.contains(skillId)) {
-                                        for (int i = 0; i < recordDataRejected.size(); i++) {
-                                            salary = null;
-                                            if (recordDataRejected.get(i).getString("skill_uid").equals(skillId)) {
-                                                //get the salary here
-                                                // and if bigger then add otherwise not
-                                                rejectedBy = recordDataRejected.get(i).getString("rejected_by");
-                                                if (rejectedBy.equals(DumeUtils.TEACHER)) {
-                                                    salary = (Number) recordDataRejected.get(i).get("salary");
-                                                    break;
-                                                }
+                    if (queryStringFromDb != null && status != null && status && a_ratio_value >= 40 && starRating >= 2.2 && expertise_value >= 40 && beha_value >= 40) {
+                        if (queryStringFromDb.equals(queryString)) {
+                            if (!SearchDataStore.getInstance().getUserUid().equals(documentSnapshot.getString("mentor_uid"))) {
+                                String skillId = documentSnapshot.getId();
+                                if (rejectedRecordIds.contains(skillId)) {
+                                    for (int i = 0; i < recordDataRejected.size(); i++) {
+                                        salary = null;
+                                        if (recordDataRejected.get(i).getString("skill_uid").equals(skillId)) {
+                                            //get the salary here
+                                            // and if bigger then add otherwise not
+                                            rejectedBy = recordDataRejected.get(i).getString("rejected_by");
+                                            if (rejectedBy.equals(DumeUtils.TEACHER)) {
+                                                salary = (Number) recordDataRejected.get(i).get("salary");
+                                                break;
                                             }
                                         }
-                                        Number documentSalary = (Number) documentSnapshot.get("salary");
+                                    }
+                                    Number documentSalary = (Number) documentSnapshot.get("salary");
 
-                                        if (documentSalary != null && SearchLoadingModel.this.salary != null && documentSalary.intValue() > SearchLoadingModel.this.salary.intValue()) {
-                                            instructorList.add(documentSnapshot);
-                                        }
-                                    } else {
-                                        //testing other thing like obligation etc here
-                                        //TODO
+                                    if (documentSalary != null && SearchLoadingModel.this.salary != null && documentSalary.intValue() > SearchLoadingModel.this.salary.intValue()) {
                                         instructorList.add(documentSnapshot);
                                     }
+                                } else {
+                                    //testing other thing like obligation etc here
+                                    //TODO
+                                    instructorList.add(documentSnapshot);
                                 }
-                            } else if (queryStringFromDb.startsWith(commonQuery) && isMatch(subjectList, queryStringFromDb)) {
+                            }
+                        } else {
+                            searchDataStore = SearchDataStore.getInstance();
+                            if (searchDataStore.getPackageName().equals(dbPackageName) && DumeUtils.isCommonMatched(searchDataStore.getQueryList(), dbQueryList, dbPackageName.equals(SearchDataStore.DUME_GANG) ? 4 : 3) && DumeUtils.isAMinimalMatch(searchDataStore.getQueryList(), dbQueryList, dbPackageName.equals(SearchDataStore.DUME_GANG) ? 4 : 3)) {
 
                                 if (!SearchDataStore.getInstance().getUserUid().equals(documentSnapshot.getString("mentor_uid"))) {
                                     String skillId = documentSnapshot.getId();
@@ -158,6 +154,7 @@ public class SearchLoadingModel extends StuBaseModel implements SearchLoadingCon
                                 }
 
                             }
+                        }
                     }
                 }
 

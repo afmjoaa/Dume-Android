@@ -471,8 +471,7 @@ public class AuthRegisterActivity extends CustomStuAppCompatActivity {
         if (item.getItemId() == R.id.action_help) {
             Toast.makeText(this, "About", Toast.LENGTH_SHORT).show();
         } else {
-            this.startActivity(new Intent(this, AuthActivity.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
-            this.finish();
+           onBackPressed();
         }
         return super.onOptionsItemSelected(item);
     }
