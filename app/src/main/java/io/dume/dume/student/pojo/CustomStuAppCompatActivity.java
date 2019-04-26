@@ -137,7 +137,7 @@ public class CustomStuAppCompatActivity extends AppCompatActivity implements MyC
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         String accountMajor = Google.getInstance().getAccountMajor();
-        if(accountMajor == null){
+        if (FirebaseAuth.getInstance().getCurrentUser() != null && accountMajor == null) {
             Intent returnIntent = new Intent(this, SplashActivity.class);
             returnIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(returnIntent);
@@ -251,7 +251,7 @@ public class CustomStuAppCompatActivity extends AppCompatActivity implements MyC
             activity.getWindow().setStatusBarColor(Color.TRANSPARENT);
         }
 
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M){
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             StatusBarUtil.setTranslucent(activity, 50);
             if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                 activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
@@ -270,7 +270,7 @@ public class CustomStuAppCompatActivity extends AppCompatActivity implements MyC
         decor = activity.getWindow().getDecorView();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             decor.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-        }else{
+        } else {
             StatusBarUtil.setDarkMode(activity);
             StatusBarUtil.setTranslucent(activity, 50);
             if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
@@ -284,7 +284,7 @@ public class CustomStuAppCompatActivity extends AppCompatActivity implements MyC
         decor = activity.getWindow().getDecorView();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             decor.setSystemUiVisibility(0);
-        }else{
+        } else {
             StatusBarUtil.setLightMode(activity);
             StatusBarUtil.setTranslucent(activity, 50);
             if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {

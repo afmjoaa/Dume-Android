@@ -518,7 +518,7 @@ public class ProfilePageActivity extends CustomStuAppCompatActivity implements P
                     @Override
                     public void accept(File file) {
                         compressedImage = file;
-                        Glide.with(ProfilePageActivity.this).load(compressedImage).apply(new RequestOptions().override(100, 100).placeholder(R.drawable.avatar)).into(profileUserDP);
+                        Glide.with(ProfilePageActivity.this).load(compressedImage).apply(new RequestOptions().override(100, 100).placeholder(R.drawable.set_display_pic)).into(profileUserDP);
                         hideSpiner();
                         updateChangesClicked();
                     }

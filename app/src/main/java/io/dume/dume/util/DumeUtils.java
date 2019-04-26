@@ -731,8 +731,11 @@ public class DumeUtils {
         if (confirmMainText != null && confirmSubText != null && comfirmYesBtn != null && confirmNoBtn != null) {
             confirmMainText.setText(title);
             confirmSubText.setText(body);
-            comfirmYesBtn.setText(positiveString);
             confirmNoBtn.setText("No");
+            comfirmYesBtn.setText(positiveString);
+            if(positiveString.equals("Add Skill")){
+                confirmNoBtn.setText("Not Now");
+            }
 
             comfirmYesBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -742,6 +745,9 @@ public class DumeUtils {
                 }
             });
             confirmNoBtn.setEnabled(cancelable);
+            if(!cancelable){
+                confirmNoBtn.setTextColor(context.getResources().getColor(R.color.disable_color));
+            }
             confirmNoBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -749,20 +755,14 @@ public class DumeUtils {
                     mMakeRequestBSD.dismiss();
                 }
             });
-            confirmNoBtn.setText("No");
-<<<<<<< HEAD
+
             setMargins(confirmNoBtn,0,0, (int) (10*context.getResources().getDisplayMetrics().density), (int) (4*context.getResources().getDisplayMetrics().density));
             if(hideBtn){
                 comfirmYesBtn.setVisibility(View.GONE);
                 confirmNoBtn.setTextColor(context.getResources().getColor(R.color.percent_off_active_color));
                 setMargins(confirmNoBtn,0,0,0, (int) (4*context.getResources().getDisplayMetrics().density));
                 confirmNoBtn.setText("Retry");
-=======
-            if (hideBtn) {
-                comfirmYesBtn.setVisibility(View.GONE);
-                confirmNoBtn.setTextColor(context.getResources().getColor(R.color.percent_off_active_color));
-                confirmNoBtn.setText(positiveString);
->>>>>>> f965007727289a7f53fa0044beb75a1379a6c575
+                confirmNoBtn.setEnabled(true);
             }
             mMakeRequestBSD.show();
             mMakeRequestBSD.setCancelable(cancelable);

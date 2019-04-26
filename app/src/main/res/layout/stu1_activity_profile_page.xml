@@ -105,7 +105,7 @@
                     android:scaleType="centerCrop"
                     app:carbon_cornerRadius="45dp"
                     app:carbon_elevation="3dp"
-                    app:srcCompat="@drawable/avatar" />
+                    app:srcCompat="@drawable/set_display_pic" />
 
                 <carbon.widget.TextView
                     android:id="@+id/label"

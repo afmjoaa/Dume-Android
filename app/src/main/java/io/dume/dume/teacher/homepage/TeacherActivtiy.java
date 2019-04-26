@@ -294,7 +294,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         setActivityContextMap(this, fromFlag);
         teacherDataStore = TeacherDataStore.getInstance();
         model = new TeacherModel(this);
-        presenter = new TeacherPresenter(this, model);
+        presenter = new TeacherPresenter(this,this, model);
         presenter.init();
         settingStatusBarTransparent();
         setDarkStatusBarIcon();
@@ -1192,6 +1192,16 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         } else return false;
     }
 
+    @Override
+    public void onBackPressed() {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        } else if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        } else {
+            super.onBackPressed();
+        }
+    }
 
     @Override
     public void showPaymentDialogue() {

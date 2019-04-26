@@ -384,7 +384,7 @@ public class StudentHelpActivity extends CustomStuAppCompatActivity implements S
                 @Override
                 public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
                     super.onReceivedError(view, request, error);
-                    Toast.makeText(getContext(), "Network Error", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Network Error", Toast.LENGTH_SHORT).show();
                 }
             });
             webView.loadUrl("https://dume-2d063.firebaseapp.com/faq");
@@ -455,7 +455,7 @@ public class StudentHelpActivity extends CustomStuAppCompatActivity implements S
                 @Override
                 public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
                     super.onReceivedError(view, request, error);
-                    Toast.makeText(getContext(), "Network Error", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Network Error", Toast.LENGTH_SHORT).show();
                 }
             });
             webView.loadUrl(loadingURL);

@@ -1516,19 +1516,25 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
     public void onMentorSelect(DocumentSnapshot selectedMentor) {
         this.selectedMentor = selectedMentor;
         Map<String, Object> sp_info = (Map<String, Object>) selectedMentor.get("sp_info");
-        final String name = String.format("%s %s", sp_info.get("first_name"), sp_info.get("last_name"));
+        String name = String.format("%s %s", sp_info.get("first_name"), sp_info.get("last_name"));
         mentorNameText.setText(name);
         String birthDate = (String) sp_info.get("birth_date");
         if (birthDate == null || birthDate.equals("")) {
             ageText.setText("Age - unknown");
         } else {
             String[] splited = birthDate.split("\\s+");
-            final String age = getAge(Integer.parseInt(splited[2]), Integer.parseInt(splited[1].replace(",", "")), splited[0]);
-            ageText.setText(age + " year old");
+            if (splited.length >= 3) {
+                try {
+                    String age = getAge(Integer.parseInt(splited[2]), Integer.parseInt(splited[1].replace(",", "")), splited[0]);
+                    ageText.setText(age + " year old");
+                } catch (Exception e) {
+                    Log.w(TAG, "onMentorSelect:" + e.getLocalizedMessage());
+                }
+            }
         }
         GeoPoint location = selectedMentor.getGeoPoint("location");
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-        final String avatar = (String) sp_info.get("avatar");
+        String avatar = (String) sp_info.get("avatar");
         if (avatar != null && !avatar.equals("")) {
             Glide.with(getApplicationContext()).load(avatar).into(mentorDisplayPic);
         }
@@ -1761,12 +1767,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
         //config the map here
         onMapReadyListener(mMap);
         mMap.setPadding((int) (6 * (getResources().getDisplayMetrics().density)), 0, 0, (int) (150 * (getResources().getDisplayMetrics().density)));
-        mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
-            @Override
-            public void onMapLoaded() {
-                onMapReadyGeneralConfig();
-            }
-        });
+        onMapReadyGeneralConfig();
         mMap.setOnMarkerClickListener(this);
         mMap.setOnInfoWindowClickListener(this);
         //mMap.getUiSettings().setZoomGesturesEnabled(false);
@@ -1820,7 +1821,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                 mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
                     @Override
                     public void onMapLoaded() {
-                        final float thisZoom = mMap.getCameraPosition().zoom;
+                        float thisZoom = mMap.getCameraPosition().zoom;
                         mMap.setMaxZoomPreference((thisZoom + 0.5f));
                         mMap.setMinZoomPreference((thisZoom - 0.6f));
 
@@ -1859,7 +1860,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                 mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
                     @Override
                     public void onMapLoaded() {
-                        final float thisZoom = mMap.getCameraPosition().zoom;
+                        float thisZoom = mMap.getCameraPosition().zoom;
                         mMap.setMaxZoomPreference((thisZoom + 0.5f));
                         mMap.setMinZoomPreference((thisZoom - 0.6f));
                     }
@@ -2170,7 +2171,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
             age--;
         }
 
-        Integer ageInt = new Integer(age);
+        Integer ageInt = age;
         String ageS = ageInt.toString();
 
         return ageS;

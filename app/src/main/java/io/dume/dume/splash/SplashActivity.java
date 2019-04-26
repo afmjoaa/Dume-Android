@@ -49,7 +49,7 @@ public class SplashActivity extends AppCompatActivity implements SplashContract.
 
     @Override
     public void foundUpdates() {
-        DumeUtils.notifyDialog(this, false,false, "Mandatory Update", updateDescription, "Update", new TeacherContract.Model.Listener<Boolean>() {
+        DumeUtils.notifyDialog(this, false,false, "Mandatory Update !!", updateDescription, "Update", new TeacherContract.Model.Listener<Boolean>() {
             @Override
             public void onSuccess(Boolean yes) {
                 if (yes) {

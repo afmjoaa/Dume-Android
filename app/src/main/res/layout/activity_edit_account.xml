@@ -58,7 +58,7 @@
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/avatar"
+                    app:srcCompat="@drawable/set_display_pic"
                     app:carbon_cornerRadius="50dp"
                     android:layout_marginBottom="5dp"
                     app:carbon_elevation="3dp" />

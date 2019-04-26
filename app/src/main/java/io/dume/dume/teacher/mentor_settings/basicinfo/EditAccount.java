@@ -178,9 +178,9 @@ public class EditAccount extends CustomStuAppCompatActivity implements EditContr
         String gender = documentSnapshot.getString("gender");
         if (gender != null) {
             if (gender.equals("Male") || gender.equals("")) {
-                requestOptions.placeholder(R.drawable.avatar);
+                requestOptions.placeholder(R.drawable.set_display_pic);
             } else {
-                requestOptions.placeholder(R.drawable.avatar_female);
+                requestOptions.placeholder(R.drawable.set_display_pic);
             }
         }
         Glide.with(getApplicationContext()).load(documentSnapshot.getString("avatar")).apply(requestOptions.override(100, 100)).into(avatar);

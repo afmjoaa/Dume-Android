@@ -1,6 +1,6 @@
 package io.dume.dume.teacher.homepage;
 
-import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
@@ -27,7 +27,6 @@ import io.dume.dume.model.DumeModel;
 import io.dume.dume.student.homePage.adapter.HomePageRatingData;
 import io.dume.dume.student.homePage.adapter.HomePageRecyclerData;
 import io.dume.dume.student.recordsPage.Record;
-import io.dume.dume.teacher.adapters.SkillAdapter;
 import io.dume.dume.teacher.pojo.Skill;
 import io.dume.dume.teacher.pojo.Stat;
 import io.dume.dume.teacher.skill.SkillActivity;
@@ -36,13 +35,15 @@ import io.dume.dume.util.DumeUtils;
 public class TeacherPresenter implements TeacherContract.Presenter {
 
     private static final String TAG = TeacherPresenter.class.getSimpleName().toString();
+    private final Context context;
     private TeacherContract.View view;
     private TeacherModel model;
     private TeacherDataStore teacherDataStore;
 
-    public TeacherPresenter(TeacherContract.View view, TeacherModel model) {
+    public TeacherPresenter(Context context, TeacherContract.View view, TeacherModel model) {
         this.view = view;
         this.model = model;
+        this.context = context;
         teacherDataStore = TeacherDataStore.getInstance();
     }
 
@@ -156,7 +157,7 @@ public class TeacherPresenter implements TeacherContract.Presenter {
                     TeacherActivtiy.ISSKILLDIALOGSHOWING = true;
                     if (teacherDataStore != null) {
                         if (teacherDataStore.getSkillArrayList() == null) {
-                            new DumeModel(view.getContext()).getSkill(new TeacherContract.Model.Listener<ArrayList<Skill>>() {
+                            new DumeModel(context).getSkill(new TeacherContract.Model.Listener<ArrayList<Skill>>() {
                                 @Override
                                 public void onSuccess(ArrayList<Skill> list) {
                                     teacherDataStore.setSkillArrayList(list);
@@ -166,17 +167,17 @@ public class TeacherPresenter implements TeacherContract.Presenter {
                                         handler.postDelayed(new Runnable() {
                                             @Override
                                             public void run() {
-                                                DumeUtils.notifyDialog(view.getContext(), false, true, "Add your skill to get Student !!", "Right now you do not have any skill. To get students nearest you, You should add your skill right now. If you do not add skill, You will never get tution offer from student.", "Add Skill", new TeacherContract.Model.Listener<Boolean>() {
+                                                DumeUtils.notifyDialog(context, false, true, "Add your skill to get Student !!", "Right now you do not have any skill. To get students near you, You need to add your skill right now. If you do not add skill, You will never get tuition offer from student.", "Add Skill", new TeacherContract.Model.Listener<Boolean>() {
                                                     @Override
                                                     public void onSuccess(Boolean yes) {
                                                         if (yes) {
-                                                            view.getContext().startActivity(new Intent(view.getContext(), SkillActivity.class));
+                                                            context.startActivity(new Intent(context, SkillActivity.class));
                                                         }
                                                     }
 
                                                     @Override
                                                     public void onError(String msg) {
-                                                        Toast.makeText(view.getContext(), msg, Toast.LENGTH_SHORT).show();
+                                                        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
 
                                                     }
                                                 });
@@ -190,7 +191,7 @@ public class TeacherPresenter implements TeacherContract.Presenter {
 
                                 @Override
                                 public void onError(String msg) {
-                                    Toast.makeText(view.getContext(), msg, Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
                                 }
                             });
                         } else {
@@ -199,17 +200,17 @@ public class TeacherPresenter implements TeacherContract.Presenter {
                                 handler.postDelayed(new Runnable() {
                                     @Override
                                     public void run() {
-                                        DumeUtils.notifyDialog(view.getContext(), false, true, "Add your skill to get Student !!", "Right now you do not have any skill. To get students nearest you, You should add your skill right now. If you do not add skill, You will never get tution offer from student.", "Add Skill", new TeacherContract.Model.Listener<Boolean>() {
+                                        DumeUtils.notifyDialog(context, false, true, "Add your skill to get Student !!", "Right now you do not have any skill. To get students nearest you, You should add your skill right now. If you do not add skill, You will never get tution offer from student.", "Add Skill", new TeacherContract.Model.Listener<Boolean>() {
                                             @Override
                                             public void onSuccess(Boolean yes) {
                                                 if (yes) {
-                                                    view.getContext().startActivity(new Intent(view.getContext(), SkillActivity.class));
+                                                    context.startActivity(new Intent(context, SkillActivity.class));
                                                 }
                                             }
 
                                             @Override
                                             public void onError(String msg) {
-                                                Toast.makeText(view.getContext(), msg, Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
 
                                             }
                                         });
@@ -262,6 +263,7 @@ public class TeacherPresenter implements TeacherContract.Presenter {
                         TeacherDataStore.getInstance().setDocumentSnapshot(documentSnapshot.getData());
                         appliedPromo(documentSnapshot.getData());
                         ArrayList<String> tempList = new ArrayList<>();
+                        assert available_promo != null;
                         for (String promoCode : available_promo) {
                             if (!tempList.contains(promoCode)) {
                                 tempList.add(promoCode);
@@ -298,6 +300,7 @@ public class TeacherPresenter implements TeacherContract.Presenter {
                 ArrayList<String> available_promo = (ArrayList<String>) documentSnapshot.get("available_promo");
                 appliedPromo(documentSnapshot);
                 ArrayList<String> tempList = new ArrayList<>();
+                assert available_promo != null;
                 for (String promoCode : available_promo) {
                     if (!tempList.contains(promoCode)) {
                         tempList.add(promoCode);

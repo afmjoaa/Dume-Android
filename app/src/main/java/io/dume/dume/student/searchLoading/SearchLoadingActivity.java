@@ -423,27 +423,23 @@ public class SearchLoadingActivity extends CusStuAppComMapActivity implements On
         mMap.setPadding((int) (10 * (getResources().getDisplayMetrics().density)), 0, 0, (int) (72 * (getResources().getDisplayMetrics().density)));
         mMap.getUiSettings().setCompassEnabled(false);
         mMap.setMyLocationEnabled(false);
-        mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+
+        onMapReadyGeneralConfig();
+        addCustomMarkerFromURL(searchDataStore.getAvatarString(), searchDataStore.getAnchorPoint());
+        mMap.addCircle(new CircleOptions()
+                .center(searchDataStore.getAnchorPoint())
+                .radius(1400)//meter radius
+                .strokeColor(0xFF0277bd)
+                .fillColor(0x0c64b5f6)
+                .strokeWidth(1.5f)
+        );
+        viewMuskOne.postDelayed(new Runnable() {
             @Override
-            public void onMapLoaded() {
-                onMapReadyGeneralConfig();
-                addCustomMarkerFromURL(searchDataStore.getAvatarString(), searchDataStore.getAnchorPoint());
-                mMap.addCircle(new CircleOptions()
-                        .center(searchDataStore.getAnchorPoint())
-                        .radius(1400)//meter radius
-                        .strokeColor(0xFF0277bd)
-                        .fillColor(0x0c64b5f6)
-                        .strokeWidth(1.5f)
-                );
-                viewMuskOne.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        //give anchor point here
-                        moveSearchLoadingCamera(searchDataStore.getAnchorPoint(), DEFAULT_ZOOM, "Device Location", mMap);
-                    }
-                }, 50L);
+            public void run() {
+                //give anchor point here
+                moveSearchLoadingCamera(searchDataStore.getAnchorPoint(), DEFAULT_ZOOM, "Device Location", mMap);
             }
-        });
+        }, 50L);
     }
 
     @Override

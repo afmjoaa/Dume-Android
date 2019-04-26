@@ -5,7 +5,7 @@
     <string name="dume">Dume</string>
     <string name="socialConnect">Or connect with social by signing in as ..</string>
     <string-array name="promo_text_array">
-        <item> Searching Teachers, Mentors, Couching or boot camp Dume got you all  covered</item>
+        <item> Searching Teachers, Mentors, Coaching or boot camp Dume got you all  covered</item>
         <item> Dume will find you the best mentor on your demand, whenever you need</item>
         <item> Finding tution was never been easier, just sign in as a mentor and get  started </item>
         <item> Reach maximum people with Dume and let your talent shine </item>
@@ -533,7 +533,7 @@
     <string name="estimated_salary">Estimated Salary</string>
 
     <string-array name="specificPromoText">
-        <item>Search for nearby couching-centers specific to  the topic</item>
+        <item>Search for nearby coaching-centers specific to  the topic</item>
         <item>Search for nearby monthly mentors avaiable to the topics</item>
         <item>Search for nearby professional genius for solution to the topic</item>
     </string-array>
@@ -546,7 +546,7 @@ provided.Tap salary for details.  </string>
     <string name="for_me">For Me</string>
     <string name="dume_products"><![CDATA[Dume Batch: This is our finding nearby boot camp package.\nRegular Dume : This is the regular monthly tuition we are generally familiar with.\nInstant Dume : This is our premier package here we instantly give you a capable mentor for a certain time to teach & guide you in a specific subject.]]></string>
     <string name="dume_products_mentor"><![CDATA[Dume Batch: This is our finding nearby boot camp package.\nRegular Dume : This is the regular monthly tuition we are generally familiar with.\nInstant Dume : This is our premier package. One will be eligible for this if he unlocks the premier badge.]]></string>
-    <string name="dume_product_intro">You can choose between regular, instant or boot camp/couching center with ease.</string>
+    <string name="dume_product_intro">You can choose between regular, instant or boot camp/coaching center with ease.</string>
     <string name="choosing_text">Choosing mentors have never been easy with Dume</string>
     <string name="start_couching_text">Life is constantly bringing us challenges and opportunities. When we have the courage to step up to the challenges and seize the opportunities we move forward. As a coach, you can help others make this kind of progress.</string>
     <string name="take_couching_text">People don\'t only use a coach when there is a problem with their technique; they understand that no matter how good their technique is, there is always room for improvement.</string>
@@ -569,7 +569,7 @@ provided.Tap salary for details.  </string>
     <string name="set_default">Set default</string>
 
     <string-array name="primaryPromoText">
-        <item>Affordable nearby couching-centers specific to the topic</item>
+        <item>Affordable nearby coaching-centers specific to the topic</item>
         <item>Affordable nearby monthly mentors specific to the topic</item>
         <item>Professional weekly mentors specific to the topic</item>
     </string-array>
@@ -680,7 +680,7 @@ provided.Tap salary for details.  </string>
     <string name="agree_terms"><![CDATA[Agree to Privacy Policy & Terms of Services]]></string>
     <string name="afterSplashTitleOne">Set default</string>
     <string name="choosing_text_mentor">Finding tuition have never been easy with dume</string>
-    <string name="intro_mentor">You can build your profile for mentor or boot-camp/couching center with ease. Just add skill and let other find you at what you are best.</string>
+    <string name="intro_mentor">You can build your profile for mentor or boot-camp/coaching center with ease. Just add skill and let other find you at what you are best.</string>
     <string name="example_capacity">Ex.8⺅-10⺅</string>
     <string name="profile_complete_msg">Profile 100% complete</string>
     <string name="phone_number">Phone Number</string>
@@ -749,9 +749,9 @@ provided.Tap salary for details.  </string>
     <string-array name="after_splash_data">
         <item>Welcome to Dume platform.It\'s a full featured skill share app of all category and type.</item>
         <item><![CDATA[Know something better then other!! Start sharing and earn money.Don\'t have anything to share don\'t worry start taking dume and be the best at what you do.]]></item>
-        <item><![CDATA[Dume would like to access your current location, make phone call, receive sms & write to storage for proper functioning & better search result.]]></item>
+        <item><![CDATA[Dume would like to access your current location, make phone call & write to storage for proper functioning & better search result.]]></item>
         <item>Select which category suite you best and build your profile.You can switch profile anytime as you wish.</item>
-        <item>In simple and short Dume Batch is couching center whereas Regular Dume is monthly tuition and Instant Dume is weekly.</item>
+        <item>In simple and short Dume Batch is coaching center whereas Regular Dume is monthly tuition and Instant Dume is weekly.</item>
     </string-array>
     <string name="title_activity_boot_camp_add">Start Boot Camp</string>
     <string name="title_activity_student_addvertise">Enhance your skill</string>
