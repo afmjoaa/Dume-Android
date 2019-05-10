@@ -83,23 +83,23 @@ public class StudentHelpActivity extends CustomStuAppCompatActivity implements S
         mPresenter.studentHelpEnqueue();
         configureAppbar(this, "Help");
 
-        loadingURL = "https://dume-2d063.firebaseapp.com/hows";
+        loadingURL = "https://xume.xyz/hows";
         //setting the recycler view
         SettingsAdapter helpAdapter = new SettingsAdapter(this, getFinalData()) {
             @Override
             protected void OnButtonClicked(View v, int position) {
                 switch (position) {
                     case 0:
-                        generalFrag(position, "https://dume-2d063.firebaseapp.com/whatsnew");
+                        generalFrag(position, "https://xume.xyz/whatsnew");
                         break;
                     case 1:
-                        String url = "https://dume-2d063.firebaseapp.com/home";
+                        String url = "https://xume.xyz/home";
                         Intent i = new Intent(Intent.ACTION_VIEW);
                         i.setData(Uri.parse(url));
                         startActivity(i);
                         break;
                     case 2:
-                        generalFrag(position, "https://dume-2d063.firebaseapp.com/hows");
+                        generalFrag(position, "https://xume.xyz/hows");
                         break;
                     case 3:
                         faqFrag(position);
@@ -129,9 +129,9 @@ public class StudentHelpActivity extends CustomStuAppCompatActivity implements S
         String action = getIntent().getAction();
         if(action!=null){
             if(action.equals("how_to_use")){
-                generalFrag(2, "https://dume-2d063.firebaseapp.com/hows");
+                generalFrag(2, "https://xume.xyz/hows");
             } else if (action.equals("whats_new")) {
-                generalFrag(0, "https://dume-2d063.firebaseapp.com/whatsnew");
+                generalFrag(0, "https://xume.xyz/whatsnew");
             } else if (action.equals("faq")) {
                 faqFrag(3);
             }
@@ -387,7 +387,7 @@ public class StudentHelpActivity extends CustomStuAppCompatActivity implements S
                     Toast.makeText(context, "Network Error", Toast.LENGTH_SHORT).show();
                 }
             });
-            webView.loadUrl("https://dume-2d063.firebaseapp.com/faq");
+            webView.loadUrl("https://xume.xyz/faq");
             WebSettings webSettings = webView.getSettings();
             webSettings.setJavaScriptEnabled(true);
             return rootView;
@@ -449,7 +449,6 @@ public class StudentHelpActivity extends CustomStuAppCompatActivity implements S
                     activity.hideProgress();
                     activity.progressBar.setVisibility(View.GONE);
                     activity.loadingRl.setVisibility(View.GONE);
-
                 }
 
                 @Override

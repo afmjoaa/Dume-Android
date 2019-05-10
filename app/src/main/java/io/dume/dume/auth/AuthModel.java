@@ -31,6 +31,7 @@ import com.google.firebase.internal.api.FirebaseNoSignedInUserException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Nullable;
@@ -293,7 +294,7 @@ public class AuthModel implements AuthContract.Model, SplashContract.Model, Phon
                         Log.w(TAG, "onAccountTypeFound: " + documentSnapshot.toString());
                         Log.e(TAG, "Fucked Here : " + documentSnapshot.toString());
 
-                        boolean foreignObligation = (boolean) documentSnapshot.getData().get("foreign_obligation");
+                        boolean foreignObligation = (boolean) Objects.requireNonNull(documentSnapshot.getData()).get("foreign_obligation");
                         boolean obligation = (boolean) documentSnapshot.get("obligation");
                         Google.getInstance().setObligation(obligation);
                         detachListener();

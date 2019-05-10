@@ -18,6 +18,7 @@ import android.os.Bundle;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.provider.Settings;
+import android.support.annotation.Keep;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
@@ -38,6 +39,7 @@ import io.dume.dume.student.recordsPage.RecordsPageActivity;
 import io.dume.dume.student.studentPayment.StudentPaymentActivity;
 import io.dume.dume.util.DumeUtils;
 
+@Keep
 public class MyNotification extends FirebaseMessagingService {
 
     private static String token;

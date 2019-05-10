@@ -381,12 +381,11 @@ public class HomePageModel extends StuBaseModel implements HomePageContract.Mode
                         studentRating = Float.parseFloat((String) shMap.get("star_rating"));
                         studentName = (String) forMap.get("stu_name");
                         studentDpUrl = (String) forMap.get("request_avatar");
-                        salaryInDemand = String.valueOf((Double) data.get("salary"));
+                        salaryInDemand = String.valueOf((Number) data.get("salary"));
                         sGender = (String) forMap.get("request_gender");
                         mGender = (String) spMap.get("gender");
                         subjectExchange = DumeUtils.getLast((Map<String, Object>) data.get("jizz"));
                         Date creation = (Date) data.get("creation");
-                        date = creation.toString();
                         status = (String) data.get("record_status");
                         Record record = new Record(mentorName, studentName, salaryInDemand, subjectExchange, creation, mentorDpUrl, studentDpUrl, studentRating, mentorRating, status, Record.DELIVERED, sGender, mGender);
                         record.setT_rate_status(documentSnapshot.getString("t_rate_status"));
