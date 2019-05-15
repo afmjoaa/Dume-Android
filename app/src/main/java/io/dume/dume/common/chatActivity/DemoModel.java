@@ -309,6 +309,7 @@ public class DemoModel {
                                 InboxNotiData inboxNotiData = documentSnapshot.toObject(InboxNotiData.class);
                                 if (inboxNotiData != null) {
                                     inboxNotiData.setDoc_id(documentSnapshot.getId());
+                                    //inboxNotiData.setTimestapm(documentSnapshot.getDate("date"));
                                     list.add(inboxNotiData);
                                 }
                             }

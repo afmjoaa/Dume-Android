@@ -63,9 +63,9 @@
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <carbon.widget.LinearLayout
-                android:descendantFocusability="blocksDescendants"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:descendantFocusability="blocksDescendants"
                 android:orientation="vertical">
 
                 <!--basic info layout-->
@@ -76,17 +76,17 @@
                     android:layout_marginBottom="10dp"
                     android:background="@drawable/bg_round_corner_rela_layout"
                     android:orientation="vertical"
-                    android:paddingBottom="8dp"
                     android:paddingLeft="16dp"
-                    android:paddingRight="16dp">
+                    android:paddingRight="16dp"
+                    android:paddingBottom="8dp">
 
 
                     <LinearLayout
                         android:id="@+id/changing_orientation_layout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="6dp"
                         android:layout_marginTop="6dp"
+                        android:layout_marginBottom="6dp"
                         android:orientation="horizontal">
 
                         <LinearLayout
@@ -102,19 +102,19 @@
                                 android:layout_width="40dp"
                                 android:layout_height="match_parent"
                                 android:layout_gravity="center_vertical"
-                                android:layout_marginEnd="80dp"
-                                android:layout_marginLeft="2dp"
-                                android:layout_marginRight="80dp"
                                 android:layout_marginStart="2dp"
-                                android:drawableLeft="@drawable/ic_swipe_left"
+                                android:layout_marginLeft="2dp"
+                                android:layout_marginEnd="80dp"
+                                android:layout_marginRight="80dp"
                                 android:drawableStart="@drawable/ic_swipe_left"
-                                android:gravity="center"
-                                android:paddingEnd="14dp"
-                                android:paddingLeft="6dp"
-                                android:paddingRight="14dp"
-                                android:paddingStart="6dp"
+                                android:drawableLeft="@drawable/ic_swipe_left"
                                 android:enabled="false"
+                                android:gravity="center"
                                 android:onClick="onSearchResultViewClicked"
+                                android:paddingStart="6dp"
+                                android:paddingLeft="6dp"
+                                android:paddingEnd="14dp"
+                                android:paddingRight="14dp"
                                 android:visibility="gone" />
 
                             <carbon.widget.ImageView
@@ -123,9 +123,9 @@
                                 android:layout_height="50dp"
                                 android:layout_gravity="center"
                                 android:layout_margin="8dp"
+                                android:scaleType="centerCrop"
                                 app:carbon_cornerRadius="25dp"
                                 app:carbon_elevation="3dp"
-                                android:scaleType="centerCrop"
                                 app:srcCompat="@drawable/ic_general_user" />
 
                             <Button
@@ -134,19 +134,19 @@
                                 android:layout_width="40dp"
                                 android:layout_height="match_parent"
                                 android:layout_gravity="center_vertical"
-                                android:layout_marginEnd="2dp"
-                                android:layout_marginLeft="80dp"
-                                android:layout_marginRight="2dp"
                                 android:layout_marginStart="80dp"
-                                android:drawableRight="@drawable/ic_swipe_right"
+                                android:layout_marginLeft="80dp"
+                                android:layout_marginEnd="2dp"
+                                android:layout_marginRight="2dp"
                                 android:drawableEnd="@drawable/ic_swipe_right"
+                                android:drawableRight="@drawable/ic_swipe_right"
+                                android:enabled="false"
                                 android:gravity="center"
                                 android:onClick="onSearchResultViewClicked"
-                                android:paddingEnd="6dp"
-                                android:paddingLeft="14dp"
-                                android:paddingRight="6dp"
                                 android:paddingStart="14dp"
-                                android:enabled="false"
+                                android:paddingLeft="14dp"
+                                android:paddingEnd="6dp"
+                                android:paddingRight="6dp"
                                 android:visibility="gone" />
 
                         </LinearLayout>
@@ -157,10 +157,10 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:layout_marginEnd="12dp"
-                            android:layout_marginLeft="12dp"
-                            android:layout_marginRight="12dp"
                             android:layout_marginStart="12dp"
+                            android:layout_marginLeft="12dp"
+                            android:layout_marginEnd="12dp"
+                            android:layout_marginRight="12dp"
                             android:orientation="vertical">
 
                             <TextView
@@ -199,14 +199,14 @@
                         style="@style/myButtonStyle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="2dp"
                         android:layout_marginTop="2dp"
+                        android:layout_marginBottom="2dp"
+                        android:enabled="false"
+                        android:onClick="onSearchResultViewClicked"
                         android:text="Make Request"
                         android:textAllCaps="false"
-                        android:onClick="onSearchResultViewClicked"
                         android:textColor="@color/white"
                         android:textSize="16sp"
-                        android:enabled="false"
                         app:fontFamily="@font/cairo_regular" />
 
                     <View
@@ -239,18 +239,18 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
+                            android:layout_toStartOf="@+id/show_salary_btn"
                             android:layout_toLeftOf="@+id/show_salary_btn"
-                            app:srcCompat="@drawable/sale_icon"
                             android:translationX="5dp"
                             android:visibility="gone"
-                            android:layout_toStartOf="@+id/show_salary_btn" />
+                            app:srcCompat="@drawable/sale_icon" />
 
                         <Button
                             android:id="@+id/show_salary_btn"
                             style="@style/Widget.AppCompat.Button.Borderless"
                             android:layout_width="wrap_content"
-                            android:layout_centerHorizontal="true"
                             android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
                             android:clickable="false"
                             android:text="Salary : 10k BDT"
                             android:textAllCaps="false"
@@ -303,10 +303,10 @@
                         android:layout_marginRight="5dp"
                         android:background="@drawable/bg_white_bottom_round"
                         android:orientation="vertical"
-                        android:paddingBottom="8dp"
                         android:paddingLeft="16dp"
-                        android:paddingRight="16dp"
                         android:paddingTop="8dp"
+                        android:paddingRight="16dp"
+                        android:paddingBottom="8dp"
                         android:translationY="-2dp">
 
                         <LinearLayout
@@ -315,8 +315,8 @@
                             android:layout_height="wrap_content"
                             android:baselineAligned="false"
                             android:orientation="horizontal"
-                            android:paddingBottom="8dp"
-                            android:paddingTop="8dp">
+                            android:paddingTop="8dp"
+                            android:paddingBottom="8dp">
 
                             <RelativeLayout
                                 android:layout_width="wrap_content"
@@ -350,18 +350,18 @@
                                     android:id="@+id/txtStatus"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_alignParentBottom="true"
                                     android:layout_below="@+id/main_rating_performance"
+                                    android:layout_alignParentBottom="true"
                                     android:layout_centerHorizontal="true"
                                     android:background="@drawable/bg_rating_textview"
                                     android:drawableEnd="@drawable/ic_person_small"
-                                    android:drawablePadding="5dp"
                                     android:drawableRight="@drawable/ic_person_small"
+                                    android:drawablePadding="5dp"
                                     android:gravity="center"
-                                    android:paddingBottom="1dp"
                                     android:paddingLeft="6dp"
-                                    android:paddingRight="6dp"
                                     android:paddingTop="1dp"
+                                    android:paddingRight="6dp"
+                                    android:paddingBottom="1dp"
                                     android:singleLine="true"
                                     android:text="1234"
                                     android:textColor="@color/white"
@@ -407,16 +407,16 @@
                                     android:id="@+id/txtStatus_accept_ratio"
                                     android:layout_width="35dp"
                                     android:layout_height="wrap_content"
-                                    android:layout_alignParentBottom="true"
                                     android:layout_below="@+id/rating_main_accept_ratio"
+                                    android:layout_alignParentBottom="true"
                                     android:layout_centerHorizontal="true"
                                     android:background="@drawable/bg_rating_textview"
                                     android:drawablePadding="5dp"
                                     android:gravity="center"
-                                    android:paddingBottom="1dp"
                                     android:paddingLeft="6dp"
-                                    android:paddingRight="6dp"
                                     android:paddingTop="1dp"
+                                    android:paddingRight="6dp"
+                                    android:paddingBottom="1dp"
                                     android:singleLine="true"
                                     android:text="80 %"
                                     android:textColor="@color/white"
@@ -465,16 +465,16 @@
                                     android:id="@+id/txtStatus_professionalism"
                                     android:layout_width="35dp"
                                     android:layout_height="wrap_content"
-                                    android:layout_alignParentBottom="true"
                                     android:layout_below="@+id/rating_main_professionalism"
+                                    android:layout_alignParentBottom="true"
                                     android:layout_centerHorizontal="true"
                                     android:background="@drawable/bg_rating_textview"
                                     android:drawablePadding="5dp"
                                     android:gravity="center"
-                                    android:paddingBottom="1dp"
                                     android:paddingLeft="6dp"
-                                    android:paddingRight="6dp"
                                     android:paddingTop="1dp"
+                                    android:paddingRight="6dp"
+                                    android:paddingBottom="1dp"
                                     android:singleLine="true"
                                     android:text="50 %"
                                     android:textColor="@color/white"
@@ -515,18 +515,18 @@
                                     android:id="@+id/txtStatus_experience"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_alignParentBottom="true"
                                     android:layout_below="@+id/main_rating_experience"
+                                    android:layout_alignParentBottom="true"
                                     android:layout_centerHorizontal="true"
                                     android:background="@drawable/bg_rating_textview"
                                     android:drawableEnd="@drawable/ic_person_small"
-                                    android:drawablePadding="5dp"
                                     android:drawableRight="@drawable/ic_person_small"
+                                    android:drawablePadding="5dp"
                                     android:gravity="center"
-                                    android:paddingBottom="1dp"
                                     android:paddingLeft="6dp"
-                                    android:paddingRight="6dp"
                                     android:paddingTop="1dp"
+                                    android:paddingRight="6dp"
+                                    android:paddingBottom="1dp"
                                     android:singleLine="true"
                                     android:text="1234"
                                     android:textColor="@color/white"
@@ -548,10 +548,10 @@
                                 android:layout_alignParentTop="true"
                                 android:layout_centerHorizontal="true"
                                 android:background="@drawable/bg_rating_tittle"
-                                android:paddingBottom="2dp"
                                 android:paddingLeft="20dp"
-                                android:paddingRight="20dp"
                                 android:paddingTop="2dp"
+                                android:paddingRight="20dp"
+                                android:paddingBottom="2dp"
                                 android:singleLine="true"
                                 android:text="Skills"
                                 android:textAlignment="center"
@@ -563,7 +563,8 @@
                                 android:id="@+id/myChartProgressBar"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_centerInParent="true"
+                                android:layout_below="@+id/rating_skills"
+                                android:layout_centerHorizontal="true"
                                 android:gravity="center"
                                 app:hdBarCanBeClick="true"
                                 app:hdBarHeight="160dp"
@@ -580,8 +581,39 @@
                                 app:hdPinMarginBottom="20dp"
                                 app:hdPinMarginEnd="7dp"
                                 app:hdPinPaddingBottom="5dp"
-                                app:hdPinPaddingStart="5dp"
                                 app:hdPinPaddingEnd="5dp"
+                                app:hdPinPaddingStart="5dp"
+                                app:hdPinTextColor="@color/pin_text"
+                                app:hdPinTxtSize="12sp"
+                                app:hdProgressClickColor="@color/progress_click"
+                                app:hdProgressColor="@color/progress"
+                                app:hdProgressDisableColor="@color/progress_disable" />
+
+                            <com.hadiidbouk.charts.ChartProgressBar
+                                android:id="@+id/myChartProgressBarOne"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/myChartProgressBar"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginTop="14dp"
+                                android:gravity="center"
+                                app:hdBarCanBeClick="true"
+                                app:hdBarHeight="160dp"
+                                app:hdBarRadius="10dp"
+                                app:hdBarTitleColor="@color/textColorPrimary"
+                                app:hdBarTitleMarginTop="9dp"
+                                app:hdBarTitleSelectedColor="@color/colorBlack"
+                                app:hdBarTitleTxtSize="12sp"
+                                app:hdBarWidth="7dp"
+                                app:hdEmptyColor="@color/empty"
+                                app:hdMaxValue="10"
+                                app:hdPinBackgroundColor="@color/pin_background"
+                                app:hdPinDrawable="@drawable/ic_pin"
+                                app:hdPinMarginBottom="20dp"
+                                app:hdPinMarginEnd="7dp"
+                                app:hdPinPaddingBottom="5dp"
+                                app:hdPinPaddingEnd="5dp"
+                                app:hdPinPaddingStart="5dp"
                                 app:hdPinTextColor="@color/pin_text"
                                 app:hdPinTxtSize="12sp"
                                 app:hdProgressClickColor="@color/progress_click"
@@ -589,7 +621,6 @@
                                 app:hdProgressDisableColor="@color/progress_disable" />
 
                         </RelativeLayout>
-
 
                     </LinearLayout>
 
@@ -636,10 +667,10 @@
                         android:layout_marginRight="5dp"
                         android:background="@drawable/bg_white_bottom_round"
                         android:orientation="vertical"
-                        android:paddingBottom="8dp"
                         android:paddingLeft="16dp"
-                        android:paddingRight="16dp"
                         android:paddingTop="8dp"
+                        android:paddingRight="16dp"
+                        android:paddingBottom="8dp"
                         android:translationY="-2dp">
 
 
@@ -649,8 +680,8 @@
                             android:layout_height="wrap_content"
                             android:baselineAligned="false"
                             android:orientation="horizontal"
-                            android:paddingBottom="8dp"
-                            android:paddingTop="8dp">
+                            android:paddingTop="8dp"
+                            android:paddingBottom="8dp">
 
                             <RelativeLayout
                                 android:layout_width="wrap_content"
@@ -664,8 +695,8 @@
                                     android:layout_height="46dp"
                                     android:layout_alignParentTop="true"
                                     android:layout_centerHorizontal="true"
-                                    android:layout_marginBottom="2dp"
                                     android:layout_marginTop="2dp"
+                                    android:layout_marginBottom="2dp"
                                     app:srcCompat="@drawable/ic_badge_joined" />
 
                                 <TextView
@@ -694,8 +725,8 @@
                                     android:layout_height="46dp"
                                     android:layout_alignParentTop="true"
                                     android:layout_centerHorizontal="true"
-                                    android:layout_marginBottom="2dp"
                                     android:layout_marginTop="2dp"
+                                    android:layout_marginBottom="2dp"
                                     app:srcCompat="@drawable/ic_badge_disable" />
 
                                 <TextView
@@ -724,8 +755,8 @@
                                     android:layout_height="46dp"
                                     android:layout_alignParentTop="true"
                                     android:layout_centerHorizontal="true"
-                                    android:layout_marginBottom="2dp"
                                     android:layout_marginTop="2dp"
+                                    android:layout_marginBottom="2dp"
                                     app:srcCompat="@drawable/ic_badge_disable" />
 
                                 <TextView
@@ -754,8 +785,8 @@
                                     android:layout_height="46dp"
                                     android:layout_alignParentTop="true"
                                     android:layout_centerHorizontal="true"
-                                    android:layout_marginBottom="2dp"
                                     android:layout_marginTop="2dp"
+                                    android:layout_marginBottom="2dp"
                                     app:srcCompat="@drawable/ic_badge_disable" />
 
                                 <TextView
@@ -819,10 +850,10 @@
                         android:layout_marginRight="5dp"
                         android:background="@drawable/bg_white_bottom_round"
                         android:orientation="vertical"
-                        android:paddingBottom="8dp"
                         android:paddingLeft="16dp"
-                        android:paddingRight="16dp"
                         android:paddingTop="8dp"
+                        android:paddingRight="16dp"
+                        android:paddingBottom="8dp"
                         android:translationY="-2dp">
 
                         <TextView
@@ -830,12 +861,12 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_margin="0dp"
+                            android:drawableStart="@drawable/ic_keyboard_arrow_right_black_24dp"
                             android:drawableLeft="@drawable/ic_keyboard_arrow_right_black_24dp"
                             android:drawablePadding="6dp"
-                            android:drawableStart="@drawable/ic_keyboard_arrow_right_black_24dp"
                             android:gravity="center_vertical"
-                            android:paddingBottom="2dp"
                             android:paddingTop="2dp"
+                            android:paddingBottom="2dp"
                             android:singleLine="true"
                             android:text="Current Status : "
                             android:textAllCaps="false"
@@ -849,12 +880,12 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_margin="0dp"
+                            android:drawableStart="@drawable/ic_keyboard_arrow_right_black_24dp"
                             android:drawableLeft="@drawable/ic_keyboard_arrow_right_black_24dp"
                             android:drawablePadding="6dp"
-                            android:drawableStart="@drawable/ic_keyboard_arrow_right_black_24dp"
                             android:gravity="center_vertical"
-                            android:paddingBottom="2dp"
                             android:paddingTop="2dp"
+                            android:paddingBottom="2dp"
                             android:singleLine="true"
                             android:text="Student Guided : "
                             android:textAllCaps="false"
@@ -868,12 +899,12 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_margin="0dp"
+                            android:drawableStart="@drawable/ic_keyboard_arrow_right_black_24dp"
                             android:drawableLeft="@drawable/ic_keyboard_arrow_right_black_24dp"
                             android:drawablePadding="6dp"
-                            android:drawableStart="@drawable/ic_keyboard_arrow_right_black_24dp"
                             android:gravity="center_vertical"
-                            android:paddingBottom="2dp"
                             android:paddingTop="2dp"
+                            android:paddingBottom="2dp"
                             android:singleLine="true"
                             android:text="Marital Status : "
                             android:textAllCaps="false"
@@ -887,12 +918,12 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_margin="0dp"
+                            android:drawableStart="@drawable/ic_keyboard_arrow_right_black_24dp"
                             android:drawableLeft="@drawable/ic_keyboard_arrow_right_black_24dp"
                             android:drawablePadding="6dp"
-                            android:drawableStart="@drawable/ic_keyboard_arrow_right_black_24dp"
                             android:gravity="center_vertical"
-                            android:paddingBottom="2dp"
                             android:paddingTop="2dp"
+                            android:paddingBottom="2dp"
                             android:singleLine="true"
                             android:text="Religion : "
                             android:textAllCaps="false"
@@ -906,12 +937,12 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_margin="0dp"
+                            android:drawableStart="@drawable/ic_keyboard_arrow_right_black_24dp"
                             android:drawableLeft="@drawable/ic_keyboard_arrow_right_black_24dp"
                             android:drawablePadding="6dp"
-                            android:drawableStart="@drawable/ic_keyboard_arrow_right_black_24dp"
                             android:gravity="center_vertical"
-                            android:paddingBottom="2dp"
                             android:paddingTop="2dp"
+                            android:paddingBottom="2dp"
                             android:singleLine="true"
                             android:text="Gender : "
                             android:textAllCaps="false"
@@ -926,11 +957,11 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_margin="0dp"
+                            android:drawableStart="@drawable/ic_keyboard_arrow_right_black_24dp"
                             android:drawableLeft="@drawable/ic_keyboard_arrow_right_black_24dp"
                             android:drawablePadding="6dp"
-                            android:drawableStart="@drawable/ic_keyboard_arrow_right_black_24dp"
-                            android:paddingBottom="5dp"
                             android:paddingTop="5dp"
+                            android:paddingBottom="5dp"
                             android:singleLine="true"
                             android:text="Qualifications : "
                             android:textAllCaps="false"
@@ -989,10 +1020,10 @@
                         android:layout_marginRight="5dp"
                         android:background="@drawable/bg_white_bottom_round"
                         android:orientation="vertical"
-                        android:paddingBottom="8dp"
                         android:paddingLeft="16dp"
-                        android:paddingRight="16dp"
                         android:paddingTop="8dp"
+                        android:paddingRight="16dp"
+                        android:paddingBottom="8dp"
                         android:translationY="-2dp">
 
                         <TextView
@@ -1000,12 +1031,12 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_margin="0dp"
+                            android:drawableStart="@drawable/ic_keyboard_arrow_right_black_24dp"
                             android:drawableLeft="@drawable/ic_keyboard_arrow_right_black_24dp"
                             android:drawablePadding="6dp"
-                            android:drawableStart="@drawable/ic_keyboard_arrow_right_black_24dp"
                             android:gravity="center_vertical"
-                            android:paddingBottom="2dp"
                             android:paddingTop="2dp"
+                            android:paddingBottom="2dp"
                             android:singleLine="true"
                             android:text="Starting Time : "
                             android:textAllCaps="false"
@@ -1019,12 +1050,12 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_margin="0dp"
+                            android:drawableStart="@drawable/ic_keyboard_arrow_right_black_24dp"
                             android:drawableLeft="@drawable/ic_keyboard_arrow_right_black_24dp"
                             android:drawablePadding="6dp"
-                            android:drawableStart="@drawable/ic_keyboard_arrow_right_black_24dp"
                             android:gravity="center_vertical"
-                            android:paddingBottom="2dp"
                             android:paddingTop="2dp"
+                            android:paddingBottom="2dp"
                             android:singleLine="true"
                             android:text="Starting Date : "
                             android:textAllCaps="false"
@@ -1038,15 +1069,15 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_margin="0dp"
+                            android:drawableStart="@drawable/ic_keyboard_arrow_right_black_24dp"
                             android:drawableLeft="@drawable/ic_keyboard_arrow_right_black_24dp"
                             android:drawablePadding="6dp"
-                            android:drawableStart="@drawable/ic_keyboard_arrow_right_black_24dp"
-                            android:gravity="center_vertical"
-                            android:paddingBottom="2dp"
-                            android:paddingTop="2dp"
-                            android:singleLine="true"
                             android:ellipsize="end"
+                            android:gravity="center_vertical"
                             android:maxLines="1"
+                            android:paddingTop="2dp"
+                            android:paddingBottom="2dp"
+                            android:singleLine="true"
                             android:text="Preferred Day : "
                             android:textAllCaps="false"
                             android:textColor="@color/textColorPrimary"
@@ -1059,11 +1090,11 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_margin="0dp"
+                            android:drawableStart="@drawable/ic_keyboard_arrow_right_black_24dp"
                             android:drawableLeft="@drawable/ic_keyboard_arrow_right_black_24dp"
                             android:drawablePadding="6dp"
-                            android:drawableStart="@drawable/ic_keyboard_arrow_right_black_24dp"
-                            android:paddingBottom="2dp"
                             android:paddingTop="2dp"
+                            android:paddingBottom="2dp"
                             android:singleLine="true"
                             android:text="Days/Week : "
                             android:textAllCaps="false"
@@ -1117,10 +1148,10 @@
                         android:layout_marginRight="5dp"
                         android:background="@drawable/bg_white_bottom_round"
                         android:orientation="vertical"
-                        android:paddingBottom="8dp"
                         android:paddingLeft="16dp"
-                        android:paddingRight="16dp"
                         android:paddingTop="8dp"
+                        android:paddingRight="16dp"
+                        android:paddingBottom="8dp"
                         android:translationY="-2dp">
 
                         <android.support.v7.widget.RecyclerView
@@ -1133,8 +1164,8 @@
                             android:id="@+id/no_data_block"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:gravity="center"
                             android:layout_marginBottom="24dp"
+                            android:gravity="center"
                             android:orientation="vertical"
                             android:visibility="visible">
 
@@ -1161,8 +1192,8 @@
                             style="@style/Widget.AppCompat.Button.Borderless"
                             android:layout_width="match_parent"
                             android:layout_height="34dp"
-                            android:text="Load more"
                             android:background="@drawable/round_btn_joaa"
+                            android:text="Load more"
                             android:textAllCaps="false"
                             android:textColor="@color/textColorPrimary"
                             android:textSize="12sp"
@@ -1183,10 +1214,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_marginBottom="162dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
         android:layout_marginTop="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="162dp"
         android:onClick="onSearchResultViewClicked"
         app:backgroundTint="@color/colorWhite"
         app:fabSize="mini"
@@ -1286,8 +1317,7 @@
 
 </android.support.design.widget.CoordinatorLayout>
 
-    <!--location layout-->
-    <!--<LinearLayout
+    <!--location layout--><!--<LinearLayout
         android:id="@+id/location_host_linearlayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

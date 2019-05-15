@@ -33,6 +33,7 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -56,23 +57,20 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import carbon.widget.ImageView;
 import io.dume.dume.R;
 import io.dume.dume.student.homePage.HomePageActivity;
 import io.dume.dume.student.pojo.CusStuAppComMapActivity;
 import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
-import io.dume.dume.student.pojo.SearchDataStore;
 import io.dume.dume.student.searchResult.SearchResultActivity;
 import io.dume.dume.teacher.homepage.TeacherContract;
+import io.dume.dume.util.DumeUtils;
 
 import static io.dume.dume.util.DumeUtils.configureAppbarWithoutColloapsing;
 import static io.dume.dume.util.DumeUtils.firstFour;
 import static io.dume.dume.util.DumeUtils.firstThree;
 import static io.dume.dume.util.ImageHelper.getRoundedCornerBitmap;
-import static io.dume.dume.util.ImageHelper.getRoundedCornerBitmapSquare;
 
 public class SearchLoadingActivity extends CusStuAppComMapActivity implements OnMapReadyCallback,
         SearchLoadingContract.View, MyGpsLocationChangeListener {
@@ -159,7 +157,7 @@ public class SearchLoadingActivity extends CusStuAppComMapActivity implements On
     private List<SearchDetailData> getSearchDetailData() {
         List<SearchDetailData> grabingInfoData = new ArrayList<>();
         SearchDetailData current = new SearchDetailData();
-        current.setItemName((String) searchDataStore.getForWhom().get("name"));
+        current.setItemName((String) searchDataStore.getForWhom().get("stu_name"));
         current.setItemInfo("Student name");
         if ((Boolean) searchDataStore.getForWhom().get("is_self")) {
             current.setItemChange(searchDataStore.getAvatarString());
@@ -304,13 +302,14 @@ public class SearchLoadingActivity extends CusStuAppComMapActivity implements On
         mNoResultBSD.setCanceledOnTouchOutside(false);
         if (goBackEditBtn != null && homePageBtn != null && noResultMainText != null && noResultSubText != null) {
             noResultMainText.setText("Sorry !!!");
-            noResultSubText.setText("No mentor available for your specific query...");
+            noResultSubText.setText("No mentor available for your specific query & offered salary. Increase you salary range for better luck...");
             homePageBtn.setText("Goto, Homepage");
             goBackEditBtn.setText("Edit, Query");
 
             if (retrivedAction != null) {
                 switch (retrivedAction) {
                     case "from_HPA":
+                        DumeUtils.setMargins(homePageBtn,0,0,0,0);
                         homePageBtn.setVisibility(View.VISIBLE);
                         goBackEditBtn.setVisibility(View.GONE);
                         break;
@@ -425,6 +424,35 @@ public class SearchLoadingActivity extends CusStuAppComMapActivity implements On
         mMap.setMyLocationEnabled(false);
 
         onMapReadyGeneralConfig();
+        if (mMap.getUiSettings().isCompassEnabled()) {
+            //this works for me
+            COMPASSBTN = MAP.findViewWithTag("GoogleMapCompass");
+            RelativeLayout.LayoutParams rlp = (RelativeLayout.LayoutParams) COMPASSBTN.getLayoutParams();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                rlp.addRule(RelativeLayout.ALIGN_PARENT_START, 0);
+                rlp.addRule(RelativeLayout.ALIGN_START, 0);
+                rlp.addRule(RelativeLayout.ALIGN_PARENT_END);
+                rlp.addRule(RelativeLayout.ALIGN_END);
+            }
+            rlp.addRule(RelativeLayout.ALIGN_PARENT_LEFT, 0);
+            rlp.addRule(RelativeLayout.ALIGN_LEFT, 0);
+            rlp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+            rlp.addRule(RelativeLayout.ALIGN_RIGHT);
+
+            rlp.addRule(RelativeLayout.ALIGN_TOP, 0);
+            rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0);
+            rlp.addRule(RelativeLayout.ALIGN_BOTTOM);
+            rlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+            rlp.topMargin = (int) (20 * (getResources().getDisplayMetrics().density));
+            rlp.bottomMargin = (int) (10 * (getResources().getDisplayMetrics().density));
+            rlp.leftMargin = (int) (16 * (getResources().getDisplayMetrics().density));
+            rlp.rightMargin = (int) (16 * (getResources().getDisplayMetrics().density));
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                COMPASSBTN.setElevation((int) (6 * (getResources().getDisplayMetrics().density)));
+            }
+        }
+
         addCustomMarkerFromURL(searchDataStore.getAvatarString(), searchDataStore.getAnchorPoint());
         mMap.addCircle(new CircleOptions()
                 .center(searchDataStore.getAnchorPoint())
@@ -563,10 +591,10 @@ public class SearchLoadingActivity extends CusStuAppComMapActivity implements On
 
     @Override
     public void showResultActivty() {
-        long tEnd = System.currentTimeMillis();
+        /*long tEnd = System.currentTimeMillis();
         long tDelta = tEnd - tStart;
-        long elseDelta = 3000 - tDelta;
-        if (tDelta >= 3000) {
+        long elseDelta = 1000 - tDelta;
+        if (tDelta >= 1000) {
             Intent intent = new Intent(SearchLoadingActivity.this, SearchResultActivity.class);
             if (retrivedAction != null) {
                 intent.setAction(retrivedAction);
@@ -574,12 +602,12 @@ public class SearchLoadingActivity extends CusStuAppComMapActivity implements On
             startActivity(intent);
             finish();
         } else {
-            /*Timer timer = new Timer();
+            *//*Timer timer = new Timer();
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
                 }
-            }, elseDelta);*/
+            }, elseDelta);*//*
             Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
                 @Override
@@ -597,7 +625,13 @@ public class SearchLoadingActivity extends CusStuAppComMapActivity implements On
                     });
                 }
             }, elseDelta);
+        }*/
+        Intent intent = new Intent(SearchLoadingActivity.this, SearchResultActivity.class);
+        if (retrivedAction != null) {
+            intent.setAction(retrivedAction);
         }
+        startActivity(intent);
+        finish();
     }
 
     //testing custom marker code here

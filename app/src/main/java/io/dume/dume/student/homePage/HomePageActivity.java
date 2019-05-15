@@ -1575,7 +1575,7 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
             textViewStart.setTextColor(Color.WHITE);
         }
         CoordinatorLayout.LayoutParams parentParams = (CoordinatorLayout.LayoutParams) layout.getLayoutParams();
-        parentParams.height = (int) (30 * (getResources().getDisplayMetrics().density));
+        parentParams.height = (int) (36 * (getResources().getDisplayMetrics().density));
 
         layout.setLayoutParams(parentParams);
         layout.addView(snackView, 0);
@@ -1669,7 +1669,7 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
         actionTV.setText(actionName);
         layout.setPadding(0, 0, 0, 0);
         CoordinatorLayout.LayoutParams parentParams = (CoordinatorLayout.LayoutParams) layout.getLayoutParams();
-        parentParams.height = (int) (30 * (getResources().getDisplayMetrics().density));
+        parentParams.height = (int) (36 * (getResources().getDisplayMetrics().density));
        /* parentParams.setAnchorId(R.id.Secondary_toolbar);
         parentParams.anchorGravity = Gravity.BOTTOM;*/
         layout.setLayoutParams(parentParams);

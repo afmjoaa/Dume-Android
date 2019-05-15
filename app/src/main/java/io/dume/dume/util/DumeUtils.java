@@ -559,7 +559,7 @@ public class DumeUtils {
     }
 
     public static boolean isAMinimalMatch(List<String> localQueryList, List<String> dbQueryList, int threshold) {
-
+        //getting the subject array string
         String localSB = localQueryList.get(localQueryList.size() - threshold);
         String dbSB = dbQueryList.get(dbQueryList.size() - threshold);
         Log.e(TAG, "isAMinimalMatch: " + localSB + " : " + dbSB);
@@ -573,20 +573,7 @@ public class DumeUtils {
                 return false;
             }
         }
-
-
         return true;
-
-
-
-      /*  for (int i = 0; i < subject.size(); i++) {
-            Log.e("bar", subject.get(i) + " contains " + queryStringFromDb + " = " + queryStringFromDb.contains(subject.get(i)));
-            if (!queryStringFromDb.contains(subject.get(i))) {
-                return false;
-            }
-        }*/
-
-
     }
 
     public static Map<String, Object> getQueryMap(String packageName, List<String> queryList, List<String> queryListName) {

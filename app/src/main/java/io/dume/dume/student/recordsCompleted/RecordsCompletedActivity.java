@@ -114,7 +114,6 @@ public class RecordsCompletedActivity extends CustomStuAppCompatActivity impleme
         if (getIntent().getAction() != null) {
             retriveAction = getIntent().getAction();
         }
-
     }
 
     @Override
@@ -238,6 +237,7 @@ public class RecordsCompletedActivity extends CustomStuAppCompatActivity impleme
         private Integer max_discount_credit = null;
         private int validDiscount;
         private String salaryFormatted;
+        private ChartProgressBar mChartOne;
 
 
         public PlaceholderFragment() {
@@ -275,6 +275,8 @@ public class RecordsCompletedActivity extends CustomStuAppCompatActivity impleme
             record = recordList.get(fragmentPosition);
             View rootView = inflater.inflate(R.layout.stu11_viewpager_layout_completed, container, false);
             mChart = (ChartProgressBar) rootView.findViewById(R.id.myChartProgressBar);
+            mChartOne = (ChartProgressBar) rootView.findViewById(R.id.myChartProgressBarOne);
+            mChartOne.setVisibility(View.GONE);
             ratingPerformance = rootView.findViewById(R.id.main_rating_performance);
             ratingExperience = rootView.findViewById(R.id.main_rating_experience);
 
@@ -375,8 +377,7 @@ public class RecordsCompletedActivity extends CustomStuAppCompatActivity impleme
             subjectInDemand.setText(record.getSubjectExchange());
 
             if (record.getStudentDpUrl() != null && !record.getStudentDpUrl().equals("")) {
-                Glide.with(context).load(record.getStudentDpUrl()).apply(new RequestOptions().override((int) (50 * mDensity), (int) (50 * mDensity)).placeholder(R.drawable.demo_default_avatar_dark)).into(studentDisplayPic)
-                ;
+                Glide.with(context).load(record.getStudentDpUrl()).apply(new RequestOptions().override((int) (50 * mDensity), (int) (50 * mDensity)).placeholder(R.drawable.demo_default_avatar_dark)).into(studentDisplayPic);
             } else {
                 if (record.getsGender() != null || record.getsGender().equals("Male") || record.getsGender().equals("")) {
                     defaultUrl = SearchDataStore.DEFAULTMALEAVATER;
@@ -489,6 +490,7 @@ public class RecordsCompletedActivity extends CustomStuAppCompatActivity impleme
 
             //now the other rating
             ArrayList<BarData> dataList = new ArrayList<>();
+            ArrayList<BarData> dataListOne = new ArrayList<>();
 
             Float comm_value = (Float.parseFloat(self_rating.get("l_communication").toString()) /
                     Float.parseFloat(self_rating.get("l_communication").toString()) + Float.parseFloat(self_rating.get("dl_communication").toString())) * 10;
@@ -514,11 +516,31 @@ public class RecordsCompletedActivity extends CustomStuAppCompatActivity impleme
                         Float.parseFloat(likes.get(splited).toString()) + Float.parseFloat(dislikes.get(splited).toString())) * 10;
                 Float loop_text = (loop_value * 10);
                 data = new BarData(splited, loop_value, loop_text.toString().substring(0, loop_text.toString().length() - 2) + " %");
-                dataList.add(data);
+                int totalSkills = splitMainSsss.length + 2;
+                if(totalSkills>6){
+                    if ((totalSkills & 1) == 0) {
+                        //even...
+                        totalSkills = totalSkills / 2;
+                    } else {
+                        //odd...
+                        totalSkills = ((totalSkills - 1) / 2) + 1;
+                    }
+                    if (dataList.size() < totalSkills) {
+                        dataList.add(data);
+                    } else {
+                        dataListOne.add(data);
+                    }
+                }else {
+                    dataList.add(data);
+                }
             }
             mChart.setDataList(dataList);
             mChart.build();
-
+            if(dataListOne.size()>0){
+                mChartOne.setVisibility(View.VISIBLE);
+                mChartOne.setDataList(dataListOne);
+                mChartOne.build();
+            }
         }
 
         public void configFragmentBtnClick() {

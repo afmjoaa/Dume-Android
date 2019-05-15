@@ -120,6 +120,7 @@ public class HeatMapActivity extends CusStuAppComMapActivity implements OnMapRea
     private HeatMapModel heatMapModel;
     private HeatMapModel mModel;
     private Google google;
+    private int selectedItem;
 
 
     @Override
@@ -138,7 +139,20 @@ public class HeatMapActivity extends CusStuAppComMapActivity implements OnMapRea
 
         //setting the adapter with the recycler view
         //chooseAccouTypeBtn.setCompoundDrawablesWithIntrinsicBounds( imageIcons[position], 0, R.drawable.ic_keyboard_arrow_down_black_24dp, 0);
-        heatMapAccountRecyAda = new HeatMapAccountRecyAda(this, getFinalData(0)) {
+        google = Google.getInstance();
+        String accountMajor = google.getAccountMajor();
+        switch (accountMajor) {
+            case DumeUtils.STUDENT:
+                selectedItem = 1;
+                break;
+            case DumeUtils.TEACHER:
+                selectedItem = 0;
+                break;
+            default:
+                selectedItem = 0;
+                break;
+        }
+        heatMapAccountRecyAda = new HeatMapAccountRecyAda(this, getFinalData(selectedItem)) {
             @Override
             protected void OnAccouItemClicked(View v, int position) {
                 thisPosition = position;
@@ -206,7 +220,6 @@ public class HeatMapActivity extends CusStuAppComMapActivity implements OnMapRea
                                                         }
                                                     });
                                                 }
-
                                                 @Override
                                                 public void onError(String msg) {
                                                     Log.w(TAG, "onError: " + msg);
@@ -373,12 +386,12 @@ public class HeatMapActivity extends CusStuAppComMapActivity implements OnMapRea
             }
         });*/
         String accountMajor = google.getAccountMajor();
-        if(accountMajor == null){
+        if (accountMajor == null) {
             Intent returnIntent = new Intent(HeatMapActivity.this, SplashActivity.class);
             returnIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(returnIntent);
             finish();
-        }else{
+        } else {
             switch (accountMajor) {
                 case DumeUtils.STUDENT:
                     chooseAccouTypeBtn.setText(accountTypeArr[1]);

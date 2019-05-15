@@ -90,6 +90,11 @@
                     android:layout_height="wrap_content"
                     android:text="@string/math_amp_physics"
                     android:textAllCaps="false"
+                    android:paddingStart="130dp"
+                    android:paddingLeft="130dp"
+                    android:paddingEnd="130dp"
+                    android:paddingRight="130dp"
+                    android:textAlignment="center"
                     android:textColor="@color/textColorPrimary"
                     android:textSize="14sp"
                     app:fontFamily="@font/cairo_regular" />
@@ -169,10 +174,10 @@
                 android:id="@+id/divider2"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_below="@+id/left_vertical_host_layout"
+                android:layout_below="@+id/center_vertical_host_layout"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="21dp"
                 android:background="#41a7a7a7" />
 
             <Button

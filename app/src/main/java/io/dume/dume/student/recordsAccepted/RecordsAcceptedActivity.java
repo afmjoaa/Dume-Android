@@ -297,7 +297,7 @@ public class RecordsAcceptedActivity extends CustomStuAppCompatActivity implemen
         private Integer max_discount_credit = null;
         private int validDiscount;
         private String salaryFormatted;
-
+        private ChartProgressBar mChartOne;
 
         public PlaceholderFragment() {
         }
@@ -344,6 +344,8 @@ public class RecordsAcceptedActivity extends CustomStuAppCompatActivity implemen
             qualificationRecyView = rootView.findViewById(R.id.recycler_view_qualifications);
             reviewRecyView = rootView.findViewById(R.id.recycler_view_reviews);
             mChart = (ChartProgressBar) rootView.findViewById(R.id.myChartProgressBar);
+            mChartOne = (ChartProgressBar) rootView.findViewById(R.id.myChartProgressBarOne);
+            mChartOne.setVisibility(View.GONE);
             ratingPerformance = rootView.findViewById(R.id.main_rating_performance);
             ratingExperience = rootView.findViewById(R.id.main_rating_experience);
 
@@ -702,6 +704,7 @@ public class RecordsAcceptedActivity extends CustomStuAppCompatActivity implemen
 
             //now the other rating
             ArrayList<BarData> dataList = new ArrayList<>();
+            ArrayList<BarData> dataListOne = new ArrayList<>();
 
             Float comm_value = (Float.parseFloat(self_rating.get("l_communication").toString()) /
                     Float.parseFloat(self_rating.get("l_communication").toString()) + Float.parseFloat(self_rating.get("dl_communication").toString())) * 10;
@@ -727,10 +730,31 @@ public class RecordsAcceptedActivity extends CustomStuAppCompatActivity implemen
                         Float.parseFloat(likes.get(splited).toString()) + Float.parseFloat(dislikes.get(splited).toString())) * 10;
                 Float loop_text = (loop_value * 10);
                 data = new BarData(splited, loop_value, loop_text.toString().substring(0, loop_text.toString().length() - 2) + " %");
-                dataList.add(data);
+                int totalSkills = splitMainSsss.length + 2;
+                if(totalSkills>6){
+                    if ((totalSkills & 1) == 0) {
+                        //even...
+                        totalSkills = totalSkills / 2;
+                    } else {
+                        //odd...
+                        totalSkills = ((totalSkills - 1) / 2) + 1;
+                    }
+                    if (dataList.size() < totalSkills) {
+                        dataList.add(data);
+                    } else {
+                        dataListOne.add(data);
+                    }
+                }else {
+                    dataList.add(data);
+                }
             }
             mChart.setDataList(dataList);
             mChart.build();
+            if(dataListOne.size()>0){
+                mChartOne.setVisibility(View.VISIBLE);
+                mChartOne.setDataList(dataListOne);
+                mChartOne.build();
+            }
 
             //now fixing the review data
             new DumeModel(getContext()).loadReview(selectedMentor.getId(), null, new TeacherContract.Model.Listener<List<ReviewHighlightData>>() {

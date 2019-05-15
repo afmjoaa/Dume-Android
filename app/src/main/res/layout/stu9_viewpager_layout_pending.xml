@@ -86,7 +86,12 @@
                     android:id="@+id/subject_in_demand"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:paddingStart="130dp"
+                    android:paddingLeft="130dp"
+                    android:paddingEnd="130dp"
+                    android:paddingRight="130dp"
                     android:text="@string/math_amp_physics"
+                    android:textAlignment="center"
                     android:textAllCaps="false"
                     android:textColor="@color/textColorPrimary"
                     android:textSize="14sp"
@@ -188,8 +193,8 @@
                     android:id="@+id/delivery_status_image_view"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:visibility="gone"
                     android:contentDescription="ic_delivery"
+                    android:visibility="gone"
                     app:srcCompat="@drawable/ic_sms_seen" />
 
             </LinearLayout>
@@ -198,7 +203,7 @@
                 android:id="@+id/divider2"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_below="@+id/left_vertical_host_layout"
+                android:layout_below="@+id/msg_delivery_info"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="4dp"
                 android:layout_marginRight="16dp"
@@ -271,19 +276,19 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
+                    android:layout_toStartOf="@+id/show_salary_btn"
                     android:layout_toLeftOf="@+id/show_salary_btn"
-                    app:srcCompat="@drawable/sale_icon"
                     android:translationX="6dp"
                     android:visibility="gone"
-                    android:layout_toStartOf="@+id/show_salary_btn" />
+                    app:srcCompat="@drawable/sale_icon" />
 
                 <Button
                     android:id="@+id/show_salary_btn"
                     style="@style/Widget.AppCompat.Button.Borderless"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:clickable="false"
                     android:layout_centerHorizontal="true"
+                    android:clickable="false"
                     android:text="Salary : 10k BDT"
                     android:textAllCaps="false"
                     android:textColor="@color/highlight_red"
@@ -344,18 +349,18 @@
                 <RelativeLayout
                     android:id="@+id/rl_holder"
                     android:layout_width="match_parent"
-                    android:layout_marginTop="4dp"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp">
 
                     <carbon.widget.ImageView
                         android:id="@+id/testing_iv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
+                        android:layout_marginStart="1dp"
+                        android:layout_marginLeft="1dp"
                         android:layout_marginEnd="3dp"
                         android:layout_marginRight="3dp"
-                        android:layout_marginLeft="1dp"
-                        android:layout_marginStart="1dp"
                         android:padding="1dp"
                         android:translationY="1dp"
                         app:srcCompat="@drawable/letter_accent_24dp" />
@@ -371,10 +376,10 @@
                         android:inputType="textMultiLine"
                         android:maxLength="120"
                         android:padding="4dp"
-                        android:textSize="13sp"
-                        app:carbon_cornerRadius="4dp"
                         android:text="testing"
                         android:textColor="@color/textColorPrimary"
+                        android:textSize="13sp"
+                        app:carbon_cornerRadius="4dp"
                         app:fontFamily="@font/cairo_regular" />
 
                 </RelativeLayout>
@@ -912,8 +917,10 @@
                         android:id="@+id/myChartProgressBar"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_below="@+id/rating_skills"
                         android:layout_centerInParent="true"
-                        android:layout_marginTop="12dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="6dp"
                         android:gravity="center"
                         app:hdBarCanBeClick="true"
                         app:hdBarHeight="160dp"
@@ -935,6 +942,38 @@
                         app:hdProgressClickColor="@color/progress_click"
                         app:hdProgressColor="@color/progress"
                         app:hdProgressDisableColor="@color/progress_disable" />
+
+                    <com.hadiidbouk.charts.ChartProgressBar
+                        android:id="@+id/myChartProgressBarOne"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/myChartProgressBar"
+                        android:layout_centerInParent="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="14dp"
+                        android:gravity="center"
+                        android:visibility="gone"
+                        app:hdBarCanBeClick="true"
+                        app:hdBarHeight="160dp"
+                        app:hdBarRadius="10dp"
+                        app:hdBarTitleColor="@color/textColorPrimary"
+                        app:hdBarTitleMarginTop="9dp"
+                        app:hdBarTitleSelectedColor="@color/colorBlack"
+                        app:hdBarTitleTxtSize="12sp"
+                        app:hdBarWidth="7dp"
+                        app:hdEmptyColor="@color/empty"
+                        app:hdMaxValue="10"
+                        app:hdPinBackgroundColor="@color/pin_background"
+                        app:hdPinDrawable="@drawable/ic_pin"
+                        app:hdPinMarginBottom="22dp"
+                        app:hdPinMarginEnd="11dp"
+                        app:hdPinPaddingBottom="5dp"
+                        app:hdPinTextColor="@color/pin_text"
+                        app:hdPinTxtSize="12sp"
+                        app:hdProgressClickColor="@color/progress_click"
+                        app:hdProgressColor="@color/progress"
+                        app:hdProgressDisableColor="@color/progress_disable" />
+
 
                 </RelativeLayout>
 

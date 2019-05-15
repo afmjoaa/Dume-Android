@@ -68,7 +68,6 @@ public class InboxNotiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
 
-
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

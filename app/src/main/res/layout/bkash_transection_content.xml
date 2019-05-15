@@ -56,7 +56,6 @@
                     android:layout_marginStart="5dp"
                     android:layout_marginLeft="5dp"
                     android:text="Bkash Num :"
-
                     android:textColor="@color/black"
                     app:fontFamily="@font/cairo_regular" />
 
@@ -65,7 +64,7 @@
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@+id/nm"
                     android:gravity="center_horizontal"
-                    android:text="        -->"
+                    android:text="   -->"
                     android:textColor="@color/black"
                     app:fontFamily="@font/cairo_regular" />
 

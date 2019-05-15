@@ -310,15 +310,15 @@ public class HomePageModel extends StuBaseModel implements HomePageContract.Mode
                                 Map<String, Number> dislikes = dbdislikes;
                                 for (Map.Entry<String, Number> entry : dblikes.entrySet()) {
                                     Boolean aBoolean = inputRating.get(entry.getKey());
-                                    if (aBoolean) {
+                                    if (aBoolean!= null && aBoolean) {
                                         Number value = entry.getValue();
                                         value = 1 + value.longValue();
                                         likes.put(entry.getKey(), value);
                                     }
                                 }
                                 for (Map.Entry<String, Number> entry : dbdislikes.entrySet()) {
-                                    final Boolean aBoolean = inputRating.get(entry.getKey());
-                                    if (!aBoolean) {
+                                    Boolean aBoolean = inputRating.get(entry.getKey());
+                                    if (aBoolean!= null && !aBoolean) {
                                         Number value = entry.getValue();
                                         value = 1 + value.longValue();
                                         dislikes.put(entry.getKey(), value);

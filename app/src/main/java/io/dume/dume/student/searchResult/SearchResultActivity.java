@@ -157,6 +157,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
     private CircleProgressbar circleProgressbarARatio;
     private final static int ANIMATIONDURATION = 2500;
     private ChartProgressBar mChart;
+    private ChartProgressBar mChartOne;
     private LinearLayout ratingHostVertical;
     private Button showAdditionalRatingBtn;
     private LinearLayout onlyRatingContainer;
@@ -262,6 +263,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
     private String salaryFormatted;
     private android.widget.ImageView saleImageView;
     private boolean penaltyChanged = false;
+    private String[] queriedSubjectList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -316,6 +318,8 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
         mentorNameText = findViewById(R.id.text_one);
 
         mChart = (ChartProgressBar) findViewById(R.id.myChartProgressBar);
+        mChartOne = (ChartProgressBar) findViewById(R.id.myChartProgressBarOne);
+        mChartOne.setVisibility(View.GONE);
         ratingHostVertical = findViewById(R.id.rating_host_linearlayout);
         showAdditionalRatingBtn = findViewById(R.id.show_additional_rating_btn);
         onlyRatingContainer = findViewById(R.id.rating_layout_vertical);
@@ -566,15 +570,34 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                             }
                         }
                     }
+                    recordsData.putAll(skillMap);
                     recordsData.putAll(searchMap);
-                    Number salary = (Number) skillMap.get("salary");
+                    //TODO calculated salary here
+                    Number mentorAskedSalary = (Number) selectedMentor.get("salary");
+
+                    int threshold = searchDataStore.getPackageName().equals(SearchDataStore.DUME_GANG) ? 4 : 3;
+                    List<String> localQueryList = searchDataStore.getQueryList();
+                    List<String> dbQueryList = (List<String>) selectedMentor.get("query_list");
+
+                    String localSB = localQueryList.get(localQueryList.size() - threshold);
+                    String dbSB = dbQueryList.get(dbQueryList.size() - threshold);
+
+                    String localtrim = localSB.replaceAll("\\s", "");
+                    String dbtrim = dbSB.replaceAll("\\s", "");
+
+                    String[] localsplit = localtrim.split(",");
+                    String[] dbsplit = dbtrim.split(",");
+
+                    Number salary = mentorAskedSalary.floatValue()*0.25 +((mentorAskedSalary.floatValue() - (mentorAskedSalary.floatValue()*0.25))/
+                            (dbsplit.length))*localsplit.length;
+
                     Number penalty = (Number) searchDataStore.getDocumentSnapshot().get("penalty");
                     if (penalty != null && penalty.intValue() != 0) {
                         penaltyChanged = true;
                         salary = salary.intValue() + penalty.intValue();
                     }
                     skillMap.put("salary", salary);
-                    recordsData.putAll(skillMap);
+
                     recordsData.put("creation", FieldValue.serverTimestamp());
                     recordsData.put("skill_uid", selectedMentor.getId());
                     recordsData.put("record_status", SearchDataStore.STATUSPENDING);
@@ -946,6 +969,18 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
     protected void onResume() {
         super.onResume();
         setConfirmedOrCanceled(false);
+        if (mMap != null) {
+            mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+                @Override
+                public void onMapLoaded() {
+                    if (searchDataStore.getSelectedMentor() != null && searchDataStore.getSelectedMentor().startsWith("select")) {
+                        String[] split = searchDataStore.getSelectedMentor().split("\\s*_\\s*");
+                        onMentorSelect(searchDataStore.getResultList().get(Integer.parseInt(split[1])));
+                        searchDataStore.setSelectedMentor(null);
+                    }
+                }
+            });
+        }
     }
 
     @Override
@@ -1080,12 +1115,12 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
         DumeUtils.setTextOverDrawable(this, experienceLayDraw, R.id.ic_badge, Color.BLACK, "00");
         //ratingExperience.setImageDrawable(experienceLayDraw);
 
-        ArrayList<BarData> dataList = new ArrayList<>();
+        /*ArrayList<BarData> dataList = new ArrayList<>();
         BarData data = new BarData("Comm.", 3.4f, "3.4€");
         dataList.add(data);
 
         mChart.setDataList(dataList);
-        mChart.build();
+        mChart.build();*/
 
         //setting the animation for the btn
         showAdditionalRatingBtn.setOnClickListener(new VisibleToggleClickListener() {
@@ -1546,7 +1581,27 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
 
         //fill up all info of the mentor TODO
         NumberFormat currencyInstance = NumberFormat.getCurrencyInstance(Locale.US);
-        Number salary = (Number) selectedMentor.get("salary");
+        //TODO calculated salary
+        //getting the subject array string
+        Number mentorAskedSalary = (Number) selectedMentor.get("salary");
+
+        int threshold = searchDataStore.getPackageName().equals(SearchDataStore.DUME_GANG) ? 4 : 3;
+        List<String> localQueryList = searchDataStore.getQueryList();
+        List<String> dbQueryList = (List<String>) selectedMentor.get("query_list");
+
+        String localSB = localQueryList.get(localQueryList.size() - threshold);
+        String dbSB = dbQueryList.get(dbQueryList.size() - threshold);
+
+        String localtrim = localSB.replaceAll("\\s", "");
+        String dbtrim = dbSB.replaceAll("\\s", "");
+
+        String[] localsplit = localtrim.split(",");
+        String[] dbsplit = dbtrim.split(",");
+
+        Number salary = mentorAskedSalary.floatValue()*0.25 +((mentorAskedSalary.floatValue() - (mentorAskedSalary.floatValue()*0.25))/
+                (dbsplit.length))*localsplit.length;
+
+        //Number salary = (Number) selectedMentor.get("salary");
         Number penalty = (Number) searchDataStore.getDocumentSnapshot().get("penalty");
         if (penalty != null && penalty.intValue() != 0) {
             salary = salary.intValue() + penalty.intValue();
@@ -1639,6 +1694,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
 
         //now the other rating
         ArrayList<BarData> dataList = new ArrayList<>();
+        ArrayList<BarData> dataListOne = new ArrayList<>();
 
         Float comm_value = (Float.parseFloat(self_rating.get("l_communication").toString()) /
                 Float.parseFloat(self_rating.get("l_communication").toString()) + Float.parseFloat(self_rating.get("dl_communication").toString())) * 10;
@@ -1663,12 +1719,43 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
             Float loop_value = (Float.parseFloat(likes.get(splited).toString()) /
                     Float.parseFloat(likes.get(splited).toString()) + Float.parseFloat(dislikes.get(splited).toString())) * 10;
             Float loop_text = (loop_value * 10);
-            data = new BarData(splited, loop_value, loop_text.toString().substring(0, loop_text.toString().length() - 2) + " %");
-            dataList.add(data);
+
+            Map<String, Object> queriedJizz = searchDataStore.getJizz();
+            if (getLast(queriedJizz) != null) {
+                String queriedMainSsss = (String) queriedJizz.get(getLast(queriedJizz));
+                if (queriedMainSsss != null) {
+                    if (queriedMainSsss.contains(splited)) {
+                        data = new BarData(splited, loop_value, loop_text.toString().substring(0, loop_text.toString().length() - 2) + " %");
+                        //TODO
+                        queriedSubjectList = queriedMainSsss.split("\\s*(=>|,)\\s*");
+                        int totalSkills = queriedSubjectList.length + 2;
+                        if(totalSkills>6){
+                            if ((totalSkills & 1) == 0) {
+                                //even...
+                                totalSkills = totalSkills / 2;
+                            } else {
+                                //odd...
+                                totalSkills = ((totalSkills - 1) / 2) + 1;
+                            }
+                            if (dataList.size() < totalSkills) {
+                                dataList.add(data);
+                            } else {
+                                dataListOne.add(data);
+                            }
+                        }else {
+                            dataList.add(data);
+                        }
+                    }
+                }
+            }
         }
         mChart.setDataList(dataList);
         mChart.build();
-
+        if(dataListOne.size()>0){
+            mChartOne.setVisibility(View.VISIBLE);
+            mChartOne.setDataList(dataListOne);
+            mChartOne.build();
+        }
         //now fixing the review data
         new DumeModel(context).loadReview(selectedMentor.getId(), null, new TeacherContract.Model.Listener<List<ReviewHighlightData>>() {
             @Override
@@ -1799,7 +1886,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                 zoomRoute(route);
                 //for the search result tab view activity
                 if (searchDataStore.getSelectedMentor() != null && searchDataStore.getSelectedMentor().startsWith("select")) {
-                    String[] split = retrivedAction.split("\\s*_\\s*");
+                    String[] split = searchDataStore.getSelectedMentor().split("\\s*_\\s*");
                     onMentorSelect(searchDataStore.getResultList().get(Integer.parseInt(split[1])));
                     searchDataStore.setSelectedMentor(null);
                 }

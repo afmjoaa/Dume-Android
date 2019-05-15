@@ -2,7 +2,7 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/custom_snackbar_layout"
     android:layout_width="match_parent"
-    android:layout_height="25dp"
+    android:layout_height="36dp"
     android:gravity="center"
     android:orientation="horizontal">
 
@@ -13,6 +13,6 @@
         android:layout_gravity="center_vertical|center_horizontal"
         android:text="Error messages"
         android:textAlignment="center"
-        android:textSize="14sp" />
+        android:textSize="15sp" />
 
 </android.support.design.widget.CoordinatorLayout>

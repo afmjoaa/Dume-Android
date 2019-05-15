@@ -181,7 +181,7 @@ public class CustomStuAppCompatActivity extends AppCompatActivity implements MyC
         layout.setPadding(0, 0, 0, 0);
         layout.setBackgroundColor(ContextCompat.getColor(context, R.color.snackbar_red));
         CoordinatorLayout.LayoutParams parentParams = (CoordinatorLayout.LayoutParams) layout.getLayoutParams();
-        parentParams.height = (int) (30 * (getResources().getDisplayMetrics().density));
+        parentParams.height = (int) (36 * (getResources().getDisplayMetrics().density));
 
         //can set those things like that ..
         //parentParams.gravity = Gravity.TOP;

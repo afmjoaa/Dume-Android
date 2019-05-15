@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/custom_snackbar_layout"
     android:layout_width="match_parent"
-    android:layout_height="25dp"
+    android:layout_height="36dp"
     android:gravity="center"
     android:orientation="horizontal">
 
@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical|start"
         android:text="Error messages"
-        android:textSize="12sp"
+        android:textSize="13sp"
         android:textColor="@color/white"
         android:layout_marginStart="30dp"
         android:layout_marginLeft="30dp" />
@@ -45,7 +45,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|end"
             android:text="Retry"
-            android:textSize="13sp"
+            android:textSize="15sp"
             android:textStyle="normal"
             android:layout_marginEnd="30dp"
             android:textColor="@color/white"

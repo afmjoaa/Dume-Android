@@ -323,7 +323,8 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
         toolbar.setOverflowIcon(drawable);
 
         bottomSheetBehavior = BottomSheetBehavior.from(llBottomSheet);
-        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        hideBSShowDB();
         llBottomSheet.animate().scaleX(1 + (1 * 0.058f)).setDuration(0).start();
         ViewTreeObserver vto = llBottomSheet.getViewTreeObserver();
         vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
