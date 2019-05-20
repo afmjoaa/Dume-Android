@@ -34,12 +34,11 @@ public class SearchResultPresenter implements SearchResultContract.Presenter {
     public void onMapLoaded() {
         List<DocumentSnapshot> resultList = SearchDataStore.getInstance().getResultList();
         if (resultList != null) {
-            for (DocumentSnapshot profile : resultList) {
-                view.pushProfile(profile);
-                Log.w("foo", resultList.size() + "/searchResultEnqueue: " + profile.toString());
+            for (int i = 0; i < resultList.size(); i++) {
+                DocumentSnapshot profile = resultList.get(i);
+                view.pushProfile(profile, resultList.get(i).getId());
+                //Log.w("foo", resultList.size() + "/searchResultEnqueue: " + profile.toString());
             }
-        } else {
-            Log.w("foo", "searchResultEnqueue: " + "Result is Null");
         }
     }
 

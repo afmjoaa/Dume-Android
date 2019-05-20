@@ -103,6 +103,11 @@
                             android:layout_height="wrap_content"
                             android:text="@string/math_amp_physics"
                             android:textAllCaps="false"
+                            android:paddingRight="120dp"
+                            android:textAlignment="center"
+                            android:paddingLeft="120dp"
+                            android:paddingEnd="120dp"
+                            android:paddingStart="120dp"
                             android:textColor="@color/textColorPrimary"
                             android:textSize="14sp"
                             app:fontFamily="@font/cairo_regular" />
@@ -119,6 +124,7 @@
                             android:layout_height="wrap_content"
                             android:text="10k BDT"
                             android:textAllCaps="false"
+                            android:textAlignment="center"
                             android:textColor="@color/textColorPrimary"
                             android:textSize="14sp"
                             app:fontFamily="@font/cairo_regular" />
@@ -182,8 +188,9 @@
                         android:id="@+id/divider"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:layout_below="@+id/left_vertical_host_layout"
+                        android:layout_below="@+id/center_vertical_host_layout"
                         android:layout_marginLeft="8dp"
+                        android:layout_marginTop="1dp"
                         android:layout_marginRight="8dp"
                         android:background="#41a7a7a7" />
 

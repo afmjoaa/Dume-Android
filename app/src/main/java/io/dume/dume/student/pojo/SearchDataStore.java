@@ -7,15 +7,10 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.GeoPoint;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
-import io.dume.dume.student.searchResultTabview.SearchResultTabData;
 import io.dume.dume.util.DumeUtils;
 
 @Keep
@@ -378,10 +373,7 @@ public class SearchDataStore implements Serializable {
         generatedMainMap.put("preferred_days", preferredDays);
         generatedMainMap.put("start_date", startDate);
         generatedMainMap.put("start_time", startTime);
-
         setMainMap(generatedMainMap);
         return generatedMainMap;
     }
-
-
 }

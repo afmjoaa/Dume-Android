@@ -39,6 +39,7 @@ import io.dume.dume.util.DumeUtils;
 
 public class SearchLoadingModel extends StuBaseModel implements SearchLoadingContract.Model {
     ArrayList<DocumentSnapshot> instructorList = null;
+    ArrayList<String> mentorList = null;
     private List<DocumentSnapshot> recordDataRejected;
     private List<String> rejectedRecordIds;
     private Number salary;
@@ -51,6 +52,7 @@ public class SearchLoadingModel extends StuBaseModel implements SearchLoadingCon
         super(context);
         this.context = context;
         instructorList = new ArrayList<>();
+        mentorList = new ArrayList<>();
         searchDataStore = SearchDataStore.getInstance();
     }
 
@@ -197,6 +199,8 @@ public class SearchLoadingModel extends StuBaseModel implements SearchLoadingCon
     }
 
     private void validateSkill(DocumentSnapshot documentSnapshot, String queryString) {
+        String mentor_uid = (String) documentSnapshot.get("mentor_uid");
+
         String queryStringFromDb = (String) documentSnapshot.get("query_string");
         String dbPackageName = (String) documentSnapshot.get("package_name");
         List<String> dbQueryList = (List<String>) documentSnapshot.get("query_list");
@@ -243,7 +247,12 @@ public class SearchLoadingModel extends StuBaseModel implements SearchLoadingCon
                         Number documentSalary = (Number) documentSnapshot.get("salary");
 
                         if (documentSalary != null && SearchLoadingModel.this.salary != null && documentSalary.intValue() > SearchLoadingModel.this.salary.intValue()) {
-                            instructorList.add(documentSnapshot);
+                            //TODO
+
+                            if (!mentorList.contains(mentor_uid)) {
+                                instructorList.add(documentSnapshot);
+                                mentorList.add(mentor_uid);
+                            }
                         }
                     } else {
                         //adding if not found in previous records
@@ -251,10 +260,16 @@ public class SearchLoadingModel extends StuBaseModel implements SearchLoadingCon
                             Number mentorAskedSalary = (Number) documentSnapshot.get("salary");
                             //checking salary validity
                             if (mentorAskedSalary != null && offeredSalary >= mentorAskedSalary.intValue()) {
-                                instructorList.add(documentSnapshot);
+                                if (!mentorList.contains(mentor_uid)) {
+                                    instructorList.add(documentSnapshot);
+                                    mentorList.add(mentor_uid);
+                                }
                             }
                         } else {
-                            instructorList.add(documentSnapshot);
+                            if (!mentorList.contains(mentor_uid)) {
+                                instructorList.add(documentSnapshot);
+                                mentorList.add(mentor_uid);
+                            }
                         }
                     }
                 }
@@ -279,7 +294,10 @@ public class SearchLoadingModel extends StuBaseModel implements SearchLoadingCon
                             }
                             Number documentSalary = (Number) documentSnapshot.get("salary");
                             if (documentSalary != null && SearchLoadingModel.this.salary != null && documentSalary.intValue() > SearchLoadingModel.this.salary.intValue()) {
-                                instructorList.add(documentSnapshot);
+                                if (!mentorList.contains(mentor_uid)) {
+                                    instructorList.add(documentSnapshot);
+                                    mentorList.add(mentor_uid);
+                                }
                             }
                         } else {
                             Number mentorAskedSalary = (Number) documentSnapshot.get("salary");
@@ -304,10 +322,16 @@ public class SearchLoadingModel extends StuBaseModel implements SearchLoadingCon
                             if (offeredSalary != null) {
                                 //checking salary validity
                                 if (calculatedSalary != null && offeredSalary >= calculatedSalary.intValue()) {
-                                    instructorList.add(documentSnapshot);
+                                    if (!mentorList.contains(mentor_uid)) {
+                                        instructorList.add(documentSnapshot);
+                                        mentorList.add(mentor_uid);
+                                    }
                                 }
                             } else {
-                                instructorList.add(documentSnapshot);
+                                if (!mentorList.contains(mentor_uid)) {
+                                    instructorList.add(documentSnapshot);
+                                    mentorList.add(mentor_uid);
+                                }
                             }
                         }
                     }

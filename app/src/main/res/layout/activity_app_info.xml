@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_above="@+id/App_icon"
             android:gravity="center"
-            android:text="Version 0.0.01"
+            android:text="Version 1.7"
             android:textColor="#64ffffff"
             android:textSize="18sp"
             android:translationY="-2dp"

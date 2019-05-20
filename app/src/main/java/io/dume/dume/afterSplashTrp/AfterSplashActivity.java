@@ -105,19 +105,19 @@ public class AfterSplashActivity extends AppCompatActivity implements DemoCardFr
         Log.d(TAG, "getLocationPermission: getting location permissions");
         String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION,
                 Manifest.permission.READ_PHONE_STATE, Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.RECEIVE_SMS};
+                Manifest.permission.READ_EXTERNAL_STORAGE};
         if (ContextCompat.checkSelfPermission(this.getApplicationContext(), FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
                 ContextCompat.checkSelfPermission(this.getApplicationContext(), COURSE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
                 ContextCompat.checkSelfPermission(this.getApplicationContext(), READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED &&
                 ContextCompat.checkSelfPermission(this.getApplicationContext(), READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(this.getApplicationContext(), WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(this.getApplicationContext(), RECEIVE_SMS) == PackageManager.PERMISSION_GRANTED) {
+                ContextCompat.checkSelfPermission(this.getApplicationContext(), WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
             MLOCATIONPERMISSIONGRANTED = true;
             flush("permission granted");
             mPager.setCurrentItem(mPager.getCurrentItem() + 1, true);
         } else {
             ActivityCompat.requestPermissions(AfterSplashActivity.this, permissions, LOCATION_PERMISSION_REQUEST_CODE);
         }
+// , Manifest.permission.RECEIVE_SMS
     }
 
     //checking the permission result here
@@ -151,11 +151,12 @@ public class AfterSplashActivity extends AppCompatActivity implements DemoCardFr
         int resSms = this.checkCallingOrSelfPermission(RECEIVE_SMS);
         return (resOne == PackageManager.PERMISSION_GRANTED
                 && resTwo == PackageManager.PERMISSION_GRANTED
-                && resPhone == PackageManager.PERMISSION_GRANTED
                 && resWrite == PackageManager.PERMISSION_GRANTED
                 && resRead == PackageManager.PERMISSION_GRANTED);
         //this is flexible
         //&& resSms == PackageManager.PERMISSION_GRANTED
+        /*&& resPhone == PackageManager.PERMISSION_GRANTED
+        */
     }
 
     public void flush(String msg){
@@ -164,23 +165,6 @@ public class AfterSplashActivity extends AppCompatActivity implements DemoCardFr
         if( v != null) v.setGravity(Gravity.CENTER);
         toast.show();
     }
-
-    /*@SuppressLint("HardwareIds")
-    public String getIMEI(Activity activity) {
-        TelephonyManager telephonyManager = (TelephonyManager) activity.getSystemService(Context.TELEPHONY_SERVICE);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
-            return Objects.requireNonNull(telephonyManager).getDeviceId();
-        } else {
-            return "not permitted";
-        }
-    }
-
-    public String getDeviceUniqueID(Activity activity) {
-        @SuppressLint("HardwareIds") String device_unique_id = Settings.Secure.getString(activity.getContentResolver(), Settings.Secure.ANDROID_ID);
-        return device_unique_id;
-    }*/
-
-
 }
 
 

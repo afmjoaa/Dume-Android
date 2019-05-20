@@ -135,21 +135,35 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
             }
         }
         if (!isImeiMatched) {
-
-            fireStore.document("mini_users/" + FirebaseAuth.getInstance().getUid()).update("imei", FieldValue.arrayUnion(imeiList.get(0)), "imei", FieldValue.arrayUnion(imeiList.get(1))).addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void aVoid) {
-                    nextActivity();
-                    //view.showToast("Imei Merged");
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    view.showToast("Network error !!");
-                    nextActivity();
-                }
-            });
-
+            if (imeiList.size() > 1) {
+                fireStore.document("mini_users/" + FirebaseAuth.getInstance().getUid()).update("imei", FieldValue.arrayUnion(imeiList.get(0)), "imei", FieldValue.arrayUnion(imeiList.get(1))).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        nextActivity();
+                        //view.showToast("Imei Merged");
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        view.showToast("Network error !!");
+                        nextActivity();
+                    }
+                });
+            } else if (imeiList.size() > 0) {
+                fireStore.document("mini_users/" + FirebaseAuth.getInstance().getUid()).update("imei", FieldValue.arrayUnion(imeiList.get(0))).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        nextActivity();
+                        //view.showToast("Imei Merged");
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        view.showToast("Network error !!");
+                        nextActivity();
+                    }
+                });
+            }
         } else {
             Log.w(TAG, "mergeImei:  " + "Not Merged");
             nextActivity();

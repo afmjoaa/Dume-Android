@@ -1,9 +1,7 @@
 package io.dume.dume.student.searchResult;
 
-import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.WriteBatch;
 
 import java.util.List;
 import java.util.Map;
@@ -12,9 +10,6 @@ import io.dume.dume.teacher.homepage.TeacherContract;
 
 public interface SearchResultContract {
     interface View {
-
-
-        void pushProfile(DocumentSnapshot singleSkill);
 
         void configSearchResult();
 
@@ -29,6 +24,8 @@ public interface SearchResultContract {
         void flush(String msg);
 
         void findView();
+
+        void pushProfile(DocumentSnapshot singleSkill, String markerTag);
 
         void centerTheMapCamera();
 

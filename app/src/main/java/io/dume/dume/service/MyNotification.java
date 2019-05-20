@@ -49,6 +49,7 @@ public class MyNotification extends FirebaseMessagingService {
     private SharedPreferences prefs;
     private int TAB_NUMBER;
     private static final String TAG = "MyNotification";
+
     @SuppressLint("CommitPrefEdits")
     public MyNotification() {
         super();
@@ -80,7 +81,7 @@ public class MyNotification extends FirebaseMessagingService {
             intentClass = RecordsPageActivity.class;
             TAB_NUMBER = 4;
         }
-        Log.w(TAG, "sendNotification: "+intentClass.toString() );
+        Log.w(TAG, "sendNotification: " + intentClass.toString());
 
 
         int NOTIFICATION_ID = 234;
@@ -91,7 +92,7 @@ public class MyNotification extends FirebaseMessagingService {
             String CHANNEL_ID = "my_channel_01";
             CharSequence name = "my_channel";
             String Description = "Urgent notifications";
-            int importance = NotificationManager.IMPORTANCE_HIGH;
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
             NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID, name, importance);
             mChannel.setDescription(Description);
             mChannel.enableVibration(true);
@@ -123,11 +124,11 @@ public class MyNotification extends FirebaseMessagingService {
                         .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
                         .build());
             }
-            if (type.equals("message") || type.equals("payment")) {
+            /*if (type.equals("message") || type.equals("payment")) {
                 mChannel.setImportance(NotificationManager.IMPORTANCE_DEFAULT);
-            }else {
-                mChannel.setImportance(NotificationManager.IMPORTANCE_HIGH);
-            }
+            } else {
+            }*/
+            mChannel.setImportance(NotificationManager.IMPORTANCE_DEFAULT);
             assert notificationManager != null;
             notificationManager.createNotificationChannel(mChannel);
         }
@@ -151,11 +152,7 @@ public class MyNotification extends FirebaseMessagingService {
                 builder.setSound(Uri.parse(ringToneString));
             }
         }
-        if (type.equals("message") || type.equals("payment")) {
-            builder.setPriority(NotificationCompat.PRIORITY_HIGH);
-        }else {
-            builder.setPriority(NotificationCompat.PRIORITY_MAX);
-        }
+        builder.setPriority(NotificationCompat.PRIORITY_HIGH);
         Intent resultIntent = new Intent(this, intentClass);
         resultIntent.putExtra("tab_number", TAB_NUMBER);
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);

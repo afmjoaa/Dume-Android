@@ -256,6 +256,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
     private List<String> imprssionUid;
     private String requestMentorUid;
     private Dialog dialog;
+
     private TextView limit;
     private Integer max_dicount_percentage = null;
     private Integer max_discount_credit = null;
@@ -1522,7 +1523,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
     }
 
     @Override
-    public void pushProfile(DocumentSnapshot singleSkill) {
+    public void pushProfile(DocumentSnapshot singleSkill, String markerTag) {
         String skillHolderUid = singleSkill.getString("mentor_uid");
         if (skillHolderUid != null) {
             imprssionUid.add(skillHolderUid);
@@ -1535,10 +1536,12 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
         String starRating = (String) selfRating.get("star_rating");
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
         route.add(latLng);
-        addCustomMarkerFromURL(avatar, latLng, gender, starRating, new TeacherContract.Model.Listener<Marker>() {
+        addCustomMarkerFromURL(markerTag ,avatar, latLng, gender, starRating, new TeacherContract.Model.Listener<Marker>() {
             @Override
             public void onSuccess(Marker list) {
-                markerList.add(list);
+                if (list.getTag()!= null) {
+                    markerList.add(list);
+                }
             }
 
             @Override
@@ -1865,7 +1868,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
         mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
             @Override
             public void onMapLoaded() {
-                addCustomMarkerFromURL(searchDataStore.getAvatarString(), searchDataStore.getAnchorPoint(), searchDataStore.getGender(), null, new TeacherContract.Model.Listener<Marker>() {
+                addCustomMarkerFromURL(null, searchDataStore.getAvatarString(), searchDataStore.getAnchorPoint(), searchDataStore.getGender(), null, new TeacherContract.Model.Listener<Marker>() {
                     @Override
                     public void onSuccess(Marker list) {
                         //already handled
@@ -1982,7 +1985,6 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                 testingCustomDialogue(R.string.confirm_info);
                 break;
             case R.id.action_list_view:
-                //Toast.makeText(MainActivity.this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
                 setConfirmedOrCanceled(true);
                 startActivity(new Intent(this, SearchResultTabviewActivity.class));
                 //finish();
@@ -2066,7 +2068,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
         return returnedBitmap;
     }
 
-    private void addCustomMarkerFromURL(String url, LatLng lattitudeLongitude, String gender, String stars, TeacherContract.Model.Listener<Marker> listener) {
+    private void addCustomMarkerFromURL(String markerTag, String url, LatLng lattitudeLongitude, String gender, String stars, TeacherContract.Model.Listener<Marker> listener) {
         if (mMap == null) {
             return;
         }
@@ -2080,7 +2082,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                         public void onResourceReady(@NonNull Bitmap resource, @Nullable com.bumptech.glide.request.transition.Transition<? super Bitmap> transition) {
                             marker = mMap.addMarker(new MarkerOptions().position(lattitudeLongitude)
                                     .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(mCustomMarkerView, resource))));
-                            //mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(lattitudeLongitude, 15f));
+                            marker.setTag(markerTag);
                             listener.onSuccess(marker);
                         }
                     });
@@ -2099,6 +2101,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                         public void onResourceReady(@NonNull Bitmap resource, @Nullable com.bumptech.glide.request.transition.Transition<? super Bitmap> transition) {
                             marker = mMap.addMarker(new MarkerOptions().position(lattitudeLongitude)
                                     .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(mCustomMarkerView, resource))));
+                            marker.setTag(markerTag);
                             listener.onSuccess(marker);
                         }
                     });
@@ -2133,11 +2136,11 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
 
     @Override
     public void onSwipeLeftRight(Boolean swipeRight) {
-        List<DocumentSnapshot> resultList = searchDataStore.getResultList();
+        //List<DocumentSnapshot> resultList = searchDataStore.getResultList();
         for (int i = 0; i < markerList.size(); i++) {
-            if (resultList.get(i).getId().equals(selectedMentor.getId())) {
+            if (markerList.get(i).getTag().toString().equals(selectedMentor.getId())) {
                 if (swipeRight) {
-                    if (i == (resultList.size() - 1)) {
+                    if (i == (markerList.size() - 1)) {
                         onMarkerClick(markerList.get(0));
                     } else {
                         onMarkerClick(markerList.get(i + 1));

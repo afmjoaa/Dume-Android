@@ -284,18 +284,25 @@ public class AuthModel implements AuthContract.Model, SplashContract.Model, Phon
         DocumentReference mini_users = firestore.collection("mini_users").document(user.getUid());
         //Source source = Source.DEFAULT;
         mini_users.get(Google.getInstance().getSource()).addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+
+            private Boolean obligation;
+            private Boolean foreignObligation;
+
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
                     // Document found in the offline cache
                     DocumentSnapshot documentSnapshot = task.getResult();
                     if (documentSnapshot != null) {
-
-                        Log.w(TAG, "onAccountTypeFound: " + documentSnapshot.toString());
-                        Log.e(TAG, "Fucked Here : " + documentSnapshot.toString());
-
-                        boolean foreignObligation = (boolean) Objects.requireNonNull(documentSnapshot.getData()).get("foreign_obligation");
-                        boolean obligation = (boolean) documentSnapshot.get("obligation");
+                        foreignObligation = documentSnapshot.getBoolean("foreign_obligation");
+                        obligation = documentSnapshot.getBoolean("obligation");
+                        //TODO solving err
+                        if (foreignObligation == null) {
+                            foreignObligation = false;
+                        }
+                        if (obligation == null) {
+                            obligation = false;
+                        }
                         Google.getInstance().setObligation(obligation);
                         detachListener();
                         Object o = documentSnapshot.get("account_major");
@@ -335,8 +342,12 @@ public class AuthModel implements AuthContract.Model, SplashContract.Model, Phon
 
                         } else {
                             String account_major = "";
-                            assert o != null;
-                            account_major = o.toString();
+                            if(o!= null){
+                                account_major = o.toString();
+                            }else {
+                                account_major = DumeUtils.STUDENT;
+                            }
+
                             if (!foreignObligation) {
                                 if (account_major.equals("student")) {
                                     Google.getInstance().setAccountMajor(DumeUtils.STUDENT);
@@ -361,7 +372,6 @@ public class AuthModel implements AuthContract.Model, SplashContract.Model, Phon
                 }
             }
         });
-
 
 
         listenerRegistration = mini_users.addSnapshotListener((documentSnapshot, e) -> {

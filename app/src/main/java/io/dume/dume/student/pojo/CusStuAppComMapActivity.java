@@ -460,7 +460,7 @@ public class CusStuAppComMapActivity extends CustomStuAppCompatActivity implemen
                     .zoom(15f)
                     .tilt(42)
                     .build();
-            time = 1800;
+            time = 1000;
             mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
                 @Override
                 public void onMapLoaded() {
@@ -481,12 +481,12 @@ public class CusStuAppComMapActivity extends CustomStuAppCompatActivity implemen
                     .zoom(15f)
                     .tilt(0)
                     .build();
-            MAP.postDelayed(new Runnable() {
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f));
+            /*MAP.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f));
                 }
-            }, 700L);
+            }, 700L);*/
             /*mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
                 @Override
                 public void onMapLoaded() {

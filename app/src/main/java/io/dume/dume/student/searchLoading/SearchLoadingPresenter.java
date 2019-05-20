@@ -59,11 +59,9 @@ public class SearchLoadingPresenter implements SearchLoadingContract.Presenter {
                         searchDataStore.setResultList(list);
                     }
                     view.showResultActivty();
-
                 }/*Not Found - Level 1*/ else {
                     view.notifyRadious(4);
                     mModel.search(searchDataStore.getAnchorPoint().latitude, searchDataStore.getAnchorPoint().longitude, 4, searchDataStore.getQueryString(), new TeacherContract.Model.Listener<List<DocumentSnapshot>>() {
-
                         @Override
                         public void onSuccess(List<DocumentSnapshot> list) {
                             /*Found - Level 4*/

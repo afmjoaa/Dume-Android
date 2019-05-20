@@ -77,6 +77,7 @@ import com.transitionseverywhere.TransitionSet;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -166,9 +167,9 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
     private carbon.widget.ImageView mMarkerImageView;
     private IconGenerator iconFactory;
     private int SEARCH_REQUEST_CODE = 0101;
-    private String gangDiscount= null;
-    private String regularDiscount= null;
-    private String instantDiscount= null;
+    private String gangDiscount = null;
+    private String regularDiscount = null;
+    private String instantDiscount = null;
 
 
     @Override
@@ -552,28 +553,28 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
 
         Map<String, Object> documentSnapshot = searchDataStore.getDocumentSnapshot();
         ArrayList<String> applied_promo = (ArrayList<String>) documentSnapshot.get("applied_promo");
-        if(applied_promo.size()>0){
+        if (applied_promo.size() > 0) {
             for (String applied : applied_promo) {
                 Log.w(TAG, "appliedPromo: " + applied);
                 Map<String, Object> promo_item = (Map<String, Object>) documentSnapshot.get(applied);
                 Gson gson = new Gson();
                 JsonElement jsonElement = gson.toJsonTree(promo_item);
                 HomePageRecyclerData homePageRecyclerData = gson.fromJson(jsonElement, HomePageRecyclerData.class);
-                if(homePageRecyclerData!= null){
-                    if(homePageRecyclerData.getPackageName().equals(SearchDataStore.DUME_GANG)){
+                if (homePageRecyclerData != null) {
+                    if (homePageRecyclerData.getPackageName().equals(SearchDataStore.DUME_GANG)) {
                         dumeGangPercentageOffImage.setVisibility(View.VISIBLE);
                         Integer max_dicount_percentage = homePageRecyclerData.getMax_dicount_percentage();
-                        gangDiscount = "-" + max_dicount_percentage.toString() +"%";
+                        gangDiscount = "-" + max_dicount_percentage.toString() + "%";
                         DumeUtils.setTextOverDrawable(this, dumeGangBadgeOffLayDraw, R.id.ic_badge, Color.WHITE, gangDiscount, 3);
-                    }else if(homePageRecyclerData.getPackageName().equals(SearchDataStore.REGULAR_DUME)){
+                    } else if (homePageRecyclerData.getPackageName().equals(SearchDataStore.REGULAR_DUME)) {
                         regularDumePercentageOffImage.setVisibility(View.VISIBLE);
                         Integer max_dicount_percentage = homePageRecyclerData.getMax_dicount_percentage();
-                        regularDiscount = "-" + max_dicount_percentage.toString() +"%";
+                        regularDiscount = "-" + max_dicount_percentage.toString() + "%";
                         DumeUtils.setTextOverDrawable(this, regularDumeBadgeOffLayDraw, R.id.ic_badge, 0xff575757, regularDiscount, 3);
-                    }else {
+                    } else {
                         instantDumePercentageOffImage.setVisibility(View.VISIBLE);
                         Integer max_dicount_percentage = homePageRecyclerData.getMax_dicount_percentage();
-                        instantDiscount = "-" + max_dicount_percentage.toString() +"%";
+                        instantDiscount = "-" + max_dicount_percentage.toString() + "%";
                         DumeUtils.setTextOverDrawable(this, instantDumeBadgeOffLayDraw, R.id.ic_badge, 0xff575757, instantDiscount, 3);
                     }
                 }
@@ -583,34 +584,118 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
 
     @Override
     public void executeSearchActivity() {
-        if (preferredDays != null && startDate != null && startTime != null) {
-            switch (checkPackage) {
-                case 0:
-                    searchDataStore.setPackageName(SearchDataStore.DUME_GANG);
-                    break;
-                case 1:
-                    searchDataStore.setPackageName(SearchDataStore.REGULAR_DUME);
-                    break;
-                case 2:
-                    searchDataStore.setPackageName(SearchDataStore.INSTANT_DUME);
-                    break;
-            }
-            Intent intent = new Intent(this, SearchLoadingActivity.class);
-            intent.setAction("from_GPA");
-            startActivity(intent);
-            finish();
-            //ActivityCompat.finishAffinity(this);
+        Calendar instance = Calendar.getInstance();
+        /*if (preferredDays != null && startDate != null && startTime != null) {
+            //handle at last
         } else if (preferredDays == null) {
             flush("Internal error !!");
+        } else */
+        if (startDate == null && startTime == null) {
+            //TODO testing auto time date
+            int hourOfDay = instance.get(Calendar.HOUR_OF_DAY);
+            int minute = instance.get(Calendar.MINUTE);
+            String myTime;
+            if (DateFormat.is24HourFormat(this)) {
+                if (minute < 10) {
+                    myTime = "" + hourOfDay + ":0" + minute;
+                } else {
+                    myTime = "" + hourOfDay + ":" + minute;
+                }
+            } else {
+                String AM_PM;
+                int myHourOfDay = hourOfDay;
+                if (hourOfDay < 12) {
+                    AM_PM = "AM";
+                } else {
+                    AM_PM = "PM";
+                }
+                if (hourOfDay >= 13) {
+                    myHourOfDay = hourOfDay - 12;
+                } else if (hourOfDay == 0) {
+                    myHourOfDay = 12;
+                }
+                if (minute < 10) {
+                    myTime = "" + myHourOfDay + ":0" + minute + " " + AM_PM;
+                } else {
+                    myTime = "" + myHourOfDay + ":" + minute + " " + AM_PM;
+                }
+            }
+            //timePickerEt.setText(myTime);
+            hintIdThree.setText(String.format("%s", myTime));
+            startTime = searchDataStore.genSetRetStartTime(hourOfDay, minute, myTime);
+
+            //now date
+            //datePickerEt.setText(currentDateStr);
+            instance.add(Calendar.DATE, 1);
+            String currentDateStr = java.text.DateFormat.getDateInstance(java.text.DateFormat.MEDIUM).format(instance.getTime());
+            hintIdTwo.setText(String.format("%s", currentDateStr));
+            startDate = searchDataStore.genSetRetStartDate(instance.get(Calendar.YEAR), instance.get(Calendar.MONTH), instance.get(Calendar.DAY_OF_MONTH), currentDateStr);
         } else if (startDate == null) {
-            executeClicked = true;
+            /*executeClicked = true;
             flush("please select start date...");
-            mViewPager.setCurrentItem(1, true);
+            mViewPager.setCurrentItem(1, true);*/
+
+            //now date
+            //datePickerEt.setText(currentDateStr);
+            instance.add(Calendar.DATE, 1);
+            String currentDateStr = java.text.DateFormat.getDateInstance(java.text.DateFormat.MEDIUM).format(instance.getTime());
+            hintIdTwo.setText(String.format("%s", currentDateStr));
+            startDate = searchDataStore.genSetRetStartDate(instance.get(Calendar.YEAR), instance.get(Calendar.MONTH), instance.get(Calendar.DAY_OF_MONTH), currentDateStr);
+
+
         } else {
-            executeClickedTwo = true;
+            /*executeClickedTwo = true;
             flush("please select start time...");
-            mViewPager.setCurrentItem(2, true);
+            mViewPager.setCurrentItem(2, true);*/
+
+            //time here
+            int hourOfDay = instance.get(Calendar.HOUR_OF_DAY);
+            int minute = instance.get(Calendar.MINUTE);
+            String myTime;
+            if (DateFormat.is24HourFormat(this)) {
+                if (minute < 10) {
+                    myTime = "" + hourOfDay + ":0" + minute;
+                } else {
+                    myTime = "" + hourOfDay + ":" + minute;
+                }
+            } else {
+                String AM_PM;
+                int myHourOfDay = hourOfDay;
+                if (hourOfDay < 12) {
+                    AM_PM = "AM";
+                } else {
+                    AM_PM = "PM";
+                }
+                if (hourOfDay >= 13) {
+                    myHourOfDay = hourOfDay - 12;
+                } else if (hourOfDay == 0) {
+                    myHourOfDay = 12;
+                }
+                if (minute < 10) {
+                    myTime = "" + myHourOfDay + ":0" + minute + " " + AM_PM;
+                } else {
+                    myTime = "" + myHourOfDay + ":" + minute + " " + AM_PM;
+                }
+            }
+            //timePickerEt.setText(myTime);
+            hintIdThree.setText(String.format("%s", myTime));
+            startTime = searchDataStore.genSetRetStartTime(hourOfDay, minute, myTime);
         }
+        switch (checkPackage) {
+            case 0:
+                searchDataStore.setPackageName(SearchDataStore.DUME_GANG);
+                break;
+            case 1:
+                searchDataStore.setPackageName(SearchDataStore.REGULAR_DUME);
+                break;
+            case 2:
+                searchDataStore.setPackageName(SearchDataStore.INSTANT_DUME);
+                break;
+        }
+        Intent intent = new Intent(this, SearchLoadingActivity.class);
+        intent.setAction("from_GPA");
+        startActivity(intent);
+        finish();
     }
 
     @Override
@@ -674,24 +759,24 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
             regularDumeBadgeOffLayDraw = (LayerDrawable) regularDumePercentageOffImage.getDrawable();
             instantDumeBadgeOffLayDraw = (LayerDrawable) instantDumePercentageOffImage.getDrawable();
 
-            if(gangDiscount!=null){
+            if (gangDiscount != null) {
                 dumeGangPercentageOffImage.setVisibility(View.VISIBLE);
                 DumeUtils.setTextOverDrawable(this, dumeGangBadgeOffLayDraw, R.id.ic_badge, Color.WHITE, gangDiscount, 3);
-            }else{
+            } else {
                 dumeGangPercentageOffImage.setVisibility(View.INVISIBLE);
                 //DumeUtils.setTextOverDrawable(this, dumeGangBadgeOffLayDraw, R.id.ic_badge, Color.WHITE, "-0%", 3);
             }
-            if(regularDiscount!= null){
+            if (regularDiscount != null) {
                 regularDumePercentageOffImage.setVisibility(View.VISIBLE);
                 DumeUtils.setTextOverDrawable(this, regularDumeBadgeOffLayDraw, R.id.ic_badge, 0xff575757, regularDiscount, 3);
-            }else{
+            } else {
                 regularDumePercentageOffImage.setVisibility(View.INVISIBLE);
                 //DumeUtils.setTextOverDrawable(this, regularDumeBadgeOffLayDraw, R.id.ic_badge, 0xff575757, "-0%", 3);
             }
-            if(instantDiscount!= null){
+            if (instantDiscount != null) {
                 instantDumePercentageOffImage.setVisibility(View.VISIBLE);
                 DumeUtils.setTextOverDrawable(this, instantDumeBadgeOffLayDraw, R.id.ic_badge, 0xff575757, instantDiscount, 3);
-            }else{
+            } else {
                 instantDumePercentageOffImage.setVisibility(View.INVISIBLE);
                 //DumeUtils.setTextOverDrawable(this, instantDumeBadgeOffLayDraw, R.id.ic_badge, 0xff575757, "-0%", 3);
             }
@@ -725,7 +810,6 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
             individualPromoTitle.setVisibility(View.VISIBLE);
             specificPromoText.setVisibility(View.INVISIBLE);
             regularDumePriceText.setVisibility(View.GONE);
-
 
         } else if (specificPromoText.getText() == specificPromoTextArr[1]
                 && bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
@@ -766,22 +850,22 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
             regularDumeBadgeOffLayDraw = (LayerDrawable) regularDumePercentageOffImage.getDrawable();
             instantDumeBadgeOffLayDraw = (LayerDrawable) instantDumePercentageOffImage.getDrawable();
 
-            if(gangDiscount!=null){
+            if (gangDiscount != null) {
                 dumeGangPercentageOffImage.setVisibility(View.VISIBLE);
                 DumeUtils.setTextOverDrawable(this, dumeGangBadgeOffLayDraw, R.id.ic_badge, 0xff575757, gangDiscount, 3);
-            }else{
+            } else {
                 dumeGangPercentageOffImage.setVisibility(View.INVISIBLE);
             }
-            if(regularDiscount!= null){
+            if (regularDiscount != null) {
                 regularDumePercentageOffImage.setVisibility(View.VISIBLE);
                 DumeUtils.setTextOverDrawable(this, regularDumeBadgeOffLayDraw, R.id.ic_badge, Color.WHITE, regularDiscount, 3);
-            }else{
+            } else {
                 regularDumePercentageOffImage.setVisibility(View.INVISIBLE);
             }
-            if(instantDiscount!= null){
+            if (instantDiscount != null) {
                 instantDumePercentageOffImage.setVisibility(View.VISIBLE);
                 DumeUtils.setTextOverDrawable(this, instantDumeBadgeOffLayDraw, R.id.ic_badge, 0xff575757, instantDiscount, 3);
-            }else{
+            } else {
                 instantDumePercentageOffImage.setVisibility(View.INVISIBLE);
             }
             packageSearchBtn.setText("Search Regular Dume");
@@ -848,22 +932,22 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
             regularDumeBadgeOffLayDraw = (LayerDrawable) regularDumePercentageOffImage.getDrawable();
             instantDumeBadgeOffLayDraw = (LayerDrawable) instantDumePercentageOffImage.getDrawable();
 
-            if(gangDiscount!=null){
+            if (gangDiscount != null) {
                 dumeGangPercentageOffImage.setVisibility(View.VISIBLE);
                 DumeUtils.setTextOverDrawable(this, dumeGangBadgeOffLayDraw, R.id.ic_badge, 0xff575757, gangDiscount, 3);
-            }else{
+            } else {
                 dumeGangPercentageOffImage.setVisibility(View.INVISIBLE);
             }
-            if(regularDiscount!= null){
+            if (regularDiscount != null) {
                 regularDumePercentageOffImage.setVisibility(View.VISIBLE);
                 DumeUtils.setTextOverDrawable(this, regularDumeBadgeOffLayDraw, R.id.ic_badge, 0xff575757, regularDiscount, 3);
-            }else{
+            } else {
                 regularDumePercentageOffImage.setVisibility(View.INVISIBLE);
             }
-            if(instantDiscount!= null){
+            if (instantDiscount != null) {
                 instantDumePercentageOffImage.setVisibility(View.VISIBLE);
                 DumeUtils.setTextOverDrawable(this, instantDumeBadgeOffLayDraw, R.id.ic_badge, Color.WHITE, instantDiscount, 3);
-            }else{
+            } else {
                 instantDumePercentageOffImage.setVisibility(View.INVISIBLE);
             }
             packageSearchBtn.setText("Search Instant Dume");
@@ -922,9 +1006,9 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
                         }
                     });
         } else {
-            if(searchDataStore.getGender().equals("Male") || searchDataStore.getGender().equals("")){
+            if (searchDataStore.getGender().equals("Male") || searchDataStore.getGender().equals("")) {
                 defaultUrl = "https://firebasestorage.googleapis.com/v0/b/dume-2d063.appspot.com/o/avatar.png?alt=media&token=801c75b7-59fe-4a13-9191-186ef50de707";
-            }else {
+            } else {
                 defaultUrl = "https://firebasestorage.googleapis.com/v0/b/dume-2d063.appspot.com/o/avatar_female.png?alt=media&token=7202ea91-4f0d-4bd6-838e-8b73d0db13eb";
             }
             Glide.with(getApplicationContext())
@@ -948,6 +1032,7 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
         iconFactory.setContentPadding((int) (27 * (getResources().getDisplayMetrics().density)), (int) (2 * (getResources().getDisplayMetrics().density)), 0, (int) (6 * (getResources().getDisplayMetrics().density)));
         addCustomInfoWindow(iconFactory, makeCharSequence("Radius", Integer.toString(SearchDataStore.SHORTRADIUS)) + " m", lattitudeLongitude);
     }
+
     //testing custom marker code here
     private Bitmap getMarkerBitmapFromView(View view, Bitmap bitmap) {
 

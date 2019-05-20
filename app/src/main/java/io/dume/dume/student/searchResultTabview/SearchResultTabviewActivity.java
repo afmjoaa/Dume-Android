@@ -358,7 +358,25 @@ public class SearchResultTabviewActivity extends CustomStuAppCompatActivity impl
                 searchResultTabData.setIdentify(i);
 
                 NumberFormat currencyInstance = NumberFormat.getCurrencyInstance(Locale.US);
-                Number salary = (Number) currentDocument.get("salary");
+                Number mentorAskedSalary = (Number) currentDocument.get("salary");
+
+                SearchDataStore searchDataStore = SearchDataStore.getInstance();
+                int threshold = searchDataStore.getPackageName().equals(SearchDataStore.DUME_GANG) ? 4 : 3;
+                List<String> localQueryList = searchDataStore.getQueryList();
+                List<String> dbQueryList = (List<String>) currentDocument.get("query_list");
+
+                String localSB = localQueryList.get(localQueryList.size() - threshold);
+                String dbSB = dbQueryList.get(dbQueryList.size() - threshold);
+
+                String localtrim = localSB.replaceAll("\\s", "");
+                String dbtrim = dbSB.replaceAll("\\s", "");
+
+                String[] localsplit = localtrim.split(",");
+                String[] dbsplit = dbtrim.split(",");
+
+                Number salary = mentorAskedSalary.floatValue()*0.25 +((mentorAskedSalary.floatValue() - (mentorAskedSalary.floatValue()*0.25))/
+                        (dbsplit.length))*localsplit.length;
+
                 searchResultTabData.mSalary = salary.intValue();
 
                 String format1 = currencyInstance.format(salary);
