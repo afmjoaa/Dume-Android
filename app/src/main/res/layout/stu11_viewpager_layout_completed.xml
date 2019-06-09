@@ -474,7 +474,7 @@
                             android:singleLine="true"
                             android:text="1234"
                             android:textColor="@color/white"
-                            android:textSize="8sp"
+                            android:textSize="10sp"
                             android:translationY="-9dp" />
 
                     </RelativeLayout>
@@ -530,7 +530,7 @@
                             android:singleLine="true"
                             android:text="80 %"
                             android:textColor="@color/white"
-                            android:textSize="8sp"
+                            android:textSize="9sp"
                             android:translationY="-6dp" />
 
 
@@ -588,7 +588,7 @@
                             android:singleLine="true"
                             android:text="50 %"
                             android:textColor="@color/white"
-                            android:textSize="8sp"
+                            android:textSize="9sp"
                             android:translationY="-6dp" />
 
                     </RelativeLayout>
@@ -641,7 +641,7 @@
                             android:singleLine="true"
                             android:text="1234"
                             android:textColor="@color/white"
-                            android:textSize="8sp"
+                            android:textSize="10sp"
                             android:translationY="-9dp" />
                     </RelativeLayout>
 
@@ -847,7 +847,7 @@
                             android:layout_below="@+id/achievement_inaugural_image"
                             android:layout_centerHorizontal="true"
                             android:singleLine="true"
-                            android:text="Inaugural"
+                            android:text="Varified"
                             android:textAlignment="center"
                             android:textSize="13sp"
                             app:fontFamily="@font/cairo_regular" />

@@ -240,8 +240,8 @@ public class StatisticsFragment extends Fragment {
         lineChart.enableScroll();
         lineChart.invalidate();
         //lineChart.moveViewToX(23f);
-        lineChart.moveViewToAnimated(23f, 0f,YAxis.AxisDependency.RIGHT , 1000);
-        lineChart.animateY(3000, Easing.EasingOption.EaseInOutElastic);
+        lineChart.moveViewToAnimated(23f, 0f,YAxis.AxisDependency.RIGHT , 800);
+        lineChart.animateY(2600, Easing.EasingOption.EaseInOutElastic);
     }
 
 }

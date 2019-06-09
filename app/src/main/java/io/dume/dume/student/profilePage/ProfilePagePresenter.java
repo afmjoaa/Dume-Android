@@ -51,7 +51,7 @@ public class ProfilePagePresenter implements ProfilePageContract.Presenter {
                 mView.setFirstName(o1);
                 mView.setUserName(o1, o);
                 mView.setGmail(documentSnapshot.getString("email"));
-                final GeoPoint current_address = documentSnapshot.getGeoPoint("current_address");
+                GeoPoint current_address = documentSnapshot.getGeoPoint("current_address");
                 if (current_address != null) {
                     if (Objects.requireNonNull(current_address).getLatitude() != 84.9 && current_address.getLongitude() != 180) {
                         mView.setCurrentAddress(current_address);
@@ -67,7 +67,7 @@ public class ProfilePagePresenter implements ProfilePageContract.Presenter {
                 } else {
                     mView.setProfileComPercent(documentSnapshot.getString("pro_com_%"));
                 }
-                final String avatar = documentSnapshot.getString("avatar");
+                String avatar = documentSnapshot.getString("avatar");
                 if(avatar!= null && !avatar.equals("")){
                     mView.setAvatar(avatar);
                 }

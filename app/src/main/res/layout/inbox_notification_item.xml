@@ -16,8 +16,8 @@
         android:layout_height="wrap_content"
         android:background="@color/notificationItemColor"
         android:padding="7dp"
-        app:carbon_cornerRadius="5dp"
-        >
+        app:carbon_elevation="3dp"
+        app:carbon_cornerRadius="5dp">
         <!-- app:carbon_elevation="3dp"-->
 
         <carbon.widget.ImageView

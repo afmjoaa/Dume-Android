@@ -95,7 +95,6 @@ public class SkillPresenter implements SkillContract.Presenter {
                     TeacherDataStore.getInstance().setPackageName(SearchDataStore.REGULAR_DUME);
                     view.goToCrudActivity(DumeUtils.TEACHER);
                 }
-
                 break;
             case R.id.fab_gang:
                 if (isProfileOK()) {
@@ -106,12 +105,14 @@ public class SkillPresenter implements SkillContract.Presenter {
             case R.id.fab_instant:
                 if (isProfileOK()) {
                     TeacherDataStore.getInstance().setPackageName(SearchDataStore.INSTANT_DUME);
-                    final Map<String, Boolean> achievements = (Map<String, Boolean>) documentSnapshot.get("achievements");
+                    view.goToCrudActivity(DumeUtils.TEACHER);
+                    /*final Map<String, Boolean> achievements = (Map<String, Boolean>) documentSnapshot.get("achievements");
                     Boolean premier = achievements.get("premier");
                     if (premier) {
                         view.goToCrudActivity(DumeUtils.TEACHER);
-                    } else
+                    } else{
                         view.flush("You can't create instant dume without unlocking Premier Badge.");
+                    }*/
                 }
 
                 break;

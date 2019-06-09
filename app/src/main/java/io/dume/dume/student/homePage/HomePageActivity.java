@@ -3,6 +3,7 @@ package io.dume.dume.student.homePage;
 import android.app.Dialog;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
@@ -38,6 +39,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -50,10 +52,12 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -68,11 +72,14 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.GeoPoint;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.transitionseverywhere.Fade;
 import com.transitionseverywhere.Slide;
 import com.transitionseverywhere.TransitionManager;
 import com.transitionseverywhere.TransitionSet;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -115,10 +122,12 @@ import io.dume.dume.student.searchResult.SearchResultActivity;
 import io.dume.dume.student.studentHelp.StudentHelpActivity;
 import io.dume.dume.student.studentPayment.StudentPaymentActivity;
 import io.dume.dume.student.studentSettings.StudentSettingsActivity;
+import io.dume.dume.teacher.crudskill.CrudSkillActivity;
 import io.dume.dume.teacher.homepage.TeacherActivtiy;
 import io.dume.dume.teacher.homepage.TeacherContract;
 import io.dume.dume.util.DumeUtils;
 import io.dume.dume.util.NetworkUtil;
+import io.dume.dume.util.RadioBtnDialogue;
 import me.zhanghai.android.materialratingbar.MaterialRatingBar;
 
 import static io.dume.dume.util.DumeUtils.animateImage;
@@ -138,6 +147,7 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
     private Button switchAcountBtn;
     private NavigationView navigationView;
     private Drawable leftDrawable;
+    private Drawable filterDrawable;
     private Drawable less;
     private Drawable more;
     private NestedScrollView nestedScrollViewContent;
@@ -206,6 +216,8 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
     private static Map<String, Map<String, Object>> recently_searched;
     private BottomSheetDialog mCancelBottomSheetDialog;
     private View cancelsheetRootView;
+    private BottomSheetDialog filterBottomSheetDialog;
+    private View filterRootView;
     private HomePageRecyclerAdapter hPageBSRcyclerAdapter;
     private Snackbar enamSnackbar;
     private LinearLayout mentorAddLayout;
@@ -222,11 +234,17 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
     private Button startCouching;
     private Button startTakingCouching;
     private TextView referLearnMore;
-    private Button referMentorBtn;
+    //private Button referMentorBtn;
     private TextView how_invite_works;
     private Button freeCashBack;
     private Button startMentoringBtn;
     private SharedPreferences sharedPreferences;
+    private carbon.widget.ImageView searchFilterBtn;
+    private List<String> selectedUnis;
+    private boolean[] checkedUnis;
+    private List<String> selectedDegrees;
+    private boolean[] checkedItems;
+    private SharedPreferences prefs;
 
 
     @Override
@@ -343,6 +361,8 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
             }
         });
 
+        prefs = getSharedPreferences("filter", MODE_PRIVATE);
+
     }
 
 
@@ -440,10 +460,14 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
         startCouching = findViewById(R.id.start_couching);
         startTakingCouching = findViewById(R.id.start_taking_couching);
         referLearnMore = findViewById(R.id.refer_learn_more_tv);
-        referMentorBtn = findViewById(R.id.refer_mentor_btn);
+        //referMentorBtn = findViewById(R.id.refer_mentor_btn);
         how_invite_works = findViewById(R.id.how_invite_works);
         freeCashBack = findViewById(R.id.free_cashback_Btn);
         startMentoringBtn = findViewById(R.id.start_mentoring_btn);
+
+        //finding the filter btn image
+        searchFilterBtn = findViewById(R.id.search_filter_image_view);
+        filterDrawable = searchFilterBtn.getDrawable();
         bottomSheetBtnCallback();
     }
 
@@ -474,12 +498,7 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
                 startActivity(intent);
             }
         });
-        referMentorBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                flush("Feature is under development...");
-            }
-        });
+
         referLearnMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -669,6 +688,11 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
         mCancelBottomSheetDialog = new BottomSheetDialog(this);
         cancelsheetRootView = this.getLayoutInflater().inflate(R.layout.custom_bottom_sheet_dialogue_cancel, null);
         mCancelBottomSheetDialog.setContentView(cancelsheetRootView);
+
+        //initializing the filter dialogue here
+        filterBottomSheetDialog = new BottomSheetDialog(this);
+        filterRootView = this.getLayoutInflater().inflate(R.layout.filter_bottom_sheet_dialogue, null);
+        filterBottomSheetDialog.setContentView(filterRootView);
         //onclick listener
         profileDataLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1022,9 +1046,20 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
 
     @Override
     public void gotoGrabingLocationPage() {
-        SearchDataStore instance = SearchDataStore.getInstance();
-        instance.setPackageName("Fucker");
-        startActivity(new Intent(this, GrabingLocationActivity.class).setAction("HomePage"));
+        Boolean chooseLocationRadio1 = prefs.getBoolean("chooseLocationRadio", false);
+        if(chooseLocationRadio1){
+            startActivity(new Intent(this, GrabingLocationActivity.class).setAction("HomePage"));
+        }else {
+            GeoPoint current_address = documentSnapshot.getGeoPoint("current_address");
+            if (current_address != null) {
+                if (Objects.requireNonNull(current_address).getLatitude() != 84.9 && current_address.getLongitude() != 180) {
+                    searchDataStore.setAnchorPoint(new LatLng(current_address.getLatitude(), current_address.getLongitude()));
+                }
+                startActivity(new Intent(this, CrudSkillActivity.class).setAction(DumeUtils.STUDENT));
+            }else{
+                startActivity(new Intent(this, GrabingLocationActivity.class).setAction("HomePage"));
+            }
+        }
     }
 
     @Override
@@ -1506,7 +1541,7 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
     @Override
     public void setMsgName(String msgName) {
         userAddressingTextView.setText(msgName);
-        referMentorBtn.setText(msgName.toLowerCase());
+        //referMentorBtn.setText(msgName.toLowerCase());
         freeCashBack.setText(msgName.toLowerCase());
     }
 
@@ -1743,6 +1778,334 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
             hPageBSRecycler.setLayoutManager(new LinearLayoutManager(this));
         }
         hPageBSRcyclerAdapter.addNewData(currentRatingDataList);
+    }
 
+    @Override
+    public void searchFilterClicked() {
+        if (filterDrawable instanceof Animatable) {
+            ((Animatable) filterDrawable).start();
+        }
+
+        TextView mainText = filterBottomSheetDialog.findViewById(R.id.main_text);
+        TextView subText = filterBottomSheetDialog.findViewById(R.id.sub_text);
+        Button proceedBtn = filterBottomSheetDialog.findViewById(R.id.cancel_yes_btn);
+        Button saveBtn = filterBottomSheetDialog.findViewById(R.id.cancel_no_btn);
+        EditText universityNames = filterBottomSheetDialog.findViewById(R.id.input_uni);
+        EditText degreeNames = filterBottomSheetDialog.findViewById(R.id.input_degree);
+        CheckBox uniCheckBox = filterBottomSheetDialog.findViewById(R.id.uni_checkbox);
+        CheckBox degreeCheckBox = filterBottomSheetDialog.findViewById(R.id.degree_checkbox);
+        RadioButton permanentRadio = filterBottomSheetDialog.findViewById(R.id.permanent_radio);
+        RadioButton chooseLocationRadio = filterBottomSheetDialog.findViewById(R.id.choose_radio);
+
+        //initialize this part form the shared Preference
+        String[] uniItems = getResources().getStringArray(R.array.University);
+        String[] listItems = getResources().getStringArray(R.array.Degrees);
+
+        SharedPreferences.Editor editor = getSharedPreferences("filter", MODE_PRIVATE).edit();
+
+        if(prefs!= null){
+            Boolean uniCheckBox1 = prefs.getBoolean("uniCheckBox", false);
+            uniCheckBox.setChecked(uniCheckBox1);
+
+            Boolean degreeCheckBox1 = prefs.getBoolean("degreeCheckBox", false);
+            degreeCheckBox.setChecked(degreeCheckBox1);
+
+            Gson gson = new Gson();
+            String json = prefs.getString("selectedUnis", "");
+            if(!json.equals("")){
+                Type type = new TypeToken<List<String>>() {}.getType();
+                selectedUnis = gson.fromJson(json, type);
+                //setting the textview
+                StringBuilder item = new StringBuilder();
+                for (int i = 0; i < selectedUnis.size(); i++) {
+                    item.append(selectedUnis.get(i));
+                    if (i != selectedUnis.size() - 1) {
+                        item.append(", ");
+                    }
+                }
+                universityNames.setText(item);
+            }else{
+                selectedUnis = new ArrayList<>();
+            }
+
+            //retrieving the array
+            int size = prefs.getInt("checkedUnis" + "_size", 0);
+            checkedUnis = new boolean[uniItems.length];
+            for(int i=0;i<size;i++)
+                checkedUnis[i] = prefs.getBoolean("checkedUnis" + "_" + i, false);
+
+            String json1 = prefs.getString("selectedDegrees", "");
+            if(!json1.equals("")){
+                Type type1 = new TypeToken<List<String>>() {}.getType();
+                selectedDegrees = gson.fromJson(json1, type1);
+                StringBuilder item = new StringBuilder();
+                for (int i = 0; i < selectedDegrees.size(); i++) {
+                    item.append(selectedDegrees.get(i));
+                    if (i != selectedDegrees.size() - 1) {
+                        item.append(", ");
+                    }
+                }
+                degreeNames.setText(item);
+            }else{
+                selectedDegrees = new ArrayList<>();
+            }
+
+            //retrieving the array
+            int size1 = prefs.getInt("checkedItems" + "_size", 0);
+            checkedItems = new boolean[listItems.length];
+            for(int i=0;i<size1;i++)
+                checkedItems[i] = prefs.getBoolean("checkedItems" + "_" + i, false);
+
+            Boolean chooseLocationRadio1 = prefs.getBoolean("chooseLocationRadio", false);
+            if(chooseLocationRadio1){
+                chooseLocationRadio.setChecked(true);
+                permanentRadio.setChecked(false);
+            }else {
+                chooseLocationRadio.setChecked(false);
+                permanentRadio.setChecked(true);
+            }
+        }
+
+        if (mainText != null && subText != null && proceedBtn != null && saveBtn != null &&
+                universityNames != null && degreeNames != null && uniCheckBox != null && degreeCheckBox != null) {
+
+            universityNames.setOnClickListener(new View.OnClickListener() {
+
+                private AlertDialog mUniDialog;
+
+                @Override
+                public void onClick(View view) {
+                    AlertDialog.Builder mBuilder = new AlertDialog.Builder(HomePageActivity.this,R.style.RadioDialogTheme);
+                    mBuilder.setTitle("Select filter universities");
+                    mBuilder.setMultiChoiceItems(uniItems, checkedUnis, new DialogInterface.OnMultiChoiceClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int position, boolean isChecked) {
+                            if (isChecked) {
+                                if(selectedUnis.size()==3){
+                                    Toast.makeText(HomePageActivity.this, "Maximum 3 filter allowed", Toast.LENGTH_SHORT).show();
+                                    ((AlertDialog) mUniDialog).getListView().setItemChecked(position, false);
+                                    checkedUnis[position] = false;
+                                }else {
+                                    if (!selectedUnis.contains(uniItems[position])) {
+                                        selectedUnis.add(uniItems[position]);
+                                    }
+                                    checkedUnis[position] = true;
+                                }
+                            } else {
+                                if (selectedUnis.contains(uniItems[position])) {
+                                    selectedUnis.remove(uniItems[position]);
+                                }
+                                checkedUnis[position] = false;
+                            }
+                        }
+                    });
+
+                    mBuilder.setCancelable(false);
+                    mBuilder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int which) {
+                            if(selectedUnis.size() >0) {
+                                StringBuilder item = new StringBuilder();
+                                for (int i = 0; i < selectedUnis.size(); i++) {
+                                    item.append(selectedUnis.get(i));
+                                    if (i != selectedUnis.size() - 1) {
+                                        item.append(", ");
+                                    }
+                                }
+                                universityNames.setText(item);
+                                uniCheckBox.setChecked(true);
+                            }else{
+                                universityNames.setText("");
+                                uniCheckBox.setChecked(false);
+                            }
+                        }
+                    });
+
+                    mBuilder.setNegativeButton("Dismiss", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.dismiss();
+                        }
+                    });
+
+                    mBuilder.setNeutralButton("Clear all", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int which) {
+                            for (int i = 0; i < checkedUnis.length; i++) {
+                                checkedUnis[i] = false;
+                                selectedUnis.clear();
+                                universityNames.setText("");
+                                uniCheckBox.setChecked(false);
+                            }
+                        }
+                    });
+
+                    mUniDialog = mBuilder.create();
+                    mUniDialog.show();
+                }
+            });
+
+            uniCheckBox.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //is chkIos checked?
+                    if (((CheckBox) v).isChecked()) {
+                        universityNames.performClick();
+                    }
+                }
+            });
+
+            degreeNames.setOnClickListener(new View.OnClickListener() {
+
+                private AlertDialog mDegreeDialog;
+
+                @Override
+                public void onClick(View view) {
+
+                    AlertDialog.Builder mBuilder = new AlertDialog.Builder(HomePageActivity.this,R.style.RadioDialogTheme);
+                    mBuilder.setTitle("Select filter degrees");
+                    mBuilder.setMultiChoiceItems(listItems, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int position, boolean isChecked) {
+                            if (isChecked) {
+                                if(selectedDegrees.size()==3){
+                                    Toast.makeText(HomePageActivity.this, "Maximum 3 filter allowed", Toast.LENGTH_SHORT).show();
+                                    ((AlertDialog) mDegreeDialog).getListView().setItemChecked(position, false);
+                                    checkedItems[position] = false;
+                                }else {
+                                    if (!selectedDegrees.contains(listItems[position])) {
+                                        selectedDegrees.add(listItems[position]);
+                                    }
+                                    checkedItems[position] = true;
+                                }
+                            } else {
+                                if (selectedDegrees.contains(listItems[position])) {
+                                    selectedDegrees.remove(listItems[position]);
+                                }
+                                checkedItems[position] = false;
+                            }
+                        }
+                    });
+
+                    mBuilder.setCancelable(false);
+                    mBuilder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int which) {
+                            if(selectedDegrees.size() >0) {
+                                StringBuilder item = new StringBuilder();
+                                for (int i = 0; i < selectedDegrees.size(); i++) {
+                                    item.append(selectedDegrees.get(i));
+                                    if (i != selectedDegrees.size() - 1) {
+                                        item.append(", ");
+                                    }
+                                }
+                                degreeNames.setText(item);
+                                degreeCheckBox.setChecked(true);
+                            }else{
+                                degreeNames.setText("");
+                                degreeCheckBox.setChecked(false);
+                            }
+                        }
+                    });
+
+                    mBuilder.setNegativeButton("Dismiss", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.dismiss();
+                        }
+                    });
+
+                    mBuilder.setNeutralButton("Clear all", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int which) {
+                            for (int i = 0; i < checkedItems.length; i++) {
+                                checkedItems[i] = false;
+                                selectedDegrees.clear();
+                                degreeNames.setText("");
+                                degreeCheckBox.setChecked(false);
+                                //mItemSelected.setText("");
+                            }
+                        }
+                    });
+
+                    mDegreeDialog = mBuilder.create();
+                    mDegreeDialog.show();
+
+                }
+            });
+
+            degreeCheckBox.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //is chkIos checked?
+                    if (((CheckBox) view).isChecked()) {
+                        degreeNames.performClick();
+                    }
+                }
+            });
+
+
+            saveBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    editor.putBoolean("uniCheckBox", uniCheckBox.isChecked());
+                    editor.putBoolean("degreeCheckBox", degreeCheckBox.isChecked());
+
+                    editor.putInt("checkedUnis" +"_size", checkedUnis.length);
+                    for(int i = 0; i< checkedUnis.length; i++)
+                        editor.putBoolean("checkedUnis" + "_" + i, checkedUnis[i]);
+
+                    editor.putInt("checkedItems" +"_size", checkedItems.length);
+                    for(int i = 0; i< checkedItems.length; i++)
+                        editor.putBoolean("checkedItems" + "_" + i, checkedItems[i]);
+
+                    Gson gson = new Gson();
+                    String json = gson.toJson(selectedUnis);
+                    editor.putString("selectedUnis", json);
+
+                    Gson gson1 = new Gson();
+                    String json1 = gson1.toJson(selectedDegrees);
+                    editor.putString("selectedDegrees", json1);
+
+                    editor.putBoolean("chooseLocationRadio", chooseLocationRadio.isChecked());
+                    editor.apply();
+
+                    filterBottomSheetDialog.dismiss();
+                }
+            });
+
+            proceedBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    editor.putBoolean("uniCheckBox", uniCheckBox.isChecked());
+                    editor.putBoolean("degreeCheckBox", degreeCheckBox.isChecked());
+
+                    editor.putInt("checkedUnis" +"_size", checkedUnis.length);
+                    for(int i = 0; i< checkedUnis.length; i++)
+                        editor.putBoolean("checkedUnis" + "_" + i, checkedUnis[i]);
+
+                    editor.putInt("checkedItems" +"_size", checkedItems.length);
+                    for(int i = 0; i< checkedItems.length; i++)
+                        editor.putBoolean("checkedItems" + "_" + i, checkedItems[i]);
+
+                    Gson gson = new Gson();
+                    String json = gson.toJson(selectedUnis);
+                    editor.putString("selectedUnis", json);
+
+                    Gson gson1 = new Gson();
+                    String json1 = gson1.toJson(selectedDegrees);
+                    editor.putString("selectedDegrees", json1);
+
+                    editor.putBoolean("chooseLocationRadio", chooseLocationRadio.isChecked());
+                    editor.apply();
+
+                    filterBottomSheetDialog.dismiss();
+                    gotoGrabingLocationPage();
+                }
+            });
+        }
+        //filterBottomSheetDialog.setCanceledOnTouchOutside(false);
+        //filterBottomSheetDialog.setCancelable(false);
+        filterBottomSheetDialog.show();
     }
 }

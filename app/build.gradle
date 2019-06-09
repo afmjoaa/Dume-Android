@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
 apply plugin: 'com.google.gms.google-services'
 
 android {
@@ -7,8 +8,8 @@ android {
         applicationId "io.dume.dume"
         minSdkVersion 16
         targetSdkVersion 28
-        versionCode 7
-        versionName "1.7"
+        versionCode 12
+        versionName "1.1.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
@@ -46,6 +47,7 @@ ext {
 repositories {
     maven { url "https://raw.github.com/laenger/maven-releases/master/releases" }
     maven { url "https://jitpack.io" }
+    mavenCentral()
 }
 
 dependencies {
@@ -157,4 +159,5 @@ dependencies {
     implementation 'com.github.amalChandran:trail-android:v1.2'
     implementation 'com.github.ybq:Android-SpinKit:1.2.0'
     implementation 'com.google.firebase:firebase-crash:16.2.1'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }

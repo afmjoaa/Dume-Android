@@ -89,7 +89,7 @@
                 android:layout_below="@+id/achievement_inaugural_image"
                 android:layout_centerHorizontal="true"
                 android:singleLine="true"
-                android:text="Inaugural"
+                android:text="Varified"
                 android:textAlignment="center"
                 android:textSize="13sp"
                 app:fontFamily="@font/cairo_regular" />

@@ -17,7 +17,7 @@
         android:singleLine="true"
         android:maxLines="1"
         android:ellipsize="end"
-        android:maxWidth="140dp"
+        android:maxWidth="120dp"
         android:text="Product" />
 
     <TextView
@@ -36,8 +36,8 @@
         android:singleLine="true"
         android:maxLines="1"
         android:ellipsize="end"
-        android:maxWidth="140dp"
+        android:maxWidth="120dp"
         android:layout_alignParentRight="true"
-        android:text="Dume Gang" />
+        android:text="Dume Gangs" />
 
 </RelativeLayout>

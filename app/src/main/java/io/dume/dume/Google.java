@@ -31,7 +31,7 @@ public class Google {
     private String lastMsg;
     private int snapCounter = 0;
     private InboxActivity.PlaceholderFragment messageFragment;
-    private Integer totalStudent, totalMentor;
+    private Integer totalStudent =0, totalMentor = 0;
     private boolean obligation;
     private Source source = Source.DEFAULT;
 

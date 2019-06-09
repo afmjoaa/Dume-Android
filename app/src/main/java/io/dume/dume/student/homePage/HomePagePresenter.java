@@ -133,6 +133,10 @@ public class HomePagePresenter implements HomePageContract.Presenter {
             case R.id.promotion_validity_text:
                 break;
 
+            case R.id.search_filter_image_view:
+                mView.searchFilterClicked();
+                break;
+
         }
 
     }

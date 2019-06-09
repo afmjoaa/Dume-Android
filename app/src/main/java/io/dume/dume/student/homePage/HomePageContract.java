@@ -157,6 +157,8 @@ public interface HomePageContract {
         void initRecentSearchRecycler(DocumentSnapshot documentSnapshot);
 
         void showSingleBottomSheetRating(HomePageRatingData currentRatingDataList);
+
+        void searchFilterClicked();
     }
 
     interface Presenter {

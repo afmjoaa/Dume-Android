@@ -57,17 +57,16 @@ public class AuthModel implements AuthContract.Model, SplashContract.Model, Phon
     private ListenerRegistration listenerRegistration1;
     private ListenerRegistration listenerRegistration2;
 
+    private Boolean obligation;
+    private Boolean foreignObligation;
+
 
     public AuthModel(Activity activity, Context context) {
         this.context = context;
         this.activity = activity;
         mAuth = FirebaseAuth.getInstance();
         mIntent = this.activity.getIntent();
-        /*if (mIntent.getSerializableExtra("datastore") != null) {
-            datastore = (DataStore) mIntent.getSerializableExtra("datastore");
-        } else {*/
         datastore = DataStore.getInstance();
-        /*  }*/
         firestore = FirebaseFirestore.getInstance();
         /*FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
                 .setTimestampsInSnapshotsEnabled(true)
@@ -283,10 +282,11 @@ public class AuthModel implements AuthContract.Model, SplashContract.Model, Phon
         listener.onStart();
         DocumentReference mini_users = firestore.collection("mini_users").document(user.getUid());
         //Source source = Source.DEFAULT;
-        mini_users.get(Google.getInstance().getSource()).addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
 
-            private Boolean obligation;
-            private Boolean foreignObligation;
+        mini_users.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+
+//            private Boolean obligation;
+//            private Boolean foreignObligation;
 
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -360,7 +360,6 @@ public class AuthModel implements AuthContract.Model, SplashContract.Model, Phon
                             } else {
                                 listener.onForeignObligation();
                             }
-
                         }
 
                     } else {
@@ -368,15 +367,14 @@ public class AuthModel implements AuthContract.Model, SplashContract.Model, Phon
                         Log.w(TAG, "onAccountTypeFound: document is not null");
                     }
                 } else {
-                    Log.d(TAG, "Cached get failed: ", task.getException());
+                    if(task.getException()!= null)
+                    listener.onFail(task.getException().getLocalizedMessage());
                 }
             }
         });
 
-
-        listenerRegistration = mini_users.addSnapshotListener((documentSnapshot, e) -> {
-        });
-
+//        listenerRegistration = mini_users.addSnapshotListener((documentSnapshot, e) -> {
+//        });
     }
 
     @Override

@@ -1,41 +1,35 @@
 package io.dume.dume.student.searchLoading;
 
 import android.content.Context;
-import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
-import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.GeoPoint;
 
-import org.imperiumlabs.geofirestore.GeoFirestore;
-import org.imperiumlabs.geofirestore.GeoQuery;
-import org.imperiumlabs.geofirestore.GeoQueryDataEventListener;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 import io.dume.dume.Google;
-import io.dume.dume.R;
-import io.dume.dume.student.homePage.HomePageActivity;
+import io.dume.dume.myGeoFIreStore.GeoFirestore;
+import io.dume.dume.myGeoFIreStore.GeoQuery;
+import io.dume.dume.myGeoFIreStore.callbacks.GeoQueryDataEventListener;
 import io.dume.dume.student.pojo.SearchDataStore;
 import io.dume.dume.student.pojo.StuBaseModel;
-import io.dume.dume.student.recordsAccepted.RecordsAcceptedActivity;
-import io.dume.dume.student.recordsCurrent.RecordsCurrentActivity;
 import io.dume.dume.student.recordsPage.Record;
-import io.dume.dume.student.recordsPage.RecordsPageActivity;
 import io.dume.dume.student.recordsPage.RecordsPageModel;
-import io.dume.dume.student.recordsPending.RecordsPendingActivity;
-import io.dume.dume.student.searchResult.SearchResultActivity;
 import io.dume.dume.teacher.homepage.TeacherContract;
 import io.dume.dume.util.DumeUtils;
+
+import static android.content.Context.MODE_PRIVATE;
+
+/*import org.imperiumlabs.geofirestore.GeoFirestore;
+import org.imperiumlabs.geofirestore.GeoQuery;
+import org.imperiumlabs.geofirestore.GeoQueryDataEventListener;*/
 
 public class SearchLoadingModel extends StuBaseModel implements SearchLoadingContract.Model {
     ArrayList<DocumentSnapshot> instructorList = null;
@@ -54,13 +48,16 @@ public class SearchLoadingModel extends StuBaseModel implements SearchLoadingCon
         instructorList = new ArrayList<>();
         mentorList = new ArrayList<>();
         searchDataStore = SearchDataStore.getInstance();
+
     }
 
     @Override
     public void search(double lat, double lon, double radius, String queryString, TeacherContract.Model.Listener<List<DocumentSnapshot>> listener) {
-        instructorList = new ArrayList<>();
+        //instructorList = new ArrayList<>();
+        //mentorList = new ArrayList<>();
         GeoFirestore geoFirestore = new GeoFirestore(skillRef);
-        GeoQuery geoQuery = geoFirestore.queryAtLocation(new GeoPoint(lat, lon), radius);
+        String commonQueryString = DumeUtils.generateCommonQueryString(searchDataStore.getPackageName(), searchDataStore.getQueryList(), searchDataStore.getQueryListName());
+        GeoQuery geoQuery = geoFirestore.queryAtLocation(new GeoPoint(lat, lon), radius, commonQueryString);
         geoQuery.removeAllListeners();
 
         String salaryInOffer = (String) searchDataStore.getJizz().get("Salary");
@@ -68,7 +65,7 @@ public class SearchLoadingModel extends StuBaseModel implements SearchLoadingCon
             String[] splited = salaryInOffer.split("\\s+");
             offeredSalary = Integer.parseInt(splited[2].substring(0, splited[2].length() - 1));
             offeredSalary = offeredSalary * 1000;
-            //adding 2k threshold value
+            //adding 2k threshold value upto which we will count valid introctor profile with calculated salary
             offeredSalary = offeredSalary + 2000;
         }
         //testing the removal of rejected and pending here
@@ -83,18 +80,22 @@ public class SearchLoadingModel extends StuBaseModel implements SearchLoadingCon
                 @Override
                 public void onDocumentEntered(DocumentSnapshot documentSnapshot, GeoPoint location) {
                     //checking gender preference validity
-                    String gendePreference = (String) searchDataStore.getJizz().get("Gender");
-                    Map<String, Object> sp_info = (Map<String, Object>) documentSnapshot.get("sp_info");
-                    if (gendePreference != null) {
-                        String mentorGender = (String) sp_info.get("gender");
-                        if (gendePreference.equals("Any")) {
-                            validateSkill(documentSnapshot, queryString);
-                        } else if (sp_info != null && mentorGender != null) {
-                            if (mentorGender.equals(gendePreference)) {
+                    String mentor_uid = (String) documentSnapshot.get("mentor_uid");
+                    //checking if already added in previous radius search
+                    if (!mentorList.contains(mentor_uid)) {
+                        String gendePreference = (String) searchDataStore.getJizz().get("Gender");
+                        Map<String, Object> sp_info = (Map<String, Object>) documentSnapshot.get("sp_info");
+                        if (gendePreference != null) {
+                            String mentorGender = (String) sp_info.get("gender");
+                            if (gendePreference.equals("Any")) {
+                                validateSkill(documentSnapshot, queryString);
+                            } else if (sp_info != null && mentorGender != null) {
+                                if (mentorGender.equals(gendePreference)) {
+                                    validateSkill(documentSnapshot, queryString);
+                                }
+                            } else {
                                 validateSkill(documentSnapshot, queryString);
                             }
-                        } else {
-                            validateSkill(documentSnapshot, queryString);
                         }
                     }
                 }
@@ -138,22 +139,25 @@ public class SearchLoadingModel extends StuBaseModel implements SearchLoadingCon
                         rejectedRecordIds.add(recordDataRejected.get(i).getString("skill_uid"));
                     }
                     geoQuery.addGeoQueryDataEventListener(new GeoQueryDataEventListener() {
-
                         @Override
                         public void onDocumentEntered(DocumentSnapshot documentSnapshot, GeoPoint location) {
                             //checking gender preference validity
-                            String gendePreference = (String) searchDataStore.getJizz().get("Gender");
-                            Map<String, Object> sp_info = (Map<String, Object>) documentSnapshot.get("sp_info");
-                            if (gendePreference != null) {
-                                String mentorGender = (String) sp_info.get("gender");
-                                if (gendePreference.equals("Any")) {
-                                    validateSkill(documentSnapshot, queryString);
-                                } else if (sp_info != null && mentorGender != null) {
-                                    if (mentorGender.equals(gendePreference)) {
+                            String mentor_uid = (String) documentSnapshot.get("mentor_uid");
+                            //checking if already added in previous radius search
+                            if (!mentorList.contains(mentor_uid)) {
+                                String gendePreference = (String) searchDataStore.getJizz().get("Gender");
+                                Map<String, Object> sp_info = (Map<String, Object>) documentSnapshot.get("sp_info");
+                                if (gendePreference != null) {
+                                    String mentorGender = (String) sp_info.get("gender");
+                                    if (gendePreference.equals("Any")) {
+                                        validateSkill(documentSnapshot, queryString);
+                                    } else if (sp_info != null && mentorGender != null) {
+                                        if (mentorGender.equals(gendePreference)) {
+                                            validateSkill(documentSnapshot, queryString);
+                                        }
+                                    } else {
                                         validateSkill(documentSnapshot, queryString);
                                     }
-                                } else {
-                                    validateSkill(documentSnapshot, queryString);
                                 }
                             }
                         }
@@ -224,7 +228,7 @@ public class SearchLoadingModel extends StuBaseModel implements SearchLoadingCon
         Float beha_value = (Float.parseFloat(self_rating.get("l_behaviour").toString()) /
                 Float.parseFloat(self_rating.get("l_behaviour").toString()) + Float.parseFloat(self_rating.get("dl_behaviour").toString())) * 100;
 
-        Log.e("bar", "Document Entered" + queryStringFromDb);
+        //Log.e("bar", "Document Entered" + queryStringFromDb);
 
         //validating valid mentors
         if (queryStringFromDb != null && status != null && status && a_ratio_value >= 40 && starRating >= 2.2 && expertise_value >= 40 && beha_value >= 40) {
@@ -248,11 +252,8 @@ public class SearchLoadingModel extends StuBaseModel implements SearchLoadingCon
 
                         if (documentSalary != null && SearchLoadingModel.this.salary != null && documentSalary.intValue() > SearchLoadingModel.this.salary.intValue()) {
                             //TODO
-
-                            if (!mentorList.contains(mentor_uid)) {
-                                instructorList.add(documentSnapshot);
-                                mentorList.add(mentor_uid);
-                            }
+                            instructorList.add(documentSnapshot);
+                            mentorList.add(mentor_uid);
                         }
                     } else {
                         //adding if not found in previous records
@@ -260,16 +261,12 @@ public class SearchLoadingModel extends StuBaseModel implements SearchLoadingCon
                             Number mentorAskedSalary = (Number) documentSnapshot.get("salary");
                             //checking salary validity
                             if (mentorAskedSalary != null && offeredSalary >= mentorAskedSalary.intValue()) {
-                                if (!mentorList.contains(mentor_uid)) {
-                                    instructorList.add(documentSnapshot);
-                                    mentorList.add(mentor_uid);
-                                }
-                            }
-                        } else {
-                            if (!mentorList.contains(mentor_uid)) {
                                 instructorList.add(documentSnapshot);
                                 mentorList.add(mentor_uid);
                             }
+                        } else {
+                            instructorList.add(documentSnapshot);
+                            mentorList.add(mentor_uid);
                         }
                     }
                 }
@@ -294,10 +291,8 @@ public class SearchLoadingModel extends StuBaseModel implements SearchLoadingCon
                             }
                             Number documentSalary = (Number) documentSnapshot.get("salary");
                             if (documentSalary != null && SearchLoadingModel.this.salary != null && documentSalary.intValue() > SearchLoadingModel.this.salary.intValue()) {
-                                if (!mentorList.contains(mentor_uid)) {
-                                    instructorList.add(documentSnapshot);
-                                    mentorList.add(mentor_uid);
-                                }
+                                instructorList.add(documentSnapshot);
+                                mentorList.add(mentor_uid);
                             }
                         } else {
                             Number mentorAskedSalary = (Number) documentSnapshot.get("salary");
@@ -316,22 +311,18 @@ public class SearchLoadingModel extends StuBaseModel implements SearchLoadingCon
                             String[] localsplit = localtrim.split(",");
                             String[] dbsplit = dbtrim.split(",");
 
-                            Number calculatedSalary = mentorAskedSalary.floatValue()*0.25 +((mentorAskedSalary.floatValue() - (mentorAskedSalary.floatValue()*0.25))/
-                                    (dbsplit.length))*localsplit.length;
-
+                            Number calculatedSalary = mentorAskedSalary.floatValue() * 0.25 + ((mentorAskedSalary.floatValue() - (mentorAskedSalary.floatValue() * 0.25)) /
+                                    (dbsplit.length)) * localsplit.length;
+                            //error here to be found
                             if (offeredSalary != null) {
                                 //checking salary validity
                                 if (calculatedSalary != null && offeredSalary >= calculatedSalary.intValue()) {
-                                    if (!mentorList.contains(mentor_uid)) {
-                                        instructorList.add(documentSnapshot);
-                                        mentorList.add(mentor_uid);
-                                    }
-                                }
-                            } else {
-                                if (!mentorList.contains(mentor_uid)) {
                                     instructorList.add(documentSnapshot);
                                     mentorList.add(mentor_uid);
                                 }
+                            } else {
+                                instructorList.add(documentSnapshot);
+                                mentorList.add(mentor_uid);
                             }
                         }
                     }
@@ -342,9 +333,7 @@ public class SearchLoadingModel extends StuBaseModel implements SearchLoadingCon
 
     @Override
     public void searchLoadingHawwa() {
-
     }
-
 
     @Override
     public void updateRecentSearch(String identify, Map<String, Object> mainMap, TeacherContract.Model.Listener<Void> listener) {
@@ -393,92 +382,4 @@ public class SearchLoadingModel extends StuBaseModel implements SearchLoadingCon
                 break;
         }
     }
-
 }
-
-/*
- geoQuery.addGeoQueryDataEventListener(new GeoQueryDataEventListener() {
-                        @Override
-                        public void onDocumentEntered(DocumentSnapshot documentSnapshot, GeoPoint location) {
-                            String gendePreference = (String) SearchDataStore.getInstance().getJizz().get("Gender");
-                            Map<String, Object> sp_info = (Map<String, Object>) documentSnapshot.get("sp_info");
-                            if (gendePreference != null) {
-                                String mentorGender = (String) sp_info.get("gender");
-                                if (gendePreference.equals("Any")) {
-                                    validateSkillOnRecord(documentSnapshot, queryString);
-                                } else if (sp_info != null && mentorGender != null) {
-                                    if (mentorGender.equals(gendePreference)) {
-                                        validateSkillOnRecord(documentSnapshot, queryString);
-                                    }
-                                } else {
-                                    validateSkillOnRecord(documentSnapshot, queryString);
-                                }
-                            }
-                        }
-
-                        @Override
-                        public void onDocumentExited(DocumentSnapshot documentSnapshot) {
-                            // ...
-                        }
-
-                        @Override
-                        public void onDocumentMoved(DocumentSnapshot documentSnapshot, GeoPoint location) {
-                            // ...
-                        }
-
-                        @Override
-                        public void onDocumentChanged(DocumentSnapshot documentSnapshot, GeoPoint location) {
-                            // ...
-                        }
-
-                        @Override
-                        public void onGeoQueryReady() {
-
-                            listener.onSuccess(instructorList);
-
-                        }
-
-                        @Override
-                        public void onGeoQueryError(Exception exception) {
-                            // ...
-                            listener.onError(exception.getLocalizedMessage());
-                        }
-                    });
-*/
-
-/*
-
-    private void validateSkillOnRecord(DocumentSnapshot documentSnapshot, String queryString) {
-        String queryStringFromDb = (String) documentSnapshot.get("query_string");
-        if (queryStringFromDb != null) {
-            if (queryStringFromDb.equals(queryString)) {
-                if (!SearchDataStore.getInstance().getUserUid().equals(documentSnapshot.getString("mentor_uid"))) {
-                    String skillId = documentSnapshot.getId();
-                    if (rejectedRecordIds.contains(skillId)) {
-                        for (int i = 0; i < recordDataRejected.size(); i++) {
-                            salary = null;
-                            if (recordDataRejected.get(i).getString("skill_uid").equals(skillId)) {
-                                //get the salary here
-                                // and if bigger then add otherwise not
-                                rejectedBy = recordDataRejected.get(i).getString("rejected_by");
-                                if (rejectedBy.equals(DumeUtils.TEACHER)) {
-                                    salary = (Number) recordDataRejected.get(i).get("salary");
-                                    break;
-                                }
-                            }
-                        }
-                        Number documentSalary = (Number) documentSnapshot.get("salary");
-
-                        if (documentSalary != null && SearchLoadingModel.this.salary != null && documentSalary.intValue() > SearchLoadingModel.this.salary.intValue()) {
-                            instructorList.add(documentSnapshot);
-                        }
-                    } else {
-                        //testing other thing like obligation etc here
-                        //TODO
-                        instructorList.add(documentSnapshot);
-                    }
-                }
-            }
-        }
-    }
-*/

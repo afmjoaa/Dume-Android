@@ -689,6 +689,7 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                         fab.setEnabled(false);
                         String packageName = TeacherDataStore.getInstance().getPackageName();
                         String queryString = DumeUtils.generateQueryString(packageName, queryList, queryListName);
+                        String commonQueryString = DumeUtils.generateCommonQueryString(packageName, queryList, queryListName);
                         ArrayList<Skill> skillArrayList = TeacherDataStore.getInstance().getSkillArrayList();
 
                         for (Skill item : skillArrayList) {
@@ -727,6 +728,8 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                                 , new GeoPoint(84.9, 180), 0, 0, "", 0.0f, likes, dislikes, packageName);
                         skill.setQuery_list(queryList);
                         skill.setQuery_list_name(queryListName);
+                        skill.setCommonQueryString(commonQueryString);
+                        skill.setPackage_name(packageName);
                         teacherModel.saveSkill(skill, new TeacherContract.Model.Listener<Void>() {
                             @Override
                             public void onSuccess(Void list) {

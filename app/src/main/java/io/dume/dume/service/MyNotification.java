@@ -152,7 +152,8 @@ public class MyNotification extends FirebaseMessagingService {
                 builder.setSound(Uri.parse(ringToneString));
             }
         }
-        builder.setPriority(NotificationCompat.PRIORITY_HIGH);
+        //setting priority
+        builder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
         Intent resultIntent = new Intent(this, intentClass);
         resultIntent.putExtra("tab_number", TAB_NUMBER);
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);

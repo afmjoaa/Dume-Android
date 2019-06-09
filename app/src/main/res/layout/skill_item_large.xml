@@ -22,16 +22,16 @@
 
         <carbon.widget.ImageView
             android:id="@+id/skillDots"
-            android:layout_width="28dp"
-            android:layout_height="28dp"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
             android:layout_gravity="end"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="6dp"
             android:layout_marginEnd="6dp"
             android:layout_marginRight="6dp"
             android:clickable="true"
             android:focusable="true"
-            android:padding="2dp"
-            app:carbon_cornerRadius="14dp"
+            android:padding="6dp"
+            app:carbon_cornerRadius="15dp"
             app:carbon_rippleColor="@color/colorRippleDefault"
             app:carbon_rippleHotspot="true"
             app:carbon_rippleStyle="background"
@@ -112,7 +112,11 @@
                         android:layout_marginRight="5dp"
                         android:layout_marginBottom="3dp"
                         android:layout_weight="1"
-                        android:text="Math, English,Phsysics"
+                        android:paddingStart="0dp"
+                        android:paddingLeft="0dp"
+                        android:paddingEnd="28dp"
+                        android:paddingRight="28dp"
+                        android:text="Math, English,Phsysics dsfd"
                         android:textColor="@color/black"
                         android:textSize="16sp" />
 
@@ -232,12 +236,12 @@
             <carbon.widget.LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
                 android:background="@drawable/bg_round_corner_relative_accent"
                 android:baselineAligned="false"
                 android:orientation="vertical"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
-                android:layout_marginBottom="4dp"
                 app:carbon_elevation="2dp">
 
                 <Button
@@ -281,12 +285,12 @@
                     style="@style/Widget.AppCompat.Button.Borderless"
                     android:layout_width="match_parent"
                     android:layout_height="34dp"
-                    android:text="Load more"
                     android:background="@drawable/round_btn_joaa"
+                    android:enabled="false"
+                    android:text="Load more"
                     android:textAllCaps="false"
                     android:textColor="@color/textColorPrimary"
                     android:textSize="12sp"
-                    android:enabled="false"
                     app:fontFamily="@font/cairo_regular" />
 
             </LinearLayout>

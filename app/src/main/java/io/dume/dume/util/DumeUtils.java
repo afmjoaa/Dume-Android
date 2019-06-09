@@ -548,6 +548,20 @@ public class DumeUtils {
         return mQuery.toString();
     }
 
+    public static String generateCommonQueryString(String packageName, List<String> queryList, List<String> queryListName) {
+        StringBuilder mQuery = new StringBuilder();
+        mQuery.append(firstTwo(packageName));
+
+        int ignoredElement = 3;
+        if (packageName.equals(SearchDataStore.DUME_GANG)) {
+            ignoredElement++;
+        }
+        for (int i = 0; i < queryList.size() - ignoredElement; i++) {
+            mQuery.append(firstTwo(queryList.get(i)));
+        }
+        return mQuery.toString();
+    }
+
 
     public static boolean isCommonMatched(List<String> localQueryList, List<String> dbQueryList, int threshold) {
         for (int i = 0; i < localQueryList.size() - threshold; i++) {
@@ -570,9 +584,11 @@ public class DumeUtils {
         //     String[] dbsplit = dbtrim.split(",");
         for (String aLocalsplit : localsplit) {
             if (!dbtrim.contains(aLocalsplit)) {
+                Log.e(TAG, "isAMinimalMatch: " + false );
                 return false;
             }
         }
+        Log.e(TAG, "isAMinimalMatch: " + true );
         return true;
     }
 

@@ -362,7 +362,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="18dp"
                         android:layout_marginBottom="10dp"
-                        android:text="Refer Mentor"
+                        android:text="Student Bonus"
                         android:textAlignment="center"
                         android:textColor="@color/colorBlack"
                         android:textSize="12sp"
@@ -378,10 +378,10 @@
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="14dp"
                             android:gravity="start"
-                            android:text="@string/refer_mentor_intro"
+                            android:text="Hire mentor from dume &amp; post a screenshot of the accepted request in our Job-Board to get 20% cashback of tuition fee after completion."
                             android:textAlignment="viewStart"
                             android:textColor="@color/colorBlack"
-                            android:textSize="18sp"
+                            android:textSize="16sp"
                             app:fontFamily="@font/cairo_regular" />
 
                         <TextView
@@ -412,7 +412,7 @@
                     </RelativeLayout>
 
 
-                    <TextView
+                    <!--<TextView
                         android:id="@+id/refer_mentor_share_text"
                         android:layout_width="160dp"
                         android:layout_height="wrap_content"
@@ -444,7 +444,7 @@
                         android:textAllCaps="false"
                         android:textColor="@color/black"
                         android:textSize="16sp"
-                        app:fontFamily="@font/cairo_regular" />
+                        app:fontFamily="@font/cairo_regular" />-->
 
                 </LinearLayout>
 

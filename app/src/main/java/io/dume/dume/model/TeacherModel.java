@@ -2,6 +2,7 @@ package io.dume.dume.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import io.dume.dume.student.common.ReviewHighlightData;
 import io.dume.dume.teacher.homepage.TeacherContract;
@@ -17,6 +18,8 @@ public interface TeacherModel {
     void changeAllSkillStatus(ArrayList<Skill> skillArrayList, boolean status, TeacherContract.Model.Listener<Void> listener);
 
     void deleteSkill(String id, TeacherContract.Model.Listener<Void> listener);
+
+    void updateSkill(String id, Map<String, Object> updateData, TeacherContract.Model.Listener<Void> listener);
 
     void loadReview(String id, String count, TeacherContract.Model.Listener<List<ReviewHighlightData>> listener);
 

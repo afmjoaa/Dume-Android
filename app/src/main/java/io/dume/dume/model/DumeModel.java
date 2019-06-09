@@ -1,10 +1,8 @@
 package io.dume.dume.model;
 
 import android.app.Activity;
-import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
@@ -27,11 +25,12 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.Source;
 import com.google.firebase.firestore.WriteBatch;
 
-import org.imperiumlabs.geofirestore.GeoFirestore;
+import io.dume.dume.myGeoFIreStore.GeoFirestore;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Nullable;
 
@@ -112,6 +111,7 @@ public class DumeModel extends HomePageModel implements TeacherModel {
         dataMap.put("package_name", skill.getPackage_name());
         dataMap.put("query_list", skill.getQuery_list());
         dataMap.put("query_list_name", skill.getQuery_list_name());
+        dataMap.put("common_query_str", skill.getCommonQueryString());
 
 
         final DocumentReference document = skillCollection.document();
@@ -255,6 +255,21 @@ public class DumeModel extends HomePageModel implements TeacherModel {
     @Override
     public void deleteSkill(String id, TeacherContract.Model.Listener<Void> listener) {
         firebaseFirestore.document("users/mentors/skills/" + id).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                listener.onSuccess(aVoid);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                listener.onError(e.getLocalizedMessage());
+            }
+        });
+    }
+
+    @Override
+    public void updateSkill(String id, Map<String, Object> updateData,  TeacherContract.Model.Listener<Void> listener) {
+        firebaseFirestore.document("users/mentors/skills/" + id).update(updateData).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 listener.onSuccess(aVoid);

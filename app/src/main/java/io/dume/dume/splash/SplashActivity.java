@@ -74,7 +74,7 @@ public class SplashActivity extends AppCompatActivity implements SplashContract.
 
     @Override
     public void foundErr(String msg){
-        DumeUtils.notifyDialog(this, true,false, "No Internet...", msg, "Retry", new TeacherContract.Model.Listener<Boolean>() {
+        DumeUtils.notifyDialog(this, true,false, "No Internet or Error...", msg, "Retry", new TeacherContract.Model.Listener<Boolean>() {
             @Override
             public void onSuccess(Boolean yes) {
                 //already handled

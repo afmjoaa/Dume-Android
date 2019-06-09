@@ -28,6 +28,7 @@ import butterknife.ButterKnife;
 import carbon.widget.ImageView;
 import io.dume.dume.R;
 import io.dume.dume.model.DumeModel;
+import io.dume.dume.student.pojo.SearchDataStore;
 import io.dume.dume.teacher.adapters.AcademicAdapter;
 import io.dume.dume.teacher.adapters.SkillAdapter;
 import io.dume.dume.teacher.crudskill.CrudSkillActivity;
@@ -186,6 +187,7 @@ public class SkillFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if (isProfileOK()) {
+                    TeacherDataStore.getInstance().setPackageName(SearchDataStore.REGULAR_DUME);
                     goToCrudActivity("frag_" + DumeUtils.TEACHER);
                 }
             }
@@ -195,6 +197,7 @@ public class SkillFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if (isProfileOK()) {
+                    TeacherDataStore.getInstance().setPackageName(SearchDataStore.DUME_GANG);
                     goToCrudActivity("frag_" + DumeUtils.BOOTCAMP);
                 }
             }
@@ -203,7 +206,11 @@ public class SkillFragment extends Fragment {
         addInstantDBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                documentSnapshot = TeacherDataStore.getInstance().getDocumentSnapshot();
+                if (isProfileOK()) {
+                    TeacherDataStore.getInstance().setPackageName(SearchDataStore.INSTANT_DUME);
+                    goToCrudActivity("frag_" + DumeUtils.TEACHER);
+                }
+                /*documentSnapshot = TeacherDataStore.getInstance().getDocumentSnapshot();
                 final Map<String, Boolean> achievements = (Map<String, Boolean>) documentSnapshot.get("achievements");
                 assert achievements != null;
                 Boolean premier = achievements.get("premier");
@@ -213,7 +220,7 @@ public class SkillFragment extends Fragment {
                     } else {
                         tips("Unlocking Premier Badge is must...");
                     }
-                }
+                }*/
             }
         });
 
@@ -309,24 +316,24 @@ public class SkillFragment extends Fragment {
         documentSnapshot = TeacherDataStore.getInstance().getDocumentSnapshot();
         Map<String, Boolean> achievements = (Map<String, Boolean>) TeacherDataStore.getInstance().getDocumentSnapshot().get("achievements");
         Boolean premier;
-        if (achievements != null) {
-            premier = achievements.get("premier");
+        if (documentSnapshot != null) {
+            /*premier = achievements.get("premier");
             if (premier!= null && premier) {
                 addInstantDBtn.setImageDrawable(context.getResources().getDrawable(R.drawable.dume_instant_image));
             } else {
                 addInstantDBtn.setImageDrawable(context.getResources().getDrawable(R.drawable.dume_instant_grayscale_image));
-
-            }
+            }*/
             String beh = (String) documentSnapshot.get("pro_com_%");
             assert beh != null;
             int percentage = Integer.parseInt(beh);
             if (percentage >= 95) {
                 addRegularDBtn.setImageDrawable(context.getResources().getDrawable(R.drawable.dume_regular_image));
                 addDumeGangBtn.setImageDrawable(context.getResources().getDrawable(R.drawable.dume_gang_image));
+                addInstantDBtn.setImageDrawable(context.getResources().getDrawable(R.drawable.dume_instant_image));
             } else {
                 addRegularDBtn.setImageDrawable(context.getResources().getDrawable(R.drawable.dume_regular_grayscale_image));
                 addDumeGangBtn.setImageDrawable(context.getResources().getDrawable(R.drawable.dume_gang_grayscale_image));
-
+                addInstantDBtn.setImageDrawable(context.getResources().getDrawable(R.drawable.dume_instant_grayscale_image));
             }
         }
     }

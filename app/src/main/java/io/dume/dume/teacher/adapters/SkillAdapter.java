@@ -2,6 +2,7 @@ package io.dume.dume.teacher.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Animatable2;
@@ -11,6 +12,8 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.v4.view.animation.FastOutLinearInInterpolator;
 import android.support.v4.view.animation.LinearOutSlowInInterpolator;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.AppCompatRadioButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
@@ -23,11 +26,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.appyvet.materialrangebar.RangeBar;
 import com.transitionseverywhere.Fade;
 import com.transitionseverywhere.Slide;
 import com.transitionseverywhere.Transition;
@@ -40,6 +45,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -49,6 +55,8 @@ import io.dume.dume.R;
 import io.dume.dume.model.DumeModel;
 import io.dume.dume.student.common.ReviewAdapter;
 import io.dume.dume.student.common.ReviewHighlightData;
+import io.dume.dume.student.homePage.HomePageActivity;
+import io.dume.dume.student.pojo.SearchDataStore;
 import io.dume.dume.teacher.homepage.TeacherContract;
 import io.dume.dume.teacher.homepage.TeacherDataStore;
 import io.dume.dume.teacher.model.KeyMap;
@@ -59,6 +67,7 @@ import io.dume.dume.util.DumeUtils;
 import io.dume.dume.util.VisibleToggleClickListener;
 
 import static io.dume.dume.util.DumeUtils.getLast;
+import static io.dume.dume.util.DumeUtils.giveIconOnCategoryName;
 
 public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public static int FRAGMENT = 1;
@@ -82,7 +91,19 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private Button backYesBtn;
     private Button backNoBtn;
     private String[] splitMainSsss;
-
+    private BottomSheetDialog mUpdateSkill;
+    private View updateSheetRootView;
+    private TextView updateMainText;
+    private TextView updateSubText;
+    private Button updateYesBtn;
+    private Button updateNoBtn;
+    private EditText chosenSubjects;
+    private TextView salaryTV;
+    private RangeBar salaryBar;
+    private String[] subjectList;
+    private boolean[] checkedItems;
+    private List<String> wantedList;
+    private List<String> selectedSubjects;
 
 
     @Override
@@ -156,6 +177,19 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         backSubText = mBackBSD.findViewById(R.id.sub_text);
         backYesBtn = mBackBSD.findViewById(R.id.cancel_yes_btn);
         backNoBtn = mBackBSD.findViewById(R.id.cancel_no_btn);
+
+        //testing skill updater here
+        mUpdateSkill = new BottomSheetDialog(context);
+        updateSheetRootView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.skill_updater_dialog, null);
+        mUpdateSkill.setContentView(updateSheetRootView);
+        updateMainText = mUpdateSkill.findViewById(R.id.main_text);
+        updateSubText = mUpdateSkill.findViewById(R.id.sub_text);
+        updateYesBtn = mUpdateSkill.findViewById(R.id.cancel_yes_btn);
+        updateNoBtn = mUpdateSkill.findViewById(R.id.cancel_no_btn);
+        chosenSubjects = mUpdateSkill.findViewById(R.id.input_subjects);
+        salaryTV = mUpdateSkill.findViewById(R.id.minSal);
+        salaryBar = mUpdateSkill.findViewById(R.id.rangeSlider);
+
         if (layoutSize == FRAGMENT) {
             inflate = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.skill_item_small, viewGroup, false);
             return new SkillFVH(inflate);
@@ -170,8 +204,8 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int i) {
-         Integer likes = 0;
-         Integer dislikes = 0;
+        Integer likes = 0;
+        Integer dislikes = 0;
         if (layoutSize == ACTIVITY) {
             SkillAVH myViewHolder = (SkillAVH) holder;
             ArrayList<KeyMap> detailList = new ArrayList<>();
@@ -251,7 +285,7 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                                 case R.id.action_remove:
                                     if (backMainText != null && backSubText != null && backYesBtn != null && backNoBtn != null) {
                                         backMainText.setText("Remove skill ?");
-                                        final String thisSkillTitile = myViewHolder.skillTitleTV.getText().toString();
+                                        String thisSkillTitile = myViewHolder.skillTitleTV.getText().toString();
                                         backSubText.setText(String.format("Confirming will remove your %s skill...", thisSkillTitile));
                                         backYesBtn.setText("Yes, Remove");
                                         backNoBtn.setText("No");
@@ -284,7 +318,192 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                                     mBackBSD.show();
                                     break;
                                 case R.id.action_edit:
-                                    Toast.makeText(context, "Feature is Coming Soon...", Toast.LENGTH_SHORT).show();
+                                    if (updateMainText != null && updateSubText != null && updateYesBtn != null && updateNoBtn != null) {
+                                        String thisSkillTitile = myViewHolder.skillTitleTV.getText().toString();
+                                        updateSubText.setText(String.format("Please update your %s skill salary & subject. Note salary is modified as,%nSalary = 0.25 * Mentor_Asked_Salary+((0.75 * Mentor_Asked_Salary) / Mentor_Selected_Subject) * Student_Searched_subject.", thisSkillTitile));
+                                        Skill hereSkill = skillList.get(i);
+                                        int salary1 = (int) hereSkill.getSalary();
+                                        String format2 = NumberFormat.getCurrencyInstance(Locale.US).format(salary1);
+                                        salaryTV.setText(format2.substring(1, format2.length() - 3) + " ৳");
+                                        int barIndex = (salary1 / 1000) - 1;
+                                        salaryBar.setSeekPinByIndex(barIndex);
+
+
+                                        //testing here
+                                        wantedList = new ArrayList<>();
+                                        int threshold = hereSkill.getPackage_name().equals(SearchDataStore.DUME_GANG) ? 4 : 3;
+                                        int level = hereSkill.getQuery_list().size() - threshold;
+                                        LocalDb localDb = new LocalDb();
+                                        switch (level) {
+                                            case 1:
+                                                wantedList = localDb.getLevelOne(giveIconOnCategoryName(hereSkill.getQuery_list().get(0)));
+                                                break;
+                                            case 2:
+                                                wantedList = localDb.getLevelTwo(hereSkill.getQuery_list().get(1), hereSkill.getQuery_list().get(0));
+                                                break;
+                                            case 3:
+                                                wantedList = localDb.getLevelThree(hereSkill.getQuery_list().get(2), hereSkill.getQuery_list().get(1));
+                                                break;
+                                            case 4:
+                                                wantedList = localDb.getLevelFour(hereSkill.getQuery_list().get(3), hereSkill.getQuery_list().get(2), hereSkill.getQuery_list().get(1));
+                                                break;
+                                        }
+
+                                        //get the two array
+                                        subjectList = new String[wantedList.size()];
+                                        subjectList = wantedList.toArray(subjectList);
+                                        checkedItems = new boolean[wantedList.size()];
+                                        selectedSubjects = new ArrayList<>();
+                                        String alreadySelectedSubjects = (String) hereSkill.getJizz().get(wantedList.toString());
+                                        for (int j = 0; j < wantedList.size(); j++) {
+                                            if (alreadySelectedSubjects.contains(wantedList.get(j))) {
+                                                checkedItems[j] = true;
+                                                selectedSubjects.add(subjectList[j]);
+                                            }
+                                        }
+                                        chosenSubjects.setText(alreadySelectedSubjects);
+
+                                        chosenSubjects.setOnClickListener(new View.OnClickListener() {
+                                            private AlertDialog mDegreeDialog;
+
+                                            @Override
+                                            public void onClick(View view) {
+
+                                                AlertDialog.Builder mBuilder = new AlertDialog.Builder(context, R.style.RadioDialogTheme);
+                                                mBuilder.setTitle("Select filter degrees");
+                                                mBuilder.setMultiChoiceItems(subjectList, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialogInterface, int position, boolean isChecked) {
+                                                        if (isChecked) {
+//                                                           /*((AlertDialog) mDegreeDialog).getListView().setItemChecked(position, false);
+//                                                                checkedItems[position] = false;*/
+                                                            if (!selectedSubjects.contains(subjectList[position])) {
+                                                                selectedSubjects.add(subjectList[position]);
+                                                            }
+                                                            checkedItems[position] = true;
+                                                        } else {
+                                                            if (selectedSubjects.contains(subjectList[position])) {
+                                                                selectedSubjects.remove(subjectList[position]);
+                                                            }
+                                                            checkedItems[position] = false;
+                                                        }
+                                                    }
+                                                });
+
+                                                mBuilder.setCancelable(false);
+                                                mBuilder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialogInterface, int which) {
+                                                        if (selectedSubjects.size() > 0) {
+                                                            StringBuilder item = new StringBuilder();
+                                                            for (int i = 0; i < selectedSubjects.size(); i++) {
+                                                                item.append(selectedSubjects.get(i));
+                                                                if (i != selectedSubjects.size() - 1) {
+                                                                    item.append(", ");
+                                                                }
+                                                            }
+                                                            chosenSubjects.setText(item);
+                                                        } else {
+                                                            chosenSubjects.setText("");
+                                                        }
+                                                    }
+                                                });
+
+                                                mBuilder.setNegativeButton("Dismiss", new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                                        dialogInterface.dismiss();
+                                                    }
+                                                });
+
+                                                mBuilder.setNeutralButton("Clear all", new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialogInterface, int which) {
+                                                        for (int i = 0; i < checkedItems.length; i++) {
+                                                            checkedItems[i] = false;
+                                                            selectedSubjects.clear();
+                                                            chosenSubjects.setText("");
+                                                        }
+                                                    }
+                                                });
+
+                                                mDegreeDialog = mBuilder.create();
+                                                mDegreeDialog.show();
+                                            }
+                                        });
+
+                                        salaryBar.setFormatter(value -> Integer.parseInt(value) + "k");
+                                        salaryBar.setOnRangeBarChangeListener(new RangeBar.OnRangeBarChangeListener() {
+                                            @Override
+                                            public void onRangeChangeListener(RangeBar rangeBar, int leftPinIndex, int rightPinIndex, String leftPinValue, String rightPinValue) {
+                                                NumberFormat currencyInstance = NumberFormat.getCurrencyInstance(Locale.US);
+                                                String format1 = currencyInstance.format(Integer.parseInt(rightPinValue) * 1000);
+                                                salaryTV.setText("Salary = " + format1.substring(1, format1.length() - 3) + " ৳");
+                                            }
+                                        });
+
+                                        updateYesBtn.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View view) {
+                                                mUpdateSkill.dismiss();
+                                                Map<String, Object> updateData = new HashMap<>();
+                                                //make the hashmap here
+                                                //get the datas now
+                                                int rightIndex = salaryBar.getRightIndex() +1;
+                                                updateData.put("salary", rightIndex*1000);
+                                                Map<String, Object> jizz = hereSkill.getJizz();
+                                                String shortSalary =  rightIndex+"k";
+                                                jizz.put("Salary", shortSalary);
+                                                jizz.put(wantedList.toString(), chosenSubjects.getText().toString());
+                                                updateData.put("jizz", jizz);
+                                                List<String> query_list = hereSkill.getQuery_list();
+                                                List<String> query_list_name = hereSkill.getQuery_list_name();
+
+                                                for (int i = 0; i < query_list_name.size(); i++) {
+                                                    if(query_list_name.get(i).equals("Salary")){
+                                                        query_list.set( i, shortSalary);
+                                                    }else if(query_list_name.get(i).equals(wantedList.toString())){
+                                                        query_list.set( i, chosenSubjects.getText().toString() );
+                                                    }
+                                                }
+                                                updateData.put("query_list", query_list);
+
+                                                Map<String, Object> preLikes = hereSkill.getLikes();
+                                                Map<String, Object> preDisLikes = hereSkill.getDislikes();
+
+                                                for (int i = 0; i < checkedItems.length; i++) {
+                                                    if (checkedItems[i]) {
+                                                        Object o = preLikes.get(subjectList[i]);
+                                                        if(o ==null){
+                                                            preLikes.put(subjectList[i], 1);
+                                                            preDisLikes.put(subjectList[i], 0);
+                                                        }
+                                                    }
+                                                }
+                                                updateData.put("likes", preLikes);
+                                                updateData.put("dislikes", preDisLikes);
+                                                new DumeModel(context).updateSkill(hereSkill.getId(), updateData, new TeacherContract.Model.Listener<Void>() {
+                                                    @Override
+                                                    public void onSuccess(Void list) {
+                                                        Toast.makeText(context, "Updated", Toast.LENGTH_SHORT).show();
+                                                    }
+
+                                                    @Override
+                                                    public void onError(String msg) {
+                                                        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+                                                    }
+                                                });
+                                            }
+                                        });
+
+                                        updateNoBtn.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View view) {
+                                                mUpdateSkill.dismiss();
+                                            }
+                                        });
+                                    }
+                                    mUpdateSkill.show();
                                     break;
                             }
                             return true;
@@ -305,13 +524,13 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     //testing here
                     boolean obligation = Google.getInstance().isObligation();
                     boolean accountActive = (boolean) TeacherDataStore.getInstance().getDocumentSnapshot().get("account_active");
-                    if(obligation){
+                    if (obligation) {
                         myViewHolder.switchCompat.setChecked(false);
                         flush("Please pay your due obligation to dume to make your skill active again...");
-                    }else if(!accountActive){
+                    } else if (!accountActive) {
                         myViewHolder.switchCompat.setChecked(false);
                         flush("Your account status is inactive.Please toggle your account status first to activate skill...");
-                    }else{
+                    } else {
                         new DumeModel(context).swithSkillStatus(skill.getId(), b, new TeacherContract.Model.Listener<Void>() {
                             @Override
                             public void onSuccess(Void list) {
@@ -439,7 +658,7 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                                 myViewHolder.reviewShowBtn.setEnabled(true);
                             }
                         });
-                    }else{
+                    } else {
                         if (visible) {
                             myViewHolder.reviewShowBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, context.getResources().getDrawable(R.drawable.ic_up_arrow_small));
                             myViewHolder.reviewShowBtn.setEnabled(true);
@@ -465,7 +684,7 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
             }
             myViewHolder.likeTV.setText((likes - splitMainSsss.length) + " likes");
-            likes=0;
+            likes = 0;
 
         } else {//fragment start here
             SkillFVH myFragmentHolder = (SkillFVH) holder;
@@ -474,17 +693,17 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                     boolean obligation = Google.getInstance().isObligation();
                     boolean accountActive = (boolean) TeacherDataStore.getInstance().getDocumentSnapshot().get("account_active");
-                    if(obligation){
+                    if (obligation) {
                         if (compoundButton.isChecked() != false || compoundButton.isChecked() != skillList.get(i).isStatus()) {
                             myFragmentHolder.switchCompat.setChecked(false);
                             flush("Please pay your due obligation to dume to make your skill active again...");
                         }
-                    }else if(!accountActive){
+                    } else if (!accountActive) {
                         if (compoundButton.isChecked() != false || compoundButton.isChecked() != skillList.get(i).isStatus()) {
                             myFragmentHolder.switchCompat.setChecked(false);
                             flush("Your account status is inactive.Please toggle your account status first to activate skill...");
                         }
-                    }else{
+                    } else {
                         if (compoundButton.isChecked() != false || compoundButton.isChecked() != skillList.get(i).isStatus()) {
                             new DumeModel(context).swithSkillStatus(skillList.get(i).getId(), b, new TeacherContract.Model.Listener<Void>() {
                                 @Override
@@ -541,10 +760,10 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         }
     }
 
-    public void flush(String msg){
+    public void flush(String msg) {
         Toast toast = Toast.makeText(context, msg, Toast.LENGTH_SHORT);
         TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
-        if( v != null) v.setGravity(Gravity.CENTER);
+        if (v != null) v.setGravity(Gravity.CENTER);
         toast.show();
     }
 

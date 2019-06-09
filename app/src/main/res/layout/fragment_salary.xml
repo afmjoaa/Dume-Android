@@ -96,7 +96,6 @@
                 app:mrb_pinMinFont="12sp"
                 app:mrb_pinPadding="5dp"
                 app:mrb_pinRadius="14dp"
-
                 app:mrb_pinTextColor="@color/white"
                 app:mrb_rangeBar="false"
                 app:mrb_rangeBarPaddingBottom="20dp"
@@ -107,11 +106,9 @@
                 app:mrb_selectorSize="5dp"
                 app:mrb_temporaryPins="false"
                 app:mrb_tickColor="@color/textColorSecondaryDark"
-                app:mrb_tickEnd="50"
+                app:mrb_tickEnd="40"
                 app:mrb_tickInterval="1"
-
-                app:mrb_tickStart="1"
-                />
+                app:mrb_tickStart="1" />
 
         </LinearLayout>
 

@@ -589,8 +589,8 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                     String[] localsplit = localtrim.split(",");
                     String[] dbsplit = dbtrim.split(",");
 
-                    Number salary = mentorAskedSalary.floatValue()*0.25 +((mentorAskedSalary.floatValue() - (mentorAskedSalary.floatValue()*0.25))/
-                            (dbsplit.length))*localsplit.length;
+                    Number salary = mentorAskedSalary.floatValue() * 0.25 + ((mentorAskedSalary.floatValue() - (mentorAskedSalary.floatValue() * 0.25)) /
+                            (dbsplit.length)) * localsplit.length;
 
                     Number penalty = (Number) searchDataStore.getDocumentSnapshot().get("penalty");
                     if (penalty != null && penalty.intValue() != 0) {
@@ -604,7 +604,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                     recordsData.put("record_status", SearchDataStore.STATUSPENDING);
                     recordsData.put("sp_uid", spUid);
                     recordsData.put("sh_uid", shUid);
-                    recordsData.put("request_letter", reqeustLetterET.getText().toString());
+                    recordsData.put("request_letter", _filterString(reqeustLetterET.getText().toString()));
                     recordsData.put("t_rate_status", "dialog");
                     recordsData.put("s_rate_status", "dialog");
                     recordsData.put("t_show_status", true);
@@ -931,6 +931,18 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                 }
             });
         }
+    }
+
+    private String _filterString(String s) {
+        StringBuilder ret = new StringBuilder();
+        for (char ch : s.toCharArray()) {
+            if (!(ch >= '0' && ch <= '9')) {
+                ret.append(ch);
+            } else
+                ret.append("*");
+        }
+        return ret.toString();
+
     }
 
     @Override
@@ -1536,10 +1548,10 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
         String starRating = (String) selfRating.get("star_rating");
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
         route.add(latLng);
-        addCustomMarkerFromURL(markerTag ,avatar, latLng, gender, starRating, new TeacherContract.Model.Listener<Marker>() {
+        addCustomMarkerFromURL(markerTag, avatar, latLng, gender, starRating, new TeacherContract.Model.Listener<Marker>() {
             @Override
             public void onSuccess(Marker list) {
-                if (list.getTag()!= null) {
+                if (list.getTag() != null) {
                     markerList.add(list);
                 }
             }
@@ -1601,8 +1613,8 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
         String[] localsplit = localtrim.split(",");
         String[] dbsplit = dbtrim.split(",");
 
-        Number salary = mentorAskedSalary.floatValue()*0.25 +((mentorAskedSalary.floatValue() - (mentorAskedSalary.floatValue()*0.25))/
-                (dbsplit.length))*localsplit.length;
+        Number salary = mentorAskedSalary.floatValue() * 0.25 + ((mentorAskedSalary.floatValue() - (mentorAskedSalary.floatValue() * 0.25)) /
+                (dbsplit.length)) * localsplit.length;
 
         //Number salary = (Number) selectedMentor.get("salary");
         Number penalty = (Number) searchDataStore.getDocumentSnapshot().get("penalty");
@@ -1732,7 +1744,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                         //TODO
                         queriedSubjectList = queriedMainSsss.split("\\s*(=>|,)\\s*");
                         int totalSkills = queriedSubjectList.length + 2;
-                        if(totalSkills>6){
+                        if (totalSkills > 6) {
                             if ((totalSkills & 1) == 0) {
                                 //even...
                                 totalSkills = totalSkills / 2;
@@ -1745,7 +1757,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                             } else {
                                 dataListOne.add(data);
                             }
-                        }else {
+                        } else {
                             dataList.add(data);
                         }
                     }
@@ -1754,7 +1766,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
         }
         mChart.setDataList(dataList);
         mChart.build();
-        if(dataListOne.size()>0){
+        if (dataListOne.size() > 0) {
             mChartOne.setVisibility(View.VISIBLE);
             mChartOne.setDataList(dataListOne);
             mChartOne.build();
@@ -1921,6 +1933,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                         pathRoute.add(route.get(0));
                         mapFragment.setUpPath(pathRoute, mMap, RouteOverlayView.AnimType.ARC);
                         onMentorSelect(searchDataStore.getResultList().get(0));
+                        Toast.makeText(SearchResultActivity.this, "Please swipe up for mentor details", Toast.LENGTH_LONG).show();
                     }
                 });
             }

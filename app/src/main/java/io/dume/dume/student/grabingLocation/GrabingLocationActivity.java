@@ -558,6 +558,8 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
 
     }
 
+
+
     @Override
     public void retriveSavedData() {
         showProgress();
@@ -800,17 +802,6 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
 
             }
         });
-
-    }
-
-    @Override
-    public void onCenterCurrentLocation() {
-        Drawable d = fab.getDrawable();
-        if (d instanceof Animatable) {
-            ((Animatable) d).start();
-        }
-        Log.d(TAG, "onClick: clicked gps icon");
-        getDeviceLocation(mMap);
 
     }
 
@@ -1166,5 +1157,15 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
     @Override
     public void onClick(View view) {
         mPresenter.onGrabingLocationViewIntracted(view);
+    }
+
+    @Override
+    public void onCenterCurrentLocation() {
+        Drawable d = fab.getDrawable();
+        if (d instanceof Animatable) {
+            ((Animatable) d).start();
+        }
+        //Log.d(TAG, "onClick: clicked gps icon");
+        getDeviceLocation(mMap);
     }
 }

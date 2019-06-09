@@ -495,7 +495,12 @@ public class LocalDb {
                 return "Subject";
             }
         };
-        innerCollegeEnglishVersion = new ArrayList<String>(Arrays.asList("Science", "Commerce", "Arts"));
+        innerCollegeEnglishVersion = new ArrayList<String>(Arrays.asList("Science", "Commerce", "Arts")) {
+            @Override
+            public String toString() {
+                return "Division";
+            }
+        };
         innerCollegeEnglishVersionScience = new ArrayList<String>(Arrays.asList("English", "Physics", "Chemistry", "Biology", "Math", "Higher Math", "Statistics", "ICT")) {
             @Override
             public String toString() {

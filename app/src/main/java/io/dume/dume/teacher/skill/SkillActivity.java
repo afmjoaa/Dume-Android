@@ -113,7 +113,7 @@ public class SkillActivity extends CustomStuAppCompatActivity implements SkillCo
     }
 
     private void changeAddSkillBtnColor() {
-        final Map<String, Boolean> achievements = (Map<String, Boolean>) documentSnapshot.get("achievements");
+        /*final Map<String, Boolean> achievements = (Map<String, Boolean>) documentSnapshot.get("achievements");
         Boolean premier = achievements.get("premier");
         if (premier) {
             fabInstant.setColorNormalResId(R.color.colorBlack);
@@ -121,7 +121,8 @@ public class SkillActivity extends CustomStuAppCompatActivity implements SkillCo
         } else {
             fabInstant.setColorNormalResId(R.color.recordsBgColor);
             fabInstant.setImageDrawable(getResources().getDrawable(R.drawable.dume_instant_grayscale_image));
-        }
+        }*/
+
         String beh = (String) documentSnapshot.get("pro_com_%");
         int percentage = Integer.parseInt(beh);
         if (percentage >= 95) {
@@ -129,11 +130,15 @@ public class SkillActivity extends CustomStuAppCompatActivity implements SkillCo
             fabRegular.setImageDrawable(getResources().getDrawable(R.drawable.dume_regular_image));
             fabGang.setColorNormalResId(R.color.colorBlack);
             fabGang.setImageDrawable(getResources().getDrawable(R.drawable.dume_gang_image));
+            fabInstant.setColorNormalResId(R.color.colorBlack);
+            fabInstant.setImageDrawable(getResources().getDrawable(R.drawable.dume_instant_image));
         } else {
             fabRegular.setColorNormalResId(R.color.recordsBgColor);
             fabRegular.setImageDrawable(getResources().getDrawable(R.drawable.dume_regular_grayscale_image));
             fabGang.setColorNormalResId(R.color.recordsBgColor);
             fabGang.setImageDrawable(getResources().getDrawable(R.drawable.dume_gang_grayscale_image));
+            fabInstant.setColorNormalResId(R.color.recordsBgColor);
+            fabInstant.setImageDrawable(getResources().getDrawable(R.drawable.dume_instant_grayscale_image));
         }
     }
 
@@ -281,8 +286,6 @@ public class SkillActivity extends CustomStuAppCompatActivity implements SkillCo
 
             }
         }
-
-
     }
 
     public void showProgress() {

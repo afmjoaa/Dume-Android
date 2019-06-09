@@ -121,7 +121,6 @@ public class ProfilePageActivity extends CustomStuAppCompatActivity implements P
         ProfilePageModel mModel = new ProfilePageModel(this);
         mPresenter = new ProfilePagePresenter(this, this, mModel);
         mPresenter.profilePageEnqueue();
-
     }
 
     @Override

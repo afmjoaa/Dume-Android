@@ -39,6 +39,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.maps.android.heatmaps.Gradient;
 import com.google.maps.android.heatmaps.HeatmapTileProvider;
 import com.transitionseverywhere.Fade;
@@ -144,12 +145,15 @@ public class HeatMapActivity extends CusStuAppComMapActivity implements OnMapRea
         switch (accountMajor) {
             case DumeUtils.STUDENT:
                 selectedItem = 1;
+                thisPosition = 1;
                 break;
             case DumeUtils.TEACHER:
                 selectedItem = 0;
+                thisPosition = 0;
                 break;
             default:
                 selectedItem = 0;
+                thisPosition = 0;
                 break;
         }
         heatMapAccountRecyAda = new HeatMapAccountRecyAda(this, getFinalData(selectedItem)) {
@@ -245,6 +249,18 @@ public class HeatMapActivity extends CusStuAppComMapActivity implements OnMapRea
         myAccountRecycler.setAdapter(heatMapAccountRecyAda);
         myAccountRecycler.setLayoutManager(new LinearLayoutManager(this));
 
+
+        FirebaseFirestore.getInstance().collection("app").document("dume_utils").get().addOnSuccessListener(documentSnapshot -> {
+            //Log.w(TAG, "hasUpdate: ");
+            //Number currentVersion = (Number) documentSnapshot.get("version_code");
+            //String updateVersionName = (String) documentSnapshot.get("version_name");
+            //String updateDescription = (String) documentSnapshot.get("version_description");
+            Number totalStudent = (Number) documentSnapshot.get("total_students");
+            Number totalMentors = (Number) documentSnapshot.get("total_mentors");
+            Google.getInstance().setTotalStudent(totalStudent == null ? 0 : totalStudent.intValue());
+            Google.getInstance().setTotalMentor(totalMentors == null ? 0 : totalMentors.intValue());
+            heatMapAccountRecyAda.update(getFinalData(thisPosition));
+        }).addOnFailureListener(e -> Log.e(TAG, "err: "+ e.getLocalizedMessage()));
     }
 
 

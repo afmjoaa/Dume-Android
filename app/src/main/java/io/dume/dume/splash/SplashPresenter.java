@@ -35,69 +35,69 @@ public class SplashPresenter implements SplashContract.Presenter {
     @Override
     public void enqueue() {
         Log.w(TAG, "enqueue: ");
-        model.hasUpdate(new TeacherContract.Model.Listener<Boolean>() {
-            @Override
-            public void onSuccess(Boolean hasUpdate) {
-                Log.w(TAG, "onSuccess: update "+hasUpdate );
-                if (hasUpdate) {
-                    view.foundUpdates();
-                }else {
-                    if (model.isUserLoggedIn()) {
-                        model.onAccountTypeFound(model.getUser(), new AuthGlobalContract.AccountTypeFoundListener() {
-                            @Override
-                            public void onStart() {
-                                Log.w(TAG, "onStart: ");
-                            }
-
-                            @Override
-                            public void onTeacherFound() {
-                                model.detachListener();
-                                view.gotoTeacherActivity();
-                                Log.w(TAG, "onTeacherFound: ");
-
-                            }
-
-                            @Override
-                            public void onStudentFound() {
-                                model.detachListener();
-                                view.gotoStudentActivity();
-                                Log.w(TAG, "onStudentFound: ");
-                            }
-
-                            @Override
-                            public void onBootcamp() {
-                                model.detachListener();
-                                view.gotoTeacherActivity();
-                                Log.w(TAG, "onBootcamp: ");
-                            }
-
-                            @Override
-                            public void onForeignObligation() {
-                                model.detachListener();
-                                view.gotoForeignObligation();
-                                Log.w(TAG, "onForeignObligation: ");
-                            }
-
-                            @Override
-                            public void onFail(String exeption) {
-                                view.foundErr(exeption);
-                            }
-                        });
-
-                    } else {
-                        view.gotoLoginActivity();
-                        Log.w(TAG, "enqueue: login");
-                    }
+        if (model.isUserLoggedIn()) {
+            model.onAccountTypeFound(model.getUser(), new AuthGlobalContract.AccountTypeFoundListener() {
+                @Override
+                public void onStart() {
+                    Log.w(TAG, "onStart: ");
                 }
-            }
 
-            @Override
-            public void onError(String msg) {
-                view.foundErr(msg);
-                Log.w(TAG, "onError: "+msg );
-            }
-        });
+                @Override
+                public void onTeacherFound() {
+                    model.detachListener();
+                    view.gotoTeacherActivity();
+                    Log.w(TAG, "onTeacherFound: ");
 
+                }
 
+                @Override
+                public void onStudentFound() {
+                    model.detachListener();
+                    view.gotoStudentActivity();
+                    Log.w(TAG, "onStudentFound: ");
+                }
+
+                @Override
+                public void onBootcamp() {
+                    model.detachListener();
+                    view.gotoTeacherActivity();
+                    Log.w(TAG, "onBootcamp: ");
+                }
+
+                @Override
+                public void onForeignObligation() {
+                    model.detachListener();
+                    view.gotoForeignObligation();
+                    Log.w(TAG, "onForeignObligation: ");
+                }
+
+                @Override
+                public void onFail(String exeption) {
+                    view.foundErr(exeption);
+                }
+            });
+
+        } else {
+            view.gotoLoginActivity();
+            Log.w(TAG, "enqueue: login");
+        }
+
+//        model.hasUpdate(new TeacherContract.Model.Listener<Boolean>() {
+//            @Override
+//            public void onSuccess(Boolean hasUpdate) {
+//                Log.w(TAG, "onSuccess: update "+hasUpdate );
+//                if (hasUpdate) {
+//                    view.foundUpdates();
+//                }else {
+//                    //uporer ta akhane chilo if else
+//                }
+//            }
+//
+//            @Override
+//            public void onError(String msg) {
+//                view.foundErr(msg);
+//                Log.w(TAG, "onError: "+msg );
+//            }
+//        });
     }
 }

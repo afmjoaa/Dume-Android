@@ -400,7 +400,6 @@ public class SearchLoadingActivity extends CusStuAppComMapActivity implements On
                 viewMuskOne.animate().alpha(2 * slideOffset).setDuration(0).start();
                 loaderView.animate().alpha(1 - (3 * slideOffset)).setDuration(0).start();
                 secondaryAppbarLayout.animate().alpha(slideOffset).scaleX(slideOffset).scaleY(slideOffset).setDuration(0).start();
-
             }
         });
         //gathering the touch event here

@@ -56,8 +56,7 @@ public class GrabingLocationPresenter implements GrabingLocaitonContract.Present
                 break;
             case R.id.hack_set_location_on_map:
                 mView.hackSetLocaOnMapClicked();
-
-
+                break;
         }
     }
 

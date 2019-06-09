@@ -26,6 +26,29 @@ public class HeatMapPresenter implements HeatMapContract.Presenter {
         mView.initHeatMap();
         mView.configHeatMap();
 
+        /*
+         firestore.collection("app").document("dume_utils").get().addOnSuccessListener(documentSnapshot -> {
+            Log.w(TAG, "hasUpdate: ");
+            Number currentVersion = (Number) documentSnapshot.get("version_code");
+            String updateVersionName = (String) documentSnapshot.get("version_name");
+            String updateDescription = (String) documentSnapshot.get("version_description");
+            Number totalStudent = (Number) documentSnapshot.get("total_students");
+            Number totalMentors = (Number) documentSnapshot.get("total_mentors");
+            Google.getInstance().setTotalStudent(totalStudent == null ? 0 : totalStudent.intValue());
+            Google.getInstance().setTotalMentor(totalMentors == null ? 0 : totalMentors.intValue());
+            if (currentVersion != null) {
+                if (currentVersion.intValue() > BuildConfig.VERSION_CODE) {
+                    SplashActivity.updateVersionName = updateVersionName;
+                    SplashActivity.updateDescription = updateDescription;
+                    listener.onSuccess(true);
+                } else {
+                    listener.onSuccess(false);
+                }
+            } else listener.onSuccess(false);
+
+        }).addOnFailureListener(e -> listener.onError(e.getLocalizedMessage()));
+       */
+
     }
 
     @Override
@@ -37,8 +60,6 @@ public class HeatMapPresenter implements HeatMapContract.Presenter {
             case R.id.fab:
                 mView.onCenterCurrentLocation();
                 break;
-
-
         }
     }
 }

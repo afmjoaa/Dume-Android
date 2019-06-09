@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/fragment_history_menu_bottom"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#ffffff"
+    android:orientation="vertical"
+    android:paddingLeft="16dp"
+    android:paddingTop="10dp"
+    android:paddingRight="16dp"
+    android:paddingBottom="10dp"
+    app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
+
+    <TextView
+        android:id="@+id/main_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:text="Choose Filters"
+        android:textAllCaps="false"
+        android:textColor="@color/colorBlack"
+        android:textSize="24sp"
+        app:fontFamily="@font/cairo_regular" />
+
+    <TextView
+        android:id="@+id/sub_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Mentor list will be filtered based on your selected filters. Provided if available..."
+        android:textColor="@color/textColorPrimary"
+        android:textSize="14sp"
+        app:fontFamily="@font/cairo_regular" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:orientation="horizontal">
+
+        <CheckBox
+            android:id="@+id/uni_checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
+            android:checked="false"
+            android:layout_gravity="center"
+            android:gravity="center"/>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/input_layout_c_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp">
+
+            <EditText
+                android:id="@+id/input_uni"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="false"
+                android:hint="University Specific"
+                android:inputType="textEmailAddress"
+                app:fontFamily="@font/cairo_regular" />
+
+        </android.support.design.widget.TextInputLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:orientation="horizontal">
+
+        <CheckBox
+            android:id="@+id/degree_checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
+            android:checked="false"
+            android:layout_gravity="center"
+            android:gravity="center"/>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp">
+
+            <EditText
+                android:id="@+id/input_degree"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="false"
+                android:hint="Degree Specific"
+                android:inputType="textEmailAddress"
+                app:fontFamily="@font/cairo_regular" />
+
+        </android.support.design.widget.TextInputLayout>
+
+    </LinearLayout>
+
+    <info.hoang8f.android.segmented.SegmentedGroup xmlns:segmentedgroup="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/segmentGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
+        android:layout_margin="4dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        segmentedgroup:sc_border_width="1dp"
+        segmentedgroup:sc_corner_radius="4dp"
+        segmentedgroup:sc_tint_color="@color/colorAccent">
+
+        <RadioButton
+            android:id="@+id/permanent_radio"
+            style="@style/RadioButton"
+            android:layout_width="60dp"
+            android:layout_height="38dp"
+            android:layout_weight="1"
+            android:checked="true"
+            android:text="Use permanent address" />
+
+        <RadioButton
+            android:id="@+id/choose_radio"
+            style="@style/RadioButton"
+            android:layout_width="60dp"
+            android:layout_height="38dp"
+            android:layout_weight="1"
+            android:text="Choose location" />
+
+    </info.hoang8f.android.segmented.SegmentedGroup>
+
+
+    <LinearLayout
+        android:id="@+id/cancel_parent_host"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/cancel_no_btn"
+            style="@style/myButtonStyleWhite"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="4dp"
+            android:layout_weight="1"
+            android:drawableEnd="@drawable/ic_save_settings"
+            android:drawableRight="@drawable/ic_save_settings"
+            android:text="Save"
+            android:textAllCaps="false"
+            android:textColor="@color/colorBlack"
+            android:textSize="16sp"
+            app:fontFamily="@font/cairo_regular" />
+
+        <Button
+            android:id="@+id/cancel_yes_btn"
+            style="@style/myButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginBottom="4dp"
+            android:layout_weight="1"
+            android:drawableEnd="@drawable/ic_proceed_settings"
+            android:drawableRight="@drawable/ic_proceed_settings"
+            android:drawablePadding="0dp"
+            android:text="Proceed"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:fontFamily="@font/cairo_regular" />
+
+    </LinearLayout>
+
+</LinearLayout>
+
+    <!--android:drawableStart="@drawable/state_inactive_inactive"
+        android:drawableLeft="@drawable/state_inactive_inactive"-->

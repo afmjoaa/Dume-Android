@@ -41,9 +41,18 @@ public class Skill implements Serializable {
 
     String package_name;
     String id;
+    String commonQueryString;
 
     List<String> query_list_name;
     List<String> query_list;
+
+    public String getCommonQueryString() {
+        return commonQueryString;
+    }
+
+    public void setCommonQueryString(String commonQueryString) {
+        this.commonQueryString = commonQueryString;
+    }
 
     public List<String> getQuery_list_name() {
         return query_list_name;

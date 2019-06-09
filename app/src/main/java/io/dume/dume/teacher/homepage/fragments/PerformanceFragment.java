@@ -220,7 +220,7 @@ public class PerformanceFragment extends Fragment {
             Boolean leading = badgeList.get(2);
             Boolean premier = badgeList.get(3);
 
-            if (Integer.parseInt(currentCount) > 1 || Integer.parseInt(totalStudents) >= 1) {
+            if (Integer.parseInt(currentCount) >= 1 || Integer.parseInt(totalStudents) >= 1) {
                 //TODO inaugural
                 String badgeName = "inaugural";
                 if (!inaugural) {

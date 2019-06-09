@@ -26,14 +26,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginRight="20dp"
                 android:background="@drawable/bg_green_top_round"
                 android:orientation="horizontal"
+                android:paddingTop="2dp"
                 android:paddingBottom="2dp"
-                app:carbon_elevation="5dp"
                 android:visibility="invisible"
-                android:paddingTop="2dp">
+                app:carbon_elevation="5dp">
 
                 <TextView
                     android:id="@+id/promotion_text"
@@ -54,9 +54,9 @@
                     android:layout_marginLeft="15dp"
                     android:layout_marginRight="15dp"
                     android:layout_weight="1"
+                    android:onClick="onHomePageViewClicked"
                     android:text="5 days"
                     android:textColor="#d8c1ebf0"
-                    android:onClick="onHomePageViewClicked"
                     android:textSize="13sp"
                     android:textStyle="bold"
                     app:fontFamily="@font/cairo_regular" />
@@ -80,8 +80,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="15dp"
                     android:layout_marginStart="15dp"
+                    android:layout_marginLeft="15dp"
                     android:contentDescription="@string/search_icon"
                     app:carbon_backgroundTint="@color/icon_color"
                     app:srcCompat="@drawable/search_icon" />
@@ -91,8 +91,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="20dp"
                     android:layout_marginStart="20dp"
+                    android:layout_marginLeft="20dp"
                     android:layout_toEndOf="@id/search_image_view"
                     android:layout_toRightOf="@id/search_image_view"
                     android:background="@null"
@@ -102,7 +102,33 @@
                     android:text="Search Mentors"
                     android:textColor="@color/stu_text_color"
                     android:textSize="18sp"
-                    app:fontFamily="@font/cairo_regular"/>
+                    app:fontFamily="@font/cairo_regular" />
+
+                <carbon.widget.ImageView
+                    android:id="@+id/search_filter_image_view"
+                    android:layout_width="42dp"
+                    android:layout_height="36dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginRight="10dp"
+                    android:clickable="true"
+                    android:contentDescription="@string/filter"
+                    android:focusable="true"
+                    android:onClick="onHomePageViewClicked"
+                    android:paddingLeft="9dp"
+                    android:paddingRight="9dp"
+                    android:paddingBottom="6dp"
+                    android:paddingTop="6dp"
+                    app:carbon_backgroundTint="@color/icon_color"
+                    app:carbon_cornerRadius="12dp"
+                    app:carbon_rippleColor="@color/colorRippleDefault"
+                    app:carbon_rippleHotspot="true"
+                    app:carbon_rippleStyle="background"
+                    app:srcCompat="@drawable/ic_search_filter" />
 
             </carbon.widget.RelativeLayout>
 
@@ -111,8 +137,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="25dp"
                 android:layout_marginRight="25dp"
-                android:background="@drawable/bg_white_bottom_round"
                 android:layout_marginBottom="10dp"
+                android:background="@drawable/bg_white_bottom_round"
                 app:carbon_elevation="3dp">
 
                 <android.support.v7.widget.RecyclerView
@@ -129,9 +155,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
+            android:layout_marginTop="10dp"
             android:layout_marginRight="20dp"
             android:layout_marginBottom="10dp"
-            android:layout_marginTop="10dp"
             android:background="#2387ba"
             android:orientation="vertical"
             android:visibility="invisible"
@@ -142,10 +168,10 @@
                 android:id="@+id/search_mentor_btn_nogps"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
-                android:layout_marginBottom="10dp"
                 android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
                 android:layout_marginTop="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginBottom="10dp"
                 android:background="@color/carbon_white"
                 android:onClick="onHomePageViewClicked"
                 app:carbon_cornerRadius="3dp"
@@ -156,8 +182,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="15dp"
                     android:layout_marginStart="15dp"
+                    android:layout_marginLeft="15dp"
                     android:contentDescription="@string/search_icon"
                     app:carbon_backgroundTint="@color/icon_color"
                     app:srcCompat="@drawable/search_icon" />
@@ -167,8 +193,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="15dp"
                     android:layout_marginStart="15dp"
+                    android:layout_marginLeft="15dp"
                     android:layout_toEndOf="@id/search_image_view_nogps"
                     android:layout_toRightOf="@id/search_image_view_nogps"
                     android:background="@null"
@@ -186,19 +212,19 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
+                android:lineSpacingExtra="6dp"
                 android:text="@string/N0_Gps_Text"
                 android:textColor="@color/carbon_white"
-                android:textSize="14sp"
-                android:lineSpacingExtra="6dp" />
+                android:textSize="14sp" />
 
             <carbon.widget.RelativeLayout
                 android:id="@+id/toggle_gps_dialogue_btn"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
-                android:layout_marginBottom="15dp"
                 android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginBottom="15dp"
                 android:background="@color/carbon_white"
                 app:carbon_cornerRadius="3dp"
                 app:carbon_elevation="3dp">
@@ -208,8 +234,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="15dp"
                     android:layout_marginStart="15dp"
+                    android:layout_marginLeft="15dp"
                     android:contentDescription="@string/search_icon"
                     app:carbon_backgroundTint="@color/icon_color"
                     app:srcCompat="@drawable/ic_gps" />
@@ -219,8 +245,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="15dp"
                     android:layout_marginStart="15dp"
+                    android:layout_marginLeft="15dp"
                     android:layout_toEndOf="@+id/toggle_gps__dialogue_image_view_one"
                     android:layout_toRightOf="@+id/toggle_gps__dialogue_image_view_one"
                     android:background="@null"
