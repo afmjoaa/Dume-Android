@@ -55,13 +55,13 @@
             android:icon="@drawable/ic_heat_map"
             android:title="Heat Map" />
         <item
-            android:id="@+id/settings"
-            android:icon="@drawable/settings_icon"
-            android:title="Settings" />
-        <item
             android:id="@+id/forum"
             android:icon="@drawable/forum_icon"
             android:title="Job Board" />
+        <item
+            android:id="@+id/settings"
+            android:icon="@drawable/settings_icon"
+            android:title="Settings" />
         <item
             android:id="@+id/help"
             android:icon="@drawable/help_icon"

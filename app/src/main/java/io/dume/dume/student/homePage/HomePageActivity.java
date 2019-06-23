@@ -1789,13 +1789,13 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
         TextView mainText = filterBottomSheetDialog.findViewById(R.id.main_text);
         TextView subText = filterBottomSheetDialog.findViewById(R.id.sub_text);
         Button proceedBtn = filterBottomSheetDialog.findViewById(R.id.cancel_yes_btn);
-        Button saveBtn = filterBottomSheetDialog.findViewById(R.id.cancel_no_btn);
         EditText universityNames = filterBottomSheetDialog.findViewById(R.id.input_uni);
         EditText degreeNames = filterBottomSheetDialog.findViewById(R.id.input_degree);
         CheckBox uniCheckBox = filterBottomSheetDialog.findViewById(R.id.uni_checkbox);
         CheckBox degreeCheckBox = filterBottomSheetDialog.findViewById(R.id.degree_checkbox);
         RadioButton permanentRadio = filterBottomSheetDialog.findViewById(R.id.permanent_radio);
         RadioButton chooseLocationRadio = filterBottomSheetDialog.findViewById(R.id.choose_radio);
+        RadioButton permanentLocationRadio = filterBottomSheetDialog.findViewById(R.id.permanent_radio);
 
         //initialize this part form the shared Preference
         String[] uniItems = getResources().getStringArray(R.array.University);
@@ -1866,7 +1866,7 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
             }
         }
 
-        if (mainText != null && subText != null && proceedBtn != null && saveBtn != null &&
+        if (mainText != null && subText != null && proceedBtn != null &&
                 universityNames != null && degreeNames != null && uniCheckBox != null && degreeCheckBox != null) {
 
             universityNames.setOnClickListener(new View.OnClickListener() {
@@ -1918,6 +1918,17 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
                                 universityNames.setText("");
                                 uniCheckBox.setChecked(false);
                             }
+
+                            editor.putBoolean("uniCheckBox", uniCheckBox.isChecked());
+
+                            editor.putInt("checkedUnis" +"_size", checkedUnis.length);
+                            for(int i = 0; i< checkedUnis.length; i++)
+                                editor.putBoolean("checkedUnis" + "_" + i, checkedUnis[i]);
+
+                            Gson gson = new Gson();
+                            String json = gson.toJson(selectedUnis);
+                            editor.putString("selectedUnis", json);
+                            editor.apply();
                         }
                     });
 
@@ -1937,6 +1948,16 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
                                 universityNames.setText("");
                                 uniCheckBox.setChecked(false);
                             }
+                            editor.putBoolean("uniCheckBox", uniCheckBox.isChecked());
+
+                            editor.putInt("checkedUnis" +"_size", checkedUnis.length);
+                            for(int i = 0; i< checkedUnis.length; i++)
+                                editor.putBoolean("checkedUnis" + "_" + i, checkedUnis[i]);
+
+                            Gson gson = new Gson();
+                            String json = gson.toJson(selectedUnis);
+                            editor.putString("selectedUnis", json);
+                            editor.apply();
                         }
                     });
 
@@ -1949,6 +1970,8 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
                 @Override
                 public void onClick(View v) {
                     //is chkIos checked?
+                    editor.putBoolean("uniCheckBox", ((CheckBox) v).isChecked());
+                    editor.apply();
                     if (((CheckBox) v).isChecked()) {
                         universityNames.performClick();
                     }
@@ -2005,6 +2028,17 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
                                 degreeNames.setText("");
                                 degreeCheckBox.setChecked(false);
                             }
+
+                            editor.putBoolean("degreeCheckBox", degreeCheckBox.isChecked());
+
+                            editor.putInt("checkedItems" +"_size", checkedItems.length);
+                            for(int i = 0; i< checkedItems.length; i++)
+                                editor.putBoolean("checkedItems" + "_" + i, checkedItems[i]);
+
+                            Gson gson1 = new Gson();
+                            String json1 = gson1.toJson(selectedDegrees);
+                            editor.putString("selectedDegrees", json1);
+                            editor.apply();
                         }
                     });
 
@@ -2025,6 +2059,16 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
                                 degreeCheckBox.setChecked(false);
                                 //mItemSelected.setText("");
                             }
+                            editor.putBoolean("degreeCheckBox", degreeCheckBox.isChecked());
+
+                            editor.putInt("checkedItems" +"_size", checkedItems.length);
+                            for(int i = 0; i< checkedItems.length; i++)
+                                editor.putBoolean("checkedItems" + "_" + i, checkedItems[i]);
+
+                            Gson gson1 = new Gson();
+                            String json1 = gson1.toJson(selectedDegrees);
+                            editor.putString("selectedDegrees", json1);
+                            editor.apply();
                         }
                     });
 
@@ -2038,39 +2082,27 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
                 @Override
                 public void onClick(View view) {
                     //is chkIos checked?
+                    editor.putBoolean("degreeCheckBox", ((CheckBox) view).isChecked());
+                    editor.apply();
                     if (((CheckBox) view).isChecked()) {
                         degreeNames.performClick();
                     }
                 }
             });
 
-
-            saveBtn.setOnClickListener(new View.OnClickListener() {
+            chooseLocationRadio.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    editor.putBoolean("uniCheckBox", uniCheckBox.isChecked());
-                    editor.putBoolean("degreeCheckBox", degreeCheckBox.isChecked());
-
-                    editor.putInt("checkedUnis" +"_size", checkedUnis.length);
-                    for(int i = 0; i< checkedUnis.length; i++)
-                        editor.putBoolean("checkedUnis" + "_" + i, checkedUnis[i]);
-
-                    editor.putInt("checkedItems" +"_size", checkedItems.length);
-                    for(int i = 0; i< checkedItems.length; i++)
-                        editor.putBoolean("checkedItems" + "_" + i, checkedItems[i]);
-
-                    Gson gson = new Gson();
-                    String json = gson.toJson(selectedUnis);
-                    editor.putString("selectedUnis", json);
-
-                    Gson gson1 = new Gson();
-                    String json1 = gson1.toJson(selectedDegrees);
-                    editor.putString("selectedDegrees", json1);
-
                     editor.putBoolean("chooseLocationRadio", chooseLocationRadio.isChecked());
                     editor.apply();
+                }
+            });
 
-                    filterBottomSheetDialog.dismiss();
+            permanentLocationRadio.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    editor.putBoolean("chooseLocationRadio", chooseLocationRadio.isChecked());
+                    editor.apply();
                 }
             });
 

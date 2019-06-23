@@ -320,6 +320,10 @@
         <item name="android:fontFamily">@font/cairo_regular</item>
     </style>
 
+    <style name="accentStyle">
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
     <style name="ProgressBarStyleUp">
         <item name="colorAccent">@color/loader_color_one</item>
     </style>

@@ -49,6 +49,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -256,6 +258,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
     private List<String> imprssionUid;
     private String requestMentorUid;
     private Dialog dialog;
+    private Animation animation;
 
     private TextView limit;
     private Integer max_dicount_percentage = null;
@@ -265,6 +268,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
     private android.widget.ImageView saleImageView;
     private boolean penaltyChanged = false;
     private String[] queriedSubjectList;
+    private ImageView swipeUpIndicator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -388,7 +392,9 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
 
         loadMoreReviewBtn = findViewById(R.id.load_more_review_btn);
         noDataBlockReview = findViewById(R.id.no_data_block);
+        swipeUpIndicator = findViewById(R.id.swipe_up_indicator);
 
+        animation = AnimationUtils.loadAnimation(this, R.anim.blink);
         route = new ArrayList<>();
     }
 
@@ -1055,6 +1061,8 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                     hideProgress();
 
                 } else if (BottomSheetBehavior.STATE_EXPANDED == newState) {
+                    swipeUpIndicator.clearAnimation();
+                    swipeUpIndicator.setVisibility(View.GONE);
                     setLightStatusBarIcon();
                     viewMusk.setVisibility(View.VISIBLE);
                     secondaryAppbarLayout.setVisibility(View.VISIBLE);
@@ -1073,6 +1081,8 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                     //showProgress();
                 } else if (BottomSheetBehavior.STATE_DRAGGING == newState) {
                     viewMusk.setVisibility(View.VISIBLE);
+                    swipeUpIndicator.clearAnimation();
+                    swipeUpIndicator.setVisibility(View.GONE);
                     secondaryAppbarLayout.setVisibility(View.VISIBLE);
                     defaultAppbarLayout.setVisibility(View.INVISIBLE);
                     changingOrientationContainer.setOrientation(LinearLayout.VERTICAL);
@@ -1933,6 +1943,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                         pathRoute.add(route.get(0));
                         mapFragment.setUpPath(pathRoute, mMap, RouteOverlayView.AnimType.ARC);
                         onMentorSelect(searchDataStore.getResultList().get(0));
+                        swipeUpIndicator.startAnimation(animation);
                         Toast.makeText(SearchResultActivity.this, "Please swipe up for mentor details", Toast.LENGTH_LONG).show();
                     }
                 });

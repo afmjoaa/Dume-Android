@@ -188,8 +188,17 @@ public class AuthModel implements AuthContract.Model, SplashContract.Model, Phon
     }
 
     public void checkImei(TeacherContract.Model.Listener<QuerySnapshot> imeiFound) {
-
-        listenerRegistration2 = firestore.collection("mini_users").whereArrayContains("imei", DumeUtils.getImei(context).get(0)).addSnapshotListener(new EventListener<QuerySnapshot>() {
+        String firstIMEI = null;
+        try{
+            firstIMEI = DumeUtils.getImei(context).get(0);
+        }catch (Exception error){
+            Log.w(TAG, "checkImei: "  + error.getLocalizedMessage());
+        }finally {
+            if(firstIMEI == null){
+             firstIMEI = "111111111111111";
+            }
+        }
+        listenerRegistration2 = firestore.collection("mini_users").whereArrayContains("imei", firstIMEI).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 if (queryDocumentSnapshots != null) {

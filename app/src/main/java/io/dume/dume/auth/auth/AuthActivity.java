@@ -226,7 +226,7 @@ public class AuthActivity extends CustomStuAppCompatActivity implements AuthCont
     @Override
     public void onAppBarLayoutExpanded() {
         toolbar.setVisibility(View.INVISIBLE);
-        floatingButoon.hide();
+        //floatingButoon.hide();
         collapsingToolbarLayout.setTitle("");
         setDarkStatusBarIcon();
     }
@@ -234,7 +234,7 @@ public class AuthActivity extends CustomStuAppCompatActivity implements AuthCont
     @Override
     public void onAppBarLayoutCollapsed() {
         toolbar.setVisibility(View.VISIBLE);
-        floatingButoon.show();
+        //floatingButoon.show();
         collapsingToolbarLayout.setTitle("");
         setLightStatusBarIcon();
     }

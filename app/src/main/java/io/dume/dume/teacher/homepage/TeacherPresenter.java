@@ -238,15 +238,21 @@ public class TeacherPresenter implements TeacherContract.Presenter {
 
     @Override
     public void appliedPromo(Map<String, Object> documentSnapshot) {
-        ArrayList<String> applied_promo = (ArrayList<String>) documentSnapshot.get("applied_promo");
-        if (applied_promo != null) {
-            for (String applied : applied_promo) {
-                Map<String, Object> promo_item = (Map<String, Object>) documentSnapshot.get(applied);
-                Gson gson = new Gson();
-                JsonElement jsonElement = gson.toJsonTree(promo_item);
-                HomePageRecyclerData homePageRecyclerData = gson.fromJson(jsonElement, HomePageRecyclerData.class);
-                if (homePageRecyclerData != null) {
-                    view.loadHeadsUpPromo(homePageRecyclerData);
+        ArrayList<String> applied_promo = null;
+        try {
+            applied_promo = (ArrayList<String>) documentSnapshot.get("applied_promo");
+        } catch (Exception err) {
+            Log.w(TAG, err.getLocalizedMessage());
+        } finally {
+            if (applied_promo != null) {
+                for (String applied : applied_promo) {
+                    Map<String, Object> promo_item = (Map<String, Object>) documentSnapshot.get(applied);
+                    Gson gson = new Gson();
+                    JsonElement jsonElement = gson.toJsonTree(promo_item);
+                    HomePageRecyclerData homePageRecyclerData = gson.fromJson(jsonElement, HomePageRecyclerData.class);
+                    if (homePageRecyclerData != null) {
+                        view.loadHeadsUpPromo(homePageRecyclerData);
+                    }
                 }
             }
         }

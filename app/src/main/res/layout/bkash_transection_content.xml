@@ -64,7 +64,7 @@
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@+id/nm"
                     android:gravity="center_horizontal"
-                    android:text="   -->"
+                    android:text="           -->"
                     android:textColor="@color/black"
                     app:fontFamily="@font/cairo_regular" />
 
@@ -75,9 +75,10 @@
                     android:layout_alignParentRight="true"
                     android:layout_marginEnd="2dp"
                     android:layout_marginRight="2dp"
-                    android:text="01551604161  or  01536100076"
+                    android:text="01536100076"
                     android:textColor="@color/black"
                     app:fontFamily="@font/cairo_regular" />
+                <!--01551604161  or  -->
 
             </RelativeLayout>
 

@@ -141,36 +141,38 @@
         android:layout_marginTop="6dp"
         android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/cancel_no_btn"
-            style="@style/myButtonStyleWhite"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="4dp"
-            android:layout_weight="1"
-            android:drawableEnd="@drawable/ic_save_settings"
-            android:drawableRight="@drawable/ic_save_settings"
-            android:text="Save"
-            android:textAllCaps="false"
-            android:textColor="@color/colorBlack"
-            android:textSize="16sp"
-            app:fontFamily="@font/cairo_regular" />
+        <!--<Button-->
+            <!--android:id="@+id/cancel_no_btn"-->
+            <!--style="@style/myButtonStyleWhite"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginEnd="10dp"-->
+            <!--android:layout_marginRight="10dp"-->
+            <!--android:layout_marginBottom="4dp"-->
+            <!--android:layout_weight="1"-->
+            <!--android:drawableEnd="@drawable/ic_save_settings"-->
+            <!--android:drawableRight="@drawable/ic_save_settings"-->
+            <!--android:text="Save"-->
+            <!--android:textAllCaps="false"-->
+            <!--android:textColor="@color/colorBlack"-->
+            <!--android:textSize="16sp"-->
+            <!--app:fontFamily="@font/cairo_regular" />-->
 
         <Button
             android:id="@+id/cancel_yes_btn"
             style="@style/myButtonStyle"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginLeft="10dp"
             android:layout_marginBottom="4dp"
+            android:layout_marginLeft="1dp"
+            android:layout_marginStart="1dp"
+            android:layout_marginRight="1dp"
+            android:layout_marginEnd="1dp"
             android:layout_weight="1"
             android:drawableEnd="@drawable/ic_proceed_settings"
             android:drawableRight="@drawable/ic_proceed_settings"
             android:drawablePadding="0dp"
-            android:text="Proceed"
+            android:text="Proceed Search"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="16sp"

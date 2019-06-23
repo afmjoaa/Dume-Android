@@ -27,12 +27,12 @@
 
         <ImageView
             android:id="@+id/imageMarker"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
             android:layout_gravity="center"
             android:layout_marginBottom="30dp"
             android:translationX="5dp"
-            android:translationY="-12dp"
+            android:translationY="-16dp"
             android:contentDescription="@string/marker_icon"
             android:gravity="center"
             app:srcCompat="@drawable/ic_current_location_marker_start" />

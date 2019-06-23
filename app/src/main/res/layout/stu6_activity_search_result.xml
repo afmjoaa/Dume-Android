@@ -65,7 +65,6 @@
             <carbon.widget.LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:descendantFocusability="blocksDescendants"
                 android:orientation="vertical">
 
                 <!--basic info layout-->
@@ -736,7 +735,7 @@
                                     android:layout_below="@+id/achievement_inaugural_image"
                                     android:layout_centerHorizontal="true"
                                     android:singleLine="true"
-                                    android:text="Varified"
+                                    android:text="Inaugural"
                                     android:textAlignment="center"
                                     android:textSize="13sp"
                                     app:fontFamily="@font/cairo_regular" />
@@ -1222,6 +1221,19 @@
         app:backgroundTint="@color/colorWhite"
         app:fabSize="mini"
         app:srcCompat="@drawable/geo_icon" />
+
+    <carbon.widget.ImageView
+        android:id="@+id/swipe_up_indicator"
+        android:layout_width="42dp"
+        app:carbon_cornerRadius="21dp"
+        android:layout_gravity="bottom|center"
+        android:layout_height="42dp"
+        app:carbon_tint="@color/colorDarkAzure"
+        app:carbon_tintMode="src_over"
+        app:srcCompat="@drawable/ic_up_up_arrow"
+        android:padding="8dp"
+        android:layout_marginBottom="132dp"
+        android:background="@color/white"/>
 
     <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"

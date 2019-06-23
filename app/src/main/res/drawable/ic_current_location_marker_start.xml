@@ -9,17 +9,17 @@
         <path
             android:name="path_1"
             android:pathData="M 11.312 18.031 L 9.187 18.286 C 7.286 18.658 6 19.338 6 20.124 C 6 21.293 18.749 21.293 18.749 20.124 C 18.749 19.072 16.454 18.201 13.437 18.031 Z"
-            android:fillColor="#4c5264"
+            android:fillColor="#000"
             android:strokeWidth="1"/>
         <path
             android:name="path_2"
             android:pathData="M 11.312 11.199 L 11.312 19.093 C 11.312 19.093 13.487 19.067 13.437 19.093 L 13.437 11.199 Z"
-            android:fillColor="#4c5264"
+            android:fillColor="#000"
             android:strokeWidth="1"/>
         <path
             android:name="path_3"
             android:pathData="M 12.375 2 C 10.95 2 9.582 2.455 8.574 3.263 C 7.567 4.071 7 5.169 7 6.312 C 7 7.455 7.567 8.553 8.574 9.361 C 9.582 10.169 10.95 10.624 12.375 10.624 C 13.8 10.624 15.168 10.169 16.176 9.361 C 17.183 8.553 17.75 7.455 17.75 6.312 C 17.75 5.169 17.183 4.071 16.176 3.263 C 15.168 2.455 13.8 2 12.375 2 Z"
-            android:strokeColor="#4c5264"
+            android:strokeColor="#000"
             android:strokeWidth="2"/>
     </group>
 </vector>

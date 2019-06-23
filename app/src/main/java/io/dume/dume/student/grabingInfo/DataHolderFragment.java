@@ -1,5 +1,6 @@
 package io.dume.dume.student.grabingInfo;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Rect;
 import android.os.Bundle;
@@ -11,14 +12,18 @@ import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.AppCompatRadioButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.InputFilter;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.NumberPicker;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,6 +31,7 @@ import android.widget.Toast;
 import com.appyvet.materialrangebar.IRangeBarFormatter;
 import com.appyvet.materialrangebar.RangeBar;
 
+import java.lang.reflect.Field;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -157,15 +163,114 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
 
             if (myMainActivity.retrivedAction.equals(DumeUtils.STUDENT)) {
                 rangeBar.setRangeBarEnabled(true);
-                rangeBar.setRangePinsByIndices(0,9);
-                min.setText("Min Salary = 1,000 ৳");
-                max.setText("Max Salary = 10,000 ৳");
+                rangeBar.setRangePinsByIndices(0, 9);
+                min.setText("Min Salary : 1,000 ৳");
+                max.setText("Max Salary : 10,000 ৳");
             } else {
                 rangeBar.setSeekPinByIndex(4);
                 rangeBar.setRangeBarEnabled(false);
                 max.setVisibility(View.GONE);
-                min.setText("Salary = 5,000 ৳");
+                min.setText("Salary : 5,000 ৳");
             }
+
+            min.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Dialog d = new Dialog(mContext);
+                    d.setTitle("NumberPicker");
+                    d.setContentView(R.layout.number_picker_dialog_layout);
+                    Button setBtn = (Button) d.findViewById(R.id.set_btn);
+                    Button cancelBtn = (Button) d.findViewById(R.id.cancel_btn);
+                    NumberPicker np = (NumberPicker) d.findViewById(R.id.numberPicker1);
+                    np.setMaxValue(40);
+                    np.setMinValue(1);
+
+                    Field f = null;
+                    try {
+                        f = NumberPicker.class.getDeclaredField("mInputText");
+                    } catch (NoSuchFieldException e) {
+                        e.printStackTrace();
+                    }
+                    f.setAccessible(true);
+                    EditText inputText = null;
+                    try {
+                        inputText = (EditText) f.get(np);
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    }
+                    if (inputText != null) {
+                        inputText.setFilters(new InputFilter[0]);
+                    }
+
+                    NumberPicker.Formatter formatter = new NumberPicker.Formatter() {
+                        @Override
+                        public String format(int value) {
+                            int temp = value * 1000;
+                            NumberFormat currencyInstance = NumberFormat.getCurrencyInstance(Locale.US);
+                            String format = currencyInstance.format(temp);
+                            return format.substring(1, format.length() - 3) +" ৳" ;
+                        }
+                    };
+                    np.setFormatter(formatter);
+
+                    np.setWrapSelectorWheel(true);
+                    //np.setOnValueChangedListener(mContext);
+                    setBtn.setOnClickListener(v -> {
+                        //tv.setText(String.valueOf(np.getValue()));
+                        d.dismiss();
+                    });
+                    cancelBtn.setOnClickListener(v -> d.dismiss());
+                    d.show();
+                }
+            });
+
+            max.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Dialog d = new Dialog(mContext);
+                    d.setTitle("NumberPicker");
+                    d.setContentView(R.layout.number_picker_dialog_layout);
+                    Button setBtn = (Button) d.findViewById(R.id.set_btn);
+                    Button cancelBtn = (Button) d.findViewById(R.id.cancel_btn);
+                    NumberPicker np = (NumberPicker) d.findViewById(R.id.numberPicker1);
+                    np.setMaxValue(40);
+                    np.setMinValue(1);
+                    Field f = null;
+                    try {
+                        f = NumberPicker.class.getDeclaredField("mInputText");
+                    } catch (NoSuchFieldException e) {
+                        e.printStackTrace();
+                    }
+                    f.setAccessible(true);
+                    EditText inputText = null;
+                    try {
+                        inputText = (EditText) f.get(np);
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    }
+                    if (inputText != null) {
+                        inputText.setFilters(new InputFilter[0]);
+                    }
+                    NumberPicker.Formatter formatter = new NumberPicker.Formatter() {
+                        @Override
+                        public String format(int value) {
+                            int temp = value * 1000;
+                            NumberFormat currencyInstance = NumberFormat.getCurrencyInstance(Locale.US);
+                            String format = currencyInstance.format(temp);
+                            return format.substring(1, format.length() - 3) +" ৳" ;
+                        }
+                    };
+                    np.setFormatter(formatter);
+                    np.setWrapSelectorWheel(true);
+                    //np.setOnValueChangedListener(mContext);
+                    setBtn.setOnClickListener(v -> {
+                        //tv.setText(String.valueOf(np.getValue()));
+                        d.dismiss();
+                    });
+                    cancelBtn.setOnClickListener(v -> d.dismiss());
+                    d.show();
+                }
+            });
 
             rangeBar.setOnRangeBarChangeListener(new RangeBar.OnRangeBarChangeListener() {
                 @Override
@@ -175,11 +280,11 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
                     String format = currencyInstance.format(Integer.parseInt(leftPinValue) * 1000);
                     String format1 = currencyInstance.format(Integer.parseInt(rightPinValue) * 1000);
                     if (myMainActivity.retrivedAction.equals(DumeUtils.STUDENT)) {
-                        min.setText("Min Salary = " + format.substring(1, format.length() - 3) + " ৳");
-                        max.setText("Max Salary = " + format1.substring(1, format1.length() - 3) + " ৳");
+                        min.setText("Min Salary : " + format.substring(1, format.length() - 3) + " ৳");
+                        max.setText("Max Salary : " + format1.substring(1, format1.length() - 3) + " ৳");
                         salaryValue = leftPinValue + "k - " + rightPinValue + "k";
                     } else {
-                        min.setText("Salary = " + format1.substring(1, format1.length() - 3) + " ৳");
+                        min.setText("Salary : " + format1.substring(1, format1.length() - 3) + " ৳");
                         salaryValue = rightPinValue + "k";
                     }
                     AppCompatRadioButton rd = new AppCompatRadioButton(mContext);
@@ -193,14 +298,26 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
                 }
             } else if (sectionNumber == 1) {
                 if (firstTime) {
-                    myMainActivity.hintIdOne.setText(myMainActivity.queryList.get(sectionNumber));
+                    try {
+                        myMainActivity.hintIdOne.setText(myMainActivity.queryList.get(sectionNumber));
+                    } catch (IndexOutOfBoundsException error) {
+                        Log.w(TAG, error.getLocalizedMessage());
+                    }
                     myMainActivity.hintIdTwo.setText("Ex.4k-10k");
                     firstTime = false;
                 }
             } else {
                 if (firstTime) {
-                    myMainActivity.hintIdOne.setText(myMainActivity.queryList.get(sectionNumber - 1));
-                    myMainActivity.hintIdTwo.setText(myMainActivity.queryList.get(sectionNumber));
+                    try {
+                        myMainActivity.hintIdOne.setText(myMainActivity.queryList.get(sectionNumber - 1));
+                    } catch (IndexOutOfBoundsException error) {
+                        Log.w(TAG, error.getLocalizedMessage());
+                    }
+                    try {
+                        myMainActivity.hintIdTwo.setText(myMainActivity.queryList.get(sectionNumber));
+                    } catch (IndexOutOfBoundsException error) {
+                        Log.w(TAG, error.getLocalizedMessage());
+                    }
                     myMainActivity.hintIdThree.setText("Ex.4k-10k");
                     firstTime = false;
                 }
@@ -233,8 +350,16 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
             mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
             if (sectionNumber >= 2) {
                 if (firstTime) {
-                    myMainActivity.hintIdOne.setText(myMainActivity.queryList.get(sectionNumber - 1));
-                    myMainActivity.hintIdTwo.setText(myMainActivity.queryList.get(sectionNumber));
+                    try {
+                        myMainActivity.hintIdOne.setText(myMainActivity.queryList.get(sectionNumber - 1));
+                    } catch (IndexOutOfBoundsException error) {
+                        Log.w(TAG, error.getLocalizedMessage());
+                    }
+                    try {
+                        myMainActivity.hintIdTwo.setText(myMainActivity.queryList.get(sectionNumber));
+                    } catch (IndexOutOfBoundsException error) {
+                        Log.w(TAG, error.getLocalizedMessage());
+                    }
                     myMainActivity.hintIdThree.setText(String.format("Ex.%s", list.get(0)));
                     firstTime = false;
                     //Log.e(TAG, String.format("Ex.%s", list.get(0)) );
@@ -291,14 +416,26 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
                 }
             } else if (sectionNumber == 1) {
                 if (firstTime) {
-                    myMainActivity.hintIdOne.setText(myMainActivity.queryList.get(sectionNumber));
+                    try {
+                        myMainActivity.hintIdOne.setText(myMainActivity.queryList.get(sectionNumber));
+                    } catch (IndexOutOfBoundsException error) {
+                        Log.w(TAG, error.getLocalizedMessage());
+                    }
                     myMainActivity.hintIdTwo.setText(String.format("Ex.%s", list.get(0)));
                     firstTime = false;
                 }
             } else {
                 if (firstTime) {
-                    myMainActivity.hintIdOne.setText(myMainActivity.queryList.get(sectionNumber - 1));
-                    myMainActivity.hintIdTwo.setText(myMainActivity.queryList.get(sectionNumber));
+                    try {
+                        myMainActivity.hintIdOne.setText(myMainActivity.queryList.get(sectionNumber - 1));
+                    } catch (IndexOutOfBoundsException error) {
+                        Log.w(TAG, error.getLocalizedMessage());
+                    }
+                    try {
+                        myMainActivity.hintIdTwo.setText(myMainActivity.queryList.get(sectionNumber));
+                    } catch (IndexOutOfBoundsException error) {
+                        Log.w(TAG, error.getLocalizedMessage());
+                    }
                     myMainActivity.hintIdThree.setText(String.format("Ex.%s", list.get(0)));
                     firstTime = false;
                     //Log.e(TAG, String.format("Ex.%s", list.get(0)) );
@@ -338,14 +475,26 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
                 }
             } else if (sectionNumber == 1) {
                 if (firstTime) {
-                    myMainActivity.hintIdOne.setText(myMainActivity.queryList.get(sectionNumber));
+                    try {
+                        myMainActivity.hintIdOne.setText(myMainActivity.queryList.get(sectionNumber));
+                    } catch (IndexOutOfBoundsException error) {
+                        Log.w(TAG, error.getLocalizedMessage());
+                    }
                     myMainActivity.hintIdTwo.setText(R.string.example_capacity);
                     firstTime = false;
                 }
             } else {
                 if (firstTime) {
-                    myMainActivity.hintIdOne.setText(myMainActivity.queryList.get(sectionNumber - 1));
-                    myMainActivity.hintIdTwo.setText(myMainActivity.queryList.get(sectionNumber));
+                    try {
+                        myMainActivity.hintIdOne.setText(myMainActivity.queryList.get(sectionNumber - 1));
+                    } catch (IndexOutOfBoundsException error) {
+                        Log.w(TAG, error.getLocalizedMessage());
+                    }
+                    try {
+                        myMainActivity.hintIdTwo.setText(myMainActivity.queryList.get(sectionNumber));
+                    } catch (IndexOutOfBoundsException error) {
+                        Log.w(TAG, error.getLocalizedMessage());
+                    }
                     myMainActivity.hintIdThree.setText(R.string.example_capacity);
                     firstTime = false;
                 }
@@ -383,14 +532,26 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
             }
         } else if (sectionNumber == 1) {
             if (firstTime) {
-                myMainActivity.hintIdOne.setText(myMainActivity.queryList.get(sectionNumber));
+                try {
+                    myMainActivity.hintIdOne.setText(myMainActivity.queryList.get(sectionNumber));
+                } catch (IndexOutOfBoundsException error) {
+                    Log.w(TAG, error.getLocalizedMessage());
+                }
                 myMainActivity.hintIdTwo.setText(String.format("Ex.%s", list.get(0)));
                 firstTime = false;
             }
         } else {
             if (firstTime) {
-                myMainActivity.hintIdOne.setText(myMainActivity.queryList.get(sectionNumber - 1));
-                myMainActivity.hintIdTwo.setText(myMainActivity.queryList.get(sectionNumber));
+                try {
+                    myMainActivity.hintIdOne.setText(myMainActivity.queryList.get(sectionNumber - 1));
+                } catch (IndexOutOfBoundsException error) {
+                    Log.w(TAG, error.getLocalizedMessage());
+                }
+                try {
+                    myMainActivity.hintIdTwo.setText(myMainActivity.queryList.get(sectionNumber));
+                } catch (IndexOutOfBoundsException error) {
+                    Log.w(TAG, error.getLocalizedMessage());
+                }
                 myMainActivity.hintIdThree.setText(String.format("Ex.%s", list.get(0)));
                 firstTime = false;
                 //Log.e(TAG, String.format("Ex.%s", list.get(0)) );

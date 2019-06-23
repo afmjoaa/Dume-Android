@@ -276,21 +276,28 @@ public class HomePagePresenter implements HomePageContract.Presenter {
 
     @Override
     public void appliedPromo(DocumentSnapshot documentSnapshot) {
-        ArrayList<String> applied_promo = (ArrayList<String>) documentSnapshot.get("applied_promo");
-        for (String applied : applied_promo) {
-            Log.w(TAG, "appliedPromo: " + applied);
-            Map<String, Object> promo_item = (Map<String, Object>) documentSnapshot.get(applied);
-            Gson gson = new Gson();
-            JsonElement jsonElement = gson.toJsonTree(promo_item);
-            try {
-                HomePageRecyclerData homePageRecyclerData = gson.fromJson(jsonElement, HomePageRecyclerData.class);
-                if (homePageRecyclerData != null) {
-                    mView.loadHeadsUpPromo(homePageRecyclerData);
+        ArrayList<String> applied_promo = null;
+        try {
+            applied_promo = (ArrayList<String>) documentSnapshot.get("applied_promo");
+        } catch (Exception err) {
+            Log.w(TAG, err.getLocalizedMessage());
+        } finally {
+            if (applied_promo != null) {
+                for (String applied : applied_promo) {
+                    Log.w(TAG, "appliedPromo: " + applied);
+                    Map<String, Object> promo_item = (Map<String, Object>) documentSnapshot.get(applied);
+                    Gson gson = new Gson();
+                    JsonElement jsonElement = gson.toJsonTree(promo_item);
+                    try {
+                        HomePageRecyclerData homePageRecyclerData = gson.fromJson(jsonElement, HomePageRecyclerData.class);
+                        if (homePageRecyclerData != null) {
+                            mView.loadHeadsUpPromo(homePageRecyclerData);
+                        }
+                    } catch (Exception e) {
+                        mView.flush(e.getMessage());
+                    }
                 }
-            } catch (Exception e) {
-                mView.flush(e.getMessage());
             }
-
         }
     }
 
