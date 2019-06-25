@@ -1,6 +1,7 @@
 package io.dume.dume.teacher.adapters;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -18,6 +19,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
+import android.text.InputFilter;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -29,6 +31,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,6 +42,7 @@ import com.transitionseverywhere.Transition;
 import com.transitionseverywhere.TransitionManager;
 import com.transitionseverywhere.TransitionSet;
 
+import java.lang.reflect.Field;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -433,6 +437,75 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                                         });
 
                                         salaryBar.setFormatter(value -> Integer.parseInt(value) + "k");
+                                        //testing the textview onclickListener here
+                                        NumberFormat currencyInstance = NumberFormat.getCurrencyInstance(Locale.US);
+                                        salaryTV.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View view) {
+                                                Dialog d = new Dialog(context);
+                                                d.setTitle("NumberPicker");
+                                                d.setContentView(R.layout.number_picker_dialog_layout);
+                                                Button setBtn = (Button) d.findViewById(R.id.set_btn);
+                                                NumberPicker np = (NumberPicker) d.findViewById(R.id.numberPicker1);
+                                                TextView tittleTV = d.findViewById(R.id.sub_text);
+                                                tittleTV.setText("Select Salary");
+                                                np.setMaxValue(40);
+                                                np.setMinValue(1);
+                                                Field f = null;
+                                                try {
+                                                    f = NumberPicker.class.getDeclaredField("mInputText");
+                                                } catch (NoSuchFieldException e) {
+                                                    e.printStackTrace();
+                                                }
+                                                if (f != null) {
+                                                    f.setAccessible(true);
+                                                }
+                                                EditText inputText = null;
+                                                try {
+                                                    inputText = (EditText) f.get(np);
+                                                } catch (IllegalAccessException e) {
+                                                    e.printStackTrace();
+                                                }
+                                                if (inputText != null) {
+                                                    inputText.setFilters(new InputFilter[0]);
+                                                }
+
+                                                NumberPicker.Formatter formatter = new NumberPicker.Formatter() {
+                                                    @Override
+                                                    public String format(int value) {
+                                                        int temp = value * 1000;
+                                                        String format = currencyInstance.format(temp);
+                                                        return format.substring(1, format.length() - 3) + " ৳";
+                                                    }
+                                                };
+                                                np.setFormatter(formatter);
+                                                np.setWrapSelectorWheel(true);
+                                                np.setValue(Integer.parseInt(salaryBar.getRightPinValue()));
+
+
+                                                np.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+                                                    @Override
+                                                    public void onValueChange(NumberPicker numberPicker, int i, int i1) {
+                                                        String format1 = currencyInstance.format(i1 * 1000);
+                                                        salaryTV.setText("Salary = " + format1.substring(1, format1.length() - 3) + " ৳");
+                                                        salaryBar.setSeekPinByIndex(i1 - 1);
+                                                        salaryBar.setFormatter(value -> Integer.parseInt(value) + "k");
+
+                                                    }
+                                                });
+
+                                                setBtn.setOnClickListener(v -> {
+                                                    tittleTV.setText("Select Salary");
+                                                    String format1 = currencyInstance.format(np.getValue() * 1000);
+                                                    salaryTV.setText("Salary = " + format1.substring(1, format1.length() - 3) + " ৳");
+                                                    salaryBar.setSeekPinByIndex(np.getValue() - 1);
+                                                    salaryBar.setFormatter(value -> Integer.parseInt(value) + "k");
+                                                    d.dismiss();
+                                                });
+                                                d.show();
+                                            }
+                                        });
+
                                         salaryBar.setOnRangeBarChangeListener(new RangeBar.OnRangeBarChangeListener() {
                                             @Override
                                             public void onRangeChangeListener(RangeBar rangeBar, int leftPinIndex, int rightPinIndex, String leftPinValue, String rightPinValue) {
@@ -449,10 +522,10 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                                                 Map<String, Object> updateData = new HashMap<>();
                                                 //make the hashmap here
                                                 //get the datas now
-                                                int rightIndex = salaryBar.getRightIndex() +1;
-                                                updateData.put("salary", rightIndex*1000);
+                                                int rightIndex = salaryBar.getRightIndex() + 1;
+                                                updateData.put("salary", rightIndex * 1000);
                                                 Map<String, Object> jizz = hereSkill.getJizz();
-                                                String shortSalary =  rightIndex+"k";
+                                                String shortSalary = rightIndex + "k";
                                                 jizz.put("Salary", shortSalary);
                                                 jizz.put(wantedList.toString(), chosenSubjects.getText().toString());
                                                 updateData.put("jizz", jizz);
@@ -460,10 +533,10 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                                                 List<String> query_list_name = hereSkill.getQuery_list_name();
 
                                                 for (int i = 0; i < query_list_name.size(); i++) {
-                                                    if(query_list_name.get(i).equals("Salary")){
-                                                        query_list.set( i, shortSalary);
-                                                    }else if(query_list_name.get(i).equals(wantedList.toString())){
-                                                        query_list.set( i, chosenSubjects.getText().toString() );
+                                                    if (query_list_name.get(i).equals("Salary")) {
+                                                        query_list.set(i, shortSalary);
+                                                    } else if (query_list_name.get(i).equals(wantedList.toString())) {
+                                                        query_list.set(i, chosenSubjects.getText().toString());
                                                     }
                                                 }
                                                 updateData.put("query_list", query_list);
@@ -474,7 +547,7 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                                                 for (int i = 0; i < checkedItems.length; i++) {
                                                     if (checkedItems[i]) {
                                                         Object o = preLikes.get(subjectList[i]);
-                                                        if(o ==null){
+                                                        if (o == null) {
                                                             preLikes.put(subjectList[i], 1);
                                                             preDisLikes.put(subjectList[i], 0);
                                                         }

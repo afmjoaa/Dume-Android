@@ -53,6 +53,8 @@
                     android:layout_weight="1"
                     android:background="@drawable/border_background"
                     android:paddingStart="10dp"
+                    android:textAlignment="center"
+
                     android:paddingLeft="10dp"
                     android:paddingTop="4dp"
                     android:paddingEnd="6dp"
@@ -73,6 +75,7 @@
                     android:paddingStart="10dp"
                     android:paddingLeft="10dp"
                     android:paddingTop="4dp"
+                    android:textAlignment="center"
                     android:paddingEnd="6dp"
                     android:paddingRight="6dp"
                     android:paddingBottom="4dp"

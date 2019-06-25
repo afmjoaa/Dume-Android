@@ -150,6 +150,7 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
         list = getArguments().getStringArrayList("list");
         TextView titleTV;
         idList = new ArrayList<>();
+        NumberFormat currencyInstance = NumberFormat.getCurrencyInstance(Locale.US);
 
         if (list != null && list.toString().equals("Salary")) {
             View view = inflater.inflate(R.layout.fragment_salary, container, false);
@@ -164,13 +165,13 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
             if (myMainActivity.retrivedAction.equals(DumeUtils.STUDENT)) {
                 rangeBar.setRangeBarEnabled(true);
                 rangeBar.setRangePinsByIndices(0, 9);
-                min.setText("Min Salary : 1,000 ৳");
-                max.setText("Max Salary : 10,000 ৳");
+                min.setText("Min Salary\n1,000 ৳");
+                max.setText("Max Salary\n10,000 ৳");
             } else {
-                rangeBar.setSeekPinByIndex(4);
                 rangeBar.setRangeBarEnabled(false);
+                rangeBar.setSeekPinByIndex(4);
                 max.setVisibility(View.GONE);
-                min.setText("Salary : 5,000 ৳");
+                min.setText("Salary\n5,000 ৳");
             }
 
             min.setOnClickListener(new View.OnClickListener() {
@@ -180,18 +181,20 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
                     d.setTitle("NumberPicker");
                     d.setContentView(R.layout.number_picker_dialog_layout);
                     Button setBtn = (Button) d.findViewById(R.id.set_btn);
-                    Button cancelBtn = (Button) d.findViewById(R.id.cancel_btn);
                     NumberPicker np = (NumberPicker) d.findViewById(R.id.numberPicker1);
+                    TextView tittleTV = d.findViewById(R.id.sub_text);
+                    tittleTV.setText("Minimum Salary");
                     np.setMaxValue(40);
                     np.setMinValue(1);
-
                     Field f = null;
                     try {
                         f = NumberPicker.class.getDeclaredField("mInputText");
                     } catch (NoSuchFieldException e) {
                         e.printStackTrace();
                     }
-                    f.setAccessible(true);
+                    if (f != null) {
+                        f.setAccessible(true);
+                    }
                     EditText inputText = null;
                     try {
                         inputText = (EditText) f.get(np);
@@ -206,20 +209,53 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
                         @Override
                         public String format(int value) {
                             int temp = value * 1000;
-                            NumberFormat currencyInstance = NumberFormat.getCurrencyInstance(Locale.US);
                             String format = currencyInstance.format(temp);
                             return format.substring(1, format.length() - 3) +" ৳" ;
                         }
                     };
                     np.setFormatter(formatter);
-
                     np.setWrapSelectorWheel(true);
-                    //np.setOnValueChangedListener(mContext);
+                    if (myMainActivity.retrivedAction.equals(DumeUtils.STUDENT)) {
+                        np.setValue(Integer.parseInt(rangeBar.getLeftPinValue()));
+                    } else {
+                        np.setValue(Integer.parseInt(rangeBar.getRightPinValue()));
+                    }
+
+                    np.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+                        @Override
+                        public void onValueChange(NumberPicker numberPicker, int i, int i1) {
+                            if (myMainActivity.retrivedAction.equals(DumeUtils.STUDENT)) {
+                                String format1 = currencyInstance.format(i1 * 1000);
+                                min.setText("Min Salary\n" + format1.substring(1, format1.length() - 3) + " ৳");
+
+                                rangeBar.setRangePinsByIndices( i1-1, rangeBar.getRightIndex());
+                                rangeBar.setFormatter(value -> Integer.parseInt(value) + "k");
+                            } else {
+                                tittleTV.setText("Select Salary");
+                                String format1 = currencyInstance.format(i1 * 1000);
+                                min.setText("Salary\n" + format1.substring(1, format1.length() - 3) + " ৳");
+                                rangeBar.setSeekPinByIndex(i1-1);
+                                rangeBar.setFormatter(value -> Integer.parseInt(value) + "k");
+                            }
+                        }
+                    });
+
                     setBtn.setOnClickListener(v -> {
-                        //tv.setText(String.valueOf(np.getValue()));
+                        if (myMainActivity.retrivedAction.equals(DumeUtils.STUDENT)) {
+                            String format1 = currencyInstance.format(np.getValue() * 1000);
+                            min.setText("Min Salary\n" + format1.substring(1, format1.length() - 3) + " ৳");
+
+                            rangeBar.setRangePinsByIndices( np.getValue()-1, rangeBar.getRightIndex());
+                            rangeBar.setFormatter(value -> Integer.parseInt(value) + "k");
+                        } else {
+                            tittleTV.setText("Select Salary");
+                            String format1 = currencyInstance.format(np.getValue() * 1000);
+                            min.setText("Salary\n" + format1.substring(1, format1.length() - 3) + " ৳");
+                            rangeBar.setSeekPinByIndex(np.getValue()-1);
+                            rangeBar.setFormatter(value -> Integer.parseInt(value) + "k");
+                        }
                         d.dismiss();
                     });
-                    cancelBtn.setOnClickListener(v -> d.dismiss());
                     d.show();
                 }
             });
@@ -231,8 +267,9 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
                     d.setTitle("NumberPicker");
                     d.setContentView(R.layout.number_picker_dialog_layout);
                     Button setBtn = (Button) d.findViewById(R.id.set_btn);
-                    Button cancelBtn = (Button) d.findViewById(R.id.cancel_btn);
                     NumberPicker np = (NumberPicker) d.findViewById(R.id.numberPicker1);
+                    TextView titleTV = d.findViewById(R.id.sub_text);
+                    titleTV.setText("Maximum Salary");
                     np.setMaxValue(40);
                     np.setMinValue(1);
                     Field f = null;
@@ -241,7 +278,9 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
                     } catch (NoSuchFieldException e) {
                         e.printStackTrace();
                     }
-                    f.setAccessible(true);
+                    if (f != null) {
+                        f.setAccessible(true);
+                    }
                     EditText inputText = null;
                     try {
                         inputText = (EditText) f.get(np);
@@ -255,19 +294,32 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
                         @Override
                         public String format(int value) {
                             int temp = value * 1000;
-                            NumberFormat currencyInstance = NumberFormat.getCurrencyInstance(Locale.US);
                             String format = currencyInstance.format(temp);
                             return format.substring(1, format.length() - 3) +" ৳" ;
                         }
                     };
                     np.setFormatter(formatter);
                     np.setWrapSelectorWheel(true);
-                    //np.setOnValueChangedListener(mContext);
+                    //setting the prior value
+                    np.setValue(Integer.parseInt(rangeBar.getRightPinValue()));
+
+                    np.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+                        @Override
+                        public void onValueChange(NumberPicker numberPicker, int i, int i1) {
+                            String format1 = currencyInstance.format(i1 * 1000);
+                            max.setText("Max Salary\n" + format1.substring(1, format1.length() - 3) + " ৳");
+                            rangeBar.setRangePinsByIndices(rangeBar.getLeftIndex(), i1-1);
+                            rangeBar.setFormatter(value -> Integer.parseInt(value) + "k");
+                        }
+                    });
                     setBtn.setOnClickListener(v -> {
                         //tv.setText(String.valueOf(np.getValue()));
+                        String format1 = currencyInstance.format(np.getValue() * 1000);
+                        max.setText("Max Salary\n" + format1.substring(1, format1.length() - 3) + " ৳");
+                        rangeBar.setRangePinsByIndices(rangeBar.getLeftIndex(), np.getValue()-1);
+                        rangeBar.setFormatter(value -> Integer.parseInt(value) + "k");
                         d.dismiss();
                     });
-                    cancelBtn.setOnClickListener(v -> d.dismiss());
                     d.show();
                 }
             });
@@ -280,11 +332,11 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
                     String format = currencyInstance.format(Integer.parseInt(leftPinValue) * 1000);
                     String format1 = currencyInstance.format(Integer.parseInt(rightPinValue) * 1000);
                     if (myMainActivity.retrivedAction.equals(DumeUtils.STUDENT)) {
-                        min.setText("Min Salary : " + format.substring(1, format.length() - 3) + " ৳");
-                        max.setText("Max Salary : " + format1.substring(1, format1.length() - 3) + " ৳");
+                        min.setText("Min Salary\n" + format.substring(1, format.length() - 3) + " ৳");
+                        max.setText("Max Salary\n" + format1.substring(1, format1.length() - 3) + " ৳");
                         salaryValue = leftPinValue + "k - " + rightPinValue + "k";
                     } else {
-                        min.setText("Salary : " + format1.substring(1, format1.length() - 3) + " ৳");
+                        min.setText("Salary\n" + format1.substring(1, format1.length() - 3) + " ৳");
                         salaryValue = rightPinValue + "k";
                     }
                     AppCompatRadioButton rd = new AppCompatRadioButton(mContext);
