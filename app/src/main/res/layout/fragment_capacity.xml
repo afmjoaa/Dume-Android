@@ -58,7 +58,7 @@
                     android:paddingEnd="6dp"
                     android:paddingRight="6dp"
                     android:paddingBottom="4dp"
-                    android:text="Min Count : "
+                    android:text="Min Count : 8 stu"
                     android:textSize="16sp" />
 
                 <TextView
@@ -76,7 +76,7 @@
                     android:paddingEnd="6dp"
                     android:paddingRight="6dp"
                     android:paddingBottom="4dp"
-                    android:text="Max Count : "
+                    android:text="Max Count : 12 stu"
                     android:textSize="16sp" />
 
             </LinearLayout>

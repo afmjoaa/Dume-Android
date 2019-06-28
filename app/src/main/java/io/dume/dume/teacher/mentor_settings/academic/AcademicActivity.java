@@ -11,6 +11,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.animation.LinearOutSlowInInterpolator;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.text.Editable;
@@ -35,10 +36,12 @@ import com.transitionseverywhere.TransitionManager;
 import com.transitionseverywhere.TransitionSet;
 
 import java.util.Calendar;
+import java.util.Objects;
 
 import io.dume.dume.R;
 import io.dume.dume.customView.HorizontalLoadView;
 import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
+import io.dume.dume.student.profilePage.ProfilePageActivity;
 import io.dume.dume.teacher.mentor_settings.basicinfo.EditAccount;
 import io.dume.dume.util.DatePickerFragment;
 import io.dume.dume.util.DumeUtils;
@@ -71,6 +74,8 @@ public class AcademicActivity extends CustomStuAppCompatActivity implements Acad
     private RelativeLayout fromRelative;
     private RelativeLayout toRelative;
     private LinearLayout hostLayout;
+    private int levelCheckedItem = 0;
+    private int PResultCheckedItem = 0;
 
 
     @Override
@@ -511,20 +516,29 @@ public class AcademicActivity extends CustomStuAppCompatActivity implements Acad
 
     @Override
     public void selectLevelClicked() {
-        Bundle pRargs = new Bundle();
-        pRargs.putString("title", "Select level");
-        pRargs.putStringArray("radioOptions", levelSelectionArr);
-        RadioBtnDialogue genderBtnDialogue = new RadioBtnDialogue();
-        genderBtnDialogue.setItemChoiceListener(new DialogInterface.OnClickListener() {
+        String level = getLevel();
+        for (int i = 0; i < levelSelectionArr.length; i++) {
+            if (level.equals(levelSelectionArr[i])) {
+                levelCheckedItem = i;
+                break;
+            }
+        }
+        AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(AcademicActivity.this), R.style.RadioDialogTheme);
+        builder.setTitle("Select level").setSingleChoiceItems(levelSelectionArr, levelCheckedItem, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+                levelCheckedItem = i;
                 levelET.setText(levelSelectionArr[i]);
             }
+        }).setPositiveButton("Select", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                //Toast.makeText(ProfilePageActivity.this, "Set", Toast.LENGTH_SHORT).show();
+                //nothing to do here
+            }
         });
-        genderBtnDialogue.setArguments(pRargs);
-        genderBtnDialogue.show(getSupportFragmentManager(), "levelDialogue");
-        levelET.setText(levelSelectionArr[0]);
-
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 
     @Override
@@ -567,32 +581,60 @@ public class AcademicActivity extends CustomStuAppCompatActivity implements Acad
 
     @Override
     public void selectResultClicked() {
-        Bundle args = new Bundle();
-        RadioBtnDialogue previousResultDialogue = new RadioBtnDialogue();
+        String previousResult = getRestult();
         if (gpaCB.isChecked()) {
-            resultET.setText(String.format("%s (GPA)", gpaOptionsArr[0]));
-            args.putString("title", "Select your GPA");
-            args.putStringArray("radioOptions", gpaOptionsArr);
-            previousResultDialogue.setItemChoiceListener(new DialogInterface.OnClickListener() {
+            for (int i = 0; i < gpaOptionsArr.length; i++) {
+                if(i== gpaOptionsArr.length-1){
+                    PResultCheckedItem = 0;
+                }
+                if (previousResult.equals(String.format("%s (GPA)", gpaOptionsArr[i]))) {
+                    PResultCheckedItem = i;
+                    break;
+                }
+            }
+            AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(AcademicActivity.this), R.style.RadioDialogTheme);
+            builder.setTitle("Select your GPA").setSingleChoiceItems(gpaOptionsArr, PResultCheckedItem, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
+                    PResultCheckedItem = i;
                     resultET.setText(String.format("%s (GPA)", gpaOptionsArr[i]));
                 }
-            });
-            previousResultDialogue.setArguments(args);
-            previousResultDialogue.show(getSupportFragmentManager(), "result_dialogue");
-        } else if (cgpaCB.isChecked()) {
-            resultET.setText(String.format("%s (CGPA)", cgpaOptionsArr[0]));
-            args.putString("title", "Select your CGPA");
-            args.putStringArray("radioOptions", cgpaOptionsArr);
-            previousResultDialogue.setItemChoiceListener(new DialogInterface.OnClickListener() {
+            }).setPositiveButton("Select", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    resultET.setText(String.format("%s (CGPA)", cgpaOptionsArr[i]));
+                    //Toast.makeText(ProfilePageActivity.this, "Set", Toast.LENGTH_SHORT).show();
+                    //nothing to do here
                 }
             });
-            previousResultDialogue.setArguments(args);
-            previousResultDialogue.show(getSupportFragmentManager(), "result_dialogue");
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
+        } else if (cgpaCB.isChecked()) {
+            for (int i = 0; i < cgpaOptionsArr.length; i++) {
+                if(i== cgpaOptionsArr.length-1){
+                    PResultCheckedItem = 0;
+                }
+                if (previousResult.equals(String.format("%s (CGPA)", cgpaOptionsArr[i]))) {
+                    PResultCheckedItem = i;
+                    break;
+                }
+
+            }
+            AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(AcademicActivity.this), R.style.RadioDialogTheme);
+            builder.setTitle("Select your CGPA").setSingleChoiceItems(cgpaOptionsArr, PResultCheckedItem, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    PResultCheckedItem = i;
+                    resultET.setText(String.format("%s (CGPA)", cgpaOptionsArr[i]));
+                }
+            }).setPositiveButton("Select", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    //Toast.makeText(ProfilePageActivity.this, "Set", Toast.LENGTH_SHORT).show();
+                    //nothing to do here
+                }
+            });
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
         } else {
             resultET.setText("Studying");
         }
@@ -600,7 +642,7 @@ public class AcademicActivity extends CustomStuAppCompatActivity implements Acad
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_grabing_info, menu);
+        getMenuInflater().inflate(R.menu.menu_show_info, menu);
         return true;
     }
 

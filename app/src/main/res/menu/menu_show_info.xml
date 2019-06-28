@@ -1,0 +1,12 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="io.dume.dume.teacher.mentor_settings.academic.AcademicActivity">
+    <item
+        android:id="@+id/action_help"
+        android:title="@string/help"
+        android:orderInCategory="1"
+        android:tooltipText="Help"
+        android:icon="@drawable/ic_help_white"
+        app:showAsAction="always" />
+</menu>

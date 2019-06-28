@@ -780,7 +780,7 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
                 instantDumePercentageOffImage.setVisibility(View.INVISIBLE);
                 //DumeUtils.setTextOverDrawable(this, instantDumeBadgeOffLayDraw, R.id.ic_badge, 0xff575757, "-0%", 3);
             }
-            packageSearchBtn.setText("Search Dume Batch");
+            packageSearchBtn.setText("Search Couching Service");
         }
     }
 
@@ -868,7 +868,7 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
             } else {
                 instantDumePercentageOffImage.setVisibility(View.INVISIBLE);
             }
-            packageSearchBtn.setText("Search Regular Dume");
+            packageSearchBtn.setText("Search Monthly Tutor");
         }
     }
 
@@ -950,7 +950,7 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
             } else {
                 instantDumePercentageOffImage.setVisibility(View.INVISIBLE);
             }
-            packageSearchBtn.setText("Search Instant Dume");
+            packageSearchBtn.setText("Search Weekly Tutor");
         }
     }
 

@@ -544,9 +544,9 @@ provided.Tap salary for details.  </string>
     <string name="done_icon">Done_icon</string>
     <string name="switch_learner">Switch Learner</string>
     <string name="for_me">For Me</string>
-    <string name="dume_products"><![CDATA[Dume Batch: This is our finding nearby boot camp package.\nRegular Dume : This is the regular monthly tuition we are generally familiar with.\nInstant Dume : This is our premier package here we instantly give you a capable mentor for a certain time to teach & guide you in a specific subject.]]></string>
-    <string name="dume_products_mentor"><![CDATA[Dume Batch: This is our finding nearby boot camp package.\nRegular Dume : This is the regular monthly tuition we are generally familiar with.\nInstant Dume : This is our premier package. One will be eligible for this if he unlocks the premier badge.]]></string>
-    <string name="dume_product_intro">You can choose between regular, instant or boot camp/coaching center with ease.</string>
+    <string name="dume_products"><![CDATA[Couching Service: This is our finding nearby Couching centers.\nMonthly Tutor: This is the regular monthly tuition we are generally familiar with.\nWeekly Tutor: This is our premier package here we instantly give you a capable mentor for a week to teach & guide you in a specific subject.]]></string>
+    <string name="dume_products_mentor"><![CDATA[Couching Service: This is our finding nearby Couching centers.\nMonthly Tutor: This is the regular monthly tuition we are generally familiar with.\nWeekly Tutor: This is our premier package.Here you will teach & guide you in a specific subject for a week.]]></string>
+    <string name="dume_product_intro">You can choose between Couching service, Monthly tutor or Weekly tutor with ease.</string>
     <string name="choosing_text">Choosing mentors have never been easy with Dume</string>
     <string name="start_couching_text">Life is constantly bringing us challenges and opportunities. When we have the courage to step up to the challenges and seize the opportunities we move forward. As a coach, you can help others make this kind of progress.</string>
     <string name="take_couching_text">People don\'t only use a coach when there is a problem with their technique; they understand that no matter how good their technique is, there is always room for improvement.</string>
@@ -681,7 +681,7 @@ provided.Tap salary for details.  </string>
     <string name="afterSplashTitleOne">Set default</string>
     <string name="choosing_text_mentor">Finding tuition have never been easy with dume</string>
     <string name="intro_mentor">You can build your profile for mentor or boot-camp/coaching center with ease. Just add skill and let other find you at what you are best.</string>
-    <string name="example_capacity">Ex.8⺅-10⺅</string>
+    <string name="example_capacity">Ex.8옷-12옷</string>
     <string name="profile_complete_msg">Profile 100% complete</string>
     <string name="phone_number">Phone Number</string>
     <string name="marital_status">Marital Status</string>
@@ -701,6 +701,17 @@ provided.Tap salary for details.  </string>
     \n•\tPerformance
     \n•\tExpertise
     \n•\tAccept-ratio]]></string>
+
+    <string name="edit_account_info"><![CDATA[Profile completion point distribution…
+        \n•\tInitial Login = 40 points
+        \n•\tProfile Pic(DP) = 10 points
+        \n•\tPermanent Address = 10 points
+        \n•\tCurrent Status = 10 points
+        \n•\tAcademic Qualification = 10 points
+        \n•\tGender = 5 points
+        \n•\tReligion = 5 points
+        \n•\tMarital Status = 5 points
+        \n•\tBirth Date = 5 points]]></string>
 
     <string-array name="unlock_recipe_value">
         <item><![CDATA[•\tJoined = true]]></item>
@@ -733,7 +744,7 @@ provided.Tap salary for details.  </string>
         \n•\tLeading badge will ensure you get your preferred tuition ]]></item>
 
         <item><![CDATA[•\tBadge helps you to earn more money with less effort
-        \n•\tPremier badge unlocks instant dume (weekly mentor) service for you
+        \n•\tPremier badge unlocks Weekly tutoring service for you
         \n•\tThis also ensures you get maximum earning from Dume network ]]></item>
     </string-array>
 
@@ -743,7 +754,7 @@ provided.Tap salary for details.  </string>
         <item>Real time service for student and mentor</item>
         <item>Allow Dume location, phone state, &amp; storage permission</item>
         <item>Choose between Student, Mentor or Boot-camp profile</item>
-        <item>Search between Dume Batch, Regular Dume or Instant Dume  package</item>
+        <item>Search between Couching Service, Monthly Tutor or Weekly Tutor package</item>
     </string-array>
 
     <string-array name="after_splash_data">
@@ -751,13 +762,13 @@ provided.Tap salary for details.  </string>
         <item><![CDATA[Know something better then other!! Start sharing and earn money.Don\'t have anything to share don\'t worry start taking dume and be the best at what you do.]]></item>
         <item><![CDATA[Recommendation will be presented based on your location, phone call so that you may call your mentor/student & write to storage so that we can save search history.]]></item>
         <item>Select which category suite you best and build your profile.You can switch profile anytime as you wish.</item>
-        <item>In simple and short Dume Batch is coaching center whereas Regular Dume is monthly tuition and Instant Dume is weekly.</item>
+        <item>In simple and short Couching Service is coaching center whereas Monthly Tutor is monthly tuition and Weekly Tutor is weekly.</item>
     </string-array>
     <string name="title_activity_boot_camp_add">Start Boot Camp</string>
     <string name="title_activity_student_addvertise">Enhance your skill</string>
-    <string name="gang_salary_detail">Dume Batch final salary will be the price presented based on your given salary range &amp; it will be shown to you before your confirmation. Tap help for details.</string>
-    <string name="regular_salary_detail">Regular Dume final salary will be the price presented based on your given salary range &amp; it will be shown to you before your confirmation. Tap help for details.</string>
-    <string name="instant_salary_detail">Instant Dume final salary will be the price presented based on your given salary range &amp; it will be shown to you before your confirmation. Tap help for details.</string>
+    <string name="gang_salary_detail">Couching Service final salary will be the price presented based on your given salary range &amp; it will be shown to you before your confirmation. Tap help for details.</string>
+    <string name="regular_salary_detail">Monthly Tutor final salary will be the price presented based on your given salary range &amp; it will be shown to you before your confirmation. Tap help for details.</string>
+    <string name="instant_salary_detail">Weekly Tutor final salary will be the price presented based on your given salary range &amp; it will be shown to you before your confirmation. Tap help for details.</string>
     <string name="msg_token_fmt">foo</string>
     <string name="demo_user_name">Demo user</string>
 

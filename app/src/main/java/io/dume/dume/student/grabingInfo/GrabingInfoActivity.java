@@ -1026,7 +1026,7 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                 case "Gender":
                     if (!(fragmentId < tabLayout.getTabCount() - 1)) {
                         if (retrivedAction.equals(DumeUtils.BOOTCAMP) || retrivedAction.equals("frag_" + DumeUtils.BOOTCAMP)) {
-                            flush("now bootcamp will work");
+                            //flush("now bootcamp will work");
                             mSectionsPagerAdapter.newTab(db.capacity);
                             mViewPager.setCurrentItem(fragmentId + 1);
                         } else {

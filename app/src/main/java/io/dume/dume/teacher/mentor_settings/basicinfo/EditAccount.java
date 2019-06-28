@@ -1,6 +1,7 @@
 package io.dume.dume.teacher.mentor_settings.basicinfo;
 
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -21,6 +22,8 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -105,6 +108,7 @@ public class EditAccount extends CustomStuAppCompatActivity implements EditContr
     private int genderCheckedItem = 0;
     private int maritalCheckedItem = 0;
     private int religionCheckedItem = 0;
+    private Dialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,6 +132,7 @@ public class EditAccount extends CustomStuAppCompatActivity implements EditContr
                 });
             }
         }
+        testingCustomDialogue();
     }
 
 
@@ -567,14 +572,6 @@ public class EditAccount extends CustomStuAppCompatActivity implements EditContr
         return this;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == android.R.id.home) {
-            onBackPressed();
-        }
-        return super.onOptionsItemSelected(item);
-    }
 
     @Override
     public void onBackPressed() {
@@ -844,6 +841,47 @@ public class EditAccount extends CustomStuAppCompatActivity implements EditContr
     @Override
     public void updateAcademics(DocumentSnapshot documentSnapshot) {
         acAdapter.update(getAcademics(documentSnapshot));
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_show_info, menu);
+        return true;
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            onBackPressed();
+        } else if (id == R.id.action_help) {
+            //show the dialogue
+            dialog.show();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void testingCustomDialogue() {
+        // custom dialog
+        dialog = new Dialog(this);
+        dialog.setContentView(R.layout.custom_obligation_dialogue);
+
+        //all find view here
+        Button dismissBtn = dialog.findViewById(R.id.dismiss_btn);
+        TextView dialogText = dialog.findViewById(R.id.dialog_text);
+        carbon.widget.ImageView dialogImage = dialog.findViewById(R.id.dialog_image);
+        dialogText.setGravity(Gravity.START);
+
+        dialogImage.setImageDrawable(getResources().getDrawable(R.drawable.ic_info_icon_green));
+        dialogText.setText(R.string.edit_account_info);
+
+        dismissBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
     }
 
 }

@@ -210,7 +210,7 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
                         public String format(int value) {
                             int temp = value * 1000;
                             String format = currencyInstance.format(temp);
-                            return format.substring(1, format.length() - 3) +" ৳" ;
+                            return format.substring(1, format.length() - 3) + " ৳";
                         }
                     };
                     np.setFormatter(formatter);
@@ -228,13 +228,13 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
                                 String format1 = currencyInstance.format(i1 * 1000);
                                 min.setText("Min Salary\n" + format1.substring(1, format1.length() - 3) + " ৳");
 
-                                rangeBar.setRangePinsByIndices( i1-1, rangeBar.getRightIndex());
+                                rangeBar.setRangePinsByIndices(i1 - 1, rangeBar.getRightIndex());
                                 rangeBar.setFormatter(value -> Integer.parseInt(value) + "k");
                             } else {
                                 tittleTV.setText("Select Salary");
                                 String format1 = currencyInstance.format(i1 * 1000);
                                 min.setText("Salary\n" + format1.substring(1, format1.length() - 3) + " ৳");
-                                rangeBar.setSeekPinByIndex(i1-1);
+                                rangeBar.setSeekPinByIndex(i1 - 1);
                                 rangeBar.setFormatter(value -> Integer.parseInt(value) + "k");
                             }
                         }
@@ -245,13 +245,13 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
                             String format1 = currencyInstance.format(np.getValue() * 1000);
                             min.setText("Min Salary\n" + format1.substring(1, format1.length() - 3) + " ৳");
 
-                            rangeBar.setRangePinsByIndices( np.getValue()-1, rangeBar.getRightIndex());
+                            rangeBar.setRangePinsByIndices(np.getValue() - 1, rangeBar.getRightIndex());
                             rangeBar.setFormatter(value -> Integer.parseInt(value) + "k");
                         } else {
                             tittleTV.setText("Select Salary");
                             String format1 = currencyInstance.format(np.getValue() * 1000);
                             min.setText("Salary\n" + format1.substring(1, format1.length() - 3) + " ৳");
-                            rangeBar.setSeekPinByIndex(np.getValue()-1);
+                            rangeBar.setSeekPinByIndex(np.getValue() - 1);
                             rangeBar.setFormatter(value -> Integer.parseInt(value) + "k");
                         }
                         d.dismiss();
@@ -295,7 +295,7 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
                         public String format(int value) {
                             int temp = value * 1000;
                             String format = currencyInstance.format(temp);
-                            return format.substring(1, format.length() - 3) +" ৳" ;
+                            return format.substring(1, format.length() - 3) + " ৳";
                         }
                     };
                     np.setFormatter(formatter);
@@ -308,7 +308,7 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
                         public void onValueChange(NumberPicker numberPicker, int i, int i1) {
                             String format1 = currencyInstance.format(i1 * 1000);
                             max.setText("Max Salary\n" + format1.substring(1, format1.length() - 3) + " ৳");
-                            rangeBar.setRangePinsByIndices(rangeBar.getLeftIndex(), i1-1);
+                            rangeBar.setRangePinsByIndices(rangeBar.getLeftIndex(), i1 - 1);
                             rangeBar.setFormatter(value -> Integer.parseInt(value) + "k");
                         }
                     });
@@ -316,7 +316,7 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
                         //tv.setText(String.valueOf(np.getValue()));
                         String format1 = currencyInstance.format(np.getValue() * 1000);
                         max.setText("Max Salary\n" + format1.substring(1, format1.length() - 3) + " ৳");
-                        rangeBar.setRangePinsByIndices(rangeBar.getLeftIndex(), np.getValue()-1);
+                        rangeBar.setRangePinsByIndices(rangeBar.getLeftIndex(), np.getValue() - 1);
                         rangeBar.setFormatter(value -> Integer.parseInt(value) + "k");
                         d.dismiss();
                     });
@@ -334,7 +334,11 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
                     if (myMainActivity.retrivedAction.equals(DumeUtils.STUDENT)) {
                         min.setText("Min Salary\n" + format.substring(1, format.length() - 3) + " ৳");
                         max.setText("Max Salary\n" + format1.substring(1, format1.length() - 3) + " ৳");
-                        salaryValue = leftPinValue + "k - " + rightPinValue + "k";
+                        if( Integer.parseInt(leftPinValue)<=Integer.parseInt(rightPinValue) ){
+                            salaryValue = leftPinValue + "k - " + rightPinValue + "k";
+                        }else {
+                            salaryValue = rightPinValue + "k - " + leftPinValue + "k";
+                        }
                     } else {
                         min.setText("Salary\n" + format1.substring(1, format1.length() - 3) + " ৳");
                         salaryValue = rightPinValue + "k";
@@ -502,20 +506,143 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
             TextView min, max;
             min = viewCapacity.findViewById(R.id.minSal);
             max = viewCapacity.findViewById(R.id.maxSal);
-            rangeBar.setFormatter(new IRangeBarFormatter() {
+            rangeBar.setFormatter(value -> value + "옷");
+            rangeBar.setRangePinsByIndices(6, 10);
+            //⺅
+            min.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public String format(String value) {
-                    return value + "옷";
+                public void onClick(View view) {
+                    Dialog d = new Dialog(mContext);
+                    d.setTitle("NumberPicker");
+                    d.setContentView(R.layout.number_picker_dialog_layout);
+                    Button setBtn = (Button) d.findViewById(R.id.set_btn);
+                    NumberPicker np = (NumberPicker) d.findViewById(R.id.numberPicker1);
+                    TextView tittleTV = d.findViewById(R.id.sub_text);
+                    tittleTV.setText("Minimum Student Count");
+                    np.setMaxValue(29);
+                    np.setMinValue(1);
+                    Field f = null;
+                    try {
+                        f = NumberPicker.class.getDeclaredField("mInputText");
+                    } catch (NoSuchFieldException e) {
+                        e.printStackTrace();
+                    }
+                    if (f != null) {
+                        f.setAccessible(true);
+                    }
+                    EditText inputText = null;
+                    try {
+                        inputText = (EditText) f.get(np);
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    }
+                    if (inputText != null) {
+                        inputText.setFilters(new InputFilter[0]);
+                    }
+
+                    NumberPicker.Formatter formatter = new NumberPicker.Formatter() {
+                        @Override
+                        public String format(int value) {
+                            int temp = value+1;
+                            return temp + " 옷";
+                        }
+                    };
+                    np.setFormatter(formatter);
+                    np.setWrapSelectorWheel(true);
+                    np.setValue(Integer.parseInt(rangeBar.getLeftPinValue())-1);
+
+                    np.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+                        @Override
+                        public void onValueChange(NumberPicker numberPicker, int i, int i1) {
+                            min.setText(String.format("Min Count : %s stu", i1));
+
+                            rangeBar.setRangePinsByIndices(i1 - 1, rangeBar.getRightIndex());
+                            rangeBar.setFormatter(value -> value + "옷");
+                        }
+                    });
+
+                    setBtn.setOnClickListener(v -> {
+                        min.setText(String.format("Min Count : %s stu", np.getValue()));
+
+                        rangeBar.setRangePinsByIndices(np.getValue() - 1, rangeBar.getRightIndex());
+                        rangeBar.setFormatter(value -> value + "옷");
+                        d.dismiss();
+                    });
+                    d.show();
                 }
             });
-            //⺅
+
+            max.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Dialog d = new Dialog(mContext);
+                    d.setTitle("NumberPicker");
+                    d.setContentView(R.layout.number_picker_dialog_layout);
+                    Button setBtn = (Button) d.findViewById(R.id.set_btn);
+                    NumberPicker np = (NumberPicker) d.findViewById(R.id.numberPicker1);
+                    TextView titleTV = d.findViewById(R.id.sub_text);
+                    titleTV.setText("Minimum Student Count");
+                    np.setMaxValue(29);
+                    np.setMinValue(1);
+                    Field f = null;
+                    try {
+                        f = NumberPicker.class.getDeclaredField("mInputText");
+                    } catch (NoSuchFieldException e) {
+                        e.printStackTrace();
+                    }
+                    if (f != null) {
+                        f.setAccessible(true);
+                    }
+                    EditText inputText = null;
+                    try {
+                        inputText = (EditText) f.get(np);
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    }
+                    if (inputText != null) {
+                        inputText.setFilters(new InputFilter[0]);
+                    }
+                    NumberPicker.Formatter formatter = new NumberPicker.Formatter() {
+                        @Override
+                        public String format(int value) {
+                            int temp = value+1;
+                            return temp + " 옷";
+                        }
+                    };
+                    np.setFormatter(formatter);
+                    np.setWrapSelectorWheel(true);
+                    //setting the prior value
+                    np.setValue(Integer.parseInt(rangeBar.getRightPinValue())-1);
+
+                    np.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+                        @Override
+                        public void onValueChange(NumberPicker numberPicker, int i, int i1) {
+                            max.setText(String.format("Max Count : %s stu", i1));
+                            rangeBar.setRangePinsByIndices(rangeBar.getLeftIndex(), i1 - 1);
+                            rangeBar.setFormatter(value -> value + "옷");
+                        }
+                    });
+                    setBtn.setOnClickListener(v -> {
+                        max.setText(String.format("Max Count : %s stu", np.getValue()));
+                        rangeBar.setRangePinsByIndices(rangeBar.getLeftIndex(), np.getValue() - 1);
+                        rangeBar.setFormatter(value -> value + "옷");
+                        d.dismiss();
+                    });
+                    d.show();
+                }
+            });
 
             rangeBar.setOnRangeBarChangeListener(new RangeBar.OnRangeBarChangeListener() {
                 @Override
                 public void onRangeChangeListener(RangeBar rangeBar, int leftPinIndex, int rightPinIndex, String leftPinValue, String rightPinValue) {
                     min.setText(String.format("Min Count : %s stu", leftPinValue));
                     max.setText(String.format("Max Count : %s stu", rightPinValue));
-                    String capacityValue = leftPinValue + "옷 - " + rightPinValue + "옷";
+                    String capacityValue;
+                    if( Integer.parseInt(leftPinValue)<=Integer.parseInt(rightPinValue) ){
+                        capacityValue = leftPinValue + "옷 - " + rightPinValue + "옷";
+                    }else {
+                        capacityValue = rightPinValue + "옷 - " + leftPinValue + "옷";
+                    }
                     AppCompatRadioButton rd = new AppCompatRadioButton(mContext);
                     rd.setText(capacityValue);
                     listener.onRadioButtonClick(rd, sectionNumber, "justForData");
