@@ -484,20 +484,16 @@ public class RecordsAcceptedActivity extends CustomStuAppCompatActivity implemen
             subjectInDemand.setText(record.getSubjectExchange());
 
             if (record.getStudentDpUrl() != null && !record.getStudentDpUrl().equals("")) {
-                Glide.with(context).load(record.getStudentDpUrl()).apply(new RequestOptions().override((int) (50 * mDensity), (int) (50 * mDensity)).placeholder(R.drawable.demo_default_avatar_dark)).into(studentDisplayPic)
-                ;
+                Glide.with(context).load(record.getStudentDpUrl()).apply(new RequestOptions().override((int) (50 * mDensity), (int) (50 * mDensity)).placeholder(R.drawable.demo_default_avatar_dark)).into(studentDisplayPic);
             } else {
                 if (record.getsGender() != null || record.getsGender().equals("Male") || record.getsGender().equals("")) {
                     defaultUrl = SearchDataStore.DEFAULTMALEAVATER;
                 } else {
                     defaultUrl = SearchDataStore.DEFAULTFEMALEAVATER;
                 }
-                Glide.with(context).load(defaultUrl).apply(new RequestOptions().override((int) (50 * mDensity), (int) (50 * mDensity)).placeholder(R.drawable.demo_default_avatar_dark)).into(studentDisplayPic)
-                ;
+                Glide.with(context).load(defaultUrl).apply(new RequestOptions().override((int) (50 * mDensity), (int) (50 * mDensity)).placeholder(R.drawable.demo_default_avatar_dark)).into(studentDisplayPic);
             }
-
-            Glide.with(context).load(record.getMentorDpUrl()).into(mentorDisplayPic);
-
+            Glide.with(context).load(record.getMentorDpUrl()).apply(new RequestOptions().override((int) (50 * mDensity), (int) (50 * mDensity)).placeholder(R.drawable.demo_default_avatar_dark)).into(mentorDisplayPic);
             mentorRatingBar.setRating(record.getMentorRating());
             studentRatingBar.setRating(record.getStudentRating());
 

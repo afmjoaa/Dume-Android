@@ -387,8 +387,7 @@ public class RecordsCompletedActivity extends CustomStuAppCompatActivity impleme
                 Glide.with(context).load(defaultUrl).apply(new RequestOptions().override((int) (50 * mDensity), (int) (50 * mDensity)).placeholder(R.drawable.demo_default_avatar_dark)).into(studentDisplayPic)
                 ;
             }
-
-            Glide.with(context).load(record.getMentorDpUrl()).into(mentorDisplayPic);
+            Glide.with(context).load(record.getMentorDpUrl()).apply(new RequestOptions().override((int) (50 * mDensity), (int) (50 * mDensity)).placeholder(R.drawable.demo_default_avatar_dark)).into(mentorDisplayPic);
 
             mentorRatingBar.setRating(record.getMentorRating());
             studentRatingBar.setRating(record.getStudentRating());

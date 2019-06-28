@@ -90,12 +90,12 @@ public class HomePagePresenter implements HomePageContract.Presenter {
         if (documentSnapshot != null) {
             String beh = (String) documentSnapshot.get("pro_com_%");
             percentage = Integer.parseInt(beh);
-            if (percentage >= 95) {
+            if (percentage >= 90) {
                 return true;
             }
 
         }
-        mView.flush("Profile should be at least 95% completed");
+        mView.flush("Profile should be at least 90% completed");
         String snackString = "Profile only " + percentage + "% complete";
         mView.showPercentSnak(snackString, "GO TO PROFILE");
         return false;

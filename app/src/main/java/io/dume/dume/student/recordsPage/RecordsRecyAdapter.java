@@ -137,7 +137,7 @@ public abstract class RecordsRecyAdapter extends RecyclerView.Adapter<RecordsRec
             Glide.with(getApplicationContext()).load(defaultUrl).apply(new RequestOptions().override((int) (50 * mDensity), (int) (50 * mDensity)).placeholder(R.drawable.demo_default_avatar_dark)).into(holder.studentDisplayPic);
         }
 
-        Glide.with(context).load(current.getMentorDpUrl()).into(holder.mentorDisplayPic);
+        Glide.with(context).load(current.getMentorDpUrl()).apply(new RequestOptions().override((int) (50 * mDensity), (int) (50 * mDensity)).placeholder(R.drawable.demo_default_avatar_dark)).into(holder.mentorDisplayPic);
 
         holder.mentorRatingBar.setRating(current.getMentorRating());
         holder.studentRatingBar.setRating(current.getStudentRating());

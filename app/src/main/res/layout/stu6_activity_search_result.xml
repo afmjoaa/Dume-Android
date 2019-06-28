@@ -1231,7 +1231,7 @@
         app:carbon_tint="@color/colorDarkAzure"
         app:carbon_tintMode="src_over"
         app:srcCompat="@drawable/ic_up_up_arrow"
-        android:padding="8dp"
+        android:padding="9dp"
         android:layout_marginBottom="132dp"
         android:background="@color/white"/>
 

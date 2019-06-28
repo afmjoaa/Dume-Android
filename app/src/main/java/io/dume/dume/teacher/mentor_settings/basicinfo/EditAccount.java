@@ -15,6 +15,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.NestedScrollView;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -41,6 +42,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -48,6 +50,7 @@ import io.dume.dume.R;
 import io.dume.dume.customView.HorizontalLoadView;
 import io.dume.dume.student.grabingLocation.GrabingLocationActivity;
 import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
+import io.dume.dume.student.profilePage.ProfilePageActivity;
 import io.dume.dume.teacher.adapters.AcAdapter;
 import io.dume.dume.teacher.homepage.TeacherContract;
 import io.dume.dume.teacher.homepage.TeacherDataStore;
@@ -99,6 +102,9 @@ public class EditAccount extends CustomStuAppCompatActivity implements EditContr
     private RelativeLayout pHostRelative;
     private BottomSheetDialog mCancelBottomSheetDialog;
     private View cancelsheetRootView;
+    private int genderCheckedItem = 0;
+    private int maritalCheckedItem = 0;
+    private int religionCheckedItem = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -587,53 +593,83 @@ public class EditAccount extends CustomStuAppCompatActivity implements EditContr
 
     @Override
     public void onGenderClicked() {
-        Bundle pRargs = new Bundle();
-        pRargs.putString("title", "Select your gender");
-        pRargs.putStringArray("radioOptions", genderSelcetionArr);
-        RadioBtnDialogue genderBtnDialogue = new RadioBtnDialogue();
-        genderBtnDialogue.setItemChoiceListener(new DialogInterface.OnClickListener() {
+        String gender = gender();
+        for (int i = 0; i < genderSelcetionArr.length; i++) {
+            if (gender.equals(genderSelcetionArr[i])) {
+                genderCheckedItem = i;
+                break;
+            }
+        }
+        AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(EditAccount.this), R.style.RadioDialogTheme);
+        builder.setTitle("Select your gender").setSingleChoiceItems(genderSelcetionArr, genderCheckedItem, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+                genderCheckedItem = i;
                 selectGenderEditText.setText(genderSelcetionArr[i]);
             }
+        }).setPositiveButton("Select", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                //Toast.makeText(ProfilePageActivity.this, "Set", Toast.LENGTH_SHORT).show();
+                //nothing to do here
+            }
         });
-        genderBtnDialogue.setArguments(pRargs);
-        genderBtnDialogue.show(getSupportFragmentManager(), "genderDialogue");
-        selectGenderEditText.setText(genderSelcetionArr[0]);
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 
     @Override
     public void onMaritalStatusClicked() {
-        Bundle pRargs = new Bundle();
-        pRargs.putString("title", "Select your marital status");
-        pRargs.putStringArray("radioOptions", maritalStatusSelcetionArr);
-        RadioBtnDialogue genderBtnDialogue = new RadioBtnDialogue();
-        genderBtnDialogue.setItemChoiceListener(new DialogInterface.OnClickListener() {
+        String marital = maritalStatus();
+        for (int i = 0; i < maritalStatusSelcetionArr.length; i++) {
+            if (marital.equals(maritalStatusSelcetionArr[i])) {
+                maritalCheckedItem = i;
+                break;
+            }
+        }
+        AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(EditAccount.this), R.style.RadioDialogTheme);
+        builder.setTitle("Select your marital status").setSingleChoiceItems(maritalStatusSelcetionArr, maritalCheckedItem, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+                maritalCheckedItem = i;
                 selectMaritalStatusET.setText(maritalStatusSelcetionArr[i]);
             }
+        }).setPositiveButton("Select", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                //Toast.makeText(ProfilePageActivity.this, "Set", Toast.LENGTH_SHORT).show();
+                //nothing to do here
+            }
         });
-        genderBtnDialogue.setArguments(pRargs);
-        genderBtnDialogue.show(getSupportFragmentManager(), "marital_status_d");
-        selectMaritalStatusET.setText(maritalStatusSelcetionArr[0]);
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 
     @Override
     public void onReligionClicked() {
-        Bundle pRargs = new Bundle();
-        pRargs.putString("title", "Select your religion");
-        pRargs.putStringArray("radioOptions", religionSelcetionArr);
-        RadioBtnDialogue genderBtnDialogue = new RadioBtnDialogue();
-        genderBtnDialogue.setItemChoiceListener(new DialogInterface.OnClickListener() {
+        String religion = religion();
+        for (int i = 0; i < religionSelcetionArr.length; i++) {
+            if (religion.equals(religionSelcetionArr[i])) {
+                religionCheckedItem = i;
+                break;
+            }
+        }
+        AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(EditAccount.this), R.style.RadioDialogTheme);
+        builder.setTitle("Select your religion").setSingleChoiceItems(religionSelcetionArr, religionCheckedItem, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+                religionCheckedItem = i;
                 selectReligionET.setText(religionSelcetionArr[i]);
             }
+        }).setPositiveButton("Select", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                //Toast.makeText(ProfilePageActivity.this, "Set", Toast.LENGTH_SHORT).show();
+                //nothing to do here
+            }
         });
-        genderBtnDialogue.setArguments(pRargs);
-        genderBtnDialogue.show(getSupportFragmentManager(), "religion_d");
-        selectReligionET.setText(religionSelcetionArr[0]);
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 
     @Override

@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Parcelable;
 import android.provider.MediaStore;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.PopupMenu;
 import android.text.Editable;
@@ -40,6 +41,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import carbon.widget.ImageView;
 import id.zelory.compressor.Compressor;
@@ -100,6 +102,8 @@ public class ProfilePageActivity extends CustomStuAppCompatActivity implements P
     private ImageView fnEmptyFound;
     private File compressedImage;
     private File actualImage;
+    private int genderCheckedItem = 0;
+    private int PResultCheckedItem = 0;
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -268,29 +272,33 @@ public class ProfilePageActivity extends CustomStuAppCompatActivity implements P
         profileUserDP.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                PopupMenu popup = new PopupMenu(context, view);
-                popup.inflate(R.menu.menu_dp_long_click);
-                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem menuItem) {
-                        int id = menuItem.getItemId();
-                        switch (id) {
-                            case R.id.action_update:
-                                openImageIntent();
-                                break;
-                            case R.id.action_remove:
-                                avatarString = null;
-                                compressedImage = null;
-                                setAvatar(null);
-                                //profileUserDP.setImageDrawable(getResources().getDrawable(R.drawable.avatar));
-                                updateChangesClicked();
-                                flush("Display pic Removed");
-                                break;
+                if (avatarString == null || avatarString.equals("")) {
+                    openImageIntent();
+                } else {
+                    PopupMenu popup = new PopupMenu(context, view);
+                    popup.inflate(R.menu.menu_dp_long_click);
+                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem menuItem) {
+                            int id = menuItem.getItemId();
+                            switch (id) {
+                                case R.id.action_update:
+                                    openImageIntent();
+                                    break;
+                                case R.id.action_remove:
+                                    avatarString = null;
+                                    compressedImage = null;
+                                    setAvatar(null);
+                                    //profileUserDP.setImageDrawable(getResources().getDrawable(R.drawable.avatar));
+                                    updateChangesClicked();
+                                    flush("Display pic Removed");
+                                    break;
+                            }
+                            return false;
                         }
-                        return false;
-                    }
-                });
-                popup.show();
+                    });
+                    popup.show();
+                }
             }
         });
         inputCurrentStatus.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -375,31 +383,61 @@ public class ProfilePageActivity extends CustomStuAppCompatActivity implements P
 
     @Override
     public void onPreviousResultClicked() {
-        Bundle args = new Bundle();
-        RadioBtnDialogue previousResultDialogue = new RadioBtnDialogue();
+        String previousResult = getPreviousResult();
         if (gpaCheckBox.isChecked()) {
-            previousResultTextView.setText(String.format("%s (GPA)", gpaOptionsArr[0]));
-            args.putString("title", "Select your GPA");
-            args.putStringArray("radioOptions", gpaOptionsArr);
-            previousResultDialogue.setItemChoiceListener(new DialogInterface.OnClickListener() {
+            for (int i = 0; i < gpaOptionsArr.length; i++) {
+                if(i== gpaOptionsArr.length-1){
+                    PResultCheckedItem = 0;
+                }
+                if (previousResult.equals(String.format("%s (GPA)", gpaOptionsArr[i]))) {
+                    PResultCheckedItem = i;
+                    break;
+                }
+            }
+            AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(ProfilePageActivity.this), R.style.RadioDialogTheme);
+            builder.setTitle("Select your GPA").setSingleChoiceItems(gpaOptionsArr, PResultCheckedItem, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
+                    PResultCheckedItem = i;
                     previousResultTextView.setText(String.format("%s (GPA)", gpaOptionsArr[i]));
                 }
-            });
-        } else {
-            previousResultTextView.setText(String.format("%s (CGPA)", cgpaOptionsArr[0]));
-            args.putString("title", "Select your CGPA");
-            args.putStringArray("radioOptions", cgpaOptionsArr);
-            previousResultDialogue.setItemChoiceListener(new DialogInterface.OnClickListener() {
+            }).setPositiveButton("Select", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    previousResultTextView.setText(String.format("%s (CGPA)", cgpaOptionsArr[i]));
+                    //Toast.makeText(ProfilePageActivity.this, "Set", Toast.LENGTH_SHORT).show();
+                    //nothing to do here
                 }
             });
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
+        }else{
+            for (int i = 0; i < cgpaOptionsArr.length; i++) {
+                if(i== cgpaOptionsArr.length-1){
+                    PResultCheckedItem = 0;
+                }
+                if (previousResult.equals(String.format("%s (CGPA)", cgpaOptionsArr[i]))) {
+                    PResultCheckedItem = i;
+                    break;
+                }
+
+            }
+            AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(ProfilePageActivity.this), R.style.RadioDialogTheme);
+            builder.setTitle("Select your CGPA").setSingleChoiceItems(cgpaOptionsArr, PResultCheckedItem, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    PResultCheckedItem = i;
+                    previousResultTextView.setText(String.format("%s (CGPA)", cgpaOptionsArr[i]));
+                }
+            }).setPositiveButton("Select", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    //Toast.makeText(ProfilePageActivity.this, "Set", Toast.LENGTH_SHORT).show();
+                    //nothing to do here
+                }
+            });
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
         }
-        previousResultDialogue.setArguments(args);
-        previousResultDialogue.show(getSupportFragmentManager(), "genderDialogue");
     }
 
     @Override
@@ -409,20 +447,29 @@ public class ProfilePageActivity extends CustomStuAppCompatActivity implements P
 
     @Override
     public void onGenderClicked() {
-        selectGenderTextView.setText(genderSelcetionArr[0]);
-        Bundle pRargs = new Bundle();
-        pRargs.putString("title", "Select your gender");
-        pRargs.putStringArray("radioOptions", genderSelcetionArr);
-        RadioBtnDialogue genderBtnDialogue = new RadioBtnDialogue();
-        genderBtnDialogue.setItemChoiceListener(new DialogInterface.OnClickListener() {
+        String gender = getGender();
+        for (int i = 0; i < genderSelcetionArr.length; i++) {
+            if (gender.equals(genderSelcetionArr[i])) {
+                genderCheckedItem = i;
+                break;
+            }
+        }
+        AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(ProfilePageActivity.this), R.style.RadioDialogTheme);
+        builder.setTitle("Select your gender").setSingleChoiceItems(genderSelcetionArr, genderCheckedItem, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+                genderCheckedItem = i;
                 selectGenderTextView.setText(genderSelcetionArr[i]);
             }
+        }).setPositiveButton("Select", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                //Toast.makeText(ProfilePageActivity.this, "Set", Toast.LENGTH_SHORT).show();
+                //nothing to do here
+            }
         });
-        genderBtnDialogue.setArguments(pRargs);
-        genderBtnDialogue.show(getSupportFragmentManager(), "genderDialogue");
-        selectGenderTextView.setText(genderSelcetionArr[0]);
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 
 
@@ -632,6 +679,11 @@ public class ProfilePageActivity extends CustomStuAppCompatActivity implements P
 
     @Override
     public void setPreviousResult(String previousResult) {
+        if(previousResult.endsWith("(GPA)")){
+            gpaCheckBox.setChecked(true);
+        }else {
+            cgpaCheckBox.setChecked(true);
+        }
         previousResultTextView.setText(previousResult);
     }
 
@@ -645,9 +697,9 @@ public class ProfilePageActivity extends CustomStuAppCompatActivity implements P
     public void setAvatar(String uri) {
         avatarString = uri;
         String gender = selectGenderTextView.getText().toString();
-        if(gender.equals("Male") || gender.equals("")){
+        if (gender.equals("Male") || gender.equals("")) {
             Glide.with(getApplicationContext()).load(uri).apply(new RequestOptions().override(100, 100).placeholder(R.drawable.avatar)).into(profileUserDP);
-        }else{
+        } else {
             Glide.with(getApplicationContext()).load(uri).apply(new RequestOptions().override(100, 100).placeholder(R.drawable.avatar_female)).into(profileUserDP);
         }
     }
