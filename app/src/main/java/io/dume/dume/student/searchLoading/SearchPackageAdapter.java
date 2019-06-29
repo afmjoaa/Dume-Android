@@ -48,12 +48,16 @@ public class SearchPackageAdapter extends RecyclerView.Adapter<SearchPackageAdap
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int position) {
         SearchDetailData current = data.get(position);
         if (position == 0) {
-            if(current.getItemName().equals(SearchDataStore.DUME_GANG)){
-                myViewHolder.searchDetailImage.setImageResource(packageIcon[0]);
-            }else if(current.getItemName().equals(SearchDataStore.REGULAR_DUME)){
-                myViewHolder.searchDetailImage.setImageResource(packageIcon[1]);
-            }else{
-                myViewHolder.searchDetailImage.setImageResource(packageIcon[2]);
+            switch (current.getItemName()) {
+                case "Couching Service":
+                    myViewHolder.searchDetailImage.setImageResource(packageIcon[0]);
+                    break;
+                case "Monthly Tutor":
+                    myViewHolder.searchDetailImage.setImageResource(packageIcon[1]);
+                    break;
+                default:
+                    myViewHolder.searchDetailImage.setImageResource(packageIcon[2]);
+                    break;
             }
         } else if(position == 1){
             myViewHolder.searchDetailImage.setImageResource(navIcons[0]);
@@ -89,7 +93,6 @@ public class SearchPackageAdapter extends RecyclerView.Adapter<SearchPackageAdap
             searchDetailChangeBtn = itemView.findViewById(R.id.search_interact_info);
             divider = itemView.findViewById(R.id.divider2);
             searchDetailImage = itemView.findViewById(R.id.search_detail_icon);
-
         }
     }
 }

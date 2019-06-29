@@ -63,6 +63,7 @@ import io.dume.dume.R;
 import io.dume.dume.student.homePage.HomePageActivity;
 import io.dume.dume.student.pojo.CusStuAppComMapActivity;
 import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
+import io.dume.dume.student.pojo.SearchDataStore;
 import io.dume.dume.student.searchResult.SearchResultActivity;
 import io.dume.dume.teacher.homepage.TeacherContract;
 import io.dume.dume.util.DumeUtils;
@@ -180,7 +181,15 @@ public class SearchLoadingActivity extends CusStuAppComMapActivity implements On
     private List<SearchDetailData> getSearchPackageData() {
         List<SearchDetailData> reviewData = new ArrayList<>();
         SearchDetailData packageCurrent = new SearchDetailData();
-        packageCurrent.setItemName((String) searchDataStore.getPackageName());
+        String packageName = searchDataStore.getPackageName();
+        if(packageName.equals(SearchDataStore.REGULAR_DUME)){
+            packageName = "Monthly Tutor";
+        } else if (packageName.equals(SearchDataStore.INSTANT_DUME)) {
+            packageName = "Weekly Tutor";
+        }else {
+            packageName = "Couching Service";
+        }
+        packageCurrent.setItemName(packageName);
         packageCurrent.setItemInfo("Package name");
         reviewData.add(packageCurrent);
         packageCurrent = new SearchDetailData();

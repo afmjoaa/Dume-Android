@@ -446,6 +446,25 @@
                 android:translationY="-2dp">
 
                 <TextView
+                    android:id="@+id/stu_textview_asked_by"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="0dp"
+                    android:drawableStart="@drawable/ic_keyboard_arrow_right_black_24dp"
+                    android:drawableLeft="@drawable/ic_keyboard_arrow_right_black_24dp"
+                    android:drawablePadding="6dp"
+                    android:gravity="center_vertical"
+                    android:paddingTop="2dp"
+                    android:paddingBottom="2dp"
+                    android:singleLine="true"
+                    android:text="Asked by : "
+                    android:textAllCaps="false"
+                    android:textColor="@color/textColorPrimary"
+                    android:textSize="13sp"
+                    android:textStyle="normal"
+                    app:fontFamily="@font/cairo_regular" />
+
+                <TextView
                     android:id="@+id/stu_textview_current_status"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -618,27 +637,41 @@
                     android:visibility="visible"
                     app:fontFamily="@font/cairo_regular" />
 
-                <TextView
-                    android:id="@+id/address_textView"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:id="@+id/address_hoster"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
                     android:layout_marginBottom="6dp"
-                    android:drawableStart="@drawable/ic_keyboard_arrow_right_black_24dp"
-                    android:drawableLeft="@drawable/ic_keyboard_arrow_right_black_24dp"
-                    android:drawablePadding="6dp"
-                    android:gravity="center_vertical"
-                    android:paddingTop="2dp"
-                    android:paddingBottom="2dp"
-                    android:text="Address : "
-                    android:textAllCaps="false"
-                    android:singleLine="true"
-                    android:maxLines="1"
-                    android:ellipsize="end"
-                    android:textColor="@color/textColorPrimary"
-                    android:textSize="13sp"
-                    android:textStyle="normal"
-                    app:fontFamily="@font/cairo_regular" />
+                    android:orientation="horizontal">
+
+                    <carbon.widget.ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="0dp"
+                        android:paddingLeft="0dp"
+                        android:paddingTop="0dp"
+                        android:paddingEnd="5dp"
+                        android:paddingRight="5dp"
+                        app:srcCompat="@drawable/ic_keyboard_arrow_right_black_24dp" />
+
+
+                    <TextView
+                        android:id="@+id/address_textView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:gravity="top"
+                        android:paddingTop="2dp"
+                        android:paddingBottom="2dp"
+                        android:text="Address : "
+                        android:textAllCaps="false"
+                        android:textColor="@color/textColorPrimary"
+                        android:textSize="13sp"
+                        android:textStyle="normal"
+                        app:fontFamily="@font/cairo_regular" />
+
+                </LinearLayout>
 
             </LinearLayout>
 

@@ -100,7 +100,7 @@ public class SearchLoadingPresenter implements SearchLoadingContract.Presenter {
                 if (list.size() >= 4) {
                     //view.flush("Found - Level 1");
                     searchDataStore.setLevelNum(1);
-                    if (list.size() > 5) {
+                    if (list.size() > 6) {
                         searchDataStore.setResultList(getFilteredResultList(list));
                     } else {
                         searchDataStore.setResultList(list);
@@ -115,7 +115,7 @@ public class SearchLoadingPresenter implements SearchLoadingContract.Presenter {
                             if (list.size() >= 4) {
                                 //view.flush("Found - Level 4");
                                 searchDataStore.setLevelNum(2);
-                                if (list.size() > 5) {
+                                if (list.size() > 6) {
                                     searchDataStore.setResultList(getFilteredResultList(list));
                                 } else {
                                     searchDataStore.setResultList(list);
@@ -133,7 +133,7 @@ public class SearchLoadingPresenter implements SearchLoadingContract.Presenter {
                                         if (list.size() >= 4) {
                                             //view.flush("Found - Level 2");
                                             searchDataStore.setLevelNum(3);
-                                            if (list.size() > 5) {
+                                            if (list.size() > 6) {
                                                 searchDataStore.setResultList(getFilteredResultList(list));
                                             } else {
                                                 searchDataStore.setResultList(list);
@@ -152,7 +152,7 @@ public class SearchLoadingPresenter implements SearchLoadingContract.Presenter {
                                                         //view.flush("Found - Level 3");
                                                         searchDataStore.setLevelNum(4);
                                                         //TODO tesing
-                                                        if (list.size() > 5) {
+                                                        if (list.size() > 6) {
                                                             searchDataStore.setResultList(getFilteredResultList(list));
                                                         } else {
                                                             searchDataStore.setResultList(list);
@@ -170,7 +170,7 @@ public class SearchLoadingPresenter implements SearchLoadingContract.Presenter {
                                                                 if (list.size() >= 1) {
                                                                     //view.flush("Found - Level 4");
                                                                     searchDataStore.setLevelNum(5);
-                                                                    if (list.size() > 5) {
+                                                                    if (list.size() > 6) {
                                                                         searchDataStore.setResultList(getFilteredResultList(list));
                                                                     } else {
                                                                         searchDataStore.setResultList(list);
@@ -356,10 +356,11 @@ public class SearchLoadingPresenter implements SearchLoadingContract.Presenter {
                 public int compare(DocumentSnapshot t1, DocumentSnapshot t2) {
                     Map<String, Object> t1Info = (Map<String, Object>) t1.get("sp_info");
                     Map<String, Object> t2Info = (Map<String, Object>) t1.get("sp_info");
-                    Map<String, Object> t1Map = (Map<String, Object>) t1Info.get("self_rating");
-                    Map<String, Object> t2Map = (Map<String, Object>) t2Info.get("self_rating");
-                    Float t1f = Float.parseFloat((String) t1Map.get("student_guided"));
-                    Float t2f = Float.parseFloat((String) t2Map.get("student_guided"));
+
+                    Map<String, Object> t1Map = (Map<String, Object>) t1Info.get("unread_records");
+                    Map<String, Object> t2Map = (Map<String, Object>) t2Info.get("unread_records");
+                    Float t1f = Float.parseFloat((String) t1Map.get("completed_count"));
+                    Float t2f = Float.parseFloat((String) t2Map.get("completed_count"));
                     return t1f.compareTo(t2f);
                 }
             });
@@ -387,7 +388,7 @@ public class SearchLoadingPresenter implements SearchLoadingContract.Presenter {
             });
             if (lastFiltered.size() == 1) {
                 for (int i = 0; i < sortedResult.size(); i++) {
-                    if (i == 3) {
+                    if (i == 2) {
                         break;
                     }
                     lastFiltered.add(sortedResult.get(i));
@@ -395,7 +396,7 @@ public class SearchLoadingPresenter implements SearchLoadingContract.Presenter {
                 }
             } else {
                 for (int i = 0; i < sortedResult.size(); i++) {
-                    if (i == 4) {
+                    if (i == 3) {
                         break;
                     }
                     lastFiltered.add(sortedResult.get(i));
@@ -406,6 +407,17 @@ public class SearchLoadingPresenter implements SearchLoadingContract.Presenter {
             if (sortedResult.size() > 0) {
                 Random random = new Random();
                 lastFiltered.add(sortedResult.get(random.nextInt(sortedResult.size())));
+                sortedResult.remove(random.nextInt(sortedResult.size()));
+            }
+            if (sortedResult.size() > 0) {
+                Random random = new Random();
+                lastFiltered.add(sortedResult.get(random.nextInt(sortedResult.size())));
+                sortedResult.remove(random.nextInt(sortedResult.size()));
+            }
+            if (sortedResult.size() > 0) {
+                Random random = new Random();
+                lastFiltered.add(sortedResult.get(random.nextInt(sortedResult.size())));
+                sortedResult.remove(random.nextInt(sortedResult.size()));
             }
             return lastFiltered;
         }
@@ -438,9 +450,11 @@ public class SearchLoadingPresenter implements SearchLoadingContract.Presenter {
                         for (int j = 0; j < selectedUnis.size(); j++) {
                             if (mainString.contains(selectedUnis.get(j).toLowerCase())) {
                                 sortedResult.add(resultList.get(i));
+                                addedDocList.add(doc_uid);
                                 break;
                             } else if (secondMainString.toString().toLowerCase().equals(selectedUnis.get(j).toLowerCase())) {
                                 sortedResult.add(resultList.get(i));
+                                addedDocList.add(doc_uid);
                                 break;
                             }
                         }
@@ -461,6 +475,7 @@ public class SearchLoadingPresenter implements SearchLoadingContract.Presenter {
                         for (int j = 0; j < selectedDegrees.size(); j++) {
                             if (mainString.contains(selectedDegrees.get(j).toLowerCase())) {
                                 sortedResult.add(resultList.get(i));
+                                addedDocList.add(doc_uid);
                                 break;
                             }
                         }
@@ -490,9 +505,11 @@ public class SearchLoadingPresenter implements SearchLoadingContract.Presenter {
                         for (int j = 0; j < selectedUnis.size(); j++) {
                             if (mainString.contains(selectedUnis.get(j).toLowerCase())) {
                                 sortedResult.add(resultList.get(i));
+                                addedDocList.add(doc_uid);
                                 break;
                             } else if (secondMainString.toString().toLowerCase().equals(selectedUnis.get(j).toLowerCase())) {
                                 sortedResult.add(resultList.get(i));
+                                addedDocList.add(doc_uid);
                                 break;
                             }
                         }
@@ -501,6 +518,7 @@ public class SearchLoadingPresenter implements SearchLoadingContract.Presenter {
                             for (int k = 0; k < selectedDegrees.size(); k++) {
                                 if (degreeString.contains(selectedDegrees.get(k).toLowerCase())) {
                                     sortedResult.add(resultList.get(i));
+                                    addedDocList.add(doc_uid);
                                     break;
                                 }
                             }
@@ -533,6 +551,7 @@ public class SearchLoadingPresenter implements SearchLoadingContract.Presenter {
                 if(remained>0){
                     if (!addedDocList.contains(doc_uid)) {
                         sortedResult.add(resultList.get(i));
+                        addedDocList.add(doc_uid);
                         remained = remained -1;
                     }
                 }

@@ -352,6 +352,7 @@ public class RecordsCurrentActivity extends CustomStuAppCompatActivity implement
         private TextView stuGenderTV;
         private TextView stuPreviousResultTV;
         private TextView stuCurrentStatusTV;
+        private TextView stuAskedByTV;
         private TextView addressTV;
         private int fragmentPosition;
         private android.widget.ImageView saleImageView;
@@ -487,6 +488,7 @@ public class RecordsCurrentActivity extends CustomStuAppCompatActivity implement
             stuGenderTV = rootView.findViewById(R.id.stu_textview_gender);
             stuPreviousResultTV = rootView.findViewById(R.id.stu_previous_result);
             stuCurrentStatusTV = rootView.findViewById(R.id.stu_textview_current_status);
+            stuAskedByTV = rootView.findViewById(R.id.stu_textview_asked_by);
 
             //setting the qualification recycler view
             List<Academic> academicList = new ArrayList<>();
@@ -1261,18 +1263,25 @@ public class RecordsCurrentActivity extends CustomStuAppCompatActivity implement
             //setting the student info here
             Float stu_comm_value = ((Float.parseFloat((String) shMap.get("l_communication"))) /
                     (Float.parseFloat((String) shMap.get("l_communication")) + Float.parseFloat((String) shMap.get("dl_communication")))) * 100;
-            stuComTV.setText(String.format("%s%s %%", stuComTV.getText(), stu_comm_value.toString().substring(0, stu_comm_value.toString().length() - 2)));
+            stuComTV.setText(String.format("%s%s %%", "Communication : ", stu_comm_value.toString().substring(0, stu_comm_value.toString().length() - 2)));
 
             Float stu_beha_value = ((Float.parseFloat((String) shMap.get("l_behaviour"))) /
                     (Float.parseFloat((String) shMap.get("l_behaviour")) + Float.parseFloat((String) shMap.get("dl_behaviour")))) * 100;
-            stuBehaTV.setText(String.format("%s%s %%", stuBehaTV.getText(), stu_beha_value.toString().substring(0, stu_beha_value.toString().length() - 2)));
+            stuBehaTV.setText(String.format("%s%s %%", "Behaviour : ", stu_beha_value.toString().substring(0, stu_beha_value.toString().length() - 2)));
 
             String stuTemp = (String) forMap.get("request_gender");
-            stuGenderTV.setText(String.format("%s%s", stuGenderTV.getText(), stuTemp));
+            stuGenderTV.setText(String.format("%s%s", "Gender : ", stuTemp));
             stuTemp = (String) forMap.get("request_cs");
-            stuCurrentStatusTV.setText(String.format("%s%s", stuCurrentStatusTV.getText(), stuTemp));
+            stuCurrentStatusTV.setText(String.format("%s%s", "Current Status : ", stuTemp));
             stuTemp = (String) forMap.get("request_pr");
-            stuPreviousResultTV.setText(String.format("%s%s", stuPreviousResultTV.getText(), stuTemp));
+            stuPreviousResultTV.setText(String.format("%s%s", "Previous Result : ", stuTemp));
+            boolean is_self = (boolean) forMap.get("is_self");
+            if(is_self){
+                stuTemp = "Student";
+            }else {
+                stuTemp = "Guardian";
+            }
+            stuAskedByTV.setText(String.format("%s%s", "Asked by : ", stuTemp));
         }
 
         public void loadQualificationData(Map<String, Object> sp_info) {

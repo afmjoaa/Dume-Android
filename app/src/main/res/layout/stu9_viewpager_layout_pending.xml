@@ -515,6 +515,25 @@
                 android:translationY="-2dp">
 
                 <TextView
+                    android:id="@+id/stu_textview_asked_by"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="0dp"
+                    android:drawableStart="@drawable/ic_keyboard_arrow_right_black_24dp"
+                    android:drawableLeft="@drawable/ic_keyboard_arrow_right_black_24dp"
+                    android:drawablePadding="6dp"
+                    android:gravity="center_vertical"
+                    android:paddingTop="2dp"
+                    android:paddingBottom="2dp"
+                    android:singleLine="true"
+                    android:text="Asked by : "
+                    android:textAllCaps="false"
+                    android:textColor="@color/textColorPrimary"
+                    android:textSize="13sp"
+                    android:textStyle="normal"
+                    app:fontFamily="@font/cairo_regular" />
+
+                <TextView
                     android:id="@+id/stu_textview_current_status"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

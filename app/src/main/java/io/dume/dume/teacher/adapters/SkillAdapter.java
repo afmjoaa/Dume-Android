@@ -221,7 +221,17 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             detailList.add(new KeyMap("Salary", format1.substring(1, format1.length() - 3) + " BDT"));
             detailList.add(new KeyMap("Skill Visibility", skill.isStatus() ? "Public" : "Private (Inactive)"));
             detailList.add(new KeyMap("Rating", ((int) skill.getRating()) + "/ 옷" + skill.getTotalRating()));
-            detailList.add(new KeyMap("Package Name", skill.getPackage_name()));
+            String package_name = skill.getPackage_name();
+            if (package_name != null) {
+                if(package_name.equals(SearchDataStore.REGULAR_DUME)){
+                    package_name = "Monthly Tutor";
+                } else if (package_name.equals(SearchDataStore.INSTANT_DUME)) {
+                    package_name = "Weekly Tutor";
+                }else {
+                    package_name = "Couching Service";
+                }
+            }
+            detailList.add(new KeyMap("Package Name", package_name));
             for (int j = 0; j < skill.getQuery_list().size() - 2; j++) {
                 detailList.add(new KeyMap(skill.getQuery_list_name().get(j), skill.getQuery_list().get(j)));
             }

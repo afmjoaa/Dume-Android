@@ -86,13 +86,13 @@
                     android:id="@+id/subject_in_demand"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/math_amp_physics"
-                    android:textAllCaps="false"
                     android:paddingStart="130dp"
                     android:paddingLeft="130dp"
                     android:paddingEnd="130dp"
                     android:paddingRight="130dp"
+                    android:text="@string/math_amp_physics"
                     android:textAlignment="center"
+                    android:textAllCaps="false"
                     android:textColor="@color/textColorPrimary"
                     android:textSize="14sp"
                     app:fontFamily="@font/cairo_regular" />
@@ -247,19 +247,19 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
+                    android:layout_toStartOf="@+id/show_salary_btn"
                     android:layout_toLeftOf="@+id/show_salary_btn"
-                    app:srcCompat="@drawable/sale_icon"
                     android:translationX="6dp"
                     android:visibility="gone"
-                    android:layout_toStartOf="@+id/show_salary_btn" />
+                    app:srcCompat="@drawable/sale_icon" />
 
                 <Button
                     android:id="@+id/show_salary_btn"
                     style="@style/Widget.AppCompat.Button.Borderless"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:clickable="false"
                     android:layout_centerHorizontal="true"
+                    android:clickable="false"
                     android:text="Salary : 10k BDT"
                     android:textAllCaps="false"
                     android:textColor="@color/highlight_red"
@@ -535,6 +535,25 @@
                 android:translationY="-2dp">
 
                 <TextView
+                    android:id="@+id/stu_textview_asked_by"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="0dp"
+                    android:drawableStart="@drawable/ic_keyboard_arrow_right_black_24dp"
+                    android:drawableLeft="@drawable/ic_keyboard_arrow_right_black_24dp"
+                    android:drawablePadding="6dp"
+                    android:gravity="center_vertical"
+                    android:paddingTop="2dp"
+                    android:paddingBottom="2dp"
+                    android:singleLine="true"
+                    android:text="Asked by : "
+                    android:textAllCaps="false"
+                    android:textColor="@color/textColorPrimary"
+                    android:textSize="13sp"
+                    android:textStyle="normal"
+                    app:fontFamily="@font/cairo_regular" />
+
+                <TextView
                     android:id="@+id/stu_textview_current_status"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -707,27 +726,41 @@
                     android:visibility="visible"
                     app:fontFamily="@font/cairo_regular" />
 
-                <TextView
-                    android:id="@+id/address_textView"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:id="@+id/address_hoster"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
                     android:layout_marginBottom="6dp"
-                    android:drawableStart="@drawable/ic_keyboard_arrow_right_black_24dp"
-                    android:drawableLeft="@drawable/ic_keyboard_arrow_right_black_24dp"
-                    android:drawablePadding="6dp"
-                    android:ellipsize="end"
-                    android:gravity="center_vertical"
-                    android:maxLines="1"
-                    android:paddingTop="2dp"
-                    android:paddingBottom="2dp"
-                    android:singleLine="true"
-                    android:text="Address : "
-                    android:textAllCaps="false"
-                    android:textColor="@color/textColorPrimary"
-                    android:textSize="13sp"
-                    android:textStyle="normal"
-                    app:fontFamily="@font/cairo_regular" />
+                    android:orientation="horizontal">
+
+                    <carbon.widget.ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="0dp"
+                        android:paddingLeft="0dp"
+                        android:paddingTop="0dp"
+                        android:paddingEnd="5dp"
+                        android:paddingRight="5dp"
+                        app:srcCompat="@drawable/ic_keyboard_arrow_right_black_24dp" />
+
+
+                    <TextView
+                        android:id="@+id/address_textView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:gravity="top"
+                        android:paddingTop="2dp"
+                        android:paddingBottom="2dp"
+                        android:text="Address : "
+                        android:textAllCaps="false"
+                        android:textColor="@color/textColorPrimary"
+                        android:textSize="13sp"
+                        android:textStyle="normal"
+                        app:fontFamily="@font/cairo_regular" />
+
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -1036,9 +1069,9 @@
                         android:id="@+id/myChartProgressBar"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_below="@+id/rating_skills"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="6dp"
-                        android:layout_below="@+id/rating_skills"
                         android:gravity="center"
                         app:hdBarCanBeClick="true"
                         app:hdBarHeight="160dp"
@@ -1065,11 +1098,12 @@
                         android:id="@+id/myChartProgressBarOne"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginTop="14dp"
                         android:layout_below="@+id/myChartProgressBar"
                         android:layout_centerInParent="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="14dp"
                         android:gravity="center"
+                        android:visibility="gone"
                         app:hdBarCanBeClick="true"
                         app:hdBarHeight="160dp"
                         app:hdBarRadius="10dp"
@@ -1089,7 +1123,6 @@
                         app:hdPinTxtSize="12sp"
                         app:hdProgressClickColor="@color/progress_click"
                         app:hdProgressColor="@color/progress"
-                        android:visibility="gone"
                         app:hdProgressDisableColor="@color/progress_disable" />
 
                 </RelativeLayout>

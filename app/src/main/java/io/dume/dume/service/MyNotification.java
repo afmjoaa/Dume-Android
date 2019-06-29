@@ -47,42 +47,19 @@ public class MyNotification extends FirebaseMessagingService {
     private String type = "";
     public static String UNREAD_MESSAGE = "unread_message";
     private SharedPreferences prefs;
-    private int TAB_NUMBER;
+    private int TAB_NUMBER = 0;
     private static final String TAG = "MyNotification";
+    private Intent resultIntent;
 
     @SuppressLint("CommitPrefEdits")
     public MyNotification() {
         super();
         firestore = FirebaseFirestore.getInstance();
-
     }
 
     private void sendNotification(String messageTitle, String messageBody, String type) {
 
-        Class intentClass = SplashActivity.class;
-        Bundle bundle = new Bundle();
-        if (type.equals("message")) {
-            intentClass = InboxActivity.class;
-        } else if (type.equals("payment")) {
-            intentClass = StudentPaymentActivity.class;
-        } else if (type.equals("pending")) {
-            intentClass = RecordsPageActivity.class;
-            TAB_NUMBER = 0;
-        } else if (type.equals("accepted")) {
-            intentClass = RecordsPageActivity.class;
-            TAB_NUMBER = 1;
-        } else if (type.equals("current")) {
-            intentClass = RecordsPageActivity.class;
-            TAB_NUMBER = 2;
-        } else if (type.equals("completed")) {
-            intentClass = RecordsPageActivity.class;
-            TAB_NUMBER = 3;
-        } else if (type.equals("rejected")) {
-            intentClass = RecordsPageActivity.class;
-            TAB_NUMBER = 4;
-        }
-        Log.w(TAG, "sendNotification: " + intentClass.toString());
-
+        //Log.w(TAG, "sendNotification: " + intentClass.toString());
 
         int NOTIFICATION_ID = 234;
         prefs = getSharedPreferences(DumeUtils.SETTING_PREFERENCE, MODE_PRIVATE);
@@ -154,13 +131,56 @@ public class MyNotification extends FirebaseMessagingService {
         }
         //setting priority
         builder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
-        Intent resultIntent = new Intent(this, intentClass);
-        resultIntent.putExtra("tab_number", TAB_NUMBER);
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-        stackBuilder.addParentStack(HomePageActivity.class);
-        stackBuilder.addNextIntent(resultIntent);
-        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        //update here
+        switch (type) {
+            case "message":
+                resultIntent = new Intent(getApplicationContext(), InboxActivity.class);
+                TAB_NUMBER = 0;
+                break;
+            case "payment":
+                resultIntent = new Intent(getApplicationContext(), StudentPaymentActivity.class);
+                TAB_NUMBER = 1;
+                break;
+            case "pending":
+                resultIntent = new Intent(getApplicationContext(), RecordsPageActivity.class);
+                resultIntent.putExtra("seletedTab", 0);
+                TAB_NUMBER = 2;
+                break;
+            case "accepted":
+                resultIntent = new Intent(getApplicationContext(), RecordsPageActivity.class);
+                resultIntent.putExtra("seletedTab", 1);
+                TAB_NUMBER = 3;
+                break;
+            case "current":
+                resultIntent = new Intent(getApplicationContext(), RecordsPageActivity.class);
+                resultIntent.putExtra("seletedTab", 2);
+                TAB_NUMBER = 4;
+                break;
+            case "completed":
+                resultIntent = new Intent(getApplicationContext(), RecordsPageActivity.class);
+                resultIntent.putExtra("seletedTab", 3);
+                TAB_NUMBER = 5;
+                break;
+            case "rejected":
+                resultIntent = new Intent(getApplicationContext(), RecordsPageActivity.class);
+                resultIntent.putExtra("seletedTab", 4);
+                TAB_NUMBER = 6;
+                break;
+            default:
+                resultIntent = null;
+                TAB_NUMBER = 7;
+                break;
+        }
+
+        stackBuilder.addParentStack(SplashActivity.class);
+        if(resultIntent!= null){
+            stackBuilder.addNextIntent(resultIntent);
+        }
+        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(TAB_NUMBER, PendingIntent.FLAG_UPDATE_CURRENT);
         builder.setContentIntent(resultPendingIntent);
+
         notificationManager.notify(NOTIFICATION_ID, builder.build());
     }
 

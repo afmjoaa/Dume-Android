@@ -734,6 +734,15 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
                 temp = (String) jizz.get(primaryText);
                 primaryText = primaryText + ": " + temp + " / ";
                 temp = (String) entry.getValue().get("package_name");
+                if (temp != null) {
+                    if(temp.equals(SearchDataStore.REGULAR_DUME)){
+                        temp = "Monthly Tutor";
+                    } else if (temp.equals(SearchDataStore.INSTANT_DUME)) {
+                        temp = "Weekly Tutor";
+                    }else {
+                        temp = "Couching";
+                    }
+                }
                 primaryText = primaryText + temp;
                 recentSearchDataCurrent.setPrimaryText(primaryText);
                 temp = (String) jizz.get("Gender");

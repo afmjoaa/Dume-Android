@@ -132,9 +132,9 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
                     TabLayout.Tab tab = tabLayout.getTabAt(tabToOpen);
                     Objects.requireNonNull(tab).select();
                 }
-                if (mViewPager != null) {
+                /*if (mViewPager != null) {
                     mViewPager.setCurrentItem(getIntent().getIntExtra("tab_number", 0));
-                }
+                }*/
             }
 
             @Override
