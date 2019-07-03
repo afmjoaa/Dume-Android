@@ -19,15 +19,21 @@ import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.provider.Settings;
 import android.support.annotation.Keep;
+import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import io.dume.dume.R;
@@ -174,7 +180,7 @@ public class MyNotification extends FirebaseMessagingService {
                 break;
         }
 
-        stackBuilder.addParentStack(SplashActivity.class);
+        stackBuilder.addNextIntent(new Intent(getApplicationContext(), SplashActivity.class));
         if(resultIntent!= null){
             stackBuilder.addNextIntent(resultIntent);
         }
@@ -231,6 +237,23 @@ public class MyNotification extends FirebaseMessagingService {
         super.onNewToken(s);
         Log.e("newToken", s);
         getSharedPreferences("dume", MODE_PRIVATE).edit().putString("fcm_token", s).apply();
+
+
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        String uid ="";
+        if(currentUser!= null ){
+            uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        }
+        HashMap<String, Object> saveData = new HashMap<>();
+        saveData.put("token", s);
+        //testing code here
+        if(!uid.equals("")){
+            FirebaseFirestore.getInstance().collection("token").document(uid).set(saveData).addOnSuccessListener(aVoid -> {
+                //Log.e("foo", "onSuccess token: " );
+            }).addOnFailureListener(e -> {
+                //Log.e("foo", "onFailure:token " + e.getLocalizedMessage());
+            });
+        }
     }
 
     public static String getToken(Context context) {

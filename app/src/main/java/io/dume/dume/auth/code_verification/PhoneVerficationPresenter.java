@@ -262,9 +262,7 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
 
             @Override
             public void onStudentFound() {
-
-
-                final HashMap<String, Object> data = new HashMap<>();
+                HashMap<String, Object> data = new HashMap<>();
                 String token = MyNotification.getToken(context);
                 if (!token.equals("undefined")) {
                     FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(new OnSuccessListener<InstanceIdResult>() {

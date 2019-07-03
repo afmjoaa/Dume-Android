@@ -189,7 +189,7 @@ public class RecordsCurrentActivity extends CustomStuAppCompatActivity implement
         if (pageToOpen != -1 && pageToOpen < Objects.requireNonNull(pager.getAdapter()).getCount()) {
             // Open the right pager
             pager.setCurrentItem(pageToOpen, true);
-        }else if(recordId != null && !recordId.equals("")){
+        } else if (recordId != null && !recordId.equals("")) {
             List<DocumentSnapshot> currentRecords = DumeUtils.filterList(Google.getInstance().getRecords(), "Current");
             for (int i = 0; i < currentRecords.size(); i++) {
                 DocumentSnapshot record = currentRecords.get(i);
@@ -718,17 +718,6 @@ public class RecordsCurrentActivity extends CustomStuAppCompatActivity implement
             }
 
 
-            /*alarmCalender.set(alarmCalender.get(Calendar.YEAR),
-                    alarmCalender.get(Calendar.MONTH),
-                    alarmCalender.get(Calendar.DAY_OF_MONTH),
-                    hourOfDay, minute, 0);
-            if (alarmManager != null) {
-                PendingIntent pi = PendingIntent.getBroadcast(myThisActivity, 12, i, 0);
-                alarmManager.set(AlarmManager.RTC_WAKEUP, alarmCalender.getTimeInMillis(), pi);
-                PendingIntent pi1 = PendingIntent.getBroadcast(myThisActivity, 13, i, 0);
-
-                alarmManager.set(AlarmManager.RTC_WAKEUP, alarmCalender.getTimeInMillis() + 30000, pi1);
-            }*/
             Toast.makeText(myThisActivity, "Alarm is set", Toast.LENGTH_SHORT).show();
 
             //setting the repeating alarm that will be fired every day
@@ -1028,7 +1017,7 @@ public class RecordsCurrentActivity extends CustomStuAppCompatActivity implement
             Number salary = (Number) selectedMentor.get("salary");
 
             Map<String, Object> promo = (Map<String, Object>) selectedMentor.get("promo");
-            if(promo!= null){
+            if (promo != null) {
                 Gson gson = new Gson();
                 JsonElement jsonElement = gson.toJsonTree(promo);
                 HomePageRecyclerData homePageRecyclerData = gson.fromJson(jsonElement, HomePageRecyclerData.class);
@@ -1178,7 +1167,7 @@ public class RecordsCurrentActivity extends CustomStuAppCompatActivity implement
                 Float loop_text = (loop_value * 10);
                 data = new BarData(splited, loop_value, loop_text.toString().substring(0, loop_text.toString().length() - 2) + " %");
                 int totalSkills = splitMainSsss.length + 2;
-                if(totalSkills>6){
+                if (totalSkills > 6) {
                     if ((totalSkills & 1) == 0) {
                         //even...
                         totalSkills = totalSkills / 2;
@@ -1191,13 +1180,13 @@ public class RecordsCurrentActivity extends CustomStuAppCompatActivity implement
                     } else {
                         dataListOne.add(data);
                     }
-                }else {
+                } else {
                     dataList.add(data);
                 }
             }
             mChart.setDataList(dataList);
             mChart.build();
-            if(dataListOne.size()>0){
+            if (dataListOne.size() > 0) {
                 mChartOne.setVisibility(View.VISIBLE);
                 mChartOne.setDataList(dataListOne);
                 mChartOne.build();
@@ -1276,9 +1265,9 @@ public class RecordsCurrentActivity extends CustomStuAppCompatActivity implement
             stuTemp = (String) forMap.get("request_pr");
             stuPreviousResultTV.setText(String.format("%s%s", "Previous Result : ", stuTemp));
             boolean is_self = (boolean) forMap.get("is_self");
-            if(is_self){
+            if (is_self) {
                 stuTemp = "Student";
-            }else {
+            } else {
                 stuTemp = "Guardian";
             }
             stuAskedByTV.setText(String.format("%s%s", "Asked by : ", stuTemp));
@@ -1840,6 +1829,7 @@ public class RecordsCurrentActivity extends CustomStuAppCompatActivity implement
             final ArrayList<CalendarDay> dates = new ArrayList<>();
             final CalendarDay day = CalendarDay.from(startingYear.intValue(), startingMonth.intValue() + 1, startingDay.intValue());
             LocalDate temp = day.getDate();
+            temp = temp.minusWeeks(1);
             List<Long> selectedDaysInt = (List<Long>) preferred_days.get("selectedDaysInt");
             Double daysPerMonth = selectedDaysInt.size() * 4.4285;
             Integer count = 0;
@@ -1851,6 +1841,8 @@ public class RecordsCurrentActivity extends CustomStuAppCompatActivity implement
                     count++;
                 }
             }
+            if (!dates.isEmpty())
+                dates.remove(0);
             return dates;
         }
 
@@ -1866,6 +1858,10 @@ public class RecordsCurrentActivity extends CustomStuAppCompatActivity implement
                 final ArrayList<CalendarDay> dates = new ArrayList<>();
                 final CalendarDay day = CalendarDay.from(startingYear.intValue(), startingMonth.intValue() + 1, startingDay.intValue());
                 LocalDate temp = day.getDate();
+
+                //Log.d(TAG, "doInBackground: first Temp: b" + temp);
+                temp = temp.minusWeeks(1);
+                //Log.d(TAG, "doInBackground: first Temp: a " + temp);
                 List<Long> selectedDaysInt = (List<Long>) preferred_days.get("selectedDaysInt");
                 Double daysPerMonth = selectedDaysInt.size() * 4.4285;
                 Integer count = 0;
@@ -1874,9 +1870,14 @@ public class RecordsCurrentActivity extends CustomStuAppCompatActivity implement
                         final CalendarDay thisDay = CalendarDay.from(temp);
                         dates.add(thisDay);
                         temp = calcNextDay(temp, returesDaysofWeek(selectedDaysInt.get(i).intValue()));
+                        Log.d(TAG, "doInBackground:+" + i + " temp is: " + temp);
                         count++;
                     }
+
                 }
+                Log.d(TAG, "doInBackground: returning: dates: " + dates);
+                if (!dates.isEmpty())
+                    dates.remove(0);
                 return dates;
             }
 
@@ -1997,37 +1998,3 @@ public class RecordsCurrentActivity extends CustomStuAppCompatActivity implement
         }
     }
 }
-
-/* do {
-temp = temp.plusDays(1);
-//final DayOfWeek dayOfWeek = temp.getDayOfWeek();
-} while (temp.getDayOfWeek() != DayOfWeek.MONDAY );*/
-
-
-/*if (chk_monday.isChecked()) {
-                        forday(2);
-                    } else if (chk_tuesday.isChecked()) {
-                        forday(3);
-                    } else if (chk_wednesday.isChecked()) {
-                        forday(4);
-                    } else if (chk_thursday.isChecked()) {
-                        forday(5);
-                    } else if (chk_friday.isChecked()) {
-                        forday(6);
-                    } else if (chk_sat.isChecked()) {
-                        forday(7);
-                    } else if (chk_sunday.isChecked()) {
-                        forday(1);
-                    }
-
-public void forday(int week) {
-
-        calSet.set(Calendar.DAY_OF_WEEK, week);
-        calSet.set(Calendar.HOUR_OF_DAY, hour);
-        calSet.set(Calendar.MINUTE, minuts);
-        calSet.set(Calendar.SECOND, 0);
-        calSet.set(Calendar.MILLISECOND, 0);
-
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,
-                calSet.getTimeInMillis(), 1 * 60 * 60 * 1000, pendingIntent);
-    }*/
