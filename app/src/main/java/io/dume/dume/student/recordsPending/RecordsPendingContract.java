@@ -1,5 +1,8 @@
 package io.dume.dume.student.recordsPending;
 
+import android.net.Uri;
+
+import io.dume.dume.inter_face.usefulListeners;
 import io.dume.dume.teacher.homepage.TeacherContract;
 
 public interface RecordsPendingContract {
@@ -31,5 +34,7 @@ public interface RecordsPendingContract {
 
 
         void recordsPendingHawwa();
+
+        void uploadPhotoId(Uri uri, usefulListeners.uploadToSTGListererMin progressListener);
     }
 }

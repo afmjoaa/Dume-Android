@@ -52,7 +52,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="start"
-        android:text="Start improving, Bangladesh! #LearnWithRegularDume"
+        android:text="Start improving, Bangladesh! #LearnWithDume"
         android:textAlignment="viewStart"
         android:textColor="@color/colorBlack"
         android:textSize="14sp"
@@ -69,7 +69,7 @@
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_margin="8dp"
-            android:src="@drawable/bs_product_scrolling_image"
+            app:srcCompat="@drawable/ic_promo_image"
             tools:ignore="ContentDescription" />
 
     </RelativeLayout>

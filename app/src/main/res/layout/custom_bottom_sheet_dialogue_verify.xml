@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_history_menu_bottom"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#ffffff"
+    android:orientation="vertical"
+    android:paddingLeft="16dp"
+    android:paddingTop="10dp"
+    android:paddingRight="16dp"
+    android:paddingBottom="10dp"
+    app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
+
+    <TextView
+        android:id="@+id/main_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:text="Accepting Request ?"
+        android:textAllCaps="false"
+        android:textColor="@color/colorBlack"
+        android:textSize="24sp"
+        app:fontFamily="@font/cairo_regular" />
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/dispaly_pic"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?android:attr/selectableItemBackground">
+
+        <carbon.widget.ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="match_parent"
+            android:layout_height="90dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/display_pic"
+            android:scaleType="centerCrop"
+            app:srcCompat="@drawable/ic_photo_id" />
+
+        <carbon.widget.TextView
+            android:id="@+id/label"
+            android:layout_width="120dp"
+            android:layout_height="26dp"
+            android:layout_gravity="top|end"
+            android:background="@color/black_overlay"
+            android:gravity="center"
+            android:maxLength="7"
+            android:maxLines="1"
+            android:rotation="45"
+            android:singleLine="true"
+            android:text="Upload"
+            android:textAppearance="?android:textAppearanceLargeInverse"
+            android:textSize="10sp"
+            android:translationX="38dp"
+            android:translationY="8dp"
+            app:carbon_elevation="3dp"
+            tools:ignore="SmallSp" />
+
+    </android.support.v7.widget.CardView>
+
+    <ProgressBar
+        android:id="@+id/progress_horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_marginStart="3dp"
+        android:layout_marginLeft="3dp"
+        android:layout_marginEnd="3dp"
+        android:layout_marginRight="3dp"
+        android:indeterminate="true"
+        android:visibility="gone"
+        android:indeterminateOnly="true" />
+
+    <Button
+        android:id="@+id/upload_text"
+        style="@style/myButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="6dp"
+        android:text="Upload Photo-ID"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        app:fontFamily="@font/cairo_regular" />
+
+
+    <TextView
+        android:id="@+id/sub_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginRight="4dp"
+        android:text="Please upload your photo-ID (University ID, NID, Passport main page) to accept the request &amp; get verified as well."
+        android:textColor="@color/textColorPrimary"
+        android:textSize="14sp"
+        app:fontFamily="@font/cairo_regular" />
+
+    <TextView
+        android:id="@+id/sub_text_one"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginRight="4dp"
+        android:text="We are verifing your photo-ID. Please be patient until(6-12 hour) it get verified, as it get verified you will be notified by sms. Please contact on 01303464617 if you have any questions"
+        android:textColor="@color/green_main_dark"
+        android:textSize="14sp"
+        android:visibility="gone"
+        app:fontFamily="@font/cairo_regular" />
+
+    <TextView
+        android:id="@+id/sub_text_two"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginRight="4dp"
+        android:text="Your photo-id is rejected after evaluation. Please upload a clear and real photo-id for acceptance &amp; contact with us on 01303464617 if you have any questions"
+        android:textColor="@color/highlight_red"
+        android:textSize="14sp"
+        android:visibility="gone"
+        app:fontFamily="@font/cairo_regular" />
+
+</LinearLayout>

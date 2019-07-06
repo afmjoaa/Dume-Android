@@ -557,7 +557,7 @@ public class ProfilePageActivity extends CustomStuAppCompatActivity implements P
     @SuppressLint("CheckResult")
     private void compressImage(File actualImage) {
         new Compressor(this)
-                .compressToFileAsFlowable(actualImage)
+                .compressToFileAsFlowable(actualImage, "student_photo")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<File>() {

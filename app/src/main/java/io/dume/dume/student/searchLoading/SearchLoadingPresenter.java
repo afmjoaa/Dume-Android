@@ -357,10 +357,10 @@ public class SearchLoadingPresenter implements SearchLoadingContract.Presenter {
                     Map<String, Object> t1Info = (Map<String, Object>) t1.get("sp_info");
                     Map<String, Object> t2Info = (Map<String, Object>) t1.get("sp_info");
 
-                    Map<String, Object> t1Map = (Map<String, Object>) t1Info.get("unread_records");
-                    Map<String, Object> t2Map = (Map<String, Object>) t2Info.get("unread_records");
-                    Float t1f = Float.parseFloat((String) t1Map.get("completed_count"));
-                    Float t2f = Float.parseFloat((String) t2Map.get("completed_count"));
+                    Map<String, Object> t1Map = (Map<String, Object>) t1Info.get("self_rating");
+                    Map<String, Object> t2Map = (Map<String, Object>) t2Info.get("self_rating");
+                    Float t1f = Float.parseFloat((String) t1Map.get("student_guided"));
+                    Float t2f = Float.parseFloat((String) t2Map.get("student_guided"));
                     return t1f.compareTo(t2f);
                 }
             });

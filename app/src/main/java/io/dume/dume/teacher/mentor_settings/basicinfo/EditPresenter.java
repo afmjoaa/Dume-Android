@@ -176,7 +176,7 @@ public class EditPresenter implements EditContract.Presenter, EditContract.onDat
     private void compressImage(File actualImage) {
         view.setImage(Uri.fromFile(actualImage));
         new Compressor(view.getActivtiyContext())
-                .compressToFileAsFlowable(actualImage)
+                .compressToFileAsFlowable(actualImage, "mentor_photo")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<File>() {

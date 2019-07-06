@@ -284,7 +284,7 @@ public class DumeModel extends HomePageModel implements TeacherModel {
 
     @Override
     public void loadReview(String id, String oldid, TeacherContract.Model.Listener<List<ReviewHighlightData>> listener) {
-        Query query = firebaseFirestore.document("users/mentors/skills/" + id).collection("reviews").orderBy("time", Query.Direction.DESCENDING);
+        Query query = firebaseFirestore.document("users/mentors/skills/" + id).collection("reviews").orderBy("time", Query.Direction.DESCENDING).limit(120);
 
         if (oldid == null) {
             //do nothing

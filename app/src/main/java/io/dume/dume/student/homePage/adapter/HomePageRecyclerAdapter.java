@@ -109,7 +109,8 @@ public class HomePageRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
             myViewHolder.mainAboutIntro.setText(homePageRecyclerData.title);
             myViewHolder.mainAboutBody.setText(homePageRecyclerData.getDescription());
             myViewHolder.mainAboutSubBody.setText(homePageRecyclerData.getSub_description());
-            Glide.with(context).load(homePageRecyclerData.getPromo_image()).into(myViewHolder.mainAboutImage);
+            //Glide.with(context).load(homePageRecyclerData.getPromo_image()).into(myViewHolder.mainAboutImage);
+            //.apply(new RequestOptions().override(100, 100).placeholder(R.drawable.ic_promo_image))
 
             myViewHolder.mainAbotuBtn.setOnClickListener(view -> {
                 view.setEnabled(false);

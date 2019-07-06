@@ -341,8 +341,6 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                                         salaryTV.setText(format2.substring(1, format2.length() - 3) + " ৳");
                                         int barIndex = (salary1 / 1000) - 1;
                                         salaryBar.setSeekPinByIndex(barIndex);
-
-
                                         //testing here
                                         wantedList = new ArrayList<>();
                                         int threshold = hereSkill.getPackage_name().equals(SearchDataStore.DUME_GANG) ? 4 : 3;
@@ -362,7 +360,6 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                                                 wantedList = localDb.getLevelFour(hereSkill.getQuery_list().get(3), hereSkill.getQuery_list().get(2), hereSkill.getQuery_list().get(1));
                                                 break;
                                         }
-
                                         //get the two array
                                         subjectList = new String[wantedList.size()];
                                         subjectList = wantedList.toArray(subjectList);
@@ -382,7 +379,6 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
                                             @Override
                                             public void onClick(View view) {
-
                                                 AlertDialog.Builder mBuilder = new AlertDialog.Builder(context, R.style.RadioDialogTheme);
                                                 mBuilder.setTitle("Select filter degrees");
                                                 mBuilder.setMultiChoiceItems(subjectList, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
@@ -500,7 +496,6 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                                                         salaryTV.setText("Salary = " + format1.substring(1, format1.length() - 3) + " ৳");
                                                         salaryBar.setSeekPinByIndex(i1 - 1);
                                                         salaryBar.setFormatter(value -> Integer.parseInt(value) + "k");
-
                                                     }
                                                 });
 
@@ -642,12 +637,14 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     reviewRecyAda = new ReviewAdapter(context, list, true);
                     myViewHolder.reviewRecycler.setAdapter(reviewRecyAda);
                     myViewHolder.reviewRecycler.setLayoutManager(new LinearLayoutManager(context));
-                    if (list.size() >= 10) {
+                    myViewHolder.loadMoreBTN.setEnabled(false);
+                    myViewHolder.loadMoreBTN.setVisibility(View.GONE);
+                    /*if (list.size() >= 10) {
                         myViewHolder.loadMoreBTN.setEnabled(true);
                     } else {
                         myViewHolder.loadMoreBTN.setEnabled(false);
                         myViewHolder.loadMoreBTN.setVisibility(View.GONE);
-                    }
+                    }*/
                 }
 
                 @Override
@@ -661,7 +658,7 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 }
             });
 
-            myViewHolder.loadMoreBTN.setOnClickListener(view -> {
+            /*myViewHolder.loadMoreBTN.setOnClickListener(view -> {
                 view.setEnabled(false);
                 new DumeModel(context).loadReview(skill.getId(), lastReviewData.getDoc_id(), new TeacherContract.Model.Listener<List<ReviewHighlightData>>() {
                     @Override
@@ -677,7 +674,7 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                         Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
                     }
                 });
-            });
+            });*/
 
 
             myViewHolder.reviewShowBtn.setOnClickListener(new VisibleToggleClickListener() {

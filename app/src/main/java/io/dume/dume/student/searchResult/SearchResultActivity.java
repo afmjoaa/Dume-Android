@@ -1782,19 +1782,15 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
             mChartOne.build();
         }
         //now fixing the review data
-        new DumeModel(context).loadReview(selectedMentor.getId(), null, new TeacherContract.Model.Listener<List<ReviewHighlightData>>() {
+        String skillUid = (String) selectedMentor.get("skill_uid");
+        new DumeModel(context).loadReview(skillUid, null, new TeacherContract.Model.Listener<List<ReviewHighlightData>>() {
             @Override
             public void onSuccess(List<ReviewHighlightData> list) {
                 lastReviewData = list.get(list.size() - 1);
                 reviewRecyAda.update(list);
-                //reviewRecyAda = new ReviewAdapter(context, list, true);
-                if (list.size() >= 10) {
-                    loadMoreReviewBtn.setEnabled(true);
-                    loadMoreReviewBtn.setVisibility(View.VISIBLE);
-                } else {
-                    loadMoreReviewBtn.setEnabled(false);
-                    loadMoreReviewBtn.setVisibility(View.GONE);
-                }
+                noDataBlockReview.setVisibility(View.GONE);
+                loadMoreReviewBtn.setEnabled(false);
+                loadMoreReviewBtn.setVisibility(View.GONE);
             }
 
             @Override
@@ -1804,13 +1800,13 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                 if (msg.equals("No review")) {
                     return;
                 }
-                Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
             }
         });
 
-        loadMoreReviewBtn.setOnClickListener(view -> {
+      /*  loadMoreReviewBtn.setOnClickListener(view -> {
             view.setEnabled(false);
-            new DumeModel(context).loadReview(selectedMentor.getId(), lastReviewData.getDoc_id(), new TeacherContract.Model.Listener<List<ReviewHighlightData>>() {
+            new DumeModel(context).loadReview(skillUid, lastReviewData.getDoc_id(), new TeacherContract.Model.Listener<List<ReviewHighlightData>>() {
                 @Override
                 public void onSuccess(List<ReviewHighlightData> list) {
                     lastReviewData = list.get(list.size() - 1);
@@ -1834,7 +1830,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                     Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
                 }
             });
-        });
+        });*/
         requestBTN.setEnabled(true);
         swipeLeft.setEnabled(true);
         swipeRight.setEnabled(true);

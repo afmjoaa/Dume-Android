@@ -1,15 +1,22 @@
 package io.dume.dume.student.recordsPending;
 
 import android.annotation.SuppressLint;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.Color;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Animatable2;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.Parcelable;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialog;
@@ -21,7 +28,9 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.animation.FastOutLinearInInterpolator;
 import android.support.v4.view.animation.LinearOutSlowInInterpolator;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
@@ -35,14 +44,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.GeoPoint;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.hadiidbouk.charts.BarData;
@@ -55,12 +67,15 @@ import com.transitionseverywhere.Transition;
 import com.transitionseverywhere.TransitionManager;
 import com.transitionseverywhere.TransitionSet;
 
+import java.io.File;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -68,8 +83,10 @@ import java.util.Objects;
 import java.util.TimeZone;
 
 import carbon.widget.ImageView;
+import id.zelory.compressor.Compressor;
 import io.dume.dume.Google;
 import io.dume.dume.R;
+import io.dume.dume.inter_face.usefulListeners;
 import io.dume.dume.model.DumeModel;
 import io.dume.dume.student.common.QualificationAdapter;
 import io.dume.dume.student.common.ReviewAdapter;
@@ -77,18 +94,25 @@ import io.dume.dume.student.common.ReviewHighlightData;
 import io.dume.dume.student.homePage.adapter.HomePageRecyclerData;
 import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
 import io.dume.dume.student.pojo.SearchDataStore;
+import io.dume.dume.student.profilePage.ProfilePageActivity;
 import io.dume.dume.student.recordsAccepted.RecordsAcceptedActivity;
 import io.dume.dume.student.recordsPage.Record;
 import io.dume.dume.student.recordsRejected.RecordsRejectedActivity;
 import io.dume.dume.student.studentHelp.StudentHelpActivity;
 import io.dume.dume.teacher.homepage.TeacherContract;
+import io.dume.dume.teacher.homepage.TeacherDataStore;
 import io.dume.dume.teacher.pojo.Academic;
 import io.dume.dume.util.DumeUtils;
+import io.dume.dume.util.FileUtil;
 import io.dume.dume.util.OnSwipeTouchListener;
 import io.dume.dume.util.VisibleToggleClickListener;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 import me.zhanghai.android.materialratingbar.MaterialRatingBar;
 
 import static io.dume.dume.util.DumeUtils.getLast;
+import static io.dume.dume.util.DumeUtils.getUserUID;
 
 public class RecordsPendingActivity extends CustomStuAppCompatActivity implements RecordsPendingContract.View {
 
@@ -295,6 +319,22 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
         private int validDiscount;
         private String salaryFormatted;
         private ChartProgressBar mChartOne;
+        private Map<String, Object> achievements;
+        private BottomSheetDialog mBottomSheetVerify;
+        private View sheetViewVerify;
+        private CardView photoIdHost;
+        private ImageView photoId;
+        private Button uploadBtn;
+        private TextView beforeUpload;
+        private TextView afterUpload;
+        private ProgressBar uploadProgress;
+        private int IMAGE_RESULT_CODE = 3333;
+        private Uri outputFileUri = null;
+        private Uri selectedImageUri = null;
+        private File actualImage;
+        private File compressedImage;
+        private TextView rejectUpload;
+
 
         public PlaceholderFragment() {
         }
@@ -534,7 +574,6 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
                 if (homePageRecyclerData != null) {
                         max_dicount_percentage = homePageRecyclerData.getMax_dicount_percentage();
                         max_discount_credit = homePageRecyclerData.getMax_discount_credit();
-
                 }
             }
             if (max_dicount_percentage != null && max_discount_credit != null) {
@@ -556,7 +595,7 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
 
             loadQualificationData(sp_info);
             //setting the achievements badge
-            Map<String, Object> achievements = (Map<String, Object>) sp_info.get("achievements");
+            achievements = (Map<String, Object>) sp_info.get("achievements");
             if ((boolean) achievements.get("joined")) {
                 joinedBadge.setImageResource(R.drawable.ic_badge_joined);
             }
@@ -683,19 +722,15 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
             }
 
             //now fixing the review data
-            new DumeModel(context).loadReview(selectedMentor.getId(), null, new TeacherContract.Model.Listener<List<ReviewHighlightData>>() {
+            String skillUid = (String) selectedMentor.get("skill_uid");
+            new DumeModel(context).loadReview(skillUid, null, new TeacherContract.Model.Listener<List<ReviewHighlightData>>() {
                 @Override
                 public void onSuccess(List<ReviewHighlightData> list) {
                     lastReviewData = list.get(list.size() - 1);
                     reviewRecyAda.update(list);
-                    //reviewRecyAda = new ReviewAdapter(context, list, true);
-                    if (list.size() >= 10) {
-                        loadMoreReviewBtn.setEnabled(true);
-                        loadMoreReviewBtn.setVisibility(View.VISIBLE);
-                    } else {
-                        loadMoreReviewBtn.setEnabled(false);
-                        loadMoreReviewBtn.setVisibility(View.GONE);
-                    }
+                    noDataBlockReview.setVisibility(View.GONE);
+                    loadMoreReviewBtn.setEnabled(false);
+                    loadMoreReviewBtn.setVisibility(View.GONE);
                 }
 
                 @Override
@@ -709,9 +744,9 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
                 }
             });
 
-            loadMoreReviewBtn.setOnClickListener(view -> {
+            /*loadMoreReviewBtn.setOnClickListener(view -> {
                 view.setEnabled(false);
-                new DumeModel(context).loadReview(selectedMentor.getId(), lastReviewData.getDoc_id(), new TeacherContract.Model.Listener<List<ReviewHighlightData>>() {
+                new DumeModel(context).loadReview(skillUid, lastReviewData.getDoc_id(), new TeacherContract.Model.Listener<List<ReviewHighlightData>>() {
                     @Override
                     public void onSuccess(List<ReviewHighlightData> list) {
                         lastReviewData = list.get(list.size() - 1);
@@ -735,9 +770,8 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
                         Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
                     }
                 });
-            });
+            });*/
 
-            Log.e(TAG, "onMentorSelect: " + "method is running ");
 
             //setting the student info here
             Float stu_comm_value = ((Float.parseFloat((String) shMap.get("l_communication"))) /
@@ -801,7 +835,8 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
             comfirmYesBtn = mBottomSheetDialog.findViewById(R.id.cancel_yes_btn);
             confirmNoBtn = mBottomSheetDialog.findViewById(R.id.cancel_no_btn);
             if (confirmMainText != null && confirmSubText != null && comfirmYesBtn != null && confirmNoBtn != null) {
-                confirmMainText.setText("Accept Request");
+                confirmMainText.setText("Accept Request ?");
+                confirmSubText.setTextColor(getResources().getColor(R.color.green_main_dark));
                 confirmSubText.setText("By Accepting you are making sure you will mentor " + studentName);
                 comfirmYesBtn.setText("Yes, Accept");
                 confirmNoBtn.setText("No");
@@ -857,6 +892,38 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
                 });
             }
 
+            //verify bottomSheet
+            mBottomSheetVerify = new BottomSheetDialog(context);
+            sheetViewVerify = this.getLayoutInflater().inflate(R.layout.custom_bottom_sheet_dialogue_verify, null);
+            mBottomSheetVerify.setContentView(sheetViewVerify);
+            photoIdHost = mBottomSheetVerify.findViewById(R.id.dispaly_pic);
+            photoId = mBottomSheetVerify.findViewById(R.id.imageView1);
+            uploadBtn = mBottomSheetVerify.findViewById(R.id.upload_text);
+            beforeUpload = mBottomSheetVerify.findViewById(R.id.sub_text);
+            afterUpload = mBottomSheetVerify.findViewById(R.id.sub_text_one);
+            rejectUpload = mBottomSheetVerify.findViewById(R.id.sub_text_two);
+            uploadProgress = mBottomSheetVerify.findViewById(R.id.progress_horizontal);
+            String photo_id = (String) TeacherDataStore.getInstance().getDocumentSnapshot().get("photo_id_url");
+            if(photo_id!= null && !photo_id.equals("")){
+                Glide.with(context).load(photo_id).apply(new RequestOptions().override(100, 100).placeholder(R.drawable.set_display_pic)).into(photoId);
+            }
+            if (photoIdHost != null && photoId != null && uploadBtn != null && beforeUpload != null && afterUpload != null) {
+
+                photoIdHost.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                            openImageIntent();
+                    }
+                });
+                uploadBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        openImageIntent();
+                    }
+                });
+
+            }
+
             //cancel bottom sheet
             mBottomSheetReject = new BottomSheetDialog(context);
             sheetViewReject = this.getLayoutInflater().inflate(R.layout.custom_bottom_sheet_dialogue_cancel, null);
@@ -866,7 +933,7 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
             rejectYesBtn = mBottomSheetReject.findViewById(R.id.cancel_yes_btn);
             rejectNoBtn = mBottomSheetReject.findViewById(R.id.cancel_no_btn);
             if (rejectMainText != null && rejectSubText != null && rejectYesBtn != null && rejectNoBtn != null) {
-                rejectMainText.setText("Reject Request");
+                rejectMainText.setText("Reject Request ?");
                 rejectSubText.setText("Dear " + mentorName + " if you reject requests repeatedly your accept ratio will decrease and so you search exposer...");
                 rejectYesBtn.setText("Yes, Reject");
                 rejectNoBtn.setText("No");
@@ -933,8 +1000,25 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
             }
 
             acceptBTN.setOnClickListener(view -> {
-                mBottomSheetDialog.show();
+                //here do your job (first varify then accept)
+                String isVerified = (String) TeacherDataStore.getInstance().getDocumentSnapshot().get("isVerified");
+                if (isVerified== null || isVerified.equals("")){
+                    mBottomSheetVerify.show();
+                }else if(isVerified.equals("Accepted")){
+                    mBottomSheetDialog.show();
+                }else if(isVerified.equals("Pending")){
+                    beforeUpload.setVisibility(View.GONE);
+                    rejectUpload.setVisibility(View.GONE);
+                    afterUpload.setVisibility(View.VISIBLE);
+                    mBottomSheetVerify.show();
+                } else if (isVerified.equals("Rejected")) {
+                    beforeUpload.setVisibility(View.GONE);
+                    afterUpload.setVisibility(View.GONE);
+                    rejectUpload.setVisibility(View.VISIBLE);
+                    mBottomSheetVerify.show();
+                }
             });
+
             rejectBTN.setOnClickListener(view -> {
                 mBottomSheetReject.show();
             });
@@ -943,10 +1027,10 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
                 case DumeUtils.STUDENT:
                     acceptBTN.setVisibility(View.GONE);
                     divider.setVisibility(View.GONE);
-                    rejectBTN.setText("Cancel Request");
+                    rejectBTN.setText("Cancel Request ?");
                     stuMoreInfoHost.setVisibility(View.GONE);
                     rejectSubText.setTextColor(context.getResources().getColor(R.color.dark_light_red));
-                    rejectMainText.setText("Cancel Request");
+                    rejectMainText.setText("Cancel Request ?");
                     rejectSubText.setText("Dear " + studentName + " if you cancel now BDT 50 will be applied as penalty which you have to pay to next mentor...");
                     rejectYesBtn.setText("Yes, Cancel");
                     rejectNoBtn.setText("No");
@@ -964,6 +1048,161 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
                     break;
             }
 
+        }
+
+        private void openImageIntent() {
+            // Determine Uri of camera image to save.
+            final File root = new File(Environment.getExternalStorageDirectory() + File.separator + "MyDir" + File.separator);
+            root.mkdirs();
+            final String fname = "stu_" + getUserUID() + ".jpg";
+            final File sdImageMainDirectory = new File(root, fname);
+            outputFileUri = Uri.fromFile(sdImageMainDirectory);
+
+            // Camera.
+            final List<Intent> cameraIntents = new ArrayList<Intent>();
+            final Intent captureIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+            final PackageManager packageManager = context.getPackageManager();
+            final List<ResolveInfo> listCam = packageManager.queryIntentActivities(captureIntent, 0);
+            for (ResolveInfo res : listCam) {
+                final String packageName = res.activityInfo.packageName;
+                final Intent intent = new Intent(captureIntent);
+                intent.setComponent(new ComponentName(packageName, res.activityInfo.name));
+                intent.setPackage(packageName);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
+                cameraIntents.add(intent);
+            }
+
+            // Filesystem.
+            final Intent galleryIntent = new Intent();
+            galleryIntent.setType("image/*");
+            galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
+
+            // Chooser of filesystem options.
+            final Intent chooserIntent = Intent.createChooser(galleryIntent, "Select Source");
+
+            // Add the camera options.
+            chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, cameraIntents.toArray(new Parcelable[cameraIntents.size()]));
+            startActivityForResult(chooserIntent, IMAGE_RESULT_CODE);
+        }
+
+        @Override
+        public void onActivityResult(int requestCode, int resultCode, Intent data) {
+            if (resultCode == RESULT_OK) {
+                if (requestCode == IMAGE_RESULT_CODE) {
+                    final boolean isCamera;
+                    if (data == null) {
+                        isCamera = true;
+                    } else {
+                        final String action = data.getAction();
+                        if (action == null) {
+                            isCamera = false;
+                        } else {
+                            isCamera = action.equals(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                        }
+                    }
+
+                    if (isCamera) {
+                        selectedImageUri = outputFileUri;
+                    } else {
+                        selectedImageUri = data == null ? null : data.getData();
+                    }
+                    if (selectedImageUri != null) {
+                        if (uploadProgress!= null) {
+                            uploadProgress.setVisibility(View.VISIBLE);
+                        }
+                        //showSpiner();
+                        try {
+                            actualImage = FileUtil.from(context, selectedImageUri);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        compressImage(actualImage);
+                    }
+                    //Glide.with(this).load(selectedImageUri).apply(new RequestOptions().override(100, 100)).into(profileUserDP);
+                }
+            }
+        }
+
+        @SuppressLint("CheckResult")
+        private void compressImage(File actualImage) {
+            new Compressor(context)
+                    .compressToFileAsFlowable(actualImage, "photo_id")
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Consumer<File>() {
+                        @Override
+                        public void accept(File file) {
+                            compressedImage = file;
+                            Glide.with(context).load(file).apply(new RequestOptions().override(100, 100).placeholder(R.drawable.ic_photo_id)).into(photoId);
+
+                            //upload the image here do what you have to do
+                            //updateChangesClicked();
+                            if(getPhotoIdUri() != null){
+                                myThisActivity.mModel.uploadPhotoId(getPhotoIdUri(), new usefulListeners.uploadToSTGListererMin() {
+                                    @Override
+                                    public void onSuccessSTG(Object obj) {
+                                        String photoIdUrl = (String) obj;
+                                        myThisActivity.flush("Photo-ID uploaded");
+                                        //not write to mentor profile
+                                        Map<String, Object> updateData = new HashMap<>();
+                                        updateData.put("photo_id_url", photoIdUrl);
+                                        updateData.put("isVerified", "Pending");
+                                        //Glide.with(context).load(photoIdUrl).apply(new RequestOptions().override(100, 100).placeholder(R.drawable.ic_photo_id)).into(photoId);
+                                        //TODO will update isVerified manually after checking the photoId
+                                        //TODO and make the pending request accepted as well
+                                        myThisActivity.mModel.updatePhotoIdToMentorProfile(updateData, new usefulListeners.uploadToDBListerer() {
+                                            @Override
+                                            public void onSuccessDB(Object obj) {
+                                                beforeUpload.setVisibility(View.GONE);
+                                                afterUpload.setVisibility(View.VISIBLE);
+                                                //update complete now fix the view here
+                                                //DONE
+                                                //DONE
+                                                //DONE
+                                                if (uploadProgress!= null) {
+                                                    uploadProgress.setVisibility(View.GONE);
+                                                }
+                                            }
+
+                                            @Override
+                                            public void onFailDB(Object obj) {
+                                                if (uploadProgress!= null) {
+                                                    uploadProgress.setVisibility(View.GONE);
+                                                }
+                                                Toast.makeText(context, "Network err!!", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                                    }
+                                    @Override
+                                    public void onFailSTG(Object obj) {
+                                        myThisActivity.flush((String) obj);
+                                        if (uploadProgress!= null) {
+                                            uploadProgress.setVisibility(View.GONE);
+                                        }
+                                    }
+                                });
+                            }
+
+
+                        }
+                    }, new Consumer<Throwable>() {
+                        @Override
+                        public void accept(Throwable throwable) {
+                            throwable.printStackTrace();
+                            myThisActivity.flush(throwable.getMessage());
+                            if (uploadProgress!= null) {
+                                uploadProgress.setVisibility(View.GONE);
+                            }
+                        }
+                    });
+        }
+
+        public Uri getPhotoIdUri() {
+            if (compressedImage != null) {
+                return Uri.fromFile(compressedImage);
+            } else {
+                return null;
+            }
         }
 
         public void configFragmentBtnClick() {

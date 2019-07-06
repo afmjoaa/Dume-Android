@@ -51,7 +51,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
     public void update(List<ReviewHighlightData> newData) {
         data.clear();
         data.addAll(newData);
-        this.notifyDataSetChanged();
+        notifyDataSetChanged();
     }
 
     @NonNull

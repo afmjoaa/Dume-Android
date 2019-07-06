@@ -5,8 +5,10 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -17,6 +19,7 @@ import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.ServerTimestamp;
+import com.google.firebase.firestore.WriteBatch;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -43,11 +46,13 @@ public class HomePageModel extends StuBaseModel implements HomePageContract.Mode
     private static final String TAG = "HomePageModel";
     private ListenerRegistration registration;
     private String name;
+    private Map<String, Object> updateSelfRating;
 
     public HomePageModel(Activity activity, Context context) {
         super(context);
         this.context = context;
         this.activity = activity;
+        updateSelfRating = new HashMap<>();
     }
 
 
@@ -130,8 +135,6 @@ public class HomePageModel extends StuBaseModel implements HomePageContract.Mode
                         promoData.getPromo_code(), FieldValue.delete()).addOnSuccessListener(aVoid -> listener.onSuccess(true)).addOnFailureListener(e -> listener.onError(e.getLocalizedMessage()));
 
 
-
-
     }
 
     @Override
@@ -141,15 +144,12 @@ public class HomePageModel extends StuBaseModel implements HomePageContract.Mode
 
     @Override
     public void getPromo(String promoCode, TeacherContract.Model.Listener<HomePageRecyclerData> listener) {
-
-
-        ListenerRegistration listenerRegistration = firestore.collection("promo").whereEqualTo("promo_code", promoCode).addSnapshotListener((Activity) context, new EventListener<QuerySnapshot>() {
+        firestore.collection("promo").whereEqualTo("promo_code", promoCode).get().addOnCompleteListener((Activity) context,new OnCompleteListener<QuerySnapshot>() {
             @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                if (queryDocumentSnapshots == null) {
-                    listener.onError("Promo Not Exists");
-                } else {
-                    List<DocumentSnapshot> documents = queryDocumentSnapshots.getDocuments();
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    QuerySnapshot document = task.getResult();
+                    List<DocumentSnapshot> documents = document.getDocuments();
                     if (documents.size() > 0) {
                         HomePageRecyclerData homePageRecyclerData = documents.get(0).toObject(HomePageRecyclerData.class);
                         if (!homePageRecyclerData.isExpired()) {
@@ -157,11 +157,11 @@ public class HomePageModel extends StuBaseModel implements HomePageContract.Mode
                         }
                     } else listener.onError("Promo Not Exists");
 
+                } else {
+                    listener.onError(task.getException().getLocalizedMessage());
                 }
-
             }
         });
-        listenerRegistration.remove();
     }
 
 
@@ -185,169 +185,213 @@ public class HomePageModel extends StuBaseModel implements HomePageContract.Mode
         }
         changeRecordStatus(record_id, keyToChange, Record.DONE);
 
-        firestore.collection(path).document(opponent_uid).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+
+        firestore.collection(path).document(opponent_uid).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
-            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-                if (documentSnapshot == null) {
-                    return;
-                }
-                if (myAccountType.equals(DumeUtils.TEACHER) || myAccountType.equals(DumeUtils.BOOTCAMP)) {
-                    Map<String, Object> self_rating = (Map<String, Object>) documentSnapshot.get("self_rating");
-                    float star_rating = Float.parseFloat((String) self_rating.get("star_rating"));
-                    Integer star_count = Integer.parseInt((String) self_rating.get("star_count"));
-                    Integer dl_behaviour = Integer.parseInt((String) self_rating.get("dl_behaviour"));
-                    Integer l_behaviour = Integer.parseInt((String) self_rating.get("l_behaviour"));
-                    Integer dl_communication = Integer.parseInt((String) self_rating.get("dl_communication"));
-                    Integer l_communication = Integer.parseInt((String) self_rating.get("l_communication"));
-
-                    star_rating = (star_rating * star_count) + inputStar / (++star_count);
-
-                    for (Map.Entry<String, Boolean> entry : inputRating.entrySet()) {
-                        switch (entry.getKey()) {
-                            case "Communication":
-                                if (entry.getValue()) {
-                                    l_communication = l_communication + 1;
-                                } else {
-                                    dl_communication = dl_communication + 1;
-                                }
-                                break;
-                            case "Behaviour":
-                                if (entry.getValue()) {
-                                    l_behaviour = l_behaviour + 1;
-                                } else {
-                                    dl_behaviour = dl_behaviour + 1;
-                                }
-                                break;
-                        }
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot documentSnapshot = task.getResult();
+                    if (documentSnapshot == null || !documentSnapshot.exists()) {
+                        return;
                     }
+                    if (myAccountType.equals(DumeUtils.TEACHER) || myAccountType.equals(DumeUtils.BOOTCAMP)) {
+                        Map<String, Object> self_rating = (Map<String, Object>) documentSnapshot.get("self_rating");
+                        Float star_rating = Float.parseFloat((String) self_rating.get("star_rating"));
+                        Integer star_count = Integer.parseInt((String) self_rating.get("star_count"));
+                        Integer dl_behaviour = Integer.parseInt((String) self_rating.get("dl_behaviour"));
+                        Integer l_behaviour = Integer.parseInt((String) self_rating.get("l_behaviour"));
+                        Integer dl_communication = Integer.parseInt((String) self_rating.get("dl_communication"));
+                        Integer l_communication = Integer.parseInt((String) self_rating.get("l_communication"));
 
-                    Map<String, Object> selfRating = new HashMap<>();
-                    selfRating.put("star_rating", star_rating);
-                    selfRating.put("star_count", star_count);
-                    selfRating.put("l_communication", l_communication);
-                    selfRating.put("dl_communication", dl_communication);
-                    selfRating.put("l_behaviour", l_behaviour);
-                    selfRating.put("dl_behaviour", dl_behaviour);
-                    documentSnapshot.getReference().update("self_rating", self_rating);
-                    listener.onSuccess(null);
-                } else {//this is for my account type student
-                    Map<String, Object> self_rating = (Map<String, Object>) documentSnapshot.get("self_rating");
-                    float star_rating = Float.parseFloat((String) self_rating.get("star_rating"));
-                    Integer star_count = Integer.parseInt((String) self_rating.get("star_count"));
-                    Integer dl_behaviour = Integer.parseInt((String) self_rating.get("dl_behaviour"));
-                    Integer l_behaviour = Integer.parseInt((String) self_rating.get("l_behaviour"));
-                    Integer dl_communication = Integer.parseInt((String) self_rating.get("dl_communication"));
-                    Integer l_communication = Integer.parseInt((String) self_rating.get("l_communication"));
+                        Integer menCurrentCount = star_count+1;
+                        star_rating = ((star_rating * star_count) + inputStar) / (menCurrentCount);
 
-                    Integer dl_experience = Integer.parseInt((String) self_rating.get("dl_experience"));
-                    Integer l_experience = Integer.parseInt((String) self_rating.get("l_experience"));
-                    Integer dl_expertise = Integer.parseInt((String) self_rating.get("dl_expertise"));
-                    Integer l_expertise = Integer.parseInt((String) self_rating.get("l_expertise"));
-                    Integer student_guided = Integer.parseInt((String) self_rating.get("student_guided"));
-                    student_guided++;
-
-                    star_rating = (star_rating * star_count) + inputStar / (++star_count);
-                    for (Map.Entry<String, Boolean> entry : inputRating.entrySet()) {
-                        switch (entry.getKey()) {
-                            case "Expertise":
-                                if (entry.getValue()) {
-                                    l_expertise = l_expertise + 1;
-                                } else {
-                                    dl_expertise = dl_expertise + 1;
-
-                                }
-                                break;
-                            case "Experience":
-                                if (entry.getValue()) {
-                                    l_experience = l_experience + 1;
-                                } else {
-                                    dl_experience = dl_experience + 1;
-
-                                }
-
-                                break;
-                            case "Communication":
-                                if (entry.getValue()) {
-                                    l_communication = l_communication + 1;
-                                } else {
-                                    dl_communication = dl_communication + 1;
-
-                                }
-
-                                break;
-                            case "Behaviour":
-                                if (entry.getValue()) {
-                                    l_behaviour = l_behaviour + 1;
-                                } else {
-                                    dl_behaviour = dl_behaviour + 1;
-
-                                }
-                                break;
-                        }
-                    }
-
-                    Map<String, Object> selfRating = new HashMap<>();
-                    selfRating.put("star_rating", star_rating);
-                    selfRating.put("star_count", star_count);
-                    selfRating.put("l_communication", l_communication);
-                    selfRating.put("dl_communication", dl_communication);
-                    selfRating.put("l_behaviour", l_behaviour);
-                    selfRating.put("dl_behaviour", dl_behaviour);
-                    selfRating.put("l_expertise", l_expertise);
-                    selfRating.put("dl_expertise", dl_expertise);
-                    selfRating.put("l_experience", l_experience);
-                    selfRating.put("dl_experience", dl_experience);
-                    selfRating.put("student_guided", student_guided);
-                    documentSnapshot.getReference().update("self_rating", self_rating);
-
-                    registration = firestore.collection("/users/mentors/skills/").document(skill_id).addSnapshotListener(new EventListener<DocumentSnapshot>() {
-                        @Override
-                        public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-                            if (myAccountType == DumeUtils.STUDENT) {
-                                Map<String, Number> dblikes = (Map<String, Number>) documentSnapshot.get("likes");
-                                Map<String, Number> likes = dblikes;
-                                Map<String, Number> dbdislikes = (Map<String, Number>) documentSnapshot.get("dislikes");
-                                Map<String, Number> dislikes = dbdislikes;
-                                for (Map.Entry<String, Number> entry : dblikes.entrySet()) {
-                                    Boolean aBoolean = inputRating.get(entry.getKey());
-                                    if (aBoolean!= null && aBoolean) {
-                                        Number value = entry.getValue();
-                                        value = 1 + value.longValue();
-                                        likes.put(entry.getKey(), value);
+                        for (Map.Entry<String, Boolean> entry : inputRating.entrySet()) {
+                            switch (entry.getKey()) {
+                                case "Communication":
+                                    if (entry.getValue()) {
+                                        l_communication = l_communication + 1;
+                                    } else {
+                                        dl_communication = dl_communication + 1;
                                     }
-                                }
-                                for (Map.Entry<String, Number> entry : dbdislikes.entrySet()) {
-                                    Boolean aBoolean = inputRating.get(entry.getKey());
-                                    if (aBoolean!= null && !aBoolean) {
-                                        Number value = entry.getValue();
-                                        value = 1 + value.longValue();
-                                        dislikes.put(entry.getKey(), value);
+                                    break;
+                                case "Behaviour":
+                                    if (entry.getValue()) {
+                                        l_behaviour = l_behaviour + 1;
+                                    } else {
+                                        dl_behaviour = dl_behaviour + 1;
                                     }
-                                }
-                                listener.onSuccess(null);
-
-                                registration.remove();
-                                firestore.collection("/users/mentors/skills/").document(skill_id).update("sp_info.self_rating", self_rating, "likes", likes, "dislikes", dislikes);
+                                    break;
                             }
                         }
-                    });
 
-                    //setting the skill feedback here
-                    Map<String, Object> reviewMap = new HashMap<>();
-                    reviewMap.put("body", feedbackString);
-                    //TODO
-                    reviewMap.put("dislikes", 0);
-                    reviewMap.put("likes", 0);
-                    reviewMap.put("name", name);
-                    reviewMap.put("r_avatar", "avatar");
-                    reviewMap.put("reviewer_rating", inputStar.toString());
-                    reviewMap.put("time", FieldValue.serverTimestamp());
-                    firestore.collection("/users/mentors/skills/").document(skill_id).collection("reviews").add(reviewMap);
+                        Map<String, Object> stuUpdateSelfRating = new HashMap<>();
+                        stuUpdateSelfRating.put("star_rating", star_rating.toString());
+                        stuUpdateSelfRating.put("star_count", menCurrentCount.toString());
+                        stuUpdateSelfRating.put("l_communication", l_communication.toString());
+                        stuUpdateSelfRating.put("dl_communication", dl_communication.toString());
+                        stuUpdateSelfRating.put("l_behaviour", l_behaviour.toString());
+                        stuUpdateSelfRating.put("dl_behaviour", dl_behaviour.toString());
+                        documentSnapshot.getReference().update("self_rating", stuUpdateSelfRating).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                listener.onSuccess(null);
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                listener.onError(e.getLocalizedMessage());
+                            }
+                        });
+
+                    } else {//this is for my account type student
+                        Map<String, Object> self_rating = (Map<String, Object>) documentSnapshot.get("self_rating");
+                        Float star_rating = Float.parseFloat((String) self_rating.get("star_rating"));
+                        Integer star_count = Integer.parseInt((String) self_rating.get("star_count"));
+                        Integer dl_behaviour = Integer.parseInt((String) self_rating.get("dl_behaviour"));
+                        Integer l_behaviour = Integer.parseInt((String) self_rating.get("l_behaviour"));
+                        Integer dl_communication = Integer.parseInt((String) self_rating.get("dl_communication"));
+                        Integer l_communication = Integer.parseInt((String) self_rating.get("l_communication"));
+
+                        Integer dl_experience = Integer.parseInt((String) self_rating.get("dl_experience"));
+                        Integer l_experience = Integer.parseInt((String) self_rating.get("l_experience"));
+                        Integer dl_expertise = Integer.parseInt((String) self_rating.get("dl_expertise"));
+                        Integer l_expertise = Integer.parseInt((String) self_rating.get("l_expertise"));
+                        Integer student_guided = Integer.parseInt((String) self_rating.get("student_guided"));
+                        Integer response_time = Integer.parseInt((String) self_rating.get("response_time"));
+                        student_guided = student_guided + 1;
+
+                        Integer currentCount = star_count+1;
+                        star_rating = ((star_rating * star_count) + inputStar )/ (currentCount);
+                        for (Map.Entry<String, Boolean> entry : inputRating.entrySet()) {
+                            switch (entry.getKey()) {
+                                case "Expertise":
+                                    if (entry.getValue()) {
+                                        l_expertise = l_expertise + 1;
+                                    } else {
+                                        dl_expertise = dl_expertise + 1;
+
+                                    }
+                                    break;
+                                case "Experience":
+                                    if (entry.getValue()) {
+                                        l_experience = l_experience + 1;
+                                    } else {
+                                        dl_experience = dl_experience + 1;
+
+                                    }
+
+                                    break;
+                                case "Communication":
+                                    if (entry.getValue()) {
+                                        l_communication = l_communication + 1;
+                                    } else {
+                                        dl_communication = dl_communication + 1;
+
+                                    }
+
+                                    break;
+                                case "Behaviour":
+                                    if (entry.getValue()) {
+                                        l_behaviour = l_behaviour + 1;
+                                    } else {
+                                        dl_behaviour = dl_behaviour + 1;
+
+                                    }
+                                    break;
+                            }
+                        }
+
+                        updateSelfRating = new HashMap<>();
+                        updateSelfRating.put("star_rating", star_rating.toString());
+                        updateSelfRating.put("star_count", currentCount.toString());
+                        updateSelfRating.put("l_communication", l_communication.toString());
+                        updateSelfRating.put("dl_communication", dl_communication.toString());
+                        updateSelfRating.put("l_behaviour", l_behaviour.toString());
+                        updateSelfRating.put("dl_behaviour", dl_behaviour.toString());
+                        updateSelfRating.put("l_expertise", l_expertise.toString());
+                        updateSelfRating.put("dl_expertise", dl_expertise.toString());
+                        updateSelfRating.put("l_experience", l_experience.toString());
+                        updateSelfRating.put("dl_experience", dl_experience.toString());
+                        updateSelfRating.put("student_guided", student_guided.toString());
+                        updateSelfRating.put("response_time", response_time.toString());
+
+
+                        firestore.collection("/users/mentors/skills/").document(skill_id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    DocumentSnapshot documentSnapshot = task.getResult();
+                                    if (myAccountType == DumeUtils.STUDENT) {
+                                        Map<String, Number> dblikes = (Map<String, Number>) documentSnapshot.get("likes");
+                                        Map<String, Number> likes = dblikes;
+                                        Map<String, Number> dbdislikes = (Map<String, Number>) documentSnapshot.get("dislikes");
+                                        Map<String, Number> dislikes = dbdislikes;
+                                        for (Map.Entry<String, Number> entry : dblikes.entrySet()) {
+                                            Boolean aBoolean = inputRating.get(entry.getKey());
+                                            if (aBoolean != null && aBoolean) {
+                                                Number value = entry.getValue();
+                                                value = 1 + value.longValue();
+                                                likes.put(entry.getKey(), value);
+                                            }
+                                        }
+                                        for (Map.Entry<String, Number> entry : dbdislikes.entrySet()) {
+                                            Boolean aBoolean = inputRating.get(entry.getKey());
+                                            if (aBoolean != null && !aBoolean) {
+                                                Number value = entry.getValue();
+                                                value = 1 + value.longValue();
+                                                dislikes.put(entry.getKey(), value);
+                                            }
+                                        }
+                                        //now batch three thing here
+                                        //1. mentorProfile
+                                        //2. skill
+                                        //3. skill.review
+                                        WriteBatch batch = firestore.batch();
+                                        DocumentReference mentorProfile = firestore.collection(path).document(opponent_uid);
+                                        batch.update(mentorProfile, "self_rating", updateSelfRating);
+
+                                        DocumentReference skill_Ref = firestore.collection("/users/mentors/skills/").document(skill_id);
+                                        batch.update(skill_Ref, "sp_info.self_rating", updateSelfRating, "likes", likes, "dislikes", dislikes);
+
+                                        //setting the skill feedback here
+                                        Map<String, Object> reviewMap = new HashMap<>();
+                                        reviewMap.put("body", feedbackString);
+                                        reviewMap.put("dislikes", 0);
+                                        reviewMap.put("likes", 0);
+                                        reviewMap.put("name", name);
+                                        reviewMap.put("r_avatar", "avatar");
+                                        reviewMap.put("reviewer_rating", inputStar.toString());
+                                        reviewMap.put("time", FieldValue.serverTimestamp());
+                                        firestore.collection("/users/mentors/skills/").document(skill_id).collection("reviews").add(reviewMap);
+
+                                        DocumentReference skillReview =firestore.collection("/users/mentors/skills/").document(skill_id).collection("reviews").document();
+                                        batch.set(skillReview, reviewMap);
+
+
+                                        // Commit the batch
+                                        batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if (task.isSuccessful()) {
+                                                    listener.onSuccess(null);
+                                                }else {
+                                                    listener.onError("err!!");
+                                                }
+                                            }
+                                        });
+                                    }
+                                } else {
+                                    Log.d(TAG, "get failed with ", task.getException());
+                                }
+                            }
+                        });
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
                 }
             }
         });
-
-
     }
 
     @Override

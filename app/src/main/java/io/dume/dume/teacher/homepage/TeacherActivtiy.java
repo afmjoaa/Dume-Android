@@ -237,6 +237,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
     private static String FACEBOOK_URL = "https://www.facebook.com/groups/1623868617935891/";
     private static String FACEBOOK_PAGE_ID = "1623868617935891";
     public static boolean ISSKILLDIALOGSHOWING = false;
+    private Dialog dialog;
 
     @Override
     public void loadPromoData(HomePageRecyclerData promoData) {
@@ -399,6 +400,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         freeCashBack = findViewById(R.id.free_cashback_Btn);
         startLearingBtn = findViewById(R.id.start_learing_btn);
         bottomSheetBtnCallback();
+        dialog = new Dialog(context);
     }
 
     public void bottomSheetBtnCallback() {
@@ -1268,7 +1270,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
     public void testingCustomDialogue(HomePageRatingData myData, Record record) {
         // custom dialog
         String keyToChange = "t_rate_status";
-        Dialog dialog = new Dialog(context);
+        //dialog = new Dialog(context);
         dialog.setContentView(R.layout.custom_rating_dialogue);
         dialog.setCanceledOnTouchOutside(false);
         DocumentSnapshot snapshot = record.getRecordSnap();
@@ -1367,8 +1369,9 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
                 }
             }
         });
-
-        dialog.show();
+        if (!dialog.isShowing()) {
+            dialog.show();
+        }
     }
 
     @Override

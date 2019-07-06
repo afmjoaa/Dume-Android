@@ -755,19 +755,16 @@ public class RecordsAcceptedActivity extends CustomStuAppCompatActivity implemen
             }
 
             //now fixing the review data
-            new DumeModel(getContext()).loadReview(selectedMentor.getId(), null, new TeacherContract.Model.Listener<List<ReviewHighlightData>>() {
+            String skillUid = (String) selectedMentor.get("skill_uid");
+            new DumeModel(getContext()).loadReview(skillUid, null, new TeacherContract.Model.Listener<List<ReviewHighlightData>>() {
                 @Override
                 public void onSuccess(List<ReviewHighlightData> list) {
                     lastReviewData = list.get(list.size() - 1);
                     reviewRecyAda.update(list);
+                    noDataBlockReview.setVisibility(View.GONE);
                     //reviewRecyAda = new ReviewAdapter(context, list, true);
-                    if (list.size() >= 10) {
-                        loadMoreReviewBtn.setEnabled(true);
-                        loadMoreReviewBtn.setVisibility(View.VISIBLE);
-                    } else {
-                        loadMoreReviewBtn.setEnabled(false);
-                        loadMoreReviewBtn.setVisibility(View.GONE);
-                    }
+                    loadMoreReviewBtn.setEnabled(false);
+                    loadMoreReviewBtn.setVisibility(View.GONE);
                 }
 
                 @Override
@@ -777,36 +774,8 @@ public class RecordsAcceptedActivity extends CustomStuAppCompatActivity implemen
                     if (msg.equals("No review")) {
                         return;
                     }
-                    Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
                 }
-            });
-
-            loadMoreReviewBtn.setOnClickListener(view -> {
-                view.setEnabled(false);
-                new DumeModel(context).loadReview(selectedMentor.getId(), lastReviewData.getDoc_id(), new TeacherContract.Model.Listener<List<ReviewHighlightData>>() {
-                    @Override
-                    public void onSuccess(List<ReviewHighlightData> list) {
-                        lastReviewData = list.get(list.size() - 1);
-                        reviewRecyAda.addMore(list);
-                        if (list.size() >= 10) {
-                            loadMoreReviewBtn.setEnabled(true);
-                            loadMoreReviewBtn.setVisibility(View.VISIBLE);
-                        } else {
-                            loadMoreReviewBtn.setEnabled(false);
-                            loadMoreReviewBtn.setVisibility(View.GONE);
-                        }
-                    }
-
-                    @Override
-                    public void onError(String msg) {
-                        view.setEnabled(true);
-                        if (msg.equals("No review")) {
-                            loadMoreReviewBtn.setVisibility(View.GONE);
-                            return;
-                        }
-                        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
-                    }
-                });
             });
 
             Log.e(TAG, "onMentorSelect: " + "method is running ");

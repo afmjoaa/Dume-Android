@@ -245,6 +245,7 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
     private List<String> selectedDegrees;
     private boolean[] checkedItems;
     private SharedPreferences prefs;
+    private Dialog dialog;
 
 
     @Override
@@ -645,6 +646,7 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
     @Override
     public void configHomePage() {
         //hiding the segment group
+        dialog = new Dialog(context);
         studentProfile.setVisible(false);
         radioSegmentGroup.setVisibility(View.GONE);
         fab.setAlpha(0.90f);
@@ -1300,7 +1302,7 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
     public void testingCustomDialogue(HomePageRatingData myData, Record record) {
         // custom dialog
         String keyToChange = "s_rate_status";
-        Dialog dialog = new Dialog(context);
+        //dialog = new Dialog(context);
         dialog.setContentView(R.layout.custom_rating_dialogue);
         dialog.setCanceledOnTouchOutside(false);
         DocumentSnapshot snapshot = record.getRecordSnap();
@@ -1421,7 +1423,9 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
             }
         });
 
-        dialog.show();
+        if (!dialog.isShowing()) {
+            dialog.show();
+        }
     }
 
     @Override

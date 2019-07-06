@@ -309,23 +309,27 @@ public class HomePagePresenter implements HomePageContract.Presenter {
                 appliedPromo(documentSnapshot);
                 ArrayList<String> tempList = new ArrayList<>();
 
+                //if more then once available then take only one
                 for (String promoCode : available_promo) {
                     if (!tempList.contains(promoCode)) {
                         tempList.add(promoCode);
                     }
                 }
                 available_promo = tempList;
+                Toast.makeText(context, available_promo.toString(), Toast.LENGTH_SHORT).show();
 
                 for (String promoCode : available_promo) {
                     mModel.getPromo(promoCode, new TeacherContract.Model.Listener<HomePageRecyclerData>() {
                         @Override
                         public void onSuccess(HomePageRecyclerData list) {
+                            Toast.makeText(context, "find the promo " + list.getPromo_code(), Toast.LENGTH_SHORT).show();
                             mView.loadPromoData(list);
                         }
 
                         @Override
                         public void onError(String msg) {
-                            Log.w(TAG, "onError: " + msg);
+                            Toast.makeText(context, "PromoPromoErr " + msg, Toast.LENGTH_SHORT).show();
+                            Log.w(TAG, "PromoPromoErr" + msg);
                         }
                     });
                 }
