@@ -278,7 +278,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
     public void setHeadsUpPromo(String discount, String dayLeft, String packageName) {
         percentOffBlock.setVisibility(View.VISIBLE);
         headerTab.setBackground(getResources().getDrawable(R.drawable.bg_white_bottom_round_6));
-        promotionTextView.setText(discount + "% off " + packageName);
+        promotionTextView.setText(discount + "% off on " + packageName);
         promotionExpireDate.setText(dayLeft);
     }
 

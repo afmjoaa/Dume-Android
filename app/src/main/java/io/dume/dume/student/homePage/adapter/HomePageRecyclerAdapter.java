@@ -24,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.transitionseverywhere.Fade;
 import com.transitionseverywhere.Slide;
@@ -109,8 +110,7 @@ public class HomePageRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
             myViewHolder.mainAboutIntro.setText(homePageRecyclerData.title);
             myViewHolder.mainAboutBody.setText(homePageRecyclerData.getDescription());
             myViewHolder.mainAboutSubBody.setText(homePageRecyclerData.getSub_description());
-            //Glide.with(context).load(homePageRecyclerData.getPromo_image()).into(myViewHolder.mainAboutImage);
-            //.apply(new RequestOptions().override(100, 100).placeholder(R.drawable.ic_promo_image))
+            Glide.with(context).load(homePageRecyclerData.getPromo_image()).apply(new RequestOptions().override(100, 100).placeholder(R.drawable.ic_promo_image)).into(myViewHolder.mainAboutImage);
 
             myViewHolder.mainAbotuBtn.setOnClickListener(view -> {
                 view.setEnabled(false);
