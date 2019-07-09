@@ -35,18 +35,14 @@
             android:clickable="false"
             app:srcCompat="@drawable/academic_school" />
 
+
         <TextView
             android:id="@+id/levelET"
-            android:layout_width="wrap_content"
+            android:layout_width="60dp"
             android:layout_height="wrap_content"
             android:layout_below="@+id/search_detail_icon"
-            android:ellipsize="end"
-            android:maxWidth="76dp"
-            android:maxLines="1"
             android:layout_centerHorizontal="true"
-            android:singleLine="true"
             android:text="BSc in CSE"
-            android:minWidth="36dp"
             android:textAlignment="center"
             android:textColor="@color/textColorPrimary"
             android:textSize="11sp" />
@@ -72,9 +68,6 @@
         android:layout_height="wrap_content"
         android:layout_toEndOf="@+id/vertical_divider"
         android:layout_toRightOf="@+id/vertical_divider"
-        android:ellipsize="end"
-        android:maxLines="1"
-        android:singleLine="true"
         android:text="MIST -Military Institute Of Science and Technology"
         android:textColor="@color/black"
         android:textSize="12sp" />

@@ -97,10 +97,10 @@ public class SearchLoadingPresenter implements SearchLoadingContract.Presenter {
             public void onSuccess(List<DocumentSnapshot> list) {
 
                 /*Found - Level 1*/
-                if (list.size() >= 4) {
+                if (list.size() >= 5) {
                     //view.flush("Found - Level 1");
                     searchDataStore.setLevelNum(1);
-                    if (list.size() > 6) {
+                    if (list.size() > 7) {
                         searchDataStore.setResultList(getFilteredResultList(list));
                     } else {
                         searchDataStore.setResultList(list);
@@ -112,10 +112,10 @@ public class SearchLoadingPresenter implements SearchLoadingContract.Presenter {
                         @Override
                         public void onSuccess(List<DocumentSnapshot> list) {
                             /*Found - Level 4*/
-                            if (list.size() >= 4) {
+                            if (list.size() >= 5) {
                                 //view.flush("Found - Level 4");
                                 searchDataStore.setLevelNum(2);
-                                if (list.size() > 6) {
+                                if (list.size() > 7) {
                                     searchDataStore.setResultList(getFilteredResultList(list));
                                 } else {
                                     searchDataStore.setResultList(list);
@@ -130,10 +130,10 @@ public class SearchLoadingPresenter implements SearchLoadingContract.Presenter {
                                     @Override
                                     public void onSuccess(List<DocumentSnapshot> list) {
                                         /*Found - Level 2*/
-                                        if (list.size() >= 4) {
+                                        if (list.size() >= 5) {
                                             //view.flush("Found - Level 2");
                                             searchDataStore.setLevelNum(3);
-                                            if (list.size() > 6) {
+                                            if (list.size() > 7) {
                                                 searchDataStore.setResultList(getFilteredResultList(list));
                                             } else {
                                                 searchDataStore.setResultList(list);
@@ -148,11 +148,11 @@ public class SearchLoadingPresenter implements SearchLoadingContract.Presenter {
                                                 @Override
                                                 public void onSuccess(List<DocumentSnapshot> list) {
                                                     /*Found - Level 3*/
-                                                    if (list.size() >= 4) {
+                                                    if (list.size() >= 5) {
                                                         //view.flush("Found - Level 3");
                                                         searchDataStore.setLevelNum(4);
                                                         //TODO tesing
-                                                        if (list.size() > 6) {
+                                                        if (list.size() > 7) {
                                                             searchDataStore.setResultList(getFilteredResultList(list));
                                                         } else {
                                                             searchDataStore.setResultList(list);
@@ -170,7 +170,7 @@ public class SearchLoadingPresenter implements SearchLoadingContract.Presenter {
                                                                 if (list.size() >= 1) {
                                                                     //view.flush("Found - Level 4");
                                                                     searchDataStore.setLevelNum(5);
-                                                                    if (list.size() > 6) {
+                                                                    if (list.size() > 7) {
                                                                         searchDataStore.setResultList(getFilteredResultList(list));
                                                                     } else {
                                                                         searchDataStore.setResultList(list);
@@ -233,10 +233,10 @@ public class SearchLoadingPresenter implements SearchLoadingContract.Presenter {
             @Override
             public void onSuccess(List<DocumentSnapshot> list) {
                 /*Found - Level 1*/
-                if (list.size() >= 5) {
+                if (list.size() >= 7) {
                     //view.flush("Found - Level 1");
                     searchDataStore.setLevelNum(1);
-                    if (list.size() > 5) {
+                    if (list.size() > 6) {
                         searchDataStore.setResultList(getSpecificFilteredResultList(list));
                     } else {
                         searchDataStore.setResultList(list);
@@ -248,10 +248,10 @@ public class SearchLoadingPresenter implements SearchLoadingContract.Presenter {
                         @Override
                         public void onSuccess(List<DocumentSnapshot> list) {
                             /*Found - Level 4*/
-                            if (list.size() >= 5) {
+                            if (list.size() >= 7) {
                                 //view.flush("Found - Level 4");
                                 searchDataStore.setLevelNum(2);
-                                if (list.size() > 5) {
+                                if (list.size() > 6) {
                                     searchDataStore.setResultList(getSpecificFilteredResultList(list));
                                 } else {
                                     searchDataStore.setResultList(list);
@@ -266,10 +266,10 @@ public class SearchLoadingPresenter implements SearchLoadingContract.Presenter {
                                     @Override
                                     public void onSuccess(List<DocumentSnapshot> list) {
                                         /*Found - Level 2*/
-                                        if (list.size() >= 5) {
+                                        if (list.size() >= 7) {
                                             //view.flush("Found - Level 2");
                                             searchDataStore.setLevelNum(3);
-                                            if (list.size() > 5) {
+                                            if (list.size() > 6) {
                                                 searchDataStore.setResultList(getSpecificFilteredResultList(list));
                                             } else {
                                                 searchDataStore.setResultList(list);
@@ -288,7 +288,7 @@ public class SearchLoadingPresenter implements SearchLoadingContract.Presenter {
                                                         //view.flush("Found - Level 3");
                                                         searchDataStore.setLevelNum(4);
                                                         //TODO tesing
-                                                        if (list.size() > 5) {
+                                                        if (list.size() > 6) {
                                                             searchDataStore.setResultList(getSpecificFilteredResultList(list));
                                                         } else {
                                                             searchDataStore.setResultList(list);
@@ -419,6 +419,11 @@ public class SearchLoadingPresenter implements SearchLoadingContract.Presenter {
                 lastFiltered.add(sortedResult.get(random.nextInt(sortedResult.size())));
                 sortedResult.remove(random.nextInt(sortedResult.size()));
             }
+            if (sortedResult.size() > 0) {
+                Random random = new Random();
+                lastFiltered.add(sortedResult.get(random.nextInt(sortedResult.size())));
+                sortedResult.remove(random.nextInt(sortedResult.size()));
+            }
             return lastFiltered;
         }
         return resultList;
@@ -528,8 +533,8 @@ public class SearchLoadingPresenter implements SearchLoadingContract.Presenter {
             }
         }
 
-        int remained = 5-sortedResult.size();
-        if(sortedResult.size()>=5){
+        int remained = 6-sortedResult.size();
+        if(sortedResult.size()>=6){
             return sortedResult;
         }else{
             //add the remaining to sortedResult here

@@ -634,7 +634,7 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 public void onSuccess(List<ReviewHighlightData> list) {
 
                     lastReviewData = list.get(list.size() - 1);
-                    reviewRecyAda = new ReviewAdapter(context, list, true);
+                    reviewRecyAda = new ReviewAdapter(context, list, skill.getId(),true);
                     myViewHolder.reviewRecycler.setAdapter(reviewRecyAda);
                     myViewHolder.reviewRecycler.setLayoutManager(new LinearLayoutManager(context));
                     myViewHolder.loadMoreBTN.setEnabled(false);
@@ -732,8 +732,10 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                                 //Do something
                                 if (visible) {
                                     myViewHolder.reviewShowBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, context.getResources().getDrawable(R.drawable.ic_up_arrow_small));
+                                    myViewHolder.hostingRelativeLayout.setBackgroundColor(context.getResources().getColor(R.color.white));
                                 } else {
                                     myViewHolder.reviewShowBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, context.getResources().getDrawable(R.drawable.ic_down_arrow_small));
+                                    myViewHolder.hostingRelativeLayout.setBackground(context.getResources().getDrawable(R.drawable.bg_white_bottom_round));
                                 }
                                 myViewHolder.reviewShowBtn.setEnabled(true);
                             }
@@ -742,9 +744,12 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                         if (visible) {
                             myViewHolder.reviewShowBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, context.getResources().getDrawable(R.drawable.ic_up_arrow_small));
                             myViewHolder.reviewShowBtn.setEnabled(true);
+                            myViewHolder.hostingRelativeLayout.setBackgroundColor(context.getResources().getColor(R.color.white));
+
                         } else {
                             myViewHolder.reviewShowBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, context.getResources().getDrawable(R.drawable.ic_down_arrow_small));
                             myViewHolder.reviewShowBtn.setEnabled(true);
+                            myViewHolder.hostingRelativeLayout.setBackground(context.getResources().getDrawable(R.drawable.bg_white_bottom_round));
                         }
                     }
                 }

@@ -7,7 +7,7 @@
     android:layout_height="wrap_content"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".student.recordsCurrent.RecordsCurrentActivity$PlaceholderFragment"
-    tools:showIn="@layout/stu13_viewpager_layout_current">
+   >
 
     <LinearLayout
         android:id="@+id/nested_host_linearlayout"
@@ -1522,7 +1522,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
-                android:background="@drawable/bg_white_bottom_round"
+                android:background="@color/white"
                 android:orientation="vertical"
                 android:paddingLeft="16dp"
                 android:paddingTop="8dp"
@@ -1531,6 +1531,7 @@
                 android:translationY="-2dp">
 
                 <android.support.v7.widget.RecyclerView
+                    android:background="@drawable/bg_white_bottom_round"
                     android:id="@+id/recycler_view_reviews"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

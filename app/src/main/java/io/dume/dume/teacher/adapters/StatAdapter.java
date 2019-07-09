@@ -45,7 +45,7 @@ public abstract class StatAdapter extends RecyclerView.Adapter<StatAdapter.FeedB
         layoutParams.width = (itemWidth);
         holder.hostingRelative.setLayoutParams(layoutParams);
         holder.valueTV.setText(String.format("%s", position == 0 ? stat.get(0).getRequest_i() : stat.get(0).getRequest_r()));
-        holder.valueTitleTV.setText(String.format("%s", position == 0 ? "Profile Impressions" : "Profile Request"));
+        holder.valueTitleTV.setText(String.format("%s", position == 0 ? "Profile Impression" : "Profile Request"));
         switch (position) {
             case 0:
                 Integer i = Integer.parseInt(stat.get(1).getRequest_i());

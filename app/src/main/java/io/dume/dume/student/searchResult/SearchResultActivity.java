@@ -295,7 +295,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
 
         //setting the review recycler view
         List<ReviewHighlightData> reviewData = new ArrayList<>();
-        reviewRecyAda = new ReviewAdapter(this, reviewData);
+        reviewRecyAda = new ReviewAdapter(this, reviewData, null);
         reviewRecyView.setAdapter(reviewRecyAda);
         reviewRecyView.setLayoutManager(new LinearLayoutManager(this));
     }
@@ -1578,7 +1578,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
         Map<String, Object> sp_info = (Map<String, Object>) selectedMentor.get("sp_info");
         String name = String.format("%s %s", sp_info.get("first_name"), sp_info.get("last_name"));
         mentorNameText.setText(name);
-        String birthDate = (String) sp_info.get("birth_date");
+        /*String birthDate = (String) sp_info.get("birth_date");
         if (birthDate == null || birthDate.equals("")) {
             ageText.setText("Age - unknown");
         } else {
@@ -1591,7 +1591,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                     Log.w(TAG, "onMentorSelect:" + e.getLocalizedMessage());
                 }
             }
-        }
+        }*/
         GeoPoint location = selectedMentor.getGeoPoint("location");
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
         String avatar = (String) sp_info.get("avatar");
@@ -1602,6 +1602,12 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
         pathRoute.add(searchDataStore.getAnchorPoint());
         pathRoute.add(latLng);
         mapFragment.setUpPath(pathRoute, mMap, RouteOverlayView.AnimType.ARC);
+        //filling the sub value property here
+        Map<String, Object> selfRating = (Map<String, Object>) sp_info.get("self_rating");
+        String starRating = (String) selfRating.get("star_rating");
+        double v = SphericalUtil.computeDistanceBetween(searchDataStore.getAnchorPoint(), latLng);
+        ageText.setText(starRating+ " ⭐  |  " + formatNumber(v) +" away");
+
         loadQualificationData(sp_info);
 
         //fill up all info of the mentor TODO
@@ -1787,7 +1793,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
             @Override
             public void onSuccess(List<ReviewHighlightData> list) {
                 lastReviewData = list.get(list.size() - 1);
-                reviewRecyAda.update(list);
+                reviewRecyAda.update(list, skillUid);
                 noDataBlockReview.setVisibility(View.GONE);
                 loadMoreReviewBtn.setEnabled(false);
                 loadMoreReviewBtn.setVisibility(View.GONE);
@@ -2126,7 +2132,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                         }
                     });
         }
-        iconFactory.setStyle(IconGenerator.STYLE_DEFAULT);
+       /* iconFactory.setStyle(IconGenerator.STYLE_DEFAULT);
         iconFactory.setTextAppearance(this, R.style.MyCustomInfoWindowTextApp);
         iconFactory.setBackground(getResources().getDrawable(R.drawable.custom_info_window_vector));
         iconFactory.setContentPadding((int) (27 * (getResources().getDisplayMetrics().density)), (int) (2 * (getResources().getDisplayMetrics().density)), 0, (int) (6 * (getResources().getDisplayMetrics().density)));
@@ -2134,7 +2140,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
         double v = SphericalUtil.computeDistanceBetween(searchDataStore.getAnchorPoint(), lattitudeLongitude);
         if (searchDataStore.getAnchorPoint() != lattitudeLongitude) {
             addCustomInfoWindow(iconFactory, makeCharSequence(stars + " ★", formatNumber(v)), lattitudeLongitude);
-        }
+        }*/
     }
 
 

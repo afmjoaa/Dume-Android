@@ -498,7 +498,8 @@ public class RecordsCurrentActivity extends CustomStuAppCompatActivity implement
 
             //setting the review recycler view
             List<ReviewHighlightData> reviewData = new ArrayList<>();
-            reviewRecyAda = new ReviewAdapter(myThisActivity, reviewData);
+            String skillUid = (String) record.get("skill_uid");
+            reviewRecyAda = new ReviewAdapter(myThisActivity, reviewData, skillUid);
             reviewRecyView.setAdapter(reviewRecyAda);
             reviewRecyView.setLayoutManager(new LinearLayoutManager(myThisActivity));
             onMentorSelect(record);
@@ -1197,7 +1198,7 @@ public class RecordsCurrentActivity extends CustomStuAppCompatActivity implement
                 @Override
                 public void onSuccess(List<ReviewHighlightData> list) {
                     lastReviewData = list.get(list.size() - 1);
-                    reviewRecyAda.update(list);
+                    reviewRecyAda.update(list, skillUid);
                     noDataBlockReview.setVisibility(View.GONE);
                     loadMoreReviewBtn.setEnabled(false);
                     loadMoreReviewBtn.setVisibility(View.GONE);

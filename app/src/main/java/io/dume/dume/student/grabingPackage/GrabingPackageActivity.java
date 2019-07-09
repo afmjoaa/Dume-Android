@@ -1024,13 +1024,6 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
                         }
                     });
         }
-
-
-        iconFactory.setStyle(IconGenerator.STYLE_DEFAULT);
-        iconFactory.setTextAppearance(this, R.style.MyCustomInfoWindowTextApp);
-        iconFactory.setBackground(getResources().getDrawable(R.drawable.custom_info_window_vector));
-        iconFactory.setContentPadding((int) (27 * (getResources().getDisplayMetrics().density)), (int) (2 * (getResources().getDisplayMetrics().density)), 0, (int) (6 * (getResources().getDisplayMetrics().density)));
-        addCustomInfoWindow(iconFactory, makeCharSequence("Radius", Integer.toString(SearchDataStore.SHORTRADIUS)) + " m", lattitudeLongitude);
     }
 
     //testing custom marker code here

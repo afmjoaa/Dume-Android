@@ -1145,7 +1145,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5dp"
                         android:layout_marginRight="5dp"
-                        android:background="@drawable/bg_white_bottom_round"
+                        android:background="@color/white"
                         android:orientation="vertical"
                         android:paddingLeft="16dp"
                         android:paddingTop="8dp"
@@ -1157,7 +1157,8 @@
                             android:id="@+id/recycler_view_reviews"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="16dp" />
+                            android:layout_marginTop="16dp"
+                            android:background="@drawable/bg_white_bottom_round" />
 
                         <LinearLayout
                             android:id="@+id/no_data_block"
@@ -1225,15 +1226,15 @@
     <carbon.widget.ImageView
         android:id="@+id/swipe_up_indicator"
         android:layout_width="42dp"
-        app:carbon_cornerRadius="21dp"
-        android:layout_gravity="bottom|center"
         android:layout_height="42dp"
+        android:layout_gravity="bottom|center"
+        android:layout_marginBottom="132dp"
+        android:background="@color/white"
+        android:padding="9dp"
+        app:carbon_cornerRadius="21dp"
         app:carbon_tint="@color/colorDarkAzure"
         app:carbon_tintMode="src_over"
-        app:srcCompat="@drawable/ic_up_up_arrow"
-        android:padding="9dp"
-        android:layout_marginBottom="132dp"
-        android:background="@color/white"/>
+        app:srcCompat="@drawable/ic_up_up_arrow" />
 
     <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"

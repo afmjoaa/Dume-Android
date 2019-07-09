@@ -47,6 +47,7 @@ public class HomePageModel extends StuBaseModel implements HomePageContract.Mode
     private ListenerRegistration registration;
     private String name;
     private Map<String, Object> updateSelfRating;
+    private String avatarUrl;
 
     public HomePageModel(Activity activity, Context context) {
         super(context);
@@ -144,7 +145,7 @@ public class HomePageModel extends StuBaseModel implements HomePageContract.Mode
 
     @Override
     public void getPromo(String promoCode, TeacherContract.Model.Listener<HomePageRecyclerData> listener) {
-        firestore.collection("promo").whereEqualTo("promo_code", promoCode).get().addOnCompleteListener((Activity) context,new OnCompleteListener<QuerySnapshot>() {
+        firestore.collection("promo").whereEqualTo("promo_code", promoCode).get().addOnCompleteListener((Activity) context, new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
@@ -176,11 +177,13 @@ public class HomePageModel extends StuBaseModel implements HomePageContract.Mode
             keyToChange = "t_rate_status";
             path = "/users/students/stu_pro_info";
             name = TeacherDataStore.getInstance().gettUserName();
+            avatarUrl = TeacherDataStore.getInstance().gettAvatarString();
 
         } else {
             keyToChange = "s_rate_status";
             path = "/users/mentors/mentor_profile";
             name = SearchDataStore.getInstance().getUserName();
+            avatarUrl = SearchDataStore.getInstance().getAvatarString();
 
         }
         changeRecordStatus(record_id, keyToChange, Record.DONE);
@@ -203,7 +206,7 @@ public class HomePageModel extends StuBaseModel implements HomePageContract.Mode
                         Integer dl_communication = Integer.parseInt((String) self_rating.get("dl_communication"));
                         Integer l_communication = Integer.parseInt((String) self_rating.get("l_communication"));
 
-                        Integer menCurrentCount = star_count+1;
+                        Integer menCurrentCount = star_count + 1;
                         star_rating = ((star_rating * star_count) + inputStar) / (menCurrentCount);
 
                         for (Map.Entry<String, Boolean> entry : inputRating.entrySet()) {
@@ -261,8 +264,8 @@ public class HomePageModel extends StuBaseModel implements HomePageContract.Mode
                         Integer response_time = Integer.parseInt((String) self_rating.get("response_time"));
                         student_guided = student_guided + 1;
 
-                        Integer currentCount = star_count+1;
-                        star_rating = ((star_rating * star_count) + inputStar )/ (currentCount);
+                        Integer currentCount = star_count + 1;
+                        star_rating = ((star_rating * star_count) + inputStar) / (currentCount);
                         for (Map.Entry<String, Boolean> entry : inputRating.entrySet()) {
                             switch (entry.getKey()) {
                                 case "Expertise":
@@ -316,7 +319,6 @@ public class HomePageModel extends StuBaseModel implements HomePageContract.Mode
                         updateSelfRating.put("student_guided", student_guided.toString());
                         updateSelfRating.put("response_time", response_time.toString());
 
-
                         firestore.collection("/users/mentors/skills/").document(skill_id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                             @Override
                             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -360,14 +362,12 @@ public class HomePageModel extends StuBaseModel implements HomePageContract.Mode
                                         reviewMap.put("dislikes", 0);
                                         reviewMap.put("likes", 0);
                                         reviewMap.put("name", name);
-                                        reviewMap.put("r_avatar", "avatar");
+                                        reviewMap.put("r_avatar", avatarUrl);
                                         reviewMap.put("reviewer_rating", inputStar.toString());
                                         reviewMap.put("time", FieldValue.serverTimestamp());
-                                        firestore.collection("/users/mentors/skills/").document(skill_id).collection("reviews").add(reviewMap);
 
-                                        DocumentReference skillReview =firestore.collection("/users/mentors/skills/").document(skill_id).collection("reviews").document();
+                                        DocumentReference skillReview = firestore.collection("/users/mentors/skills/").document(skill_id).collection("reviews").document();
                                         batch.set(skillReview, reviewMap);
-
 
                                         // Commit the batch
                                         batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -375,7 +375,7 @@ public class HomePageModel extends StuBaseModel implements HomePageContract.Mode
                                             public void onComplete(@NonNull Task<Void> task) {
                                                 if (task.isSuccessful()) {
                                                     listener.onSuccess(null);
-                                                }else {
+                                                } else {
                                                     listener.onError("err!!");
                                                 }
                                             }

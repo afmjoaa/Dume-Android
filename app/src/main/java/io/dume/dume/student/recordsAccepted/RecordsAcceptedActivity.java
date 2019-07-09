@@ -432,7 +432,8 @@ public class RecordsAcceptedActivity extends CustomStuAppCompatActivity implemen
 
             //setting the review recycler view
             List<ReviewHighlightData> reviewData = new ArrayList<>();
-            reviewRecyAda = new ReviewAdapter(myThisActivity, reviewData);
+            String skillUid = (String) record.get("skill_uid");
+            reviewRecyAda = new ReviewAdapter(myThisActivity, reviewData, skillUid);
             reviewRecyView.setAdapter(reviewRecyAda);
             reviewRecyView.setLayoutManager(new LinearLayoutManager(myThisActivity));
             onMentorSelect(record);
@@ -729,7 +730,7 @@ public class RecordsAcceptedActivity extends CustomStuAppCompatActivity implemen
                 Float loop_text = (loop_value * 10);
                 data = new BarData(splited, loop_value, loop_text.toString().substring(0, loop_text.toString().length() - 2) + " %");
                 int totalSkills = splitMainSsss.length + 2;
-                if(totalSkills>6){
+                if (totalSkills > 6) {
                     if ((totalSkills & 1) == 0) {
                         //even...
                         totalSkills = totalSkills / 2;
@@ -742,13 +743,13 @@ public class RecordsAcceptedActivity extends CustomStuAppCompatActivity implemen
                     } else {
                         dataListOne.add(data);
                     }
-                }else {
+                } else {
                     dataList.add(data);
                 }
             }
             mChart.setDataList(dataList);
             mChart.build();
-            if(dataListOne.size()>0){
+            if (dataListOne.size() > 0) {
                 mChartOne.setVisibility(View.VISIBLE);
                 mChartOne.setDataList(dataListOne);
                 mChartOne.build();
@@ -760,7 +761,7 @@ public class RecordsAcceptedActivity extends CustomStuAppCompatActivity implemen
                 @Override
                 public void onSuccess(List<ReviewHighlightData> list) {
                     lastReviewData = list.get(list.size() - 1);
-                    reviewRecyAda.update(list);
+                    reviewRecyAda.update(list, skillUid);
                     noDataBlockReview.setVisibility(View.GONE);
                     //reviewRecyAda = new ReviewAdapter(context, list, true);
                     loadMoreReviewBtn.setEnabled(false);
@@ -796,9 +797,9 @@ public class RecordsAcceptedActivity extends CustomStuAppCompatActivity implemen
             stuTemp = (String) forMap.get("request_pr");
             stuPreviousResultTV.setText(String.format("%s%s", "Previous Result : ", stuTemp));
             boolean is_self = (boolean) forMap.get("is_self");
-            if(is_self){
+            if (is_self) {
                 stuTemp = "Student";
-            }else {
+            } else {
                 stuTemp = "Guardian";
             }
             stuAskedByTV.setText(String.format("%s%s", "Asked by : ", stuTemp));

@@ -549,7 +549,15 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
     public void setHeadsUpPromo(String discount, String dayLeft, String packageName) {
         headsUpPromoContainer.setVisibility(View.VISIBLE);
         searchMentorBtn.setBackground(getResources().getDrawable(R.drawable.bg_white_bottom_round));
-        promotionTextView.setText(discount + "% off on " + packageName);
+        String herePackageName = "";
+        if(packageName.equals(SearchDataStore.DUME_GANG)){
+            herePackageName = "Couching Service";
+        }else if(packageName.equals(SearchDataStore.REGULAR_DUME)){
+            herePackageName = "Monthly Tuition";
+        }else {
+            herePackageName = "Weekly Tuition";
+        }
+        promotionTextView.setText(discount + "% off on " + herePackageName);
         promotionExpireDate.setText(dayLeft);
     }
 

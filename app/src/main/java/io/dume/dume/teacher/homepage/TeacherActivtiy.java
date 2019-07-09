@@ -107,6 +107,7 @@ import io.dume.dume.student.homePage.adapter.HomePageRecyclerAdapter;
 import io.dume.dume.student.homePage.adapter.HomePageRecyclerData;
 import io.dume.dume.student.pojo.CusStuAppComMapActivity;
 import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
+import io.dume.dume.student.pojo.SearchDataStore;
 import io.dume.dume.student.recordsPage.Record;
 import io.dume.dume.student.recordsPage.RecordsPageActivity;
 import io.dume.dume.student.studentHelp.StudentHelpActivity;
@@ -278,7 +279,15 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
     public void setHeadsUpPromo(String discount, String dayLeft, String packageName) {
         percentOffBlock.setVisibility(View.VISIBLE);
         headerTab.setBackground(getResources().getDrawable(R.drawable.bg_white_bottom_round_6));
-        promotionTextView.setText(discount + "% off on " + packageName);
+        String herePackageName = "";
+        if(packageName.equals(SearchDataStore.DUME_GANG)){
+            herePackageName = "Couching Service";
+        }else if(packageName.equals(SearchDataStore.REGULAR_DUME)){
+            herePackageName = "Monthly Tuition";
+        }else {
+            herePackageName = "Weekly Tuition";
+        }
+        promotionTextView.setText(discount + "% off on " + herePackageName);
         promotionExpireDate.setText(dayLeft);
     }
 

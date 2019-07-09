@@ -790,7 +790,7 @@ provided.Tap salary for details.  </string>
     <string name="request_letter">Request Letter</string>
     <string name="how_it_works">How it works...</string>
     <string name="enter_bkash_transection_id">Enter Bkash Transection ID</string>
-    <string name="transaction_info_text">Please Bkash your due amount to any of the following Dume personal account and send us the transaction id and amount for vilification, genrally vilification take 1&#8211;6 hours sorry for the inconvenience. Update is on it\'s way&#8230;</string>
+    <string name="transaction_info_text">Please Bkash your due amount to the following Dume personal account and send us the transaction id and amount for vilification, genrally vilification take 1&#8211;6 hours sorry for the inconvenience. Update is on it\'s way&#8230;</string>
     <string name="transaction_id">Transaction ID</string>
     <string name="amount">Amount</string>
     <string name="payment_info">You can send any amount of money through Bkash transaction. But don\'t send more then your due amount. As you provide us the transaction id and amount we will validate the transaction and deduct the same

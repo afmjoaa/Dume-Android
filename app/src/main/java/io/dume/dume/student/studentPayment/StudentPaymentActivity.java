@@ -65,6 +65,7 @@ import io.dume.dume.util.DumeUtils;
 
 import static io.dume.dume.util.DumeUtils.configAppbarTittle;
 import static io.dume.dume.util.DumeUtils.configureAppbar;
+import static io.dume.dume.util.DumeUtils.hideKeyboard;
 import static io.dume.dume.util.DumeUtils.showKeyboard;
 
 public class StudentPaymentActivity extends CustomStuAppCompatActivity implements StudentPaymentContract.View {
@@ -234,7 +235,11 @@ public class StudentPaymentActivity extends CustomStuAppCompatActivity implement
             appliedPromoList = new ArrayList<>();
         }
         promotionNumberTV.setText("" + appliedPromoList.size());
-
+        if(appliedPromoList.size()==0){
+            promotionNumberTV.setVisibility(View.INVISIBLE);
+        }else {
+            promotionNumberTV.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -448,7 +453,7 @@ public class StudentPaymentActivity extends CustomStuAppCompatActivity implement
                     }
                     ArrayList<String> available_promo = (ArrayList<String>) documentSnapshot.get("available_promo");
                     ArrayList<String> applied_promo = (ArrayList<String>) documentSnapshot.get("applied_promo");
-                    final String writtenCode = queryTextView.getText().toString();
+                    String writtenCode = queryTextView.getText().toString();
 
                     if (writtenCode.length() <= 0) {
                         queryTextView.setError("Please enter a promo code...");
@@ -459,7 +464,8 @@ public class StudentPaymentActivity extends CustomStuAppCompatActivity implement
                         Toast.makeText(myMainActivity, "Promo already applied...", Toast.LENGTH_SHORT).show();
                         view.setEnabled(true);
                         myMainActivity.hideProgress();
-                    } else if (available_promo != null && available_promo.contains(writtenCode)) {
+                    } else if ((available_promo != null && available_promo.contains(writtenCode)) ||
+                            writtenCode.equals("ANTIKTUITION")) {
                         HomePageModel homePageModel = new HomePageModel((Activity) context, context);
 
                         homePageModel.getPromo(writtenCode, new TeacherContract.Model.Listener<HomePageRecyclerData>() {
@@ -470,6 +476,8 @@ public class StudentPaymentActivity extends CustomStuAppCompatActivity implement
                                     public void onSuccess(String list) {
                                         Toast.makeText(context, list, Toast.LENGTH_SHORT).show();
                                         view.setEnabled(true);
+                                        queryTextView.setText("");
+                                        hideKeyboard(myMainActivity);
                                         myMainActivity.hideProgress();
                                     }
 
@@ -490,8 +498,8 @@ public class StudentPaymentActivity extends CustomStuAppCompatActivity implement
                             }
                         });
                     } else {
-                        queryTextView.setError("Promo not valid for you...");
-                        Toast.makeText(myMainActivity, "Promo not valid for you...", Toast.LENGTH_SHORT).show();
+                        queryTextView.setError("This Promo isn't valid for you...");
+                        Toast.makeText(myMainActivity, "This Promo isn't valid for you...", Toast.LENGTH_SHORT).show();
                         view.setEnabled(true);
                         myMainActivity.hideProgress();
                     }

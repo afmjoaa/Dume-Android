@@ -265,7 +265,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
-                android:background="@drawable/bg_light_accent_bottom_round"
+                android:background="#f2f8f8"
                 android:orientation="vertical"
                 android:paddingLeft="10dp"
                 android:paddingTop="6dp"
@@ -273,6 +273,7 @@
                 android:paddingBottom="6dp"
                 android:translationY="-4dp"
                 android:visibility="gone">
+                <!--@drawable/bg_light_accent_bottom_round-->
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/recycler_view_reviews"

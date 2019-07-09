@@ -8,15 +8,18 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.google.android.gms.location.places.AutocompletePrediction;
+import com.bumptech.glide.request.RequestOptions;
+import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import carbon.widget.ImageView;
 import io.dume.dume.R;
@@ -29,18 +32,27 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
     private Context context;
     private List<ReviewHighlightData> data;
     private boolean isSmall = false;
+    private float mDensity;
+    private String skillID = null;
+    private Map<String, String> tracker;
 
-    public ReviewAdapter(Context context, List<ReviewHighlightData> data) {
+    public ReviewAdapter(Context context, List<ReviewHighlightData> data, String skill_ID) {
         inflater = LayoutInflater.from(context);
         this.data = data;
         this.context = context;
+        mDensity = context.getResources().getDisplayMetrics().density;
+        this.skillID = skill_ID;
+        tracker = new HashMap<>();
     }
 
-    public ReviewAdapter(Context context, List<ReviewHighlightData> data, boolean isSmall) {
+    public ReviewAdapter(Context context, List<ReviewHighlightData> data, String skill_ID, boolean isSmall) {
         inflater = LayoutInflater.from(context);
         this.data = data;
         this.context = context;
         this.isSmall = isSmall;
+        this.skillID = skill_ID;
+        mDensity = context.getResources().getDisplayMetrics().density;
+        tracker = new HashMap<>();
     }
 
     public void addMore(List<ReviewHighlightData> loaded) {
@@ -48,10 +60,11 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
         notifyDataSetChanged();
     }
 
-    public void update(List<ReviewHighlightData> newData) {
+    public void update(List<ReviewHighlightData> newData, String skillID) {
         data.clear();
         data.addAll(newData);
         notifyDataSetChanged();
+        this.skillID = skillID;
     }
 
     @NonNull
@@ -78,14 +91,84 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
         SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
         holder.reviewProducerTime.setText(format.format(review.getTime()));
 
-        holder.likeTextView.setText(String.valueOf(review.getLikes()));
-        holder.dislikeTextView.setText(String.valueOf(review.getDislikes()));
+        holder.likeBtn.setText(String.valueOf(review.getLikes()));
+        holder.dislikeBtn.setText(String.valueOf(review.getDislikes()));
         holder.mainReview.setText(review.getBody());
         if (review.getR_avatar() != null && !review.getR_avatar().equals("")) {
-            Glide.with(context).load(review.getR_avatar()).into(holder.reviewProducerDP);
+            Glide.with(context).load(review.getR_avatar()).apply(new RequestOptions().override((int) (50 * mDensity), (int) (50 * mDensity)).placeholder(R.drawable.alias_profile_icon)).into(holder.reviewProducerDP);
         }
         holder.reviewProducerRateingBar.setRating(Float.parseFloat(review.getReviewer_rating()));
 
+        holder.likeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(tracker.get(review.doc_id)== null){
+                    String text = (String) holder.likeBtn.getText();
+                    Integer likeVal = Integer.parseInt(text);
+                    likeVal = likeVal + 1;
+                    holder.likeBtn.setText(likeVal.toString());
+                    if (skillID != null) {
+                        FirebaseFirestore.getInstance().collection("/users/mentors/skills/").document(skillID).collection("reviews")
+                                .document(review.doc_id).update("likes", likeVal);
+                        tracker.put(review.doc_id, "likes");
+                    }
+                }else if(("dislikes").equals(tracker.get(review.doc_id))){
+                    String text = (String) holder.likeBtn.getText();
+                    Integer likeVal = Integer.parseInt(text);
+                    likeVal = likeVal + 1;
+                    holder.likeBtn.setText(likeVal.toString());
+
+                    String dislikeText = (String) holder.dislikeBtn.getText();
+                    Integer dislikeVal = Integer.parseInt(dislikeText);
+                    dislikeVal = dislikeVal-1;
+                    holder.dislikeBtn.setText(dislikeVal.toString());
+
+                    if (skillID != null) {
+                        FirebaseFirestore.getInstance().collection("/users/mentors/skills/").document(skillID).collection("reviews")
+                                .document(review.doc_id).update("likes", likeVal, "dislikes", dislikeVal);
+                        tracker.put(review.doc_id, "likes");
+                    }
+                }else {
+                    Toast.makeText(context, "Can't like more then once", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        holder.dislikeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(tracker.get(review.doc_id)== null){
+                    String text = (String) holder.dislikeBtn.getText();
+                    Integer dislikeVal = Integer.parseInt(text);
+                    dislikeVal = dislikeVal + 1;
+                    holder.dislikeBtn.setText(dislikeVal.toString());
+                    if (skillID != null) {
+                        FirebaseFirestore.getInstance().collection("/users/mentors/skills/").document(skillID).collection("reviews")
+                                .document(review.doc_id).update("dislikes", dislikeVal);
+                        tracker.put(review.doc_id, "dislikes");
+                    }
+                }else if(("likes").equals(tracker.get(review.doc_id))){
+
+                    String text = (String) holder.likeBtn.getText();
+                    Integer likeVal = Integer.parseInt(text);
+                    likeVal = likeVal - 1;
+                    holder.likeBtn.setText(likeVal.toString());
+
+                    String dislikeText = (String) holder.dislikeBtn.getText();
+                    Integer dislikeVal = Integer.parseInt(dislikeText);
+                    dislikeVal = dislikeVal+1;
+                    holder.dislikeBtn.setText(dislikeVal.toString());
+
+                    if (skillID != null) {
+                        FirebaseFirestore.getInstance().collection("/users/mentors/skills/").document(skillID).collection("reviews")
+                                .document(review.doc_id).update("likes", likeVal, "dislikes", dislikeVal);
+                        tracker.put(review.doc_id, "dislikes");
+                    }
+                }else {
+                    Toast.makeText(context, "Can't dislike more then once", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     @Override
@@ -101,8 +184,8 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
         private final TextView reviewProducerName;
         private final MaterialRatingBar reviewProducerRateingBar;
         private final AppCompatTextView mainReview;
-        private final TextView dislikeTextView;
-        private final TextView likeTextView;
+        private final Button dislikeBtn;
+        private final Button likeBtn;
 
         public MyViewHolder(View itemView) {
             super(itemView);
@@ -111,8 +194,8 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
             reviewProducerRateingBar = itemView.findViewById(R.id.review_producer_rating_bar);
             reviewProducerTime = itemView.findViewById(R.id.review_produce_time);
             mainReview = itemView.findViewById(R.id.main_review);
-            likeTextView = itemView.findViewById(R.id.like_text_view);
-            dislikeTextView = itemView.findViewById(R.id.dislike_text_view);
+            likeBtn = itemView.findViewById(R.id.like_text_view);
+            dislikeBtn = itemView.findViewById(R.id.dislike_text_view);
 
         }
     }
