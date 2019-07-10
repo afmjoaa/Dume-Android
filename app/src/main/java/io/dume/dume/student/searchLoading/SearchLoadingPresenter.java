@@ -388,7 +388,7 @@ public class SearchLoadingPresenter implements SearchLoadingContract.Presenter {
             });
             if (lastFiltered.size() == 1) {
                 for (int i = 0; i < sortedResult.size(); i++) {
-                    if (i == 2) {
+                    if (i == 1) {
                         break;
                     }
                     lastFiltered.add(sortedResult.get(i));
@@ -396,7 +396,7 @@ public class SearchLoadingPresenter implements SearchLoadingContract.Presenter {
                 }
             } else {
                 for (int i = 0; i < sortedResult.size(); i++) {
-                    if (i == 3) {
+                    if (i == 2) {
                         break;
                     }
                     lastFiltered.add(sortedResult.get(i));
@@ -404,6 +404,11 @@ public class SearchLoadingPresenter implements SearchLoadingContract.Presenter {
                 }
             }
 
+            if (sortedResult.size() > 0) {
+                Random random = new Random();
+                lastFiltered.add(sortedResult.get(random.nextInt(sortedResult.size())));
+                sortedResult.remove(random.nextInt(sortedResult.size()));
+            }
             if (sortedResult.size() > 0) {
                 Random random = new Random();
                 lastFiltered.add(sortedResult.get(random.nextInt(sortedResult.size())));
@@ -533,12 +538,12 @@ public class SearchLoadingPresenter implements SearchLoadingContract.Presenter {
             }
         }
 
-        int remained = 6-sortedResult.size();
-        if(sortedResult.size()>=6){
+        int remained = 6 - sortedResult.size();
+        if (sortedResult.size() >= 6) {
             return sortedResult;
-        }else{
+        } else {
             //add the remaining to sortedResult here
-            Collections.sort(resultList, new Comparator<DocumentSnapshot>() {
+            /*Collections.sort(resultList, new Comparator<DocumentSnapshot>() {
                 @Override
                 public int compare(DocumentSnapshot t1, DocumentSnapshot t2) {
                     Map<String, Object> t1Info = (Map<String, Object>) t1.get("sp_info");
@@ -553,12 +558,25 @@ public class SearchLoadingPresenter implements SearchLoadingContract.Presenter {
 
             for (int i = 0; i < resultList.size(); i++) {
                 String doc_uid = (String) resultList.get(i).getId();
-                if(remained>0){
+                if (remained > 0) {
                     if (!addedDocList.contains(doc_uid)) {
                         sortedResult.add(resultList.get(i));
                         addedDocList.add(doc_uid);
-                        remained = remained -1;
+                        remained = remained - 1;
                     }
+                }
+            }*/
+
+            //random take in
+            Random random = new Random();
+            while (remained > 0) {
+                int nowInt = random.nextInt(resultList.size());
+                String doc_uid = (String) resultList.get(nowInt).getId();
+                if (!addedDocList.contains(doc_uid)) {
+                    sortedResult.add(resultList.get(nowInt));
+                    addedDocList.add(doc_uid);
+                    resultList.remove(nowInt);
+                    remained = remained - 1;
                 }
             }
             return sortedResult;

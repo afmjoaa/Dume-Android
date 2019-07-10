@@ -669,6 +669,7 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
             } else if (levelName.equals("Salary")) {
                 AppCompatRadioButton rd = new AppCompatRadioButton(this);
                 rd.setText("null");
+                mMap.clear();
                 onRadioButtonClick(rd, tabLayout.getSelectedTabPosition(), levelName);
             } else if (levelName.equals("Capacity")) {
                 AppCompatRadioButton rd = new AppCompatRadioButton(this);
