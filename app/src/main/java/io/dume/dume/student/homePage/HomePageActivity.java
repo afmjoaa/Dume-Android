@@ -1065,7 +1065,7 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
 
     @Override
     public void gotoGrabingLocationPage() {
-        Boolean chooseLocationRadio1 = prefs.getBoolean("chooseLocationRadio", false);
+        Boolean chooseLocationRadio1 = prefs.getBoolean("chooseLocationRadio", true);
         if(chooseLocationRadio1){
             startActivity(new Intent(this, GrabingLocationActivity.class).setAction("HomePage"));
         }else {
@@ -1877,7 +1877,7 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
             for(int i=0;i<size1;i++)
                 checkedItems[i] = prefs.getBoolean("checkedItems" + "_" + i, false);
 
-            Boolean chooseLocationRadio1 = prefs.getBoolean("chooseLocationRadio", false);
+            Boolean chooseLocationRadio1 = prefs.getBoolean("chooseLocationRadio", true);
             if(chooseLocationRadio1){
                 chooseLocationRadio.setChecked(true);
                 permanentRadio.setChecked(false);

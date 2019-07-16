@@ -568,13 +568,13 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
             Number salary = (Number) selectedMentor.get("salary");
 
             Map<String, Object> promo = (Map<String, Object>) selectedMentor.get("promo");
-            if(promo!= null){
+            if (promo != null) {
                 Gson gson = new Gson();
                 JsonElement jsonElement = gson.toJsonTree(promo);
                 HomePageRecyclerData homePageRecyclerData = gson.fromJson(jsonElement, HomePageRecyclerData.class);
                 if (homePageRecyclerData != null) {
-                        max_dicount_percentage = homePageRecyclerData.getMax_dicount_percentage();
-                        max_discount_credit = homePageRecyclerData.getMax_discount_credit();
+                    max_dicount_percentage = homePageRecyclerData.getMax_dicount_percentage();
+                    max_discount_credit = homePageRecyclerData.getMax_discount_credit();
                 }
             }
             if (max_dicount_percentage != null && max_discount_credit != null) {
@@ -697,7 +697,7 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
                 Float loop_text = (loop_value * 10);
                 data = new BarData(splited, loop_value, loop_text.toString().substring(0, loop_text.toString().length() - 2) + " %");
                 int totalSkills = splitMainSsss.length + 2;
-                if(totalSkills>6){
+                if (totalSkills > 6) {
                     if ((totalSkills & 1) == 0) {
                         //even...
                         totalSkills = totalSkills / 2;
@@ -710,13 +710,13 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
                     } else {
                         dataListOne.add(data);
                     }
-                }else {
+                } else {
                     dataList.add(data);
                 }
             }
             mChart.setDataList(dataList);
             mChart.build();
-            if(dataListOne.size()>0){
+            if (dataListOne.size() > 0) {
                 mChartOne.setVisibility(View.VISIBLE);
                 mChartOne.setDataList(dataListOne);
                 mChartOne.build();
@@ -790,9 +790,9 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
             stuTemp = (String) forMap.get("request_pr");
             stuPreviousResultTV.setText(String.format("%s%s", "Previous Result : ", stuTemp));
             boolean is_self = (boolean) forMap.get("is_self");
-            if(is_self){
+            if (is_self) {
                 stuTemp = "Student";
-            }else {
+            } else {
                 stuTemp = "Guardian";
             }
             stuAskedByTV.setText(String.format("%s%s", "Asked by : ", stuTemp));
@@ -893,38 +893,39 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
                 });
             }
 
-            //verify bottomSheet
-            mBottomSheetVerify = new BottomSheetDialog(context);
-            sheetViewVerify = this.getLayoutInflater().inflate(R.layout.custom_bottom_sheet_dialogue_verify, null);
-            mBottomSheetVerify.setContentView(sheetViewVerify);
-            photoIdHost = mBottomSheetVerify.findViewById(R.id.dispaly_pic);
-            photoId = mBottomSheetVerify.findViewById(R.id.imageView1);
-            uploadBtn = mBottomSheetVerify.findViewById(R.id.upload_text);
-            beforeUpload = mBottomSheetVerify.findViewById(R.id.sub_text);
-            afterUpload = mBottomSheetVerify.findViewById(R.id.sub_text_one);
-            rejectUpload = mBottomSheetVerify.findViewById(R.id.sub_text_two);
-            uploadProgress = mBottomSheetVerify.findViewById(R.id.progress_horizontal);
-            String photo_id = (String) TeacherDataStore.getInstance().getDocumentSnapshot().get("photo_id_url");
-            if(photo_id!= null && !photo_id.equals("")){
-                Glide.with(context).load(photo_id).apply(new RequestOptions().override(100, 100).placeholder(R.drawable.set_display_pic)).into(photoId);
-            }
-            if (photoIdHost != null && photoId != null && uploadBtn != null && beforeUpload != null && afterUpload != null) {
+            if (myThisActivity.retriveAction.equals(DumeUtils.TEACHER)) {
+                //verify bottomSheet
+                mBottomSheetVerify = new BottomSheetDialog(context);
+                sheetViewVerify = this.getLayoutInflater().inflate(R.layout.custom_bottom_sheet_dialogue_verify, null);
+                mBottomSheetVerify.setContentView(sheetViewVerify);
+                photoIdHost = mBottomSheetVerify.findViewById(R.id.dispaly_pic);
+                photoId = mBottomSheetVerify.findViewById(R.id.imageView1);
+                uploadBtn = mBottomSheetVerify.findViewById(R.id.upload_text);
+                beforeUpload = mBottomSheetVerify.findViewById(R.id.sub_text);
+                afterUpload = mBottomSheetVerify.findViewById(R.id.sub_text_one);
+                rejectUpload = mBottomSheetVerify.findViewById(R.id.sub_text_two);
+                uploadProgress = mBottomSheetVerify.findViewById(R.id.progress_horizontal);
+                String photo_id = (String) TeacherDataStore.getInstance().getDocumentSnapshot().get("photo_id_url");
+                if (photo_id != null && !photo_id.equals("")) {
+                    Glide.with(context).load(photo_id).apply(new RequestOptions().override(100, 100).placeholder(R.drawable.set_display_pic)).into(photoId);
+                }
+                if (photoIdHost != null && photoId != null && uploadBtn != null && beforeUpload != null && afterUpload != null) {
 
-                photoIdHost.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
+                    photoIdHost.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
                             openImageIntent();
-                    }
-                });
-                uploadBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        openImageIntent();
-                    }
-                });
+                        }
+                    });
+                    uploadBtn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            openImageIntent();
+                        }
+                    });
 
+                }
             }
-
             //cancel bottom sheet
             mBottomSheetReject = new BottomSheetDialog(context);
             sheetViewReject = this.getLayoutInflater().inflate(R.layout.custom_bottom_sheet_dialogue_cancel, null);
@@ -1003,11 +1004,11 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
             acceptBTN.setOnClickListener(view -> {
                 //here do your job (first varify then accept)
                 String isVerified = (String) TeacherDataStore.getInstance().getDocumentSnapshot().get("isVerified");
-                if (isVerified== null || isVerified.equals("")){
+                if (isVerified == null || isVerified.equals("")) {
                     mBottomSheetVerify.show();
-                }else if(isVerified.equals("Accepted")){
+                } else if (isVerified.equals("Accepted")) {
                     mBottomSheetDialog.show();
-                }else if(isVerified.equals("Pending")){
+                } else if (isVerified.equals("Pending")) {
                     beforeUpload.setVisibility(View.GONE);
                     rejectUpload.setVisibility(View.GONE);
                     afterUpload.setVisibility(View.VISIBLE);
@@ -1108,7 +1109,7 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
                         selectedImageUri = data == null ? null : data.getData();
                     }
                     if (selectedImageUri != null) {
-                        if (uploadProgress!= null) {
+                        if (uploadProgress != null) {
                             uploadProgress.setVisibility(View.VISIBLE);
                         }
                         //showSpiner();
@@ -1138,7 +1139,7 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
 
                             //upload the image here do what you have to do
                             //updateChangesClicked();
-                            if(getPhotoIdUri() != null){
+                            if (getPhotoIdUri() != null) {
                                 myThisActivity.mModel.uploadPhotoId(getPhotoIdUri(), new usefulListeners.uploadToSTGListererMin() {
                                     @Override
                                     public void onSuccessSTG(Object obj) {
@@ -1147,7 +1148,15 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
                                         //not write to mentor profile
                                         Map<String, Object> updateData = new HashMap<>();
                                         updateData.put("photo_id_url", photoIdUrl);
-                                        updateData.put("isVerified", "Pending");
+                                        //Directly making accepted here.
+                                        //updateData.put("isVerified", "Pending");
+                                        updateData.put("isVerified", "Accepted");
+
+                                        Map<String, Object> achievements = (Map<String, Object>) TeacherDataStore.getInstance().getDocumentSnapshot().get("achievements");
+                                        if (achievements != null) {
+                                            achievements.put("inaugural", true);
+                                        }
+                                        updateData.put("achievements", achievements);
                                         //Glide.with(context).load(photoIdUrl).apply(new RequestOptions().override(100, 100).placeholder(R.drawable.ic_photo_id)).into(photoId);
                                         //TODO will update isVerified manually after checking the photoId
                                         //TODO and make the pending request accepted as well
@@ -1160,24 +1169,60 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
                                                 //DONE
                                                 //DONE
                                                 //DONE
-                                                if (uploadProgress!= null) {
+                                                if (uploadProgress != null) {
                                                     uploadProgress.setVisibility(View.GONE);
                                                 }
+                                                mBottomSheetVerify.dismiss();
+                                                myThisActivity.showProgress();
+                                                myThisActivity.mModel.changeRecordStatus(record, "Accepted", null, new TeacherContract.Model.Listener<Void>() {
+                                                    @Override
+                                                    public void onSuccess(Void list) {
+                                                        Toast.makeText(myThisActivity, "Status Changed To Accepted", Toast.LENGTH_SHORT).show();
+                                                        Intent intentMain = new Intent(context, RecordsAcceptedActivity.class).setAction(DumeUtils.TEACHER);
+                                                        intentMain.putExtra("recordId", record.getId());
+                                                        myThisActivity.mModel.getRecords(new TeacherContract.Model.Listener<List<Record>>() {
+                                                            @Override
+                                                            public void onSuccess(List<Record> list) {
+                                                                Google.getInstance().setRecordList(list);
+                                                                searchDataStore.setRecordStatusChanged(true);
+                                                                searchDataStore.setFromPACCR(1);
+                                                                startActivity(intentMain);
+                                                                myThisActivity.finish();
+                                                                myThisActivity.hideProgress();
+                                                            }
+
+                                                            @Override
+                                                            public void onError(String msg) {
+                                                                Toast.makeText(myThisActivity, msg, Toast.LENGTH_SHORT).show();
+                                                                myThisActivity.hideProgress();
+                                                            }
+                                                        });
+                                                    }
+
+                                                    @Override
+                                                    public void onError(String msg) {
+                                                        rejectBTN.setEnabled(true);
+                                                        acceptBTN.setEnabled(true);
+                                                        myThisActivity.hideProgress();
+                                                        Toast.makeText(myThisActivity, msg, Toast.LENGTH_SHORT).show();
+                                                    }
+                                                });
                                             }
 
                                             @Override
                                             public void onFailDB(Object obj) {
-                                                if (uploadProgress!= null) {
+                                                if (uploadProgress != null) {
                                                     uploadProgress.setVisibility(View.GONE);
                                                 }
                                                 Toast.makeText(context, "Network err!!", Toast.LENGTH_SHORT).show();
                                             }
                                         });
                                     }
+
                                     @Override
                                     public void onFailSTG(Object obj) {
                                         myThisActivity.flush((String) obj);
-                                        if (uploadProgress!= null) {
+                                        if (uploadProgress != null) {
                                             uploadProgress.setVisibility(View.GONE);
                                         }
                                     }
@@ -1191,7 +1236,7 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
                         public void accept(Throwable throwable) {
                             throwable.printStackTrace();
                             myThisActivity.flush(throwable.getMessage());
-                            if (uploadProgress!= null) {
+                            if (uploadProgress != null) {
                                 uploadProgress.setVisibility(View.GONE);
                             }
                         }

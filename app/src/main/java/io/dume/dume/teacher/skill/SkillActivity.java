@@ -122,7 +122,7 @@ public class SkillActivity extends CustomStuAppCompatActivity implements SkillCo
             fabInstant.setColorNormalResId(R.color.recordsBgColor);
             fabInstant.setImageDrawable(getResources().getDrawable(R.drawable.dume_instant_grayscale_image));
         }*/
-
+        documentSnapshot = TeacherDataStore.getInstance().getDocumentSnapshot();
         String beh = (String) documentSnapshot.get("pro_com_%");
         int percentage = Integer.parseInt(beh);
         if (percentage >= 95) {
@@ -247,7 +247,6 @@ public class SkillActivity extends CustomStuAppCompatActivity implements SkillCo
 
     @Override
     public void defaultSnak(String message, String actionName) {
-
     }
 
     @Override

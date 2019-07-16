@@ -406,6 +406,10 @@ public class ProfilePageActivity extends CustomStuAppCompatActivity implements P
                 public void onClick(DialogInterface dialogInterface, int i) {
                     //Toast.makeText(ProfilePageActivity.this, "Set", Toast.LENGTH_SHORT).show();
                     //nothing to do here
+                    if(i==-1){
+                        PResultCheckedItem = 0;
+                        previousResultTextView.setText(String.format("%s (GPA)", gpaOptionsArr[0]));
+                    }
                 }
             });
             AlertDialog alertDialog = builder.create();
@@ -433,6 +437,10 @@ public class ProfilePageActivity extends CustomStuAppCompatActivity implements P
                 public void onClick(DialogInterface dialogInterface, int i) {
                     //Toast.makeText(ProfilePageActivity.this, "Set", Toast.LENGTH_SHORT).show();
                     //nothing to do here
+                    if(i==-1){
+                        PResultCheckedItem = 0;
+                        previousResultTextView.setText(String.format("%s (CGPA)", cgpaOptionsArr[0]));
+                    }
                 }
             });
             AlertDialog alertDialog = builder.create();
@@ -466,6 +474,10 @@ public class ProfilePageActivity extends CustomStuAppCompatActivity implements P
             public void onClick(DialogInterface dialogInterface, int i) {
                 //Toast.makeText(ProfilePageActivity.this, "Set", Toast.LENGTH_SHORT).show();
                 //nothing to do here
+                if(i==-1){
+                    genderCheckedItem = 0;
+                    selectGenderTextView.setText(genderSelcetionArr[0]);
+                }
             }
         });
         AlertDialog alertDialog = builder.create();
