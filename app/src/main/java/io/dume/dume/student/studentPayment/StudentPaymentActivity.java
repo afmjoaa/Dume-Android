@@ -465,13 +465,13 @@ public class StudentPaymentActivity extends CustomStuAppCompatActivity implement
                         view.setEnabled(true);
                         myMainActivity.hideProgress();
                     } else if ((available_promo != null && available_promo.contains(writtenCode)) ||
-                            writtenCode.equals("ANTIKTUITION")) {
+                            writtenCode.toLowerCase().equals("antiktution")||writtenCode.toLowerCase().equals("antiktuition")) {
                         HomePageModel homePageModel = new HomePageModel((Activity) context, context);
 
-                        homePageModel.getPromo(writtenCode, new TeacherContract.Model.Listener<HomePageRecyclerData>() {
+                        homePageModel.getPromo("ANTIKTUITION", new TeacherContract.Model.Listener<HomePageRecyclerData>() {
                             @Override
                             public void onSuccess(HomePageRecyclerData list) {
-                                homePageModel.applyPromo(list, writtenCode, Google.getInstance().getAccountMajor(), new TeacherContract.Model.Listener<String>() {
+                                homePageModel.applyPromo(list, "ANTIKTUITION", Google.getInstance().getAccountMajor(), new TeacherContract.Model.Listener<String>() {
                                     @Override
                                     public void onSuccess(String list) {
                                         Toast.makeText(context, list, Toast.LENGTH_SHORT).show();
@@ -603,7 +603,6 @@ public class StudentPaymentActivity extends CustomStuAppCompatActivity implement
             if (appliedPromoList == null) {
                 appliedPromoList = new ArrayList<>();
             }
-
 
             for (String promo_code : appliedPromoList) {
                 Map<String, Object> promoMap;

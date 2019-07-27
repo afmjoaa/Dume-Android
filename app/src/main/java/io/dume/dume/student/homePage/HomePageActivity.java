@@ -1953,13 +1953,6 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
                         }
                     });
 
-                    mBuilder.setNegativeButton("Dismiss", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            dialogInterface.dismiss();
-                        }
-                    });
-
                     mBuilder.setNeutralButton("Clear all", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int which) {
@@ -2060,13 +2053,6 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
                             String json1 = gson1.toJson(selectedDegrees);
                             editor.putString("selectedDegrees", json1);
                             editor.apply();
-                        }
-                    });
-
-                    mBuilder.setNegativeButton("Dismiss", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            dialogInterface.dismiss();
                         }
                     });
 

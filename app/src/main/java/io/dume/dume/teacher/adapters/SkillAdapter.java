@@ -419,12 +419,12 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                                                     }
                                                 });
 
-                                                mBuilder.setNegativeButton("Dismiss", new DialogInterface.OnClickListener() {
+                                               /* mBuilder.setNegativeButton("Dismiss", new DialogInterface.OnClickListener() {
                                                     @Override
                                                     public void onClick(DialogInterface dialogInterface, int i) {
                                                         dialogInterface.dismiss();
                                                     }
-                                                });
+                                                });*/
 
                                                 mBuilder.setNeutralButton("Clear all", new DialogInterface.OnClickListener() {
                                                     @Override

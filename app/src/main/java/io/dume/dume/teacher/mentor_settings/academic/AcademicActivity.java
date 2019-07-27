@@ -535,7 +535,7 @@ public class AcademicActivity extends CustomStuAppCompatActivity implements Acad
             public void onClick(DialogInterface dialogInterface, int i) {
                 //Toast.makeText(ProfilePageActivity.this, "Set", Toast.LENGTH_SHORT).show();
                 //nothing to do here
-                if(i==-1){
+                if(getLevel().equals("")){
                     levelCheckedItem = 0;
                     levelET.setText(levelSelectionArr[0]);
                 }

@@ -696,6 +696,8 @@ provided.Tap salary for details.  </string>
     <string name="academic_info"><![CDATA[•\tSetting false info is strictly prohibited & if you are found guilty your account will be obligated for false info.\n•\tPrimarily add your board exam institution as School/O Level & College/A Level.\n•\tYou can add multiple School/O Level, College/A Level, Under Graduation & Post Graduation according to your associated time and achievement. (optional)]]></string>
     <string name="confirm_info"><![CDATA[If you confirm any tuition Dume will send a request to your selected mentor on your behalf provided you are informed about all agreement term & mentor details.Considering you are willing to take the service in return of the salary mentioned underneath…]]></string>
 
+    <string name="first_instruction"><![CDATA[Please tap on mentor icons on the map to change selected mentor or you can swipe up to get mentor details & then navigate them by tapping left or right arrow key. You can also find the sorted mentor list if you tap on the top-right list icon.]]></string>
+
     <string name="search_result_tab_info"><![CDATA[Your queried mentor are shown in descending order based on the following categories…
     \n•\tSalary
     \n•\tPerformance

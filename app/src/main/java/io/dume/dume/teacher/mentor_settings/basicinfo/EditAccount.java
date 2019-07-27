@@ -609,7 +609,7 @@ public class EditAccount extends CustomStuAppCompatActivity implements EditContr
             public void onClick(DialogInterface dialogInterface, int i) {
                 //Toast.makeText(ProfilePageActivity.this, "Set", Toast.LENGTH_SHORT).show();
                 //nothing to do here
-                if(i==-1){
+                if(gender().equals("")){
                     genderCheckedItem = 0;
                     selectGenderEditText.setText(genderSelcetionArr[0]);
                 }
@@ -640,7 +640,7 @@ public class EditAccount extends CustomStuAppCompatActivity implements EditContr
             public void onClick(DialogInterface dialogInterface, int i) {
                 //Toast.makeText(ProfilePageActivity.this, "Set", Toast.LENGTH_SHORT).show();
                 //nothing to do here
-                if(i==-1){
+                if(maritalStatus().equals("")){
                     maritalCheckedItem = 0;
                     selectMaritalStatusET.setText(maritalStatusSelcetionArr[0]);
                 }
@@ -671,7 +671,7 @@ public class EditAccount extends CustomStuAppCompatActivity implements EditContr
             public void onClick(DialogInterface dialogInterface, int i) {
                 //Toast.makeText(ProfilePageActivity.this, "Set", Toast.LENGTH_SHORT).show();
                 //nothing to do here
-                if(i==-1){
+                if(religion().equals("")){
                     religionCheckedItem = 0;
                     selectReligionET.setText(religionSelcetionArr[0]);
                 }
