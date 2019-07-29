@@ -669,7 +669,11 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
             } else if (levelName.equals("Salary")) {
                 AppCompatRadioButton rd = new AppCompatRadioButton(this);
                 rd.setText("null");
-                mMap.clear();
+                try{
+                    mMap.clear();
+                }catch (Exception e){
+                    Log.e(TAG, e.getLocalizedMessage());
+                }
                 onRadioButtonClick(rd, tabLayout.getSelectedTabPosition(), levelName);
             } else if (levelName.equals("Capacity")) {
                 AppCompatRadioButton rd = new AppCompatRadioButton(this);
@@ -990,9 +994,17 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
             } else if (fragmentId == 1) {
                 hintIdTwo.setText(queryList.get(fragmentId + 1));
             } else if (fragmentId == (tabLayout.getTabCount() - 1)) {
-                hintIdThree.setText(queryList.get(fragmentId + 1));
+                try{
+                    hintIdThree.setText(queryList.get(fragmentId + 1));
+                }catch (Exception err){
+                    Log.e(TAG, err.getLocalizedMessage());
+                }
             } else if (fragmentId == (tabLayout.getTabCount() - 2)) {
-                hintIdTwo.setText(queryList.get(fragmentId + 1));
+                try{
+                    hintIdTwo.setText(queryList.get(fragmentId + 1));
+                }catch (Exception err){
+                    Log.e(TAG, err.getLocalizedMessage());
+                }
             }
         }
 

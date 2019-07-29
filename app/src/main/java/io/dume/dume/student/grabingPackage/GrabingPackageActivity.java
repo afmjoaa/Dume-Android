@@ -1327,11 +1327,15 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
                             }
                             break;
                         case 3:
-                            if (myMainActivity.executeClickedTwo) {
-                                if (timePickerEt.getText().toString().equals("")) {
-                                    emptyTPF.setVisibility(View.VISIBLE);
+                            try{
+                                if (myMainActivity.executeClickedTwo) {
+                                    if (timePickerEt.getText().toString().equals("")) {
+                                        emptyTPF.setVisibility(View.VISIBLE);
+                                    }
+                                    myMainActivity.executeClickedTwo = false;
                                 }
-                                myMainActivity.executeClickedTwo = false;
+                            }catch (Exception err){
+                                Log.e(TAG, err.getLocalizedMessage());
                             }
                             break;
                     }

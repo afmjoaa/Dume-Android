@@ -16,7 +16,6 @@ import android.support.annotation.Keep;
 import android.support.annotation.StringRes;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.PopupMenu;
@@ -39,16 +38,11 @@ import android.view.animation.ScaleAnimation;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FieldValue;
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
 
 import java.io.IOException;
 import java.text.DateFormat;
@@ -62,20 +56,16 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.TimeZone;
-import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import io.dume.dume.Google;
 import io.dume.dume.R;
 import io.dume.dume.inter_face.usefulListeners;
-import io.dume.dume.student.homePage.adapter.HomePageRecyclerData;
 import io.dume.dume.student.pojo.SearchDataStore;
 import io.dume.dume.student.recordsPage.Record;
 import io.dume.dume.teacher.homepage.TeacherContract;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
-import static com.facebook.FacebookSdk.removeLoggingBehavior;
 
 @Keep
 public class DumeUtils {
@@ -214,7 +204,8 @@ public class DumeUtils {
         collapsingToolbarLayout.setExpandedTitleTypeface(Typeface.createFromAsset(activity.getAssets(), "fonts/Cairo-Light.ttf"));
         collapsingToolbarLayout.setTitle(title);
 
-        Drawable drawable = ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_more_vert_black_24dp);
+        //Drawable drawable = ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_more_vert_black_24dp);
+        Drawable drawable = context.getResources().getDrawable(R.drawable.ic_more_vert_black_24dp);
         toolbar.setOverflowIcon(drawable);
     }
 
@@ -234,10 +225,11 @@ public class DumeUtils {
         collapsingToolbarLayout.setTitle(title);
 
         if (isWhite) {
-            Drawable drawable = ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_more_vert_white_24dp);
+            Drawable drawable = context.getResources().getDrawable(R.drawable.ic_more_vert_white_24dp);
             toolbar.setOverflowIcon(drawable);
         } else {
-            Drawable drawable = ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_more_vert_black_24dp);
+//            Drawable drawable = ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_more_vert_black_24dp);
+            Drawable drawable = context.getResources().getDrawable(R.drawable.ic_more_vert_black_24dp);
             toolbar.setOverflowIcon(drawable);
         }
     }
@@ -282,7 +274,7 @@ public class DumeUtils {
         }
         toolbar.setTitleTextAppearance(context, R.style.MyTextApprncColOne);
         toolbar.setTitle(title);
-        Drawable drawable = ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_more_vert_black_24dp);
+        Drawable drawable = context.getResources().getDrawable(R.drawable.ic_more_vert_black_24dp);
         toolbar.setOverflowIcon(drawable);
     }
 
@@ -584,11 +576,11 @@ public class DumeUtils {
         //     String[] dbsplit = dbtrim.split(",");
         for (String aLocalsplit : localsplit) {
             if (!dbtrim.contains(aLocalsplit)) {
-                Log.e(TAG, "isAMinimalMatch: " + false );
+                Log.e(TAG, "isAMinimalMatch: " + false);
                 return false;
             }
         }
-        Log.e(TAG, "isAMinimalMatch: " + true );
+        Log.e(TAG, "isAMinimalMatch: " + true);
         return true;
     }
 

@@ -1,5 +1,6 @@
 package io.dume.dume.teacher.homepage;
 
+import android.Manifest;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -27,6 +28,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -280,11 +282,11 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         percentOffBlock.setVisibility(View.VISIBLE);
         headerTab.setBackground(getResources().getDrawable(R.drawable.bg_white_bottom_round_6));
         String herePackageName = "";
-        if(packageName.equals(SearchDataStore.DUME_GANG)){
+        if (packageName.equals(SearchDataStore.DUME_GANG)) {
             herePackageName = "Couching Service";
-        }else if(packageName.equals(SearchDataStore.REGULAR_DUME)){
+        } else if (packageName.equals(SearchDataStore.REGULAR_DUME)) {
             herePackageName = "Monthly Tuition";
-        }else {
+        } else {
             herePackageName = "Weekly Tuition";
         }
         promotionTextView.setText(discount + "% off on " + herePackageName);
@@ -304,7 +306,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         setActivityContextMap(this, fromFlag);
         teacherDataStore = TeacherDataStore.getInstance();
         model = new TeacherModel(this);
-        presenter = new TeacherPresenter(this,this, model);
+        presenter = new TeacherPresenter(this, this, model);
         presenter.init();
         settingStatusBarTransparent();
         setDarkStatusBarIcon();
@@ -524,15 +526,17 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
                 SkillFragment skillFragment = SkillFragment.getInstance();
                 ArrayList<Skill> skillArrayList = TeacherDataStore.getInstance().getSkillArrayList();
                 if (skillArrayList != null) {
+                    try{
+                        skillFragment.skillAdapter = new SkillAdapter(TeacherActivtiy.this, SkillAdapter.FRAGMENT, skillFragment.itemWidth, teacherDataStore.getSkillArrayList());
+                        skillFragment.skillRV.setAdapter(skillFragment.skillAdapter);
+                        if (skillArrayList.size() == 0) {
+                            skillFragment.noDataBlock.setVisibility(View.VISIBLE);
 
-
-                    skillFragment.skillAdapter = new SkillAdapter(TeacherActivtiy.this, SkillAdapter.FRAGMENT, skillFragment.itemWidth, teacherDataStore.getSkillArrayList());
-                    skillFragment.skillRV.setAdapter(skillFragment.skillAdapter);
-                    if (skillArrayList.size() == 0) {
-                        skillFragment.noDataBlock.setVisibility(View.VISIBLE);
-
-                    } else {
-                        skillFragment.noDataBlock.setVisibility(View.GONE);
+                        } else {
+                            skillFragment.noDataBlock.setVisibility(View.GONE);
+                        }
+                    }catch (Exception e){
+                        Log.e(TAG, "onResume: " + e.getLocalizedMessage());
                     }
                 }
                 skillFragment.changeAddSkillBtnColor();
@@ -986,10 +990,14 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
                 startActivity(new Intent(this, StudentPaymentActivity.class).setAction(DumeUtils.TEACHER));
                 break;
             case R.id.forum:
-                Intent facebookIntent = new Intent(Intent.ACTION_VIEW);
-                String facebookUrl = getFacebookPageURL(context);
-                facebookIntent.setData(Uri.parse(facebookUrl));
-                context.startActivity(facebookIntent);
+                try {
+                    Intent facebookIntent = new Intent(Intent.ACTION_VIEW);
+                    String facebookUrl = getFacebookPageURL(context);
+                    facebookIntent.setData(Uri.parse(facebookUrl));
+                    context.startActivity(facebookIntent);
+                }catch (Exception err){
+                    Log.e(TAG, err.getLocalizedMessage());
+                }
                 //Toast.makeText(context, "Coming soon", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.messages:
@@ -1091,7 +1099,9 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         onMapReadyListener(mMap);
         onMapReadyGeneralConfig();
         mMap.setPadding((int) (20 * (getResources().getDisplayMetrics().density)), 0, 0, (int) (72 * (getResources().getDisplayMetrics().density)));
-        mMap.setMyLocationEnabled(false);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            mMap.setMyLocationEnabled(false);
+        }
         getDeviceLocation(mMap);
     }
 

@@ -516,10 +516,14 @@ public class CusStuAppComMapActivity extends CustomStuAppCompatActivity implemen
                                 // GPS location can be null if GPS is switched off
                                 if (location != null) {
                                     if (fromFlag != 5) {
-                                        if (mMap.getCameraPosition().zoom < 4) {
-                                            mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(LAT_LNG_BOUNDS, 10));
-                                            moveCamera(new LatLng(location.getLatitude(), location.getLongitude()), DEFAULT_ZOOM, "Device Location", mMap);
-                                        } else {
+                                        try{
+                                            if (mMap.getCameraPosition().zoom < 4) {
+                                                mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(LAT_LNG_BOUNDS, 10));
+                                                moveCamera(new LatLng(location.getLatitude(), location.getLongitude()), DEFAULT_ZOOM, "Device Location", mMap);
+                                            } else {
+                                                moveCamera(new LatLng(location.getLatitude(), location.getLongitude()), DEFAULT_ZOOM, "Device Location", mMap);
+                                            }
+                                        }catch (Exception err){
                                             moveCamera(new LatLng(location.getLatitude(), location.getLongitude()), DEFAULT_ZOOM, "Device Location", mMap);
                                         }
                                     }

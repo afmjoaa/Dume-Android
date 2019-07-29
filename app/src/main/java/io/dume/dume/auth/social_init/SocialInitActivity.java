@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Keep;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
@@ -80,8 +81,15 @@ public class SocialInitActivity extends CustomStuAppCompatActivity {
                     }
 
                     dataStore.setEmail(user.getEmail());
-                    dataStore.setFirstName(splited[0]== null ? "" : splited[0]);
-                    dataStore.setLastName(splited[1] == null ? "" : splited[1]);
+                    try{
+                        dataStore.setFirstName(splited[0]== null ? "" : splited[0]);
+                        dataStore.setLastName(splited[1] == null ? "" : splited[1]);
+                    }catch (Exception err){
+                        dataStore.setFirstName(str);
+                        dataStore.setLastName("");
+                        Log.e("tag", err.getLocalizedMessage());
+                    }
+
                     dataStore.setPhoneNumber(user.getPhoneNumber());
                     dataStore.setPhotoUri(Objects.requireNonNull(user.getPhotoUrl()).toString());
 

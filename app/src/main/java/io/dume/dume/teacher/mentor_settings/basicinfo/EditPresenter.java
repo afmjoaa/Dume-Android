@@ -277,7 +277,7 @@ public class EditPresenter implements EditContract.Presenter, EditContract.onDat
 
                         try {
                             actualImage = FileUtil.from(view.getActivtiyContext(), selectedImageUri);
-                        } catch (IOException e) {
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
                         compressImage(actualImage);

@@ -488,8 +488,13 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
         if (recently_used != null && recently_used.size() > 0) {
             for (Map.Entry<String, Map<String, Object>> entry : recently_used.entrySet()) {
                 String targetAddress = getAddress(geoPoint.getLatitude(), geoPoint.getLongitude());
-                String[] targetAddressParts = targetAddress.split("\\s*,\\s*", 2);
-                String primary = targetAddressParts[0];
+                String primary = "";
+                try {
+                    String[] targetAddressParts = targetAddress.split("\\s*,\\s*", 2);
+                    primary = targetAddressParts[0];
+                }catch (Exception err){
+                    primary = targetAddress;
+                }
                 if (entry.getValue().get("location").equals(geoPoint)) {
                     found = true;
                 }
@@ -885,15 +890,21 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
             GeoPoint targetGeopoint = new GeoPoint(target.latitude, target.longitude);
             if (!checkIfInDB(targetGeopoint)) {
                 String targetAddress = getAddress(target.latitude, target.longitude);
-                String[] targetAddressParts = targetAddress.split("\\s*,\\s*", 2);
-                String primary = targetAddressParts[0];
-                String secondary = targetAddressParts[1];
-
                 MenualRecyclerData current = new MenualRecyclerData();
+                String primary ="";
+                String secondary ="";
+                try{
+                    String[] targetAddressParts = targetAddress.split("\\s*,\\s*", 2);
+                    primary = targetAddressParts[0];
+                    secondary = targetAddressParts[1];
+                }catch (Exception e){
+                    primary = targetAddress;
+                    secondary = "";
+                }
+
                 current.setPrimaryText(primary);
                 current.setSecondaryText(secondary);
                 current.setLocation(targetGeopoint);
-
                 Map<String, Object> myMap = new HashMap<>();
                 myMap.put("location", targetGeopoint);
                 myMap.put("primary_text", primary);

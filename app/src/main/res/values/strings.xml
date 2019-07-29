@@ -7,7 +7,7 @@
     <string-array name="promo_text_array">
         <item> Searching Teachers, Mentors, Coaching or boot camp Dume got you all  covered</item>
         <item> Dume will find you the best mentor on your demand, whenever you need</item>
-        <item> Finding tution was never been easier, just sign in as a mentor and get  started </item>
+        <item> Finding tuition was never been easier, just sign in as a mentor and get  started </item>
         <item> Reach maximum people with Dume and let your talent shine </item>
         <item> You never really learn something until you teach it, So start sharing your skill with dume </item>
     </string-array>
@@ -98,14 +98,14 @@
     <string name="tab_subject">Subject</string>
     <string name="tab_payment">Payment</string>
     <string name="tab_gender_preference">Gender</string>
-    <string name="tab_cross_ckeck">Cross Ckeck</string>
+    <string name="tab_cross_ckeck">Cross Check</string>
     <string name="demo_data">demo</string>
     <string name="title_activity_grabing_location">Grabing Location</string>
     <string name="fucking_testing_lorum">This is working example of bottom sheet   remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem IpsumThis is working example of bottom sheet   remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem IpsumThis is working example of bottom sheet   remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem IpsumThis is working example of bottom sheet   remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem IpsumThis is working example of bottom sheet   remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem IpsumThis is working example of bottom sheet   remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem IpsumThis is working example of bottom sheet   remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem IpsumThis is working example of bottom sheet   remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem IpsumThis is working example of bottom sheet   remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum</string>
     <string name="testing_lorum">This is working example of bottom sheet   remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem IpsumThis is working example of bottom sheet   remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem IpsumThis is working example of bottom sheet   remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem IpsumThis is working example of bottom sheet   remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem IpsumThis is working example of bottom sheet   remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem IpsumThis is working example of bottom sheet   remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem IpsumThis is working example of bottom sheet   remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem IpsumThis is working example of bottom sheet   remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem IpsumThis is working example of bottom sheet   remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum</string>
     <string name="gps_network_not_enabled">Gps_network_not_enabled</string>
     <string name="open_location_settings">Open_location_settings</string>
-    <string name="Cancel">cencel</string>
+    <string name="Cancel">Cancel</string>
     <string name="noNet_snack_text">Can\'t reach the Dume network.</string>
     <string name="N0_Gps_Text">Your search anchor point isn\'t showed on the map. If you turn on your phone\'s location services, Dume will auto locate the point.</string>
     <string name="Turn_on_location">Turn on Location Services</string>
@@ -534,7 +534,7 @@
 
     <string-array name="specificPromoText">
         <item>Search for nearby coaching-centers specific to  the topic</item>
-        <item>Search for nearby monthly mentors avaiable to the topics</item>
+        <item>Search for nearby monthly mentors available to the topics</item>
         <item>Search for nearby professional genius for solution to the topic</item>
     </string-array>
 
@@ -776,23 +776,13 @@ provided.Tap salary for details.  </string>
 
     <string name="new_message_notification_title_template">New message: %1$s</string>
 
-    <!-- TODO: remove this placeholder text -->
-    <string name="new_message_notification_placeholder_text_template">You said %1$s and lorem ipsum
-        dolor sit amet, consectetur adipiscing elit. Etiam non enim magna. Morbi dictum, velit vel
-        semper venenatis, magna odio volutpat velit, at ullamcorper nulla lacus sed turpis.
-        Pellentesque vitae metus elit, nec tincidunt tellus. Integer sed nisl sem, ullamcorper
-        ornare lacus. Duis ac mauris sed massa congue volutpat. Donec sed erat sit amet turpis
-        viverra rhoncus sit amet nec magna. Donec lacinia ligula at libero volutpat volutpat nec nec
-        tortor.
-    </string>
-
     <string name="action_share">Share</string>
     <string name="action_reply">Reply</string>
     <string name="unlock_recipe">Unlock Recipe</string>
     <string name="request_letter">Request Letter</string>
     <string name="how_it_works">How it works...</string>
-    <string name="enter_bkash_transection_id">Enter Bkash Transection ID</string>
-    <string name="transaction_info_text">Please Bkash your due amount to the following Dume personal account and send us the transaction id and amount for vilification, genrally vilification take 1&#8211;6 hours sorry for the inconvenience. Update is on it\'s way&#8230;</string>
+    <string name="enter_bkash_transection_id">Enter Bkash Transaction ID</string>
+    <string name="transaction_info_text">Please Bkash your due amount to the following Dume personal account and send us the transaction id and amount for verification, generally verification take 1&#8211;6 hours sorry for the inconvenience. Update is on it\'s way&#8230;</string>
     <string name="transaction_id">Transaction ID</string>
     <string name="amount">Amount</string>
     <string name="payment_info">You can send any amount of money through Bkash transaction. But don\'t send more then your due amount. As you provide us the transaction id and amount we will validate the transaction and deduct the same

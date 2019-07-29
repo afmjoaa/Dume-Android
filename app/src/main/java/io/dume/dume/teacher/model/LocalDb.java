@@ -520,14 +520,14 @@ public class LocalDb {
             }
         };
 
-        innerProgramming = new ArrayList<String>(Arrays.asList("C", "Java", "C++", "C#", "JavaScript", "Python", "Web Development", "NodeJS", "Angular", "ReactJS", "VueJS", "Django", "Wordpress Development", "iOS Development", "Xamarin Cross Platform", "DotNet Framework", "Data Science", "Machine Learning")) {
+        innerProgramming = new ArrayList<String>(Arrays.asList("C", "Java", "C++", "C#", "JavaScript", "Python", "Web Development", "NodeJS", "Angular", "ReactJS", "VueJS", "Django", "Wordpress Development", "iOS Development", "Xamarin Cross Platform", "DotNet Framework", "Data Science", "Machine Learning", "Android Development", "WPF App Development")) {
             @Override
             public String toString() {
                 return " Language ";
             }
         };
 
-        innerSoftWare = new ArrayList<String>(Arrays.asList("Word", "Excel", "Powerpoint", "Adobe Illustrator", "Adobe PhotoShop", "Matlab", "Solid work", "AutoCad", "Adobe After Effect")) {
+        innerSoftWare = new ArrayList<String>(Arrays.asList("Word", "Excel", "Powerpoint", "Adobe Illustrator", "Adobe PhotoShop", "Matlab", "Solid work", "AutoCad", "Adobe After Effect", "Adobe Premiere Pro", "Adobe XD", "Jetbrains IDEs")) {
             @Override
             public String toString() {
                 return "Software";

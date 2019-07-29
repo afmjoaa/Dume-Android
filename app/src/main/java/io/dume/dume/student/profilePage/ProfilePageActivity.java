@@ -691,12 +691,14 @@ public class ProfilePageActivity extends CustomStuAppCompatActivity implements P
 
     @Override
     public void setPreviousResult(String previousResult) {
-        if(previousResult.endsWith("(GPA)")){
-            gpaCheckBox.setChecked(true);
-        }else {
-            cgpaCheckBox.setChecked(true);
+        if(previousResult!= null){
+            if(previousResult.endsWith("(GPA)")){
+                gpaCheckBox.setChecked(true);
+            }else {
+                cgpaCheckBox.setChecked(true);
+            }
+            previousResultTextView.setText(previousResult);
         }
-        previousResultTextView.setText(previousResult);
     }
 
     @Override

@@ -403,31 +403,31 @@ public class SearchLoadingPresenter implements SearchLoadingContract.Presenter {
                     sortedResult.remove(i);
                 }
             }
-
+            Random random = new Random();
             if (sortedResult.size() > 0) {
-                Random random = new Random();
-                lastFiltered.add(sortedResult.get(random.nextInt(sortedResult.size())));
-                sortedResult.remove(random.nextInt(sortedResult.size()));
+                int randomInt = random.nextInt(sortedResult.size());
+                lastFiltered.add(sortedResult.get(randomInt));
+                sortedResult.remove(randomInt);
             }
             if (sortedResult.size() > 0) {
-                Random random = new Random();
-                lastFiltered.add(sortedResult.get(random.nextInt(sortedResult.size())));
-                sortedResult.remove(random.nextInt(sortedResult.size()));
+                int randomInt = random.nextInt(sortedResult.size());
+                lastFiltered.add(sortedResult.get(randomInt));
+                sortedResult.remove(randomInt);
             }
             if (sortedResult.size() > 0) {
-                Random random = new Random();
-                lastFiltered.add(sortedResult.get(random.nextInt(sortedResult.size())));
-                sortedResult.remove(random.nextInt(sortedResult.size()));
+                int randomInt = random.nextInt(sortedResult.size());
+                lastFiltered.add(sortedResult.get(randomInt));
+                sortedResult.remove(randomInt);
             }
             if (sortedResult.size() > 0) {
-                Random random = new Random();
-                lastFiltered.add(sortedResult.get(random.nextInt(sortedResult.size())));
-                sortedResult.remove(random.nextInt(sortedResult.size()));
+                int randomInt = random.nextInt(sortedResult.size());
+                lastFiltered.add(sortedResult.get(randomInt));
+                sortedResult.remove(randomInt);
             }
             if (sortedResult.size() > 0) {
-                Random random = new Random();
-                lastFiltered.add(sortedResult.get(random.nextInt(sortedResult.size())));
-                sortedResult.remove(random.nextInt(sortedResult.size()));
+                int randomInt = random.nextInt(sortedResult.size());
+                lastFiltered.add(sortedResult.get(randomInt));
+                sortedResult.remove(randomInt);
             }
             return lastFiltered;
         }

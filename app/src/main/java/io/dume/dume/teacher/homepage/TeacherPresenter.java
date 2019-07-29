@@ -269,27 +269,31 @@ public class TeacherPresenter implements TeacherContract.Presenter {
                         TeacherDataStore.getInstance().setDocumentSnapshot(documentSnapshot.getData());
                         appliedPromo(documentSnapshot.getData());
                         ArrayList<String> tempList = new ArrayList<>();
-                        assert available_promo != null;
-                        for (String promoCode : available_promo) {
-                            if (!tempList.contains(promoCode)) {
-                                tempList.add(promoCode);
+                        try {
+                            if (available_promo != null) {
+                                for (String promoCode : available_promo) {
+                                    if (!tempList.contains(promoCode)) {
+                                        tempList.add(promoCode);
+                                    }
+                                }
+                                available_promo = tempList;
+                                for (String promoCode : available_promo) {
+                                    model.getPromo(promoCode, new TeacherContract.Model.Listener<HomePageRecyclerData>() {
+                                        @Override
+                                        public void onSuccess(HomePageRecyclerData list) {
+                                            view.loadPromoData(list);
+                                        }
+
+                                        @Override
+                                        public void onError(String msg) {
+                                            Log.w(TAG, "onError: " + msg);
+                                        }
+                                    });
+                                }
                             }
+                        } catch (Exception exception) {
+                            Log.e(TAG, exception.getLocalizedMessage());
                         }
-                        available_promo = tempList;
-                        for (String promoCode : available_promo) {
-                            model.getPromo(promoCode, new TeacherContract.Model.Listener<HomePageRecyclerData>() {
-                                @Override
-                                public void onSuccess(HomePageRecyclerData list) {
-                                    view.loadPromoData(list);
-                                }
-
-                                @Override
-                                public void onError(String msg) {
-                                    Log.w(TAG, "onError: " + msg);
-                                }
-                            });
-                        }
-
                     } else {
                         view.flush("Does not found any user");
                     }

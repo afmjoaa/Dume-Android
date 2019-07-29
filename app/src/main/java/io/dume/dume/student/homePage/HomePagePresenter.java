@@ -184,10 +184,14 @@ public class HomePagePresenter implements HomePageContract.Presenter {
                 break;
             case R.id.forum:
                 //TODO
-                Intent facebookIntent = new Intent(Intent.ACTION_VIEW);
-                String facebookUrl = getFacebookPageURL(context);
-                facebookIntent.setData(Uri.parse(facebookUrl));
-                context.startActivity(facebookIntent);
+                try {
+                    Intent facebookIntent = new Intent(Intent.ACTION_VIEW);
+                    String facebookUrl = getFacebookPageURL(context);
+                    facebookIntent.setData(Uri.parse(facebookUrl));
+                    context.startActivity(facebookIntent);
+                } catch (Exception err) {
+                    Log.e(TAG, err.getLocalizedMessage());
+                }
                 //Toast.makeText(context, "Coming soon", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.messages:
@@ -308,27 +312,32 @@ public class HomePagePresenter implements HomePageContract.Presenter {
                 ArrayList<String> available_promo = (ArrayList<String>) documentSnapshot.get("available_promo");
                 appliedPromo(documentSnapshot);
                 ArrayList<String> tempList = new ArrayList<>();
-
                 //if more then once available then take only one
-                for (String promoCode : available_promo) {
-                    if (!tempList.contains(promoCode)) {
-                        tempList.add(promoCode);
+                if (available_promo != null) {
+                    try {
+                        for (String promoCode : available_promo) {
+                            if (!tempList.contains(promoCode)) {
+                                tempList.add(promoCode);
+                            }
+                        }
+                        available_promo = tempList;
+
+                        for (String promoCode : available_promo) {
+                            mModel.getPromo(promoCode, new TeacherContract.Model.Listener<HomePageRecyclerData>() {
+                                @Override
+                                public void onSuccess(HomePageRecyclerData list) {
+                                    mView.loadPromoData(list);
+                                }
+
+                                @Override
+                                public void onError(String msg) {
+                                    Log.w(TAG, "PromoPromoErr" + msg);
+                                }
+                            });
+                        }
+                    } catch (Exception error) {
+                        Log.e(TAG, error.getLocalizedMessage());
                     }
-                }
-                available_promo = tempList;
-
-                for (String promoCode : available_promo) {
-                    mModel.getPromo(promoCode, new TeacherContract.Model.Listener<HomePageRecyclerData>() {
-                        @Override
-                        public void onSuccess(HomePageRecyclerData list) {
-                            mView.loadPromoData(list);
-                        }
-
-                        @Override
-                        public void onError(String msg) {
-                            Log.w(TAG, "PromoPromoErr" + msg);
-                        }
-                    });
                 }
                 if (mView.checkNull()) {
                     final String avatar = documentSnapshot.getString("avatar");

@@ -300,15 +300,4 @@
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/skillAddDateTV"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:layout_weight="1"
-        android:gravity="end"
-        android:text="12/10/2016"
-        android:textSize="10sp"
-        android:textStyle="italic"
-        android:visibility="gone" />
 </carbon.widget.RelativeLayout>

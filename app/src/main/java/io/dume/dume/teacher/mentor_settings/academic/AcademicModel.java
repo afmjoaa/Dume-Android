@@ -43,11 +43,13 @@ public class AcademicModel implements AcademicContract.Model {
             hashMap.put("from_year", from);
             hashMap.put("to_year", to);
             hashMap.put("result", result);
-            firestore.collection("users").document("mentors").collection("mentor_profile").document(Objects.requireNonNull(mAuth.getUid())).update("academic." + degree.replace(".", ""), hashMap).addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    listener.onSuccess();
-                }
-            }).addOnFailureListener(e -> listener.onFail(e.toString()));
+            if (FirebaseAuth.getInstance().getUid() != null) {
+                firestore.collection("users").document("mentors").collection("mentor_profile").document(FirebaseAuth.getInstance().getUid()).update("academic." + degree.replace(".", ""), hashMap).addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        listener.onSuccess();
+                    }
+                }).addOnFailureListener(e -> listener.onFail(e.toString()));
+            }
         } else throw new Error("Listener Not Set at AcademicModel");
     }
 

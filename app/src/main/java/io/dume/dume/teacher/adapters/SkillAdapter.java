@@ -591,8 +591,6 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 }
             });
 
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-            String dateString = format.format(skillList.get(i).getCreation());
             int salary1 = (int) skillList.get(i).getSalary();
             String format2 = NumberFormat.getCurrencyInstance(Locale.US).format(salary1);
             myViewHolder.salaryTV.setText(format2.substring(1, format2.length() - 3) + " BDT");
@@ -625,7 +623,6 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     }
                 }
             });
-            myViewHolder.publishDate.setText(dateString);
             myViewHolder.enrolledTV.setText("Enrolled Students : " + skillList.get(i).getEnrolled());
 
             //init review recycler
@@ -824,8 +821,13 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             }
             myFragmentHolder.switchCompat.setChecked(skillList.get(i).isStatus());
             for (String splited : splitMainSsss) {
-                likes = likes + Integer.parseInt(skillList.get(i).getLikes().get(splited).toString());
-                dislikes = dislikes + Integer.parseInt(skillList.get(i).getDislikes().get(splited).toString());
+                try{
+                    likes = likes + Integer.parseInt(skillList.get(i).getLikes().get(splited).toString());
+                    dislikes = dislikes + Integer.parseInt(skillList.get(i).getDislikes().get(splited).toString());
+                }catch (Exception e){
+                    likes = 0;
+                    dislikes = 0;
+                }
             }
 
 
@@ -838,10 +840,17 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             }
             int salary = (int) (skillList.get(i).getSalary()) / 1000;
 
-
-            myFragmentHolder.packageName.setText(skillList.get(i).getPackage_name() + " / " + salary + " k");
-
-
+            String package_name = skillList.get(i).getPackage_name();
+            if (package_name != null) {
+                if(package_name.equals(SearchDataStore.REGULAR_DUME)){
+                    package_name = "Monthly Tutor";
+                } else if (package_name.equals(SearchDataStore.INSTANT_DUME)) {
+                    package_name = "Weekly Tutor";
+                }else {
+                    package_name = "Couching Service";
+                }
+            }
+            myFragmentHolder.packageName.setText(package_name + " / " + salary + " k");
         }
     }
 
@@ -892,8 +901,6 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         RecyclerView detailsRV;
         @BindView(R.id.skillSalaryTV)
         TextView salaryTV;
-        @BindView(R.id.skillAddDateTV)
-        TextView publishDate;
         @BindView(R.id.skillTitleTV)
         TextView skillTitleTV;
         @BindView(R.id.skillStatus)
