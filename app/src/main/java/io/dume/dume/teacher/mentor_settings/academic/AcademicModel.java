@@ -36,7 +36,7 @@ public class AcademicModel implements AcademicContract.Model {
     public void syncWithDatabase(@NonNull String level, String institution, String degree, String from, String to, String result) {
         if (listener != null) {
             listener.onStart();
-            hashMap.clear();
+            hashMap = new HashMap<>();
             hashMap.put("level", level);
             hashMap.put("institution", institution);
             hashMap.put("degree", degree);
@@ -44,7 +44,8 @@ public class AcademicModel implements AcademicContract.Model {
             hashMap.put("to_year", to);
             hashMap.put("result", result);
             if (FirebaseAuth.getInstance().getUid() != null) {
-                firestore.collection("users").document("mentors").collection("mentor_profile").document(FirebaseAuth.getInstance().getUid()).update("academic." + degree.replace(".", ""), hashMap).addOnCompleteListener(task -> {
+                String path = "academic." + degree.replace(".", "");
+                firestore.collection("/users/mentors/mentor_profile").document(FirebaseAuth.getInstance().getUid()).update(path, hashMap).addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         listener.onSuccess();
                     }

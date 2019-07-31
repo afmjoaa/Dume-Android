@@ -1556,7 +1556,9 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
 
     @Override
     public void setRating(Map<String, Object> selfRating) {
-        userRatingTextView.setText(selfRating.get("star_rating") + "  ★");
+        if(selfRating.get("star_rating")!= null){
+            userRatingTextView.setText(selfRating.get("star_rating") + "  ★");
+        }
     }
 
     @Override
