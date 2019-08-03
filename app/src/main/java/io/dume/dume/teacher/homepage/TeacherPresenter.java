@@ -76,7 +76,12 @@ public class TeacherPresenter implements TeacherContract.Presenter {
                 view.setMsgName(view.generateMsgName(o1, o));
                 view.setDocumentSnapshot(documentSnapshot);
 
-                boolean acountActive = documentSnapshot.getBoolean("account_active");
+                boolean acountActive = false;
+                try {
+                    acountActive = documentSnapshot.getBoolean("account_active");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 view.updateAccountActive(acountActive);
 
                 //setting the stat in teacherdataStore
