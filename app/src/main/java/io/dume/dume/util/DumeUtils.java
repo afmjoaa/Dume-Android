@@ -620,7 +620,11 @@ public class DumeUtils {
                 }
             } else {
                 mQuery.append(firstTwo(queryList.get(i)));
-                commonQuery.append(firstTwo(queryList.get(i)));
+                try {
+                    commonQuery.append(firstTwo(queryList.get(i)));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
         Log.e("bar", "Common Query : " + commonQuery.toString());
