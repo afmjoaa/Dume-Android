@@ -550,11 +550,11 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
         headsUpPromoContainer.setVisibility(View.VISIBLE);
         searchMentorBtn.setBackground(getResources().getDrawable(R.drawable.bg_white_bottom_round));
         String herePackageName = "";
-        if(packageName.equals(SearchDataStore.DUME_GANG)){
+        if (packageName.equals(SearchDataStore.DUME_GANG)) {
             herePackageName = "Couching Service";
-        }else if(packageName.equals(SearchDataStore.REGULAR_DUME)){
+        } else if (packageName.equals(SearchDataStore.REGULAR_DUME)) {
             herePackageName = "Monthly Tuition";
-        }else {
+        } else {
             herePackageName = "Weekly Tuition";
         }
         promotionTextView.setText(discount + "% off on " + herePackageName);
@@ -745,11 +745,11 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
                 primaryText = primaryText + ": " + temp + " / ";
                 temp = (String) entry.getValue().get("package_name");
                 if (temp != null) {
-                    if(temp.equals(SearchDataStore.REGULAR_DUME)){
+                    if (temp.equals(SearchDataStore.REGULAR_DUME)) {
                         temp = "Monthly Tutor";
                     } else if (temp.equals(SearchDataStore.INSTANT_DUME)) {
                         temp = "Weekly Tutor";
-                    }else {
+                    } else {
                         temp = "Couching";
                     }
                 }
@@ -1066,16 +1066,16 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
     @Override
     public void gotoGrabingLocationPage() {
         Boolean chooseLocationRadio1 = prefs.getBoolean("chooseLocationRadio", true);
-        if(chooseLocationRadio1){
+        if (chooseLocationRadio1) {
             startActivity(new Intent(this, GrabingLocationActivity.class).setAction("HomePage"));
-        }else {
+        } else {
             GeoPoint current_address = documentSnapshot.getGeoPoint("current_address");
             if (current_address != null) {
                 if (Objects.requireNonNull(current_address).getLatitude() != 84.9 && current_address.getLongitude() != 180) {
                     searchDataStore.setAnchorPoint(new LatLng(current_address.getLatitude(), current_address.getLongitude()));
                 }
                 startActivity(new Intent(this, CrudSkillActivity.class).setAction(DumeUtils.STUDENT));
-            }else{
+            } else {
                 startActivity(new Intent(this, GrabingLocationActivity.class).setAction("HomePage"));
             }
         }
@@ -1556,7 +1556,11 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
 
     @Override
     public void setRating(Map<String, Object> selfRating) {
-        userRatingTextView.setText(selfRating.get("star_rating") + "  ★");
+        if (selfRating != null) {
+            String ret = (String) selfRating.get("star_rating");
+            ret += "  ★";
+            userRatingTextView.setText(ret);
+        }
     }
 
     @Override
@@ -1824,7 +1828,7 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
 
         SharedPreferences.Editor editor = getSharedPreferences("filter", MODE_PRIVATE).edit();
 
-        if(prefs!= null){
+        if (prefs != null) {
             Boolean uniCheckBox1 = prefs.getBoolean("uniCheckBox", false);
             uniCheckBox.setChecked(uniCheckBox1);
 
@@ -1833,8 +1837,9 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
 
             Gson gson = new Gson();
             String json = prefs.getString("selectedUnis", "");
-            if(!json.equals("")){
-                Type type = new TypeToken<List<String>>() {}.getType();
+            if (!json.equals("")) {
+                Type type = new TypeToken<List<String>>() {
+                }.getType();
                 selectedUnis = gson.fromJson(json, type);
                 //setting the textview
                 StringBuilder item = new StringBuilder();
@@ -1845,19 +1850,20 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
                     }
                 }
                 universityNames.setText(item);
-            }else{
+            } else {
                 selectedUnis = new ArrayList<>();
             }
 
             //retrieving the array
             int size = prefs.getInt("checkedUnis" + "_size", 0);
             checkedUnis = new boolean[uniItems.length];
-            for(int i=0;i<size;i++)
+            for (int i = 0; i < size; i++)
                 checkedUnis[i] = prefs.getBoolean("checkedUnis" + "_" + i, false);
 
             String json1 = prefs.getString("selectedDegrees", "");
-            if(!json1.equals("")){
-                Type type1 = new TypeToken<List<String>>() {}.getType();
+            if (!json1.equals("")) {
+                Type type1 = new TypeToken<List<String>>() {
+                }.getType();
                 selectedDegrees = gson.fromJson(json1, type1);
                 StringBuilder item = new StringBuilder();
                 for (int i = 0; i < selectedDegrees.size(); i++) {
@@ -1867,21 +1873,21 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
                     }
                 }
                 degreeNames.setText(item);
-            }else{
+            } else {
                 selectedDegrees = new ArrayList<>();
             }
 
             //retrieving the array
             int size1 = prefs.getInt("checkedItems" + "_size", 0);
             checkedItems = new boolean[listItems.length];
-            for(int i=0;i<size1;i++)
+            for (int i = 0; i < size1; i++)
                 checkedItems[i] = prefs.getBoolean("checkedItems" + "_" + i, false);
 
             Boolean chooseLocationRadio1 = prefs.getBoolean("chooseLocationRadio", true);
-            if(chooseLocationRadio1){
+            if (chooseLocationRadio1) {
                 chooseLocationRadio.setChecked(true);
                 permanentRadio.setChecked(false);
-            }else {
+            } else {
                 chooseLocationRadio.setChecked(false);
                 permanentRadio.setChecked(true);
             }
@@ -1896,17 +1902,17 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
 
                 @Override
                 public void onClick(View view) {
-                    AlertDialog.Builder mBuilder = new AlertDialog.Builder(HomePageActivity.this,R.style.RadioDialogTheme);
+                    AlertDialog.Builder mBuilder = new AlertDialog.Builder(HomePageActivity.this, R.style.RadioDialogTheme);
                     mBuilder.setTitle("Select filter universities");
                     mBuilder.setMultiChoiceItems(uniItems, checkedUnis, new DialogInterface.OnMultiChoiceClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int position, boolean isChecked) {
                             if (isChecked) {
-                                if(selectedUnis.size()==3){
+                                if (selectedUnis.size() == 3) {
                                     Toast.makeText(HomePageActivity.this, "Maximum 3 filter allowed", Toast.LENGTH_SHORT).show();
                                     ((AlertDialog) mUniDialog).getListView().setItemChecked(position, false);
                                     checkedUnis[position] = false;
-                                }else {
+                                } else {
                                     if (!selectedUnis.contains(uniItems[position])) {
                                         selectedUnis.add(uniItems[position]);
                                     }
@@ -1925,7 +1931,7 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
                     mBuilder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int which) {
-                            if(selectedUnis.size() >0) {
+                            if (selectedUnis.size() > 0) {
                                 StringBuilder item = new StringBuilder();
                                 for (int i = 0; i < selectedUnis.size(); i++) {
                                     item.append(selectedUnis.get(i));
@@ -1935,15 +1941,15 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
                                 }
                                 universityNames.setText(item);
                                 uniCheckBox.setChecked(true);
-                            }else{
+                            } else {
                                 universityNames.setText("");
                                 uniCheckBox.setChecked(false);
                             }
 
                             editor.putBoolean("uniCheckBox", uniCheckBox.isChecked());
 
-                            editor.putInt("checkedUnis" +"_size", checkedUnis.length);
-                            for(int i = 0; i< checkedUnis.length; i++)
+                            editor.putInt("checkedUnis" + "_size", checkedUnis.length);
+                            for (int i = 0; i < checkedUnis.length; i++)
                                 editor.putBoolean("checkedUnis" + "_" + i, checkedUnis[i]);
 
                             Gson gson = new Gson();
@@ -1964,8 +1970,8 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
                             }
                             editor.putBoolean("uniCheckBox", uniCheckBox.isChecked());
 
-                            editor.putInt("checkedUnis" +"_size", checkedUnis.length);
-                            for(int i = 0; i< checkedUnis.length; i++)
+                            editor.putInt("checkedUnis" + "_size", checkedUnis.length);
+                            for (int i = 0; i < checkedUnis.length; i++)
                                 editor.putBoolean("checkedUnis" + "_" + i, checkedUnis[i]);
 
                             Gson gson = new Gson();
@@ -1999,17 +2005,17 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
                 @Override
                 public void onClick(View view) {
 
-                    AlertDialog.Builder mBuilder = new AlertDialog.Builder(HomePageActivity.this,R.style.RadioDialogTheme);
+                    AlertDialog.Builder mBuilder = new AlertDialog.Builder(HomePageActivity.this, R.style.RadioDialogTheme);
                     mBuilder.setTitle("Select filter degrees");
                     mBuilder.setMultiChoiceItems(listItems, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int position, boolean isChecked) {
                             if (isChecked) {
-                                if(selectedDegrees.size()==3){
+                                if (selectedDegrees.size() == 3) {
                                     Toast.makeText(HomePageActivity.this, "Maximum 3 filter allowed", Toast.LENGTH_SHORT).show();
                                     ((AlertDialog) mDegreeDialog).getListView().setItemChecked(position, false);
                                     checkedItems[position] = false;
-                                }else {
+                                } else {
                                     if (!selectedDegrees.contains(listItems[position])) {
                                         selectedDegrees.add(listItems[position]);
                                     }
@@ -2028,7 +2034,7 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
                     mBuilder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int which) {
-                            if(selectedDegrees.size() >0) {
+                            if (selectedDegrees.size() > 0) {
                                 StringBuilder item = new StringBuilder();
                                 for (int i = 0; i < selectedDegrees.size(); i++) {
                                     item.append(selectedDegrees.get(i));
@@ -2038,15 +2044,15 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
                                 }
                                 degreeNames.setText(item);
                                 degreeCheckBox.setChecked(true);
-                            }else{
+                            } else {
                                 degreeNames.setText("");
                                 degreeCheckBox.setChecked(false);
                             }
 
                             editor.putBoolean("degreeCheckBox", degreeCheckBox.isChecked());
 
-                            editor.putInt("checkedItems" +"_size", checkedItems.length);
-                            for(int i = 0; i< checkedItems.length; i++)
+                            editor.putInt("checkedItems" + "_size", checkedItems.length);
+                            for (int i = 0; i < checkedItems.length; i++)
                                 editor.putBoolean("checkedItems" + "_" + i, checkedItems[i]);
 
                             Gson gson1 = new Gson();
@@ -2068,8 +2074,8 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
                             }
                             editor.putBoolean("degreeCheckBox", degreeCheckBox.isChecked());
 
-                            editor.putInt("checkedItems" +"_size", checkedItems.length);
-                            for(int i = 0; i< checkedItems.length; i++)
+                            editor.putInt("checkedItems" + "_size", checkedItems.length);
+                            for (int i = 0; i < checkedItems.length; i++)
                                 editor.putBoolean("checkedItems" + "_" + i, checkedItems[i]);
 
                             Gson gson1 = new Gson();
@@ -2119,12 +2125,12 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
                     editor.putBoolean("uniCheckBox", uniCheckBox.isChecked());
                     editor.putBoolean("degreeCheckBox", degreeCheckBox.isChecked());
 
-                    editor.putInt("checkedUnis" +"_size", checkedUnis.length);
-                    for(int i = 0; i< checkedUnis.length; i++)
+                    editor.putInt("checkedUnis" + "_size", checkedUnis.length);
+                    for (int i = 0; i < checkedUnis.length; i++)
                         editor.putBoolean("checkedUnis" + "_" + i, checkedUnis[i]);
 
-                    editor.putInt("checkedItems" +"_size", checkedItems.length);
-                    for(int i = 0; i< checkedItems.length; i++)
+                    editor.putInt("checkedItems" + "_size", checkedItems.length);
+                    for (int i = 0; i < checkedItems.length; i++)
                         editor.putBoolean("checkedItems" + "_" + i, checkedItems[i]);
 
                     Gson gson = new Gson();

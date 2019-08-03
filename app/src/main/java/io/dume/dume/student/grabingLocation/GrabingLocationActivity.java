@@ -413,7 +413,8 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
         }
         if (recently_used != null && recently_used.size() > 0) {
             for (Map.Entry<String, Map<String, Object>> entry : recently_used.entrySet()) {
-                if (entry.getValue().get("primary_text").equals(s)) {
+                String cmp = (String) entry.getValue().get("primary_text");
+                if (cmp != null && cmp.equals(s)) {
                     MenualRecyclerData savedPlacesAdaData = new MenualRecyclerData();
                     savedPlacesAdaData.setPrimaryText((String) entry.getValue().get("primary_text"));
                     savedPlacesAdaData.setSecondaryText((String) entry.getValue().get("secondary_text"));
@@ -492,7 +493,7 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
                 try {
                     String[] targetAddressParts = targetAddress.split("\\s*,\\s*", 2);
                     primary = targetAddressParts[0];
-                }catch (Exception err){
+                } catch (Exception err) {
                     primary = targetAddress;
                 }
                 if (entry.getValue().get("location").equals(geoPoint)) {
@@ -562,7 +563,6 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
     public void makingCallbackInterfaces() {
 
     }
-
 
 
     @Override
@@ -822,7 +822,7 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
 
         if (Objects.requireNonNull(retrivedAction).equals("fromPPA")) {
             //testing
-            if (mCenterLatLong==null) {
+            if (mCenterLatLong == null) {
                 flush("Please move map marker to select location...");
                 return;
             }
@@ -832,7 +832,7 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
             finish();
             //GeoPoint selectedLocation = new GeoPoint(mCenterLatLong.latitude, mCenterLatLong.longitude);
         } else if (Objects.requireNonNull(retrivedAction).equals("fromMPA")) {
-            if (mCenterLatLong==null) {
+            if (mCenterLatLong == null) {
                 flush("Please move map marker to select location...");
                 return;
             }
@@ -841,7 +841,7 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
             setResult(RESULT_OK, mpaIntent);
             finish();
         } else if (Objects.requireNonNull(retrivedAction).startsWith("fromSPA")) {
-            if (mCenterLatLong==null) {
+            if (mCenterLatLong == null) {
                 flush("Please move map marker to select location...");
                 return;
             }
@@ -853,7 +853,7 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
             setResult(RESULT_OK, goBackToPPAIntent);
             finish();
         } else if (Objects.requireNonNull(retrivedAction).startsWith("fromGLA")) {
-            if (mCenterLatLong==null) {
+            if (mCenterLatLong == null) {
                 flush("Please move map marker to select location...");
                 return;
             }
@@ -862,7 +862,7 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
             setResult(RESULT_OK, goBackToGLAIntent);
             finish();
         } else if (Objects.requireNonNull(retrivedAction).startsWith("fromSA")) {
-            if (mCenterLatLong==null) {
+            if (mCenterLatLong == null) {
                 flush("Please move map marker to select location...");
                 return;
             }
@@ -876,7 +876,7 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
             locationDoneBtn.setBackgroundColor(getResources().getColor(R.color.disable_color));
             LatLng target = mMap.getCameraPosition().target;
 
-            if(target== null){
+            if (target == null) {
                 flush("Please move map marker to select location...");
                 return;
             }
@@ -891,13 +891,13 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
             if (!checkIfInDB(targetGeopoint)) {
                 String targetAddress = getAddress(target.latitude, target.longitude);
                 MenualRecyclerData current = new MenualRecyclerData();
-                String primary ="";
-                String secondary ="";
-                try{
+                String primary = "";
+                String secondary = "";
+                try {
                     String[] targetAddressParts = targetAddress.split("\\s*,\\s*", 2);
                     primary = targetAddressParts[0];
                     secondary = targetAddressParts[1];
-                }catch (Exception e){
+                } catch (Exception e) {
                     primary = targetAddress;
                     secondary = "";
                 }
@@ -1133,10 +1133,10 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
     }
 
     @Override
-    public void flush(String msg){
+    public void flush(String msg) {
         Toast toast = Toast.makeText(this, msg, Toast.LENGTH_SHORT);
         TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
-        if( v != null) v.setGravity(Gravity.CENTER);
+        if (v != null) v.setGravity(Gravity.CENTER);
         toast.show();
     }
 

@@ -52,7 +52,7 @@ public class EditPresenter implements EditContract.Presenter, EditContract.onDat
         this.view = view;
         this.model = model;
         this.context = context;
-        this.activity = (Activity)context;
+        this.activity = (Activity) context;
         model.setListener(this);
     }
 
@@ -89,8 +89,6 @@ public class EditPresenter implements EditContract.Presenter, EditContract.onDat
             }
         });
     }
-
-
 
 
     @Override
@@ -174,7 +172,12 @@ public class EditPresenter implements EditContract.Presenter, EditContract.onDat
 
     @SuppressLint("CheckResult")
     private void compressImage(File actualImage) {
-        view.setImage(Uri.fromFile(actualImage));
+
+        try {
+            view.setImage(Uri.fromFile(actualImage));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         new Compressor(view.getActivtiyContext())
                 .compressToFileAsFlowable(actualImage, "mentor_photo")
                 .subscribeOn(Schedulers.io())
