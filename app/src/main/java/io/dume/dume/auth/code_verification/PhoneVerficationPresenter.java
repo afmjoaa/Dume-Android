@@ -126,7 +126,12 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
     private void mergeImei() {
         boolean isImeiMatched = false;
         Map<String, Object> data = dataStore.getDocumentSnapshot();
-        List<String> imeiDbList = (List<String>) data.get("imei");
+        List<String> imeiDbList = null;
+        try {
+            imeiDbList = (List<String>) data.get("imei");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         List<String> imeiList = DumeUtils.getImei(context);
         for (int i = 0; i < imeiList.size(); i++) {
             if (imeiDbList.contains(imeiList.get(i))) {
