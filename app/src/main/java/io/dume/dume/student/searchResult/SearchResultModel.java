@@ -57,22 +57,22 @@ public class SearchResultModel extends StuBaseModel implements SearchResultContr
             String penalty_paid = (String) payments.get("penalty_paid");
 
 
-            map.put("payments.penalty_paid", currentPenalty == null ? Integer.parseInt(penalty_paid) + 0 + "": Integer.parseInt(penalty_paid)+currentPenalty.intValue()+"");
-                    updateStuProfile(map, new usefulListeners.uploadToDBListerer() {
-                        @Override
-                        public void onSuccessDB(Object obj) {
-                            firestore.collection("records").add(data).addOnSuccessListener((Activity) context, documentReference -> {
-                                listener.onSuccess(documentReference);
-                            }).addOnFailureListener(e -> {
-                                listener.onError(e.getLocalizedMessage());
-                            });
-                        }
-
-                        @Override
-                        public void onFailDB(Object obj) {
-                            listener.onError(obj.toString());
-                        }
+            map.put("payments.penalty_paid", currentPenalty == null ? Integer.parseInt(penalty_paid) + 0 + "" : Integer.parseInt(penalty_paid) + currentPenalty.intValue() + "");
+            updateStuProfile(map, new usefulListeners.uploadToDBListerer() {
+                @Override
+                public void onSuccessDB(Object obj) {
+                    firestore.collection("records").add(data).addOnSuccessListener((Activity) context, documentReference -> {
+                        listener.onSuccess(documentReference);
+                    }).addOnFailureListener(e -> {
+                        listener.onError(e.getLocalizedMessage());
                     });
+                }
+
+                @Override
+                public void onFailDB(Object obj) {
+                    listener.onError(obj.toString());
+                }
+            });
         } else {
             firestore.collection("records").add(data).addOnSuccessListener((Activity) context, documentReference -> {
                 listener.onSuccess(documentReference);
@@ -158,7 +158,10 @@ public class SearchResultModel extends StuBaseModel implements SearchResultContr
                             pendingCount = pendingCount + 1;
                             dailyImpression = dailyImpression + 1;
                             dailyRequest = dailyRequest + 1;
-                            if (requestUid != null && requestUid == imprssionUid.get(finalI)) {
+                            if (pendingCount < 0) {
+                                pendingCount = 0;
+                            }
+                            if (requestUid != null && requestUid.equals(imprssionUid.get(finalI))) {
                                 batch.update(mentorDocRef, "daily_i", dailyImpression.toString(), "daily_r", dailyRequest.toString(), "unread_records.pending_count", pendingCount.toString());
 
                                 DocumentReference studentProfile = firestore.collection("/users/students/stu_pro_info").document(FirebaseAuth.getInstance().getCurrentUser().getUid());
@@ -166,6 +169,9 @@ public class SearchResultModel extends StuBaseModel implements SearchResultContr
                                 Map<String, Object> myUnreadRecords = (Map<String, Object>) myDocumentSnap.get("unread_records");
                                 Integer myPendingCount = Integer.parseInt(myUnreadRecords.get("pending_count").toString());
                                 myPendingCount = myPendingCount + 1;
+                                if (myPendingCount < 0) {
+                                    myPendingCount = 0;
+                                }
                                 batch.update(studentProfile, "unread_records.pending_count", myPendingCount.toString());
                             } else {
                                 batch.update(mentorDocRef, "daily_i", dailyImpression.toString());

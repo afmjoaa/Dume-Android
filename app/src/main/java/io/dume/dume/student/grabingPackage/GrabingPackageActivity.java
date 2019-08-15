@@ -780,7 +780,7 @@ public class GrabingPackageActivity extends CusStuAppComMapActivity implements G
                 instantDumePercentageOffImage.setVisibility(View.INVISIBLE);
                 //DumeUtils.setTextOverDrawable(this, instantDumeBadgeOffLayDraw, R.id.ic_badge, 0xff575757, "-0%", 3);
             }
-            packageSearchBtn.setText("Search Couching Service");
+            packageSearchBtn.setText("Search Coaching Service");
         }
     }
 

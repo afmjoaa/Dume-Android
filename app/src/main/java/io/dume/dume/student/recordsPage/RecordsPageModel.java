@@ -145,13 +145,13 @@ public class RecordsPageModel implements RecordsPageContract.Model {
     public void changeRecordStatus(DocumentSnapshot record, String status, String rejectedBy, TeacherContract.Model.Listener<Void> listener) {
         String studentUid = record.getString("user_uid");
         String mentorUid = record.getString("mentor_uid");
-        if (!status.equals("Rejected")) {
+        if (status.equals("Accepted")) {
             firestore.document("records/" + record.getId()).update("record_status", status, "status_modi_date", FieldValue.serverTimestamp()).addOnSuccessListener((Activity) context, new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
                     WriteBatch batch = firestore.batch();
                     if (Google.getInstance().getAccountMajor().equals(DumeUtils.TEACHER)) {
-                        if (status.equals("Accepted") || status.equals("Rejected")) {
+                        if (status.equals("Accepted")) {
                             Date requestTime = (Date) record.get("creation");
 
                             long currentResponseTime = new Date().getTime() - requestTime.getTime();
@@ -171,12 +171,10 @@ public class RecordsPageModel implements RecordsPageContract.Model {
                             int currentCount = Integer.parseInt(current == null ? "0" : current);
                             int completedCount = Integer.parseInt(completed == null ? "0" : completed);
                             int rejectedCount = Integer.parseInt(rejected == null ? "0" : rejected);
-                            if (status.equals("Accepted")) {
-                                acceptedCount++;
-                                pendingCount--;
-                            } else {
-                                rejectedCount++;
-                                pendingCount--;
+                            acceptedCount = acceptedCount + 1;
+                            pendingCount = pendingCount - 1;
+                            if (pendingCount < 0) {
+                                pendingCount = 0;
                             }
                             int foo = (int) (currentResponseTime / (1000 * 60 * 60));
                             int finalResponseTime = (responseTime + foo) / (acceptedCount + rejectedCount + completedCount + currentCount);
@@ -199,12 +197,10 @@ public class RecordsPageModel implements RecordsPageContract.Model {
                                             int stuPendingCount = Integer.parseInt(pending == null ? "0" : pending);
                                             int stuAcceptedCount = Integer.parseInt(accepted == null ? "0" : accepted);
                                             int stuRejectedCount = Integer.parseInt(rejected == null ? "0" : rejected);
-                                            if (status.equals("Accepted")) {
-                                                stuAcceptedCount++;
-                                                stuPendingCount--;
-                                            } else {
-                                                stuRejectedCount++;
-                                                stuPendingCount--;
+                                            stuAcceptedCount = stuAcceptedCount + 1;
+                                            stuPendingCount = stuPendingCount - 1;
+                                            if (stuPendingCount < 0) {
+                                                stuPendingCount = 0;
                                             }
                                             batch.update(studentDocRef, "unread_records.pending_count", stuPendingCount + "", "unread_records.accepted_count", stuAcceptedCount + "");
                                             batch.commit();
@@ -221,7 +217,7 @@ public class RecordsPageModel implements RecordsPageContract.Model {
                     }
                 }
             }).addOnFailureListener(e -> listener.onError(e.getLocalizedMessage()));
-        } else {
+        } else {//this is for the rejected by teacher one
             firestore.document("records/" + record.getId()).update("record_status", status, "rejected_by", rejectedBy, "status_modi_date", FieldValue.serverTimestamp()).addOnSuccessListener((Activity) context, new OnSuccessListener<Void>() {
 
                 private int responseTime;
@@ -251,18 +247,18 @@ public class RecordsPageModel implements RecordsPageContract.Model {
                     int currentCount = Integer.parseInt(current == null ? "0" : current);
                     int completedCount = Integer.parseInt(completed == null ? "0" : completed);
                     int rejectedCount = Integer.parseInt(rejected == null ? "0" : rejected);
-                    if (status.equals("Accepted")) {
-                        acceptedCount++;
-                        pendingCount--;
-                    } else {
-                        rejectedCount++;
-                        pendingCount--;
+                    rejectedCount = rejectedCount + 1;
+                    pendingCount = pendingCount - 1;
+                    if (pendingCount < 0) {
+                        pendingCount = 0;
                     }
+
+
                     if (rejectedBy.equals(DumeUtils.TEACHER)) {
                         int foo = (int) (currentResponseTime / (1000 * 60 * 60));
                         int finalResponseTime = (responseTime + foo) / (acceptedCount + rejectedCount + completedCount + currentCount);
                         DocumentReference document = firestore.document("users/mentors/mentor_profile/" + FirebaseAuth.getInstance().getUid());
-                        batch.update(document, "self_rating.response_time", String.valueOf(finalResponseTime), "unread_records.pending_count", pendingCount + "", "unread_records.accepted_count", acceptedCount + "");
+                        batch.update(document, "self_rating.response_time", String.valueOf(finalResponseTime), "unread_records.pending_count", pendingCount + "", "unread_records.rejected_count", rejectedCount + "");
                         //testing here
                         DocumentReference studentDocRef = firestore.collection("/users/students/stu_pro_info").document(studentUid);//todo
                         studentDocRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -279,14 +275,12 @@ public class RecordsPageModel implements RecordsPageContract.Model {
                                         int stuPendingCount = Integer.parseInt(pending == null ? "0" : pending);
                                         int stuAcceptedCount = Integer.parseInt(accepted == null ? "0" : accepted);
                                         int stuRejectedCount = Integer.parseInt(rejected == null ? "0" : rejected);
-                                        if (status.equals("Accepted")) {
-                                            stuAcceptedCount++;
-                                            stuPendingCount--;
-                                        } else {
-                                            stuRejectedCount++;
-                                            stuPendingCount--;
+                                        stuRejectedCount = stuRejectedCount + 1;
+                                        stuPendingCount = stuPendingCount - 1;
+                                        if (stuPendingCount < 0) {
+                                            stuPendingCount = 0;
                                         }
-                                        batch.update(studentDocRef, "unread_records.pending_count", stuPendingCount + "", "unread_records.accepted_count", stuAcceptedCount + "");
+                                        batch.update(studentDocRef, "unread_records.pending_count", stuPendingCount + "", "unread_records.rejected_count", stuRejectedCount + "");
                                         batch.commit();
                                         listener.onSuccess(aVoid);
                                     } else {
@@ -297,12 +291,12 @@ public class RecordsPageModel implements RecordsPageContract.Model {
                                 }
                             }
                         });
-                    } else {
-                        DocumentReference document = firestore.document("/users/students/stu_pro_info/" + FirebaseAuth.getInstance().getUid());
-                        batch.update(document, "unread_records.pending_count", pendingCount + "", "unread_records.accepted_count", acceptedCount + "");
+                    } else {//rejected by student...
+                        DocumentReference studentDocument = firestore.document("/users/students/stu_pro_info/" + FirebaseAuth.getInstance().getUid());
+                        batch.update(studentDocument, "unread_records.pending_count", pendingCount + "", "unread_records.rejected_count", rejectedCount + "");
                         //testing here
-                        DocumentReference studentDocRef = firestore.collection("users/mentors/mentor_profile/").document(mentorUid);//todo
-                        studentDocRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        DocumentReference mentorDocRef = firestore.collection("users/mentors/mentor_profile/").document(mentorUid);//todo
+                        mentorDocRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                             @Override
                             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                                 if (task.isSuccessful()) {
@@ -313,17 +307,15 @@ public class RecordsPageModel implements RecordsPageContract.Model {
                                         String accepted = (String) stuUnreadRecords.get("accepted_count");
                                         String rejected = (String) stuUnreadRecords.get("rejected_count");
                                         String pending = (String) stuUnreadRecords.get("pending_count");
-                                        int stuPendingCount = Integer.parseInt(pending == null ? "0" : pending);
-                                        int stuAcceptedCount = Integer.parseInt(accepted == null ? "0" : accepted);
-                                        int stuRejectedCount = Integer.parseInt(rejected == null ? "0" : rejected);
-                                        if (status.equals("Accepted")) {
-                                            stuAcceptedCount++;
-                                            stuPendingCount--;
-                                        } else {
-                                            stuRejectedCount++;
-                                            stuPendingCount--;
+                                        int menPendingCount = Integer.parseInt(pending == null ? "0" : pending);
+                                        int menAcceptedCount = Integer.parseInt(accepted == null ? "0" : accepted);
+                                        int menRejectedCount = Integer.parseInt(rejected == null ? "0" : rejected);
+                                        menRejectedCount = menRejectedCount + 1;
+                                        menPendingCount = menPendingCount - 1;
+                                        if (menPendingCount < 0) {
+                                            menPendingCount = 0;
                                         }
-                                        batch.update(studentDocRef, "unread_records.pending_count", stuPendingCount + "", "unread_records.accepted_count", stuAcceptedCount + "");
+                                        batch.update(mentorDocRef, "unread_records.pending_count", menPendingCount + "", "unread_records.rejected_count", menRejectedCount + "");
                                         batch.commit();
                                         listener.onSuccess(aVoid);
                                     } else {

@@ -15,6 +15,70 @@
       },
       "oauth_client": [
         {
+          "client_id": "22401850959-2uh0v2noogaa7gupo8au45j3n3ne0h1j.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.dume.dume",
+            "certificate_hash": "4bea901fd8ea4a9c2a7fb377548352e52a16aeb1"
+          }
+        },
+        {
+          "client_id": "22401850959-tqgocsi5nud2utbdsbbredpmq9nvvv6b.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.dume.dume",
+            "certificate_hash": "bb35a88338d33b80374712d098f43ff41e6d266b"
+          }
+        },
+        {
+          "client_id": "22401850959-gkkts3q0k4u24jtqo5od5vkp7t0uc8rk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.dume.dume",
+            "certificate_hash": "92c7a92d54b4cfa31215afd5ea3cff4190d0032b"
+          }
+        },
+        {
+          "client_id": "22401850959-g2lod7ep8nshbpvnbi2393t63e7br8kb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.dume.dume",
+            "certificate_hash": "4b67e5fef3e1753da2063b6e127948600c6ce6da"
+          }
+        },
+        {
+          "client_id": "22401850959-0b4qt2h3ckah8ll03nu0knas47vfmn9k.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.dume.dume",
+            "certificate_hash": "84731015d7ba47773a295296e91d4cb2910b8494"
+          }
+        },
+        {
+          "client_id": "22401850959-tg5c6dkneqaviv87f7mv3ooqqq5d66it.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.dume.dume",
+            "certificate_hash": "028db640534dea3014b8910841d5e3382c94abf8"
+          }
+        },
+        {
+          "client_id": "22401850959-o9ni7quvfvtu9uum74fghbukgvoqvb1s.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.dume.dume",
+            "certificate_hash": "bcec1984fd1ac15cc58e6fbbbd53fb92697ece2f"
+          }
+        },
+        {
+          "client_id": "22401850959-cqurrh9r5n9613bmp96dcf9s9l7f8l65.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.dume.dume",
+            "certificate_hash": "f350093d061aa37b4ddcecfe02ea8cf997dfacc4"
+          }
+        },
+        {
           "client_id": "22401850959-5a8h03iii98enfjm0tt72082m932h2j7.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -25,15 +89,13 @@
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 1
-        },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
-        },
-        "ads_service": {
-          "status": 2
+          "other_platform_oauth_client": [
+            {
+              "client_id": "22401850959-5a8h03iii98enfjm0tt72082m932h2j7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

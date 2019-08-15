@@ -28,6 +28,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.animation.FastOutLinearInInterpolator;
@@ -103,6 +104,7 @@ import io.dume.dume.util.RadioBtnDialogue;
 import io.dume.dume.util.VisibleToggleClickListener;
 
 import static io.dume.dume.util.DumeUtils.getLast;
+import static io.dume.dume.util.DumeUtils.giveIconOnCategoryName;
 import static io.dume.dume.util.ImageHelper.getRoundedCornerBitmap;
 import static io.dume.dume.util.ImageHelper.getRoundedCornerBitmapSquare;
 
@@ -663,15 +665,16 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
             String levelName = (String) tabLayout.getTabAt(tabLayout.getSelectedTabPosition()).getText();
             if (endOfNest.contains(levelName)) {
                 //flush("this should work : " + tabLayout.getSelectedTabPosition());
+                //flush("i am here");
                 AppCompatRadioButton rd = new AppCompatRadioButton(this);
                 rd.setText("null");
                 onRadioButtonClick(rd, tabLayout.getSelectedTabPosition(), levelName);
             } else if (levelName.equals("Salary")) {
                 AppCompatRadioButton rd = new AppCompatRadioButton(this);
                 rd.setText("null");
-                try{
+                try {
                     mMap.clear();
-                }catch (Exception e){
+                } catch (Exception e) {
                     Log.e(TAG, e.getLocalizedMessage());
                 }
                 onRadioButtonClick(rd, tabLayout.getSelectedTabPosition(), levelName);
@@ -697,8 +700,44 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                         String commonQueryString = DumeUtils.generateCommonQueryString(packageName, queryList, queryListName);
                         ArrayList<Skill> skillArrayList = TeacherDataStore.getInstance().getSkillArrayList();
 
+
+                        int thresholdHere = packageName.equals(SearchDataStore.DUME_GANG) ? 4 : 3;
+                        int levelHere = queryList.size() - thresholdHere;
+                        String beforeListFoundHere = "";
+                        switch (levelHere) {
+                            case 1:
+                                beforeListFoundHere = queryList.get(0);
+                                break;
+                            case 2:
+                                beforeListFoundHere = queryList.get(0) + queryList.get(1);
+                                break;
+                            case 3:
+                                beforeListFoundHere = queryList.get(0) + queryList.get(1) + queryList.get(2);
+                                break;
+                            case 4:
+                                beforeListFoundHere = queryList.get(0) + queryList.get(1) + queryList.get(2) + queryList.get(3);
+                                break;
+                        }
+
                         for (Skill item : skillArrayList) {
-                            if (item.getQuery_string().equals(queryString)) {
+                            int threshold = item.getPackage_name().equals(SearchDataStore.DUME_GANG) ? 4 : 3;
+                            int level = item.getQuery_list().size() - threshold;
+                            String beforeListFound = "";
+                            switch (level) {
+                                case 1:
+                                    beforeListFound = item.getQuery_list().get(0);
+                                    break;
+                                case 2:
+                                    beforeListFound = item.getQuery_list().get(0) + item.getQuery_list().get(1);
+                                    break;
+                                case 3:
+                                    beforeListFound = item.getQuery_list().get(0) + item.getQuery_list().get(1) + item.getQuery_list().get(2);
+                                    break;
+                                case 4:
+                                    beforeListFound = item.getQuery_list().get(0) + item.getQuery_list().get(1) + item.getQuery_list().get(2) + item.getQuery_list().get(3);
+                                    break;
+                            }
+                            if (beforeListFoundHere.equals(beforeListFound)) {
                                 flush("Skill Already Exists");
                                 if (retrivedAction.startsWith("frag")) {
                                     hideProgress();
@@ -779,6 +818,8 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
                         gotoGrabingPackage();
                         break;
                 }
+            }else if(levelName.equals("Gender")){
+                flush("Please select your gender preference...");
             }
         } else {
             //other general block "just go to the next one"
@@ -852,7 +893,9 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
         onMapReadyListener(mMap);
         mMap.setPadding((int) (10 * (getResources().getDisplayMetrics().density)), (int) (250 * (getResources().getDisplayMetrics().density)), 0, (int) (6 * (getResources().getDisplayMetrics().density)));
         mMap.getUiSettings().setCompassEnabled(false);
-        mMap.setMyLocationEnabled(false);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            mMap.setMyLocationEnabled(false);
+        }
         onMapReadyGeneralConfig();
         switch (Objects.requireNonNull(getIntent().getAction())) {
             case DumeUtils.STUDENT:
@@ -1103,8 +1146,12 @@ public class GrabingInfoActivity extends CusStuAppComMapActivity implements Grab
 
     public void generateNextTabs(int fragment) {
         if (!(fragment < tabLayout.getTabCount() - 1)) {
-            mSectionsPagerAdapter.newTab(db.getGenderPreferencesList());
-            mViewPager.setCurrentItem(fragment + 1);
+            if(hintIdThree.getText().toString().toLowerCase().startsWith("ex.")){
+                flush("Please select at least one field...");
+            }else {
+                mSectionsPagerAdapter.newTab(db.getGenderPreferencesList());
+                mViewPager.setCurrentItem(fragment + 1);
+            }
         } else mViewPager.setCurrentItem(fragment + 1);
     }
 

@@ -633,6 +633,99 @@
 
         </LinearLayout>
 
+        <!--location layout-->
+        <LinearLayout
+            android:id="@+id/location_host_linearlayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:orientation="vertical">
+
+            <carbon.widget.LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_round_corner_rela_layout"
+                android:baselineAligned="false"
+                android:orientation="vertical"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                app:carbon_elevation="8dp">
+
+                <Button
+                    android:id="@+id/show_location_btn"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableBottom="@drawable/ic_up_arrow_small"
+                    android:drawablePadding="2dp"
+                    android:text="Location"
+                    android:textAllCaps="false"
+                    android:textColor="@color/textColorPrimary"
+                    android:textSize="16sp"
+                    app:fontFamily="@font/cairo_regular" />
+            </carbon.widget.LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/location_layout_vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:background="@drawable/bg_white_bottom_round"
+                android:orientation="vertical"
+                android:paddingLeft="16dp"
+                android:paddingTop="16dp"
+                android:paddingRight="16dp"
+                android:paddingBottom="10dp"
+                android:translationY="-2dp">
+
+                <carbon.widget.LinearLayout
+                    android:id="@+id/location_layout_inside"
+                    android:layout_width="match_parent"
+                    android:layout_height="220dp"
+                    app:carbon_cornerRadius="4dp">
+
+                </carbon.widget.LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/address_hoster"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginBottom="6dp"
+                    android:orientation="horizontal">
+
+                    <carbon.widget.ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="0dp"
+                        android:paddingLeft="0dp"
+                        android:paddingTop="0dp"
+                        android:paddingEnd="5dp"
+                        android:paddingRight="5dp"
+                        app:srcCompat="@drawable/ic_keyboard_arrow_right_black_24dp" />
+
+                    <TextView
+                        android:id="@+id/address_textView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:gravity="top"
+                        android:paddingTop="2dp"
+                        android:paddingBottom="2dp"
+                        android:text="Address : "
+                        android:textAllCaps="false"
+                        android:textColor="@color/textColorPrimary"
+                        android:textSize="13sp"
+                        android:textStyle="normal"
+                        app:fontFamily="@font/cairo_regular" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
         <!--rating layout -->
         <LinearLayout
             android:id="@+id/rating_host_linearlayout"

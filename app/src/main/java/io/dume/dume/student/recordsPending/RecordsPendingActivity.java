@@ -6,7 +6,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Animatable2;
 import android.graphics.drawable.Drawable;
@@ -25,6 +28,7 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.animation.FastOutLinearInInterpolator;
 import android.support.v4.view.animation.LinearOutSlowInInterpolator;
@@ -51,7 +55,15 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.GeoPoint;
@@ -111,8 +123,10 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import me.zhanghai.android.materialratingbar.MaterialRatingBar;
 
+import static io.dume.dume.util.DumeUtils.getAddress;
 import static io.dume.dume.util.DumeUtils.getLast;
 import static io.dume.dume.util.DumeUtils.getUserUID;
+import static io.dume.dume.util.ImageHelper.getRoundedCornerBitmap;
 
 public class RecordsPendingActivity extends CustomStuAppCompatActivity implements RecordsPendingContract.View {
 
@@ -334,7 +348,12 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
         private File actualImage;
         private File compressedImage;
         private TextView rejectUpload;
-
+        private Button locationShowBtn;
+        private LinearLayout locationHideable;
+        private LinearLayout locationHostLayout;
+        private TextView addressTV;
+        private View mCustomMarkerView;
+        private carbon.widget.ImageView mMarkerImageView;
 
         public PlaceholderFragment() {
         }
@@ -375,6 +394,13 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
             mChartOne.setVisibility(View.GONE);
             ratingPerformance = rootView.findViewById(R.id.main_rating_performance);
             ratingExperience = rootView.findViewById(R.id.main_rating_experience);
+
+            locationShowBtn = rootView.findViewById(R.id.show_location_btn);
+            locationHideable = rootView.findViewById(R.id.location_layout_vertical);
+            locationHostLayout = rootView.findViewById(R.id.location_host_linearlayout);
+            addressTV = rootView.findViewById(R.id.address_textView);
+            mCustomMarkerView = ((LayoutInflater) Objects.requireNonNull(context.getSystemService(LAYOUT_INFLATER_SERVICE))).inflate(R.layout.custom_marker_view, null);
+            mMarkerImageView = mCustomMarkerView.findViewById(R.id.profile_image);
 
             moreInfoBtn = rootView.findViewById(R.id.show_more_info_btn);
             moreInfoHost = rootView.findViewById(R.id.more_info_host_linearlayout);
@@ -595,6 +621,65 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
             }
 
             loadQualificationData(sp_info);
+
+            //fuck the location data here
+            GeoPoint student_location = selectedMentor.getGeoPoint("anchor_point");
+            LatLng stu_location_lat_lng = new LatLng(student_location.getLatitude(), student_location.getLongitude());
+
+            GeoPoint mentor_location = selectedMentor.getGeoPoint("location");
+            LatLng mentor_location_lat_lng = new LatLng(mentor_location.getLatitude(), mentor_location.getLongitude());
+
+            FragmentManager fm = getChildFragmentManager();
+            SupportMapFragment mapFragment = (SupportMapFragment) fm.findFragmentByTag("mapFragment");
+            if (mapFragment == null) {
+                mapFragment = new SupportMapFragment();
+                mapFragment.getMapAsync(new OnMapReadyCallback() {
+                    @Override
+                    public void onMapReady(GoogleMap googleMap) {
+                        MapStyleOptions style = MapStyleOptions.loadRawResourceStyle(
+                                myThisActivity, R.raw.loading_map_style_one);
+                        googleMap.setMapStyle(style);
+                        googleMap.getUiSettings().setMyLocationButtonEnabled(true);
+                        if (myThisActivity.retriveAction != null) {
+                            switch (myThisActivity.retriveAction) {
+                                case DumeUtils.STUDENT:
+                                    addressTV.setText(addressTV.getText() + getAddress(context, mentor_location_lat_lng.latitude, mentor_location_lat_lng.longitude));
+                                    googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mentor_location_lat_lng, 15.25f));
+                                    googleMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+                                        @Override
+                                        public void onMapLoaded() {
+                                            final float thisZoom = googleMap.getCameraPosition().zoom;
+                                            googleMap.setMaxZoomPreference((thisZoom + 2f));
+                                            googleMap.setMinZoomPreference((thisZoom - 2f));
+                                            addCustomMarkerFromURL(googleMap, record.getMentorDpUrl(), mentor_location_lat_lng, record.getmGender());
+                                        }
+                                    });
+                                    break;
+                                case DumeUtils.TEACHER:
+                                case DumeUtils.BOOTCAMP:
+                                    addressTV.setText(addressTV.getText() + getAddress(context, stu_location_lat_lng.latitude, stu_location_lat_lng.longitude));
+                                    googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(stu_location_lat_lng, 15.25f));
+                                    googleMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+                                        @Override
+                                        public void onMapLoaded() {
+                                            final float thisZoom = googleMap.getCameraPosition().zoom;
+                                            googleMap.setMaxZoomPreference((thisZoom + 2f));
+                                            googleMap.setMinZoomPreference((thisZoom - 2f));
+                                            addCustomMarkerFromURL(googleMap, record.getStudentDpUrl(), stu_location_lat_lng, record.getsGender());
+                                        }
+                                    });
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                    }
+                });
+                FragmentTransaction ft = fm.beginTransaction();
+                ft.add(R.id.location_layout_inside, mapFragment, "mapFragment");
+                ft.commit();
+                fm.executePendingTransactions();
+            }
             //setting the achievements badge
             achievements = (Map<String, Object>) sp_info.get("achievements");
             if ((boolean) achievements.get("joined")) {
@@ -1036,6 +1121,7 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
                     rejectSubText.setText("Dear " + studentName + " if you cancel now BDT 50 will be applied as penalty which you have to pay to next mentor...");
                     rejectYesBtn.setText("Yes, Cancel");
                     rejectNoBtn.setText("No");
+                    locationShowBtn.setText("Mentor Location");
                     break;
                 case DumeUtils.TEACHER:
                     stuMoreInfoHost.setVisibility(View.VISIBLE);
@@ -1043,6 +1129,7 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
                     achievementInfoBtn.setText("Your Achievements");
                     moreInfoBtn.setText("Your Info");
                     rejectSubText.setTextColor(context.getResources().getColor(R.color.dark_light_red));
+                    locationShowBtn.setText("Student Location");
                     break;
                 case DumeUtils.BOOTCAMP:
                     break;
@@ -1116,9 +1203,101 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
                         try {
                             actualImage = FileUtil.from(context, selectedImageUri);
                         } catch (IOException e) {
+                            actualImage = null;
                             e.printStackTrace();
                         }
-                        compressImage(actualImage);
+                        if(actualImage ==null){
+                            compressedImage = null;
+                            Glide.with(context).load(selectedImageUri).apply(new RequestOptions().override(100, 100).placeholder(R.drawable.ic_photo_id)).into(photoId);
+
+                            if (selectedImageUri != null) {
+                                myThisActivity.mModel.uploadPhotoId(selectedImageUri, new usefulListeners.uploadToSTGListererMin() {
+                                    @Override
+                                    public void onSuccessSTG(Object obj) {
+                                        String photoIdUrl = (String) obj;
+                                        myThisActivity.flush("Photo-ID uploaded");
+                                        Map<String, Object> updateData = new HashMap<>();
+                                        updateData.put("photo_id_url", photoIdUrl);
+                                        //Directly making accepted here.
+                                        //updateData.put("isVerified", "Pending");
+                                        updateData.put("isVerified", "Accepted");
+
+                                        Map<String, Object> achievements = (Map<String, Object>) TeacherDataStore.getInstance().getDocumentSnapshot().get("achievements");
+                                        if (achievements != null) {
+                                            achievements.put("inaugural", true);
+                                        }
+                                        updateData.put("achievements", achievements);
+                                        //TODO will update isVerified manually after checking the photoId
+                                        //TODO and make the pending request accepted as well
+                                        myThisActivity.mModel.updatePhotoIdToMentorProfile(updateData, new usefulListeners.uploadToDBListerer() {
+                                            @Override
+                                            public void onSuccessDB(Object obj) {
+                                                beforeUpload.setVisibility(View.GONE);
+                                                afterUpload.setVisibility(View.VISIBLE);
+                                                if (uploadProgress != null) {
+                                                    uploadProgress.setVisibility(View.GONE);
+                                                }
+                                                mBottomSheetVerify.dismiss();
+                                                myThisActivity.showProgress();
+                                                //menual varification possible na tai amon kora hoise
+                                                myThisActivity.mModel.changeRecordStatus(record, "Accepted", null, new TeacherContract.Model.Listener<Void>() {
+                                                    @Override
+                                                    public void onSuccess(Void list) {
+                                                        Toast.makeText(myThisActivity, "Status Changed To Accepted", Toast.LENGTH_SHORT).show();
+                                                        Intent intentMain = new Intent(context, RecordsAcceptedActivity.class).setAction(DumeUtils.TEACHER);
+                                                        intentMain.putExtra("recordId", record.getId());
+                                                        myThisActivity.mModel.getRecords(new TeacherContract.Model.Listener<List<Record>>() {
+                                                            @Override
+                                                            public void onSuccess(List<Record> list) {
+                                                                Google.getInstance().setRecordList(list);
+                                                                searchDataStore.setRecordStatusChanged(true);
+                                                                searchDataStore.setFromPACCR(1);
+                                                                startActivity(intentMain);
+                                                                myThisActivity.finish();
+                                                                myThisActivity.hideProgress();
+                                                            }
+
+                                                            @Override
+                                                            public void onError(String msg) {
+                                                                Toast.makeText(myThisActivity, msg, Toast.LENGTH_SHORT).show();
+                                                                myThisActivity.hideProgress();
+                                                            }
+                                                        });
+                                                    }
+
+                                                    @Override
+                                                    public void onError(String msg) {
+                                                        rejectBTN.setEnabled(true);
+                                                        acceptBTN.setEnabled(true);
+                                                        myThisActivity.hideProgress();
+                                                        Toast.makeText(myThisActivity, msg, Toast.LENGTH_SHORT).show();
+                                                    }
+                                                });
+                                            }
+
+                                            @Override
+                                            public void onFailDB(Object obj) {
+                                                if (uploadProgress != null) {
+                                                    uploadProgress.setVisibility(View.GONE);
+                                                }
+                                                Toast.makeText(context, "Network err!!", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                                    }
+
+                                    @Override
+                                    public void onFailSTG(Object obj) {
+                                        myThisActivity.flush((String) obj);
+                                        if (uploadProgress != null) {
+                                            uploadProgress.setVisibility(View.GONE);
+                                        }
+                                    }
+                                });
+                            }
+                        }else {
+                            Glide.with(context).load(selectedImageUri).apply(new RequestOptions().override(100, 100).placeholder(R.drawable.ic_photo_id)).into(photoId);
+                            compressImage(actualImage);
+                        }
                     }
                     //Glide.with(this).load(selectedImageUri).apply(new RequestOptions().override(100, 100)).into(profileUserDP);
                 }
@@ -1135,17 +1314,13 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
                         @Override
                         public void accept(File file) {
                             compressedImage = file;
-                            Glide.with(context).load(file).apply(new RequestOptions().override(100, 100).placeholder(R.drawable.ic_photo_id)).into(photoId);
-
-                            //upload the image here do what you have to do
-                            //updateChangesClicked();
+                            //Glide.with(context).load(actualImage).apply(new RequestOptions().override(100, 100).placeholder(R.drawable.ic_photo_id)).into(photoId);
                             if (getPhotoIdUri() != null) {
                                 myThisActivity.mModel.uploadPhotoId(getPhotoIdUri(), new usefulListeners.uploadToSTGListererMin() {
                                     @Override
                                     public void onSuccessSTG(Object obj) {
                                         String photoIdUrl = (String) obj;
                                         myThisActivity.flush("Photo-ID uploaded");
-                                        //not write to mentor profile
                                         Map<String, Object> updateData = new HashMap<>();
                                         updateData.put("photo_id_url", photoIdUrl);
                                         //Directly making accepted here.
@@ -1157,7 +1332,6 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
                                             achievements.put("inaugural", true);
                                         }
                                         updateData.put("achievements", achievements);
-                                        //Glide.with(context).load(photoIdUrl).apply(new RequestOptions().override(100, 100).placeholder(R.drawable.ic_photo_id)).into(photoId);
                                         //TODO will update isVerified manually after checking the photoId
                                         //TODO and make the pending request accepted as well
                                         myThisActivity.mModel.updatePhotoIdToMentorProfile(updateData, new usefulListeners.uploadToDBListerer() {
@@ -1165,15 +1339,12 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
                                             public void onSuccessDB(Object obj) {
                                                 beforeUpload.setVisibility(View.GONE);
                                                 afterUpload.setVisibility(View.VISIBLE);
-                                                //update complete now fix the view here
-                                                //DONE
-                                                //DONE
-                                                //DONE
                                                 if (uploadProgress != null) {
                                                     uploadProgress.setVisibility(View.GONE);
                                                 }
                                                 mBottomSheetVerify.dismiss();
                                                 myThisActivity.showProgress();
+                                                //menual varification possible na tai amon kora hoise
                                                 myThisActivity.mModel.changeRecordStatus(record, "Accepted", null, new TeacherContract.Model.Listener<Void>() {
                                                     @Override
                                                     public void onSuccess(Void list) {
@@ -1245,9 +1416,14 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
 
         public Uri getPhotoIdUri() {
             if (compressedImage != null) {
-                return Uri.fromFile(compressedImage);
+                try{
+                    return Uri.fromFile(compressedImage);
+                }catch (Exception e){
+                    e.printStackTrace();
+                    return selectedImageUri;
+                }
             } else {
-                return null;
+                return selectedImageUri;
             }
         }
 
@@ -1711,7 +1887,141 @@ public class RecordsPendingActivity extends CustomStuAppCompatActivity implement
                     }
                 }
             });
+
+            //location one handler
+            locationShowBtn.setOnClickListener(new VisibleToggleClickListener() {
+
+                @SuppressLint("CheckResult")
+                @Override
+                protected void changeVisibility(boolean visible) {
+                    TransitionSet set = new TransitionSet()
+                            .addTransition(new Fade())
+                            .addTransition(new Slide(Gravity.TOP))
+                            .setInterpolator(visible ? new LinearOutSlowInInterpolator() : new FastOutLinearInInterpolator())
+                            .addListener(new Transition.TransitionListener() {
+                                @Override
+                                public void onTransitionStart(@NonNull Transition transition) {
+
+                                }
+
+                                @Override
+                                public void onTransitionEnd(@NonNull Transition transition) {
+                                    if (visible) {
+                                        locationHideable.setVisibility(View.GONE);
+                                    }
+                                }
+
+                                @Override
+                                public void onTransitionCancel(@NonNull Transition transition) {
+
+                                }
+
+                                @Override
+                                public void onTransitionPause(@NonNull Transition transition) {
+
+                                }
+
+                                @Override
+                                public void onTransitionResume(@NonNull Transition transition) {
+
+                                }
+                            });
+                    TransitionManager.beginDelayedTransition(locationHostLayout, set);
+                    locationShowBtn.setEnabled(false);
+                    if (visible) {
+                        locationHideable.setVisibility(View.INVISIBLE);
+                    } else {
+                        locationHideable.setVisibility(View.VISIBLE);
+                    }
+                    Drawable[] compoundDrawables = locationShowBtn.getCompoundDrawables();
+                    Drawable d = compoundDrawables[3];
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        if (d instanceof Animatable) {
+                            ((Animatable) d).start();
+                        }
+                        ((Animatable2) d).registerAnimationCallback(new Animatable2.AnimationCallback() {
+                            public void onAnimationEnd(Drawable drawable) {
+                                //Do something
+                                if (visible) {
+                                    locationShowBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_down_arrow_small));
+                                } else {
+                                    locationShowBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_up_arrow_small));
+                                }
+                                locationShowBtn.setEnabled(true);
+                            }
+                        });
+                    } else {
+                        if (visible) {
+                            locationShowBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_down_arrow_small));
+                            locationShowBtn.setEnabled(true);
+                        } else {
+                            locationShowBtn.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.drawable.ic_up_arrow_small));
+                            locationShowBtn.setEnabled(true);
+                        }
+                    }
+                }
+            });
         }
+
+        //testing custom marker code here
+        private Bitmap getMarkerBitmapFromView(View view, Bitmap bitmap) {
+
+            mMarkerImageView.setImageBitmap(getRoundedCornerBitmap(bitmap, (int) (28 * (getResources().getDisplayMetrics().density))));
+            view.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+            view.layout(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
+            view.buildDrawingCache();
+            Bitmap returnedBitmap = Bitmap.createBitmap(view.getMeasuredWidth(), view.getMeasuredHeight(),
+                    Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(returnedBitmap);
+            canvas.drawColor(Color.WHITE, PorterDuff.Mode.SRC_IN);
+            Drawable drawable = view.getBackground();
+            if (drawable != null)
+                drawable.draw(canvas);
+            view.draw(canvas);
+            return returnedBitmap;
+
+        }
+
+        private void addCustomMarkerFromURL(GoogleMap mMap, String url, LatLng lattitudeLongitude, String gender) {
+            if (mMap == null) {
+                return;
+            }
+            if (url != null && !url.equals("")) {
+                Glide.with(context)
+                        .asBitmap()
+                        .load(url)
+                        .apply(new RequestOptions().override((int) (28 * (getResources().getDisplayMetrics().density)), (int) (28 * (getResources().getDisplayMetrics().density))).centerCrop().placeholder(R.drawable.alias_profile_icon))
+                        .into(new SimpleTarget<Bitmap>() {
+                            @Override
+                            public void onResourceReady(@NonNull Bitmap resource, @Nullable com.bumptech.glide.request.transition.Transition<? super Bitmap> transition) {
+                                mMap.addMarker(new MarkerOptions().position(lattitudeLongitude)
+                                        .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(mCustomMarkerView, resource))));
+                                //mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(lattitudeLongitude, 15f));
+                            }
+                        });
+            } else {
+                if (gender.equals("Male") || gender.equals("")) {
+                    defaultUrl = SearchDataStore.DEFAULTMALEAVATER;
+                } else {
+                    defaultUrl = SearchDataStore.DEFAULTFEMALEAVATER;
+                    ;
+                }
+                Glide.with(context)
+                        .asBitmap()
+                        .load(defaultUrl)
+                        .apply(new RequestOptions().override((int) (28 * (getResources().getDisplayMetrics().density)), (int) (28 * (getResources().getDisplayMetrics().density))).centerCrop().placeholder(R.drawable.alias_profile_icon))
+                        .into(new SimpleTarget<Bitmap>() {
+                            @Override
+                            public void onResourceReady(@NonNull Bitmap resource, @Nullable com.bumptech.glide.request.transition.Transition<? super Bitmap> transition) {
+                                mMap.addMarker(new MarkerOptions().position(lattitudeLongitude)
+                                        .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(mCustomMarkerView, resource))));
+                            }
+                        });
+            }
+
+        }
+
     }
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {

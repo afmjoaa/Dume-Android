@@ -334,9 +334,9 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
                     if (myMainActivity.retrivedAction.equals(DumeUtils.STUDENT)) {
                         min.setText("Min Salary\n" + format.substring(1, format.length() - 3) + " ৳");
                         max.setText("Max Salary\n" + format1.substring(1, format1.length() - 3) + " ৳");
-                        if( Integer.parseInt(leftPinValue)<=Integer.parseInt(rightPinValue) ){
+                        if (Integer.parseInt(leftPinValue) <= Integer.parseInt(rightPinValue)) {
                             salaryValue = leftPinValue + "k - " + rightPinValue + "k";
-                        }else {
+                        } else {
                             salaryValue = rightPinValue + "k - " + leftPinValue + "k";
                         }
                     } else {
@@ -543,13 +543,13 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
                     NumberPicker.Formatter formatter = new NumberPicker.Formatter() {
                         @Override
                         public String format(int value) {
-                            int temp = value+1;
+                            int temp = value + 1;
                             return temp + " 옷";
                         }
                     };
                     np.setFormatter(formatter);
                     np.setWrapSelectorWheel(true);
-                    np.setValue(Integer.parseInt(rangeBar.getLeftPinValue())-1);
+                    np.setValue(Integer.parseInt(rangeBar.getLeftPinValue()) - 1);
 
                     np.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
                         @Override
@@ -605,14 +605,14 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
                     NumberPicker.Formatter formatter = new NumberPicker.Formatter() {
                         @Override
                         public String format(int value) {
-                            int temp = value+1;
+                            int temp = value + 1;
                             return temp + " 옷";
                         }
                     };
                     np.setFormatter(formatter);
                     np.setWrapSelectorWheel(true);
                     //setting the prior value
-                    np.setValue(Integer.parseInt(rangeBar.getRightPinValue())-1);
+                    np.setValue(Integer.parseInt(rangeBar.getRightPinValue()) - 1);
 
                     np.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
                         @Override
@@ -638,9 +638,9 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
                     min.setText(String.format("Min Count : %s stu", leftPinValue));
                     max.setText(String.format("Max Count : %s stu", rightPinValue));
                     String capacityValue;
-                    if( Integer.parseInt(leftPinValue)<=Integer.parseInt(rightPinValue) ){
+                    if (Integer.parseInt(leftPinValue) <= Integer.parseInt(rightPinValue)) {
                         capacityValue = leftPinValue + "옷 - " + rightPinValue + "옷";
-                    }else {
+                    } else {
                         capacityValue = rightPinValue + "옷 - " + leftPinValue + "옷";
                     }
                     AppCompatRadioButton rd = new AppCompatRadioButton(mContext);
@@ -827,10 +827,13 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
 
         List<String> queryList = myMainActivity.queryList;
         List<String> queryListName = myMainActivity.queryListName;
-
         String[] finalInfo = new String[(queryList.size())];
         for (int i = 0; i < queryListName.size(); i++) {
-            finalInfo[i] = queryListName.get(i) + " : " + queryList.get(i);
+            try {
+                finalInfo[i] = queryListName.get(i) + " : " + queryList.get(i);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         for (String title : finalInfo) {

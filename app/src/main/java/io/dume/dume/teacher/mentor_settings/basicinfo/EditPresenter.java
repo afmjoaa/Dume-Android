@@ -19,10 +19,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.GeoPoint;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import id.zelory.compressor.Compressor;
 import io.dume.dume.R;
@@ -43,7 +41,6 @@ public class EditPresenter implements EditContract.Presenter, EditContract.onDat
     private final Activity activity;
     private Uri imageUri;
     private static final String TAG = "EditPresenter";
-    private File compressedImage;
     private Uri selectedImageUri = null;
     private Uri outputFileUri;
     private File actualImage;
@@ -52,7 +49,7 @@ public class EditPresenter implements EditContract.Presenter, EditContract.onDat
         this.view = view;
         this.model = model;
         this.context = context;
-        this.activity = (Activity)context;
+        this.activity = (Activity) context;
         model.setListener(this);
     }
 
@@ -89,8 +86,6 @@ public class EditPresenter implements EditContract.Presenter, EditContract.onDat
             }
         });
     }
-
-
 
 
     @Override
@@ -174,7 +169,13 @@ public class EditPresenter implements EditContract.Presenter, EditContract.onDat
 
     @SuppressLint("CheckResult")
     private void compressImage(File actualImage) {
-        view.setImage(Uri.fromFile(actualImage));
+        /*try {
+            Toast.makeText(context, "compressImage", Toast.LENGTH_SHORT).show();
+            view.setImageFile(actualImage);
+        } catch (Exception e) {
+            Toast.makeText(context, "compressImage error", Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        }*/
         new Compressor(view.getActivtiyContext())
                 .compressToFileAsFlowable(actualImage, "mentor_photo")
                 .subscribeOn(Schedulers.io())
@@ -182,15 +183,38 @@ public class EditPresenter implements EditContract.Presenter, EditContract.onDat
                 .subscribe(new Consumer<File>() {
                     @Override
                     public void accept(File file) {
-                        compressedImage = file;
-                        imageUri = Uri.fromFile(file);
-                        view.setImage(imageUri);
+                        try {
+                            imageUri = Uri.fromFile(file);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            imageUri = null;
+                        }
+                        //view.setImage(imageUri);
                         if (imageUri != null) {
                             model.uploadImage(EditPresenter.this.imageUri, new EditContract.DownloadListener() {
                                 @Override
                                 public void onSuccess(String url) {
                                     view.setAvatarUrl(url);
-                                    //view.setImage(url);
+                                    view.setImageUrlString(url);
+                                    view.disableLoad();
+                                    view.generatePercent();
+                                    view.someThingChanged(true);
+                                }
+
+                                @Override
+                                public void onFail(String msg) {
+                                    view.toast(msg);
+                                    view.disableLoad();
+                                }
+                            });
+
+                        } else if (selectedImageUri != null) {
+                            model.uploadImage(selectedImageUri, new EditContract.DownloadListener() {
+                                @Override
+                                public void onSuccess(String url) {
+                                    view.setAvatarUrl(url);
+
+                                    view.setImageUrlString(url);
                                     view.disableLoad();
                                     view.generatePercent();
                                     view.someThingChanged(true);
@@ -205,6 +229,7 @@ public class EditPresenter implements EditContract.Presenter, EditContract.onDat
 
                         }
                     }
+
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) {
@@ -278,9 +303,33 @@ public class EditPresenter implements EditContract.Presenter, EditContract.onDat
                         try {
                             actualImage = FileUtil.from(view.getActivtiyContext(), selectedImageUri);
                         } catch (Exception e) {
+                            actualImage = null;
                             e.printStackTrace();
                         }
-                        compressImage(actualImage);
+                        if (actualImage == null) {
+                            view.setImage(selectedImageUri);
+                            if (selectedImageUri != null) {
+                                model.uploadImage(selectedImageUri, new EditContract.DownloadListener() {
+                                    @Override
+                                    public void onSuccess(String url) {
+                                        view.setAvatarUrl(url);
+                                        view.setImageUrlString(url);
+                                        view.disableLoad();
+                                        view.generatePercent();
+                                        view.someThingChanged(true);
+                                    }
+
+                                    @Override
+                                    public void onFail(String msg) {
+                                        view.toast(msg);
+                                        view.disableLoad();
+                                    }
+                                });
+
+                            }
+                        } else {
+                            compressImage(actualImage);
+                        }
                     }
                 }
 

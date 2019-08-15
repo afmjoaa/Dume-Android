@@ -76,11 +76,15 @@ public class TeacherPresenter implements TeacherContract.Presenter {
                 view.setMsgName(view.generateMsgName(o1, o));
                 view.setDocumentSnapshot(documentSnapshot);
 
-                Boolean acountActive = documentSnapshot.getBoolean("account_active");
+                Boolean acountActive = null;
+                try {
+                    acountActive = documentSnapshot.getBoolean("account_active");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 if(acountActive!= null){
                     view.updateAccountActive(acountActive);
-                }
-                else{
+                } else{
                     view.updateAccountActive(true);
                 }
 

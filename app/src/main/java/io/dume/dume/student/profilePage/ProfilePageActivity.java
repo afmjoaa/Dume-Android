@@ -101,7 +101,7 @@ public class ProfilePageActivity extends CustomStuAppCompatActivity implements P
     private ImageView lnEmptyFound;
     private ImageView fnEmptyFound;
     private File compressedImage;
-    private File actualImage;
+    private File actualImage = null;
     private int genderCheckedItem = 0;
     private int PResultCheckedItem = 0;
 
@@ -549,10 +549,18 @@ public class ProfilePageActivity extends CustomStuAppCompatActivity implements P
                     showSpiner();
                     try {
                         actualImage = FileUtil.from(this, selectedImageUri);
-                    } catch (IOException e) {
+                    } catch (Exception e) {
+                        actualImage = null;
                         e.printStackTrace();
                     }
-                    compressImage(actualImage);
+                    Glide.with(ProfilePageActivity.this).load(selectedImageUri).apply(new RequestOptions().override(100, 100).placeholder(R.drawable.set_display_pic)).into(profileUserDP);
+                    if(actualImage ==null){
+                        compressedImage = null;
+                        hideSpiner();
+                        updateChangesClicked();
+                    }else {
+                        compressImage(actualImage);
+                    }
                 }
                 //Glide.with(this).load(selectedImageUri).apply(new RequestOptions().override(100, 100)).into(profileUserDP);
             } else if (requestCode == LOCATION_REQUEST_CODE) {
@@ -575,8 +583,8 @@ public class ProfilePageActivity extends CustomStuAppCompatActivity implements P
                 .subscribe(new Consumer<File>() {
                     @Override
                     public void accept(File file) {
+                        //flush("i am here");
                         compressedImage = file;
-                        Glide.with(ProfilePageActivity.this).load(compressedImage).apply(new RequestOptions().override(100, 100).placeholder(R.drawable.set_display_pic)).into(profileUserDP);
                         hideSpiner();
                         updateChangesClicked();
                     }
@@ -634,9 +642,14 @@ public class ProfilePageActivity extends CustomStuAppCompatActivity implements P
     @Override
     public Uri getAvatarUri() {
         if (compressedImage != null) {
-            return Uri.fromFile(compressedImage);
+            try{
+                return Uri.fromFile(compressedImage);
+            }catch (Exception e){
+                e.printStackTrace();
+                return selectedImageUri;
+            }
         } else {
-            return null;
+            return selectedImageUri;
         }
     }
 
@@ -710,6 +723,7 @@ public class ProfilePageActivity extends CustomStuAppCompatActivity implements P
     @Override
     public void setAvatar(String uri) {
         avatarString = uri;
+        //flush("this is setAvatar");
         String gender = selectGenderTextView.getText().toString();
         if (gender.equals("Male") || gender.equals("")) {
             Glide.with(getApplicationContext()).load(uri).apply(new RequestOptions().override(100, 100).placeholder(R.drawable.avatar)).into(profileUserDP);

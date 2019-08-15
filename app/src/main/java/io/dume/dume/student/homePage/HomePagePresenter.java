@@ -134,6 +134,7 @@ public class HomePagePresenter implements HomePageContract.Presenter {
                 break;
 
             case R.id.search_filter_image_view:
+            case R.id.search_filter_image_view_one:
                 mView.searchFilterClicked();
                 break;
 

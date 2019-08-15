@@ -31,7 +31,7 @@ import static android.content.Context.MODE_PRIVATE;
 import org.imperiumlabs.geofirestore.GeoQuery;
 import org.imperiumlabs.geofirestore.GeoQueryDataEventListener;*/
 
-public class SearchLoadingModel extends StuBaseModel implements SearchLoadingContract.Model {
+public class    SearchLoadingModel extends StuBaseModel implements SearchLoadingContract.Model {
     ArrayList<DocumentSnapshot> instructorList = null;
     ArrayList<String> mentorList = null;
     private List<DocumentSnapshot> recordDataRejected;

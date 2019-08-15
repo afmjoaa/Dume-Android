@@ -41,6 +41,7 @@ import com.transitionseverywhere.TransitionManager;
 import com.warkiz.widget.IndicatorSeekBar;
 import com.warkiz.widget.IndicatorStayLayout;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -194,7 +195,7 @@ public class EditAccount extends CustomStuAppCompatActivity implements EditContr
                 requestOptions.placeholder(R.drawable.set_display_pic);
             }
         }
-        Glide.with(getApplicationContext()).load(documentSnapshot.getString("avatar")).apply(requestOptions.override(100, 100)).into(avatar);
+        Glide.with(getApplicationContext()).load(documentSnapshot.getString("avatar")).apply(requestOptions.override(100, 100).placeholder(R.drawable.set_display_pic)).into(avatar);
         first.setText(documentSnapshot.getString("first_name") == null ? "" : documentSnapshot.getString("first_name"));
         last.setText(documentSnapshot.getString("last_name") == null ? "" : documentSnapshot.getString("last_name"));
         phone.setText(documentSnapshot.getString("phone_number") == null ? "" : documentSnapshot.getString("phone_number"));
@@ -515,7 +516,12 @@ public class EditAccount extends CustomStuAppCompatActivity implements EditContr
 
     @Override
     public void setImage(Uri uri) {
-        Glide.with(this).load(uri).into(avatar);
+        Glide.with(this).load(uri).apply(new RequestOptions().override(100, 100).placeholder(R.drawable.set_display_pic)).into(avatar);
+    }
+
+    @Override
+    public void setImageUrlString(String url) {
+        Glide.with(getApplicationContext()).load(url).apply(new RequestOptions().override(100, 100).placeholder(R.drawable.set_display_pic)).into(avatar);
     }
 
     @Override

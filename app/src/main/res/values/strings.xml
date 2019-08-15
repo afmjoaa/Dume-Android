@@ -544,9 +544,9 @@ provided.Tap salary for details.  </string>
     <string name="done_icon">Done_icon</string>
     <string name="switch_learner">Switch Learner</string>
     <string name="for_me">For Me</string>
-    <string name="dume_products"><![CDATA[Couching Service: This is our finding nearby Couching centers.\nMonthly Tutor: This is the regular monthly tuition we are generally familiar with.\nWeekly Tutor: This is our premier package here we instantly give you a capable mentor for a week to teach & guide you in a specific subject.]]></string>
-    <string name="dume_products_mentor"><![CDATA[Couching Service: This is our finding nearby Couching centers.\nMonthly Tutor: This is the regular monthly tuition we are generally familiar with.\nWeekly Tutor: This is our premier package.Here you will teach & guide you in a specific subject for a week.]]></string>
-    <string name="dume_product_intro">You can choose between Couching service, Monthly tutor or Weekly tutor with ease.</string>
+    <string name="dume_products"><![CDATA[Coaching Service: This is our finding nearby Coaching centers.\nMonthly Tutor: This is the regular monthly tuition we are generally familiar with.\nWeekly Tutor: This is our premier package here we instantly give you a capable mentor for a week to teach & guide you in a specific subject.]]></string>
+    <string name="dume_products_mentor"><![CDATA[Coaching Service: This is our finding nearby Coaching centers.\nMonthly Tutor: This is the regular monthly tuition we are generally familiar with.\nWeekly Tutor: This is our premier package.Here you will teach & guide you in a specific subject for a week.]]></string>
+    <string name="dume_product_intro">You can choose between Coaching service, Monthly tutor or Weekly tutor with ease.</string>
     <string name="choosing_text">Choosing mentors have never been easy with Dume</string>
     <string name="start_couching_text">Life is constantly bringing us challenges and opportunities. When we have the courage to step up to the challenges and seize the opportunities we move forward. As a coach, you can help others make this kind of progress.</string>
     <string name="take_couching_text">People don\'t only use a coach when there is a problem with their technique; they understand that no matter how good their technique is, there is always room for improvement.</string>
@@ -756,7 +756,7 @@ provided.Tap salary for details.  </string>
         <item>Real time service for student and mentor</item>
         <item>Allow Dume location, phone state, &amp; storage permission</item>
         <item>Choose between Student, Mentor or Boot-camp profile</item>
-        <item>Search between Couching Service, Monthly Tutor or Weekly Tutor package</item>
+        <item>Search between Coaching Service, Monthly Tutor or Weekly Tutor package</item>
     </string-array>
 
     <string-array name="after_splash_data">
@@ -764,11 +764,11 @@ provided.Tap salary for details.  </string>
         <item><![CDATA[Know something better then other!! Start sharing and earn money.Don\'t have anything to share don\'t worry start taking dume and be the best at what you do.]]></item>
         <item><![CDATA[Recommendation will be presented based on your location, phone call so that you may call your mentor/student & write to storage so that we can save search history.]]></item>
         <item>Select which category suite you best and build your profile.You can switch profile anytime as you wish.</item>
-        <item>In simple and short Couching Service is coaching center whereas Monthly Tutor is monthly tuition and Weekly Tutor is weekly.</item>
+        <item>In simple and short Coaching Service is coaching center whereas Monthly Tutor is monthly tuition and Weekly Tutor is weekly.</item>
     </string-array>
     <string name="title_activity_boot_camp_add">Start Boot Camp</string>
     <string name="title_activity_student_addvertise">Enhance your skill</string>
-    <string name="gang_salary_detail">Couching Service final salary will be the price presented based on your given salary range &amp; it will be shown to you before your confirmation. Tap help for details.</string>
+    <string name="gang_salary_detail">Coaching Service final salary will be the price presented based on your given salary range &amp; it will be shown to you before your confirmation. Tap help for details.</string>
     <string name="regular_salary_detail">Monthly Tutor final salary will be the price presented based on your given salary range &amp; it will be shown to you before your confirmation. Tap help for details.</string>
     <string name="instant_salary_detail">Weekly Tutor final salary will be the price presented based on your given salary range &amp; it will be shown to you before your confirmation. Tap help for details.</string>
     <string name="msg_token_fmt">foo</string>

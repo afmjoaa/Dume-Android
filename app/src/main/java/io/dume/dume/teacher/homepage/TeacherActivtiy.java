@@ -283,7 +283,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         headerTab.setBackground(getResources().getDrawable(R.drawable.bg_white_bottom_round_6));
         String herePackageName = "";
         if (packageName.equals(SearchDataStore.DUME_GANG)) {
-            herePackageName = "Couching Service";
+            herePackageName = "Coaching Service";
         } else if (packageName.equals(SearchDataStore.REGULAR_DUME)) {
             herePackageName = "Monthly Tuition";
         } else {
@@ -602,7 +602,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         cancelsheetRootView = this.getLayoutInflater().inflate(R.layout.custom_bottom_sheet_dialogue_cancel, null);
         mCancelBottomSheetDialog.setContentView(cancelsheetRootView);
         //setting do more
-        doMoreDetailTextView.setText("Start a couching center");
+        doMoreDetailTextView.setText("Start a coaching center");
         //setting the onclick listener here
         profileDataLayout.setOnClickListener(new View.OnClickListener() {
             @Override

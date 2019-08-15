@@ -27,13 +27,18 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import io.dume.dume.Google;
 import io.dume.dume.R;
 import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
+import io.dume.dume.student.pojo.SearchDataStore;
 import io.dume.dume.student.recordsAccepted.RecordsAcceptedActivity;
 import io.dume.dume.student.recordsCompleted.RecordsCompletedActivity;
 import io.dume.dume.student.recordsCurrent.RecordsCurrentActivity;
@@ -41,6 +46,7 @@ import io.dume.dume.student.recordsPending.RecordsPendingActivity;
 import io.dume.dume.student.recordsRejected.RecordsRejectedActivity;
 import io.dume.dume.student.studentHelp.StudentHelpActivity;
 import io.dume.dume.teacher.homepage.TeacherContract;
+import io.dume.dume.teacher.homepage.TeacherDataStore;
 import io.dume.dume.util.DumeUtils;
 
 import static io.dume.dume.util.DumeUtils.RECORDTAB;
@@ -239,6 +245,48 @@ public class RecordsPageActivity extends CustomStuAppCompatActivity implements R
             badgeTV.setVisibility(View.VISIBLE);
         } else {
             badgeTV.setVisibility(View.GONE);
+        }
+        //check here if same then do nothing
+        if (retriveAction != null) {
+            Map<String, Object> documentSnapshot = null;
+            switch (retriveAction) {
+                case DumeUtils.STUDENT:
+                    documentSnapshot = SearchDataStore.getInstance().getDocumentSnapshot();
+                    break;
+                case DumeUtils.TEACHER:
+                    documentSnapshot = TeacherDataStore.getInstance().getDocumentSnapshot();
+                    break;
+            }
+            if (documentSnapshot != null) {
+                //documentSnapshot.get()
+                //TODO here i am editing
+                Map<String, Object> unreadRecords = (Map<String, Object>) documentSnapshot.get("unread_records");
+                int pendingCount = Integer.parseInt((String) unreadRecords.get("pending_count"));
+                int acceptedCount = Integer.parseInt((String) unreadRecords.get("accepted_count"));
+                int currentCount = Integer.parseInt((String) unreadRecords.get("current_count"));
+                int rejectedCount = Integer.parseInt((String) unreadRecords.get("rejected_count"));
+                int completedCount = Integer.parseInt((String) unreadRecords.get("completed_count"));
+
+                if (pendingCount != recordDataPending.size() || acceptedCount != recordDataAccepted.size() || currentCount != recordDataCurrent.size()
+                        || rejectedCount != recordDataRejected.size() || completedCount != recordDataCompleted.size()) {
+                    unreadRecords.put("pending_count", recordDataPending.size()+"");
+                    unreadRecords.put("accepted_count", recordDataAccepted.size() + "");
+                    unreadRecords.put("current_count", recordDataCurrent.size() + "");
+                    unreadRecords.put("rejected_count", recordDataRejected.size() + "");
+                    unreadRecords.put("completed_count", recordDataCompleted.size() + "");
+                    String uid = FirebaseAuth.getInstance().getUid();
+                    if (uid != null) {
+                        switch (retriveAction) {
+                            case DumeUtils.STUDENT:
+                                FirebaseFirestore.getInstance().collection("/users/students/stu_pro_info").document(uid).update("unread_records", unreadRecords);
+                                break;
+                            case DumeUtils.TEACHER:
+                                FirebaseFirestore.getInstance().collection("users/mentors/mentor_profile").document(uid).update("unread_records", unreadRecords);
+                                break;
+                        }
+                    }
+                }
+            }
         }
     }
 

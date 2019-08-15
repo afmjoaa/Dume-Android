@@ -3,6 +3,7 @@ package io.dume.dume.util;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.Typeface;
@@ -225,11 +226,22 @@ public class DumeUtils {
         collapsingToolbarLayout.setTitle(title);
 
         if (isWhite) {
-            Drawable drawable = context.getResources().getDrawable(R.drawable.ic_more_vert_white_24dp);
+
+            Drawable drawable = null; /*I've check validation of xml file there's no error :( */
+            try {
+                drawable = context.getResources().getDrawable(R.drawable.ic_more_vert_white_24dp);
+            } catch (Resources.NotFoundException e) {
+                e.printStackTrace();
+            }
             toolbar.setOverflowIcon(drawable);
         } else {
 //            Drawable drawable = ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_more_vert_black_24dp);
-            Drawable drawable = context.getResources().getDrawable(R.drawable.ic_more_vert_black_24dp);
+            Drawable drawable = null;
+            try {
+                drawable = context.getResources().getDrawable(R.drawable.ic_more_vert_black_24dp);
+            } catch (Resources.NotFoundException e) {
+                e.printStackTrace();
+            }
             toolbar.setOverflowIcon(drawable);
         }
     }
@@ -608,7 +620,11 @@ public class DumeUtils {
                 }
             } else {
                 mQuery.append(firstTwo(queryList.get(i)));
-                commonQuery.append(firstTwo(queryList.get(i)));
+                try {
+                    commonQuery.append(firstTwo(queryList.get(i)));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
         Log.e("bar", "Common Query : " + commonQuery.toString());

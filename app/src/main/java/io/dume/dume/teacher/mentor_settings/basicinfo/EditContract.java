@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.GeoPoint;
 
+import java.io.File;
 import java.util.List;
 
 import io.dume.dume.teacher.homepage.TeacherContract;
@@ -61,6 +62,8 @@ public class EditContract {
         Context getActivtiyContext();
 
         void setImage(Uri uri);
+
+        void setImageUrlString(String url);
 
         void setAvatarUrl(String url);
 

@@ -28,19 +28,19 @@
             android:layout_height="50dp"
             android:layout_marginBottom="1dp"
             android:scaleType="centerCrop"
-            app:srcCompat="@drawable/demo_default_avatar_dark"
             app:carbon_cornerRadius="6dp"
-            app:carbon_elevation="3dp" />
+            app:carbon_elevation="3dp"
+            app:srcCompat="@drawable/demo_default_avatar_dark" />
 
         <TextView
             android:id="@+id/student_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Student"
             android:ellipsize="end"
             android:maxWidth="110dp"
-            android:singleLine="true"
             android:maxLines="1"
+            android:singleLine="true"
+            android:text="Student"
             android:textColor="@color/textColorPrimary"
             android:textSize="16sp"
             app:fontFamily="@font/cairo_regular" />
@@ -72,13 +72,13 @@
             android:id="@+id/subject_in_demand"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/math_amp_physics"
-            android:textAlignment="center"
-            android:textAllCaps="false"
             android:paddingStart="130dp"
             android:paddingLeft="130dp"
             android:paddingEnd="130dp"
             android:paddingRight="130dp"
+            android:text="@string/math_amp_physics"
+            android:textAlignment="center"
+            android:textAllCaps="false"
             android:textColor="@color/textColorPrimary"
             android:textSize="14sp"
             app:fontFamily="@font/cairo_regular" />
@@ -121,19 +121,19 @@
             android:layout_height="50dp"
             android:layout_marginBottom="1dp"
             android:scaleType="centerCrop"
-            app:srcCompat="@drawable/demo_default_avatar_dark"
             app:carbon_cornerRadius="6dp"
-            app:carbon_elevation="3dp" />
+            app:carbon_elevation="3dp"
+            app:srcCompat="@drawable/demo_default_avatar_dark" />
 
         <TextView
             android:id="@+id/mentor_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Mentor"
             android:ellipsize="end"
             android:maxWidth="110dp"
-            android:singleLine="true"
             android:maxLines="1"
+            android:singleLine="true"
+            android:text="Mentor"
             android:textColor="@color/textColorPrimary"
             android:textSize="16sp"
             app:fontFamily="@font/cairo_regular" />
@@ -160,6 +160,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/center_vertical_host_layout"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="4dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         tools:ignore="UseCompoundDrawables">

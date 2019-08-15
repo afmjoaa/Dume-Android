@@ -182,11 +182,11 @@ public class SearchLoadingActivity extends CusStuAppComMapActivity implements On
         List<SearchDetailData> reviewData = new ArrayList<>();
         SearchDetailData packageCurrent = new SearchDetailData();
         String packageName = searchDataStore.getPackageName();
-        if(packageName.equals(SearchDataStore.REGULAR_DUME)){
+        if (packageName.equals(SearchDataStore.REGULAR_DUME)) {
             packageName = "Monthly Tutor";
         } else if (packageName.equals(SearchDataStore.INSTANT_DUME)) {
             packageName = "Weekly Tutor";
-        }else {
+        } else {
             packageName = "Couching Service";
         }
         packageCurrent.setItemName(packageName);
@@ -318,7 +318,7 @@ public class SearchLoadingActivity extends CusStuAppComMapActivity implements On
             if (retrivedAction != null) {
                 switch (retrivedAction) {
                     case "from_HPA":
-                        DumeUtils.setMargins(homePageBtn,0,0,0,0);
+                        DumeUtils.setMargins(homePageBtn, 0, 0, 0, 0);
                         homePageBtn.setVisibility(View.VISIBLE);
                         goBackEditBtn.setVisibility(View.GONE);
                         break;
