@@ -526,7 +526,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
                 SkillFragment skillFragment = SkillFragment.getInstance();
                 ArrayList<Skill> skillArrayList = TeacherDataStore.getInstance().getSkillArrayList();
                 if (skillArrayList != null) {
-                    try{
+                    try {
                         skillFragment.skillAdapter = new SkillAdapter(TeacherActivtiy.this, SkillAdapter.FRAGMENT, skillFragment.itemWidth, teacherDataStore.getSkillArrayList());
                         skillFragment.skillRV.setAdapter(skillFragment.skillAdapter);
                         if (skillArrayList.size() == 0) {
@@ -535,7 +535,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
                         } else {
                             skillFragment.noDataBlock.setVisibility(View.GONE);
                         }
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         Log.e(TAG, "onResume: " + e.getLocalizedMessage());
                     }
                 }
@@ -995,7 +995,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
                     String facebookUrl = getFacebookPageURL(context);
                     facebookIntent.setData(Uri.parse(facebookUrl));
                     context.startActivity(facebookIntent);
-                }catch (Exception err){
+                } catch (Exception err) {
                     Log.e(TAG, err.getLocalizedMessage());
                 }
                 //Toast.makeText(context, "Coming soon", Toast.LENGTH_SHORT).show();
@@ -1515,7 +1515,12 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
 
     @Override
     public void setRating(Map<String, Object> selfRating) {
-        userRatingTextView.setText(selfRating.get("star_rating") + "  ★");
+        try {
+            String toSet = selfRating.get("star_rating") + "  ★";
+            userRatingTextView.setText(toSet);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
