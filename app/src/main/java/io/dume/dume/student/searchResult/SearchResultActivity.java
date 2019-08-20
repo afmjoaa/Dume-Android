@@ -1615,7 +1615,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
         Map<String, Object> selfRating = (Map<String, Object>) sp_info.get("self_rating");
         String starRating = (String) selfRating.get("star_rating");
         double v = SphericalUtil.computeDistanceBetween(searchDataStore.getAnchorPoint(), latLng);
-        ageText.setText(starRating+ " ⭐  |  " + formatNumber(v) +" away");
+        ageText.setText(starRating + " ⭐  |  " + formatNumber(v) + " away");
 
         loadQualificationData(sp_info);
 
@@ -1934,8 +1934,13 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
         lstLatLngRoute.add(searchDataStore.getAnchorPoint());
         if (mMap == null || lstLatLngRoute == null || lstLatLngRoute.isEmpty()) return;
         LatLngBounds.Builder boundsBuilder = new LatLngBounds.Builder();
-        for (LatLng latLngPoint : lstLatLngRoute)
-            boundsBuilder.include(latLngPoint);
+        for (LatLng latLngPoint : lstLatLngRoute) {
+            try {
+                boundsBuilder.include(latLngPoint);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
         int routePadding = 150;
         LatLngBounds latLngBounds = boundsBuilder.build();
         mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, routePadding), 2000, new GoogleMap.CancelableCallback() {
@@ -1960,7 +1965,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                             editor = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE).edit();
                             editor.putBoolean("instructionShown", true);
                             editor.apply();
-                        }else {
+                        } else {
                             Toast.makeText(SearchResultActivity.this, "Please swipe up for mentor details", Toast.LENGTH_LONG).show();
                         }
                     }
