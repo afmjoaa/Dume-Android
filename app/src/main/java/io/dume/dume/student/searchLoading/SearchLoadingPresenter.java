@@ -508,7 +508,15 @@ public class SearchLoadingPresenter implements SearchLoadingContract.Presenter {
                         String[] split = mainString.split("\\s");
                         for (String aSplit : split) {
                             if (!aSplit.equals("of") && !aSplit.equals("and") && !aSplit.equals("&")) {
-                                secondMainString.append(aSplit.substring(0, 1));
+                                try {
+                                    String s = "";
+                                    if (aSplit.length() >= 1) {
+                                        s = aSplit.substring(0, 1);
+                                    }
+                                    secondMainString.append(s);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
                             }
                         }
 
