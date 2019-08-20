@@ -9,7 +9,7 @@ import java.util.Date;
 @Keep
 public class Record {
     public static int DELIVERED = 2, NOT_DELIVERED = 1, DELIVERED_SEEN = 3;
-    public static final String DIALOG =  "dialog", BOTTOM_SHEET = "bottom_sheet", DONE = "done";
+    public static final String DIALOG = "dialog", BOTTOM_SHEET = "bottom_sheet", DONE = "done";
 
 
     String mentorName;
@@ -38,7 +38,10 @@ public class Record {
     String s_rate_status;
 
     DocumentSnapshot recordSnap;
-    public Record(String mentorName, String studentName, String salaryInDemand, String subjectExchange, Date date, String mentorDpUrl, String studentDpUrl, float studentRating, float mentorRating, String status, int deliveryStatus, String studentGender, String mentorGender) {
+
+    public Record(String mentorName, String studentName, String salaryInDemand, String subjectExchange, Date date,
+                  String mentorDpUrl, String studentDpUrl, float studentRating, float mentorRating,
+                  String status, int deliveryStatus, String studentGender, String mentorGender) {
         this.mentorName = mentorName;
         this.studentName = studentName;
         this.salaryInDemand = salaryInDemand;

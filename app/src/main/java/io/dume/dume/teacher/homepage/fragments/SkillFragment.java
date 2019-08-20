@@ -3,6 +3,7 @@ package io.dume.dume.teacher.homepage.fragments;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -327,11 +328,19 @@ public class SkillFragment extends Fragment {
             assert beh != null;
             int percentage = Integer.parseInt(beh);
             if (percentage >= 95) {
-                addRegularDBtn.setImageDrawable(context.getResources().getDrawable(R.drawable.dume_regular_image));
+                try {
+                    addRegularDBtn.setImageDrawable(context.getResources().getDrawable(R.drawable.dume_regular_image));
+                } catch (Resources.NotFoundException e) {
+                    e.printStackTrace();
+                }
                 addDumeGangBtn.setImageDrawable(context.getResources().getDrawable(R.drawable.dume_gang_image));
                 addInstantDBtn.setImageDrawable(context.getResources().getDrawable(R.drawable.dume_instant_image));
             } else {
-                addRegularDBtn.setImageDrawable(context.getResources().getDrawable(R.drawable.dume_regular_grayscale_image));
+                try {
+                    addRegularDBtn.setImageDrawable(context.getResources().getDrawable(R.drawable.dume_regular_grayscale_image));
+                } catch (Resources.NotFoundException e) {
+                    e.printStackTrace();
+                }
                 addDumeGangBtn.setImageDrawable(context.getResources().getDrawable(R.drawable.dume_gang_grayscale_image));
                 addInstantDBtn.setImageDrawable(context.getResources().getDrawable(R.drawable.dume_instant_grayscale_image));
             }
