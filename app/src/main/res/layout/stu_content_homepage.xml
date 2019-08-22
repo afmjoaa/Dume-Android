@@ -206,7 +206,7 @@
                     app:fontFamily="@font/cairo_regular" />
 
                 <carbon.widget.ImageView
-                    android:id="@+id/search_filter_image_view_one"
+                    android:id="@+id/nogps_search_filter_image"
                     android:layout_width="42dp"
                     android:layout_height="36dp"
                     android:layout_alignParentEnd="true"

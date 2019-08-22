@@ -12,10 +12,8 @@ import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.GeoPoint;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 
@@ -26,14 +24,11 @@ import java.util.Map;
 import java.util.Objects;
 
 import io.dume.dume.R;
-import io.dume.dume.model.DumeModel;
 import io.dume.dume.student.homePage.adapter.HomePageRatingData;
 import io.dume.dume.student.homePage.adapter.HomePageRecyclerData;
 import io.dume.dume.student.pojo.SearchDataStore;
 import io.dume.dume.student.recordsPage.Record;
-import io.dume.dume.teacher.homepage.TeacherActivtiy;
 import io.dume.dume.teacher.homepage.TeacherContract;
-import io.dume.dume.teacher.homepage.TeacherDataStore;
 import io.dume.dume.util.DumeUtils;
 
 public class HomePagePresenter implements HomePageContract.Presenter {
@@ -134,7 +129,7 @@ public class HomePagePresenter implements HomePageContract.Presenter {
                 break;
 
             case R.id.search_filter_image_view:
-            case R.id.search_filter_image_view_one:
+            case R.id.nogps_search_filter_image:
                 mView.searchFilterClicked();
                 break;
 

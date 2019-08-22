@@ -816,7 +816,11 @@ public class DumeUtils {
                 confirmNoBtn.setText("Retry");
                 confirmNoBtn.setEnabled(true);
             }
-            mMakeRequestBSD.show();
+            try{
+                mMakeRequestBSD.show();
+            }catch (Exception e){
+                e.printStackTrace();
+            }
             mMakeRequestBSD.setCancelable(cancelable);
             mMakeRequestBSD.setCanceledOnTouchOutside(false);
         }
