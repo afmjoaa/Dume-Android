@@ -137,6 +137,7 @@ import q.rorbin.verticaltablayout.widget.TabView;
 
 import static io.dume.dume.util.DumeUtils.animateImage;
 import static io.dume.dume.util.ImageHelper.getRoundedCornerBitmapSquare;
+import static java.lang.Integer.parseInt;
 
 public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherContract.View,
         NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback, MyGpsLocationChangeListener,
@@ -323,7 +324,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
 
     @Override
     public void updateBadge(String badgeNumber) {
-        if (Integer.parseInt(badgeNumber) != 0) {
+        if (parseInt(badgeNumber) != 0) {
             tabLayout.setTabBadge(1, badgeNumber);
         }
     }
@@ -500,7 +501,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
             if (payments != null) {
                 String totalPaid = (String) payments.get("total_paid");
                 String obligationAmount = (String) payments.get("obligation_amount");
-                if (obligationAmount != null && Integer.parseInt(obligationAmount) >= 500) {
+                if (obligationAmount != null && parseInt(obligationAmount) >= 500) {
                     if (!isDialogShowing()) {
                         showPaymentDialogue();
 
@@ -1242,9 +1243,9 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
             String totalPaid = (String) payments.get("total_paid");
             String obligationAmount = (String) payments.get("obligation_amount");
             if (obligationAmount != null && totalPaid != null) {
-                obligationAmountTV.setText(Integer.parseInt(obligationAmount) + " ৳");
+                obligationAmountTV.setText(parseInt(obligationAmount) + " ৳");
                 totalPaidTV.setText(totalPaid + " ৳");
-                if (Integer.parseInt(obligationAmount) >= 1000) {
+                if (parseInt(obligationAmount) >= 1000) {
                     if (!Google.getInstance().isObligation()) {
                         model.toggleObligation(true, new TeacherContract.Model.Listener<Void>() {
                             @Override
@@ -1545,7 +1546,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
 
     @Override
     public void setProfileComPercent(String num) {
-        if (Integer.parseInt(num) < 100) {
+        if (parseInt(num) < 100) {
             updateProfileBadge('!');
         } else {
             updateProfileBadge('%');
@@ -1556,21 +1557,28 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
 
     @Override
     public void setUnreadMsg(String unreadMsg) {
-        updateChatBadge(Integer.parseInt(unreadMsg));
+        int it = 0;
+        try {
+            it = Integer.parseInt(unreadMsg);
+        } catch (NumberFormatException e) {
+            it = 0;
+            e.printStackTrace();
+        }
+        updateChatBadge(it);
         sharedPreferences = context.getSharedPreferences(UNREAD_MESSAGE, MODE_PRIVATE);
         updateChatBadge(sharedPreferences.getInt("unread", 0));
     }
 
     @Override
     public void setUnreadNoti(String unreadNoti) {
-        updateNotificationsBadge(Integer.parseInt(unreadNoti));
+        updateNotificationsBadge(parseInt(unreadNoti));
     }
 
     @Override
     public void setUnreadRecords(Map<String, Object> unreadRecords) {
-        updateRecordsBadge(Integer.parseInt((String) unreadRecords.get("pending_count")),
-                Integer.parseInt((String) unreadRecords.get("accepted_count")),
-                Integer.parseInt((String) unreadRecords.get("current_count")));
+        updateRecordsBadge(parseInt((String) unreadRecords.get("pending_count")),
+                parseInt((String) unreadRecords.get("accepted_count")),
+                parseInt((String) unreadRecords.get("current_count")));
     }
 
     @Override
@@ -1587,7 +1595,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
 
 
         layout.setPadding(0, 0, 0, 0);
-        if (Integer.parseInt(completePercent) < 90) {
+        if (parseInt(completePercent) < 90) {
             layout.setBackgroundColor(ContextCompat.getColor(context, R.color.snackbar_yellow));
             textViewStart.setTextColor(Color.BLACK);
         } else {
