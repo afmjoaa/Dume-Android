@@ -127,7 +127,6 @@ import io.dume.dume.teacher.homepage.TeacherActivtiy;
 import io.dume.dume.teacher.homepage.TeacherContract;
 import io.dume.dume.util.DumeUtils;
 import io.dume.dume.util.NetworkUtil;
-import io.dume.dume.util.RadioBtnDialogue;
 import me.zhanghai.android.materialratingbar.MaterialRatingBar;
 
 import static io.dume.dume.util.DumeUtils.animateImage;
@@ -470,7 +469,7 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
 
         //finding the filter btn image
         searchFilterBtn = findViewById(R.id.search_filter_image_view);
-        searchFilterBtnOne = findViewById(R.id.search_filter_image_view_one);
+        searchFilterBtnOne = findViewById(R.id.nogps_search_filter_image);
         filterDrawable = searchFilterBtn.getDrawable();
         filterDrawableOne = searchFilterBtnOne.getDrawable();
         bottomSheetBtnCallback();
@@ -1542,19 +1541,23 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
     @Override
     public void setAvatarForMenu(String avatar) {
         if (avatar != null && !avatar.equals("")) {
-            Glide.with(this).asBitmap().load(avatar)
-                    .apply(new RequestOptions().override((int) (20 * (getResources().getDisplayMetrics().density)), (int) (20 * (getResources().getDisplayMetrics().density))).centerCrop().placeholder(R.drawable.alias_profile_icon))
-                    .into(new SimpleTarget<Bitmap>() {
-                        @Override
-                        public void onResourceReady(@NonNull Bitmap resource, @Nullable com.bumptech.glide.request.transition.Transition<? super Bitmap> transition) {
-                            final Bitmap roundedCornerBitmap = getRoundedCornerBitmapSquare(resource, (int) (10 * (getResources().getDisplayMetrics().density)), (int) (20 * (getResources().getDisplayMetrics().density)));
-                            Drawable drawable = new BitmapDrawable(getResources(), roundedCornerBitmap);
-                            if (drawable != null) {
-                                alProfileIcon.setDrawableByLayerId(R.id.ic_al_profile_pic, drawable);
-                                alProfile.setIcon(alProfileIcon);
+            try{
+                Glide.with(this).asBitmap().load(avatar)
+                        .apply(new RequestOptions().override((int) (20 * (getResources().getDisplayMetrics().density)), (int) (20 * (getResources().getDisplayMetrics().density))).centerCrop().placeholder(R.drawable.alias_profile_icon))
+                        .into(new SimpleTarget<Bitmap>() {
+                            @Override
+                            public void onResourceReady(@NonNull Bitmap resource, @Nullable com.bumptech.glide.request.transition.Transition<? super Bitmap> transition) {
+                                final Bitmap roundedCornerBitmap = getRoundedCornerBitmapSquare(resource, (int) (10 * (getResources().getDisplayMetrics().density)), (int) (20 * (getResources().getDisplayMetrics().density)));
+                                Drawable drawable = new BitmapDrawable(getResources(), roundedCornerBitmap);
+                                if (drawable != null) {
+                                    alProfileIcon.setDrawableByLayerId(R.id.ic_al_profile_pic, drawable);
+                                    alProfile.setIcon(alProfileIcon);
+                                }
                             }
-                        }
-                    });
+                        });
+            }catch (Exception e){
+                e.printStackTrace();
+            }
         }
     }
 

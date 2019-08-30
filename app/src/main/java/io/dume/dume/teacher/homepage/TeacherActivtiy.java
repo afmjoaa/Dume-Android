@@ -1499,19 +1499,23 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
 
     @Override
     public void setAvatarForMenu(String avatar) {
-        Glide.with(getApplicationContext()).asBitmap().load(avatar)
-                .apply(new RequestOptions().override((int) (20 * (getResources().getDisplayMetrics().density)), (int) (20 * (getResources().getDisplayMetrics().density))).centerCrop().placeholder(R.drawable.alias_profile_icon))
-                .into(new SimpleTarget<Bitmap>() {
-                    @Override
-                    public void onResourceReady(@NonNull Bitmap resource, @Nullable com.bumptech.glide.request.transition.Transition<? super Bitmap> transition) {
-                        final Bitmap roundedCornerBitmap = getRoundedCornerBitmapSquare(resource, (int) (10 * (getResources().getDisplayMetrics().density)), (int) (20 * (getResources().getDisplayMetrics().density)));
-                        Drawable drawable = new BitmapDrawable(getResources(), roundedCornerBitmap);
-                        if (drawable != null) {
-                            alProfileIcon.setDrawableByLayerId(R.id.ic_al_profile_pic, drawable);
-                            alProfile.setIcon(alProfileIcon);
+        try{
+            Glide.with(getApplicationContext()).asBitmap().load(avatar)
+                    .apply(new RequestOptions().override((int) (20 * (getResources().getDisplayMetrics().density)), (int) (20 * (getResources().getDisplayMetrics().density))).centerCrop().placeholder(R.drawable.alias_profile_icon))
+                    .into(new SimpleTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(@NonNull Bitmap resource, @Nullable com.bumptech.glide.request.transition.Transition<? super Bitmap> transition) {
+                            final Bitmap roundedCornerBitmap = getRoundedCornerBitmapSquare(resource, (int) (10 * (getResources().getDisplayMetrics().density)), (int) (20 * (getResources().getDisplayMetrics().density)));
+                            Drawable drawable = new BitmapDrawable(getResources(), roundedCornerBitmap);
+                            if (drawable != null) {
+                                alProfileIcon.setDrawableByLayerId(R.id.ic_al_profile_pic, drawable);
+                                alProfile.setIcon(alProfileIcon);
+                            }
                         }
-                    }
-                });
+                    });
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Override
