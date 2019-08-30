@@ -586,8 +586,6 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                             }
                         }
                     }
-                    recordsData.putAll(skillMap);
-                    recordsData.putAll(searchMap);
                     //TODO calculated salary here
                     Number mentorAskedSalary = (Number) selectedMentor.get("salary");
 
@@ -613,6 +611,9 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                         salary = salary.intValue() + penalty.intValue();
                     }
                     skillMap.put("salary", salary);
+
+                    recordsData.putAll(skillMap);
+                    recordsData.putAll(searchMap);
 
                     recordsData.put("creation", FieldValue.serverTimestamp());
                     recordsData.put("skill_uid", selectedMentor.getId());
@@ -1641,7 +1642,8 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
         Number salary = mentorAskedSalary.floatValue() * 0.25 + ((mentorAskedSalary.floatValue() - (mentorAskedSalary.floatValue() * 0.25)) /
                 (dbsplit.length)) * localsplit.length;
 
-        //Number salary = (Number) selectedMentor.get("salary");
+        //Number salary = DumeUtils.getCalculatedSalary(mentorAskedSalary, searchDataStore.getPackageName(), dbQueryList);
+
         Number penalty = (Number) searchDataStore.getDocumentSnapshot().get("penalty");
         if (penalty != null && penalty.intValue() != 0) {
             salary = salary.intValue() + penalty.intValue();

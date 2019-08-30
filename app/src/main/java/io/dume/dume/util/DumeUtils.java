@@ -826,6 +826,28 @@ public class DumeUtils {
         }
     }
 
+    public static Number getCalculatedSalary(Number mentorAskedSalary, String dbPackageName,  List<String> dbQueryList){
+        //adding if not found in previous records
+        //TODO calculated salary
+        //getting the subject array string
+        SearchDataStore searchDataStore = SearchDataStore.getInstance();
+        int threshold = dbPackageName.equals(SearchDataStore.DUME_GANG) ? 4 : 3;
+        List<String> localQueryList = searchDataStore.getQueryList();
+
+        String localSB = localQueryList.get(localQueryList.size() - threshold);
+        String dbSB = dbQueryList.get(dbQueryList.size() - threshold);
+
+        String localtrim = localSB.replaceAll("\\s", "");
+        String dbtrim = dbSB.replaceAll("\\s", "");
+
+        String[] localsplit = localtrim.split(",");
+        String[] dbsplit = dbtrim.split(",");
+
+        Number calculatedSalary = mentorAskedSalary.floatValue() * 0.25 + ((mentorAskedSalary.floatValue() - (mentorAskedSalary.floatValue() * 0.25)) /
+                (dbsplit.length)) * localsplit.length;
+        return calculatedSalary;
+    }
+
 
 }
 

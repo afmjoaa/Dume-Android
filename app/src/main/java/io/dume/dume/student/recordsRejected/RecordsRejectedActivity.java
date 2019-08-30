@@ -280,10 +280,18 @@ public class RecordsRejectedActivity extends CustomStuAppCompatActivity implemen
             mentorName = spMap.get("first_name") + " " + spMap.get("last_name");
             mentorDpUrl = (String) spMap.get("avatar");
             Map<String, Object> bal = (Map<String, Object>) spMap.get("self_rating");
-            mentorRating = Float.parseFloat((String) bal.get("star_rating"));
+            if(bal != null){
+                mentorRating = Float.parseFloat((String) Objects.requireNonNull(bal.get("star_rating")));
+            }else {
+                mentorRating = 5.0f;
+            }
             Map<String, Object> forMap = (Map<String, Object>) documentData.get("for_whom");
             Map<String, Object> shMap = (Map<String, Object>) forMap.get("request_sr");
-            studentRating = Float.parseFloat((String) shMap.get("star_rating"));
+            if(shMap!= null){
+                studentRating = Float.parseFloat((String) Objects.requireNonNull(shMap.get("star_rating")));
+            }else {
+                studentRating = 5.0f;
+            }
             studentName = (String) forMap.get("stu_name");
             studentDpUrl = (String) forMap.get("request_avatar");
             salaryInDemand = String.valueOf((Number) documentData.get("salary"));
@@ -301,7 +309,7 @@ public class RecordsRejectedActivity extends CustomStuAppCompatActivity implemen
             }else if(DumeUtils.TEACHER.equals(rejected_by) || DumeUtils.BOOTCAMP.equals(rejected_by)) {
                 rejectedByBtn.setText(String.format("Rejected By : %s", mentorName));
             }else{
-                rejectedByBtn.setText(String.format("Rejected By : Dume(For Inactivity)", mentorName));
+                rejectedByBtn.setText("Rejected By : Dume(For Inactivity)");
             }
 
             mentorNameTV.setText(record.getMentorName());
