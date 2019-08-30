@@ -71,7 +71,9 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.hanks.htextview.scale.ScaleTextView;
 import com.tomergoldst.tooltips.ToolTipsManager;
 import com.transitionseverywhere.Fade;
@@ -1565,7 +1567,11 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         try {
             it = Integer.parseInt(unreadMsg);
         } catch (NumberFormatException e) {
-            it = 0;
+            FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+            FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+            if(currentUser!= null){
+                FirebaseFirestore.getInstance().collection("users/mentors/mentor_profile").document(currentUser.getUid()).update("unread_msg", "0");
+            }
             e.printStackTrace();
         }
         updateChatBadge(it);

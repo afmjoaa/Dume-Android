@@ -627,6 +627,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
                     recordsData.put("s_show_status", true);
                     recordsData.put("rejected_by", DumeUtils.TEACHER);
                     recordsData.put("payment_added", false);
+                    recordsData.put("payment_given", false);
                     List<String> participants = new ArrayList<>();
                     participants.add((String) skillMap.get("mentor_uid"));
                     participants.add((String) searchDataStore.getUserUid());
