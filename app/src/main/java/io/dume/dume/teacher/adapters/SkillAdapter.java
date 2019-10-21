@@ -761,9 +761,13 @@ public class SkillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 splitMainSsss = mainSsss.split("\\s*(=>|,)\\s*");
             }
             for (String splited : splitMainSsss) {
-                likes = likes + Integer.parseInt(skillList.get(i).getLikes().get(splited).toString());
-                dislikes = dislikes + Integer.parseInt(skillList.get(i).getDislikes().get(splited).toString());
-
+                try{
+                    likes = likes + Integer.parseInt(skillList.get(i).getLikes().get(splited).toString());
+                    dislikes = dislikes + Integer.parseInt(skillList.get(i).getDislikes().get(splited).toString());
+                }catch (Exception e){
+                    likes = 0;
+                    dislikes = 0;
+                }
             }
             myViewHolder.likeTV.setText((likes - splitMainSsss.length) + " likes");
             likes = 0;

@@ -1263,8 +1263,22 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
                     }
                     paymentDialog.setCancelable(false);
                     paymentDialog.setCanceledOnTouchOutside(false);
-                    if (!buttonActive.isChecked()) {
+                    if (buttonActive.isChecked()) {
                         buttonInActive.setChecked(true);
+                    }
+                    //make account_active false and all skill status false while keeping track of skill previous status...
+                    //then in the processPayment make account_active and skill back to previous status
+                    userName.setText(o1 + " " + o + "- Inactive");
+                    buttonActive.setCompoundDrawablesWithIntrinsicBounds(R.drawable.state_active_inactive, 0, 0, 0);
+                    buttonInActive.setCompoundDrawablesWithIntrinsicBounds(R.drawable.state_inactive_active, 0, 0, 0);
+                    boolean accountActive = (boolean) teacherDataStore.getDocumentSnapshot().get("account_active");
+                    if (accountActive) {
+                        switchStatus(false);
+                    } else {
+                        Toast toast = Toast.makeText(context, "Your account status is inactive. While you are inactive your skills are excluded from Dume queries...", Toast.LENGTH_LONG);
+                        TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
+                        if (v != null) v.setGravity(Gravity.CENTER);
+                        toast.show();
                     }
                 } else {
                     paymentDialog.setCancelable(true);
