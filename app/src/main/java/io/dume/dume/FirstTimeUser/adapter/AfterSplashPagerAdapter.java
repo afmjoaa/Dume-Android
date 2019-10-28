@@ -1,4 +1,4 @@
-package io.dume.dume.afterSplashTrp.adapter;
+package io.dume.dume.FirstTimeUser.adapter;
 
 
 import android.content.Context;

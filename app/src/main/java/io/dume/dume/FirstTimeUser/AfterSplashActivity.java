@@ -1,4 +1,4 @@
-package io.dume.dume.afterSplashTrp;
+package io.dume.dume.FirstTimeUser;
 
 import android.Manifest;
 import android.content.Intent;
@@ -18,8 +18,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import io.dume.dume.R;
-import io.dume.dume.afterSplashTrp.adapter.AfterSplashPagerAdapter;
-import io.dume.dume.afterSplashTrp.adapter.DemoCardFragment;
+import io.dume.dume.FirstTimeUser.adapter.AfterSplashPagerAdapter;
+import io.dume.dume.FirstTimeUser.adapter.DemoCardFragment;
 import io.dume.dume.auth.auth.AuthActivity;
 import li.yohan.parallax.ParallaxViewPager;
 import me.relex.circleindicator.CircleIndicator;

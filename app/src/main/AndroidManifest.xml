@@ -9,8 +9,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.READ_CONTACTS" />
-    <!--<uses-permission android:name="android.permission.RECEIVE_SMS" />-->
+    <uses-permission android:name="android.permission.READ_CONTACTS" /> <!-- <uses-permission android:name="android.permission.RECEIVE_SMS" /> -->
     <uses-permission android:name="android.permission.READ_PHONE_NUMBERS" />
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
@@ -29,6 +28,8 @@
         android:roundIcon="@mipmap/icon_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".FirstTimeUser.PermissionActivity"></activity>
+        <activity android:name=".FirstTimeUser.RoleChooserActivity" />
         <activity android:name=".common.nexuspay.NexusPay" />
         <activity android:name=".common.bkash_otp.BkashOTP" />
         <activity android:name=".common.bkash_transection.BkashTransectionActivity" />
@@ -69,7 +70,7 @@
         <activity android:name=".student.homePage.StudentActivity" />
         <activity
             android:name=".auth.auth.AuthActivity"
-            android:theme="@style/LoginTheme"    />
+            android:theme="@style/LoginTheme" />
         <activity
             android:name=".auth.code_verification.PhoneVerificationActivity"
             android:theme="@style/MyStyle" />
@@ -189,8 +190,8 @@
         <activity
             android:name=".student.searchResult.SearchResultActivity"
             android:label=""
-            android:windowSoftInputMode="stateHidden|adjustResize"
-            android:theme="@style/AppTheme.NoActionBar.transparent" />
+            android:theme="@style/AppTheme.NoActionBar.transparent"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".student.searchLoading.SearchLoadingActivity"
             android:label=""
@@ -254,7 +255,7 @@
             android:label="@string/title_activity_contact"
             android:theme="@style/AppTheme.NoActionBar.transparent.testing" />
         <activity
-            android:name=".afterSplashTrp.AfterSplashActivity"
+            android:name=".FirstTimeUser.AfterSplashActivity"
             android:label="@string/title_activity_after_splash"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/permission_one"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:paddingBottom="100dp">
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="6dp"
+            android:text="@string/greetings"
+            android:textAlignment="center"
+            android:textAllCaps="false"
+            android:textColor="@color/black"
+            android:gravity="center"
+            android:textSize="18sp"
+            app:fontFamily="@font/cairo_regular" />
+
+
+
+        <Button
+            android:id="@+id/asTeacher"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/round_button"
+            android:text="As a Teacher"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:layout_below="@id/tvTitle"
+            android:onClick="onClick"
+            app:fontFamily="@font/cairo_regular" />
+
+        <LinearLayout
+            android:id="@+id/role_divider"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:layout_below="@id/asTeacher">
+
+            <View
+                android:layout_width="150dp"
+                android:layout_height="1dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:background="@color/textColorSecondary" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Or"
+                android:textColor="@color/textColorPrimary"
+                android:textSize="11sp"
+                app:fontFamily="@font/cairo_regular" />
+
+            <View
+                android:layout_width="150dp"
+                android:layout_height="1dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:background="@color/textColorSecondary" />
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/asStudent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/round_button"
+            android:text="As a Student"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:onClick="onClick"
+            app:fontFamily="@font/cairo_regular"
+            android:layout_below="@id/role_divider"
+            />
+
+    </RelativeLayout>
+
+</LinearLayout>
