@@ -60,14 +60,23 @@ public class DemoCardFragment extends Fragment
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.trp_fragment_after_splash_cardview, container, false);
-        TextView tvTitle = (TextView) v.findViewById(R.id.tvTitle);
-        TextView tvDescription = (TextView) v.findViewById(R.id.tvDescription);
-        ImageView afterSplashImageView = v.findViewById(R.id.after_splash_imageview);
-        tvTitle.setText(title);
-        tvDescription.setText(description);
-        afterSplashImageView.setImageResource(imageSrc);
-        return v;
+        if(id ==0){
+            View v = inflater.inflate(R.layout.select_role, container, false);
+            /*TextView tvTitle = (TextView) v.findViewById(R.id.tvTitle);
+            TextView tvDescription = (TextView) v.findViewById(R.id.tvDescription);
+            tvTitle.setText(title);
+            tvDescription.setText(description);*/
+            return v;
+        }else{
+            View v = inflater.inflate(R.layout.trp_fragment_after_splash_cardview, container, false);
+            TextView tvTitle = (TextView) v.findViewById(R.id.tvTitle);
+            TextView tvDescription = (TextView) v.findViewById(R.id.tvDescription);
+            ImageView afterSplashImageView = v.findViewById(R.id.after_splash_imageview);
+            tvTitle.setText(title);
+            tvDescription.setText(description);
+            afterSplashImageView.setImageResource(imageSrc);
+            return v;
+        }
     }
 
     @Override
@@ -78,19 +87,10 @@ public class DemoCardFragment extends Fragment
             if(myMainActivity!= null){
                 switch (id){
                     case 0:
-                        myMainActivity.afterSplashBtn.setText("Next");
+                        myMainActivity.afterSplashBtn.setVisibility(View.GONE);
                         break;
                     case 1:
-                        myMainActivity.afterSplashBtn.setText("Next");
-                        break;
-                    case 2:
-                        myMainActivity.afterSplashBtn.setText("Accept & continue");
-                        break;
-                    case 3:
-                        myMainActivity.afterSplashBtn.setText("Next");
-                        break;
-                    case 4:
-                        myMainActivity.afterSplashBtn.setText("Start dume");
+                        myMainActivity.afterSplashBtn.setVisibility(View.VISIBLE);
                         break;
                 }
             }

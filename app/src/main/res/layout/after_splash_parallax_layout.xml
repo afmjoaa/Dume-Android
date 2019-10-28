@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:fitsSystemWindows="true"
-    android:background="@drawable/black_bg"
+    android:background="@drawable/white_bg"
     android:layout_height="match_parent">
 
 
@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
-        android:background="@drawable/black_bg"
+        android:background="@drawable/white_bg"
         app:speedRatio=".5" />
 
     <TextView
@@ -47,7 +47,9 @@
         android:layout_marginRight="40dp"
         android:layout_marginBottom="60dp"
         android:background="@drawable/round_button"
-        android:text="Next"
+        app:fontFamily="@font/cairo_regular"
+        android:textAllCaps="false"
+        android:text="Accept &amp; Continue"
         android:textColor="@color/white" />
 
     <TextView
@@ -55,11 +57,11 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:text="@string/agree_terms"
-        android:textColor="@color/white"
+        android:textColor="@color/black"
         android:layout_marginBottom="34dp"
         android:layout_alignParentBottom="true"
-        app:fontFamily="@font/cairo_extralight"
-        android:textSize="10sp" />
+        app:fontFamily="@font/cairo_regular"
+        android:textSize="11sp" />
 
 </RelativeLayout>
 

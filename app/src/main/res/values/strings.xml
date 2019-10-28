@@ -752,19 +752,13 @@ provided.Tap salary for details.  </string>
 
 
     <string-array name="after_splash_title">
-        <item>Find mentor anytime and anywhere</item>
-        <item>Real time service for student and mentor</item>
-        <item>Allow Dume location, phone state, &amp; storage permission</item>
-        <item>Choose between Student, Mentor or Boot-camp profile</item>
-        <item>Search between Coaching Service, Monthly Tutor or Weekly Tutor package</item>
+        <item>Welcome to dume tuition app.</item>
+        <item>Allow location permission</item>
     </string-array>
 
     <string-array name="after_splash_data">
-        <item>Welcome to Dume platform.It\'s a full featured skill share app of all category and type.</item>
-        <item><![CDATA[Know something better then other!! Start sharing and earn money.Don\'t have anything to share don\'t worry start taking dume and be the best at what you do.]]></item>
-        <item><![CDATA[Recommendation will be presented based on your location, phone call so that you may call your mentor/student & write to storage so that we can save search history.]]></item>
-        <item>Select which category suite you best and build your profile.You can switch profile anytime as you wish.</item>
-        <item>In simple and short Coaching Service is coaching center whereas Monthly Tutor is monthly tuition and Weekly Tutor is weekly.</item>
+        <item>Please select how you want to use the app </item>
+        <item>Location permission is needed as we use Google map to build the UI and search mentor/student.</item>
     </string-array>
     <string name="title_activity_boot_camp_add">Start Boot Camp</string>
     <string name="title_activity_student_addvertise">Enhance your skill</string>

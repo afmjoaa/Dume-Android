@@ -258,6 +258,13 @@ public class GeoQuery {
                 Query firestoreQuery = collectionReference.orderBy("g").startAt(query.getStartValue()).endAt(query.getEndValue())
                         .whereEqualTo("common_query_str", startcode);
 
+
+                //testing here
+                /*Query firestoreQuery = collectionReference.orderBy("g").startAt(query.getStartValue()).endAt(query.getEndValue())
+                        .whereArrayContains("common_query_str", startcode);
+                */
+                //testing finishes here
+
                 //can be customized as you want here
                 ListenerRegistration childAddedListener = firestoreQuery.addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override

@@ -1268,7 +1268,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
                     }
                     //make account_active false and all skill status false while keeping track of skill previous status...
                     //then in the processPayment make account_active and skill back to previous status
-                    userName.setText(o1 + " " + o + "- Inactive");
+                    //userName.setText(o1 + " " + o + "- Inactive");
                     buttonActive.setCompoundDrawablesWithIntrinsicBounds(R.drawable.state_active_inactive, 0, 0, 0);
                     buttonInActive.setCompoundDrawablesWithIntrinsicBounds(R.drawable.state_inactive_active, 0, 0, 0);
                     boolean accountActive = (boolean) teacherDataStore.getDocumentSnapshot().get("account_active");
@@ -1286,7 +1286,6 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
 
                 }
             }
-
         }
 
 

@@ -12,9 +12,6 @@ public class AfterSplashPagerAdapter extends FragmentStatePagerAdapter {
 
     public static final int ID_DEFAULT = 0;
     public static final int ID_STYLED = 1;
-    public static final int ID_CUSTOM_LAYOUT = 2;
-    public static final int ID_CUSTOM_VIEW_HOLDER = 3;
-    public static final int ID_CUSTOM_CONTENT = 4;
 
     private Context context;
 
@@ -48,27 +45,12 @@ public class AfterSplashPagerAdapter extends FragmentStatePagerAdapter {
                 description = descriptionArr[1];
                 imageSrc= imageIcons[1];
                 break;
-            case ID_CUSTOM_LAYOUT:
-                title = titleArr[2];
-                description = descriptionArr[2];
-                imageSrc= imageIcons[2];
-                break;
-            case ID_CUSTOM_VIEW_HOLDER:
-                title = titleArr[3];
-                description = descriptionArr[3];
-                imageSrc= imageIcons[3];
-                break;
-            case ID_CUSTOM_CONTENT:
-                title = titleArr[4];
-                description = descriptionArr[4];
-                imageSrc= imageIcons[4];
-                break;
         }
         return DemoCardFragment.newInstance(position, title, description, imageSrc);
     }
 
     @Override
     public int getCount() {
-        return 5;
+        return 2;
     }
 }
