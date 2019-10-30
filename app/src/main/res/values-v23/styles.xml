@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources >
+
+    <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="colorPrimary">@color/colorDeepIcon</item>
+        <item name="colorPrimaryDark">#00ffffff</item>
+        <item name="android:windowActionBarOverlay">true</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:fontFamily">@font/cairo_regular</item>
+    </style>
+
+
+    <style name="AppTheme.NoActionBar.transparent" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="colorPrimary">@color/colorDeepIcon</item>
+        <item name="colorPrimaryDark">#cac8c8</item>
+        <item name="android:windowActionBarOverlay">true</item>
+        <item name="android:windowActivityTransitions">true</item>
+        <item name="android:windowTranslucentStatus">false</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:fontFamily">@font/cairo_regular</item>
+
+    </style>
+</resources>

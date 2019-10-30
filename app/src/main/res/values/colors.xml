@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#ECE9E0</color>
     <color name="colorPrimaryDark">#000000</color>
-    <color name="colorAccent">#108174</color>
+    <color name="colorAccent">#0086c3</color>
     <color name="colorNarvik">#ECE9E0</color>
     <color name="colorDarkBlue">#2A2E43</color>
     <color name="colorWhite">#ffffff</color>
@@ -143,4 +143,11 @@
     <color name="payment_green_one">#88d68c</color>
     <color name="payment_item_bg">#e9f8ff</color>
     <color name="payment_wage">#80deea</color>
+
+    <!--new color pallets here-->
+    <color name="ButtonColor">#039be5</color>
+    <color name="ButtonAfterPressedColor">#0086c3</color>
+    <color name="ButtonPressedColor">#01579b</color>
+    <color name="CircularIndicator">#607d8b</color>
+
 </resources>

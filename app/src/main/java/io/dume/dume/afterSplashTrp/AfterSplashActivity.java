@@ -21,13 +21,14 @@ import io.dume.dume.R;
 import io.dume.dume.afterSplashTrp.adapter.AfterSplashPagerAdapter;
 import io.dume.dume.afterSplashTrp.adapter.DemoCardFragment;
 import io.dume.dume.auth.auth.AuthActivity;
+import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
 import li.yohan.parallax.ParallaxViewPager;
 import me.relex.circleindicator.CircleIndicator;
 
 import static io.dume.dume.util.DumeUtils.setDarkStatusBarIcon;
 import static io.dume.dume.util.DumeUtils.settingStatusBarTransparent;
 
-public class AfterSplashActivity extends AppCompatActivity implements DemoCardFragment.OnActionListener {
+public class AfterSplashActivity extends CustomStuAppCompatActivity implements DemoCardFragment.OnActionListener {
 
     private static final String TAG = "Bal";
     private ParallaxViewPager mPager;
@@ -49,8 +50,9 @@ public class AfterSplashActivity extends AppCompatActivity implements DemoCardFr
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.after_splash_parallax_layout);
-        setDarkStatusBarIcon(this);
-        settingStatusBarTransparent(this);
+        setActivityContext(this, 3636);
+        settingStatusBarTransparent();
+        setDarkStatusBarIcon();
         //makeFullScreen(this);
         mPager = findViewById(R.id.pager);
         mPager.setAdapter(new AfterSplashPagerAdapter(this, getSupportFragmentManager()));

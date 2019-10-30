@@ -62,10 +62,10 @@ public class DemoCardFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if(id ==0){
             View v = inflater.inflate(R.layout.select_role, container, false);
-            /*TextView tvTitle = (TextView) v.findViewById(R.id.tvTitle);
+            TextView tvTitle = (TextView) v.findViewById(R.id.tvTitle);
             TextView tvDescription = (TextView) v.findViewById(R.id.tvDescription);
             tvTitle.setText(title);
-            tvDescription.setText(description);*/
+            tvDescription.setText(description);
             return v;
         }else{
             View v = inflater.inflate(R.layout.trp_fragment_after_splash_cardview, container, false);
