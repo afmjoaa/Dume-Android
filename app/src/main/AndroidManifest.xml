@@ -28,9 +28,16 @@
         android:roundIcon="@mipmap/icon_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".FirstTimeUser.PrivacyActivity"></activity>
-        <activity android:name=".FirstTimeUser.PermissionActivity" />
-        <activity android:name=".FirstTimeUser.RoleChooserActivity" />
+        <activity android:name=".firstTimeUser.NIDVerificationActivity"></activity>
+        <activity
+            android:name=".firstTimeUser.PrivacyActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".firstTimeUser.PermissionActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".firstTimeUser.RoleChooserActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".common.nexuspay.NexusPay" />
         <activity android:name=".common.bkash_otp.BkashOTP" />
         <activity android:name=".common.bkash_transection.BkashTransectionActivity" />
@@ -71,7 +78,7 @@
         <activity android:name=".student.homePage.StudentActivity" />
         <activity
             android:name=".auth.auth.AuthActivity"
-            android:theme="@style/LoginTheme" />
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".auth.code_verification.PhoneVerificationActivity"
             android:theme="@style/MyStyle" />
@@ -256,7 +263,7 @@
             android:label="@string/title_activity_contact"
             android:theme="@style/AppTheme.NoActionBar.transparent.testing" />
         <activity
-            android:name=".FirstTimeUser.AfterSplashActivity"
+            android:name=".firstTimeUser.AfterSplashActivity"
             android:label="@string/title_activity_after_splash"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity

@@ -8,8 +8,8 @@ import android.content.IntentFilter;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -39,7 +39,7 @@ public class PhoneVerificationActivity extends CustomStuAppCompatActivity implem
     private static final String TAG = "PhoneVerificationActivi";
     private PinEntryView pinEditText;
     private AppBarLayout appbar;
-    private FloatingActionButton fab;
+    private Button verifyButton;
     private TextView timerTextView;
     private Button resendButton;
     private DataStore dataStore;
@@ -49,6 +49,7 @@ public class PhoneVerificationActivity extends CustomStuAppCompatActivity implem
     private TextView editPhn;
     public static boolean isAlive;
     private BroadcastReceiver smsAutoVerfication;
+
 
     @Override
     protected void onStart() {
@@ -78,7 +79,7 @@ public class PhoneVerificationActivity extends CustomStuAppCompatActivity implem
                         char[] chars = smsCode.toCharArray();
                         pinEditText.setText(smsCode);
                         Log.w(TAG, "onReceive: Sms Code " + smsCode);
-                        fab.performClick();
+                        verifyButton.performClick();
                     }
 
                 }
@@ -94,7 +95,27 @@ public class PhoneVerificationActivity extends CustomStuAppCompatActivity implem
     public void init() {
         context = this;
         pinEditText.setOnClickListener(view -> appbar.setExpanded(false));
-        fab.setOnClickListener(view -> {
+        pinEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.toString().length() == 6) {
+                    verifyButton.setEnabled(true);
+                } else {
+                    verifyButton.setEnabled(false);
+                }
+            }
+        });
+        verifyButton.setOnClickListener(view -> {
             presenter.onPinConfirm(pinEditText.getText().toString());
         });
         resendButton.setOnClickListener(view -> {
@@ -118,7 +139,7 @@ public class PhoneVerificationActivity extends CustomStuAppCompatActivity implem
         detailsTextView = findViewById(R.id.detailsTxt);
         pinEditText = findViewById(R.id.pinEditTxt);
         appbar = findViewById(R.id.app_bar);
-        fab = findViewById(R.id.verifyFab);
+        verifyButton = findViewById(R.id.verifyFab);
         timerTextView = findViewById(R.id.timerTxt);
         resendButton = findViewById(R.id.resendButton);
         loadView = findViewById(R.id.loadView);

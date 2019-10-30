@@ -20,7 +20,9 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.telephony.TelephonyManager;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.SpannableString;
+import android.text.Spanned;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
@@ -29,6 +31,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,6 +45,7 @@ import io.dume.dume.auth.auth_final.AuthRegisterActivity;
 import io.dume.dume.auth.code_verification.PhoneVerificationActivity;
 import io.dume.dume.auth.social_init.SocialInitActivity;
 import io.dume.dume.customView.HorizontalLoadView;
+import io.dume.dume.firstTimeUser.NIDVerificationActivity;
 import io.dume.dume.obligation.foreignObli.PayActivity;
 import io.dume.dume.splash.FeaturedSliderAdapter;
 import io.dume.dume.student.homePage.HomePageActivity;
@@ -50,31 +54,19 @@ import io.dume.dume.teacher.homepage.TeacherActivtiy;
 import io.dume.dume.util.DumeUtils;
 
 
-public class AuthActivity extends CustomStuAppCompatActivity implements AuthContract.View, BottomNavigationView.OnNavigationItemSelectedListener, TextView.OnEditorActionListener, TextWatcher {
-    SliderLayout sliderLayout;
+public class AuthActivity extends CustomStuAppCompatActivity implements AuthContract.View, TextView.OnEditorActionListener, TextWatcher {
     AuthContract.Presenter presenter;
-    private String[] promoTextArray;
-    private BottomNavigationView bottomNavigationView;
     private EditText phoneEditText;
-    private Toolbar toolbar;
-    private CollapsingToolbarLayout collapsingToolbarLayout;
-    private AppBarLayout appBar;
-    private ActionBar actionBar;
-    private NestedScrollView scrollView;
-    private TextView countryCode;
-    private FloatingActionButton floatingButoon;
+    private Button floatingButoon;
     private TextView numberCounter;
     private static final String TAG = "AuthActivity";
-    private String[] changingTextArray;
-    private TextView changingTextView;
-    private TextView socialConnect;
     private Context context;
     private Typeface cairoRegular;
     private HorizontalLoadView loadView;
     private Intent fromIntent;
     private String fromIntentAction;
     private DataStore dataStore;
-    private boolean isAccountDefined = false;
+
     private int accountDefinedFlag = 0;
 
 
@@ -86,7 +78,6 @@ public class AuthActivity extends CustomStuAppCompatActivity implements AuthCont
         presenter = new AuthPresenter(this, this, new AuthModel(this, this));
         presenter.enqueue();
         dataStore = DataStore.getInstance();
-        socialConnect.setOnClickListener(view -> startActivity(new Intent(AuthActivity.this, SocialInitActivity.class)));
         presenter.setBundle();
         TelephonyManager tMgr = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
         if (ActivityCompat.checkSelfPermission(this,
@@ -113,131 +104,49 @@ public class AuthActivity extends CustomStuAppCompatActivity implements AuthCont
             @Override
             public void onDismissed(Snackbar snackbar, int event) {
                 floatingButoon.setClickable(true);
-                floatingButoon.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorAccent)));
+                floatingButoon.setEnabled(true);
             }
 
             @Override
             public void onShown(Snackbar snackbar) {
                 floatingButoon.setClickable(false);
-                floatingButoon.setBackgroundTintList(ColorStateList.valueOf(Color.GRAY));
+                floatingButoon.setEnabled(false);
             }
         });
     }
 
-    @Override
-    public boolean isAccountDefined() {
-        return isAccountDefined;
-    }
 
     @Override
     public void init() {
         context = this;
-        promoTextArray = getResources().getStringArray(R.array.promo_text_array);
-        changingTextArray = getResources().getStringArray(R.array.changing_text_array);
-        sliderLayout.setCustomIndicator(findViewById(R.id.page_indicator));
-        bottomNavigationView.setOnNavigationItemSelectedListener(this);
         phoneEditText.setOnEditorActionListener(this);
-        appBar.addOnOffsetChangedListener(new AppbarStateChangeListener() {
-            @Override
-            public void onStateChanged(AppBarLayout appBarLayout, State state) {
-                presenter.onAppBarStateChange(state);
-            }
-        });
-        phoneEditText.setOnClickListener(view -> appBar.setExpanded(false, true));
         floatingButoon.setOnClickListener(view -> presenter.onPhoneValidation(phoneEditText.getText().toString()));
         phoneEditText.addTextChangedListener(this);
         Typeface custom_font = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Medium.ttf");
         cairoRegular = Typeface.createFromAsset(getAssets(), "fonts/Cairo_Regular.ttf");
-
-        //changingTextView.setTypeface(custom_font);
-        //initializing sliderLayout
-        sliderLayout.addSlider(new FeaturedSliderAdapter(this).image(R.drawable.slide_background).
-                description(promoTextArray[0]));
-        sliderLayout.addSlider(new FeaturedSliderAdapter(this).image(R.drawable.slide_background).
-                description(promoTextArray[1]));
-        sliderLayout.addSlider(new FeaturedSliderAdapter(this).image(R.drawable.slide_background).
-                description(promoTextArray[2]));
-        sliderLayout.addSlider(new FeaturedSliderAdapter(this).image(R.drawable.slide_background).
-                description(promoTextArray[3]));
-        sliderLayout.addSlider(new FeaturedSliderAdapter(this).image(R.drawable.slide_background).
-                description(promoTextArray[4]));
-        sliderLayout.startAutoCycle(1000, 5000, true);
-
-        for (int i = 0; i < bottomNavigationView.getMenu().size(); i++) {
-            MenuItem item = bottomNavigationView.getMenu().getItem(i);
-            Menu menu = bottomNavigationView.getMenu();
-            if (item.getMenuInfo() != null) {
-                Log.w(TAG, "init: " + item.getMenuInfo());
-            } else Log.w(TAG, "init: null");
-            SpannableString spannableString = new SpannableString(item.getTitle());
-            spannableString.setSpan(cairoRegular, 0, item.getTitle().length(), 0);
-            item.setTitle(spannableString);
-        }
-        collapsingToolbarLayout.setExpandedTitleTypeface(cairoRegular);
-        collapsingToolbarLayout.setCollapsedTitleTypeface(cairoRegular);
+        Button button = findViewById(R.id.test);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), NIDVerificationActivity.class));
+            }
+        });
     }
 
     @Override
     public void initActionBar() {
-        setSupportActionBar(toolbar);
-        actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayShowTitleEnabled(false);
-        }
+
+
     }
 
     @Override
     public void findView() {
-        sliderLayout = findViewById(R.id.slidingLayout);
-        bottomNavigationView = findViewById(R.id.bottomNav);
         phoneEditText = findViewById(R.id.phoneNumberEditText);
-        collapsingToolbarLayout = findViewById(R.id.collapsing_toolbar);
-        appBar = findViewById(R.id.appbarLayout);
-        toolbar = findViewById(R.id.authToolbar);
-        scrollView = findViewById(R.id.scroll_view);
-        countryCode = findViewById(R.id.countryCode);
-        floatingButoon = findViewById(R.id.floating_button);
+        floatingButoon = findViewById(R.id.verify_phone);
         numberCounter = findViewById(R.id.phoneCount);
-        changingTextView = findViewById(R.id.changingText);
-        socialConnect = findViewById(R.id.socialConnect);
         loadView = findViewById(R.id.loadView);
-        bottomNavigationView.setItemIconTintList(getResources().getColorStateList(R.drawable.color_state_list_pre));
-        bottomNavigationView.setItemTextColor(getResources().getColorStateList(R.drawable.color_state_list_pre));
-
     }
 
-    @Override
-    public void onStudentSelected() {
-        changingTextView.setText(changingTextArray[0]);
-
-    }
-
-    @Override
-    public void onTeacherSelected() {
-        changingTextView.setText(changingTextArray[1]);
-
-    }
-
-    @Override
-    public void onBootcampSelected() {
-        changingTextView.setText(changingTextArray[2]);
-    }
-
-    @Override
-    public void onAppBarLayoutExpanded() {
-        toolbar.setVisibility(View.INVISIBLE);
-        //floatingButoon.hide();
-        collapsingToolbarLayout.setTitle("");
-        setDarkStatusBarIcon();
-    }
-
-    @Override
-    public void onAppBarLayoutCollapsed() {
-        toolbar.setVisibility(View.VISIBLE);
-        //floatingButoon.show();
-        collapsingToolbarLayout.setTitle("");
-        setLightStatusBarIcon();
-    }
 
     @Override
     public void showCount(String s) {
@@ -274,22 +183,6 @@ public class AuthActivity extends CustomStuAppCompatActivity implements AuthCont
     @Override
     public void goToRegesterActivity() {
         Intent intent = new Intent(this, AuthRegisterActivity.class);
-        //J
-        String accountMajor = null;
-        switch (bottomNavigationView.getSelectedItemId()) {
-            case R.id.student_nav:
-                accountMajor = DumeUtils.STUDENT;
-                break;
-            case R.id.teacher_nav:
-                accountMajor = DumeUtils.TEACHER;
-                break;
-            default:
-                accountMajor = DumeUtils.BOOTCAMP;
-                break;
-        }
-        dataStore.setAccountManjor(accountMajor);
-        dataStore.setBottomNavAccountMajor(true);
-
         startActivity(intent);
 
     }
@@ -318,7 +211,7 @@ public class AuthActivity extends CustomStuAppCompatActivity implements AuthCont
     public void showToast(String msg) {
         Toast toast = Toast.makeText(this, msg, Toast.LENGTH_SHORT);
         TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
-        if( v != null) v.setGravity(Gravity.CENTER);
+        if (v != null) v.setGravity(Gravity.CENTER);
         toast.show();
     }
 
@@ -328,23 +221,26 @@ public class AuthActivity extends CustomStuAppCompatActivity implements AuthCont
         phoneEditText.setText(dataStore.getPhoneNumber());
     }
 
+    @Override
+    public void enableVerifyButton() {
+        floatingButoon.setEnabled(true);
+
+
+    }
 
     @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        isAccountDefined = true;
-        bottomNavigationView.setItemIconTintList(getResources().getColorStateList(R.drawable.color_state_list));
-        bottomNavigationView.setItemTextColor(getResources().getColorStateList(R.drawable.color_state_list));
+    public void disableVerifyButton() {
+        floatingButoon.setEnabled(false);
+    }
 
-        switch (item.getItemId()) {
-            case R.id.bootcamp_nav:
-                showToast("Boot Camp Service is coming soon...");
-                bottomNavigationView.setSelectedItemId(R.id.teacher_nav);
-                return false;
-            default:
-                presenter.onBottomNavChange(item);
-                break;
-        }
-        return true;
+    @Override
+    public void sending() {
+        floatingButoon.setText("Code Sending...");
+    }
+
+    @Override
+    public void resetSending() {
+
     }
 
 
@@ -359,23 +255,16 @@ public class AuthActivity extends CustomStuAppCompatActivity implements AuthCont
 
     @Override
     public void onBackPressed() {
-        if (appBar != null) {
-            appBar.setExpanded(true);
-        }
         super.onBackPressed();
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == 16908332 && appBar != null) {
-            appBar.setExpanded(true);
-        }
         return super.onOptionsItemSelected(item);
     }
 
     @Override
     public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-        Log.w(TAG, "beforeTextChanged: " + charSequence);
     }
 
     @Override
@@ -385,7 +274,6 @@ public class AuthActivity extends CustomStuAppCompatActivity implements AuthCont
 
     @Override
     public void afterTextChanged(Editable editable) {
-        Log.w(TAG, "afterTextChanged: " + editable.toString());
     }
 
     @Override
@@ -415,6 +303,7 @@ public class AuthActivity extends CustomStuAppCompatActivity implements AuthCont
         startActivity(new Intent(this, PayActivity.class));
         finish();
     }
+
 }
 
 

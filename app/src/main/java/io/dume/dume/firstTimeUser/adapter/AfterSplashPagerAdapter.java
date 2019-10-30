@@ -1,4 +1,4 @@
-package io.dume.dume.FirstTimeUser.adapter;
+package io.dume.dume.firstTimeUser.adapter;
 
 
 import android.content.Context;

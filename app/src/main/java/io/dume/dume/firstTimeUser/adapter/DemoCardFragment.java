@@ -1,4 +1,4 @@
-package io.dume.dume.FirstTimeUser.adapter;
+package io.dume.dume.firstTimeUser.adapter;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import carbon.widget.ImageView;
 import io.dume.dume.R;
-import io.dume.dume.FirstTimeUser.AfterSplashActivity;
+import io.dume.dume.firstTimeUser.AfterSplashActivity;
 
 public class DemoCardFragment extends Fragment
         implements View.OnClickListener {

@@ -1,39 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/parent_coor_layout"
     android:layout_width="match_parent"
-    android:fitsSystemWindows="true"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
 
-
-
-
-    <Button
-        android:id="@+id/after_splash_start_btn"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginLeft="40dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginRight="40dp"
-        android:layout_marginBottom="60dp"
-        android:background="@drawable/round_button_before_pressed"
-        app:fontFamily="@font/cairo_regular"
-        android:textAllCaps="false"
-        android:text="@string/accept_continue"
-        android:textColor="@color/white"
-        android:onClick="onClick"/>
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:text="@string/agree_terms"
-        android:textColor="@color/black"
-        android:layout_marginBottom="34dp"
-        android:layout_alignParentBottom="true"
-        app:fontFamily="@font/cairo_regular"
-        android:textSize="11sp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="150dp"
+            android:orientation="vertical">
 
-</RelativeLayout>
 
+            <carbon.widget.ImageView
+                android:id="@+id/after_splash_imageview"
+                android:layout_width="210dp"
+                android:layout_height="150dp"
+                android:layout_gravity="center"
+                android:layout_margin="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="6dp"
+                android:src="@drawable/permission_bg" />
+
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="6dp"
+                android:text="Allow location permission"
+                android:textAlignment="center"
+                android:textAllCaps="false"
+                android:textColor="@color/black"
+                android:textSize="22sp"
+                app:fontFamily="@font/cairo_regular" />
+
+            <TextView
+                android:id="@+id/tvDescription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvTitle"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="10dp"
+                android:text="@string/lorem_para"
+                android:textAlignment="center"
+                android:textAllCaps="false"
+                android:textColor="@color/textColorPrimary"
+                android:textSize="16sp"
+                app:fontFamily="@font/cairo_light" />
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/after_splash_start_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginBottom="60dp"
+            android:background="@drawable/round_button_before_pressed"
+            android:onClick="onClick"
+            android:text="Next"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            app:fontFamily="@font/cairo_regular" />
+
+
+    </RelativeLayout>
+
+</android.support.design.widget.CoordinatorLayout>

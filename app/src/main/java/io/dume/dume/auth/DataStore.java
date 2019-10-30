@@ -19,9 +19,6 @@ public class DataStore implements Serializable {
     private String lastName = null;
     private String accountManjor = "student";
 
-
-
-
     private boolean isBottomNavAccountMajor = false;
     private String phoneNumber = null;
     public static transient PhoneAuthProvider.ForceResendingToken resendingToken = null;

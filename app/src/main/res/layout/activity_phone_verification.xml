@@ -5,6 +5,7 @@
     android:id="@+id/parent_coor_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/white_bg"
     tools:context=".auth.code_verification.PhoneVerificationActivity">
 
     <android.support.design.widget.AppBarLayout
@@ -58,7 +59,7 @@
         android:translationY="2dp"
         android:visibility="gone"
         app:layout_anchor="@id/app_bar"
-        app:layout_anchorGravity="bottom"/>
+        app:layout_anchorGravity="bottom" />
 
 
     <android.support.v4.widget.NestedScrollView
@@ -117,55 +118,58 @@
                 app:numDigits="6"
                 app:pinAccentColor="@color/colorAccent" />
 
+
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:orientation="vertical">
 
-                <LinearLayout
+                <Button
+                    android:id="@+id/resendButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/round_btn_joaa"
+                    android:text="Resend Code"
+                    android:textAllCaps="false"
+                    android:textColor="@color/blue"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/timerTxt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:layout_gravity="center"
+                    android:text="Resend Code in 12 Second"
+                    android:visibility="visible" />
 
-                    <Button
-                        android:id="@+id/resendButton"
-                        style="@style/Base.Widget.AppCompat.Button.Borderless"
-                        android:layout_width="120dp"
-                        android:layout_height="40dp"
-                        android:background="@drawable/round_btn_joaa"
-                        android:text="Resend Code"
-                        android:visibility="gone" />
-
-                    <TextView
-                        android:id="@+id/timerTxt"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Resend Code in 12 Second"
-                        android:visibility="visible" />
-
-                    <TextView
-                        android:id="@+id/editPhn"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:onClick="onPhoneEdit"
-                        android:text="Edit Phone Number"
-
-                        android:textColor="@color/colorAccent" />
-                </LinearLayout>
-
-                <android.support.design.widget.FloatingActionButton
+                <Button
                     android:id="@+id/verifyFab"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom|end"
                     android:layout_margin="10dp"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:gravity="end"
-                    app:rippleColor="@color/colorDarkAzure"
-                    app:srcCompat="@drawable/ic_arrow_forward_white_24dp" />
+                    android:background="@drawable/round_button_before_pressed"
+                    android:enabled="false"
+                    android:text="Verify"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/editPhn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:onClick="onPhoneEdit"
+                    android:text="Edit Phone Number"
+                    android:textColor="@color/colorAccent" />
             </LinearLayout>
+
+
         </LinearLayout>
 
 

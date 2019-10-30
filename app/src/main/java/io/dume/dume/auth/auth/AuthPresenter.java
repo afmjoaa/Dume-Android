@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.InputFilter;
+import android.text.Spanned;
 import android.util.Log;
 import android.view.MenuItem;
 
@@ -45,31 +47,13 @@ public class AuthPresenter implements AuthContract.Presenter {
 
     @Override
     public void onPhoneTextChange(String text) {
-        if (text.length() > 0) {
-            view.showCount(String.valueOf(text.length()));
-        } else view.hideCount();
+        if (text.length() == 11) {
+            view.enableVerifyButton();
+        } else view.disableVerifyButton();
+
+
     }
 
-    @Override
-    public void onBottomNavChange(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.student_nav:
-                dataStore.setAccountManjor(DataStore.STUDENT);
-                dataStore.setBottomNavAccountMajor(true);
-                view.onStudentSelected();
-                break;
-            case R.id.teacher_nav:
-                dataStore.setAccountManjor(DataStore.TEACHER);
-                dataStore.setBottomNavAccountMajor(true);
-                view.onTeacherSelected();
-                break;
-            case R.id.bootcamp_nav:
-                dataStore.setAccountManjor(DataStore.BOOTCAMP);
-                dataStore.setBottomNavAccountMajor(true);
-                view.onBootcampSelected();
-                break;
-        }
-    }
 
     @Override
     public void onPhoneValidation(String phoneNumber) {
@@ -86,13 +70,10 @@ public class AuthPresenter implements AuthContract.Presenter {
             view.onValidationFailed("Should be 11 Digits");
             view.hideProgress();
             return;
-        } else if (!view.isAccountDefined()) {
-            DumeUtils.hideKeyboard((Activity) context);
-            view.showToast("Are you Teacher or Student? Choose One");
-            view.hideProgress();
-            return;
         }
-
+        view.disableVerifyButton();
+        view.sending();
+        DumeUtils.hideKeyboard((Activity) context);
         model.isExistingUser(phoneNumber, new AuthGlobalContract.OnExistingUserCallback() {
             @Override
             public void onStart() {
@@ -118,6 +99,9 @@ public class AuthPresenter implements AuthContract.Presenter {
                         view.hideProgress();
                         view.onValidationFailed(error);
                         view.showToast(error);
+                        view.enableVerifyButton();
+                        view.resetSending();
+
                     }
 
                     @Override
@@ -176,6 +160,9 @@ public class AuthPresenter implements AuthContract.Presenter {
                                 Log.w(TAG, "onFail: hiding dialog");
                                 view.hideProgress();
                                 view.showToast(exeption);
+                                view.enableVerifyButton();
+                                view.resetSending();
+
                             }
                         });
 
@@ -197,19 +184,10 @@ public class AuthPresenter implements AuthContract.Presenter {
                 Log.w(TAG, "onGpsError: hiding dialog");
                 view.hideProgress();
                 view.showToast(err);
+                view.enableVerifyButton();
+                view.resetSending();
             }
         });
-    }
-
-    @Override
-    public void onAppBarStateChange(AppbarStateChangeListener.State state) {
-        String appState = state.name();
-        if (appState == "EXPANDED") {
-            view.onAppBarLayoutExpanded();
-        }
-        if (appState == "COLLAPSED") {
-            view.onAppBarLayoutCollapsed();
-        }
     }
 
 
@@ -219,4 +197,6 @@ public class AuthPresenter implements AuthContract.Presenter {
             view.restoreData(dataStore);
         }*/
     }
+
+
 }

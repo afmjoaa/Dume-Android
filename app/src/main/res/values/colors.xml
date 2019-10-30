@@ -145,9 +145,10 @@
     <color name="payment_wage">#80deea</color>
 
     <!--new color pallets here-->
-    <color name="ButtonColor">#039be5</color>
+    <color name="ButtonColor">#368CF3</color>
     <color name="ButtonAfterPressedColor">#0086c3</color>
     <color name="ButtonPressedColor">#01579b</color>
+    <color name="ButtonDisableColor">#86C4F7</color>
     <color name="CircularIndicator">#607d8b</color>
 
 </resources>

@@ -9,8 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
-import io.dume.dume.FirstTimeUser.AfterSplashActivity;
-import io.dume.dume.FirstTimeUser.RoleChooserActivity;
+import io.dume.dume.firstTimeUser.RoleChooserActivity;
 import io.dume.dume.auth.AuthModel;
 import io.dume.dume.auth.auth.AuthActivity;
 import io.dume.dume.obligation.foreignObli.PayActivity;
