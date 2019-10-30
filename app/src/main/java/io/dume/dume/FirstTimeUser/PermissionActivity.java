@@ -40,9 +40,17 @@ public class PermissionActivity extends AppCompatActivity implements View.OnClic
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_permission);
-
         setupObjects();
         getLocationPermission();
+        if (checkPermissions()) {
+            editor.putBoolean("isShown", true);
+            editor.apply();
+            editor.commit();
+            startActivity(new Intent(getApplicationContext(), PrivacyActivity.class));
+
+        } else {
+            flush("Please grant the permissions");
+        }
 
 
     }

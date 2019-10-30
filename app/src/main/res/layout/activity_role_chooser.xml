@@ -50,6 +50,7 @@
         app:fontFamily="@font/cairo_regular"
         android:textAllCaps="false"
         android:text="As a Teacher"
+        android:onClick="onClick"
         android:textColor="@color/white" />
 
     <LinearLayout
@@ -95,6 +96,7 @@
         app:fontFamily="@font/cairo_regular"
         android:textAllCaps="false"
         android:text="As a Student"
+        android:onClick="onClick"
         android:textColor="@color/white" />
 
 
