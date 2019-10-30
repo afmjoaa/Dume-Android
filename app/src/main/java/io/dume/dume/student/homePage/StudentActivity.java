@@ -1,42 +1,25 @@
 package io.dume.dume.student.homePage;
 
-import android.app.Activity;
-import android.app.Application;
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.telecom.GatewayInfo;
 import android.util.Log;
 import android.view.View;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import io.dume.dume.R;
-import io.dume.dume.afterSplashTrp.AfterSplashActivity;
-import io.dume.dume.auth.auth.AuthActivity;
-import io.dume.dume.common.chatActivity.ChatActivity;
 import io.dume.dume.student.grabingInfo.GrabingInfoActivity;
-import io.dume.dume.student.grabingPackage.GrabingPackageActivity;
-import io.dume.dume.student.recordsAccepted.RecordsAcceptedActivity;
-import io.dume.dume.student.recordsCompleted.RecordsCompletedActivity;
-import io.dume.dume.student.recordsCurrent.RecordsCurrentActivity;
-import io.dume.dume.student.recordsPending.RecordsPendingActivity;
-import io.dume.dume.student.recordsRejected.RecordsRejectedActivity;
 import io.dume.dume.student.searchLoading.SearchLoadingActivity;
 import io.dume.dume.student.searchResult.SearchResultActivity;
 import io.dume.dume.teacher.crudskill.CrudSkillActivity;

@@ -1,15 +1,15 @@
-package io.dume.dume.afterSplashTrp;
+package io.dume.dume.FirstTimeUser;
 
 import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -18,21 +18,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import io.dume.dume.R;
-import io.dume.dume.afterSplashTrp.adapter.AfterSplashPagerAdapter;
-import io.dume.dume.afterSplashTrp.adapter.DemoCardFragment;
 import io.dume.dume.auth.auth.AuthActivity;
-import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
 import li.yohan.parallax.ParallaxViewPager;
-import me.relex.circleindicator.CircleIndicator;
 
-import static io.dume.dume.util.DumeUtils.setDarkStatusBarIcon;
-import static io.dume.dume.util.DumeUtils.settingStatusBarTransparent;
-
-public class AfterSplashActivity extends CustomStuAppCompatActivity implements DemoCardFragment.OnActionListener {
-
+public class PermissionActivity extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = "Bal";
-    private ParallaxViewPager mPager;
-    private ViewPager pager;
+
     public Button afterSplashBtn;
     private static Boolean MLOCATIONPERMISSIONGRANTED = false;
     private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
@@ -45,65 +36,20 @@ public class AfterSplashActivity extends CustomStuAppCompatActivity implements D
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
     private static final String MY_PREFS_NAME = "welcome";
     private SharedPreferences.Editor editor;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.after_splash_parallax_layout);
-        setActivityContext(this, 3636);
-        settingStatusBarTransparent();
-        setDarkStatusBarIcon();
-        //makeFullScreen(this);
-        mPager = findViewById(R.id.pager);
-        mPager.setAdapter(new AfterSplashPagerAdapter(this, getSupportFragmentManager()));
-        CircleIndicator indicator = findViewById(R.id.indicator);
-        afterSplashBtn = findViewById(R.id.after_splash_start_btn);
-        indicator.setViewPager(mPager);
+        setContentView(R.layout.activity_permission);
+
+        setupObjects();
+        getLocationPermission();
+
+
+    }
+
+    private void setupObjects(){
         editor = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE).edit();
-
-        afterSplashBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Button button = (Button) view;
-               /*button.setEnabled(false);
-                button.setBackgroundColor(getResources().getColor(R.color.green));*/
-                switch (mPager.getCurrentItem()) {
-                    case 0:
-                        mPager.setCurrentItem(mPager.getCurrentItem() + 1, true);
-                        break;
-                    case 1:
-                        mPager.setCurrentItem(mPager.getCurrentItem() + 1, true);
-                        break;
-                    case 2:
-                        getLocationPermission();
-                        break;
-                    case 3:
-                        mPager.setCurrentItem(mPager.getCurrentItem() + 1, true);
-                        break;
-                    case 4:
-                        if (checkPermissions()) {
-                            editor.putBoolean("isShown", true);
-                            editor.apply();
-                            startActivity(new Intent(getApplicationContext(), AuthActivity.class));
-                            AfterSplashActivity.this.finish();
-                        } else {
-                            flush("Please grant the permissions");
-                            //getLocationPermission();
-                            mPager.setCurrentItem(2, true);
-                        }
-                        break;
-                }
-            }
-        });
-
     }
-
-    @Override
-    public void onAction(int id) {
-
-    }
-
-    //testing for have to left undone
     public void getLocationPermission() {
         Log.d(TAG, "getLocationPermission: getting location permissions");
         String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION,
@@ -116,14 +62,13 @@ public class AfterSplashActivity extends CustomStuAppCompatActivity implements D
                 ContextCompat.checkSelfPermission(this.getApplicationContext(), WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
             MLOCATIONPERMISSIONGRANTED = true;
             flush("permission granted");
-            mPager.setCurrentItem(mPager.getCurrentItem() + 1, true);
+           // mPager.setCurrentItem(mPager.getCurrentItem() + 1, true);
         } else {
-            ActivityCompat.requestPermissions(AfterSplashActivity.this, permissions, LOCATION_PERMISSION_REQUEST_CODE);
+            ActivityCompat.requestPermissions(PermissionActivity.this, permissions, LOCATION_PERMISSION_REQUEST_CODE);
         }
 // , Manifest.permission.RECEIVE_SMS
     }
 
-    //checking the permission result here
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
@@ -132,7 +77,8 @@ public class AfterSplashActivity extends CustomStuAppCompatActivity implements D
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     if (checkPermissions()) {
                         MLOCATIONPERMISSIONGRANTED = true;
-                        mPager.setCurrentItem(mPager.getCurrentItem() + 1, true);
+                      //  mPager.setCurrentItem(mPager.getCurrentItem() + 1, true);
+
                     }
                 } else {
                     flush("Please accept the permission to proceed");
@@ -159,15 +105,27 @@ public class AfterSplashActivity extends CustomStuAppCompatActivity implements D
         //this is flexible
         //&& resSms == PackageManager.PERMISSION_GRANTED
         /*&& resPhone == PackageManager.PERMISSION_GRANTED
-        */
+         */
     }
-
     public void flush(String msg){
         Toast toast = Toast.makeText(this, msg, Toast.LENGTH_SHORT);
         TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
         if( v != null) v.setGravity(Gravity.CENTER);
         toast.show();
     }
+
+    @Override
+    public void onClick(View v) {
+        if (checkPermissions()) {
+            editor.putBoolean("isShown", true);
+            editor.apply();
+            editor.commit();
+            startActivity(new Intent(getApplicationContext(), PrivacyActivity.class));
+
+        } else {
+            flush("Please grant the permissions");
+            //getLocationPermission();
+           // mPager.setCurrentItem(2, true);
+        }
+    }
 }
-
-

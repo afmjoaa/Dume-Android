@@ -1,21 +1,16 @@
-package io.dume.dume.afterSplashTrp.adapter;
+package io.dume.dume.FirstTimeUser.adapter;
 
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import carbon.widget.ImageView;
 import io.dume.dume.R;
-import io.dume.dume.afterSplashTrp.AfterSplashActivity;
-import io.dume.dume.student.grabingInfo.GrabingInfoActivity;
+import io.dume.dume.FirstTimeUser.AfterSplashActivity;
 
 public class DemoCardFragment extends Fragment
         implements View.OnClickListener {
