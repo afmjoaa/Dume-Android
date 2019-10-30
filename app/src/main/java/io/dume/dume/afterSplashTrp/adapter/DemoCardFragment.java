@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -60,14 +61,19 @@ public class DemoCardFragment extends Fragment
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        if(id ==0){
+        if (id == 0) {
             View v = inflater.inflate(R.layout.select_role, container, false);
             TextView tvTitle = (TextView) v.findViewById(R.id.tvTitle);
             TextView tvDescription = (TextView) v.findViewById(R.id.tvDescription);
             tvTitle.setText(title);
             tvDescription.setText(description);
             return v;
-        }else{
+        } else if (id == 1) {
+            View v = inflater.inflate(R.layout.after_splash_privacy, container, false);
+            WebView termsWebView = v.findViewById(R.id.termsWV);
+            termsWebView.loadUrl("file:///android_asset/privacy.html");
+            return v;
+        } else {
             View v = inflater.inflate(R.layout.trp_fragment_after_splash_cardview, container, false);
             TextView tvTitle = (TextView) v.findViewById(R.id.tvTitle);
             TextView tvDescription = (TextView) v.findViewById(R.id.tvDescription);
@@ -84,8 +90,8 @@ public class DemoCardFragment extends Fragment
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
             myMainActivity = (AfterSplashActivity) getActivity();
-            if(myMainActivity!= null){
-                switch (id){
+            if (myMainActivity != null) {
+                switch (id) {
                     case 0:
                         myMainActivity.afterSplashBtn.setVisibility(View.GONE);
                         break;
@@ -94,7 +100,7 @@ public class DemoCardFragment extends Fragment
                         break;
                 }
             }
-        }else{
+        } else {
 
         }
     }

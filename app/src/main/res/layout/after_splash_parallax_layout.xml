@@ -57,7 +57,8 @@
             android:text="Accept &amp; Continue"
             android:textAllCaps="false"
             android:textColor="@color/white"
-            app:fontFamily="@font/cairo_regular" />
+            app:fontFamily="@font/cairo_regular"
+            />
 
         <TextView
             android:layout_width="wrap_content"
@@ -68,7 +69,8 @@
             android:text="@string/agree_terms"
             android:textColor="@color/black"
             android:textSize="11sp"
-            app:fontFamily="@font/cairo_regular" />
+            app:fontFamily="@font/cairo_regular"
+            android:visibility="visible"/>
 
     </RelativeLayout>
 </android.support.design.widget.CoordinatorLayout>
