@@ -4,31 +4,24 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.PopupMenu;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.PopupMenu;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.location.places.AutocompletePrediction;
-
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.dume.dume.R;
-import io.dume.dume.teacher.homepage.TeacherDataStore;
 import io.dume.dume.teacher.mentor_settings.academic.AcademicActivity;
 import io.dume.dume.teacher.mentor_settings.academic.AcademicContract;
 import io.dume.dume.teacher.mentor_settings.academic.AcademicModel;
-import io.dume.dume.teacher.mentor_settings.basicinfo.EditAccount;
-import io.dume.dume.teacher.mentor_settings.basicinfo.EditModel;
 import io.dume.dume.teacher.pojo.Academic;
 
 public class AcAdapter extends RecyclerView.Adapter<AcAdapter.AcademicVH> {

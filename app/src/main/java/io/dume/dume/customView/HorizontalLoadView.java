@@ -3,7 +3,6 @@ package io.dume.dume.customView;
 import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -11,7 +10,6 @@ import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.View;
 
-import io.dume.dume.R;
 import io.dume.dume.util.DumeUtils;
 
 public class HorizontalLoadView extends View implements ValueAnimator.AnimatorUpdateListener {
@@ -30,7 +28,7 @@ public class HorizontalLoadView extends View implements ValueAnimator.AnimatorUp
         init(context, null);
     }
 
-    public HorizontalLoadView(Context context, @android.support.annotation.Nullable AttributeSet attrs) {
+    public HorizontalLoadView(Context context, @androidx.annotation.Nullable AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs);
     }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -34,7 +34,7 @@
                 android:layout_weight="1"
                 android:orientation="vertical">
 
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/input_layout_firstname"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -46,7 +46,7 @@
                         android:fontFamily="@font/cairo_regular"
                         android:hint="First Name"
                         android:inputType="textEmailAddress" />
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -75,7 +75,7 @@
                 android:layout_weight="1"
                 android:orientation="vertical">
 
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/input_layout_lastname"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -87,7 +87,7 @@
                         android:fontFamily="@font/cairo_regular"
                         android:hint="Last Name"
                         android:inputType="textEmailAddress" />
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -118,7 +118,7 @@
             android:layout_marginBottom="10dp"
             android:orientation="vertical">
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/input_layout_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -131,7 +131,7 @@
                     android:hint="@string/hint_email"
                     android:inputType="textEmailAddress" />
 
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -187,7 +187,7 @@
                     android:textSize="18sp" />
 
 
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/input_layout_mobile_number"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -209,7 +209,7 @@
                         android:singleLine="true"
                         android:textColor="@color/disable_color"
                         android:textSize="18sp" />
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
 
             </LinearLayout>
@@ -231,7 +231,7 @@
             </LinearLayout>
         </LinearLayout>
 
-        <android.support.constraint.ConstraintLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
@@ -329,9 +329,9 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/hiperlink_terms_text" />
 
-        </android.support.constraint.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <android.support.design.widget.FloatingActionButton
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/floating_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -349,4 +349,4 @@
     </LinearLayout>
 
 
-</android.support.v4.widget.NestedScrollView>
+</androidx.core.widget.NestedScrollView>

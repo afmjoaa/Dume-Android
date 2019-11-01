@@ -1,7 +1,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Main Application theme /AuthActivity-->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="colorPrimary">@color/colorDeepIcon</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
@@ -21,7 +21,7 @@
 
 
     <!--No actionBar theme /Homepage/TeachActivity/AppInfoActivity -->
-    <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppTheme.NoActionBar" parent="Theme.MaterialComponents.Light.DarkActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="colorPrimary">@color/colorDeepIcon</item>
@@ -33,7 +33,7 @@
     </style>
 
     <!--grabbingInfo, searchResult, searchLoading, grabbingLocation, HeatMap, grabbingPackage, crudSkill theme -->
-    <style name="AppTheme.NoActionBar.transparent" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppTheme.NoActionBar.transparent" parent="Theme.MaterialComponents.Light.DarkActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="colorPrimary">#9d9d9d</item>

@@ -2,17 +2,16 @@ package io.dume.dume.student.studentPayment.adapterAndData;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Color;
-import android.support.annotation.NonNull;
-import android.support.v4.view.animation.FastOutLinearInInterpolator;
-import android.support.v4.view.animation.LinearOutSlowInInterpolator;
-import android.support.v7.widget.RecyclerView;
+
+import androidx.annotation.NonNull;
+import androidx.interpolator.view.animation.FastOutLinearInInterpolator;
+import androidx.interpolator.view.animation.LinearOutSlowInInterpolator;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -30,9 +29,7 @@ import carbon.widget.ImageView;
 import carbon.widget.LinearLayout;
 import carbon.widget.RelativeLayout;
 import io.dume.dume.R;
-import io.dume.dume.model.DumeModel;
 import io.dume.dume.student.pojo.SearchDataStore;
-import io.dume.dume.teacher.homepage.TeacherContract;
 import io.dume.dume.util.VisibleToggleClickListener;
 import me.zhanghai.android.materialratingbar.MaterialRatingBar;
 

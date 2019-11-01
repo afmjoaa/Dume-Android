@@ -1,12 +1,10 @@
 package io.dume.dume.auth;
 
-import android.support.annotation.Keep;
+import androidx.annotation.Keep;
 
 import com.google.firebase.auth.PhoneAuthProvider;
-import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Map;
 
 @Keep

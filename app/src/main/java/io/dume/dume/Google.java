@@ -1,13 +1,12 @@
 package io.dume.dume;
 
 import android.media.MediaPlayer;
-import android.support.annotation.Keep;
+import androidx.annotation.Keep;
 
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Source;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import io.dume.dume.common.chatActivity.Room;

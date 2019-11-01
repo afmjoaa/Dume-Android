@@ -24,7 +24,7 @@
         android:textSize="24sp"
         app:fontFamily="@font/cairo_regular" />
 
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         android:id="@+id/dispaly_pic"
         android:layout_width="90dp"
         android:layout_height="90dp"
@@ -65,7 +65,7 @@
             app:carbon_elevation="3dp"
             tools:ignore="SmallSp" />
 
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 
     <ProgressBar
         android:id="@+id/progress_horizontal"

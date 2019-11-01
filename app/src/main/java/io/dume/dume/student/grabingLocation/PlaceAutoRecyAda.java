@@ -3,8 +3,8 @@ package io.dume.dume.student.grabingLocation;
 
 import android.content.Context;
 import android.graphics.Typeface;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import android.text.style.CharacterStyle;
 import android.text.style.StyleSpan;
 import android.view.LayoutInflater;

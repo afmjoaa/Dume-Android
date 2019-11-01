@@ -1,8 +1,8 @@
 package io.dume.dume.common.inboxActivity;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,12 +14,8 @@ import com.bumptech.glide.request.RequestOptions;
 import com.jackandphantom.circularprogressbar.CircleProgressbar;
 import com.stfalcon.chatkit.utils.DateFormatter;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.TimeZone;
 
 import carbon.widget.ImageView;
 import io.dume.dume.R;

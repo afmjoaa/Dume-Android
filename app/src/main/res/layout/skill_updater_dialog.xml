@@ -81,7 +81,7 @@
         app:mrb_tickInterval="1"
         app:mrb_tickStart="1" />
 
-    <android.support.design.widget.TextInputLayout
+    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/input_layout_c_address"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -97,7 +97,7 @@
             android:inputType="textEmailAddress"
             app:fontFamily="@font/cairo_regular" />
 
-    </android.support.design.widget.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 
     <LinearLayout
         android:id="@+id/cancel_parent_host"

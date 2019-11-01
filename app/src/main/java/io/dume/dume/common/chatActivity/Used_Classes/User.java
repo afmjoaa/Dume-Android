@@ -1,6 +1,6 @@
 package io.dume.dume.common.chatActivity.Used_Classes;
 
-import android.support.annotation.Keep;
+import androidx.annotation.Keep;
 
 import com.stfalcon.chatkit.commons.models.IUser;
 

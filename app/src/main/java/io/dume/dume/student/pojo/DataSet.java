@@ -1,6 +1,6 @@
 package io.dume.dume.student.pojo;
 
-import android.support.annotation.Keep;
+import androidx.annotation.Keep;
 
 import com.google.android.gms.maps.model.LatLng;
 

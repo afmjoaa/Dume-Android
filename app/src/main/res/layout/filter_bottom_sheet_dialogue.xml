@@ -48,7 +48,7 @@
             android:layout_gravity="center"
             android:gravity="center"/>
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/input_layout_c_address"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -63,7 +63,7 @@
                 android:inputType="textEmailAddress"
                 app:fontFamily="@font/cairo_regular" />
 
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
     </LinearLayout>
 
@@ -83,7 +83,7 @@
             android:layout_gravity="center"
             android:gravity="center"/>
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp">
@@ -97,7 +97,7 @@
                 android:inputType="textEmailAddress"
                 app:fontFamily="@font/cairo_regular" />
 
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
     </LinearLayout>
 

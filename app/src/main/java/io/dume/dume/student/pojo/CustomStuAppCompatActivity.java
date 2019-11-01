@@ -10,14 +10,15 @@ import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.Nullable;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import com.google.android.material.snackbar.Snackbar;
+import androidx.core.content.ContextCompat;
+import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -43,7 +44,6 @@ import io.dume.dume.broadcastReceiver.MyConnectivityHandler;
 import io.dume.dume.broadcastReceiver.NetworkChangeReceiver;
 import io.dume.dume.customView.HorizontalLoadView;
 import io.dume.dume.splash.SplashActivity;
-import io.dume.dume.student.heatMap.HeatMapActivity;
 import io.dume.dume.student.homePage.HomePageContract;
 import io.dume.dume.util.MyApplication;
 import io.dume.dume.util.NetworkUtil;
@@ -58,7 +58,6 @@ public class CustomStuAppCompatActivity extends AppCompatActivity implements MyC
     protected Snackbar snackbar;
     protected View rootView;
     protected static int fromFlag = 0;
-    protected HomePageContract.ParentCallback parentCallback;
     protected static Boolean ISNIGHT;
     protected static int HOUR;
     private CoordinatorLayout v;
@@ -74,10 +73,6 @@ public class CustomStuAppCompatActivity extends AppCompatActivity implements MyC
         createNetworkCheckSnackbar();
         searchDataStore = SearchDataStore.getInstance();
         mDensity = getResources().getDisplayMetrics().density;
-    }
-
-    public void setParentCallback(HomePageContract.ParentCallback parentCallback) {
-        this.parentCallback = parentCallback;
     }
 
     @Override
@@ -169,7 +164,7 @@ public class CustomStuAppCompatActivity extends AppCompatActivity implements MyC
         snackbar = Snackbar.make(v, "Replace with your own action", Snackbar.LENGTH_INDEFINITE);
         Snackbar.SnackbarLayout layout = (Snackbar.SnackbarLayout) snackbar.getView();
 
-        TextView textView = (TextView) layout.findViewById(android.support.design.R.id.snackbar_text);
+        TextView textView = (TextView) layout.findViewById(com.google.android.material.R.id.snackbar_text);
         textView.setVisibility(View.INVISIBLE);
 
         LayoutInflater inflater = LayoutInflater.from(context);
@@ -305,26 +300,6 @@ public class CustomStuAppCompatActivity extends AppCompatActivity implements MyC
         win.setAttributes(winParams);
     }
 
-    //    checking google service for map implementation and availability
-    public boolean isServicesOK(Activity activity, Context context) {
-        Log.d(TAG, "isServicesOK: checking google services version");
-        int available = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(activity);
-
-        if (available == ConnectionResult.SUCCESS) {
-            //everything is fine and the user can make map requests
-            Log.d(TAG, "isServicesOK: Google Play Services is working");
-            return true;
-        } else if (GoogleApiAvailability.getInstance().isUserResolvableError(available)) {
-            //an error occured but we can resolve it
-            Log.d(TAG, "isServicesOK: an error occured but we can fix it");
-            Dialog dialog = GoogleApiAvailability.getInstance().getErrorDialog(activity, available, ERROR_DIALOG_REQUEST);
-            dialog.show();
-        } else {
-            Toast.makeText(context, "You can't make map requests", Toast.LENGTH_SHORT).show();
-        }
-        return false;
-    }
-
     public int getCurrentHour() {
         Calendar cal = Calendar.getInstance();
         return cal.get(Calendar.HOUR_OF_DAY);
@@ -400,5 +375,19 @@ public class CustomStuAppCompatActivity extends AppCompatActivity implements MyC
         TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
         if (v != null) v.setGravity(Gravity.CENTER);
         toast.show();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            super.onBackPressed();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources >
 
-    <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppTheme.NoActionBar" parent="Theme.MaterialComponents.Light.DarkActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="colorPrimary">@color/colorDeepIcon</item>
@@ -14,7 +14,7 @@
     </style>
 
 
-    <style name="AppTheme.NoActionBar.transparent" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppTheme.NoActionBar.transparent" parent="Theme.MaterialComponents.Light.DarkActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="colorPrimary">@color/colorDeepIcon</item>

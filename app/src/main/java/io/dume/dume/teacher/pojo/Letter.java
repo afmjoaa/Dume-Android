@@ -1,6 +1,6 @@
 package io.dume.dume.teacher.pojo;
 
-import android.support.annotation.Keep;
+import androidx.annotation.Keep;
 
 import com.google.firebase.firestore.DocumentSnapshot;
 

@@ -1,18 +1,14 @@
 package io.dume.dume.bootCamp.student_addvertise;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
 import io.dume.dume.R;
-import io.dume.dume.student.mentorAddvertise.MentorAddvertiseContact;
-import io.dume.dume.student.mentorAddvertise.MentorAddvertiseModel;
-import io.dume.dume.student.mentorAddvertise.MentorAddvertisePresenter;
 import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
 
 import static io.dume.dume.util.DumeUtils.animateImage;

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/parent_coor_layout"
@@ -23,7 +23,7 @@
         app:layout_anchor="@id/included_appber"
         app:layout_anchorGravity="bottom" />
 
-    <android.support.design.widget.FloatingActionButton
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabEdit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -35,7 +35,7 @@
         app:backgroundTint="@color/colorBlack"
         app:rippleColor="@color/colorDarkAzure" />
 
-    <android.support.v4.widget.NestedScrollView
+    <androidx.core.widget.NestedScrollView
         android:id="@+id/editAccountScrolling"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -161,7 +161,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1">
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/input_layout_firstname"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -177,7 +177,7 @@
                             android:inputType="textPersonName"
                             app:fontFamily="@font/cairo_regular" />
 
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
                     <carbon.widget.ImageView
                         android:id="@+id/empty_fn_found"
@@ -202,7 +202,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1">
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/input_layout_lastname"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -216,7 +216,7 @@
                             android:hint="Last Name"
                             android:inputType="textPersonName"
                             app:fontFamily="@font/cairo_regular" />
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
                     <carbon.widget.ImageView
                         android:id="@+id/empty_ln_found"
@@ -247,7 +247,7 @@
                 android:layout_marginRight="18dp"
                 android:layout_marginBottom="10dp">
 
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/input_layout_email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -260,7 +260,7 @@
                         android:inputType="textEmailAddress"
                         app:fontFamily="@font/cairo_regular" />
 
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <carbon.widget.ImageView
                     android:id="@+id/empty_email_found"
@@ -280,7 +280,7 @@
 
             </RelativeLayout>
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/input_layout_phone_num"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -301,7 +301,7 @@
                     android:textColor="#c2c2c2"
                     app:fontFamily="@font/cairo_regular" />
 
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -312,7 +312,7 @@
                 android:layout_marginRight="18dp"
                 android:layout_marginBottom="10dp">
 
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/input_layout_c_address"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -326,7 +326,7 @@
                         android:inputType="textEmailAddress"
                         app:fontFamily="@font/cairo_regular" />
 
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <carbon.widget.ImageView
                     android:id="@+id/empty_address_found"
@@ -346,7 +346,7 @@
 
             </RelativeLayout>
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/input_layout_current_status"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -364,9 +364,9 @@
                     android:inputType="text"
                     app:fontFamily="@font/cairo_regular" />
 
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/input_layout_Gender"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -386,9 +386,9 @@
                     android:onClick="onClick"
                     app:fontFamily="@font/cairo_regular" />
 
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/input_layout_Religion"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -408,9 +408,9 @@
                     android:onClick="onClick"
                     app:fontFamily="@font/cairo_regular" />
 
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/input_layout_marital_status"
                 android:layout_width="match_parent"
                 android:layout_marginStart="18dp"
@@ -430,9 +430,9 @@
                     android:onClick="onClick"
                     app:fontFamily="@font/cairo_regular" />
 
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/input_layout_birth_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -452,7 +452,7 @@
                     android:onClick="onClick"
                     app:fontFamily="@font/cairo_regular" />
 
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
             <LinearLayout
                 android:id="@+id/academicContainer"
@@ -479,7 +479,7 @@
                     android:textSize="13sp"
                     app:fontFamily="@font/cairo_regular" />
 
-                <android.support.v7.widget.RecyclerView
+                <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/academicRV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
@@ -545,6 +545,6 @@
 
         </LinearLayout>
 
-    </android.support.v4.widget.NestedScrollView>
+    </androidx.core.widget.NestedScrollView>
 
-</android.support.design.widget.CoordinatorLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -1,17 +1,14 @@
 package io.dume.dume.student.grabingLocation;
 
-import android.app.Activity;
 import android.content.Context;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.GeoPoint;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import io.dume.dume.student.pojo.StuBaseModel;

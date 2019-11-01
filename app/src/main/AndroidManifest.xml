@@ -21,7 +21,7 @@
     <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
-        android:name="android.support.multidex.MultiDexApplication"
+        android:name="androidx.multidex.MultiDexApplication"
         android:allowBackup="true"
         android:fullBackupContent="true"
         android:icon="@mipmap/icon_launcher"

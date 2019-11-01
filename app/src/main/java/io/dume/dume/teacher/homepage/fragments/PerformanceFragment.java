@@ -1,24 +1,20 @@
 package io.dume.dume.teacher.homepage.fragments;
 
 import android.app.Dialog;
-import android.arch.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProviders;
 import android.content.Context;
-import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.view.ViewCompat;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.core.view.ViewCompat;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -27,7 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
 import carbon.widget.ImageView;
 import io.dume.dume.R;
@@ -38,7 +33,6 @@ import io.dume.dume.teacher.homepage.TeacherDataStore;
 import io.dume.dume.teacher.homepage.TeacherModel;
 import io.dume.dume.teacher.model.KeyValueModel;
 import io.dume.dume.util.DumeUtils;
-import io.dume.dume.util.EqualSpacingItemDecoration;
 import io.dume.dume.util.GridSpacingItemDecoration;
 
 public class PerformanceFragment extends Fragment {

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:map="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -27,7 +27,7 @@
 
     </io.dume.dume.customView.WindowInsetsFrameLayout>
 
-    <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/parent_coor_layout"
@@ -45,7 +45,7 @@
             android:orientation="vertical"
             android:visibility="gone" />
 
-        <android.support.design.widget.AppBarLayout
+        <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/my_appbarLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -63,7 +63,7 @@
                     android:background="@drawable/bg_white_bottom_round"
                     app:carbon_elevation="8dp">
 
-                    <android.support.v7.widget.Toolbar
+                    <androidx.appcompat.widget.Toolbar
                         android:id="@+id/toolbar"
                         android:layout_width="match_parent"
                         android:layout_height="?attr/actionBarSize"
@@ -109,12 +109,12 @@
                                 app:fontFamily="@font/cairo_regular" />
                         </LinearLayout>
 
-                    </android.support.v7.widget.Toolbar>
+                    </androidx.appcompat.widget.Toolbar>
 
                 </carbon.widget.LinearLayout>
 
 
-                <android.support.v7.widget.RecyclerView
+                <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/heatMap_account_recycler"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -125,7 +125,7 @@
                     android:paddingBottom="5dp"
                     android:visibility="gone">
 
-                </android.support.v7.widget.RecyclerView>
+                </androidx.recyclerview.widget.RecyclerView>
 
                 <View
                     android:id="@+id/hack"
@@ -137,7 +137,7 @@
             </RelativeLayout>
 
 
-        </android.support.design.widget.AppBarLayout>
+        </com.google.android.material.appbar.AppBarLayout>
 
         <io.dume.dume.customView.HorizontalLoadView
             android:id="@+id/loadView"
@@ -150,7 +150,7 @@
             app:layout_anchor="@id/my_appbarLayout"
             app:layout_anchorGravity="bottom"/>
 
-        <android.support.design.widget.FloatingActionButton
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab"
             style="?android:attr/borderlessButtonStyle"
             android:layout_width="wrap_content"
@@ -165,7 +165,7 @@
             app:fabSize="mini"
             app:srcCompat="@drawable/geo_icon" />
 
-    </android.support.design.widget.CoordinatorLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 
-</android.support.design.widget.CoordinatorLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

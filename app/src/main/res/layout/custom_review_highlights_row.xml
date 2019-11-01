@@ -85,7 +85,7 @@
         android:layout_marginTop="14dp"
         android:layout_marginBottom="16dp">
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/main_review"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

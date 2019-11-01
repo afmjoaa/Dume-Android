@@ -2,7 +2,7 @@ package io.dume.dume;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.support.annotation.IntDef;
+import androidx.annotation.IntDef;
 
 public class StateManager {
 

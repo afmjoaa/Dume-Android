@@ -2,7 +2,7 @@ package io.dume.dume.student.pojo;
 
 import android.app.Activity;
 import android.content.Context;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.util.Log;
 
 import com.google.android.gms.tasks.OnCanceledListener;
@@ -15,15 +15,10 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreSettings;
 
 import java.util.Map;
 
 import io.dume.dume.inter_face.usefulListeners;
-import io.dume.dume.model.DumeModel;
-import io.dume.dume.student.recordsPage.Record;
-import io.dume.dume.teacher.homepage.TeacherContract;
-import io.dume.dume.teacher.homepage.TeacherModel;
 
 public abstract class StuBaseModel{
     private static final String TAG = "StuBaseModel";

@@ -3,16 +3,13 @@ package io.dume.dume.auth.auth;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.text.InputFilter;
-import android.text.Spanned;
+import androidx.annotation.Nullable;
+
 import android.util.Log;
-import android.view.MenuItem;
 
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.PhoneAuthProvider;
 
-import io.dume.dume.R;
 import io.dume.dume.auth.AuthGlobalContract;
 import io.dume.dume.auth.DataStore;
 import io.dume.dume.util.DumeUtils;

@@ -4,20 +4,13 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.support.annotation.NonNull;
-import android.support.design.widget.AppBarLayout;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.Gravity;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
-import android.widget.Toast;
+import androidx.appcompat.widget.Toolbar;
 
-import java.util.Objects;
+import android.view.View;
 
 import io.dume.dume.R;
 import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
@@ -27,7 +20,6 @@ import static io.dume.dume.util.DumeUtils.configureAppbar;
 public class PermissionActivity extends CustomStuAppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "PermissionActivity";
-    private Toolbar toolbar;
     private static Boolean MLOCATIONPERMISSIONGRANTED = false;
     private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
     private static final String COURSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
@@ -44,9 +36,9 @@ public class PermissionActivity extends CustomStuAppCompatActivity implements Vi
         editor = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE).edit();
         //if permission already granted then don't show anything at all
         if (checkPermissions()) {
-            editor.putBoolean("isShown", true);
+            /*editor.putBoolean("isShown", true);
             editor.apply();
-            editor.commit();
+            editor.commit();*/
             startActivity(new Intent(getApplicationContext(), PrivacyActivity.class));
         }
     }
@@ -57,7 +49,6 @@ public class PermissionActivity extends CustomStuAppCompatActivity implements Vi
 
     public void initDesign(){
         setActivityContext(this, 3637);
-        setSupportActionBar(toolbar);
         configureAppbar(this, "Provide Permission", true);
     }
 
@@ -81,9 +72,9 @@ public class PermissionActivity extends CustomStuAppCompatActivity implements Vi
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 if (checkPermissions()) {
                     MLOCATIONPERMISSIONGRANTED = true;
-                    editor.putBoolean("isShown", true);
+                    /*editor.putBoolean("isShown", true);
                     editor.apply();
-                    editor.commit();
+                    editor.commit();*/
                     startActivity(new Intent(getApplicationContext(), PrivacyActivity.class));
                 }
             } else {
@@ -103,9 +94,9 @@ public class PermissionActivity extends CustomStuAppCompatActivity implements Vi
     @Override
     public void onClick(View v) {
         if (checkPermissions()) {
-            editor.putBoolean("isShown", true);
+            /*editor.putBoolean("isShown", true);
             editor.apply();
-            editor.commit();
+            editor.commit();*/
             startActivity(new Intent(getApplicationContext(), PrivacyActivity.class));
         } else {
             getLocationPermission();

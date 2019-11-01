@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/parent_coor_layout"
@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".student.grabingLocation.GrabingLocationActivity">
 
-    <android.support.design.widget.AppBarLayout
+    <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/my_appbarLayout_cardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -16,7 +16,7 @@
         <!--android:background="@drawable/bg_white_bottom_round"-->
 
 
-        <android.support.v7.widget.Toolbar
+        <androidx.appcompat.widget.Toolbar
             android:id="@+id/accountToolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
@@ -34,7 +34,7 @@
             app:titleTextAppearance="@style/MyTextApprncCol.lightBg">
 
 
-        </android.support.v7.widget.Toolbar>
+        </androidx.appcompat.widget.Toolbar>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -118,7 +118,7 @@
         </LinearLayout>
 
 
-    </android.support.design.widget.AppBarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
 
     <io.dume.dume.customView.HorizontalLoadView
         android:id="@+id/loadView"
@@ -139,7 +139,7 @@
         app:layout_anchor="@id/location_done_btn"
         app:layout_anchorGravity="top|end">
 
-        <android.support.design.widget.FloatingActionButton
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab"
             style="?android:attr/borderlessButtonStyle"
             android:layout_width="wrap_content"
@@ -178,4 +178,4 @@
         app:carbon_rippleColor="#80ffffff"
         app:carbon_rippleStyle="background" />
 
-</android.support.design.widget.CoordinatorLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

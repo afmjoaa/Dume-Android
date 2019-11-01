@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/pending_nested_scroll"
@@ -446,7 +446,7 @@
                         android:textStyle="normal"
                         app:fontFamily="@font/cairo_regular" />
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/reminder_edittext_label"
                         android:layout_width="80dp"
                         android:layout_height="wrap_content"
@@ -466,10 +466,10 @@
                             android:textColor="@color/textColorPrimary"
                             android:textSize="12sp"
                             app:fontFamily="@font/cairo_regular" />
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
 
-                    <android.support.v7.widget.SwitchCompat
+                    <androidx.appcompat.widget.SwitchCompat
                         android:id="@+id/reminder_switch"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -1474,7 +1474,7 @@
                     android:textStyle="normal"
                     app:fontFamily="@font/cairo_regular" />
 
-                <android.support.v7.widget.RecyclerView
+                <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recycler_view_qualifications"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
@@ -1530,7 +1530,7 @@
                 android:paddingBottom="8dp"
                 android:translationY="-2dp">
 
-                <android.support.v7.widget.RecyclerView
+                <androidx.recyclerview.widget.RecyclerView
                     android:background="@drawable/bg_white_bottom_round"
                     android:id="@+id/recycler_view_reviews"
                     android:layout_width="match_parent"
@@ -1583,7 +1583,7 @@
 
     </LinearLayout>
 
-</android.support.v4.widget.NestedScrollView>
+</androidx.core.widget.NestedScrollView>
 
     <!--<RelativeLayout
         android:id="@+id/notification_block_layout"

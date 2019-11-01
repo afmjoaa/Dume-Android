@@ -41,7 +41,7 @@
         android:orientation="vertical">
 
 
-        <android.support.v7.widget.AppCompatSpinner
+        <androidx.appcompat.widget.AppCompatSpinner
             android:id="@+id/eddclass"
             android:layout_width="250dp"
             android:layout_height="wrap_content"
@@ -54,7 +54,7 @@
             android:paddingStart="10dp"
             android:paddingTop="5dp" />
 
-        <android.support.v7.widget.AppCompatSpinner
+        <androidx.appcompat.widget.AppCompatSpinner
             android:id="@+id/eddsub"
             android:layout_width="250dp"
             android:layout_height="wrap_content"
