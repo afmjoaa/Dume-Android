@@ -294,9 +294,6 @@ public class AuthModel implements AuthContract.Model, SplashContract.Model, Phon
 
         mini_users.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
 
-//            private Boolean obligation;
-//            private Boolean foreignObligation;
-
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {

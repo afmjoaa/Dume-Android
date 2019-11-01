@@ -22,7 +22,6 @@ import java.util.List;
 import io.dume.dume.Google;
 import io.dume.dume.R;
 import io.dume.dume.student.homePage.HomePageActivity;
-import io.dume.dume.student.homePage.StudentActivity;
 import io.dume.dume.student.recordsCurrent.RecordsCurrentActivity;
 import io.dume.dume.util.DumeUtils;
 

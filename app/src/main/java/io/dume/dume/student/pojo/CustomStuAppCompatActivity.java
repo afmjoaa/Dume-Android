@@ -16,6 +16,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -392,5 +393,12 @@ public class CustomStuAppCompatActivity extends AppCompatActivity implements MyC
         if (loadView.getVisibility() == View.VISIBLE) {
             loadView.setVisibility(View.INVISIBLE);
         }
+    }
+
+    public void flush(String msg) {
+        Toast toast = Toast.makeText(context, msg, Toast.LENGTH_SHORT);
+        TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
+        if (v != null) v.setGravity(Gravity.CENTER);
+        toast.show();
     }
 }

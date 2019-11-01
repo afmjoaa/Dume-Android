@@ -155,10 +155,6 @@ public class MentorAddvertiseActivity extends CustomStuAppCompatActivity impleme
         finish();
     }
 
-    private void flush(String msg) {
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
-    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();

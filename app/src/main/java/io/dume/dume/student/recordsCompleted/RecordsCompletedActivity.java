@@ -168,10 +168,6 @@ public class RecordsCompletedActivity extends CustomStuAppCompatActivity impleme
         super.onBackPressed();
     }
 
-    private void flush(String msg) {
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
-    }
-
     //testing code goes here
     public static class PlaceholderFragment extends Fragment {
 
@@ -181,7 +177,6 @@ public class RecordsCompletedActivity extends CustomStuAppCompatActivity impleme
         private ChartProgressBar mChart;
         private ImageView ratingPerformance;
         private ImageView ratingExperience;
-
         private DocumentSnapshot selectedMentor;
         private Button salaryBtn;
         private carbon.widget.ImageView joinedBadge;

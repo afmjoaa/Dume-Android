@@ -18,6 +18,7 @@ public class DataStore implements Serializable {
     private String firstName = null;
     private String lastName = null;
     private String accountManjor = "student";
+    private String flowState = "Role";
 
     private boolean isBottomNavAccountMajor = false;
     private String phoneNumber = null;

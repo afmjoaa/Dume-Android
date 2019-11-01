@@ -10,8 +10,6 @@ import io.dume.dume.auth.DataStore;
 import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
 
 public class RoleChooserActivity extends CustomStuAppCompatActivity implements View.OnClickListener {
-    Button asTeacher;
-    Button asStudent;
     private DataStore local;
 
     @Override
@@ -23,21 +21,20 @@ public class RoleChooserActivity extends CustomStuAppCompatActivity implements V
         init();
     }
 
-
     private void init() {
         settingStatusBarTransparent();
         setDarkStatusBarIcon();
-        // makeFullScreen();
     }
 
     @Override
     public void onClick(View v) {
-
         if (v.getId() == R.id.asStudent) {
             local.setAccountManjor(DataStore.STUDENT);
         } else if (v.getId() == R.id.asTeacher) {
             local.setAccountManjor(DataStore.TEACHER );
         }
+        ForwardFlowStat.ROLE.getFlow();
+
         startActivity(new Intent(this, PermissionActivity.class));
     }
 }

@@ -205,7 +205,6 @@ public class DumeUtils {
         collapsingToolbarLayout.setExpandedTitleTypeface(Typeface.createFromAsset(activity.getAssets(), "fonts/Cairo-Light.ttf"));
         collapsingToolbarLayout.setTitle(title);
 
-        //Drawable drawable = ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_more_vert_black_24dp);
         Drawable drawable = context.getResources().getDrawable(R.drawable.ic_more_vert_black_24dp);
         toolbar.setOverflowIcon(drawable);
     }
