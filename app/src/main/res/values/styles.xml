@@ -1,7 +1,56 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
+    <!--Material theme default-->
+    <style name="DefaultTheme.NoActionBar" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">@color/mColorPrimary</item>
+        <item name="colorPrimaryDark">@color/mStatusBar</item>
+        <item name="colorPrimaryVariant">@color/mColorPrimaryVariant</item>
+        <item name="colorOnPrimary">@color/mColorOnPrimary</item>
+        <item name="colorSecondary">@color/mColorSecondary</item>
+        <item name="colorSecondaryVariant">@color/mColorSecondaryVariant</item>
+        <item name="colorOnSecondary">@color/mColorOnSecondary</item>
+        <item name="colorError">@color/mColorError</item>
+        <item name="colorOnError">@color/mColorOnError</item>
+        <item name="colorSurface">@color/mColorSurface</item>
+        <item name="colorOnSurface">@color/mColorOnSurface</item>
+        <item name="android:colorBackground">@color/mColorBackground</item>
+        <item name="colorOnBackground">@color/mColorOnBackground</item>
+        <item name="android:fontFamily">@font/cairo_regular</item>
+        <item name="fontFamily" >@font/cairo_regular</item>
+        <item name="shapeAppearanceSmallComponent">@style/AppShapeAppearance.SmallComponent</item>
+        <item name="shapeAppearanceMediumComponent">@style/AppShapeAppearance.MediumComponent</item>
+        <item name="shapeAppearanceLargeComponent">@style/AppShapeAppearance.MediumComponent</item>
+        <item name="textInputStyle">@style/AppTextField</item>
+    </style>
+
+    <style name="AppShapeAppearance.SmallComponent" parent="ShapeAppearance.MaterialComponents.SmallComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">4dp</item>
+    </style>
+
+    <style name="AppShapeAppearance.MediumComponent" parent="ShapeAppearance.MaterialComponents.MediumComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">6dp</item>
+    </style>
+
+    <style name="AppShapeAppearance.LargeComponent" parent="ShapeAppearance.MaterialComponents.LargeComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">8dp</item>
+    </style>
+
+    <!--TextBox Fill color -->
+    <style name="AppTextField" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
+        <item name="boxBackgroundColor">@color/mTextBoxFill</item>
+    </style>
+
+   <!--Button style for tint color (not added)-->
+    <style name="AppButton" parent="Widget.MaterialComponents.Button">
+        <item name="backgroundTint">?attr/colorSecondary</item>
+    </style>
+
+
     <!-- Main Application theme /AuthActivity-->
-    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
         <item name="colorPrimary">@color/colorDeepIcon</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
@@ -11,14 +60,12 @@
         <item name="carbon_linearLayoutStyle">@style/carbon_LinearLayout</item>
         <item name="android:fontFamily" tools:targetApi="jelly_bean">@font/cairo_regular</item>
         <item name="android:actionMenuTextColor">@color/black</item>
-        <item name="android:windowBackground">@drawable/white_bg</item>
     </style>
 
     <!--Splash theme-->
     <style name="SplashTheme" parent="AppTheme">
         <item name="android:windowBackground">@drawable/splash_background</item>
     </style>
-
 
     <!--No actionBar theme /Homepage/TeachActivity/AppInfoActivity -->
     <style name="AppTheme.NoActionBar" parent="Theme.MaterialComponents.Light.DarkActionBar">
@@ -29,7 +76,6 @@
         <item name="android:windowActionBarOverlay">true</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
         <item name="android:fontFamily">@font/cairo_regular</item>
-        <item name="android:windowBackground">@drawable/white_bg</item>
     </style>
 
     <!--grabbingInfo, searchResult, searchLoading, grabbingLocation, HeatMap, grabbingPackage, crudSkill theme -->
@@ -41,7 +87,6 @@
         <item name="android:windowActionBarOverlay">true</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
         <item name="android:fontFamily">@font/cairo_regular</item>
-        <item name="android:windowBackground">@drawable/white_bg</item>
     </style>
 
     <!--Default black ActionBar theme /studentSetting/studentPayment/editAccount... -->
@@ -49,7 +94,6 @@
         <item name="colorPrimary">@color/carbon_black</item>
         <item name="colorPrimaryDark">@color/carbon_black</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
-        <item name="android:windowBackground">@drawable/white_bg</item>
     </style>
 
     <!--Contact and message activity default theme-->

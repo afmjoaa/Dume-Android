@@ -57,8 +57,7 @@ public class SkillFragment extends Fragment {
     @BindView(R.id.no_data_block)
     public
     LinearLayout noDataBlock;
-    @BindView(R.id.tipsTV)
-    ScaleTextView scaleTextView;
+
     private TeacherActivtiy fragmentActivity;
     private TeacherDataStore teacherDataStore;
     private static SkillFragment skillFragment = null;
@@ -139,7 +138,8 @@ public class SkillFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.skill_fragment, container, false);
         ButterKnife.bind(this, root);
-        scaleTextView.setTypeface(Typeface.createFromAsset(Objects.requireNonNull(getContext()).getAssets(), "fonts/Cairo_Regular.ttf"));
+
+        //scaleTextView.setTypeface(Typeface.createFromAsset(Objects.requireNonNull(getContext()).getAssets(), "fonts/Cairo_Regular.ttf"));
         assert container != null;
         int[] wh = DumeUtils.getScreenSize(container.getContext());
         float mDensity = getResources().getDisplayMetrics().density;
@@ -283,8 +283,8 @@ public class SkillFragment extends Fragment {
     }
 
     public void tips(CharSequence sequence) {
-        scaleTextView.setSelected(true);
-        scaleTextView.animateText(sequence);
+        //scaleTextView.setSelected(true);
+        //scaleTextView.animateText(sequence);
         /*scaleTextView.setAnimationListener(hTextView -> {
         });*/
 

@@ -10,7 +10,6 @@
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:fontFamily">@font/cairo_regular</item>
-        <item name="android:windowBackground">@drawable/white_bg</item>
     </style>
 
 
@@ -24,6 +23,5 @@
         <item name="android:windowTranslucentStatus">false</item>
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:fontFamily">@font/cairo_regular</item>
-
     </style>
 </resources>

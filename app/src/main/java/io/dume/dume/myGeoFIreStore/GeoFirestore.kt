@@ -13,7 +13,7 @@ class GeoFirestore(val collectionReference: CollectionReference) {
 
     companion object {
         @JvmField
-        val LOGGER = Logger.getLogger("GeoFirestore")!!
+        val LOGGER: Logger = Logger.getLogger("GeoFirestore")
 
         /**
          * Build a GeoPoint from a DocumentSnapshot

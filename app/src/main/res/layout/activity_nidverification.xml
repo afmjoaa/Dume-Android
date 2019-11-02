@@ -11,7 +11,7 @@
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/appbarLayoutHeight"
-        android:stateListAnimator="@drawable/appbar_always_elevated"
+        android:stateListAnimator="@animator/appbar_always_elevated"
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout

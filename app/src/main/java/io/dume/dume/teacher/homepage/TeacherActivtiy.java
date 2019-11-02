@@ -187,8 +187,8 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
     VerticalTabLayout tabLayout;
     @BindView(R.id.mViewPager)
     VerticalViewPager viewPager;
-    @BindView(R.id.fragmentTitle)
-    ScaleTextView fragmentTitle;
+
+    private View fragmentTitle;
     private CoordinatorLayout mainInterface;
     private ImageView referMentorImageView;
     private ImageView enhanceSkillImageView;
@@ -346,6 +346,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         mToolTipsManager = new ToolTipsManager();
         menu = navigationView.getMenu();
         fab = findViewById(R.id.fab);
+        fragmentTitle = findViewById(R.id.fragmentTitle);
         home = menu.findItem(R.id.home_id);
         records = menu.findItem(R.id.records);
         payments = menu.findItem(R.id.payments);
@@ -820,7 +821,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
             @Override
             public void onTabSelected(TabView tab, int position) {
                 viewPager.setCurrentItem(position);
-                fragmentTitle.animateText(tabModelArrayList.get(position).getTabName());
+                //fragmentTitle.animateText(tabModelArrayList.get(position).getTabName());
 
             }
 
@@ -846,8 +847,8 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
 
             }
         });
-        fragmentTitle.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Cairo_Regular.ttf"));
-        fragmentTitle.animateText(tabModelArrayList.get(tabLayout.getSelectedTabPosition()).getTabName());
+        //fragmentTitle.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Cairo_Regular.ttf"));
+        //fragmentTitle.animateText(tabModelArrayList.get(tabLayout.getSelectedTabPosition()).getTabName());
 
 
     }

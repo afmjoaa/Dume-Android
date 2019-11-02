@@ -60,25 +60,13 @@
             android:textColor="@color/white"
             app:fontFamily="@font/cairo_regular" />
 
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:hint="fjkdj">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-        </com.google.android.material.textfield.TextInputLayout>
-
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
             <View
-                android:layout_width="150dp"
+                android:layout_width="145dp"
                 android:layout_height="1dp"
                 android:layout_gravity="center"
                 android:layout_marginLeft="5dp"
@@ -94,7 +82,7 @@
                 app:fontFamily="@font/cairo_regular" />
 
             <View
-                android:layout_width="150dp"
+                android:layout_width="145dp"
                 android:layout_height="1dp"
                 android:layout_gravity="center"
                 android:layout_marginLeft="5dp"

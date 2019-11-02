@@ -12,6 +12,10 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.view.View;
 
+import com.google.android.material.appbar.AppBarLayout;
+import com.jaeger.library.StatusBarUtil;
+
+import androidx.core.view.ViewCompat;
 import io.dume.dume.R;
 import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
 
@@ -49,6 +53,7 @@ public class PermissionActivity extends CustomStuAppCompatActivity implements Vi
 
     public void initDesign(){
         setActivityContext(this, 3637);
+        setDarkStatusBarIcon();
         configureAppbar(this, "Provide Permission", true);
     }
 

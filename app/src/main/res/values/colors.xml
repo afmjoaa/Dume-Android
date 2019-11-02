@@ -146,9 +146,23 @@
 
     <!--new color pallets here-->
     <color name="ButtonColor">#368CF3</color>
-    <color name="ButtonAfterPressedColor">#0086c3</color>
     <color name="ButtonPressedColor">#01579b</color>
     <color name="ButtonDisableColor">#86C4F7</color>
     <color name="CircularIndicator">#607d8b</color>
 
+    <!--material theme colors-->
+    <color name="mColorPrimary">#039be5</color>
+    <color name="mColorPrimaryVariant">#0288d1</color>
+    <color name="mColorOnPrimary">#FFFFFF</color>
+    <color name="mColorSecondary">#039be5</color>
+    <color name="mColorSecondaryVariant">#0288d1</color>
+    <color name="mColorOnSecondary">#FFFFFF</color>
+    <color name="mColorError">#ef5350</color>
+    <color name="mColorOnError">#FAFAFA</color>
+    <color name="mColorSurface">#FAFAFA</color>
+    <color name="mColorOnSurface">#212121</color>
+    <color name="mColorBackground">#FAFAFA</color>
+    <color name="mColorOnBackground">#212121</color>
+    <color name="mStatusBar">#ffffff</color>
+    <color name="mTextBoxFill">#e1f5fe</color>
 </resources>

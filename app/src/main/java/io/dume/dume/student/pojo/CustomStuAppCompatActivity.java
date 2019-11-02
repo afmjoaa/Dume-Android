@@ -26,9 +26,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.firebase.auth.FirebaseAuth;
 import com.jaeger.library.StatusBarUtil;
 
@@ -85,7 +82,6 @@ public class CustomStuAppCompatActivity extends AppCompatActivity implements MyC
     protected void onStart() {
         super.onStart();
         int status = NetworkUtil.getConnectivityStatusString(context);
-
 
         if (status == NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
             if (snackbar != null) {

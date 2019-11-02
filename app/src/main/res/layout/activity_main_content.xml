@@ -21,7 +21,7 @@
             android:layout_height="?attr/actionBarSize"
             android:layout_margin="0dp"
             app:layout_scrollFlags="snap"
-            app:navigationIcon="@drawable/ic_arrow_back_black_24dp"
+            app:navigationIcon="@drawable/ic_arrow_back_dark"
             app:popupTheme="@style/AppTheme.PopupOverlay"
             app:theme="@style/ThemeToolbar.default" />
 

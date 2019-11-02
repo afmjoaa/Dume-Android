@@ -81,13 +81,13 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".firstTimeUser.PrivacyActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/DefaultTheme.NoActionBar" />
         <activity
             android:name=".firstTimeUser.PermissionActivity"
-            android:theme="@style/AppTheme.NoActionBar.transparent.black" />
+            android:theme="@style/DefaultTheme.NoActionBar" />
         <activity
             android:name=".firstTimeUser.RoleChooserActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/DefaultTheme.NoActionBar" />
 
         <activity android:name=".common.nexuspay.NexusPay" />
         <activity android:name=".common.bkash_otp.BkashOTP" />
