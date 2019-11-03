@@ -1,9 +1,8 @@
 package io.dume.dume.common.inboxActivity;
 
-import android.support.annotation.Keep;
+import androidx.annotation.Keep;
 
 import java.io.Serializable;
-import java.net.URL;
 
 @Keep
 public class InboxCallData implements Serializable {

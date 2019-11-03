@@ -17,33 +17,33 @@ import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.BottomSheetBehavior;
-import android.support.design.widget.BottomSheetDialog;
-import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
-import android.support.design.widget.TextInputLayout;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.view.ViewCompat;
-import android.support.v4.view.ViewPager;
-import android.support.v4.view.animation.FastOutLinearInInterpolator;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v4.widget.NestedScrollView;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.textfield.TextInputLayout;
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.GravityCompat;
+import androidx.core.view.ViewCompat;
+import androidx.viewpager.widget.ViewPager;
+import androidx.interpolator.view.animation.FastOutLinearInInterpolator;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.core.widget.NestedScrollView;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -187,8 +187,8 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
     VerticalTabLayout tabLayout;
     @BindView(R.id.mViewPager)
     VerticalViewPager viewPager;
-    @BindView(R.id.fragmentTitle)
-    ScaleTextView fragmentTitle;
+
+    private View fragmentTitle;
     private CoordinatorLayout mainInterface;
     private ImageView referMentorImageView;
     private ImageView enhanceSkillImageView;
@@ -346,6 +346,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         mToolTipsManager = new ToolTipsManager();
         menu = navigationView.getMenu();
         fab = findViewById(R.id.fab);
+        fragmentTitle = findViewById(R.id.fragmentTitle);
         home = menu.findItem(R.id.home_id);
         records = menu.findItem(R.id.records);
         payments = menu.findItem(R.id.payments);
@@ -626,7 +627,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
     @Override
     public void showSnackBar(String messages, String actionName) {
         Snackbar.SnackbarLayout layout = (Snackbar.SnackbarLayout) enamSnackbar.getView();
-        TextView textView = (TextView) layout.findViewById(android.support.design.R.id.snackbar_text);
+        TextView textView = (TextView) layout.findViewById(com.google.android.material.R.id.snackbar_text);
         textView.setVisibility(View.INVISIBLE);
         LayoutInflater inflater = LayoutInflater.from(context);
         View snackView = inflater.inflate(R.layout.teachers_snakbar_layout, null);
@@ -820,7 +821,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
             @Override
             public void onTabSelected(TabView tab, int position) {
                 viewPager.setCurrentItem(position);
-                fragmentTitle.animateText(tabModelArrayList.get(position).getTabName());
+                //fragmentTitle.animateText(tabModelArrayList.get(position).getTabName());
 
             }
 
@@ -846,8 +847,8 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
 
             }
         });
-        fragmentTitle.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Cairo_Regular.ttf"));
-        fragmentTitle.animateText(tabModelArrayList.get(tabLayout.getSelectedTabPosition()).getTabName());
+        //fragmentTitle.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Cairo_Regular.ttf"));
+        //fragmentTitle.animateText(tabModelArrayList.get(tabLayout.getSelectedTabPosition()).getTabName());
 
 
     }
@@ -1608,7 +1609,7 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
     public void showPercentSnackBar(String completePercent) {
         Snackbar mySnackbar = Snackbar.make(coordinatorLayout, "Replace with your own action", Snackbar.LENGTH_LONG);
         Snackbar.SnackbarLayout layout = (Snackbar.SnackbarLayout) mySnackbar.getView();
-        TextView textView = (TextView) layout.findViewById(android.support.design.R.id.snackbar_text);
+        TextView textView = (TextView) layout.findViewById(com.google.android.material.R.id.snackbar_text);
         textView.setVisibility(View.INVISIBLE);
         LayoutInflater inflater = LayoutInflater.from(context);
         View snackView = inflater.inflate(R.layout.custom_snackbar_layout_one, null);

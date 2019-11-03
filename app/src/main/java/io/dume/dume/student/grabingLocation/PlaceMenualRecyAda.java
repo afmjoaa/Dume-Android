@@ -3,8 +3,8 @@ package io.dume.dume.student.grabingLocation;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,13 +12,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.android.gms.location.places.AutocompletePrediction;
-
-import java.util.ArrayList;
 import java.util.List;
 
 import io.dume.dume.R;
-import io.dume.dume.inter_face.usefulListeners;
 import io.dume.dume.student.studentSettings.SavedPlacesAdaData;
 
 public abstract class PlaceMenualRecyAda extends RecyclerView.Adapter<PlaceMenualRecyAda.MyViewHolder> {

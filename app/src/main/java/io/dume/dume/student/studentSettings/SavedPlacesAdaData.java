@@ -1,6 +1,6 @@
 package io.dume.dume.student.studentSettings;
 
-import android.support.annotation.Keep;
+import androidx.annotation.Keep;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;

@@ -6,17 +6,17 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.view.ViewPager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.tabs.TabLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.core.content.ContextCompat;
+import androidx.viewpager.widget.ViewPager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.util.Pair;
 import android.view.Gravity;
@@ -47,20 +47,12 @@ import io.dume.dume.common.chatActivity.DemoModel;
 import io.dume.dume.common.chatActivity.Room;
 import io.dume.dume.common.contactActivity.ContactActivity;
 import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
-import io.dume.dume.student.studentHelp.StudentHelpActivity;
 import io.dume.dume.student.studentSettings.StudentSettingsActivity;
-import io.dume.dume.teacher.adapters.AcademicAdapter;
-import io.dume.dume.teacher.homepage.TeacherActivtiy;
 import io.dume.dume.teacher.homepage.TeacherContract;
-import io.dume.dume.teacher.homepage.fragments.AcademicFragment;
 import io.dume.dume.teacher.mentor_settings.AccountSettings;
-import io.dume.dume.teacher.mentor_settings.basicinfo.EditAccount;
 import io.dume.dume.util.DumeUtils;
 
-import static io.dume.dume.util.DumeUtils.configToolbarTittle;
 import static io.dume.dume.util.DumeUtils.configureAppbarWithoutColloapsing;
-
-import io.dume.dume.common.chatActivity.*;
 
 public class InboxActivity extends CustomStuAppCompatActivity implements InboxActivityContact.View {
 

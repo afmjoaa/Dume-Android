@@ -1,6 +1,6 @@
 package io.dume.dume.common.chatActivity;
 
-import android.support.annotation.Keep;
+import androidx.annotation.Keep;
 
 import java.util.Date;
 

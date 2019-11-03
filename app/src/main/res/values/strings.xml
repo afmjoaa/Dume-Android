@@ -38,6 +38,8 @@
     <string name="lorem_para">
     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent arcu tellus, tincidunt at hendrerit nec,
         rhoncus non ligula. Cras vehicula cursus felis, at malesuada augue consequat ut. Vestibulum tincidunt enim magna,
+    </string><string name="lorem_para_sm">
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent arcu tellus
     </string>
     <string name="facebook_app_id">2108291549389177</string>
     <string name="fb_login_protocol_scheme">fb2108291549389177</string>
@@ -758,7 +760,7 @@ provided.Tap salary for details.  </string>
 
     <string-array name="after_splash_data">
         <item>Please select how you want to use the app </item>
-        <item>Location permission is needed as we use Google map to build the UI and search mentor/student.</item>
+        <item>sds</item>
     </string-array>
     <string name="title_activity_boot_camp_add">Start Boot Camp</string>
     <string name="title_activity_student_addvertise">Enhance your skill</string>
@@ -776,15 +778,18 @@ provided.Tap salary for details.  </string>
     <string name="request_letter">Request Letter</string>
     <string name="how_it_works">How it works...</string>
     <string name="enter_bkash_transection_id">Enter Bkash Transaction ID</string>
-    <string name="transaction_info_text">Please Bkash your due amount to the following Dume personal account and send us the transaction id and amount for verification, generally verification take 1&#8211;6 hours sorry for the inconvenience. Update is on it\'s way&#8230;</string>
+    <string name="transaction_info_text">Please Bkash your due amount to the following Dume personal
+        account and send us the transaction id and amount for verification, generally verification take 1&#8211;6 hours sorry for the inconvenience. Update is on it\'s way&#8230;</string>
     <string name="transaction_id">Transaction ID</string>
     <string name="amount">Amount</string>
     <string name="payment_info">You can send any amount of money through Bkash transaction. But don\'t send more then your due amount. As you provide us the transaction id and amount we will validate the transaction and deduct the same
-    from your due/obligation amount to Dume authority. For any further query please visit our website&#8230;</string>
+    from your due/obligation amount to Dume authority. For any further query please visit our website</string>
 
     <string name="cash_info">You need to pay the salary which you agreed to pay as wage mentioned in the record.You can pay that in cash to your mentor.
-        For any further query please visit our website&#8230;</string>
+        For any further query please visit our website</string>
     <string name="filter">Filter</string>
+    <string name="accept_continue">Accept and Continue</string>
+    <string name="greetings">Welcome to dume service app. Please select how you want to use the app</string>
 
     <string-array name="University">
         <item>AIUB</item>

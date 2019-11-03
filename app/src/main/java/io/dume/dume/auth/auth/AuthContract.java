@@ -11,7 +11,6 @@ import io.dume.dume.auth.DataStore;
 
 public interface AuthContract {
     interface View extends AuthGlobalContract.View {
-        boolean isAccountDefined();
 
         void init();
 
@@ -19,15 +18,6 @@ public interface AuthContract {
 
         void findView();
 
-        void onStudentSelected();
-
-        void onTeacherSelected();
-
-        void onBootcampSelected();
-
-        void onAppBarLayoutExpanded();
-
-        void onAppBarLayoutCollapsed();
 
         void showCount(String s);
 
@@ -48,8 +38,12 @@ public interface AuthContract {
         void showToast(String toast);
 
         void restoreData();
+        void enableVerifyButton();
+        void disableVerifyButton();
 
 
+        void sending();
+        void resetSending();
     }
 
     interface Model extends AuthGlobalContract.Model {
@@ -80,11 +74,7 @@ public interface AuthContract {
 
         void onPhoneTextChange(String text);
 
-        void onBottomNavChange(MenuItem menuItem);
-
         void onPhoneValidation(String phoneNumber);
-
-        void onAppBarStateChange(AppbarStateChangeListener.State state);
 
         void setBundle();
 

@@ -1,6 +1,6 @@
 package io.dume.dume.student.searchResultTabview;
 
-import android.support.annotation.Keep;
+import androidx.annotation.Keep;
 
 import java.io.Serializable;
 

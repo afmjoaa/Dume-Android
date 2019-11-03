@@ -1,6 +1,6 @@
 package io.dume.dume.student.homePage.adapter;
 
-import android.support.annotation.Keep;
+import androidx.annotation.Keep;
 
 @Keep
 public class RecentSearchData {

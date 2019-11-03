@@ -1,6 +1,6 @@
 package io.dume.dume.teacher.homepage.fragments;
 
-import android.arch.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModel;
 
 import com.github.mikephil.charting.data.Entry;
 

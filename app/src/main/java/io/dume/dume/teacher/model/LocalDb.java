@@ -1,6 +1,6 @@
 package io.dume.dume.teacher.model;
 
-import android.support.annotation.Keep;
+import androidx.annotation.Keep;
 
 import java.util.ArrayList;
 import java.util.Arrays;

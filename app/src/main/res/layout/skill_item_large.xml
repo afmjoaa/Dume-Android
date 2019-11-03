@@ -147,7 +147,7 @@
                             android:layout_height="14dp"
                             android:background="#eee4e3e4" />
 
-                        <android.support.v7.widget.SwitchCompat
+                        <androidx.appcompat.widget.SwitchCompat
                             android:id="@+id/skillStatus"
                             android:layout_width="40dp"
                             android:layout_height="20dp"
@@ -217,7 +217,7 @@
         android:translationY="-2dp"
         android:visibility="gone">
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/skillDetailsRV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
@@ -275,7 +275,7 @@
                 android:visibility="gone">
                 <!--@drawable/bg_light_accent_bottom_round-->
 
-                <android.support.v7.widget.RecyclerView
+                <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recycler_view_reviews"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

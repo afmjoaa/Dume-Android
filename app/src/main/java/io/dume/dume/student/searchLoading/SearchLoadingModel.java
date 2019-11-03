@@ -1,9 +1,8 @@
 package io.dume.dume.student.searchLoading;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.support.annotation.NonNull;
-import android.util.Log;
+
+import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -24,8 +23,6 @@ import io.dume.dume.student.recordsPage.Record;
 import io.dume.dume.student.recordsPage.RecordsPageModel;
 import io.dume.dume.teacher.homepage.TeacherContract;
 import io.dume.dume.util.DumeUtils;
-
-import static android.content.Context.MODE_PRIVATE;
 
 /*import org.imperiumlabs.geofirestore.GeoFirestore;
 import org.imperiumlabs.geofirestore.GeoQuery;

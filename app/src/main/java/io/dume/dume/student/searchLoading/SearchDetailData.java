@@ -1,7 +1,7 @@
 package io.dume.dume.student.searchLoading;
 
 import android.graphics.Bitmap;
-import android.support.annotation.Keep;
+import androidx.annotation.Keep;
 
 @Keep
 public class SearchDetailData {

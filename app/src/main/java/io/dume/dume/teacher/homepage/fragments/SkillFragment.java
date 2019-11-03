@@ -1,16 +1,16 @@
 package io.dume.dume.teacher.homepage.fragments;
 
-import android.arch.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,13 +30,11 @@ import carbon.widget.ImageView;
 import io.dume.dume.R;
 import io.dume.dume.model.DumeModel;
 import io.dume.dume.student.pojo.SearchDataStore;
-import io.dume.dume.teacher.adapters.AcademicAdapter;
 import io.dume.dume.teacher.adapters.SkillAdapter;
 import io.dume.dume.teacher.crudskill.CrudSkillActivity;
 import io.dume.dume.teacher.homepage.TeacherActivtiy;
 import io.dume.dume.teacher.homepage.TeacherContract;
 import io.dume.dume.teacher.homepage.TeacherDataStore;
-import io.dume.dume.teacher.mentor_settings.basicinfo.EditAccount;
 import io.dume.dume.teacher.pojo.Skill;
 import io.dume.dume.teacher.skill.SkillActivity;
 import io.dume.dume.util.DumeUtils;
@@ -59,8 +57,7 @@ public class SkillFragment extends Fragment {
     @BindView(R.id.no_data_block)
     public
     LinearLayout noDataBlock;
-    @BindView(R.id.tipsTV)
-    ScaleTextView scaleTextView;
+
     private TeacherActivtiy fragmentActivity;
     private TeacherDataStore teacherDataStore;
     private static SkillFragment skillFragment = null;
@@ -141,7 +138,8 @@ public class SkillFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.skill_fragment, container, false);
         ButterKnife.bind(this, root);
-        scaleTextView.setTypeface(Typeface.createFromAsset(Objects.requireNonNull(getContext()).getAssets(), "fonts/Cairo_Regular.ttf"));
+
+        //scaleTextView.setTypeface(Typeface.createFromAsset(Objects.requireNonNull(getContext()).getAssets(), "fonts/Cairo_Regular.ttf"));
         assert container != null;
         int[] wh = DumeUtils.getScreenSize(container.getContext());
         float mDensity = getResources().getDisplayMetrics().density;
@@ -285,8 +283,8 @@ public class SkillFragment extends Fragment {
     }
 
     public void tips(CharSequence sequence) {
-        scaleTextView.setSelected(true);
-        scaleTextView.animateText(sequence);
+        //scaleTextView.setSelected(true);
+        //scaleTextView.animateText(sequence);
         /*scaleTextView.setAnimationListener(hTextView -> {
         });*/
 

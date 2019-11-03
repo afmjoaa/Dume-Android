@@ -177,7 +177,7 @@
             android:translationY="-2dp"
             android:visibility="gone">
 
-            <android.support.v7.widget.RecyclerView
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/item_descriptions"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
@@ -186,7 +186,7 @@
 
     </carbon.widget.RelativeLayout>
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/p_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

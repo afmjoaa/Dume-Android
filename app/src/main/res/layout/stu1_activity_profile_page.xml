@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/parent_coor_layout"
@@ -76,7 +76,7 @@
             android:layout_weight="3"
             android:orientation="vertical">
 
-            <android.support.v7.widget.CardView
+            <androidx.cardview.widget.CardView
                 android:id="@+id/dispaly_pic"
                 android:layout_width="90dp"
                 android:layout_height="90dp"
@@ -126,7 +126,7 @@
                     android:translationY="8dp"
                     tools:ignore="SmallSp" />
 
-            </android.support.v7.widget.CardView>
+            </androidx.cardview.widget.CardView>
 
             <TextView
                 android:id="@+id/Profile_page_user_name"
@@ -185,7 +185,7 @@
     </LinearLayout>
 
 
-    <android.support.v4.widget.NestedScrollView
+    <androidx.core.widget.NestedScrollView
         android:id="@+id/profile_page_body"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -288,7 +288,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1">
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/input_layout_firstname"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -304,7 +304,7 @@
                             android:inputType="textPersonName"
                             app:fontFamily="@font/cairo_regular" />
 
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
                     <carbon.widget.ImageView
                         android:id="@+id/empty_fn_found"
@@ -329,7 +329,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1">
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/input_layout_lastname"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -343,7 +343,7 @@
                             android:hint="Last Name"
                             android:inputType="textPersonName"
                             app:fontFamily="@font/cairo_regular" />
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
                     <carbon.widget.ImageView
                         android:id="@+id/empty_ln_found"
@@ -375,7 +375,7 @@
                 android:layout_marginRight="20dp"
                 android:layout_marginBottom="10dp">
 
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/input_layout_email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -388,7 +388,7 @@
                         android:inputType="textEmailAddress"
                         app:fontFamily="@font/cairo_regular" />
 
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <carbon.widget.ImageView
                     android:id="@+id/empty_email_found"
@@ -408,7 +408,7 @@
 
             </RelativeLayout>
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/input_layout_c_address"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -428,9 +428,9 @@
                     android:onClick="onProfilePageClicked"
                     app:fontFamily="@font/cairo_regular" />
 
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/input_layout_c_status"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -446,9 +446,9 @@
                     android:inputType="text"
                     app:fontFamily="@font/cairo_regular" />
 
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/input_layout_p_result"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -467,7 +467,7 @@
                     android:onClick="onProfilePageClicked"
                     app:fontFamily="@font/cairo_regular" />
 
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -476,7 +476,7 @@
                 android:layout_marginEnd="20dp"
                 android:translationY="-4dp">
 
-                <android.support.v7.widget.AppCompatCheckBox
+                <androidx.appcompat.widget.AppCompatCheckBox
                     android:id="@+id/cgpa_checkbox"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -487,7 +487,7 @@
                     android:checked="false"
                     android:text="CGPA" />
 
-                <android.support.v7.widget.AppCompatCheckBox
+                <androidx.appcompat.widget.AppCompatCheckBox
                     android:id="@+id/gpa_checkbox"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -500,7 +500,7 @@
 
             </RelativeLayout>
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/input_layout_Gender"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -521,7 +521,7 @@
                     android:onClick="onProfilePageClicked"
                     app:fontFamily="@font/cairo_regular" />
 
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
             <LinearLayout
                 android:id="@+id/done_discard_btn_layout"
@@ -565,6 +565,6 @@
 
         </LinearLayout>
 
-    </android.support.v4.widget.NestedScrollView>
+    </androidx.core.widget.NestedScrollView>
 
-</android.support.design.widget.CoordinatorLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

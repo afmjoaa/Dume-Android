@@ -5,8 +5,8 @@ import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -30,7 +30,6 @@ import io.dume.dume.Google;
 import io.dume.dume.R;
 import io.dume.dume.common.chatActivity.ChatActivity;
 import io.dume.dume.common.chatActivity.DemoModel;
-import io.dume.dume.common.inboxActivity.InboxActivity;
 import io.dume.dume.teacher.homepage.TeacherContract;
 
 public class ContactDataAdapter extends RecyclerView.Adapter<ContactDataAdapter.MyViewHolder> {

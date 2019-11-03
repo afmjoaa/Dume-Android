@@ -3,30 +3,20 @@ package io.dume.dume.obligation.foreignObli;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.design.widget.BottomSheetBehavior;
-import android.support.design.widget.TextInputLayout;
-import android.support.v4.view.animation.FastOutLinearInInterpolator;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.interpolator.view.animation.FastOutLinearInInterpolator;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.GeoPoint;
-import com.transitionseverywhere.Fade;
-import com.transitionseverywhere.Slide;
-import com.transitionseverywhere.TransitionManager;
-import com.transitionseverywhere.TransitionSet;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,17 +24,11 @@ import java.util.Map;
 
 import io.dume.dume.R;
 import io.dume.dume.auth.auth.AuthActivity;
-import io.dume.dume.student.grabingLocation.GrabingLocationActivity;
-import io.dume.dume.student.grabingLocation.MenualRecyclerData;
 import io.dume.dume.student.homePage.HomePageActivity;
-import io.dume.dume.student.homePage.adapter.HomePageRatingAdapter;
 import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
-import io.dume.dume.student.profilePage.ProfilePageActivity;
-import io.dume.dume.teacher.crudskill.CrudSkillActivity;
 import io.dume.dume.teacher.homepage.TeacherActivtiy;
 import io.dume.dume.util.DumeUtils;
 import io.dume.dume.util.RadioBtnDialogue;
-import me.zhanghai.android.materialratingbar.MaterialRatingBar;
 
 public class PayActivity extends CustomStuAppCompatActivity implements PayContact.View {
     private static final String TAG = "PayActivity";

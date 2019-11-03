@@ -1,6 +1,6 @@
 package io.dume.dume.common.bkash_otp;
 
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 
 import io.dume.dume.R;

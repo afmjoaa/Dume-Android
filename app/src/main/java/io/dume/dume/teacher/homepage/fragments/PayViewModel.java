@@ -1,6 +1,6 @@
 package io.dume.dume.teacher.homepage.fragments;
 
-import android.arch.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModel;
 import android.content.Context;
 
 import java.util.ArrayList;

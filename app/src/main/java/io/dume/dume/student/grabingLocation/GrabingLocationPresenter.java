@@ -2,20 +2,15 @@ package io.dume.dume.student.grabingLocation;
 
 import android.app.Activity;
 import android.content.Context;
-import android.support.annotation.Nullable;
-import android.util.Log;
+import androidx.annotation.Nullable;
+
 import android.view.View;
 
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.GeoPoint;
-
-import java.util.Map;
-import java.util.Objects;
 
 import io.dume.dume.R;
-import io.dume.dume.student.pojo.SearchDataStore;
 import io.dume.dume.teacher.homepage.TeacherContract;
 
 public class GrabingLocationPresenter implements GrabingLocaitonContract.Presenter {

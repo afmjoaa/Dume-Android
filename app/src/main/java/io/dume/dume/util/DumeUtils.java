@@ -13,14 +13,14 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.LocationManager;
 import android.os.Build;
-import android.support.annotation.Keep;
-import android.support.annotation.StringRes;
-import android.support.design.widget.BottomSheetDialog;
-import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.PopupMenu;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.Keep;
+import androidx.annotation.StringRes;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.PopupMenu;
+import androidx.appcompat.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -205,7 +205,6 @@ public class DumeUtils {
         collapsingToolbarLayout.setExpandedTitleTypeface(Typeface.createFromAsset(activity.getAssets(), "fonts/Cairo-Light.ttf"));
         collapsingToolbarLayout.setTitle(title);
 
-        //Drawable drawable = ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_more_vert_black_24dp);
         Drawable drawable = context.getResources().getDrawable(R.drawable.ic_more_vert_black_24dp);
         toolbar.setOverflowIcon(drawable);
     }

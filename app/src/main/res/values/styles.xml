@@ -1,8 +1,56 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <!-- Customize your theme here. -->
+    <!--Material theme default-->
+    <style name="DefaultTheme.NoActionBar" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">@color/mColorPrimary</item>
+        <item name="colorPrimaryDark">@color/mStatusBar</item>
+        <item name="colorPrimaryVariant">@color/mColorPrimaryVariant</item>
+        <item name="colorOnPrimary">@color/mColorOnPrimary</item>
+        <item name="colorSecondary">@color/mColorSecondary</item>
+        <item name="colorSecondaryVariant">@color/mColorSecondaryVariant</item>
+        <item name="colorOnSecondary">@color/mColorOnSecondary</item>
+        <item name="colorError">@color/mColorError</item>
+        <item name="colorOnError">@color/mColorOnError</item>
+        <item name="colorSurface">@color/mColorSurface</item>
+        <item name="colorOnSurface">@color/mColorOnSurface</item>
+        <item name="android:colorBackground">@color/mColorBackground</item>
+        <item name="colorOnBackground">@color/mColorOnBackground</item>
+        <item name="android:fontFamily">@font/cairo_regular</item>
+        <item name="fontFamily" >@font/cairo_regular</item>
+        <item name="shapeAppearanceSmallComponent">@style/AppShapeAppearance.SmallComponent</item>
+        <item name="shapeAppearanceMediumComponent">@style/AppShapeAppearance.MediumComponent</item>
+        <item name="shapeAppearanceLargeComponent">@style/AppShapeAppearance.MediumComponent</item>
+        <item name="textInputStyle">@style/AppTextField</item>
+    </style>
+
+    <style name="AppShapeAppearance.SmallComponent" parent="ShapeAppearance.MaterialComponents.SmallComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">4dp</item>
+    </style>
+
+    <style name="AppShapeAppearance.MediumComponent" parent="ShapeAppearance.MaterialComponents.MediumComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">6dp</item>
+    </style>
+
+    <style name="AppShapeAppearance.LargeComponent" parent="ShapeAppearance.MaterialComponents.LargeComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">8dp</item>
+    </style>
+
+    <!--TextBox Fill color -->
+    <style name="AppTextField" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
+        <item name="boxBackgroundColor">@color/mTextBoxFill</item>
+    </style>
+
+   <!--Button style for tint color (not added)-->
+    <style name="AppButton" parent="Widget.MaterialComponents.Button">
+        <item name="backgroundTint">?attr/colorSecondary</item>
+    </style>
+
+
+    <!-- Main Application theme /AuthActivity-->
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
         <item name="colorPrimary">@color/colorDeepIcon</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
@@ -12,11 +60,89 @@
         <item name="carbon_linearLayoutStyle">@style/carbon_LinearLayout</item>
         <item name="android:fontFamily" tools:targetApi="jelly_bean">@font/cairo_regular</item>
         <item name="android:actionMenuTextColor">@color/black</item>
-        <item name="android:windowBackground">@drawable/white_bg</item>
     </style>
 
+    <!--Splash theme-->
     <style name="SplashTheme" parent="AppTheme">
         <item name="android:windowBackground">@drawable/splash_background</item>
+    </style>
+
+    <!--No actionBar theme /Homepage/TeachActivity/AppInfoActivity -->
+    <style name="AppTheme.NoActionBar" parent="Theme.MaterialComponents.Light.DarkActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="colorPrimary">@color/colorDeepIcon</item>
+        <item name="colorPrimaryDark">#00ffffff</item>
+        <item name="android:windowActionBarOverlay">true</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
+        <item name="android:fontFamily">@font/cairo_regular</item>
+    </style>
+
+    <!--grabbingInfo, searchResult, searchLoading, grabbingLocation, HeatMap, grabbingPackage, crudSkill theme -->
+    <style name="AppTheme.NoActionBar.transparent" parent="Theme.MaterialComponents.Light.DarkActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="colorPrimary">#9d9d9d</item>
+        <item name="colorPrimaryDark">#cac8c8</item>
+        <item name="android:windowActionBarOverlay">true</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
+        <item name="android:fontFamily">@font/cairo_regular</item>
+    </style>
+
+    <!--Default black ActionBar theme /studentSetting/studentPayment/editAccount... -->
+    <style name="AppTheme.NoActionBar.transparent.black" parent="AppTheme.NoActionBar.transparent">
+        <item name="colorPrimary">@color/carbon_black</item>
+        <item name="colorPrimaryDark">@color/carbon_black</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
+    </style>
+
+    <!--Contact and message activity default theme-->
+    <style name="AppTheme.NoActionBar.transparent.contact" parent="AppTheme.NoActionBar.transparent">
+        <item name="colorPrimary">@color/inbox_active_color</item>
+        <item name="colorPrimaryDark">@color/inbox_active_color_dark</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
+    </style>
+
+    <!--Contact and message activity default theme-->
+    <style name="AppTheme.NoActionBar.transparent.default" parent="AppTheme.NoActionBar.transparent">
+        <item name="colorPrimary">@color/white</item>
+        <item name="colorPrimaryDark">@color/white</item>
+    </style>
+
+    <!--grabbingInfo/SearchResultTab/RecordPage-->
+    <style name="AppTheme.NoActionBar.transparent.defaultTwo" parent="AppTheme.NoActionBar.transparent">
+        <item name="colorPrimary">@color/toolbar_defaultTwo</item>
+        <item name="colorPrimaryDark">@color/status_defaultTwo</item>
+    </style>
+
+    <!--Pending record theme-->
+    <style name="AppTheme.NoActionBar.transparent.pending" parent="AppTheme.NoActionBar.transparent">
+        <item name="colorPrimary">@color/toolbar_pending</item>
+        <item name="colorPrimaryDark">@color/status_pending</item>
+    </style>
+
+    <!--Rejected record theme -->
+    <style name="AppTheme.NoActionBar.transparent.rejected" parent="AppTheme.NoActionBar.transparent">
+        <item name="colorPrimary">@color/toolbar_rejected</item>
+        <item name="colorPrimaryDark">@color/status_rejected</item>
+    </style>
+
+    <!--Accepted record theme-->
+    <style name="AppTheme.NoActionBar.transparent.accepted" parent="AppTheme.NoActionBar.transparent">
+        <item name="colorPrimary">@color/toolbar_accepted</item>
+        <item name="colorPrimaryDark">@color/status_accepted</item>
+    </style>
+
+    <!--current record theme-->
+    <style name="AppTheme.NoActionBar.transparent.current" parent="AppTheme.NoActionBar.transparent">
+        <item name="colorPrimary">@color/toolbar_current</item>
+        <item name="colorPrimaryDark">@color/status_current</item>
+    </style>
+
+    <!--completed-->
+    <style name="AppTheme.NoActionBar.transparent.completed" parent="AppTheme.NoActionBar.transparent">
+        <item name="colorPrimary">@color/toolbar_completed</item>
+        <item name="colorPrimaryDark">@color/status_completed</item>
     </style>
 
     <style name="MyDarkBlueButton" parent="Widget.AppCompat.Button.Colored">
@@ -34,14 +160,6 @@
         <item name="android:textColor">@color/textColorPrimary</item>
     </style>
 
-    <style name="LoginTheme" parent="MyStyle">
-        <item name="android:windowTranslucentStatus" tools:targetApi="kitkat">true</item>
-        <item name="android:statusBarColor" tools:targetApi="lollipop">@android:color/transparent
-        </item>
-        <item name="android:fontFamily" tools:targetApi="jelly_bean">@font/cairo_regular</item>
-        <item name="colorPrimaryDark">@android:color/transparent</item>
-        <item name="android:navigationBarColor" tools:targetApi="lollipop">#000000</item>
-    </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
@@ -137,15 +255,7 @@
     </style>
 
 
-    <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-        <item name="colorPrimary">@color/colorDeepIcon</item>
-        <item name="colorPrimaryDark">#00ffffff</item>
-        <item name="android:windowActionBarOverlay">true</item>
-        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
-        <item name="android:fontFamily">@font/cairo_regular</item>
-    </style>
+
     <!--<item name="android:activatedBackgroundIndicator">@drawable/drawer_item_textcolor</item>-->
 
     <style name="AppTheme.NoActionBar.default" parent="AppTheme.NoActionBar">
@@ -206,64 +316,7 @@
         <item name="android:textColor">@color/tab_colorstate_list</item>
     </style>
 
-    <!--testing theme for translucedent -->
 
-    <style name="AppTheme.NoActionBar.transparent" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-        <item name="colorPrimary">#9d9d9d</item>
-        <item name="colorPrimaryDark">#cac8c8</item>
-        <item name="android:windowActionBarOverlay">true</item>
-        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
-        <item name="android:fontFamily">@font/cairo_regular</item>
-    </style>
-
-    <style name="AppTheme.NoActionBar.transparent.black" parent="AppTheme.NoActionBar.transparent">
-        <item name="colorPrimary">@color/carbon_black</item>
-        <item name="colorPrimaryDark">@color/carbon_black</item>
-        <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
-    </style>
-
-    <style name="AppTheme.NoActionBar.transparent.testing" parent="AppTheme.NoActionBar.transparent">
-        <item name="colorPrimary">@color/inbox_active_color</item>
-        <item name="colorPrimaryDark">@color/inbox_active_color_dark</item>
-        <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
-    </style>
-
-    <style name="AppTheme.NoActionBar.transparent.default" parent="AppTheme.NoActionBar.transparent">
-        <item name="colorPrimary">@color/white</item>
-        <item name="colorPrimaryDark">@color/white</item>
-    </style>
-
-    <style name="AppTheme.NoActionBar.transparent.defaultTwo" parent="AppTheme.NoActionBar.transparent">
-        <item name="colorPrimary">@color/toolbar_defaultTwo</item>
-        <item name="colorPrimaryDark">@color/status_defaultTwo</item>
-    </style>
-
-    <style name="AppTheme.NoActionBar.transparent.pending" parent="AppTheme.NoActionBar.transparent">
-        <item name="colorPrimary">@color/toolbar_pending</item>
-        <item name="colorPrimaryDark">@color/status_pending</item>
-    </style>
-
-    <style name="AppTheme.NoActionBar.transparent.rejected" parent="AppTheme.NoActionBar.transparent">
-        <item name="colorPrimary">@color/toolbar_rejected</item>
-        <item name="colorPrimaryDark">@color/status_rejected</item>
-    </style>
-
-    <style name="AppTheme.NoActionBar.transparent.accepted" parent="AppTheme.NoActionBar.transparent">
-        <item name="colorPrimary">@color/toolbar_accepted</item>
-        <item name="colorPrimaryDark">@color/status_accepted</item>
-    </style>
-
-    <style name="AppTheme.NoActionBar.transparent.current" parent="AppTheme.NoActionBar.transparent">
-        <item name="colorPrimary">@color/toolbar_current</item>
-        <item name="colorPrimaryDark">@color/status_current</item>
-    </style>
-
-    <style name="AppTheme.NoActionBar.transparent.completed" parent="AppTheme.NoActionBar.transparent">
-        <item name="colorPrimary">@color/toolbar_completed</item>
-        <item name="colorPrimaryDark">@color/status_completed</item>
-    </style>
 
     <style name="EnamTextAppearanceNormal" parent="Base.TextAppearance.AppCompat.Small">
         <item name="android:textColor">@color/colorBlack</item>

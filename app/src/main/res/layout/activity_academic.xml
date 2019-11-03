@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/parent_coor_layout"
@@ -23,7 +23,7 @@
         app:layout_anchor="@id/included_appber"
         app:layout_anchorGravity="bottom" />
 
-    <android.support.v4.widget.NestedScrollView
+    <androidx.core.widget.NestedScrollView
         android:id="@+id/academicScroll"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -45,7 +45,7 @@
                 android:layout_marginRight="18dp"
                 android:layout_marginBottom="10dp">
 
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/input_layout_level"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -60,7 +60,7 @@
                         android:onClick="onAcademicClick"
                         app:fontFamily="@font/cairo_regular" />
 
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <carbon.widget.ImageView
                     android:id="@+id/empty_level_found"
@@ -89,7 +89,7 @@
                 android:layout_marginRight="18dp"
                 android:layout_marginBottom="10dp">
 
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/input_layout_institution"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -103,7 +103,7 @@
                         android:onClick="onAcademicClick"
                         app:fontFamily="@font/cairo_regular" />
 
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <carbon.widget.ImageView
                     android:id="@+id/empty_institution_found"
@@ -132,7 +132,7 @@
                 android:layout_marginRight="18dp"
                 android:layout_marginBottom="10dp">
 
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/input_layout_degree"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -146,7 +146,7 @@
                         android:onClick="onAcademicClick"
                         app:fontFamily="@font/cairo_regular" />
 
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <carbon.widget.ImageView
                     android:id="@+id/empty_degree_found"
@@ -184,7 +184,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1">
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/input_layout_form"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
@@ -200,7 +200,7 @@
                             android:onClick="onAcademicClick"
                             app:fontFamily="@font/cairo_regular" />
 
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
                     <carbon.widget.ImageView
                         android:id="@+id/empty_from_found"
@@ -229,7 +229,7 @@
                     android:layout_weight="1"
                     android:visibility="gone">
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/input_layout_to"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
@@ -244,7 +244,7 @@
                             android:inputType="textPersonName"
                             android:onClick="onAcademicClick"
                             app:fontFamily="@font/cairo_regular" />
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
                     <carbon.widget.ImageView
                         android:id="@+id/empty_to_found"
@@ -274,7 +274,7 @@
                 android:layout_marginEnd="18dp"
                 android:layout_marginRight="18dp">
 
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/input_layout_status"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -290,7 +290,7 @@
                         android:onClick="onAcademicClick"
                         app:fontFamily="@font/cairo_regular" />
 
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <carbon.widget.ImageView
                     android:id="@+id/empty_status_found"
@@ -319,7 +319,7 @@
                 android:layout_marginRight="18dp"
                 android:translationY="-4dp">
 
-                <android.support.v7.widget.AppCompatCheckBox
+                <androidx.appcompat.widget.AppCompatCheckBox
                     android:id="@+id/cgpa_checkbox"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -330,7 +330,7 @@
                     android:checked="false"
                     android:text="CGPA" />
 
-                <android.support.v7.widget.AppCompatCheckBox
+                <androidx.appcompat.widget.AppCompatCheckBox
                     android:id="@+id/gpa_checkbox"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -341,7 +341,7 @@
                     android:checked="false"
                     android:text="GPA" />
 
-                <android.support.v7.widget.AppCompatCheckBox
+                <androidx.appcompat.widget.AppCompatCheckBox
                     android:id="@+id/study_checkbox"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -356,9 +356,9 @@
 
         </LinearLayout>
 
-    </android.support.v4.widget.NestedScrollView>
+    </androidx.core.widget.NestedScrollView>
 
-    <android.support.design.widget.FloatingActionButton
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabEdit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -371,4 +371,4 @@
         app:backgroundTint="@color/colorBlack"
         app:rippleColor="@color/colorDarkAzure" />
 
-</android.support.design.widget.CoordinatorLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

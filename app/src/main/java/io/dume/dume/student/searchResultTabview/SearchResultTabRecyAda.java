@@ -2,31 +2,24 @@ package io.dume.dume.student.searchResultTabview;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.RecyclerView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.bumptech.glide.request.target.SimpleTarget;
-import com.google.android.gms.location.places.AutocompletePrediction;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.List;
 
 import carbon.widget.ImageView;
 import io.dume.dume.R;
 import io.dume.dume.student.pojo.SearchDataStore;
-import io.dume.dume.student.searchResult.SearchResultActivity;
 import me.zhanghai.android.materialratingbar.MaterialRatingBar;
 
 import static com.facebook.FacebookSdk.getApplicationContext;

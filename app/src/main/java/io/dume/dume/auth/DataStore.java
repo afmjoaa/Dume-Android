@@ -1,12 +1,10 @@
 package io.dume.dume.auth;
 
-import android.support.annotation.Keep;
+import androidx.annotation.Keep;
 
 import com.google.firebase.auth.PhoneAuthProvider;
-import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Map;
 
 @Keep
@@ -18,7 +16,7 @@ public class DataStore implements Serializable {
     private String firstName = null;
     private String lastName = null;
     private String accountManjor = "student";
-
+    private String flowState = "Role";
 
     private boolean isBottomNavAccountMajor = false;
     private String phoneNumber = null;

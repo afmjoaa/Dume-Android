@@ -3,12 +3,11 @@ package io.dume.dume.auth;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.util.Log;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.FirebaseTooManyRequestsException;
@@ -22,16 +21,13 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.Source;
 import com.google.firebase.internal.api.FirebaseNoSignedInUserException;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Nullable;
@@ -293,9 +289,6 @@ public class AuthModel implements AuthContract.Model, SplashContract.Model, Phon
         //Source source = Source.DEFAULT;
 
         mini_users.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-
-//            private Boolean obligation;
-//            private Boolean foreignObligation;
 
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {

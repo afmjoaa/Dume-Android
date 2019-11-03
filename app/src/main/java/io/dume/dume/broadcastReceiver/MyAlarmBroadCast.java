@@ -13,8 +13,8 @@ import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.provider.Settings;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.TaskStackBuilder;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.TaskStackBuilder;
 import android.util.Log;
 
 import java.util.List;
@@ -22,7 +22,6 @@ import java.util.List;
 import io.dume.dume.Google;
 import io.dume.dume.R;
 import io.dume.dume.student.homePage.HomePageActivity;
-import io.dume.dume.student.homePage.StudentActivity;
 import io.dume.dume.student.recordsCurrent.RecordsCurrentActivity;
 import io.dume.dume.util.DumeUtils;
 

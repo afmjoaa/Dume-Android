@@ -1,6 +1,6 @@
 package io.dume.dume.auth.auth;
 
-import android.support.design.widget.AppBarLayout;
+import com.google.android.material.appbar.AppBarLayout;
 
 public abstract class AppbarStateChangeListener implements AppBarLayout.OnOffsetChangedListener {
     public enum State {

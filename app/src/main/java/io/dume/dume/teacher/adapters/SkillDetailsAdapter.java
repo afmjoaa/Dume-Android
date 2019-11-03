@@ -1,8 +1,8 @@
 package io.dume.dume.teacher.adapters;
 
 import android.graphics.Typeface;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,15 +10,12 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.dume.dume.R;
 import io.dume.dume.teacher.model.KeyMap;
-import io.dume.dume.teacher.model.KeyValueModel;
 
 public class SkillDetailsAdapter extends RecyclerView.Adapter<SkillDetailsAdapter.SDVH> {
 

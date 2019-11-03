@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/my_main_container"
@@ -57,7 +57,7 @@
         app:elevation="8dp"
         app:layout_behavior="@string/bottom_sheet_behavior">
         <!--75dp-->
-        <android.support.v4.widget.NestedScrollView
+        <androidx.core.widget.NestedScrollView
             android:id="@+id/bottom_sheet_scroll_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -174,7 +174,7 @@
                         android:background="#3ca7a7a7" />
 
 
-                    <android.support.v7.widget.RecyclerView
+                    <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/search_details_recycler"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -183,7 +183,7 @@
                         android:layout_marginRight="8dp"
                         android:layout_marginBottom="4dp">
 
-                    </android.support.v7.widget.RecyclerView>
+                    </androidx.recyclerview.widget.RecyclerView>
 
                 </LinearLayout>
 
@@ -231,7 +231,7 @@
                         android:background="#3ca7a7a7" />
 
 
-                    <android.support.v7.widget.RecyclerView
+                    <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/package_detail_recycler"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -240,12 +240,12 @@
                         android:layout_marginRight="8dp"
                         android:layout_marginBottom="2dp">
 
-                    </android.support.v7.widget.RecyclerView>
+                    </androidx.recyclerview.widget.RecyclerView>
 
                 </LinearLayout>
 
             </carbon.widget.LinearLayout>
-        </android.support.v4.widget.NestedScrollView>
+        </androidx.core.widget.NestedScrollView>
     </LinearLayout>
 
     <com.varunest.loader.TheGlowingLoader
@@ -268,7 +268,7 @@
         app:theglowingloader_particle_3_color="@color/particle_dark_blue"
         app:theglowingloader_ripple_color="@color/colorOffWhite" />
 
-    <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/parent_coor_layout"
@@ -276,7 +276,7 @@
         android:layout_height="match_parent"
         tools:context=".student.searchLoading.SearchLoadingActivity">
 
-        <android.support.design.widget.AppBarLayout
+        <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/my_appbarLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -284,7 +284,7 @@
             android:theme="@style/AppTheme.AppBarOverlay"
             app:elevation="0dp">
 
-            <android.support.v7.widget.Toolbar
+            <androidx.appcompat.widget.Toolbar
                 android:id="@+id/accountToolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
@@ -296,11 +296,11 @@
                 app:titleMargin="0dp"
                 app:titleTextAppearance="@style/MyTextApprncCol.lightBg">
 
-            </android.support.v7.widget.Toolbar>
+            </androidx.appcompat.widget.Toolbar>
 
-        </android.support.design.widget.AppBarLayout>
+        </com.google.android.material.appbar.AppBarLayout>
 
-        <android.support.design.widget.AppBarLayout
+        <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/secondary_Appbar"
             android:layout_width="match_parent"
             android:layout_height="@dimen/appbarLayoutHeight"
@@ -310,7 +310,7 @@
             android:theme="@style/Base.ThemeOverlay.AppCompat.Dark"
             android:visibility="invisible">
 
-            <android.support.design.widget.CollapsingToolbarLayout
+            <com.google.android.material.appbar.CollapsingToolbarLayout
                 android:id="@+id/secondary_collapsing_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="90dp"
@@ -329,7 +329,7 @@
                 app:title="Requesting"
                 app:titleEnabled="true">
 
-                <android.support.v7.widget.Toolbar
+                <androidx.appcompat.widget.Toolbar
                     android:id="@+id/secondary_toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
@@ -344,10 +344,10 @@
                     app:titleMarginStart="@dimen/titleMarginStart"
                     app:titleMarginTop="@dimen/titleMarginTop">
 
-                </android.support.v7.widget.Toolbar>
-            </android.support.design.widget.CollapsingToolbarLayout>
-        </android.support.design.widget.AppBarLayout>
+                </androidx.appcompat.widget.Toolbar>
+            </com.google.android.material.appbar.CollapsingToolbarLayout>
+        </com.google.android.material.appbar.AppBarLayout>
 
-    </android.support.design.widget.CoordinatorLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-</android.support.design.widget.CoordinatorLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

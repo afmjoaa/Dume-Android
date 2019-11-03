@@ -130,7 +130,7 @@
     <color name="testing_transparent">#eaf4f4</color>
 
     <color name="view">#7b1fa2</color>
-    <color name="impression">#0288d1</color>
+    <color name="impression">#368CF3</color>
     <color name="skill_color">#e8f4f4</color>
     <color name="noti_color">#04AA77</color>
 
@@ -145,9 +145,24 @@
     <color name="payment_wage">#80deea</color>
 
     <!--new color pallets here-->
-    <color name="ButtonColor">#039be5</color>
-    <color name="ButtonAfterPressedColor">#0086c3</color>
+    <color name="ButtonColor">#368CF3</color>
     <color name="ButtonPressedColor">#01579b</color>
+    <color name="ButtonDisableColor">#86C4F7</color>
     <color name="CircularIndicator">#607d8b</color>
 
+    <!--material theme colors-->
+    <color name="mColorPrimary">#039be5</color>
+    <color name="mColorPrimaryVariant">#0288d1</color>
+    <color name="mColorOnPrimary">#FFFFFF</color>
+    <color name="mColorSecondary">#039be5</color>
+    <color name="mColorSecondaryVariant">#0288d1</color>
+    <color name="mColorOnSecondary">#FFFFFF</color>
+    <color name="mColorError">#ef5350</color>
+    <color name="mColorOnError">#FAFAFA</color>
+    <color name="mColorSurface">#FAFAFA</color>
+    <color name="mColorOnSurface">#212121</color>
+    <color name="mColorBackground">#FAFAFA</color>
+    <color name="mColorOnBackground">#212121</color>
+    <color name="mStatusBar">#ffffff</color>
+    <color name="mTextBoxFill">#e1f5fe</color>
 </resources>

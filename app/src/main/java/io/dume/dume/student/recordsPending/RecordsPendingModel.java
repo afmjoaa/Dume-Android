@@ -3,13 +3,11 @@ package io.dume.dume.student.recordsPending;
 import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
-import android.support.annotation.NonNull;
-import android.util.Log;
+import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCanceledListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
@@ -23,7 +21,6 @@ import java.util.Objects;
 
 import io.dume.dume.inter_face.usefulListeners;
 import io.dume.dume.student.recordsPage.RecordsPageModel;
-import io.dume.dume.teacher.homepage.TeacherContract;
 
 public class RecordsPendingModel extends RecordsPageModel implements RecordsPendingContract.Model {
 

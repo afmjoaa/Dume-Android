@@ -3,9 +3,7 @@ package io.dume.dume.customView;
 import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.AttributeSet;
@@ -30,7 +28,7 @@ public class HorizontalLoadViewTwo extends View implements ValueAnimator.Animato
         init(context, null);
     }
 
-    public HorizontalLoadViewTwo(Context context, @android.support.annotation.Nullable AttributeSet attrs) {
+    public HorizontalLoadViewTwo(Context context, @androidx.annotation.Nullable AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs);
     }

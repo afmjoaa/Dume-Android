@@ -3,12 +3,11 @@ package io.dume.dume.teacher.mentor_settings.basicinfo;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.GeoPoint;
 
-import java.io.File;
 import java.util.List;
 
 import io.dume.dume.teacher.homepage.TeacherContract;

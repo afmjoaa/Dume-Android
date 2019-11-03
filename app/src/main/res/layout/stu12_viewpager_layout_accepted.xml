@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/accepted_nested_scroll"
@@ -1385,7 +1385,7 @@
                     android:textStyle="normal"
                     app:fontFamily="@font/cairo_regular" />
 
-                <android.support.v7.widget.RecyclerView
+                <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recycler_view_qualifications"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
@@ -1441,7 +1441,7 @@
                 android:paddingBottom="8dp"
                 android:translationY="-2dp">
 
-                <android.support.v7.widget.RecyclerView
+                <androidx.recyclerview.widget.RecyclerView
                     android:background="@drawable/bg_white_bottom_round"
                     android:id="@+id/recycler_view_reviews"
                     android:layout_width="match_parent"
@@ -1494,4 +1494,4 @@
 
     </LinearLayout>
 
-</android.support.v4.widget.NestedScrollView>
+</androidx.core.widget.NestedScrollView>

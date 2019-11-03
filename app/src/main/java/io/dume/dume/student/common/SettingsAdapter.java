@@ -1,8 +1,8 @@
 package io.dume.dume.student.common;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +13,6 @@ import java.util.List;
 
 import carbon.widget.ImageView;
 import io.dume.dume.R;
-
-import static io.dume.dume.util.DumeUtils.configAppbarTittle;
 
 public abstract class SettingsAdapter extends RecyclerView.Adapter<SettingsAdapter.MyViewHolder> {
 
