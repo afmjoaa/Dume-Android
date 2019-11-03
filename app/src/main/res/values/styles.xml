@@ -16,11 +16,14 @@
         <item name="android:colorBackground">@color/mColorBackground</item>
         <item name="colorOnBackground">@color/mColorOnBackground</item>
         <item name="android:fontFamily">@font/cairo_regular</item>
-        <item name="fontFamily" >@font/cairo_regular</item>
+        <item name="fontFamily">@font/cairo_regular</item>
         <item name="shapeAppearanceSmallComponent">@style/AppShapeAppearance.SmallComponent</item>
         <item name="shapeAppearanceMediumComponent">@style/AppShapeAppearance.MediumComponent</item>
         <item name="shapeAppearanceLargeComponent">@style/AppShapeAppearance.MediumComponent</item>
         <item name="textInputStyle">@style/AppTextField</item>
+    </style>    <!--Material theme No Animation-->
+    <style name="DefaultTheme.NoActionBar.NoAnimation" parent="DefaultTheme.NoActionBar">
+        <item name="android:windowAnimationStyle">@null</item>
     </style>
 
     <style name="AppShapeAppearance.SmallComponent" parent="ShapeAppearance.MaterialComponents.SmallComponent">
@@ -43,7 +46,7 @@
         <item name="boxBackgroundColor">@color/mTextBoxFill</item>
     </style>
 
-   <!--Button style for tint color (not added)-->
+    <!--Button style for tint color (not added)-->
     <style name="AppButton" parent="Widget.MaterialComponents.Button">
         <item name="backgroundTint">?attr/colorSecondary</item>
     </style>
@@ -255,7 +258,6 @@
     </style>
 
 
-
     <!--<item name="android:activatedBackgroundIndicator">@drawable/drawer_item_textcolor</item>-->
 
     <style name="AppTheme.NoActionBar.default" parent="AppTheme.NoActionBar">
@@ -315,7 +317,6 @@
         <item name="android:textStyle">normal</item>
         <item name="android:textColor">@color/tab_colorstate_list</item>
     </style>
-
 
 
     <style name="EnamTextAppearanceNormal" parent="Base.TextAppearance.AppCompat.Small">

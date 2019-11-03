@@ -37,12 +37,14 @@ public class PrivacyActivity extends CustomStuAppCompatActivity implements View.
          setDarkStatusBarIcon();
         if (local.getAccountManjor().equals(DataStore.TEACHER)) {
             webViewPrivacey.loadUrl("file:///android_asset/pages/teacher_privacy.html");
+            configureAppbar(this, "Teacher Guide", true);
         } else {
             webViewPrivacey.loadUrl("file:///android_asset/pages/student_privacy.html");
+            configureAppbar(this, "Student Guide", true);
         }
         ExtendedFloatingActionButton testOne = findViewById(R.id.testOne);
         testOne.extend();
-        configureAppbar(this, "Teacher Guide", true);
+
     }
 
 

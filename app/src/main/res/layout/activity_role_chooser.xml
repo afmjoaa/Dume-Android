@@ -99,12 +99,29 @@
             android:layout_marginTop="10dp"
             android:layout_marginRight="40dp"
             android:layout_marginBottom="10dp"
-            android:background="@drawable/round_button_before_pressed"
             android:onClick="onClick"
             android:text="As a Student"
             android:textAllCaps="false"
             android:textColor="@color/white"
             app:fontFamily="@font/cairo_regular" />
+
+        <Button
+            android:id="@+id/test"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginBottom="10dp"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:onClick="onClick"
+            android:text="Test"
+            android:textAllCaps="false"
+            app:fontFamily="@font/cairo_regular" />
+
+
+
+
 
 
     </LinearLayout>

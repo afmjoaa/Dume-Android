@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/my_job_board"
+        android:icon="@drawable/home_icon"
+        android:title="Job Board" />
+    <item
+        android:id="@+id/my_tution"
+        android:icon="@drawable/record_icon"
+        android:title="Tutions" />
+    <item
+        android:id="@+id/my_skill"
+        android:icon="@drawable/skill"
+        android:title="Skills" />
+    <item
+        android:id="@+id/my_payment"
+        android:icon="@drawable/ic_payment"
+        android:title="Payments" />
+
+</menu>
