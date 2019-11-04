@@ -78,7 +78,7 @@
 
         <activity
             android:name=".firstTimeUser.NIDVerificationActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/DefaultTheme.NoActionBar" />
         <activity
             android:name=".firstTimeUser.PrivacyActivity"
             android:theme="@style/DefaultTheme.NoActionBar" />
@@ -95,24 +95,15 @@
 
         <activity
             android:name=".auth.auth.AuthActivity"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/DefaultTheme.NoActionBar" />
         <activity
             android:name=".auth.code_verification.PhoneVerificationActivity"
             android:theme="@style/MyStyle" />
         <activity
             android:name=".auth.auth_final.AuthRegisterActivity"
             android:label="@string/title_activity_auth_final"
-            android:theme="@style/MyStyle"
+            android:theme="@style/DefaultTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize" />
-        <activity
-            android:name=".auth.social_init.SocialInitActivity"
-            android:label="@string/title_activity_social_init"
-            android:theme="@style/MyStyle" />
-
-        <activity
-            android:name="com.facebook.FacebookActivity"
-            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
-            android:label="@string/app_name" />
 
         <activity
             android:name=".teacher.mentor_settings.AccountSettings"

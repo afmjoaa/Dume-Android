@@ -34,64 +34,7 @@
         android:layout_marginBottom="10dp"
         android:text="ready to verify"
         android:visibility="invisible" />
-    <carbon.widget.LinearLayout
-        android:id="@+id/demoText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:layout_marginLeft="40dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="40dp"
-        android:layout_marginBottom="10dp"
-        app:carbon_elevation="5dp"
-        android:paddingLeft="10dp"
-        app:carbon_cornerRadius="8dp"
-        android:paddingTop="4dp"
-        android:paddingBottom="4dp"
-        android:orientation="horizontal">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_margin="5dp"
-            app:srcCompat="@drawable/ic_call" />
-
-        <TextView
-            android:id="@+id/countryCode"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginTop="5dp"
-            android:text="+88"
-            android:visibility="gone"
-            android:fontFamily="@font/cairo_regular"
-            android:textSize="18sp" />
-
-
-
-            <EditText
-                android:id="@+id/phoneNumberEditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:background="@null"
-                android:descendantFocusability="beforeDescendants"
-                android:focusableInTouchMode="true"
-                android:fontFamily="@font/cairo_regular"
-                android:hint="Enter Mobile Number"
-                android:imeOptions="actionDone"
-                android:inputType="phone"
-                android:nextFocusLeft="@id/phoneNumberEditText"
-                android:nextFocusUp="@id/phoneNumberEditText"
-                android:singleLine="true"
-                android:paddingLeft="10dp"
-                android:maxLength="11"
-                android:textSize="18sp" />
-
-    </carbon.widget.LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -99,40 +42,6 @@
         android:gravity="end"
         android:orientation="vertical">
 
-
-
-        <Button
-            android:id="@+id/verify_phone"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="40dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="40dp"
-            android:layout_marginBottom="10dp"
-            android:background="@drawable/round_button_before_pressed"
-            android:onClick="onClick"
-            android:text="Send Code"
-            android:enabled="false"
-            android:textStyle="bold"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            app:fontFamily="@font/cairo_regular" />
-<Button
-            android:id="@+id/test"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="40dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="40dp"
-            android:layout_marginBottom="10dp"
-            android:background="@drawable/round_button_outline"
-            android:onClick="onClick"
-            android:text="Test"
-            android:enabled="true"
-            android:textStyle="bold"
-            android:textAllCaps="false"
-            android:textColor="@color/blue"
-            app:fontFamily="@font/cairo_regular" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/floating_button"

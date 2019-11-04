@@ -59,20 +59,21 @@
             android:id="@+id/termsWV"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
         </WebView>
+
     </androidx.core.widget.NestedScrollView>
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:layout_width="wrap_content"
-        android:id="@+id/testOne"
+        android:id="@+id/continueBtn"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:contentDescription="Accept the terms"
-        android:text="Testing"
-        app:icon="@drawable/ic_arrow_back_default_24dp"
+        android:layout_margin="18dp"
+        android:contentDescription="@string/accept_amp_continue"
+        android:text="Continue"
+        app:icon="@drawable/accept_icon"
+        android:onClick="continueBtnCLicked"
         app:layout_anchor="@id/test"
-        app:layout_anchorGravity="bottom|right" />
+        app:layout_anchorGravity="bottom|center"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

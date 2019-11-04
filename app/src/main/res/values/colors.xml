@@ -160,7 +160,7 @@
     <color name="mColorError">#ef5350</color>
     <color name="mColorOnError">#FAFAFA</color>
     <color name="mColorSurface">#FAFAFA</color>
-    <color name="mColorOnSurface">#212121</color>
+    <color name="mColorOnSurface">#01579b</color>
     <color name="mColorBackground">#FAFAFA</color>
     <color name="mColorOnBackground">#212121</color>
     <color name="mStatusBar">#ffffff</color>

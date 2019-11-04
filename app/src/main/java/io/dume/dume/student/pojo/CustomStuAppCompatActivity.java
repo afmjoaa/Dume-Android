@@ -128,6 +128,12 @@ public class CustomStuAppCompatActivity extends AppCompatActivity implements MyC
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        View view = findViewById(R.id.parent_coor_layout);
+        if(view != null){
+            setActivityContext(this, 5666);
+        }
+
         String accountMajor = Google.getInstance().getAccountMajor();
         if (FirebaseAuth.getInstance().getCurrentUser() != null && accountMajor == null) {
             Intent returnIntent = new Intent(this, SplashActivity.class);

@@ -15,7 +15,7 @@ import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
 
 import static io.dume.dume.util.DumeUtils.configureAppbar;
 
-public class PrivacyActivity extends CustomStuAppCompatActivity implements View.OnClickListener {
+public class PrivacyActivity extends CustomStuAppCompatActivity {
 
     private DataStore local;
     private WebView webViewPrivacey;
@@ -31,25 +31,20 @@ public class PrivacyActivity extends CustomStuAppCompatActivity implements View.
         init();
     }
 
-
     private void init() {
-        //  settingStatusBarTransparent();
          setDarkStatusBarIcon();
         if (local.getAccountManjor().equals(DataStore.TEACHER)) {
             webViewPrivacey.loadUrl("file:///android_asset/pages/teacher_privacy.html");
         } else {
             webViewPrivacey.loadUrl("file:///android_asset/pages/student_privacy.html");
         }
-        ExtendedFloatingActionButton testOne = findViewById(R.id.testOne);
+        ExtendedFloatingActionButton testOne = findViewById(R.id.continueBtn);
         testOne.extend();
         configureAppbar(this, "Teacher Guide", true);
     }
 
 
-    @Override
-    public void onClick(View v) {
+    public void continueBtnCLicked(View view) {
         startActivity(new Intent(this, AuthActivity.class));
     }
-
-
 }

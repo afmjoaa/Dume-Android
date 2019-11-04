@@ -103,19 +103,20 @@ public class AuthActivity extends CustomStuAppCompatActivity implements AuthCont
 
     @Override
     public void init() {
+        setDarkStatusBarIcon();
         context = this;
         phoneEditText.setOnEditorActionListener(this);
         floatingButoon.setOnClickListener(view -> presenter.onPhoneValidation(phoneEditText.getText().toString()));
         phoneEditText.addTextChangedListener(this);
         Typeface custom_font = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Medium.ttf");
         cairoRegular = Typeface.createFromAsset(getAssets(), "fonts/Cairo_Regular.ttf");
-        Button button = findViewById(R.id.test);
+       /* Button button = findViewById(R.id.test);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(), NIDVerificationActivity.class));
             }
-        });
+        });*/
     }
 
     @Override

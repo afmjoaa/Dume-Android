@@ -48,6 +48,11 @@
         <item name="backgroundTint">?attr/colorSecondary</item>
     </style>
 
+    <style name="DefaultText" parent="Base.TextAppearance.AppCompat.Small">
+        <item name="android:textColor">@color/textColorPrimary</item>
+        <item name="android:textSize">17sp</item>
+        <item name="android:textStyle">normal</item>
+    </style>
 
     <!-- Main Application theme /AuthActivity-->
     <style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
