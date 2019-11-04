@@ -160,4 +160,6 @@ dependencies {
     implementation 'com.google.firebase:firebase-crash:16.2.1'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'com.jakewharton.threetenabp:threetenabp:1.2.0'
+
+    implementation 'de.hdodenhof:circleimageview:3.0.1'
 }

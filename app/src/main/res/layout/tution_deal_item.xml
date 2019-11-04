@@ -1,0 +1,168 @@
+<carbon.widget.RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/recordsHostLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="true"
+    app:carbon_stroke="@color/colorGrey"
+    app:carbon_strokeWidth="1dp"
+    app:carbon_cornerRadius="8dp"
+    android:padding="5dp"
+    android:layout_margin="5dp"
+    android:foreground="?android:attr/selectableItemBackground">
+
+    <LinearLayout
+        android:id="@+id/left_vertical_host_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:gravity="start"
+        android:orientation="vertical">
+
+        <carbon.widget.ImageView
+            android:id="@+id/student_display_pic"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="1dp"
+            android:scaleType="centerCrop"
+            app:carbon_cornerRadius="100dp"
+            app:carbon_elevation="3dp"
+            android:src="@color/colorLink" />
+
+        <TextView
+            android:id="@+id/student_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxWidth="110dp"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:text="Student"
+            android:textColor="@color/textColorPrimary"
+            android:textSize="16sp"
+            app:fontFamily="@font/cairo_regular" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/center_vertical_host_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        tools:ignore="RelativeOverlap">
+
+        <TextView
+            android:id="@+id/subject_in_demand"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="130dp"
+            android:paddingLeft="130dp"
+            android:paddingEnd="130dp"
+            android:paddingRight="130dp"
+            android:text="@string/math_amp_physics"
+            android:textAlignment="center"
+            android:textAllCaps="false"
+            android:textColor="@color/textColorPrimary"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginTop="10dp"
+            app:fontFamily="@font/cairo_regular" />
+
+        <TextView
+            android:id="@+id/salary_in_demand"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="10k BDT"
+            android:textAllCaps="false"
+            android:textColor="@color/textColorPrimary"
+            android:textSize="14sp"
+            app:fontFamily="@font/cairo_regular" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/right_vertical_host_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="10dp"
+        android:gravity="end"
+        android:orientation="vertical">
+
+        <carbon.widget.ImageView
+            android:id="@+id/mentor_display_pic"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="1dp"
+            android:scaleType="centerCrop"
+            app:carbon_cornerRadius="100dp"
+            app:carbon_elevation="3dp"
+            android:src="@color/blue"/>
+
+        <TextView
+            android:id="@+id/mentor_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxWidth="110dp"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:text="Mentor"
+            android:textColor="@color/textColorPrimary"
+            android:textSize="16sp"
+            app:fontFamily="@font/cairo_regular" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/msg_delivery_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/center_vertical_host_layout"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="4dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        tools:ignore="UseCompoundDrawables">
+
+        <TextView
+            android:id="@+id/delivery_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:text="Rejected"
+            android:textAllCaps="false"
+            android:textColor="@color/red"
+            android:textSize="12sp"
+            app:fontFamily="@font/cairo_regular" />
+
+        <ImageView
+            android:id="@+id/delivery_status_image_view"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginBottom="5dp"
+            android:contentDescription="ic_delivery"
+            android:visibility="gone"
+            app:srcCompat="@drawable/ic_sms_delivered" />
+
+    </LinearLayout>
+
+
+
+
+</carbon.widget.RelativeLayout>

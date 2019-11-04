@@ -3,11 +3,14 @@ package io.dume.dume.teacher.dashboard.activities
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import io.dume.dume.R
 import io.dume.dume.teacher.dashboard.DashboardCompatActivity
 import io.dume.dume.teacher.dashboard.DashboardContact
 import io.dume.dume.teacher.dashboard.DashboardPresenter
+import io.dume.dume.teacher.dashboard.adapters.TutionAdapter
 import kotlinx.android.synthetic.main.activity_my_tution.*
 
 class MyTutionActivity : DashboardCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener, DashboardContact.View {
@@ -43,5 +46,10 @@ class MyTutionActivity : DashboardCompatActivity(), BottomNavigationView.OnNavig
         bottom_menu.selectedItemId = R.id.my_tution
         bottom_menu.setOnNavigationItemSelectedListener(this)
 
+    }
+
+    override fun setupRecycler() {
+        tution_rv.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
+        tution_rv.adapter = TutionAdapter()
     }
 }

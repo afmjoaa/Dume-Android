@@ -6,7 +6,8 @@ interface DashboardContact {
 
     interface View {
         fun init()
-        fun toast(message:String)
+        fun toast(message: String)
+        fun setupRecycler()
     }
 
     interface Presenter {

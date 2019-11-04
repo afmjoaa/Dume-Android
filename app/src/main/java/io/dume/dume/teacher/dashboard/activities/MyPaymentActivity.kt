@@ -11,6 +11,9 @@ import io.dume.dume.teacher.dashboard.DashboardPresenter
 import kotlinx.android.synthetic.main.activity_my_payment.*
 
 class MyPaymentActivity : DashboardCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener, DashboardContact.View {
+    override fun setupRecycler() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 
     private val presenter = DashboardPresenter(this, this)
 

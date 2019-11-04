@@ -11,6 +11,10 @@ import io.dume.dume.teacher.dashboard.DashboardPresenter
 import kotlinx.android.synthetic.main.activity_my_skill.*
 
 class MySkillActivity : DashboardCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener, DashboardContact.View  {
+    override fun setupRecycler() {
+
+    }
+
     private val presenter = DashboardPresenter(this, this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
