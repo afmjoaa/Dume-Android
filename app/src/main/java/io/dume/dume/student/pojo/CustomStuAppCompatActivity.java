@@ -1,7 +1,6 @@
 package io.dume.dume.student.pojo;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -10,11 +9,6 @@ import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import com.google.android.material.snackbar.Snackbar;
-import androidx.core.content.ContextCompat;
-import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -26,6 +20,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.jaeger.library.StatusBarUtil;
 
@@ -34,6 +30,10 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.Calendar;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.content.ContextCompat;
 import io.dume.dume.Google;
 import io.dume.dume.R;
 import io.dume.dume.auth.auth.AuthActivity;
@@ -41,7 +41,6 @@ import io.dume.dume.broadcastReceiver.MyConnectivityHandler;
 import io.dume.dume.broadcastReceiver.NetworkChangeReceiver;
 import io.dume.dume.customView.HorizontalLoadView;
 import io.dume.dume.splash.SplashActivity;
-import io.dume.dume.student.homePage.HomePageContract;
 import io.dume.dume.util.MyApplication;
 import io.dume.dume.util.NetworkUtil;
 
@@ -130,7 +129,8 @@ public class CustomStuAppCompatActivity extends AppCompatActivity implements MyC
         super.onCreate(savedInstanceState);
 
         View view = findViewById(R.id.parent_coor_layout);
-        if(view != null){
+
+        if (view != null) {
             setActivityContext(this, 5666);
         }
 

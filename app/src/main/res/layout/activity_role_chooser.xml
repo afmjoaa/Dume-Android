@@ -103,65 +103,20 @@
             android:textAllCaps="false"
             app:fontFamily="@font/cairo_regular" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/test_btn"
-            style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
-            android:layout_width="wrap_content"
-            android:onClick="onClick"
-            android:layout_height="wrap_content"
-            android:text="test"/>
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/material_text_button"
+        <Button
+            android:id="@+id/test"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:layout_width="wrap_content"
-            android:onClick="onClick"
-            android:layout_height="wrap_content"
-            android:text="testtwo"/>
-
-        <carbon.widget.LinearLayout
-            android:id="@+id/demoText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/white"
             android:layout_marginLeft="40dp"
             android:layout_marginTop="10dp"
             android:layout_marginRight="40dp"
             android:layout_marginBottom="10dp"
-            app:carbon_elevation="5dp"
-            android:paddingLeft="10dp"
-            app:carbon_cornerRadius="8dp"
-            android:paddingTop="4dp"
-            android:paddingBottom="4dp"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_margin="5dp"
-                app:srcCompat="@drawable/ic_call" />
-
-            <EditText
-                android:id="@+id/phoneNumberEditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:background="@null"
-                android:descendantFocusability="beforeDescendants"
-                android:focusableInTouchMode="true"
-                android:fontFamily="@font/cairo_regular"
-                android:hint="Enter Mobile Number"
-                android:imeOptions="actionDone"
-                android:inputType="phone"
-                android:nextFocusLeft="@id/phoneNumberEditText"
-                android:nextFocusUp="@id/phoneNumberEditText"
-                android:singleLine="true"
-                android:paddingLeft="10dp"
-                android:maxLength="11"
-                android:textSize="18sp" />
-
-        </carbon.widget.LinearLayout>
+            android:onClick="onClick"
+            android:text="Test"
+            android:textAllCaps="false"
+            app:fontFamily="@font/cairo_regular" />
 
     </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

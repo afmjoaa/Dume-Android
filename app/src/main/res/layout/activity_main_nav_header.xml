@@ -6,19 +6,15 @@
     android:padding="16dp"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
-    <ImageView
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:src="@mipmap/icon_launcher" />
 
     <TextView
         android:id="@+id/userNameNavTxt"
-        android:layout_width="227dp"
-        android:layout_height="40dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:text="@string/app_name"
-        android:textColor="@color/colorAsh"
-        android:textSize="30dp" />
+        android:text="\@username"
+        android:textColor="@color/colorLink"
+        android:textSize="25dp" />
 
     <Button
         android:id="@+id/signOutButton"

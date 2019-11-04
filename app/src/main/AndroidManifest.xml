@@ -6,16 +6,12 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-    <!-- local storage permission for reading instant camera photos-->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" /> <!-- local storage permission for reading instant camera photos -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.READ_CONTACTS" />
-    <!-- <uses-permission android:name="android.permission.RECEIVE_SMS" /> -->
-    <uses-permission android:name="android.permission.READ_PHONE_NUMBERS" />
-
-    <!--location permission-->
+    <uses-permission android:name="android.permission.READ_CONTACTS" /> <!-- <uses-permission android:name="android.permission.RECEIVE_SMS" /> -->
+    <uses-permission android:name="android.permission.READ_PHONE_NUMBERS" /> <!-- location permission -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.VIBRATE" />
@@ -28,9 +24,25 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/icon_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/DefaultTheme.NoActionBar">
+        <activity android:name=".teacher.dashboard.DashboardCompatActivity" />
+        <activity
+            android:name=".teacher.dashboard.activities.MyPaymentActivity"
+            android:launchMode="singleInstance"
+            android:theme="@style/DefaultTheme.NoActionBar.NoAnimation" />
+        <activity
+            android:name=".teacher.dashboard.activities.MySkillActivity"
+            android:launchMode="singleInstance"
+            android:theme="@style/DefaultTheme.NoActionBar.NoAnimation" />
+        <activity
+            android:name=".teacher.dashboard.activities.MyTutionActivity"
+            android:launchMode="singleInstance"
+            android:theme="@style/DefaultTheme.NoActionBar.NoAnimation" />
+        <activity
+            android:name=".teacher.dashboard.activities.JobBoardActivity"
+            android:launchMode="singleInstance"
+            android:theme="@style/DefaultTheme.NoActionBar.NoAnimation" />
 
-        <!--Meta data for app config -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/ic_notification_launcher" />
@@ -42,10 +54,8 @@
             android:value="@integer/google_play_services_version" />
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_maps_key" />
-
-        <!--All the activity-->
-        <!--launcher activity (splash activity-->
+            android:value="@string/google_maps_key" /> <!-- All the activity -->
+        <!-- launcher activity (splash activity -->
         <activity
             android:name=".splash.SplashActivity"
             android:theme="@style/SplashTheme">
@@ -55,27 +65,26 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".student.homePage.HomePageActivity"
             android:label=""
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustResize" >
+            android:windowSoftInputMode="adjustResize">
             <intent-filter android:label="Dume Tuition">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <!-- Accepts URIs that begin with "http://www.xume.com/home” -->
-                <data android:scheme="http"
-                    android:host="www.xume.xyz" />
+                <data
+                    android:host="www.xume.xyz"
+                    android:scheme="http" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".teacher.homepage.TeacherActivtiy"
             android:label=""
             android:theme="@style/AppTheme.NoActionBar" />
-
         <activity
             android:name=".firstTimeUser.NIDVerificationActivity"
             android:theme="@style/DefaultTheme.NoActionBar" />
@@ -88,33 +97,28 @@
         <activity
             android:name=".firstTimeUser.RoleChooserActivity"
             android:theme="@style/DefaultTheme.NoActionBar" />
-
         <activity android:name=".common.nexuspay.NexusPay" />
         <activity android:name=".common.bkash_otp.BkashOTP" />
         <activity android:name=".common.bkash_transection.BkashTransectionActivity" />
-
         <activity
             android:name=".auth.auth.AuthActivity"
             android:theme="@style/DefaultTheme.NoActionBar" />
         <activity
             android:name=".auth.code_verification.PhoneVerificationActivity"
-            android:theme="@style/MyStyle" />
+            android:theme="@style/DefaultTheme.NoActionBar" />
         <activity
             android:name=".auth.auth_final.AuthRegisterActivity"
             android:label="@string/title_activity_auth_final"
             android:theme="@style/DefaultTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize" />
-
         <activity
             android:name=".teacher.mentor_settings.AccountSettings"
             android:theme="@style/AppTheme.NoActionBar.transparent.black" />
         <activity
             android:name=".teacher.mentor_settings.basicinfo.EditAccount"
-            android:theme="@style/AppTheme.NoActionBar.transparent.black"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".teacher.mentor_settings.academic.AcademicActivity"
-            android:theme="@style/AppTheme.NoActionBar.transparent.black"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".student.profilePage.ProfilePageActivity"
@@ -132,9 +136,6 @@
             android:theme="@style/AppTheme.NoActionBar.transparent"
             android:windowSoftInputMode="adjustResize" />
         <activity android:name=".student.pojo.CusStuAppComMapActivity" />
-
-
-
         <activity
             android:name=".student.heatMap.HeatMapActivity"
             android:theme="@style/AppTheme.NoActionBar.transparent" />
@@ -225,7 +226,6 @@
             android:name=".common.contactActivity.ContactActivity"
             android:label="@string/title_activity_contact"
             android:theme="@style/AppTheme.NoActionBar.transparent.contact" />
-
         <activity
             android:name=".common.appInfoActivity.AppInfoActivity"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -241,14 +241,11 @@
         <activity
             android:name=".bootCamp.student_addvertise.StudentAddvertise"
             android:label="@string/title_activity_student_addvertise"
-            android:theme="@style/AppTheme.NoActionBar.transparent.black" />
-
-        <!--service and broadCasts -->
+            android:theme="@style/AppTheme.NoActionBar.transparent.black" /> <!-- service and broadCasts -->
         <receiver
             android:name=".broadcastReceiver.MyAlarmBroadCast"
             android:enabled="true"
             android:exported="false" />
-
         <receiver
             android:name=".broadcastReceiver.NetworkChangeReceiver"
             android:label="NetworkChangeReceiver">
@@ -256,23 +253,19 @@
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
                 <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
             </intent-filter>
-        </receiver>
-
-        <!--receive sms to auto verify receiver-->
+        </receiver> <!-- receive sms to auto verify receiver -->
         <receiver android:name=".broadcastReceiver.SMSAutoVerfication">
             <intent-filter>
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>
-        </receiver>
-
-        <!--Services-->
-        <service android:name=".service.MyNotification"
+        </receiver> <!-- Services -->
+        <service
+            android:name=".service.MyNotification"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-
         <service
             android:name=".service.MyLocationService"
             android:enabled="true"
@@ -280,21 +273,3 @@
     </application>
 
 </manifest>
-
-
-<!-- facebook meta data not needed anymore
-<meta-data
-   android:name="com.facebook.sdk.ApplicationId"
-   android:value="@string/facebook_app_id" />
-<activity
-   android:name="com.facebook.CustomTabActivity"
-   android:exported="true">
-   <intent-filter>
-       <action android:name="android.intent.action.VIEW" />
-
-       <category android:name="android.intent.category.DEFAULT" />
-       <category android:name="android.intent.category.BROWSABLE" />
-
-       <data android:scheme="@string/fb_login_protocol_scheme" />
-   </intent-filter>
-</activity>-->

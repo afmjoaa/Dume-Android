@@ -10,9 +10,9 @@
         android:id="@+id/simpleText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_marginTop="25dp"
-        android:layout_marginBottom="10dp">
+        android:layout_marginBottom="10dp"
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/changingText"
@@ -22,8 +22,9 @@
             android:text="Start Learning With Dume"
             android:textSize="16sp"
             android:visibility="gone"
-            app:fontFamily="@font/cairo_regular"/>
+            app:fontFamily="@font/cairo_regular" />
     </LinearLayout>
+
     <TextView
         android:id="@+id/phoneCount"
         android:layout_width="wrap_content"
@@ -35,6 +36,64 @@
         android:text="ready to verify"
         android:visibility="invisible" />
 
+    <carbon.widget.LinearLayout
+        android:id="@+id/demoText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginBottom="10dp"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        app:carbon_cornerRadius="8dp"
+        app:carbon_elevation="5dp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="5dp"
+            app:srcCompat="@drawable/ic_call" />
+
+        <TextView
+            android:id="@+id/countryCode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="5dp"
+            android:fontFamily="@font/cairo_regular"
+            android:text="+88"
+            android:textSize="18sp"
+            android:visibility="gone" />
+
+
+        <EditText
+            android:id="@+id/phoneNumberEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@null"
+            android:descendantFocusability="beforeDescendants"
+            android:focusableInTouchMode="true"
+            android:fontFamily="@font/cairo_regular"
+            android:hint="Enter Mobile Number"
+            android:imeOptions="actionDone"
+            android:inputType="phone"
+            android:maxLength="11"
+            android:nextFocusLeft="@id/phoneNumberEditText"
+            android:nextFocusUp="@id/phoneNumberEditText"
+            android:paddingLeft="10dp"
+            android:singleLine="true"
+            android:textSize="18sp" />
+
+    </carbon.widget.LinearLayout>
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -42,6 +101,37 @@
         android:gravity="end"
         android:orientation="vertical">
 
+
+
+        <Button
+            android:id="@+id/verify_phone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginBottom="10dp"
+            android:enabled="false"
+            android:onClick="onClick"
+            android:text="Send Code"
+            android:textAllCaps="false"
+            android:textStyle="bold"
+            app:fontFamily="@font/cairo_regular" />
+
+        <Button
+            android:id="@+id/test"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginBottom="10dp"
+            android:enabled="true"
+            android:onClick="onClick"
+            android:text="Test"
+            android:textAllCaps="false"
+            android:textStyle="bold"
+            app:fontFamily="@font/cairo_regular" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/floating_button"
@@ -52,8 +142,8 @@
             android:clickable="true"
             android:focusable="true"
             android:visibility="gone"
-            app:srcCompat="@drawable/ic_arrow_forward_white_24dp"
-            app:rippleColor="@color/colorDarkAzure" />
+            app:rippleColor="@color/colorDarkAzure"
+            app:srcCompat="@drawable/ic_arrow_forward_white_24dp" />
     </LinearLayout>
 </LinearLayout>
 

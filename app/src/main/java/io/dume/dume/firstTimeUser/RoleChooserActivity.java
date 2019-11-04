@@ -3,13 +3,13 @@ package io.dume.dume.firstTimeUser;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 
 import io.dume.dume.R;
 import io.dume.dume.auth.DataStore;
 import io.dume.dume.auth.auth.AuthActivity;
 import io.dume.dume.auth.auth_final.AuthRegisterActivity;
 import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
+import io.dume.dume.teacher.dashboard.activities.JobBoardActivity;
 
 public class RoleChooserActivity extends CustomStuAppCompatActivity implements View.OnClickListener {
     private DataStore local;
@@ -34,16 +34,14 @@ public class RoleChooserActivity extends CustomStuAppCompatActivity implements V
             local.setAccountManjor(DataStore.STUDENT);
             startActivity(new Intent(this, PermissionActivity.class));
         } else if (v.getId() == R.id.asTeacher) {
-            local.setAccountManjor(DataStore.TEACHER );
-            startActivity(new Intent(this, PermissionActivity.class));
-        }else if(v.getId() == R.id.material_text_button){
-            startActivity(new Intent(this, AuthRegisterActivity.class));
-        }else if(v.getId() == R.id.test_btn){
-            startActivity(new Intent(this, NIDVerificationActivity.class));
-
+            local.setAccountManjor(DataStore.TEACHER);
+        } else if (v.getId() == R.id.test) {
+            Intent[] buddies = {
+                    new Intent(this, JobBoardActivity.class)};
+            startActivities(buddies);
+            return;
         }
-        ForwardFlowStat.ROLE.getFlow();
-
+        startActivity(new Intent(this, PermissionActivity.class));
 
     }
 }

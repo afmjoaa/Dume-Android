@@ -38,7 +38,8 @@
     <string name="lorem_para">
     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent arcu tellus, tincidunt at hendrerit nec,
         rhoncus non ligula. Cras vehicula cursus felis, at malesuada augue consequat ut. Vestibulum tincidunt enim magna,
-    </string><string name="lorem_para_sm">
+    </string>
+    <string name="lorem_para_sm">
     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent arcu tellus
     </string>
     <string name="facebook_app_id">2108291549389177</string>

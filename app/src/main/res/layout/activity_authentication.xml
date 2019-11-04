@@ -30,7 +30,7 @@
             app:expandedTitleMarginTop="@dimen/expTittleMarginTop"
             app:expandedTitleTextAppearance="@style/MyTextApprncExp.lightBg"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            app:title="Account Settings"
+            app:title="Enter phone number"
             app:titleEnabled="true">
 
             <androidx.appcompat.widget.Toolbar

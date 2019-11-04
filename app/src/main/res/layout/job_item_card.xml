@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.google.android.material.card.MaterialCardView
+        app:cardBackgroundColor="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/activity_horizontal_margin"
+        android:minHeight="200dp">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <carbon.widget.ImageView
+                android:id="@+id/job_item_image"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@color/textColorPrimary"
+                app:carbon_cornerRadius="100dp" />
+
+            <TextView
+                android:id="@+id/job_item_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_toRightOf="@id/job_item_image"
+                android:fontFamily="@font/redhat_bold"
+                android:text="Need a tution for class 8 student" />
+
+            <TextView
+                android:id="@+id/job_item_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/job_item_title"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_toRightOf="@id/job_item_image"
+                android:fontFamily="@font/redhat_bold"
+                android:text="I need a tutor who has experienced and able to guide all subjects of class five [emergency]...." />
+
+            <TextView
+                android:id="@+id/job_item_proposal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/job_item_description"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_toRightOf="@id/job_item_image"
+                android:fontFamily="@font/redhat_regular"
+                android:text="Proposal: Less than 5" />
+
+
+            <TextView
+                android:id="@+id/job_item_salary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/job_item_proposal"
+                android:layout_toRightOf="@id/job_item_image"
+                android:drawableLeft="@drawable/salary_bag"
+                android:drawablePadding="5dp"
+                android:fontFamily="@font/redhat_regular"
+                android:text="7,000$" />
+
+            <TextView
+                android:id="@+id/job_item_location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/job_item_proposal"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="166dp"
+                android:layout_marginTop="0dp"
+                android:layout_toRightOf="@id/job_item_salary"
+                android:drawableLeft="@drawable/job_item_loc"
+                android:drawablePadding="5dp"
+                android:fontFamily="@font/redhat_regular"
+                android:text="7,000$" />
+
+        </RelativeLayout>
+
+
+    </com.google.android.material.card.MaterialCardView>
+
+</RelativeLayout>
