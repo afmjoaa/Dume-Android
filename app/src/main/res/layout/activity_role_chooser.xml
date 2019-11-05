@@ -105,7 +105,7 @@
 
 
         <Button
-            android:id="@+id/test"
+            android:id="@+id/testEnam"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -114,7 +114,35 @@
             android:layout_marginRight="40dp"
             android:layout_marginBottom="10dp"
             android:onClick="onClick"
-            android:text="Test"
+            android:text="Test(Enam)"
+            android:textAllCaps="false"
+            app:fontFamily="@font/cairo_regular" />
+
+        <Button
+            android:id="@+id/testJoaa"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginBottom="10dp"
+            android:onClick="onClick"
+            android:text="Test(Joaa)"
+            android:textAllCaps="false"
+            app:fontFamily="@font/cairo_regular" />
+
+        <Button
+            android:id="@+id/testSumon"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginBottom="10dp"
+            android:onClick="onClick"
+            android:text="Test(Sumon)"
             android:textAllCaps="false"
             app:fontFamily="@font/cairo_regular" />
 

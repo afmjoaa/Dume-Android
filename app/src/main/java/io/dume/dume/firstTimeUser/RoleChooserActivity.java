@@ -35,10 +35,15 @@ public class RoleChooserActivity extends CustomStuAppCompatActivity implements V
             startActivity(new Intent(this, PermissionActivity.class));
         } else if (v.getId() == R.id.asTeacher) {
             local.setAccountManjor(DataStore.TEACHER);
-        } else if (v.getId() == R.id.test) {
-            Intent[] buddies = {
-                    new Intent(this, JobBoardActivity.class)};
+        } else if (v.getId() == R.id.testEnam) {
+            Intent[] buddies = {new Intent(this, JobBoardActivity.class)};
             startActivities(buddies);
+            return;
+        }else if (v.getId() == R.id.testJoaa) {
+            startActivity(new Intent(this, PermissionActivity.class));
+            return;
+        }else if (v.getId() == R.id.testSumon) {
+            startActivity(new Intent(this, JobBoardActivity.class));
             return;
         }
         startActivity(new Intent(this, PermissionActivity.class));

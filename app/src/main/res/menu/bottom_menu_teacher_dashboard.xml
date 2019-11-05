@@ -3,11 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/my_job_board"
-        android:icon="@drawable/home_icon"
+        android:icon="@drawable/job_board"
         android:title="Job Board" />
     <item
         android:id="@+id/my_tution"
-        android:icon="@drawable/record_icon"
+        android:icon="@drawable/tuition_icon"
         android:title="Tutions" />
     <item
         android:id="@+id/my_skill"
@@ -16,6 +16,6 @@
     <item
         android:id="@+id/my_payment"
         android:icon="@drawable/ic_payment"
-        android:title="Payments" />
+        android:title="Payment" />
 
 </menu>

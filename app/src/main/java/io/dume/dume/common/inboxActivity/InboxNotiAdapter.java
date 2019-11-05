@@ -50,7 +50,7 @@ public class InboxNotiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private List<InboxNotiData> data = new ArrayList<>();
     int[] imageIcons = {
             R.drawable.ic_dume_admin, //default
-            R.drawable.record_icon,  // for  record notifications
+            R.drawable.tuition_icon,  // for  record notifications
             R.drawable.ic_promo_icon, //for promotions
             R.drawable.ic_cancel_icon //for cancel
     };
@@ -218,7 +218,7 @@ public class InboxNotiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
         String avatar = item.getAvatar();
         if (avatar != null) {
-            Glide.with(context).load(avatar).apply(new RequestOptions().override(40, 40).placeholder(R.drawable.record_icon)).into(myViewHolder.titleImage);
+            Glide.with(context).load(avatar).apply(new RequestOptions().override(40, 40).placeholder(R.drawable.tuition_icon)).into(myViewHolder.titleImage);
         }
         //myViewHolder.subTitle.setText(DumeUtils.getFormattedDate(item.getTimestapm()));
         myViewHolder.subTitle.setText(java.text.DateFormat.getDateInstance(java.text.DateFormat.MEDIUM).format(item.getTimestapm().getTime()));

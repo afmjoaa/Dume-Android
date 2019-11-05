@@ -32,7 +32,7 @@
             android:title="Skill" />
         <item
             android:id="@+id/records"
-            android:icon="@drawable/records_icon"
+            android:icon="@drawable/tuition_icon"
             android:title="Records" />
         <item
             android:id="@+id/payments"

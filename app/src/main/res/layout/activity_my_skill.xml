@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawer_layout"
+    android:background="@color/white"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".teacher.dashboard.activities.MyTutionActivity">
@@ -86,6 +87,8 @@
             android:id="@+id/bottom_menu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.BottomNavigationView"
+            android:background="@drawable/bg_white_top_round_8"
             android:layout_gravity="bottom"
             app:itemIconTint="@drawable/bottom_menu_teacher_style"
             app:itemTextColor="@drawable/bottom_menu_teacher_style"

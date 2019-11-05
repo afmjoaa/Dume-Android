@@ -5,6 +5,7 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".teacher.dashboard.activities.MyTutionActivity">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -90,15 +91,18 @@
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottom_menu"
+            style="@style/Widget.MaterialComponents.BottomNavigationView"
+            android:background="@drawable/bg_white_top_round_8"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             app:itemIconTint="@drawable/bottom_menu_teacher_style"
             app:itemTextColor="@drawable/bottom_menu_teacher_style"
             app:labelVisibilityMode="labeled"
-
             app:menu="@menu/bottom_menu_teacher_dashboard" />
+
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/navigation"
