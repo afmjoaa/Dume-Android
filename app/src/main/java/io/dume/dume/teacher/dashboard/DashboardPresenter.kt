@@ -11,6 +11,7 @@ import io.dume.dume.teacher.dashboard.activities.MyTutionActivity
 
 class DashboardPresenter(var context: Context, var view: DashboardContact.View) : DashboardContact.Presenter {
 
+
     override fun enqueue() {
         view.init()
         view.setupRecycler()
@@ -25,6 +26,10 @@ class DashboardPresenter(var context: Context, var view: DashboardContact.View) 
             R.id.my_payment -> context.startActivity(Intent(context, MyPaymentActivity::class.java))
         }
     }
+
+
+
+
 
 
 }
