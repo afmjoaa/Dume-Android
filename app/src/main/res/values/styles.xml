@@ -21,9 +21,13 @@
         <item name="shapeAppearanceMediumComponent">@style/AppShapeAppearance.MediumComponent</item>
         <item name="shapeAppearanceLargeComponent">@style/AppShapeAppearance.MediumComponent</item>
         <item name="textInputStyle">@style/AppTextField</item>
-    </style>    <!--Material theme No Animation-->
+    </style>
+
+
+    <!--Material theme No Animation-->
     <style name="DefaultTheme.NoActionBar.NoAnimation" parent="DefaultTheme.NoActionBar">
         <item name="android:windowAnimationStyle">@null</item>
+        <item name="android:windowBackground">@drawable/loading_bg</item>
     </style>
 
     <style name="AppShapeAppearance.SmallComponent" parent="ShapeAppearance.MaterialComponents.SmallComponent">
@@ -51,6 +55,11 @@
         <item name="backgroundTint">?attr/colorSecondary</item>
     </style>
 
+    <style name="DefaultText" parent="Base.TextAppearance.AppCompat.Small">
+        <item name="android:textColor">@color/textColorPrimary</item>
+        <item name="android:textSize">17sp</item>
+        <item name="android:textStyle">normal</item>
+    </style>
 
     <!-- Main Application theme /AuthActivity-->
     <style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">

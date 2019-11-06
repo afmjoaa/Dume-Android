@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp"
+app:cardCornerRadius="10dp"
+    app:cardBackgroundColor="@color/white">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="10dp">
+
+        <carbon.widget.ImageView
+            android:id="@+id/job_item_image"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@color/mColorPrimaryVariant"
+            app:carbon_cornerRadius="100dp" />
+
+        <TextView
+            android:id="@+id/job_item_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_toRightOf="@id/job_item_image"
+            android:fontFamily="@font/redhat_bold"
+            android:text="Need a tution for class 8 student"
+            android:textSize="16dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/job_item_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/job_item_title"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/tendp"
+            android:layout_toRightOf="@id/job_item_image"
+            android:fontFamily="@font/redhat_regular"
+            android:text="I need a tutor who has experienced and able to guide all subjects of class five [emergency]...." />
+
+        <TextView
+            android:id="@+id/job_item_proposal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/job_item_description"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_toRightOf="@id/job_item_image"
+            android:fontFamily="@font/redhat_regular"
+            android:layout_marginTop="@dimen/tendp"
+            android:text="Proposal: Less than 5" />
+
+
+        <TextView
+            android:id="@+id/job_item_salary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/job_item_proposal"
+
+            android:layout_marginTop="10dp"
+            android:drawableLeft="@drawable/salary_bag"
+            android:drawablePadding="5dp"
+            android:fontFamily="@font/redhat_regular"
+            android:text="7,000 BDT" />
+
+        <TextView
+            android:id="@+id/job_item_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/job_item_proposal"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="10dp"
+            android:drawableLeft="@drawable/ic_autocomplete_places"
+            android:drawablePadding="5dp"
+            android:drawableTint="@color/mColorPrimaryVariant"
+            android:fontFamily="@font/redhat_regular"
+            android:gravity="end"
+            android:text="Uttara Dhaka"
+            android:textColor="@color/mColorPrimaryVariant"
+
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
+</com.google.android.material.card.MaterialCardView>

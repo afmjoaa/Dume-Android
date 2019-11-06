@@ -129,7 +129,8 @@ public class CustomStuAppCompatActivity extends AppCompatActivity implements MyC
         super.onCreate(savedInstanceState);
 
         View view = findViewById(R.id.parent_coor_layout);
-        if (view!=null) {
+
+        if (view != null) {
             setActivityContext(this, 5666);
         }
 

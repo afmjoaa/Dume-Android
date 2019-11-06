@@ -4,17 +4,15 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
-import io.dume.dume.firstTimeUser.RoleChooserActivity;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import io.dume.dume.auth.AuthModel;
 import io.dume.dume.auth.auth.AuthActivity;
+import io.dume.dume.firstTimeUser.RoleChooserActivity;
 import io.dume.dume.obligation.foreignObli.PayActivity;
-import io.dume.dume.student.homePage.HomePageActivity;
-import io.dume.dume.teacher.homepage.TeacherActivtiy;
 import io.dume.dume.teacher.homepage.TeacherContract;
 import io.dume.dume.util.DumeUtils;
 
@@ -97,13 +95,15 @@ public class SplashActivity extends AppCompatActivity implements SplashContract.
     @Override
     public void gotoTeacherActivity() {
         //  startActivity(new Intent(this, TeacherActivityMock.class));
-        startActivity(new Intent(this, TeacherActivtiy.class));
+      //  startActivity(new Intent(this, TeacherActivtiy.class));
+        gotoLoginActivity();
         finish();
     }
 
     @Override
     public void gotoStudentActivity() {
-        startActivity(new Intent(this, HomePageActivity.class));
+      //  startActivity(new Intent(this, HomePageActivity.class));
+        gotoLoginActivity();
         finish();
     }
 

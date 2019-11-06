@@ -228,8 +228,6 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
     private TextView promotionTextView, promotionExpireDate;
     Integer discount = 0;
     private carbon.widget.LinearLayout headerTab;
-    private TextView dumeInfo;
-    private LinearLayout dumeInfoContainer;
     private Button learnMoreBtnOne;
     private Button startCouching;
     private Button startTakingCouching;
@@ -403,8 +401,6 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
         promotionTextView = findViewById(R.id.promotion_text);
         promotionExpireDate = findViewById(R.id.promotion_validity_text);
         headerTab = findViewById(R.id.header_fuck);
-        dumeInfo = findViewById(R.id.dume_info);
-        dumeInfoContainer = findViewById(R.id.dume_info_container);
 
         learnMoreBtnOne = findViewById(R.id.learn_more_btn_one);
         startCouching = findViewById(R.id.start_couching);
@@ -568,7 +564,6 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
             dumeInfoContainer.setVisibility(View.VISIBLE);
             dumeInfo.setText(Google.getInstance().getTotalStudent() +" students & "+Google.getInstance().getTotalMentor() +" mentors on dume network");
         }*/
-        dumeInfoContainer.setVisibility(View.GONE);
         mentorProfile.setVisible(false);
         fab.setAlpha(0.90f);
         enamSnackbar = Snackbar.make(coordinatorLayout, "Replace with your own action", Snackbar.LENGTH_LONG);

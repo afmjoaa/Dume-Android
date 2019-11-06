@@ -5,6 +5,8 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
+    android:fitsSystemWindows="true"
     tools:context=".teacher.dashboard.activities.MyTutionActivity">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -72,37 +74,64 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-                    <TextView
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/job_card_rv"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:gravity="center"
-                        android:text="Jobboard goes here" />
+                        android:layout_height="wrap_content" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:layout_below="@id/job_card_rv">
+
+                        <include
+                            android:id="@+id/item"
+                            layout="@layout/job_item_card" />
+
+                        <include
+                            android:id="@+id/item1"
+                            layout="@layout/job_item_card" />
+
+                        <include
+                            android:id="@+id/item2"
+                            layout="@layout/job_item_card" />
+                    </LinearLayout>
+
+
                 </RelativeLayout>
 
             </androidx.core.widget.NestedScrollView>
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 
-
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottom_menu"
+            style="@style/Widget.MaterialComponents.BottomNavigationView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
+            android:background="@drawable/bg_white_top_round_8"
             app:itemIconTint="@drawable/bottom_menu_teacher_style"
             app:itemTextColor="@drawable/bottom_menu_teacher_style"
             app:labelVisibilityMode="labeled"
-
             app:menu="@menu/bottom_menu_teacher_dashboard" />
+
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/navigation"
-        android:layout_width="wrap_content"
+        android:layout_width="300dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        app:headerLayout="@layout/activity_main_nav_header"
-        app:menu="@menu/bottom_menu_teacher_dashboard" />
+        android:background="@color/white"
+        android:fitsSystemWindows="true"
+        app:headerLayout="@layout/teacher_nav_header"
+        app:itemBackground="@drawable/drawer_item_background"
+        app:itemIconTint="@drawable/drawer_item_icontint"
+        app:itemTextColor="@drawable/drawer_item_textcolor"
+        app:menu="@menu/dashboard_sidenav" />
+
 
 </androidx.drawerlayout.widget.DrawerLayout>

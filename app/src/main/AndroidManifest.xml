@@ -25,7 +25,7 @@
         android:roundIcon="@mipmap/icon_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/DefaultTheme.NoActionBar">
-        <activity android:name=".teacher.dashboard.DashboardCompatActivity"></activity>
+        <activity android:name=".teacher.dashboard.DashboardCompatActivity" />
         <activity
             android:name=".teacher.dashboard.activities.MyPaymentActivity"
             android:launchMode="singleInstance"
@@ -87,7 +87,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".firstTimeUser.NIDVerificationActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/DefaultTheme.NoActionBar" />
         <activity
             android:name=".firstTimeUser.PrivacyActivity"
             android:theme="@style/DefaultTheme.NoActionBar" />

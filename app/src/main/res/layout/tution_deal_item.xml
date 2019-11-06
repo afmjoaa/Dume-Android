@@ -4,14 +4,14 @@
     android:id="@+id/recordsHostLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_margin="5dp"
     android:clickable="true"
     android:focusable="true"
-    app:carbon_stroke="@color/colorGrey"
-    app:carbon_strokeWidth="1dp"
-    app:carbon_cornerRadius="8dp"
+    android:foreground="?android:attr/selectableItemBackground"
     android:padding="5dp"
-    android:layout_margin="5dp"
-    android:foreground="?android:attr/selectableItemBackground">
+    app:carbon_cornerRadius="8dp"
+    app:carbon_stroke="@color/colorGrey"
+    app:carbon_strokeWidth="1dp">
 
     <LinearLayout
         android:id="@+id/left_vertical_host_layout"
@@ -30,11 +30,11 @@
             android:id="@+id/student_display_pic"
             android:layout_width="50dp"
             android:layout_height="50dp"
+            android:layout_gravity="center"
             android:layout_marginBottom="1dp"
             android:scaleType="centerCrop"
             app:carbon_cornerRadius="100dp"
-            app:carbon_elevation="3dp"
-            android:src="@color/colorLink" />
+            app:carbon_elevation="3dp" />
 
         <TextView
             android:id="@+id/student_name"
@@ -56,7 +56,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-
         android:gravity="center_horizontal"
         android:orientation="vertical"
         tools:ignore="RelativeOverlap">
@@ -65,6 +64,7 @@
             android:id="@+id/subject_in_demand"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:paddingStart="130dp"
             android:paddingLeft="130dp"
             android:paddingEnd="130dp"
@@ -72,10 +72,8 @@
             android:text="@string/math_amp_physics"
             android:textAlignment="center"
             android:textAllCaps="false"
-            android:textColor="@color/textColorPrimary"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:layout_marginTop="10dp"
             app:fontFamily="@font/cairo_regular" />
 
         <TextView
@@ -111,8 +109,8 @@
             android:layout_marginBottom="1dp"
             android:scaleType="centerCrop"
             app:carbon_cornerRadius="100dp"
-            app:carbon_elevation="3dp"
-            android:src="@color/blue"/>
+            android:layout_gravity="center"
+            app:carbon_elevation="3dp" />
 
         <TextView
             android:id="@+id/mentor_name"
@@ -141,15 +139,12 @@
         tools:ignore="UseCompoundDrawables">
 
         <TextView
-            android:id="@+id/delivery_time"
+            android:id="@+id/tution_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
             android:text="Rejected"
-            android:textAllCaps="false"
-            android:textColor="@color/red"
-            android:textSize="12sp"
-            app:fontFamily="@font/cairo_regular" />
+            android:textSize="16sp" />
 
         <ImageView
             android:id="@+id/delivery_status_image_view"
@@ -161,8 +156,6 @@
             app:srcCompat="@drawable/ic_sms_delivered" />
 
     </LinearLayout>
-
-
 
 
 </carbon.widget.RelativeLayout>

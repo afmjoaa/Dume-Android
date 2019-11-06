@@ -29,7 +29,7 @@
             android:title="Home" />
         <item
             android:id="@+id/records"
-            android:icon="@drawable/records_icon"
+            android:icon="@drawable/tuition_icon"
             android:title="Records" />
         <item
             android:id="@+id/payments"
@@ -41,7 +41,7 @@
             android:title="Messages" />
         <item
             android:id="@+id/notifications"
-            android:icon="@drawable/notification_drawer_icon"
+            android:icon="@drawable/notificaion_icon"
             android:title="Notifications" />
         <item
             android:id="@+id/free_cashback"
@@ -100,7 +100,7 @@
                 android:title="About Us" />
             <item
                 android:id="@+id/privacy_policy"
-                android:icon="@drawable/pp_icon"
+                android:icon="@drawable/privacy_policy_icon"
                 android:title="Privacy policy" />
         </menu>
     </item>

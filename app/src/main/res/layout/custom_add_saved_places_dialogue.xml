@@ -62,7 +62,7 @@
             app:carbon_cornerRadius="8dp"
             app:carbon_elevation="1dp"
             android:visibility="gone"
-            app:srcCompat="@drawable/ic_empty_field" />
+            app:srcCompat="@drawable/error_icon" />
 
     </RelativeLayout>
 
@@ -107,7 +107,7 @@
             android:visibility="gone"
             app:carbon_cornerRadius="8dp"
             app:carbon_elevation="1dp"
-            app:srcCompat="@drawable/ic_empty_field" />
+            app:srcCompat="@drawable/error_icon" />
 
     </RelativeLayout>
 

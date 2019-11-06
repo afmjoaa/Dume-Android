@@ -1,15 +1,19 @@
 package io.dume.dume.firstTimeUser;
 
-import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 
 import io.dume.dume.R;
+import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
 
-public class NIDVerificationActivity extends AppCompatActivity {
+import static io.dume.dume.util.DumeUtils.configureAppbar;
+
+public class NIDVerificationActivity extends CustomStuAppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nidverification);
+        super.onCreate(savedInstanceState);
+        setDarkStatusBarIcon();
+        configureAppbar(this, "NID Verification", true);
     }
 }

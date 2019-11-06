@@ -148,6 +148,7 @@ dependencies {
     implementation 'com.github.castorflex.verticalviewpager:library:19.0.1'
 
     def htextview_version = "0.1.6"
+
     implementation "com.hanks:htextview-scale:$htextview_version"
     implementation "me.philio:pinentryview:1.0.6"
     implementation 'id.zelory:compressor:2.1.0'
@@ -161,5 +162,8 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'com.jakewharton.threetenabp:threetenabp:1.2.0'
 
-    implementation 'de.hdodenhof:circleimageview:3.0.1'
+    implementation 'me.dm7.barcodescanner:zxing:1.9.13'
+
+    implementation  'com.ramotion.cardslider:card-slider:0.3.1'
+
 }

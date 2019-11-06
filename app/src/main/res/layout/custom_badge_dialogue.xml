@@ -16,7 +16,7 @@
         android:layout_marginBottom="10dp"
         app:carbon_cornerRadius="40dp"
         app:carbon_elevation="2dp"
-        app:srcCompat="@drawable/ic_empty_field" />
+        app:srcCompat="@drawable/error_icon" />
 
     <TextView
         android:id="@+id/dialog_title_text"

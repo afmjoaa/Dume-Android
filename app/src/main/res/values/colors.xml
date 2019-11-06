@@ -14,7 +14,7 @@
     <color name="colorIconTint">#00796B</color>
     <color name="colorDefaultAndroid">#ECE9E0</color>
     <color name="textColorPrimary">#575757</color>
-    <color name="textColorSecondary">#989D9D</color>
+    <color name="textColorSecondary">#7C7C7C</color>
     <color name="textColorSecondaryDark">#78909c</color>
     <color name="windowBackground">#ffffff</color>
     <color name="navigationBarColor">#afafaf</color>
@@ -29,7 +29,6 @@
     <color name="green_main_dark">#037803</color>
     <color name="color_navigation_list_background">#263238</color>
     <color name="color_selector_navigation_item">#FFFFFF</color>
-    <color name="drawer_active_item">#11212a</color>
     <color name="snackbar_red">#d90000</color>
     <color name="snackbar_yellow">#decb25</color>
     <color name="snackbar_green">#369c3a</color>
@@ -149,6 +148,8 @@
     <color name="ButtonPressedColor">#01579b</color>
     <color name="ButtonDisableColor">#86C4F7</color>
     <color name="CircularIndicator">#607d8b</color>
+    <color name="drawer_active_item">#01579b</color>
+    <color name="textDarkPrimary">#11212a</color>
 
     <!--material theme colors-->
     <color name="mColorPrimary">#039be5</color>

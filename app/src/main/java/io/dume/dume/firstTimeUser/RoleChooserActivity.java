@@ -6,6 +6,8 @@ import android.view.View;
 
 import io.dume.dume.R;
 import io.dume.dume.auth.DataStore;
+import io.dume.dume.auth.auth.AuthActivity;
+import io.dume.dume.auth.auth_final.AuthRegisterActivity;
 import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
 import io.dume.dume.teacher.dashboard.activities.JobBoardActivity;
 
@@ -30,17 +32,21 @@ public class RoleChooserActivity extends CustomStuAppCompatActivity implements V
     public void onClick(View v) {
         if (v.getId() == R.id.asStudent) {
             local.setAccountManjor(DataStore.STUDENT);
+            startActivity(new Intent(this, PermissionActivity.class));
         } else if (v.getId() == R.id.asTeacher) {
             local.setAccountManjor(DataStore.TEACHER);
-        } else if (v.getId() == R.id.test) {
-
-            Intent[] buddies = {
-                    new Intent(this, JobBoardActivity.class)};
+        } else if (v.getId() == R.id.testEnam) {
+            Intent[] buddies = {new Intent(this, JobBoardActivity.class)};
             startActivities(buddies);
-
-
+            return;
+        }else if (v.getId() == R.id.testJoaa) {
+            startActivity(new Intent(this, PermissionActivity.class));
+            return;
+        }else if (v.getId() == R.id.testSumon) {
+            startActivity(new Intent(this, JobBoardActivity.class));
             return;
         }
         startActivity(new Intent(this, PermissionActivity.class));
+
     }
 }

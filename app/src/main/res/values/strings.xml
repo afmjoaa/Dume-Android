@@ -790,6 +790,8 @@ provided.Tap salary for details.  </string>
     <string name="filter">Filter</string>
     <string name="accept_continue">Accept and Continue</string>
     <string name="greetings">Welcome to dume service app. Please select how you want to use the app</string>
+    <string name="accept_amp_continue"><![CDATA[Accept & Continue]]></string>
+    <string name="nid_info">Please center your NID Barcode in the camera window, to verify your identity.The highlighted area in the reference photo is demo of NID Barcode.</string>
 
     <string-array name="University">
         <item>AIUB</item>

@@ -922,7 +922,7 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
         alProfileIcon.setDrawableByLayerId(R.id.ic_al_profile_pic, alProfileDrawable);
 
 
-        Drawable alRecordDrawable = ResourcesCompat.getDrawable(getResources(), R.drawable.record_icon, null);
+        Drawable alRecordDrawable = ResourcesCompat.getDrawable(getResources(), R.drawable.tuition_icon, null);
         alRecordDrawable = DrawableCompat.wrap(Objects.requireNonNull(alRecordDrawable));
         DrawableCompat.setTint(alRecordDrawable, tint);
         alRecordsIcon.setDrawableByLayerId(R.id.ic_al_record, alRecordDrawable);
