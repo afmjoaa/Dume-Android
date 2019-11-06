@@ -23,10 +23,12 @@ class JobBoardActivity : DashboardCompatActivity(), DashboardContact.View, Botto
     }
 
     override fun init() {
+        settingStatusBarTransparent()
         setDarkStatusBarIcon()
         bottom_menu.setOnNavigationItemSelectedListener(this)
         swipe_to_refres.setColorSchemeColors(ContextCompat.getColor(this, R.color.mColorPrimaryVariant))
         bottom_menu.selectedItemId = R.id.my_job_board
+        navigation.menu.getItem(0).isChecked = true
 
 
     }

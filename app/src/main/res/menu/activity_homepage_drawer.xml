@@ -1,23 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:showIn="navigation_view">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <item
-        android:enabled="false"
-        android:title=" ">
-        <menu>
-            <item
-                android:enabled="false"
-                android:title=" " />
-        </menu>
-    </item>
-    <item
-        android:enabled="false"
-        android:title=" " />
-    <item
-        android:enabled="false"
-        android:title=" " />
     <group
         android:id="@+id/main_section"
         android:checkableBehavior="single"
@@ -44,7 +28,7 @@
             android:title="Messages" />
         <item
             android:id="@+id/notifications"
-            android:icon="@drawable/notification_drawer_icon"
+            android:icon="@drawable/notificaion_icon"
             android:title="Notifications" />
         <item
             android:id="@+id/free_cashback"
@@ -101,7 +85,7 @@
                 android:title="About Us" />
             <item
                 android:id="@+id/privacy_policy"
-                android:icon="@drawable/pp_icon"
+                android:icon="@drawable/privacy_policy_icon"
                 android:title="Privacy policy" />
         </menu>
     </item>

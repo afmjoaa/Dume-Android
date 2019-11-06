@@ -6,6 +6,7 @@
     android:background="@color/white"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     tools:context=".teacher.dashboard.activities.MyTutionActivity">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -98,10 +99,15 @@
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/navigation"
-        android:layout_width="wrap_content"
+        android:layout_width="300dp"
         android:layout_height="match_parent"
+        android:background="@color/white"
         android:layout_gravity="start"
-        app:headerLayout="@layout/activity_main_nav_header"
-        app:menu="@menu/bottom_menu_teacher_dashboard" />
+        android:fitsSystemWindows="true"
+        app:headerLayout="@layout/teacher_nav_header"
+        app:itemBackground="@drawable/drawer_item_background"
+        app:itemIconTint="@drawable/drawer_item_icontint"
+        app:itemTextColor="@drawable/drawer_item_textcolor"
+        app:menu="@menu/dashboard_sidenav" />
 
 </androidx.drawerlayout.widget.DrawerLayout>

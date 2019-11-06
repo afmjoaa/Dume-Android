@@ -20,6 +20,7 @@ class MySkillActivity : DashboardCompatActivity(), BottomNavigationView.OnNaviga
 
     }
     override fun init() {
+        settingStatusBarTransparent()
         setDarkStatusBarIcon()
         bottom_menu.setOnNavigationItemSelectedListener(this)
         bottom_menu.selectedItemId = R.id.my_skill

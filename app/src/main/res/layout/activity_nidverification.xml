@@ -84,7 +84,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="18dp"
                 android:layout_marginBottom="16dp"
-                android:src="@drawable/profile_icon"/>
+                app:srcCompat="@drawable/alias_profile_icon"/>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/asStudent"
