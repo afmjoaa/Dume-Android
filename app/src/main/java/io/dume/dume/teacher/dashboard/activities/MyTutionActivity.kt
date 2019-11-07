@@ -65,7 +65,7 @@ class MyTutionActivity : DashboardCompatActivity(), BottomNavigationView.OnNavig
     override fun onDataLoaded(t: List<Record>) {
         toast("OnDataLoaded")
         tution_rv.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
-        tution_rv.adapter = FeatureCardSlider(t)
+        tution_rv.adapter = FeatureCardSlider()
     }
 
     override fun error(error: String) {

@@ -5,14 +5,15 @@ import android.view.MenuItem
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import carbon.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.ramotion.cardslider.CardSnapHelper
 import io.dume.dume.R
 import io.dume.dume.teacher.dashboard.DashboardCompatActivity
 import io.dume.dume.teacher.dashboard.DashboardContact
 import io.dume.dume.teacher.dashboard.DashboardPresenter
+import io.dume.dume.teacher.dashboard.adapters.CirclePagerIndicatorDecoration
+import io.dume.dume.teacher.dashboard.adapters.FeatureCardSlider
 import io.dume.dume.teacher.dashboard.pojo.JobsItem
 import kotlinx.android.synthetic.main.activity_job_board.*
 
@@ -32,8 +33,12 @@ class JobBoardActivity : DashboardCompatActivity(), DashboardContact.View<List<J
         swipe_to_refres.setColorSchemeColors(ContextCompat.getColor(this, R.color.mColorPrimaryVariant))
         bottom_menu.selectedItemId = R.id.my_job_board
         navigation.menu.getItem(0).isChecked = true
-        job_card_rv.layoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
-        CardSnapHelper().attachToRecyclerView(job_card_rv)
+        job_card_rv.layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
+        job_card_rv.addItemDecoration(CirclePagerIndicatorDecoration())
+        job_card_rv.adapter = FeatureCardSlider()
+
+        /*    var cardSnapHelper = CardSnapHelper()
+            cardSnapHelper.attachToRecyclerView(job_card_rv)*/
 
     }
 
@@ -60,6 +65,12 @@ class JobBoardActivity : DashboardCompatActivity(), DashboardContact.View<List<J
     }
 
     override fun onDataLoaded(t: List<JobsItem>) {
+
+        /*  job_card_rv.layoutManager = CardSliderLayoutManager(context)
+          job_card_rv.adapter = FeatureCardSlider()
+          CardSnapHelper().attachToRecyclerView(job_card_rv)*/
+/*        job_card_rv.layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
+        job_card_rv.adapter = FeatureCardSlider()*/
     }
 
     override fun error(error: String) {

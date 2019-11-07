@@ -13,7 +13,7 @@ import io.dume.dume.student.recordsPage.Record
 import kotlinx.android.synthetic.main.tution_deal_item.view.*
 
 
-class TutionAdapter(var t: List<Record>) : RecyclerView.Adapter<FeatureCardSlider.VH>() {
+class TutionAdapter(var t: List<Record>) : RecyclerView.Adapter<TutionAdapter.VH>() {
 
     lateinit var context: Context
 
