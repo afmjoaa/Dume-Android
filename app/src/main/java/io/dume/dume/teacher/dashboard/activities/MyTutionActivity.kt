@@ -13,7 +13,7 @@ import io.dume.dume.student.recordsPage.Record
 import io.dume.dume.teacher.dashboard.DashboardCompatActivity
 import io.dume.dume.teacher.dashboard.DashboardContact
 import io.dume.dume.teacher.dashboard.DashboardPresenter
-import io.dume.dume.teacher.dashboard.adapters.FeatureCardSlider
+import io.dume.dume.teacher.dashboard.adapters.TutionAdapter
 import kotlinx.android.synthetic.main.activity_my_tution.*
 
 class MyTutionActivity : DashboardCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener, DashboardContact.View<List<Record>>, SwipeRefreshLayout.OnRefreshListener {
@@ -21,9 +21,6 @@ class MyTutionActivity : DashboardCompatActivity(), BottomNavigationView.OnNavig
 
     private val presenter = DashboardPresenter(this, this)
 
-    init {
-
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setContentView(R.layout.activity_my_tution)
@@ -63,9 +60,8 @@ class MyTutionActivity : DashboardCompatActivity(), BottomNavigationView.OnNavig
     }
 
     override fun onDataLoaded(t: List<Record>) {
-        toast("OnDataLoaded")
         tution_rv.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
-        tution_rv.adapter = FeatureCardSlider()
+        tution_rv.adapter = TutionAdapter(t, presenter)
     }
 
     override fun error(error: String) {

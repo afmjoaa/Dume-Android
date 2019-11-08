@@ -8,15 +8,6 @@ import android.graphics.drawable.Animatable2;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.viewpager.widget.ViewPager;
-import androidx.interpolator.view.animation.FastOutLinearInInterpolator;
-import androidx.interpolator.view.animation.LinearOutSlowInInterpolator;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StrikethroughSpan;
@@ -34,6 +25,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
@@ -51,6 +43,14 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.interpolator.view.animation.FastOutLinearInInterpolator;
+import androidx.interpolator.view.animation.LinearOutSlowInInterpolator;
+import androidx.viewpager.widget.ViewPager;
 import io.dume.dume.Google;
 import io.dume.dume.R;
 import io.dume.dume.student.homePage.adapter.HomePageRecyclerData;
@@ -118,6 +118,8 @@ public class RecordsRejectedActivity extends CustomStuAppCompatActivity implemen
                 break;
             }
         }
+
+
     }
     }
 

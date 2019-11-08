@@ -179,6 +179,7 @@
         <activity
             android:name=".student.recordsRejected.RecordsRejectedActivity"
             android:label="@string/title_activity_records_rejected"
+            android:launchMode="singleInstance"
             android:theme="@style/AppTheme.NoActionBar.transparent.rejected" />
         <activity
             android:name=".student.recordsCurrent.RecordsCurrentActivity"

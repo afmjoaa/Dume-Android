@@ -13,14 +13,14 @@ import io.dume.dume.student.recordsPage.Record
 import kotlinx.android.synthetic.main.tution_deal_item.view.*
 
 
-class TutionAdapter(var t: List<Record>) : RecyclerView.Adapter<TutionAdapter.VH>() {
+class TutionAdapter(var t: List<Record>, var listener: RecordClickListener) : RecyclerView.Adapter<TutionAdapter.VH>() {
 
     lateinit var context: Context
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
         context = parent.context
-        return VH(LayoutInflater.from(parent.context).inflate(R.layout.tution_deal_item, parent, false))
+        return VH(LayoutInflater.from(parent.context).inflate(R.layout.tution_deal_item, parent, false), listener, t)
     }
 
     override fun getItemCount(): Int {
@@ -47,15 +47,22 @@ class TutionAdapter(var t: List<Record>) : RecyclerView.Adapter<TutionAdapter.VH
         } else if (record.status.equals("Current")) {
             holder.itemView.tution_status.text = "Running Now"
             holder.itemView.tution_status.setTextColor(Color.BLUE)
-
-
         }
-
     }
 
 
-    class VH(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class VH(itemView: View, var listener: RecordClickListener, t: List<Record>) : RecyclerView.ViewHolder(itemView) {
 
+        init {
+            itemView.setOnClickListener {
+                listener.onRecordClickListener(this.adapterPosition, t[this.adapterPosition])
+            }
+        }
     }
+
+    interface RecordClickListener {
+        fun onRecordClickListener(position: Int, record: Record)
+    }
+
 
 }
