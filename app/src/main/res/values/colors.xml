@@ -147,7 +147,7 @@
     <color name="ButtonColor">#368CF3</color>
     <color name="ButtonPressedColor">#01579b</color>
     <color name="ButtonDisableColor">#86C4F7</color>
-    <color name="CircularIndicator">#607d8b</color>
+    <color name="CircularIndicator">#3E515C</color>
     <color name="drawer_active_item">#01579b</color>
     <color name="textDarkPrimary">#11212a</color>
 

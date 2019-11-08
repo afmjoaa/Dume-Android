@@ -14,6 +14,7 @@ open class DashboardCompatActivity : CustomStuAppCompatActivity() {
         val toolbar: Toolbar = this.findViewById(R.id.toolbar)
         val drawer: DrawerLayout = this.findViewById(R.id.drawer_layout)
         toolbar.setNavigationOnClickListener { drawer.openDrawer(GravityCompat.START) }
-
+        settingStatusBarTransparent()
+        setDarkStatusBarIcon()
     }
 }

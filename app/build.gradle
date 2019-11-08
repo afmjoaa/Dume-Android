@@ -148,6 +148,7 @@ dependencies {
     implementation 'com.github.castorflex.verticalviewpager:library:19.0.1'
 
     def htextview_version = "0.1.6"
+
     implementation "com.hanks:htextview-scale:$htextview_version"
     implementation "me.philio:pinentryview:1.0.6"
     implementation 'id.zelory:compressor:2.1.0'
@@ -164,4 +165,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics:17.2.1'
     implementation 'com.google.firebase:firebase-ml-vision:24.0.0'
     implementation 'ch.halcyon:squareprogressbar:1.6.4'
+    implementation 'com.tbuonomo.andrui:viewpagerdotsindicator:4.1.2'
+
+
 }

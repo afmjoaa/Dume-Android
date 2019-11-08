@@ -11,9 +11,9 @@
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/settingsAppbar"
         android:layout_width="match_parent"
-        android:stateListAnimator="@animator/appbar_always_elevated"
         android:layout_height="@dimen/appbarLayoutHeightLow"
         android:background="@drawable/bg_black_bottom_round"
+        android:stateListAnimator="@animator/appbar_always_elevated"
         android:theme="@style/AppTheme.AppBarOverlay"
         tools:targetApi="lollipop">
 
@@ -80,90 +80,30 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:hint="Phone Number"
-                app:hintEnabled="true"
                 app:errorEnabled="true"
                 app:errorIconDrawable="@drawable/error_icon"
+                app:hintEnabled="true"
                 app:startIconDrawable="@drawable/phone_icon">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/phoneNumberEditText"
                     android:layout_width="match_parent"
+                    android:inputType="number"
                     android:layout_height="wrap_content" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+                android:id="@+id/verify_phone"
                 android:layout_width="wrap_content"
-                android:id="@+id/registerBtn"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="18dp"
+                android:layout_gravity="end"
                 android:layout_marginTop="8dp"
+                android:layout_marginBottom="18dp"
                 android:contentDescription="@string/accept_amp_continue"
                 android:text="Send code"
-                app:icon="@drawable/send_icon"
-                android:layout_gravity="end"/>
+                app:icon="@drawable/send_icon" />
 
-
-            <carbon.widget.LinearLayout
-                android:id="@+id/demoText"
-                android:visibility="invisible"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:layout_marginLeft="40dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="40dp"
-                android:layout_marginBottom="10dp"
-                app:carbon_elevation="5dp"
-                android:paddingLeft="10dp"
-                app:carbon_cornerRadius="8dp"
-                android:paddingTop="4dp"
-                android:paddingBottom="4dp"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_margin="5dp"
-                    app:srcCompat="@drawable/ic_call" />
-
-                <EditText
-                    android:id="@+id/phoneNumberEditText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:background="@null"
-                    android:descendantFocusability="beforeDescendants"
-                    android:focusableInTouchMode="true"
-                    android:fontFamily="@font/cairo_regular"
-                    android:hint="Enter Mobile Number"
-                    android:imeOptions="actionDone"
-                    android:inputType="phone"
-                    android:nextFocusLeft="@id/phoneNumberEditText"
-                    android:nextFocusUp="@id/phoneNumberEditText"
-                    android:singleLine="true"
-                    android:paddingLeft="10dp"
-                    android:maxLength="11"
-                    android:textSize="18sp" />
-
-            </carbon.widget.LinearLayout>
-
-            <Button
-            android:id="@+id/verify_phone"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="40dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="40dp"
-            android:layout_marginBottom="10dp"
-            android:background="@drawable/round_button_before_pressed"
-            android:text="Send Code"
-            android:enabled="false"
-            android:textStyle="bold"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            android:visibility="invisible"
-            app:fontFamily="@font/cairo_regular" />
 
 
         </LinearLayout>
@@ -172,7 +112,7 @@
 
     <include
         android:id="@+id/phoneInputContainer"
-        android:visibility="invisible"
-        layout="@layout/activity_authentication_number_input_section" />
+        layout="@layout/activity_authentication_number_input_section"
+        android:visibility="invisible" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

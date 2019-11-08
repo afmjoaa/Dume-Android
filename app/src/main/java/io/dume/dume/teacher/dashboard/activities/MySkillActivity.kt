@@ -3,14 +3,19 @@ package io.dume.dume.teacher.dashboard.activities
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.core.content.ContextCompat
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import io.dume.dume.R
 import io.dume.dume.teacher.dashboard.DashboardCompatActivity
 import io.dume.dume.teacher.dashboard.DashboardContact
 import io.dume.dume.teacher.dashboard.DashboardPresenter
+import io.dume.dume.teacher.pojo.Skill
 import kotlinx.android.synthetic.main.activity_my_skill.*
 
-class MySkillActivity : DashboardCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener, DashboardContact.View  {
+class MySkillActivity : DashboardCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener, DashboardContact.View<List<Skill>>, SwipeRefreshLayout.OnRefreshListener {
+
+
     private val presenter = DashboardPresenter(this, this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,13 +24,15 @@ class MySkillActivity : DashboardCompatActivity(), BottomNavigationView.OnNaviga
         presenter.enqueue()
 
     }
+
     override fun init() {
-        settingStatusBarTransparent()
-        setDarkStatusBarIcon()
-        bottom_menu.setOnNavigationItemSelectedListener(this)
+        swipe_to_refres.setColorSchemeColors(ContextCompat.getColor(this, R.color.mColorPrimaryVariant))
         bottom_menu.selectedItemId = R.id.my_skill
     }
+    override fun initListeners() {
+        bottom_menu.setOnNavigationItemSelectedListener(this)
 
+    }
     override fun toast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
@@ -34,10 +41,27 @@ class MySkillActivity : DashboardCompatActivity(), BottomNavigationView.OnNaviga
         presenter.onBottomMenuClicked(item = item)
         return true
     }
+
     override fun onResume() {
         super.onResume()
         bottom_menu.setOnNavigationItemSelectedListener(null)
         bottom_menu.selectedItemId = R.id.my_skill
         bottom_menu.setOnNavigationItemSelectedListener(this)
+    }
+
+    override fun onDataLoaded(t: List<Skill>) {
+
+
+    }
+
+    override fun error(error: String) {
+
+    }
+
+    override fun onRefresh() {
+        presenter.onRefresh()
+    }
+    override fun stopRefresh() {
+        swipe_to_refres.isRefreshing = false
     }
 }

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/Widget.MaterialComponents.CardView"
+    android:layout_width="match_parent"
+    android:layout_height="150dp"
+    app:cardElevation="4dp"
+    android:layout_marginBottom="10dp"
+    android:layout_marginLeft="@dimen/mtrl_card_spacing"
+    android:layout_marginTop="@dimen/mtrl_card_spacing"
+    android:layout_marginRight="@dimen/mtrl_card_spacing">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="16dp"
+        android:paddingLeft="16dp"
+        android:paddingTop="16dp">
+
+        <TextView
+            android:id="@+id/card_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/redhat_bold"
+            android:text="Add your education"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/card_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/card_title"
+            android:text="describe your educational qualification \n in profile settings" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/card_action"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/card_description"
+            android:layout_centerHorizontal="true"
+            android:text="Add"
+            android:textAllCaps="false"
+            android:textStyle="bold"
+            app:backgroundTint="@color/white"
+            app:cornerRadius="20dp"
+
+            />
+
+
+        <ImageView
+            android:id="@+id/card_image"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@color/colorGrey"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="16dp"
+            android:layout_centerInParent="true"/>
+
+
+    </RelativeLayout>
+
+
+</com.google.android.material.card.MaterialCardView>

@@ -6,10 +6,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.os.Bundle;
-
-import com.google.android.material.snackbar.Snackbar;
-import androidx.core.app.ActivityCompat;
-
 import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -18,11 +14,14 @@ import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.textfield.TextInputEditText;
+
+import androidx.core.app.ActivityCompat;
 import io.dume.dume.R;
 import io.dume.dume.auth.AuthModel;
 import io.dume.dume.auth.DataStore;
@@ -36,8 +35,8 @@ import io.dume.dume.teacher.homepage.TeacherActivtiy;
 
 public class AuthActivity extends CustomStuAppCompatActivity implements AuthContract.View, TextView.OnEditorActionListener, TextWatcher {
     AuthContract.Presenter presenter;
-    private EditText phoneEditText;
-    private Button floatingButoon;
+    private TextInputEditText phoneEditText;
+    private ExtendedFloatingActionButton floatingButoon;
     private TextView numberCounter;
     private static final String TAG = "AuthActivity";
     private Context context;

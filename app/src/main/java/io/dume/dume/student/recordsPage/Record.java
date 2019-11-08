@@ -1,17 +1,17 @@
 package io.dume.dume.student.recordsPage;
 
-import androidx.annotation.Keep;
-
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.Date;
+
+import androidx.annotation.Keep;
 
 @Keep
 public class Record {
     public static int DELIVERED = 2, NOT_DELIVERED = 1, DELIVERED_SEEN = 3;
     public static final String DIALOG = "dialog", BOTTOM_SHEET = "bottom_sheet", DONE = "done";
 
-
+    public static String PENDING = "Pending", REJECTED = "Rejected", COMPLETED = "Completed", CURRENT = "Current", ACCEPTED = "Accepted";
     String mentorName;
     String studentName;
     String salaryInDemand;
