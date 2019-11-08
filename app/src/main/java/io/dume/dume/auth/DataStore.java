@@ -3,6 +3,7 @@ package io.dume.dume.auth;
 import androidx.annotation.Keep;
 
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.ml.vision.text.FirebaseVisionText;
 
 import java.io.Serializable;
 import java.util.Map;

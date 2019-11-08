@@ -40,7 +40,7 @@ public class RoleChooserActivity extends CustomStuAppCompatActivity implements V
             startActivities(buddies);
             return;
         }else if (v.getId() == R.id.testJoaa) {
-            startActivity(new Intent(this, PermissionActivity.class));
+            startActivity(new Intent(this, NIDScanActivity.class));
             return;
         }else if (v.getId() == R.id.testSumon) {
             startActivity(new Intent(this, JobBoardActivity.class));

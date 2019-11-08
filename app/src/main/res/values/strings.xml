@@ -792,6 +792,11 @@ provided.Tap salary for details.  </string>
     <string name="greetings">Welcome to dume service app. Please select how you want to use the app</string>
     <string name="accept_amp_continue"><![CDATA[Accept & Continue]]></string>
     <string name="nid_info">Please center your NID Barcode in the camera window, to verify your identity.The highlighted area in the reference photo is demo of NID Barcode.</string>
+    <string name="imageview">imageview</string>
+
+    <string name="how_nid_info"><![CDATA[Please center your NID front page in the camera window, to verify your identity.
+      \nCamera will auto detect and accept your National ID Card.
+      \nPlease provide good lighting condition so that camera may focus better.]]></string>
 
     <string-array name="University">
         <item>AIUB</item>

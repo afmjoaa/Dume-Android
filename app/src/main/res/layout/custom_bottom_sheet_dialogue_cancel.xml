@@ -4,7 +4,7 @@
     android:id="@+id/fragment_history_menu_bottom"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#ffffff"
+    android:background="@drawable/bg_white_top_round_8"
     android:orientation="vertical"
     android:paddingLeft="16dp"
     android:paddingTop="10dp"
@@ -19,7 +19,7 @@
         android:layout_marginBottom="10dp"
         android:text="Canceling Request ?"
         android:textAllCaps="false"
-        android:textColor="@color/colorBlack"
+        android:textColor="@color/textDarkPrimary"
         android:textSize="24sp"
         app:fontFamily="@font/cairo_regular" />
 
@@ -39,9 +39,9 @@
         android:layout_marginTop="10dp"
         android:orientation="horizontal">
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/cancel_no_btn"
-            style="@style/myButtonStyleWhite"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginEnd="10dp"
@@ -49,14 +49,10 @@
             android:layout_marginBottom="4dp"
             android:layout_weight="1"
             android:text="No"
-            android:textAllCaps="false"
-            android:textColor="@color/colorBlack"
-            android:textSize="16sp"
-            app:fontFamily="@font/cairo_regular" />
+            android:textAllCaps="false" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/cancel_yes_btn"
-            style="@style/myButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
@@ -64,10 +60,7 @@
             android:layout_marginBottom="4dp"
             android:layout_weight="1"
             android:text="Yes, Cancel"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            app:fontFamily="@font/cairo_regular" />
+            android:textAllCaps="false" />
 
     </LinearLayout>
 

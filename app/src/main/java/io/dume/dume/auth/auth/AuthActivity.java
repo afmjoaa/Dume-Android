@@ -6,13 +6,10 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
 
 import com.google.android.material.snackbar.Snackbar;
 import androidx.core.app.ActivityCompat;
-import androidx.core.widget.NestedScrollView;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.widget.Toolbar;
+
 import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -32,12 +29,10 @@ import io.dume.dume.auth.DataStore;
 import io.dume.dume.auth.auth_final.AuthRegisterActivity;
 import io.dume.dume.auth.code_verification.PhoneVerificationActivity;
 import io.dume.dume.customView.HorizontalLoadView;
-import io.dume.dume.firstTimeUser.NIDVerificationActivity;
 import io.dume.dume.obligation.foreignObli.PayActivity;
 import io.dume.dume.student.homePage.HomePageActivity;
 import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
 import io.dume.dume.teacher.homepage.TeacherActivtiy;
-
 
 public class AuthActivity extends CustomStuAppCompatActivity implements AuthContract.View, TextView.OnEditorActionListener, TextWatcher {
     AuthContract.Presenter presenter;
@@ -51,9 +46,7 @@ public class AuthActivity extends CustomStuAppCompatActivity implements AuthCont
     private Intent fromIntent;
     private String fromIntentAction;
     private DataStore dataStore;
-
     private int accountDefinedFlag = 0;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,7 +107,7 @@ public class AuthActivity extends CustomStuAppCompatActivity implements AuthCont
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), NIDVerificationActivity.class));
+
             }
         });*/
     }

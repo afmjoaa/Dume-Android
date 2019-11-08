@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/top_action_bar_height"
+    android:paddingStart="@dimen/top_action_bar_padding_horizontal"
+    android:paddingEnd="@dimen/top_action_bar_padding_horizontal"
+    android:background="@drawable/top_action_bar_scrim">
+
+  <ImageView
+      android:id="@+id/close_button"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="start"
+      android:padding="@dimen/top_action_button_padding"
+      android:contentDescription="Back"
+      app:srcCompat="@drawable/close_icon"/>
+
+  <ImageView
+      android:id="@+id/hdr_button"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_alignParentEnd="true"
+      android:padding="@dimen/top_action_button_padding"
+      android:contentDescription="HDROff"
+      app:srcCompat="@drawable/hdr_icon"
+      android:layout_alignParentRight="true" />
+
+  <ImageView
+      android:id="@+id/flash_button"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_toStartOf="@id/hdr_button"
+      android:padding="@dimen/top_action_button_padding"
+      android:contentDescription="flashOff"
+      app:srcCompat="@drawable/flush_icon"
+      android:layout_toLeftOf="@id/hdr_button" />
+
+</RelativeLayout>

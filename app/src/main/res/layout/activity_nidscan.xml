@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/parent_coor_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <carbon.widget.LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="220dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="18dp"
+        android:layout_marginTop="70dp"
+        android:layout_marginRight="18dp"
+        android:background="#4AB9B9BE"
+        android:clipChildren="true"
+        android:orientation="vertical"
+        app:carbon_cornerRadius="10dp">
+
+        <ch.halcyon.squareprogressbar.SquareProgressBar
+            android:id="@+id/sprogressbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="top|center_horizontal"
+            android:gravity="center" />
+
+    </carbon.widget.LinearLayout>
+
+    <carbon.widget.LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="210dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="22dp"
+        android:layout_marginTop="75dp"
+        android:layout_marginRight="22dp"
+        android:clipChildren="true"
+        android:orientation="vertical"
+        app:carbon_cornerRadius="10dp">
+
+        <com.otaliastudios.cameraview.CameraView
+            android:id="@+id/camera"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/black"
+            android:gravity="center"
+            app:cameraFlash="on"
+            app:cameraHdr="on"
+            app:cameraMode="picture"
+            app:cameraPictureSnapshotMetering="true"
+            app:cameraUseDeviceOrientation="false"
+            app:cameraWhiteBalance="auto">
+
+        </com.otaliastudios.cameraview.CameraView>
+
+
+    </carbon.widget.LinearLayout>
+
+    <carbon.widget.RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="22dp"
+        android:layout_marginTop="314dp"
+        android:layout_marginRight="22dp">
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/infoClip"
+            style="@style/Widget.MaterialComponents.Chip.Action"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="Please scan your NID front page"
+            android:textColor="@color/mColorPrimary"
+            app:rippleColor="@color/colorRippleDefault"
+            app:chipIcon="@drawable/about_us_icon"
+            android:layout_marginBottom="8dp"
+            app:chipIconTint="@color/mColorPrimary" />
+
+        <com.google.android.material.button.MaterialButton
+
+            android:id="@+id/howNIDScanWork"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/infoClip"
+            android:layout_marginBottom="8dp"
+            android:text="How NID Scan Work?"
+            android:textAllCaps="false" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/dontHaveNIDBtn"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/howNIDScanWork"
+            android:layout_marginBottom="8dp"
+            android:text="Skip NID Verification"
+            android:textAllCaps="false" />
+
+    </carbon.widget.RelativeLayout>
+
+
+    <include
+        layout="@layout/top_action_bar_in_live_camera"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

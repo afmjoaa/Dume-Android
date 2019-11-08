@@ -15,6 +15,8 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
 
     <application
         android:name="androidx.multidex.MultiDexApplication"
@@ -25,7 +27,11 @@
         android:roundIcon="@mipmap/icon_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/DefaultTheme.NoActionBar">
+        <activity android:name=".firstTimeUser.NIDScanActivity"
+            android:theme="@style/DefaultTheme.NoActionBar.darkStatus" />
+
         <activity android:name=".teacher.dashboard.DashboardCompatActivity" />
+
         <activity
             android:name=".teacher.dashboard.activities.MyPaymentActivity"
             android:launchMode="singleInstance"
@@ -85,9 +91,6 @@
             android:name=".teacher.homepage.TeacherActivtiy"
             android:label=""
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".firstTimeUser.NIDVerificationActivity"
-            android:theme="@style/DefaultTheme.NoActionBar" />
         <activity
             android:name=".firstTimeUser.PrivacyActivity"
             android:theme="@style/DefaultTheme.NoActionBar" />

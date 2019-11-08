@@ -76,26 +76,26 @@ dependencies {
     implementation "io.reactivex.rxjava2:rxjava:$rxJava"
     implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion"
     //  firebase
-    implementation 'com.google.firebase:firebase-core:16.0.8'
+    implementation 'com.google.firebase:firebase-core:17.2.1'
     /*Android Slider for Login Screen*/
     implementation 'com.nineoldandroids:library:2.4.0'
     implementation 'com.daimajia.slider:library:1.1.5@aar'
     /*Image Loading Library*/
     implementation 'com.squareup.picasso:picasso:2.3.2'
-    implementation 'com.google.firebase:firebase-auth:16.2.0'
-    implementation 'com.google.android.gms:play-services-auth:16.0.1'
+    implementation 'com.google.firebase:firebase-auth:19.1.0'
+    implementation 'com.google.android.gms:play-services-auth:17.0.0'
     implementation 'com.facebook.android:facebook-android-sdk:4.35.0'
     implementation 'com.squareup.okhttp:okhttp:2.7.5'
     implementation 'com.squareup.okhttp:okhttp-urlconnection:1.6.0'
     //don't update firestore as 18 is still incompatible with geofirestore
     implementation 'com.google.firebase:firebase-firestore:17.1.5'
-    implementation 'androidx.multidex:multidex:2.0.0'
+    implementation 'androidx.multidex:multidex:2.0.1'
 
     // google play services
-    implementation 'com.google.android.gms:play-services-gcm:16.1.0'
-    implementation 'com.google.android.gms:play-services-location:16.0.0'
-    implementation 'com.google.android.gms:play-services-maps:16.1.0'
-    implementation 'com.google.android.gms:play-services-places:16.0.0'
+    implementation 'com.google.android.gms:play-services-gcm:17.0.0'
+    implementation 'com.google.android.gms:play-services-location:17.0.0'
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
+    implementation 'com.google.android.gms:play-services-places:17.0.0'
     //for seek bar modification added by joaa
     implementation 'com.github.warkiz.widget:indicatorseekbar:2.0.9'
     implementation 'tk.zielony:carbon:0.15.3'
@@ -103,8 +103,8 @@ dependencies {
     //implementation 'de.hdodenhof:circleimageview:2.2.0'
     implementation 'com.andkulikov:transitionseverywhere:1.8.0'
     implementation 'com.tomergoldst.android:tooltips:1.0.10'
-    implementation 'com.google.firebase:firebase-storage:16.1.0'
-    implementation 'com.google.firebase:firebase-messaging:17.5.0'
+    implementation 'com.google.firebase:firebase-storage:19.1.0'
+    implementation 'com.google.firebase:firebase-messaging:20.0.0'
     implementation 'com.github.bumptech.glide:glide:4.7.1'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
 
@@ -160,5 +160,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-crash:16.2.1'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'com.jakewharton.threetenabp:threetenabp:1.2.0'
-    implementation 'me.dm7.barcodescanner:zxing:1.9.13'
+    api 'com.otaliastudios:cameraview:2.4.0'
+    implementation 'com.google.firebase:firebase-analytics:17.2.1'
+    implementation 'com.google.firebase:firebase-ml-vision:24.0.0'
+    implementation 'ch.halcyon:squareprogressbar:1.6.4'
 }
