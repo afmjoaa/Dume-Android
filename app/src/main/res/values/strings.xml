@@ -797,6 +797,9 @@ provided.Tap salary for details.  </string>
     <string name="how_nid_info"><![CDATA[Please center your NID front page in the camera window, to verify your identity.
       \nCamera will auto detect and accept your National ID Card.
       \nPlease provide good lighting condition so that camera may focus better.]]></string>
+    <string name="flush">Flush</string>
+    <string name="hdr">HDR</string>
+    <string name="support">Support</string>
 
     <string-array name="University">
         <item>AIUB</item>

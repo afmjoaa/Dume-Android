@@ -7,20 +7,24 @@ import androidx.core.content.ContextCompat
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import io.dume.dume.R
+import io.dume.dume.student.pojo.CustomStuAppCompatActivity
 import io.dume.dume.teacher.dashboard.DashboardCompatActivity
 import io.dume.dume.teacher.dashboard.DashboardContact
 import io.dume.dume.teacher.dashboard.DashboardPresenter
 import io.dume.dume.teacher.pojo.Skill
+import io.dume.dume.util.DumeUtils
 import kotlinx.android.synthetic.main.activity_my_skill.*
 
-class MySkillActivity : DashboardCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener, DashboardContact.View<List<Skill>>, SwipeRefreshLayout.OnRefreshListener {
+class MySkillActivity : CustomStuAppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener, DashboardContact.View<List<Skill>>, SwipeRefreshLayout.OnRefreshListener {
 
 
     private val presenter = DashboardPresenter(this, this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        setContentView(R.layout.activity_my_skill)
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_my_skill)
+        setActivityContext(this, 1112)
+        DumeUtils.configureAppbar(this, "My Skill", true)
         presenter.enqueue()
 
     }
@@ -50,8 +54,6 @@ class MySkillActivity : DashboardCompatActivity(), BottomNavigationView.OnNaviga
     }
 
     override fun onDataLoaded(t: List<Skill>) {
-
-
     }
 
     override fun error(error: String) {

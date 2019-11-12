@@ -1,6 +1,7 @@
 package io.dume.dume.student.pojo;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -12,15 +13,18 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.jaeger.library.StatusBarUtil;
@@ -34,6 +38,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import io.dume.dume.Google;
 import io.dume.dume.R;
 import io.dume.dume.auth.auth.AuthActivity;
@@ -47,19 +53,17 @@ import io.dume.dume.util.NetworkUtil;
 public class CustomStuAppCompatActivity extends AppCompatActivity implements MyConnectivityHandler {
     private View decor;
     private static final String TAG = "CustomStuAppCompatActiv";
-    private static final int ERROR_DIALOG_REQUEST = 9001;
     protected NetworkChangeReceiver networkChangeReceiver;
     protected Context context;
     protected Activity activity;
     protected Snackbar snackbar;
     protected View rootView;
     protected static int fromFlag = 0;
-    protected static Boolean ISNIGHT;
-    protected static int HOUR;
     private CoordinatorLayout v;
     private HorizontalLoadView loadView;
     protected SearchDataStore searchDataStore;
     protected float mDensity;
+    private Dialog dialog;
 
     public void setActivityContext(Context context, int i) {
         this.context = context;
@@ -69,6 +73,7 @@ public class CustomStuAppCompatActivity extends AppCompatActivity implements MyC
         createNetworkCheckSnackbar();
         searchDataStore = SearchDataStore.getInstance();
         mDensity = getResources().getDisplayMetrics().density;
+        init();
     }
 
     @Override
@@ -94,8 +99,6 @@ public class CustomStuAppCompatActivity extends AppCompatActivity implements MyC
                 try {
                     Socket socket = new Socket();
                     socket.connect(new InetSocketAddress("8.8.8.8", 53), 2500);
-
-                    // socket.connect(new InetSocketAddress("114.114.114.114", 53), 3000);
                     if (snackbar != null) {
                         snackbar.dismiss();
                     }
@@ -105,7 +108,6 @@ public class CustomStuAppCompatActivity extends AppCompatActivity implements MyC
                     if (snackbar != null) {
                         snackbar.show();
                     }
-
                 }
             }).start();
         }
@@ -123,17 +125,9 @@ public class CustomStuAppCompatActivity extends AppCompatActivity implements MyC
         MyApplication.activityResumed();// On Resume notify the Application
     }
 
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        View view = findViewById(R.id.parent_coor_layout);
-
-        if (view != null) {
-            setActivityContext(this, 5666);
-        }
-
         String accountMajor = Google.getInstance().getAccountMajor();
         if (FirebaseAuth.getInstance().getCurrentUser() != null && accountMajor == null) {
             Intent returnIntent = new Intent(this, SplashActivity.class);
@@ -142,7 +136,6 @@ public class CustomStuAppCompatActivity extends AppCompatActivity implements MyC
             //finish();
             System.exit(0);
         }
-        init();
         // Create an IntentFilter instance.
         IntentFilter intentFilter = new IntentFilter();
         // Add network connectivity change action.
@@ -157,8 +150,54 @@ public class CustomStuAppCompatActivity extends AppCompatActivity implements MyC
         registerReceiver(networkChangeReceiver, intentFilter);
     }
 
-    private void init() {
+    @Override
+    public void pause() {
+        if (snackbar != null) {
+            snackbar.show();
+        }
+    }
 
+    @Override
+    public void resume() {
+        if (snackbar != null) {
+            snackbar.dismiss();
+        }
+
+    }
+
+    @Override
+    public void onError(Exception e) {
+        Log.e(TAG, "onNetworkError: Error function called" + e);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            if (fromFlag == 1112) {
+                DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
+                drawerLayout.openDrawer(GravityCompat.START, true);
+                return true;
+            } else {
+                super.onBackPressed();
+            }
+        } else if (id == R.id.support) {
+            dialog.show();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        if (fromFlag == 1112) {
+            getMenuInflater().inflate(R.menu.support_menu, menu);
+        }
+        return super.onCreateOptionsMenu(menu);
     }
 
     public void createNetworkCheckSnackbar() {
@@ -302,44 +341,12 @@ public class CustomStuAppCompatActivity extends AppCompatActivity implements MyC
         win.setAttributes(winParams);
     }
 
-    public int getCurrentHour() {
-        Calendar cal = Calendar.getInstance();
-        return cal.get(Calendar.HOUR_OF_DAY);
-    }
-
-    @Override
-    public void pause() {
-        if (snackbar != null) {
-            snackbar.show();
-        }
-    }
-
-    @Override
-    public void resume() {
-        if (snackbar != null) {
-            snackbar.dismiss();
-        }
-
-    }
-
-    @Override
-    public void onError(Exception e) {
-        Log.e(TAG, "onNetworkError: Error function called" + e);
-    }
-
-    public void setIsNight() {
-        HOUR = getCurrentHour();
-        ISNIGHT = HOUR < 5 || HOUR > 19;
-    }
-
-    //fullscreen code
     public void makeFullScreen() {
         View decorView = activity.getWindow().getDecorView();
         int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
         decorView.setSystemUiVisibility(uiOptions);
     }
 
-    //sign_out function
     public void onSignOut() {
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
             FirebaseAuth.getInstance().signOut();
@@ -379,17 +386,31 @@ public class CustomStuAppCompatActivity extends AppCompatActivity implements MyC
         toast.show();
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == android.R.id.home) {
-            super.onBackPressed();
+    public void initSupportDialog() {
+        MaterialAlertDialogBuilder materialAlertDialogBuilder = new MaterialAlertDialogBuilder(context, R.style.ThemeOverlay_MaterialComponents_MaterialAlertDialog_Centered);
+        View customLayout = getLayoutInflater().inflate(R.layout.support_dialog_layout, null, false);
+        materialAlertDialogBuilder.setView(customLayout);
+        dialog = materialAlertDialogBuilder.create();
+
+        try {
+            Button adminChat = customLayout.findViewById(R.id.adminChatBtn);
+            adminChat.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                }
+            });
+        } catch (NullPointerException npe) {
+            npe.printStackTrace();
         }
-        return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
+    //initializing activities based on there flag
+    private void init() {
+        if (fromFlag == 1112) {
+            initSupportDialog();
+            settingStatusBarTransparent();
+        }
+        setDarkStatusBarIcon();
     }
 }

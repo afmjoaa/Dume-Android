@@ -38,7 +38,6 @@ public class AuthPresenter implements AuthContract.Presenter {
     @Override
     public void enqueue() {
         view.findView();
-        view.initActionBar();
         view.init();
     }
 

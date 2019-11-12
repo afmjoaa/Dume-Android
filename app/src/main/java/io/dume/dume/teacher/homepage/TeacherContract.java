@@ -108,11 +108,7 @@ public interface TeacherContract {
 
         void showPercentSnackBar(String string);
 
-        void gotoBootCampAddvertise();
-
         void gotoStudentHomePage();
-
-        void gotoBootCamPHomePage();
 
         void gotoProfilePage();
 

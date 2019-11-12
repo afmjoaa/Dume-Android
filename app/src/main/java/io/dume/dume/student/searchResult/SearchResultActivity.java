@@ -1682,7 +1682,7 @@ public class SearchResultActivity extends CusStuAppComMapActivity implements OnM
         }
 
         //fixing more info now
-        String Temp = (String) sp_info.get("current_status");
+        String Temp = (String) sp_info.get("current_status_icon");
         currentStatusTV.setText("Current Status : " + Temp);
         Map<String, Object> self_rating = (Map<String, Object>) sp_info.get("self_rating");
         Temp = (String) self_rating.get("student_guided");

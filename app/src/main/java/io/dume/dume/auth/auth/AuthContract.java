@@ -14,10 +14,7 @@ public interface AuthContract {
 
         void init();
 
-        void initActionBar();
-
         void findView();
-
 
         void showCount(String s);
 
@@ -37,10 +34,8 @@ public interface AuthContract {
 
         void showToast(String toast);
 
-        void restoreData();
         void enableVerifyButton();
         void disableVerifyButton();
-
 
         void sending();
         void resetSending();

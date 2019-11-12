@@ -1,110 +1,159 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/parent_coor_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
     android:orientation="vertical">
 
-    <carbon.widget.LinearLayout
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/settingsAppbar"
         android:layout_width="match_parent"
-        android:layout_height="220dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginLeft="18dp"
-        android:layout_marginTop="70dp"
-        android:layout_marginRight="18dp"
-        android:background="#4AB9B9BE"
-        android:clipChildren="true"
-        android:orientation="vertical"
-        app:carbon_cornerRadius="10dp">
+        android:layout_height="@dimen/appbarLayoutHeightLow"
+        android:background="@drawable/bg_black_bottom_round"
+        android:stateListAnimator="@animator/appbar_always_elevated"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        tools:targetApi="lollipop">
 
-        <ch.halcyon.squareprogressbar.SquareProgressBar
-            android:id="@+id/sprogressbar"
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:id="@+id/accountCollapsing"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="top|center_horizontal"
-            android:gravity="center" />
+            android:background="@drawable/bg_black_bottom_round"
+            app:collapsedTitleGravity="start"
+            app:collapsedTitleTextAppearance="@style/MyTextApprncCol.lightBg"
+            app:expandedTitleGravity="start"
+            app:expandedTitleMarginBottom="@dimen/expTittleMarginBottom"
+            app:expandedTitleMarginStart="@dimen/expTittleMarginStart"
+            app:expandedTitleMarginTop="@dimen/expTittleMarginTop"
+            app:expandedTitleTextAppearance="@style/MyTextApprncExp.lightBg"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:title="Account Settings"
+            app:titleEnabled="true">
 
-    </carbon.widget.LinearLayout>
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/accountToolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:theme="@style/AccountToolbarStyle"
+                app:buttonGravity="bottom"
+                app:layout_collapseMode="pin"
+                app:navigationIcon="@drawable/close_icon"
+                app:popupTheme="@style/AppTheme.PopupOverlay"
+                app:theme="@style/ThemeToolbar.default"
+                app:title="Provide Permission">
 
-    <carbon.widget.LinearLayout
+            </androidx.appcompat.widget.Toolbar>
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/test"
         android:layout_width="match_parent"
-        android:layout_height="210dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginLeft="22dp"
-        android:layout_marginTop="75dp"
-        android:layout_marginRight="22dp"
-        android:clipChildren="true"
-        android:orientation="vertical"
-        app:carbon_cornerRadius="10dp">
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <com.otaliastudios.cameraview.CameraView
-            android:id="@+id/camera"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/black"
-            android:gravity="center"
-            app:cameraFlash="on"
-            app:cameraHdr="on"
-            app:cameraMode="picture"
-            app:cameraPictureSnapshotMetering="true"
-            app:cameraUseDeviceOrientation="false"
-            app:cameraWhiteBalance="auto">
+            android:layout_height="wrap_content">
 
-        </com.otaliastudios.cameraview.CameraView>
+            <carbon.widget.LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="220dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="18dp"
+                android:layout_marginTop="18dp"
+                android:layout_marginRight="18dp"
+                android:background="#4AB9B9BE"
+                android:clipChildren="true"
+                android:orientation="vertical"
+                app:carbon_cornerRadius="10dp">
 
+                <ch.halcyon.squareprogressbar.SquareProgressBar
+                    android:id="@+id/sprogressbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="top|center_horizontal"
+                    android:gravity="center" />
 
-    </carbon.widget.LinearLayout>
+            </carbon.widget.LinearLayout>
 
-    <carbon.widget.RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="22dp"
-        android:layout_marginTop="314dp"
-        android:layout_marginRight="22dp">
+            <carbon.widget.LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="210dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="22dp"
+                android:layout_marginTop="23dp"
+                android:layout_marginRight="22dp"
+                android:clipChildren="true"
+                android:orientation="vertical"
+                app:carbon_cornerRadius="10dp">
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/infoClip"
-            style="@style/Widget.MaterialComponents.Chip.Action"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:text="Please scan your NID front page"
-            android:textColor="@color/mColorPrimary"
-            app:rippleColor="@color/colorRippleDefault"
-            app:chipIcon="@drawable/about_us_icon"
-            android:layout_marginBottom="8dp"
-            app:chipIconTint="@color/mColorPrimary" />
+                <com.otaliastudios.cameraview.CameraView
+                    android:id="@+id/camera"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/black"
+                    android:gravity="center"
+                    app:cameraFlash="on"
+                    app:cameraHdr="on"
+                    app:cameraMode="picture"
+                    app:cameraPictureSnapshotMetering="true"
+                    app:cameraUseDeviceOrientation="false"
+                    app:cameraWhiteBalance="auto">
 
-        <com.google.android.material.button.MaterialButton
-
-            android:id="@+id/howNIDScanWork"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/infoClip"
-            android:layout_marginBottom="8dp"
-            android:text="How NID Scan Work?"
-            android:textAllCaps="false" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/dontHaveNIDBtn"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/howNIDScanWork"
-            android:layout_marginBottom="8dp"
-            android:text="Skip NID Verification"
-            android:textAllCaps="false" />
-
-    </carbon.widget.RelativeLayout>
+                </com.otaliastudios.cameraview.CameraView>
 
 
-    <include
-        layout="@layout/top_action_bar_in_live_camera"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="top" />
+            </carbon.widget.LinearLayout>
+
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/infoClip"
+                style="@style/Widget.MaterialComponents.Chip.Action"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="22dp"
+                android:layout_marginTop="260dp"
+                android:layout_marginRight="22dp"
+                android:layout_marginBottom="8dp"
+                android:text="Please scan your NID front page"
+                android:textColor="@color/mColorPrimary"
+                app:chipIcon="@drawable/about_us_icon"
+                app:chipIconTint="@color/mColorPrimary"
+                app:rippleColor="@color/colorRippleDefault" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/howNIDScanWork"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/infoClip"
+                android:layout_marginLeft="22dp"
+                android:layout_marginRight="22dp"
+                android:layout_marginBottom="8dp"
+                android:text="How NID Scan Work?"
+                android:textAllCaps="false" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/dontHaveNIDBtn"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/howNIDScanWork"
+                android:layout_marginLeft="22dp"
+                android:layout_marginRight="22dp"
+                android:layout_marginBottom="8dp"
+                android:text="Skip NID Verification"
+                android:textAllCaps="false" />
+
+        </RelativeLayout>
+
+    </androidx.core.widget.NestedScrollView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

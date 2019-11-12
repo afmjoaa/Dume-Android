@@ -312,7 +312,7 @@ public class SearchDataStore implements Serializable {
         generatedforWhom.put("request_user_name", request_user_name);
         generatedforWhom.put("request_phone_number", documentSnapshot.get("phone_number"));
         generatedforWhom.put("request_avatar", documentSnapshot.get("avatar"));
-        generatedforWhom.put("request_cs", documentSnapshot.get("current_status"));
+        generatedforWhom.put("request_cs", documentSnapshot.get("current_status_icon"));
         generatedforWhom.put("request_gender", documentSnapshot.get("gender"));
         generatedforWhom.put("request_pr", documentSnapshot.get("previous_result"));
         generatedforWhom.put("request_sr", documentSnapshot.get("self_rating"));

@@ -60,7 +60,7 @@ public class EditModel implements EditContract.Model {
             map.put("birth_date", birth_date);
             map.put("marital", marital);
             map.put("location", geoPoint);
-            map.put("current_status", currentStatus);
+            map.put("current_status_icon", currentStatus);
             map.put("pro_com_%", comPercent);
             /*users/mentors/mentor_profile/*/
             database.collection("users/mentors/mentor_profile").document(Objects.requireNonNull(auth.getUid())).update(map).addOnCompleteListener(activity, new OnCompleteListener<Void>() {
@@ -93,7 +93,7 @@ public class EditModel implements EditContract.Model {
             map.put("birth_date", birth_date);
             map.put("marital", marital);
             map.put("location", geoPoint);
-            map.put("current_status", currentStatus);
+            map.put("current_status_icon", currentStatus);
             map.put("pro_com_%", comPercent);
             /*users/mentors/mentor_profile/*/
             database.collection("users/mentors/mentor_profile").document(Objects.requireNonNull(auth.getUid())).update(map).addOnCompleteListener(activity, new OnCompleteListener<Void>() {

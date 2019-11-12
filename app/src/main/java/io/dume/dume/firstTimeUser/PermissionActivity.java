@@ -52,8 +52,7 @@ public class PermissionActivity extends CustomStuAppCompatActivity implements Vi
     }
 
     public void initDesign(){
-        setActivityContext(this, 3637);
-        setDarkStatusBarIcon();
+        setActivityContext(this, 2003);
         configureAppbar(this, "Provide Permission", true);
     }
 

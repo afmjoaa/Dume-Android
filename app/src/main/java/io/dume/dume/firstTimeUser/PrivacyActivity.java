@@ -25,14 +25,13 @@ public class PrivacyActivity extends CustomStuAppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_privacy);
-        setActivityContext(this, 3638);
+        setActivityContext(this, 2002);
         webViewPrivacey = findViewById(R.id.termsWV);
         local = DataStore.getInstance();
         init();
     }
 
     private void init() {
-         setDarkStatusBarIcon();
         if (local.getAccountManjor().equals(DataStore.TEACHER)) {
             webViewPrivacey.loadUrl("file:///android_asset/pages/teacher_privacy.html");
             configureAppbar(this, "Teacher Guide", true);

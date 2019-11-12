@@ -643,7 +643,7 @@ public class RecordsAcceptedActivity extends CustomStuAppCompatActivity implemen
             }
 
             //fixing more info now
-            String Temp = (String) sp_info.get("current_status");
+            String Temp = (String) sp_info.get("current_status_icon");
             currentStatusTV.setText(currentStatusTV.getText() + Temp);
             Map<String, Object> self_rating = (Map<String, Object>) sp_info.get("self_rating");
             Temp = (String) self_rating.get("student_guided");

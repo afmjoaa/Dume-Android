@@ -52,7 +52,7 @@ public class ProfilePageModel extends StuBaseModel implements ProfilePageContrac
         map.put("last_name", ln);
         map.put("email", mail);
         map.put("current_address", ca);
-        map.put("current_status", cs);
+        map.put("current_status_icon", cs);
         map.put("previous_result", pr);
         map.put("gender", gender);
         map.put("pro_com_%", progress);

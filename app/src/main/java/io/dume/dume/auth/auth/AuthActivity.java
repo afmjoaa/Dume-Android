@@ -33,19 +33,15 @@ import io.dume.dume.student.homePage.HomePageActivity;
 import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
 import io.dume.dume.teacher.homepage.TeacherActivtiy;
 
+import static io.dume.dume.util.DumeUtils.configureAppbar;
+
 public class AuthActivity extends CustomStuAppCompatActivity implements AuthContract.View, TextView.OnEditorActionListener, TextWatcher {
     AuthContract.Presenter presenter;
     private TextInputEditText phoneEditText;
     private ExtendedFloatingActionButton floatingButoon;
     private TextView numberCounter;
     private static final String TAG = "AuthActivity";
-    private Context context;
-    private Typeface cairoRegular;
-    private HorizontalLoadView loadView;
-    private Intent fromIntent;
-    private String fromIntentAction;
     private DataStore dataStore;
-    private int accountDefinedFlag = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,24 +52,7 @@ public class AuthActivity extends CustomStuAppCompatActivity implements AuthCont
         presenter.enqueue();
         dataStore = DataStore.getInstance();
         presenter.setBundle();
-        TelephonyManager tMgr = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
-        if (ActivityCompat.checkSelfPermission(this,
-                Manifest.permission.READ_SMS) == PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_NUMBERS) == PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
-            if (tMgr != null) {
-                String mPhoneNumber = tMgr.getLine1Number();
-                if (mPhoneNumber != null || !mPhoneNumber.equals("")) {
-                    phoneEditText.setText(mPhoneNumber);
-                }
-            }
-        }
-        fromIntent = getIntent();
-        fromIntentAction = fromIntent.getAction();
-        String phone_number = fromIntent.getStringExtra("phone_number");
-        if (phone_number != null) {
-            phoneEditText.setText(phone_number);
-        }
+
         //testing null error solution
         DataStore.setSTATION(1);
         //setting my snackbar callback
@@ -96,33 +75,18 @@ public class AuthActivity extends CustomStuAppCompatActivity implements AuthCont
     @Override
     public void init() {
         setDarkStatusBarIcon();
-        context = this;
+        configureAppbar(this, "Enter Phone Number", true);
         phoneEditText.setOnEditorActionListener(this);
         floatingButoon.setOnClickListener(view -> presenter.onPhoneValidation(phoneEditText.getText().toString()));
         phoneEditText.addTextChangedListener(this);
-        Typeface custom_font = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Medium.ttf");
-        cairoRegular = Typeface.createFromAsset(getAssets(), "fonts/Cairo_Regular.ttf");
-       /* Button button = findViewById(R.id.test);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });*/
     }
 
-    @Override
-    public void initActionBar() {
-
-
-    }
 
     @Override
     public void findView() {
         phoneEditText = findViewById(R.id.phoneNumberEditText);
         floatingButoon = findViewById(R.id.verify_phone);
         numberCounter = findViewById(R.id.phoneCount);
-        loadView = findViewById(R.id.loadView);
     }
 
 
@@ -162,27 +126,6 @@ public class AuthActivity extends CustomStuAppCompatActivity implements AuthCont
     public void goToRegesterActivity() {
         Intent intent = new Intent(this, AuthRegisterActivity.class);
         startActivity(intent);
-
-    }
-
-    @Override
-    public void showProgress() {
-        if (loadView.getVisibility() == View.INVISIBLE || loadView.getVisibility() == View.GONE) {
-            loadView.setVisibility(View.VISIBLE);
-        }
-        if (!loadView.isRunningAnimation()) {
-            loadView.startLoading();
-        }
-    }
-
-    @Override
-    public void hideProgress() {
-        if (loadView.isRunningAnimation()) {
-            loadView.stopLoading();
-        }
-        if (loadView.getVisibility() == View.VISIBLE) {
-            loadView.setVisibility(View.INVISIBLE);
-        }
     }
 
     @Override
@@ -193,11 +136,6 @@ public class AuthActivity extends CustomStuAppCompatActivity implements AuthCont
         toast.show();
     }
 
-    @Override
-    public void restoreData() {
-
-        phoneEditText.setText(dataStore.getPhoneNumber());
-    }
 
     @Override
     public void enableVerifyButton() {
@@ -252,16 +190,6 @@ public class AuthActivity extends CustomStuAppCompatActivity implements AuthCont
 
     @Override
     public void afterTextChanged(Editable editable) {
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
     }
 
     @Override

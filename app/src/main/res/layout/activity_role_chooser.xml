@@ -12,15 +12,15 @@
         android:layout_gravity="center"
         android:fitsSystemWindows="true"
         android:gravity="center"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/tvTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
             android:layout_marginTop="6dp"
-            android:layout_marginRight="16dp"
             android:layout_marginBottom="6dp"
             android:text="Welcome to Dume tution app"
             android:textAlignment="center"
@@ -33,11 +33,7 @@
             android:id="@+id/tvDescription"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
             android:layout_marginTop="4dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
             android:layout_marginBottom="10dp"
             android:text="please select how you want to use the app"
             android:textAlignment="center"
@@ -50,9 +46,7 @@
             android:id="@+id/asTeacher"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="40dp"
             android:layout_marginTop="10dp"
-            android:layout_marginRight="40dp"
             android:layout_marginBottom="10dp"
             android:onClick="onClick"
             android:text="As a Teacher"
@@ -65,27 +59,33 @@
             android:orientation="horizontal">
 
             <View
-                android:layout_width="145dp"
+                android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_gravity="center"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
+                android:layout_weight="1"
                 android:background="@color/textColorSecondary" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
                 android:text="Or"
                 android:textColor="@color/textColorPrimary"
                 android:textSize="12sp"
                 app:fontFamily="@font/cairo_regular" />
 
             <View
-                android:layout_width="145dp"
+                android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_gravity="center"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
+                android:layout_weight="1"
                 android:background="@color/textColorSecondary" />
 
         </LinearLayout>
@@ -94,9 +94,7 @@
             android:id="@+id/asStudent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="40dp"
             android:layout_marginTop="10dp"
-            android:layout_marginRight="40dp"
             android:layout_marginBottom="10dp"
             android:onClick="onClick"
             android:text="As a Student"
@@ -109,9 +107,7 @@
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="40dp"
             android:layout_marginTop="10dp"
-            android:layout_marginRight="40dp"
             android:layout_marginBottom="10dp"
             android:onClick="onClick"
             android:text="Test(Enam)"
@@ -123,9 +119,7 @@
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="40dp"
             android:layout_marginTop="10dp"
-            android:layout_marginRight="40dp"
             android:layout_marginBottom="10dp"
             android:onClick="onClick"
             android:text="Test(Joaa)"
@@ -137,9 +131,7 @@
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="40dp"
             android:layout_marginTop="10dp"
-            android:layout_marginRight="40dp"
             android:layout_marginBottom="10dp"
             android:onClick="onClick"
             android:text="Test(Sumon)"

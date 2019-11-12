@@ -1,0 +1,59 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="185dp"
+    android:orientation="vertical"
+    android:background="@drawable/paper"
+    android:theme="@style/DefaultTheme.NoActionBar">
+
+    <carbon.widget.RelativeLayout
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="20dp"
+        android:paddingTop="50dp"
+        android:paddingRight="20dp">
+
+        <carbon.widget.ImageView
+            android:id="@+id/user_dp"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_marginBottom="10dp"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/nav_header_desc"
+            android:scaleType="centerCrop"
+            app:carbon_cornerRadius="8dp"
+            app:carbon_elevation="2dp"
+            app:srcCompat="@drawable/demo_alias_dp" />
+
+        <TextView
+            android:id="@+id/userNameNavTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/user_dp"
+            android:text="Username abcde"
+            android:textColor="@color/white"
+            android:textSize="17sp"
+            android:translationY="6dp" />
+
+        <TextView
+            android:id="@+id/userProfile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/userNameNavTxt"
+            android:text="5.00  ★"
+            android:textColor="@color/colorOffWhite"
+            android:textSize="15sp"
+            android:translationY="4dp" />
+
+    </carbon.widget.RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom"
+        android:background="#eee4e3e4" />
+
+</RelativeLayout>

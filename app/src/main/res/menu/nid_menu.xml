@@ -1,0 +1,25 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".MainActivity">
+
+    <item
+        android:id="@+id/flush"
+        android:title="@string/flush"
+        android:orderInCategory="1"
+        android:tooltipText="Toggle Flush"
+        android:icon="@drawable/flush_icon"
+        app:showAsAction="always"
+        />
+
+    <item
+        android:id="@+id/hdr"
+        android:title="@string/hdr"
+        android:orderInCategory="2"
+        android:tooltipText="Toggle HDR"
+        android:icon="@drawable/no_hdr_icon"
+        app:showAsAction="always"
+        />
+
+</menu>
+

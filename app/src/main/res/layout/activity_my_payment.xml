@@ -41,7 +41,7 @@
                 app:titleEnabled="true">
 
                 <androidx.appcompat.widget.Toolbar
-                    android:id="@+id/toolbar"
+                    android:id="@+id/accountToolbar"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
                     android:theme="@style/AccountToolbarStyle"
@@ -105,7 +105,7 @@
         android:background="@color/white"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
-        app:headerLayout="@layout/teacher_nav_header"
+        app:headerLayout="@layout/dashboard_nav_header"
         app:itemBackground="@drawable/drawer_item_background"
         app:itemIconTint="@drawable/drawer_item_icontint"
         app:itemTextColor="@drawable/drawer_item_textcolor"

@@ -28,7 +28,8 @@
         android:supportsRtl="true"
         android:theme="@style/DefaultTheme.NoActionBar">
         <activity android:name=".firstTimeUser.NIDScanActivity"
-            android:theme="@style/DefaultTheme.NoActionBar.darkStatus" />
+            android:theme="@style/DefaultTheme.NoActionBar"
+            android:screenOrientation="portrait"/>
 
         <activity android:name=".teacher.dashboard.DashboardCompatActivity" />
 

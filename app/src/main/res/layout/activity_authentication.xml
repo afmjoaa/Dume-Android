@@ -71,7 +71,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="18dp"
+            android:layout_marginTop="18dp"
+            android:layout_marginBottom="18dp"
             android:orientation="vertical">
 
             <com.google.android.material.textfield.TextInputLayout
@@ -80,6 +81,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:hint="Phone Number"
+                android:paddingStart="18dp"
+                android:paddingLeft="18dp"
+                android:paddingEnd="18dp"
+                android:paddingRight="18dp"
                 app:errorEnabled="true"
                 app:errorIconDrawable="@drawable/error_icon"
                 app:hintEnabled="true"
@@ -88,8 +93,8 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/phoneNumberEditText"
                     android:layout_width="match_parent"
-                    android:inputType="number"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:inputType="number" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -99,20 +104,16 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:layout_marginTop="8dp"
+                android:layout_marginLeft="18dp"
+                android:layout_marginRight="18dp"
+                android:layout_marginEnd="18dp"
+                android:layout_marginStart="18dp"
                 android:layout_marginBottom="18dp"
                 android:contentDescription="@string/accept_amp_continue"
                 android:text="Send code"
                 app:icon="@drawable/send_icon" />
-
-
-
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
-
-    <include
-        android:id="@+id/phoneInputContainer"
-        layout="@layout/activity_authentication_number_input_section"
-        android:visibility="invisible" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -1,23 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-
     <group
         android:id="@+id/main_section"
         android:checkableBehavior="single"
         android:visible="true">
         <item
-            android:id="@+id/home_id"
-            android:icon="@drawable/home_icon"
-            android:title="Home" />
-        <item
             android:id="@+id/profile"
             android:icon="@drawable/profile_icon"
             android:title="Profile" />
         <item
-            android:id="@+id/notifications"
-            android:icon="@drawable/notificaion_icon"
-            android:title="Notifications" />
+            android:id="@+id/chat"
+            android:icon="@drawable/chat_inbox"
+            android:title="Chats Inbox" />
         <item
             android:id="@+id/heat_map"
             android:icon="@drawable/ic_heat_map"
@@ -30,6 +25,11 @@
             android:id="@+id/help"
             android:icon="@drawable/help_icon"
             android:title="Help" />
+        <item
+            android:id="@+id/logOut"
+            android:icon="@drawable/ic_settings_sign_out"
+            android:tooltipText="Loging out of your Profile"
+            android:title="Log out" />
     </group>
 
     <item
@@ -40,6 +40,11 @@
                 android:id="@+id/about_us"
                 android:icon="@drawable/about_us_icon"
                 android:title="About Us" />
+            <item
+                android:id="@+id/userManual"
+                android:icon="@drawable/user_manual_icon"
+                android:title="User Manual" />
+
             <item
                 android:id="@+id/privacy_policy"
                 android:icon="@drawable/privacy_policy_icon"

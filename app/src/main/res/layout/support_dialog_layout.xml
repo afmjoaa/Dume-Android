@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/dialog_hosting_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_round_corner_rela_layout"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/dialog_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginEnd="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginBottom="10dp"
+        android:text="For any query or help, please reach out to us..."
+        android:textAllCaps="false"
+        android:textSize="16sp" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/adminChatBtn"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/dialog_text"
+        android:layout_marginBottom="6dp"
+        android:text="Live Admin Chat"
+        android:textAllCaps="false"
+        android:textSize="16sp"
+        app:icon="@drawable/ic_inbox_chat"
+        app:iconGravity="textStart"
+        app:iconPadding="10dp" />
+
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/hotlineBtn"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/adminChatBtn"
+        android:text="Hotline"
+        android:textAllCaps="false"
+        android:textSize="16sp"
+        app:icon="@drawable/phone_icon"
+        app:iconGravity="textStart"
+        app:iconPadding="10dp" />
+</RelativeLayout>

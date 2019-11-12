@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraintLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".student.grabingInfo.GrabingInfoActivity">
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/hosting_nestedScroll_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="6dp"
+        android:background="@drawable/drop_shadow_top">
+
+        <LinearLayout
+            android:id="@+id/hosting_linear_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginRight="20dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/section_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="10dp"
+                android:text="Select salary range in BDT"
+                android:textAlignment="center"
+                android:textColor="@color/textColorPrimary"
+                android:textSize="20sp" />
+
+            <RadioButton
+                android:id="@+id/timeWiseRadio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="Time wise salary (Monthly)"/>
+
+            <carbon.widget.LinearLayout
+                android:id="@+id/demoText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="40dp"
+                android:layout_marginBottom="10dp"
+                android:background="@color/white"
+                android:orientation="horizontal"
+                android:paddingLeft="10dp"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"
+                app:carbon_cornerRadius="8dp"
+                app:carbon_elevation="5dp">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/salaryTotal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:hint="Total :"
+                    android:paddingLeft="10dp"
+                    android:singleLine="true"
+                    android:textSize="18sp" />
+
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/phoneNumberEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:hint="Enter Mobile Number"
+                    android:paddingLeft="10dp"
+                    android:singleLine="true"
+                    android:textSize="18sp" />
+
+            </carbon.widget.LinearLayout>
+
+
+            <RadioButton
+                android:id="@+id/subjectWiseRadio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Subject wise salary"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/minSal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="2dp"
+                    android:layout_marginRight="2dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/border_background"
+                    android:paddingStart="10dp"
+                    android:textAlignment="center"
+
+                    android:paddingLeft="10dp"
+                    android:paddingTop="4dp"
+                    android:paddingEnd="6dp"
+                    android:paddingRight="6dp"
+                    android:paddingBottom="4dp"
+                    android:text="Min Salary : "
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/maxSal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginLeft="2dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/border_background"
+                    android:paddingStart="10dp"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="4dp"
+                    android:textAlignment="center"
+                    android:paddingEnd="6dp"
+                    android:paddingRight="6dp"
+                    android:paddingBottom="4dp"
+                    android:text="Max Salary : "
+                    android:textSize="16sp" />
+
+            </LinearLayout>
+
+            <com.appyvet.materialrangebar.RangeBar
+                android:id="@+id/rangeSlider"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginLeft="4dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="4dp"
+                android:layout_marginRight="4dp"
+                app:mrb_connectingLineColor="@color/colorAccent"
+                app:mrb_pinColor="@color/colorAccent"
+                app:mrb_pinMaxFont="12sp"
+                app:mrb_pinMinFont="12sp"
+                app:mrb_pinPadding="5dp"
+                app:mrb_pinRadius="14dp"
+                app:mrb_pinTextColor="@color/white"
+                app:mrb_rangeBar="false"
+                app:mrb_rangeBarPaddingBottom="20dp"
+                app:mrb_rangeBar_rounded="true"
+                app:mrb_selectorBoundaryColor="@color/colorAccent"
+                app:mrb_selectorBoundarySize="2dp"
+                app:mrb_selectorColor="@color/colorAccent"
+                app:mrb_selectorSize="5dp"
+                app:mrb_temporaryPins="false"
+                app:mrb_tickColor="@color/textColorSecondaryDark"
+                app:mrb_tickEnd="40"
+                app:mrb_tickInterval="1"
+                app:mrb_tickStart="1" />
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</LinearLayout>

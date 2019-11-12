@@ -23,11 +23,6 @@
         <item name="textInputStyle">@style/AppTextField</item>
     </style>
 
-    <!--darkStatus bar theme -->
-    <style name="DefaultTheme.NoActionBar.darkStatus" parent="DefaultTheme.NoActionBar">
-        <item name="colorPrimaryDark">@color/black</item>
-    </style>
-
     <!--Material theme No Animation-->
     <style name="DefaultTheme.NoActionBar.NoAnimation" parent="DefaultTheme.NoActionBar">
         <item name="android:windowAnimationStyle">@null</item>
@@ -260,14 +255,14 @@
     <style name="MyTextApprncExp.lightBg" parent="MyTextApprncExp">
         <item name="android:textColor">@color/textColorPrimary</item>
         <item name="android:textSize">25sp</item>
-        <item name="android:fontFamily">@font/cairo_regular</item>
+        <item name="android:fontFamily">@font/cairo_light</item>
     </style>
 
     <style name="MyTextApprncCol.lightBg" parent="MyTextApprncCol">
         <item name="android:textColor">@color/textColorPrimary</item>
         <item name="android:textStyle">normal</item>
         <item name="android:textSize">20sp</item>
-        <item name="android:fontFamily">@font/cairo_regular</item>
+        <item name="android:fontFamily">@font/cairo_light</item>
     </style>
 
 

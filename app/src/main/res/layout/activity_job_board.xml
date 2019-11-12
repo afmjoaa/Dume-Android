@@ -37,11 +37,11 @@
                 app:expandedTitleMarginTop="@dimen/expTittleMarginTop"
                 app:expandedTitleTextAppearance="@style/MyTextApprncExp.lightBg"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed"
-                app:title="Job Board"
+                app:title="Account Settings"
                 app:titleEnabled="true">
 
                 <androidx.appcompat.widget.Toolbar
-                    android:id="@+id/toolbar"
+                    android:id="@+id/accountToolbar"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
                     android:theme="@style/AccountToolbarStyle"
@@ -77,10 +77,7 @@
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/job_card_rv"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-
-                        />
-
+                        android:layout_height="wrap_content" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -122,7 +119,6 @@
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/navigation"
         android:layout_width="300dp"
@@ -130,11 +126,10 @@
         android:layout_gravity="start"
         android:background="@color/white"
         android:fitsSystemWindows="true"
-        app:headerLayout="@layout/teacher_nav_header"
+        app:headerLayout="@layout/dashboard_nav_header"
         app:itemBackground="@drawable/drawer_item_background"
         app:itemIconTint="@drawable/drawer_item_icontint"
         app:itemTextColor="@drawable/drawer_item_textcolor"
         app:menu="@menu/dashboard_sidenav" />
-
 
 </androidx.drawerlayout.widget.DrawerLayout>

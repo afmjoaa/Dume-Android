@@ -163,7 +163,6 @@ public class GrabingLocationActivity extends CusStuAppComMapActivity implements 
         retrivedAction = fromIntent.getAction();
         mPresenter.grabingLocationPageEnqueue();
         setDarkStatusBarIcon();
-        setIsNight();
         compositeDisposable = new CompositeDisposable();
         //auto one
         initAdapterData = new ArrayList<AutocompletePrediction>();

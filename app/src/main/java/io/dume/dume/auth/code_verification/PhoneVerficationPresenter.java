@@ -437,7 +437,7 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
         mentorFeild.put("religion", "");
         mentorFeild.put("birth_date", "");
         mentorFeild.put("marital", "");
-        mentorFeild.put("current_status", "");
+        mentorFeild.put("current_status_icon", "");
 
         mentorFeild.put("referred", false);
         mentorFeild.put("referer_id", "");
@@ -613,7 +613,7 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
         stuProInfo.put("avatar", dataStore.getPhotoUri());
         stuProInfo.put("email", dataStore.getEmail());
         stuProInfo.put("gender", "");
-        stuProInfo.put("current_status", "");
+        stuProInfo.put("current_status_icon", "");
         stuProInfo.put("previous_result", "");
         stuProInfo.put("pro_com_%", "60");
         stuProInfo.put("unread_msg", "0");

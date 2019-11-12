@@ -4,10 +4,14 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Animatable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -15,7 +19,9 @@ import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.ml.vision.FirebaseVision;
 import com.google.firebase.ml.vision.common.FirebaseVisionImage;
 import com.google.firebase.ml.vision.text.FirebaseVisionText;
@@ -29,20 +35,20 @@ import com.otaliastudios.cameraview.controls.Hdr;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.core.view.GravityCompat;
 import ch.halcyon.squareprogressbar.SquareProgressBar;
 import io.dume.dume.R;
 import io.dume.dume.StateManager;
 import io.dume.dume.auth.auth_final.AuthRegisterActivity;
 import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
 
+import static io.dume.dume.util.DumeUtils.configureAppbar;
+
 public class NIDScanActivity extends CustomStuAppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "scanActivity";
     private CameraView camera;
     private boolean flag;
-    private ImageView flashButton;
-    private ImageView hdrButton;
-    private ImageView closeButton;
     private SquareProgressBar squareProgressBar;
     private Button howNIDScanWorkBtn;
     private Button dontHaveNIDBtn;
@@ -59,7 +65,7 @@ public class NIDScanActivity extends CustomStuAppCompatActivity implements View.
         super.onCreate(state);
         setContentView(R.layout.activity_nidscan);
         setActivityContext(this, 7766);
-        setLightStatusBarIcon();
+        configureAppbar(this, "NID Verification", true);
         initView();
 
         flag = false;
@@ -100,69 +106,71 @@ public class NIDScanActivity extends CustomStuAppCompatActivity implements View.
     }
 
     private void initView() {
-        flashButton = findViewById(R.id.flash_button);
-        hdrButton = findViewById(R.id.hdr_button);
-        closeButton = findViewById(R.id.close_button);
         camera = findViewById(R.id.camera);
         squareProgressBar = findViewById(R.id.sprogressbar);
         howNIDScanWorkBtn = findViewById(R.id.howNIDScanWork);
         dontHaveNIDBtn = findViewById(R.id.dontHaveNIDBtn);
         howNIDScanWorkBtn.setOnClickListener(this);
         dontHaveNIDBtn.setOnClickListener(this);
-        flashButton.setOnClickListener(this);
-        hdrButton.setOnClickListener(this);
-        closeButton.setOnClickListener(this);
         initDialog();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.nid_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.flush) {
+            if(camera.getFlash() == Flash.TORCH){
+                item.setIcon(getResources().getDrawable(R.drawable.flush_icon));
+                camera.setFlash(Flash.OFF);
+            }else{
+                item.setIcon(getResources().getDrawable(R.drawable.no_flush_icon));
+                camera.setFlash(Flash.TORCH);
+            }
+        }else if(id  == R.id.hdr){
+            if(camera.getHdr() == Hdr.ON){
+                item.setIcon(getResources().getDrawable(R.drawable.hdr_icon));
+                camera.setHdr(Hdr.OFF);
+            }else {
+                item.setIcon(getResources().getDrawable(R.drawable.no_hdr_icon));
+                camera.setHdr(Hdr.ON);
+            }
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     public void onClick(View view) {
         int id = view.getId();
-        if (id == R.id.close_button) {
-            onBackPressed();
-        } else if (id == R.id.flash_button) {
-            CharSequence contentDescription = flashButton.getContentDescription();
-            if (contentDescription.equals("flashOff")) {
-                camera.setFlash(Flash.TORCH);
-                flashButton.setContentDescription("flashOn");
-                flashButton.setImageDrawable(getResources().getDrawable(R.drawable.no_flush_icon));
-            } else {
-                camera.setFlash(Flash.OFF);
-                flashButton.setContentDescription("flashOff");
-                flashButton.setImageDrawable(getResources().getDrawable(R.drawable.flush_icon));
-            }
-        } else if (id == R.id.hdr_button) {
-            CharSequence contentDescription = hdrButton.getContentDescription();
-            if (contentDescription.equals("HDROff")) {
-                camera.setHdr(Hdr.ON);
-                hdrButton.setContentDescription("HDROn");
-                hdrButton.setImageDrawable(getResources().getDrawable(R.drawable.no_hdr_icon));
-            } else {
-                camera.setHdr(Hdr.OFF);
-                hdrButton.setContentDescription("HDROff");
-                hdrButton.setImageDrawable(getResources().getDrawable(R.drawable.hdr_icon));
-            }
-        } else if (id == R.id.howNIDScanWork) {
+        if (id == R.id.howNIDScanWork) {
             dialog.show();
         } else if (id == R.id.dontHaveNIDBtn) {
             skipNIDScanDialog.show();
         }
     }
 
-
     public void initDialog() {
         //custom dialog
-        dialog = new Dialog(this);
-        dialog.setContentView(R.layout.custom_nid_scan_info);
-        //all find view here
-        Button dismissBtn = dialog.findViewById(R.id.dismiss_btn);
-        dismissBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
+        MaterialAlertDialogBuilder materialAlertDialogBuilder = new MaterialAlertDialogBuilder(context, R.style.ThemeOverlay_MaterialComponents_MaterialAlertDialog_Centered);
+        View customLayout = getLayoutInflater().inflate(R.layout.custom_nid_scan_info, null, false);
+        materialAlertDialogBuilder.setView(customLayout);
+        dialog = materialAlertDialogBuilder.create();
+        try {
+            Button dismissBtn = customLayout.findViewById(R.id.dismiss_btn);
+            dismissBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                }
+            });
+        } catch (NullPointerException npe) {
+            npe.printStackTrace();
+        }
 
         //initializing the bottomSheet dialogue
         skipNIDScanDialog = new BottomSheetDialog(this);

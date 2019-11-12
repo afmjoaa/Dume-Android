@@ -80,7 +80,7 @@ public class AuthRegisterActivity extends CustomStuAppCompatActivity {
         mentorFeild.put("religion", "");
         mentorFeild.put("birth_date", "");
         mentorFeild.put("marital", "");
-        mentorFeild.put("current_status", "");
+        mentorFeild.put("current_status_icon", "");
 
         mentorFeild.put("referred", false);
         mentorFeild.put("referer_id", "");
@@ -299,7 +299,7 @@ public class AuthRegisterActivity extends CustomStuAppCompatActivity {
         stuProInfo.put("avatar", dataStore.getPhotoUri());
         stuProInfo.put("email", dataStore.getEmail());
         stuProInfo.put("gender", "");
-        stuProInfo.put("current_status", "");
+        stuProInfo.put("current_status_icon", "");
         stuProInfo.put("previous_result", "");
         stuProInfo.put("pro_com_%", "60");
         stuProInfo.put("unread_msg", "0");
@@ -417,10 +417,10 @@ public class AuthRegisterActivity extends CustomStuAppCompatActivity {
     }
 
     private void restoreData() {
-        firstname.setText(dataStore.getFirstName() == null ? "" : dataStore.getFirstName());
+       /* firstname.setText(dataStore.getFirstName() == null ? "" : dataStore.getFirstName());
         lastName.setText(dataStore.getLastName() == null ? "" : dataStore.getLastName());
         email.setText(dataStore.getEmail() == null ? "" : dataStore.getEmail());
-        phoneNumber.setText(dataStore.getPhoneNumber() == null ? "" : dataStore.getPhoneNumber());
+        phoneNumber.setText(dataStore.getPhoneNumber() == null ? "" : dataStore.getPhoneNumber());*/
     }
 
     private void init() {

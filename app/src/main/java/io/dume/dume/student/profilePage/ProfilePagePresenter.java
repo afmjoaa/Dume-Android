@@ -57,7 +57,7 @@ public class ProfilePagePresenter implements ProfilePageContract.Presenter {
                         mView.setCurrentAddress(current_address);
                     }
                 }
-                mView.setCurrentStatus(documentSnapshot.getString("current_status"));
+                mView.setCurrentStatus(documentSnapshot.getString("current_status_icon"));
                 mView.setPreviousResult(documentSnapshot.getString("previous_result"));
                 mView.setGender(documentSnapshot.getString("gender"));
 

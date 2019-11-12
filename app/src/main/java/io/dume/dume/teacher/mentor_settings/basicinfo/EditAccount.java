@@ -201,7 +201,7 @@ public class EditAccount extends CustomStuAppCompatActivity implements EditContr
         selectGenderEditText.setText(documentSnapshot.getString("gender") == null ? "" : documentSnapshot.getString("gender"));
         selectMaritalStatusET.setText(documentSnapshot.getString("marital") == null ? "" : documentSnapshot.getString("marital"));
         pickLocationET.setText(documentSnapshot.getGeoPoint("location") == null ? "" : documentSnapshot.getGeoPoint("location").toString());
-        currentStatusET.setText(documentSnapshot.getString("current_status") == null ? "" : documentSnapshot.getString("current_status"));
+        currentStatusET.setText(documentSnapshot.getString("current_status_icon") == null ? "" : documentSnapshot.getString("current_status_icon"));
         selectBirthDataET.setText(documentSnapshot.getString("birth_date") == null ? "" : documentSnapshot.getString("birth_date"));
 
         Log.e(TAG, "loadCarryData: " + documentSnapshot.toString());

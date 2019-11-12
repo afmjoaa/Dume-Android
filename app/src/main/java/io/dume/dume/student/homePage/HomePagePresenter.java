@@ -197,9 +197,6 @@ public class HomePagePresenter implements HomePageContract.Presenter {
                 //will be added later
                 mView.gotoNotificationTab();
                 break;
-            case R.id.free_cashback:
-                mView.gotoFreeCashBackActivity();
-                break;
             case R.id.about_us:
                 mView.gotoAboutUsActivity();
                 break;

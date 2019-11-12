@@ -225,7 +225,6 @@ public class DumeUtils {
         collapsingToolbarLayout.setTitle(title);
 
         if (isWhite) {
-
             Drawable drawable = null; /*I've check validation of xml file there's no error :( */
             try {
                 drawable = context.getResources().getDrawable(R.drawable.ic_more_vert_white_24dp);

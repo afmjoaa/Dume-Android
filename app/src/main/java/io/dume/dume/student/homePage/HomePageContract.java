@@ -61,15 +61,9 @@ public interface HomePageContract {
 
         void gotoInboxActivity();
 
-        void gotoFreeCashBackActivity();
-
         void gotoAboutUsActivity();
 
         void gotoPrivacyPolicyActivity();
-
-        void gotoMentorAddvertise();
-
-        void gotoBootCampHomePage();
 
         void gotoNotificationTab();
 

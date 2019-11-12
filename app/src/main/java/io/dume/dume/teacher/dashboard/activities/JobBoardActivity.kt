@@ -1,38 +1,44 @@
 package io.dume.dume.teacher.dashboard.activities
 
 import android.os.Bundle
+import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import carbon.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import io.dume.dume.R
+import io.dume.dume.student.pojo.CustomStuAppCompatActivity
 import io.dume.dume.teacher.dashboard.DashboardCompatActivity
 import io.dume.dume.teacher.dashboard.DashboardContact
 import io.dume.dume.teacher.dashboard.DashboardPresenter
 import io.dume.dume.teacher.dashboard.adapters.CirclePagerIndicatorDecoration
 import io.dume.dume.teacher.dashboard.adapters.FeatureCardSlider
 import io.dume.dume.teacher.dashboard.pojo.JobsItem
+import io.dume.dume.util.DumeUtils.configureAppbar
 import kotlinx.android.synthetic.main.activity_job_board.*
 
-class JobBoardActivity : DashboardCompatActivity(), DashboardContact.View<List<JobsItem>>, BottomNavigationView.OnNavigationItemSelectedListener, SwipeRefreshLayout.OnRefreshListener {
+class JobBoardActivity : CustomStuAppCompatActivity(), DashboardContact.View<List<JobsItem>>, BottomNavigationView.OnNavigationItemSelectedListener, SwipeRefreshLayout.OnRefreshListener {
 
 
     private val presenter = DashboardPresenter(this, this)
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        setContentView(R.layout.activity_job_board)
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_job_board)
+        setActivityContext(this, 1112)
+        configureAppbar(this, "Job Board", true)
         presenter.enqueue()
     }
 
     override fun init() {
         swipe_to_refres.setColorSchemeColors(ContextCompat.getColor(this, R.color.mColorPrimaryVariant))
         bottom_menu.selectedItemId = R.id.my_job_board
-        navigation.menu.getItem(0).isChecked = true
         job_card_rv.layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
         job_card_rv.addItemDecoration(CirclePagerIndicatorDecoration())
         job_card_rv.adapter = FeatureCardSlider()
@@ -86,4 +92,5 @@ class JobBoardActivity : DashboardCompatActivity(), DashboardContact.View<List<J
     override fun stopRefresh() {
         swipe_to_refres.isRefreshing = false
     }
+
 }

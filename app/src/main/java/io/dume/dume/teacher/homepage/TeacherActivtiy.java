@@ -17,33 +17,6 @@ import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import com.google.android.material.appbar.AppBarLayout;
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.android.material.appbar.CollapsingToolbarLayout;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.textfield.TextInputLayout;
-import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.core.content.ContextCompat;
-import androidx.core.view.GravityCompat;
-import androidx.core.view.ViewCompat;
-import androidx.viewpager.widget.ViewPager;
-import androidx.interpolator.view.animation.FastOutLinearInInterpolator;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.core.widget.NestedScrollView;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -70,11 +43,18 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.MapStyleOptions;
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.hanks.htextview.scale.ScaleTextView;
 import com.tomergoldst.tooltips.ToolTipsManager;
 import com.transitionseverywhere.Fade;
 import com.transitionseverywhere.Slide;
@@ -87,13 +67,31 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.GravityCompat;
+import androidx.core.view.ViewCompat;
+import androidx.core.widget.NestedScrollView;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.interpolator.view.animation.FastOutLinearInInterpolator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import fr.castorflex.android.verticalviewpager.VerticalViewPager;
 import info.hoang8f.android.segmented.SegmentedGroup;
 import io.dume.dume.Google;
 import io.dume.dume.R;
-import io.dume.dume.bootCamp.bootCampHomePage.BootCampHomePageActivity;
 import io.dume.dume.common.aboutUs.AboutUsActivity;
 import io.dume.dume.common.bkash_transection.BkashTransectionActivity;
 import io.dume.dume.common.chatActivity.DemoModel;
@@ -102,7 +100,6 @@ import io.dume.dume.common.privacyPolicy.PrivacyPolicyActivity;
 import io.dume.dume.customView.HorizontalLoadView;
 import io.dume.dume.customView.HorizontalLoadViewTwo;
 import io.dume.dume.model.DumeModel;
-import io.dume.dume.student.freeCashBack.FreeCashBackActivity;
 import io.dume.dume.student.heatMap.HeatMapActivity;
 import io.dume.dume.student.homePage.HomePageActivity;
 import io.dume.dume.student.homePage.adapter.HomePageRatingAdapter;
@@ -119,7 +116,6 @@ import io.dume.dume.student.studentPayment.StudentPaymentActivity;
 import io.dume.dume.teacher.adapters.AcademicAdapter;
 import io.dume.dume.teacher.adapters.MyTabAdapter;
 import io.dume.dume.teacher.adapters.SkillAdapter;
-import io.dume.dume.teacher.boot_camp_addvertise.BootCampAdd;
 import io.dume.dume.teacher.homepage.fragments.AcademicFragment;
 import io.dume.dume.teacher.homepage.fragments.InboxFragment;
 import io.dume.dume.teacher.homepage.fragments.PayFragment;
@@ -610,13 +606,6 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
                 gotoProfilePage();
             }
         });
-        BootCampAddLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                drawerLayout.closeDrawer(GravityCompat.START, true);
-                gotoBootCampAddvertise();
-            }
-        });
     }
 
     @Override
@@ -1006,9 +995,6 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
                 Intent notificationTabIntent = new Intent(this, InboxActivity.class);
                 notificationTabIntent.putExtra("notiTab", 1);
                 startActivity(notificationTabIntent);
-                break;
-            case R.id.free_cashback:
-                startActivity(new Intent(this, FreeCashBackActivity.class));
                 break;
             case R.id.privacy_policy:
                 startActivity(new Intent(this, PrivacyPolicyActivity.class));
@@ -1633,20 +1619,8 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
     }
 
     @Override
-    public void gotoBootCampAddvertise() {
-        startActivity(new Intent(this, BootCampAdd.class));
-
-    }
-
-    @Override
     public void gotoStudentHomePage() {
         startActivity(new Intent(getApplicationContext(), HomePageActivity.class));
-        finish();
-    }
-
-    @Override
-    public void gotoBootCamPHomePage() {
-        startActivity(new Intent(getApplicationContext(), BootCampHomePageActivity.class));
         finish();
     }
 
@@ -1709,19 +1683,6 @@ public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherC
                             @Override
                             public void onSuccess(Void aVoid) {
                                 gotoStudentHomePage();
-                            }
-
-                            @Override
-                            public void onError(String msg) {
-                                hideProgress();
-                                flush("Network error 101 !!");
-                            }
-                        });
-                    } else {
-                        new DumeModel(context).switchAcount(DumeUtils.BOOTCAMP, new TeacherContract.Model.Listener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                gotoBootCamPHomePage();
                             }
 
                             @Override

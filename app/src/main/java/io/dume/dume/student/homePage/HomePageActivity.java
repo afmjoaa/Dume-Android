@@ -18,31 +18,6 @@ import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import com.google.android.material.appbar.AppBarLayout;
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.android.material.appbar.CollapsingToolbarLayout;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.textfield.TextInputLayout;
-import androidx.core.content.ContextCompat;
-import androidx.core.content.res.ResourcesCompat;
-import androidx.core.graphics.drawable.DrawableCompat;
-import androidx.core.view.GravityCompat;
-import androidx.core.view.ViewCompat;
-import androidx.interpolator.view.animation.FastOutLinearInInterpolator;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.core.widget.NestedScrollView;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AlertDialog;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -70,6 +45,14 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.gson.Gson;
@@ -86,10 +69,26 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.core.view.GravityCompat;
+import androidx.core.view.ViewCompat;
+import androidx.core.widget.NestedScrollView;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.interpolator.view.animation.FastOutLinearInInterpolator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import info.hoang8f.android.segmented.SegmentedGroup;
 import io.dume.dume.Google;
 import io.dume.dume.R;
-import io.dume.dume.bootCamp.bootCampHomePage.BootCampHomePageActivity;
 import io.dume.dume.common.aboutUs.AboutUsActivity;
 import io.dume.dume.common.chatActivity.DemoModel;
 import io.dume.dume.common.inboxActivity.InboxActivity;
@@ -100,7 +99,6 @@ import io.dume.dume.model.DumeModel;
 import io.dume.dume.obligation.foreignObli.PayActivity;
 import io.dume.dume.service.LocationServiceHandler;
 import io.dume.dume.service.MyLocationService;
-import io.dume.dume.student.freeCashBack.FreeCashBackActivity;
 import io.dume.dume.student.grabingInfo.GrabingInfoActivity;
 import io.dume.dume.student.grabingLocation.GrabingLocationActivity;
 import io.dume.dume.student.heatMap.HeatMapActivity;
@@ -110,7 +108,6 @@ import io.dume.dume.student.homePage.adapter.HomePageRecyclerAdapter;
 import io.dume.dume.student.homePage.adapter.HomePageRecyclerData;
 import io.dume.dume.student.homePage.adapter.RecentSearchAdapter;
 import io.dume.dume.student.homePage.adapter.RecentSearchData;
-import io.dume.dume.student.mentorAddvertise.MentorAddvertiseActivity;
 import io.dume.dume.student.pojo.CusStuAppComMapActivity;
 import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
 import io.dume.dume.student.pojo.SearchDataStore;
@@ -339,7 +336,6 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
         mPresenter.homePageEnqueue();
         settingStatusBarTransparent();
         setDarkStatusBarIcon();
-        setIsNight();
         isNightConfig();
 
         locationServiceIntent = new Intent(this, MyLocationService.class);
@@ -712,13 +708,6 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
             public void onClick(View view) {
                 drawer.closeDrawer(GravityCompat.START, true);
                 gotoProfilePage();
-            }
-        });
-        mentorAddLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                drawer.closeDrawer(GravityCompat.START, true);
-                gotoMentorAddvertise();
             }
         });
     }
@@ -1115,10 +1104,6 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
         startActivity(new Intent(this, InboxActivity.class));
     }
 
-    @Override
-    public void gotoFreeCashBackActivity() {
-        startActivity(new Intent(this, FreeCashBackActivity.class));
-    }
 
     @Override
     public void gotoAboutUsActivity() {
@@ -1128,17 +1113,6 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
     @Override
     public void gotoPrivacyPolicyActivity() {
         startActivity(new Intent(this, PrivacyPolicyActivity.class));
-    }
-
-    @Override
-    public void gotoMentorAddvertise() {
-        startActivity(new Intent(this, MentorAddvertiseActivity.class));
-    }
-
-    @Override
-    public void gotoBootCampHomePage() {
-        startActivity(new Intent(this, BootCampHomePageActivity.class));
-        finish();
     }
 
     @Override
@@ -1690,19 +1664,6 @@ public class HomePageActivity extends CusStuAppComMapActivity implements HomePag
                             @Override
                             public void onSuccess(Void aVoid) {
                                 gotoMentorProfile();
-                            }
-
-                            @Override
-                            public void onError(String msg) {
-                                hideProgress();
-                                flush("Network error 101 !!");
-                            }
-                        });
-                    } else {
-                        new DumeModel(context).switchAcount(DumeUtils.BOOTCAMP, new TeacherContract.Model.Listener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                gotoBootCampHomePage();
                             }
 
                             @Override
