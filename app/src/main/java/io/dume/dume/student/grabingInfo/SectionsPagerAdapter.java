@@ -75,10 +75,6 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
         return PagerAdapter.POSITION_NONE;
     }
 
-    public void sync() {
-        this.notifyDataSetChanged();
-    }
-
     @Nullable
     @Override
     public CharSequence getPageTitle(int position) {

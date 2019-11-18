@@ -1,35 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginStart="20dp"
     android:layout_marginLeft="20dp"
     android:orientation="horizontal">
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/finalInfoBtn"
-        style="?android:attr/borderlessButtonStyle"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="0dp"
-        android:drawableStart="@drawable/ic_keyboard_arrow_right_black_24dp"
-        android:drawableLeft="@drawable/ic_keyboard_arrow_right_black_24dp"
-        android:drawablePadding="15dp"
-        android:drawableTint="#575757"
-        android:fontFamily="@font/cairo_regular"
-        android:paddingStart="10dp"
-        android:paddingLeft="10dp"
-        android:paddingTop="5dp"
-        android:paddingEnd="10dp"
-        android:paddingRight="10dp"
-        android:paddingBottom="5dp"
-        android:text="For Me"
         android:ellipsize="end"
-        android:maxLines="1"
         android:maxWidth="300dp"
+        android:maxLines="1"
+        android:paddingEnd="16dp"
+        android:paddingRight="16dp"
+        android:text="For Me"
         android:textAllCaps="false"
-        android:textColor="@color/textColorPrimary"
         android:textSize="16sp"
-        android:textStyle="normal" />
+        android:textStyle="normal"
+        app:icon="@drawable/small_right_arrow"
+        app:iconPadding="12dp"
+        tools:ignore="RtlSymmetry" />
 
 </LinearLayout>

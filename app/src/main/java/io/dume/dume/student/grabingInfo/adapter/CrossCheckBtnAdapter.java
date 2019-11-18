@@ -1,4 +1,4 @@
-package io.dume.dume.student.grabingInfo;
+package io.dume.dume.student.grabingInfo.adapter;
 
 import android.content.Context;
 import androidx.annotation.NonNull;
@@ -13,12 +13,12 @@ import java.util.List;
 
 import io.dume.dume.R;
 
-public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyViewHolder> {
+public abstract class CrossCheckBtnAdapter extends RecyclerView.Adapter<CrossCheckBtnAdapter.MyViewHolder> {
     private LayoutInflater inflater;
-    List<RecycleData> data = Collections.emptyList();
+    List<CrossCheckBtnData> data = Collections.emptyList();
     private Context context;
 
-    public RecyclerAdapter(Context context ,List<RecycleData> data){
+    public CrossCheckBtnAdapter(Context context , List<CrossCheckBtnData> data){
         inflater = LayoutInflater.from(context);
         this.data = data;
         this.context = context;
@@ -40,7 +40,7 @@ public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapt
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
-        RecycleData current = data.get(position);
+        CrossCheckBtnData current = data.get(position);
         holder.finalButtons.setText(current.options);
         holder.finalButtons.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,7 +53,7 @@ public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapt
 
     protected abstract void OnButtonClicked(View v ,int position);
 
-    public void update(List<RecycleData> newData){
+    public void update(List<CrossCheckBtnData> newData){
         data.clear();
         data.addAll(newData);
         this.notifyDataSetChanged();

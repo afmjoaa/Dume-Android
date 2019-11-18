@@ -38,6 +38,8 @@ import java.util.Locale;
 import java.util.Objects;
 
 import io.dume.dume.R;
+import io.dume.dume.student.grabingInfo.adapter.CrossCheckBtnAdapter;
+import io.dume.dume.student.grabingInfo.adapter.CrossCheckBtnData;
 import io.dume.dume.util.DumeUtils;
 import io.dume.dume.util.OnViewClick;
 
@@ -61,7 +63,7 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
     private GrabingInfoActivity myMainActivity;
     private final int VERTICAL_ITEM_SPACE = -2;
     private final ArrayList<String> grabbedData;
-    private RecyclerAdapter recyclerAdapter;
+    private CrossCheckBtnAdapter crossCheckBtnAdapter;
     private LinearLayout hostingChecklistLayout;
     private TextView sectionLevel;
     boolean firstTime = true;
@@ -107,7 +109,7 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
                     }
                 }
             } else if (list != null && list.toString().equals("Cross Check")) {
-                recyclerAdapter.update(getFinalData());
+                crossCheckBtnAdapter.update(getFinalData());
             } else if (list != null && (list.toString().equals("Subject") || list.toString().equals("Field")
                     || list.toString().equals("Software") || list.toString().equals("Language") ||
                     list.toString().equals("Flavour") || list.toString().equals("Type") ||
@@ -385,7 +387,7 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
 
             mRecyclerView = viewLast.findViewById(R.id.recycler_view_list);
             //toolbar button clicked
-            recyclerAdapter = new RecyclerAdapter(getActivity(), getFinalData()) {
+            crossCheckBtnAdapter = new CrossCheckBtnAdapter(getActivity(), getFinalData()) {
                 @Override
                 protected void OnButtonClicked(View v, int position) {
                     //toolbar button clicked
@@ -401,7 +403,7 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
                 }
             };
             mRecyclerView.addItemDecoration(new VerticalSpaceItemDecoration(VERTICAL_ITEM_SPACE * (int) (mContext.getResources().getDisplayMetrics().density)));
-            mRecyclerView.setAdapter(recyclerAdapter);
+            mRecyclerView.setAdapter(crossCheckBtnAdapter);
             mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
             if (sectionNumber >= 2) {
                 if (firstTime) {
@@ -821,8 +823,8 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
         }
     }
 
-    public List<RecycleData> getFinalData() {
-        List<RecycleData> data = new ArrayList<>();
+    public List<CrossCheckBtnData> getFinalData() {
+        List<CrossCheckBtnData> data = new ArrayList<>();
 
         List<String> queryList = myMainActivity.queryList;
         List<String> queryListName = myMainActivity.queryListName;
@@ -836,7 +838,7 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
         }
 
         for (String title : finalInfo) {
-            RecycleData current = new RecycleData();
+            CrossCheckBtnData current = new CrossCheckBtnData();
             current.options = title;
             data.add(current);
         }
