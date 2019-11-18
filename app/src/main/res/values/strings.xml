@@ -834,4 +834,8 @@ provided.Tap salary for details.  </string>
         <item>Pharmacy</item>
         <item>SE</item>
     </string-array>
+    <string name="title_activity_student_dash_board">StudentDashBoard</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
 </resources>

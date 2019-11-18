@@ -7,6 +7,7 @@ import android.view.View;
 import io.dume.dume.R;
 import io.dume.dume.auth.DataStore;
 import io.dume.dume.auth.auth.AuthActivity;
+import io.dume.dume.student.DashBoard.Testing.StudentDashBoard;
 import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
 import io.dume.dume.teacher.dashboard.activities.JobBoardActivity;
 
@@ -38,7 +39,7 @@ public class RoleChooserActivity extends CustomStuAppCompatActivity implements V
             startActivity(new Intent(this, JobBoardActivity.class));
             return;
         }else if (v.getId() == R.id.testJoaa) {
-            startActivity(new Intent(this, NIDScanActivity.class));
+            startActivity(new Intent(this, StudentDashBoard.class));
             return;
         }else if (v.getId() == R.id.testSumon) {
             startActivity(new Intent(this, AuthActivity.class));
