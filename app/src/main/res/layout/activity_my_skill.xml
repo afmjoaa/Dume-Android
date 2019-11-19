@@ -91,6 +91,7 @@
             style="@style/Widget.MaterialComponents.BottomNavigationView"
             android:background="@drawable/bg_white_top_round_8"
             android:layout_gravity="bottom"
+            app:elevation="3dp"
             app:itemIconTint="@drawable/bottom_menu_teacher_style"
             app:itemTextColor="@drawable/bottom_menu_teacher_style"
             app:labelVisibilityMode="labeled"

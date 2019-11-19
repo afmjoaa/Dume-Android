@@ -187,10 +187,7 @@ public class CustomStuAppCompatActivity extends AppCompatActivity implements MyC
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -198,6 +195,11 @@ public class CustomStuAppCompatActivity extends AppCompatActivity implements MyC
             getMenuInflater().inflate(R.menu.support_menu, menu);
         }
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 
     public void createNetworkCheckSnackbar() {

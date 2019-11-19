@@ -835,7 +835,8 @@ provided.Tap salary for details.  </string>
         <item>SE</item>
     </string-array>
     <string name="title_activity_student_dash_board">StudentDashBoard</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+
+    <string name="search_mentor">Search Mentor</string>
+    <string name="job_board">Job Board</string>
+    <string name="my_tuition">My Tuition</string>
 </resources>

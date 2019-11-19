@@ -272,6 +272,15 @@ public class DumeUtils {
         toolbar.setTitle(title);
     }
 
+    public static void configAppToolBarTitle(Context context, String title){
+        AppCompatActivity activity = (AppCompatActivity) context;
+        CollapsingToolbarLayout collapsingToolbarLayout = activity.findViewById(R.id.accountCollapsing);
+        Toolbar toolbar = activity.findViewById(R.id.accountToolbar);
+        toolbar.setTitle(title);
+        collapsingToolbarLayout.setTitle(title);
+    }
+
+
     public static void configureAppbarWithoutColloapsing(Context context, String title) {
         AppCompatActivity activity = (AppCompatActivity) context;
         Toolbar toolbar = activity.findViewById(R.id.accountToolbar);

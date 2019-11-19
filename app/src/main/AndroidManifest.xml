@@ -29,12 +29,11 @@
         android:theme="@style/DefaultTheme.NoActionBar">
         <activity android:name=".teacher.dashboard.activities.JobItemDetails"></activity>
         <activity
-            android:name=".student.DashBoard.Testing.StudentDashBoard"
+            android:name=".student.DashBoard.StudentDashBoard"
             android:label="@string/title_activity_student_dash_board"
-            android:parentActivityName=".student.pojo.CustomStuAppCompatActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="io.dume.dume.student.pojo.CustomStuAppCompatActivity" />
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/DefaultTheme.NoActionBar">
         </activity>
         <activity
             android:name=".firstTimeUser.NIDScanActivity"
