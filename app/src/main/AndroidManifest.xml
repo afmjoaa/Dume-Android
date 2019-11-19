@@ -29,6 +29,14 @@
         android:theme="@style/DefaultTheme.NoActionBar">
         <activity android:name=".teacher.dashboard.activities.JobItemDetails"></activity>
         <activity
+            android:name=".student.DashBoard.Testing.StudentDashBoard"
+            android:label="@string/title_activity_student_dash_board"
+            android:parentActivityName=".student.pojo.CustomStuAppCompatActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="io.dume.dume.student.pojo.CustomStuAppCompatActivity" />
+        </activity>
+        <activity
             android:name=".firstTimeUser.NIDScanActivity"
             android:screenOrientation="portrait"
             android:theme="@style/DefaultTheme.NoActionBar" />
@@ -204,10 +212,7 @@
             android:name=".teacher.crudskill.CrudSkillActivity"
             android:label="Select category"
             android:theme="@style/AppTheme.NoActionBar.transparent" />
-        <activity
-            android:name=".student.freeCashBack.FreeCashBackActivity"
-            android:label="@string/title_activity_free_cash_back"
-            android:theme="@style/AppTheme.NoActionBar.transparent.black" />
+
         <activity
             android:name=".common.aboutUs.AboutUsActivity"
             android:label="@string/title_activity_about_us"
@@ -216,10 +221,7 @@
             android:name=".common.privacyPolicy.PrivacyPolicyActivity"
             android:label="@string/title_activity_privacy_policy"
             android:theme="@style/AppTheme.NoActionBar.transparent.black" />
-        <activity
-            android:name=".student.mentorAddvertise.MentorAddvertiseActivity"
-            android:label="@string/title_activity_mentor_addvertise"
-            android:theme="@style/AppTheme.NoActionBar.transparent.black" />
+
         <activity
             android:name=".common.inboxActivity.InboxActivity"
             android:label="@string/title_activity_inbox"
@@ -239,14 +241,7 @@
         <activity
             android:name=".obligation.foreignObli.PayActivity"
             android:theme="@style/AppTheme.NoActionBar.transparent.black" />
-        <activity
-            android:name=".teacher.boot_camp_addvertise.BootCampAdd"
-            android:label="@string/title_activity_boot_camp_add"
-            android:theme="@style/AppTheme.NoActionBar.transparent.black" />
-        <activity
-            android:name=".bootCamp.student_addvertise.StudentAddvertise"
-            android:label="@string/title_activity_student_addvertise"
-            android:theme="@style/AppTheme.NoActionBar.transparent.black" /> <!-- service and broadCasts -->
+     <!-- service and broadCasts -->
         <receiver
             android:name=".broadcastReceiver.MyAlarmBroadCast"
             android:enabled="true"

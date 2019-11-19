@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
     <item
-        android:id="@+id/bootcamp_nav"
-        android:icon="@drawable/boot_camp_icon"
-        android:title="Boot Camp"
-        />
+        android:id="@+id/navigation_home"
+        android:icon="@drawable/ic_home_black_24dp"
+        android:title="@string/title_home" />
+
     <item
-        android:id="@+id/student_nav"
-        android:icon="@drawable/student_account_icon"
-        android:title="Student" />
+        android:id="@+id/navigation_dashboard"
+        android:icon="@drawable/ic_dashboard_black_24dp"
+        android:title="@string/title_dashboard" />
+
     <item
-        android:id="@+id/teacher_nav"
-        android:icon="@drawable/mentor_icon"
-        android:title="Teacher" />
+        android:id="@+id/navigation_notifications"
+        android:icon="@drawable/ic_notifications_black_24dp"
+        android:title="@string/title_notifications" />
+
 </menu>
