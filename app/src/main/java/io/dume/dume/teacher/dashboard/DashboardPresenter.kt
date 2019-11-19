@@ -10,7 +10,7 @@ import io.dume.dume.student.recordsCurrent.RecordsCurrentActivity
 import io.dume.dume.student.recordsPage.Record
 import io.dume.dume.student.recordsPending.RecordsPendingActivity
 import io.dume.dume.student.recordsRejected.RecordsRejectedActivity
-import io.dume.dume.teacher.dashboard.activities.JobBoardActivity
+import io.dume.dume.teacher.dashboard.jobboard.JobBoardActivity
 import io.dume.dume.teacher.dashboard.activities.MyPaymentActivity
 import io.dume.dume.teacher.dashboard.activities.MySkillActivity
 import io.dume.dume.teacher.dashboard.activities.MyTutionActivity
