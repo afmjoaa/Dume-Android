@@ -36,6 +36,31 @@ class JobBoardActivity : CustomStuAppCompatActivity(), DashboardContact.View<Lis
         presenter.enqueue()
     }
 
+    fun initJobsReciclyerView() {
+
+        lateinit var recyclerView: androidx.recyclerview.widget.RecyclerView
+        lateinit var viewAdapter: androidx.recyclerview.widget.RecyclerView.Adapter<*>
+        lateinit var viewManager: androidx.recyclerview.widget.RecyclerView.LayoutManager
+
+        viewManager = LinearLayoutManager(this)
+        //viewAdapter = MyAdapter(myDataset)
+
+        recyclerView = findViewById<RecyclerView>(R.id.job_card_rv).apply {
+            // use this setting to improve performance if you know that changes
+            // in content do not change the layout size of the RecyclerView
+            setHasFixedSize(true)
+
+            // use a linear layout manager
+            layoutManager = viewManager
+
+            // specify an viewAdapter (see also next example)
+            adapter = viewAdapter
+
+        }
+
+
+    }
+
     override fun init() {
         swipe_to_refres.setColorSchemeColors(ContextCompat.getColor(this, R.color.mColorPrimaryVariant))
         bottom_menu.selectedItemId = R.id.my_job_board

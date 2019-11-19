@@ -89,12 +89,9 @@
                             android:id="@+id/item"
                             layout="@layout/job_item_card" />
 
-                        <include
-                            android:id="@+id/item1"
-                            layout="@layout/job_item_card" />
 
                         <include
-                            android:id="@+id/item2"
+                            android:id="@+id/item1"
                             layout="@layout/job_item_card" />
                     </LinearLayout>
 

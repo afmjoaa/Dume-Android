@@ -6,8 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="10dp"
-app:cardCornerRadius="10dp"
-    app:cardBackgroundColor="@color/white">
+    app:cardBackgroundColor="@color/white"
+    app:cardCornerRadius="10dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -49,9 +49,9 @@ app:cardCornerRadius="10dp"
             android:layout_height="wrap_content"
             android:layout_below="@id/job_item_description"
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/tendp"
             android:layout_toRightOf="@id/job_item_image"
             android:fontFamily="@font/redhat_regular"
-            android:layout_marginTop="@dimen/tendp"
             android:text="Proposal: Less than 5" />
 
 
