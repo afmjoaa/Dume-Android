@@ -59,7 +59,7 @@ class JobBoardActivity : BaseAppCompatActivity(), DashboardContact.View<List<Job
         // Live data is updated...
         jAdapter.jobItems = updatedList
         jAdapter.notifyDataSetChanged()
-        Log.d("JobBoardActivity", "updated list")
+        // Log.d("JobBoardActivity", "updated list")
     }
 
 
