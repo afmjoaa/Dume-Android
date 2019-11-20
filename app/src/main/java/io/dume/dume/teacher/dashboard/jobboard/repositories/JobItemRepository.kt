@@ -1,14 +1,10 @@
 package io.dume.dume.teacher.dashboard.jobboard.repositories
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.firestore.FirebaseFirestore
-import io.dume.dume.teacher.dashboard.jobboard.models.JobInfo
 import io.dume.dume.teacher.dashboard.jobboard.models.JobItem
-import io.dume.dume.teacher.dashboard.jobboard.models.RecordInfo
 
-@Suppress("UNCHECKED_CAST")
 class JobItemRepository private constructor() {
 
     companion object {
@@ -20,25 +16,37 @@ class JobItemRepository private constructor() {
     }
 
     private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
-    val allJobs: MutableLiveData<List<JobItem>> = MutableLiveData()
 
-    fun __getAllJobs(): LiveData<List<JobItem>> {
+    private val allJobs: MutableLiveData<List<JobItem>> = MutableLiveData()
 
+    fun getAllJobsFromDb(): LiveData<List<JobItem>> {
         db.collection("jobs").get().addOnSuccessListener { querySnapshot ->
             val ret = mutableListOf<JobItem>()
             if (!querySnapshot.isEmpty) {
                 for (doc in querySnapshot) {
-                    val data: MutableMap<String, Any> = doc.data
-                    val job_info: Map<String, Any> = data["job_info"] as Map<String, Any>
-                    val name: String = job_info["job_title"] as String
-                    Log.d("JobItemRepository: ", name)
-                    ret.add(JobItem("", JobInfo(name, "", ""), RecordInfo(null, null, null)))
+                    val obj = doc.toObject(JobItem::class.java)
+
+                    /*val data: MutableMap<String, Any> = doc.data
+                    val title = data["title"] as String
+                    val desc = data["description"] as String
+                    val toAdd = JobItem()
+                    toAdd.title = title
+                    toAdd.description = desc*/
+
+                    ret.add(obj)
                 }
             }
             allJobs.value = ret
         }
-//        ret.add(JobItem("", JobInfo("manually added", "", ""), RecordInfo(null, null, null)))
         return allJobs
     }
+
+    fun addNewJobToDb(jobToAdd: JobItem) {
+        val add = db.collection("jobs").add(jobToAdd)
+        add.addOnSuccessListener {
+            //it.id
+        }
+    }
+
 
 }

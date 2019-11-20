@@ -42,7 +42,7 @@ class JobBoardActivity : CustomStuAppCompatActivity(), DashboardContact.View<Lis
         configureAppbar(this, "Job Board", true)
         presenter.enqueue()
 
-        job_items_rv.layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
+        job_items_rv.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         job_items_rv.adapter = jAdapter
 
 
@@ -59,8 +59,7 @@ class JobBoardActivity : CustomStuAppCompatActivity(), DashboardContact.View<Lis
         // Live data is updated...
         jAdapter.jobItems = updatedList
         jAdapter.notifyDataSetChanged()
-
-        Log.d("JobBoardActivity", "updated list ")
+        Log.d("JobBoardActivity", "updated list")
     }
 
 
