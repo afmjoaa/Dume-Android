@@ -13,7 +13,7 @@
         android:id="@+id/parent_coor_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".teacher.dashboard.activities.JobBoardActivity">
+        tools:context=".teacher.dashboard.jobboard.JobBoardActivity">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/settingsAppbar"

@@ -1,23 +1,26 @@
-package io.dume.dume.teacher.dashboard.activities
+package io.dume.dume.teacher.dashboard.jobboard
 
 import android.os.Bundle
-import android.view.Menu
+import android.util.Log
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.core.content.ContextCompat
-import androidx.core.view.GravityCompat
-import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import carbon.widget.RecyclerView
+import com.facebook.internal.Utility
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import io.dume.dume.R
 import io.dume.dume.student.pojo.CustomStuAppCompatActivity
-import io.dume.dume.teacher.dashboard.DashboardCompatActivity
 import io.dume.dume.teacher.dashboard.DashboardContact
 import io.dume.dume.teacher.dashboard.DashboardPresenter
 import io.dume.dume.teacher.dashboard.adapters.CirclePagerIndicatorDecoration
 import io.dume.dume.teacher.dashboard.adapters.FeatureCardSlider
+import io.dume.dume.teacher.dashboard.adapters.JobItemCardAdapter
+import io.dume.dume.teacher.dashboard.jobboard.models.JobItem
+import io.dume.dume.teacher.dashboard.jobboard.viewmodels.JobBoardActivityViewModel
 import io.dume.dume.teacher.dashboard.pojo.JobsItem
 import io.dume.dume.util.DumeUtils.configureAppbar
 import kotlinx.android.synthetic.main.activity_job_board.*
@@ -26,7 +29,11 @@ class JobBoardActivity : CustomStuAppCompatActivity(), DashboardContact.View<Lis
 
 
     private val presenter = DashboardPresenter(this, this)
+    private var jobBoardViewModel: JobBoardActivityViewModel? = null
 
+
+    val jobs = null
+    val jAdapter: JobItemCardAdapter = JobItemCardAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,21 +41,29 @@ class JobBoardActivity : CustomStuAppCompatActivity(), DashboardContact.View<Lis
         setActivityContext(this, 1112)
         configureAppbar(this, "Job Board", true)
         presenter.enqueue()
-    }
 
-    fun initJobsReciclyerView() {
+        job_items_rv.layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
 
-        lateinit var recyclerView: androidx.recyclerview.widget.RecyclerView
-        lateinit var viewAdapter: androidx.recyclerview.widget.RecyclerView.Adapter<*>
-        lateinit var viewManager: androidx.recyclerview.widget.RecyclerView.LayoutManager
+        jobBoardViewModel = ViewModelProviders.of(this).get(JobBoardActivityViewModel::class.java)
 
-        viewManager = LinearLayoutManager(this)
-        //viewAdapter = MyAdapter(myDataset)
+        if (jobBoardViewModel == null) throw Exception("null model")
 
-
-
+        jobBoardViewModel?.getAllJobs()?.observe(this, Observer {
+            // set adapter or update it..
+            updateJobRecView(it)
+        })
 
     }
+
+
+    fun updateJobRecView(updatedList: List<JobItem>) {
+        // Live data is updated...
+        jAdapter.jobItems = updatedList
+        jAdapter.notifyDataSetChanged()
+
+        Log.d("JobBoardActivity", "updated list ")
+    }
+
 
     override fun init() {
         swipe_to_refres.setColorSchemeColors(ContextCompat.getColor(this, R.color.mColorPrimaryVariant))
@@ -87,10 +102,10 @@ class JobBoardActivity : CustomStuAppCompatActivity(), DashboardContact.View<Lis
     override fun onDataLoaded(t: List<JobsItem>) {
 
         /*  job_card_rv.layoutManager = CardSliderLayoutManager(context)
-          job_card_rv.adapter = FeatureCardSlider()
+          job_card_rv.adapter = JobItemCardAdapter()
           CardSnapHelper().attachToRecyclerView(job_card_rv)*/
 /*        job_card_rv.layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
-        job_card_rv.adapter = FeatureCardSlider()*/
+        job_card_rv.adapter = JobItemCardAdapter()*/
     }
 
     override fun error(error: String) {

@@ -13,7 +13,7 @@
         android:id="@+id/parent_coor_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".teacher.dashboard.activities.JobBoardActivity">
+        tools:context=".teacher.dashboard.jobboard.JobBoardActivity">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/settingsAppbar"
@@ -85,14 +85,10 @@
                         android:layout_below="@id/job_card_rv"
                         android:orientation="vertical">
 
-                        <include
-                            android:id="@+id/item"
-                            layout="@layout/job_item_card" />
-
-
-                        <include
-                            android:id="@+id/item1"
-                            layout="@layout/job_item_card" />
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/job_items_rv"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
                     </LinearLayout>
 
 

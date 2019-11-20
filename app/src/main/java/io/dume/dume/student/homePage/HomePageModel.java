@@ -51,7 +51,6 @@ public class HomePageModel extends StuBaseModel implements HomePageContract.Mode
         updateSelfRating = new HashMap<>();
     }
 
-
     @Override
     public void applyPromo(HomePageRecyclerData promoData, String promo_code, String accountType, TeacherContract.Model.Listener<String> listener) {
         String path;

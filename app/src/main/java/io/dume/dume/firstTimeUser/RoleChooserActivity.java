@@ -9,7 +9,7 @@ import io.dume.dume.auth.DataStore;
 import io.dume.dume.auth.auth.AuthActivity;
 import io.dume.dume.student.DashBoard.StudentDashBoard;
 import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
-import io.dume.dume.teacher.dashboard.activities.JobBoardActivity;
+import io.dume.dume.teacher.dashboard.jobboard.JobBoardActivity;
 
 public class RoleChooserActivity extends CustomStuAppCompatActivity implements View.OnClickListener {
     private DataStore local;
