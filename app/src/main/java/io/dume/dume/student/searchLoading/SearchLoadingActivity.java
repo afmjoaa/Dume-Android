@@ -61,7 +61,7 @@ import java.util.Objects;
 import carbon.widget.ImageView;
 import io.dume.dume.R;
 import io.dume.dume.student.homePage.HomePageActivity;
-import io.dume.dume.student.pojo.CusStuAppComMapActivity;
+import io.dume.dume.student.pojo.BaseMapActivity;
 import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
 import io.dume.dume.student.pojo.SearchDataStore;
 import io.dume.dume.student.searchResult.SearchResultActivity;
@@ -73,7 +73,7 @@ import static io.dume.dume.util.DumeUtils.firstFour;
 import static io.dume.dume.util.DumeUtils.firstThree;
 import static io.dume.dume.util.ImageHelper.getRoundedCornerBitmap;
 
-public class SearchLoadingActivity extends CusStuAppComMapActivity implements OnMapReadyCallback,
+public class SearchLoadingActivity extends BaseMapActivity implements OnMapReadyCallback,
         SearchLoadingContract.View, MyGpsLocationChangeListener {
 
     private static final String TAG = "SearchLoadingActivity";

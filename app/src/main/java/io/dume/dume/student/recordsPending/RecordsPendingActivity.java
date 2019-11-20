@@ -33,7 +33,6 @@ import androidx.interpolator.view.animation.FastOutLinearInInterpolator;
 import androidx.interpolator.view.animation.LinearOutSlowInInterpolator;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.appcompat.widget.PopupMenu;
 import androidx.recyclerview.widget.RecyclerView;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
@@ -98,7 +97,7 @@ import io.dume.dume.student.common.QualificationAdapter;
 import io.dume.dume.student.common.ReviewAdapter;
 import io.dume.dume.student.common.ReviewHighlightData;
 import io.dume.dume.student.homePage.adapter.HomePageRecyclerData;
-import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
+import io.dume.dume.student.pojo.BaseAppCompatActivity;
 import io.dume.dume.student.pojo.SearchDataStore;
 import io.dume.dume.student.recordsAccepted.RecordsAcceptedActivity;
 import io.dume.dume.student.recordsPage.Record;
@@ -121,7 +120,7 @@ import static io.dume.dume.util.DumeUtils.getLast;
 import static io.dume.dume.util.DumeUtils.getUserUID;
 import static io.dume.dume.util.ImageHelper.getRoundedCornerBitmap;
 
-public class RecordsPendingActivity extends CustomStuAppCompatActivity implements RecordsPendingContract.View {
+public class RecordsPendingActivity extends BaseAppCompatActivity implements RecordsPendingContract.View {
 
     private RecordsPendingContract.Presenter mPresenter;
     private static final int fromFlag = 20;

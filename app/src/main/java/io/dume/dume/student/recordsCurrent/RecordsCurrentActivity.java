@@ -106,7 +106,7 @@ import io.dume.dume.student.common.QualificationAdapter;
 import io.dume.dume.student.common.ReviewAdapter;
 import io.dume.dume.student.common.ReviewHighlightData;
 import io.dume.dume.student.homePage.adapter.HomePageRecyclerData;
-import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
+import io.dume.dume.student.pojo.BaseAppCompatActivity;
 import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
 import io.dume.dume.student.pojo.SearchDataStore;
 import io.dume.dume.student.recordsCurrent.calenderDecorator.EventDecorator;
@@ -126,7 +126,7 @@ import static io.dume.dume.util.DumeUtils.getAddress;
 import static io.dume.dume.util.DumeUtils.getLast;
 import static io.dume.dume.util.ImageHelper.getRoundedCornerBitmap;
 
-public class RecordsCurrentActivity extends CustomStuAppCompatActivity implements RecordsCurrentContract.View,
+public class RecordsCurrentActivity extends BaseAppCompatActivity implements RecordsCurrentContract.View,
         MyGpsLocationChangeListener {
 
     private RecordsCurrentContract.Presenter mPresenter;

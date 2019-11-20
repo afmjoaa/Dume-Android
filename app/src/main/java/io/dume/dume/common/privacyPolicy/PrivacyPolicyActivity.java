@@ -2,9 +2,6 @@ package io.dume.dume.common.privacyPolicy;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
 import android.view.MenuItem;
 import android.view.View;
@@ -20,11 +17,11 @@ import com.github.ybq.android.spinkit.sprite.Sprite;
 import com.github.ybq.android.spinkit.style.ChasingDots;
 
 import io.dume.dume.R;
-import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
+import io.dume.dume.student.pojo.BaseAppCompatActivity;
 
 import static io.dume.dume.util.DumeUtils.configureAppbar;
 
-public class PrivacyPolicyActivity extends CustomStuAppCompatActivity implements PrivacyPolicyActivityContact.View {
+public class PrivacyPolicyActivity extends BaseAppCompatActivity implements PrivacyPolicyActivityContact.View {
 
     private PrivacyPolicyActivityContact.Presenter mPresenter;
     private static final String TAG = "PrivacyPolicyActivity";

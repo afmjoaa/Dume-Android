@@ -1,313 +1,159 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/swipe_to_refres"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+    android:layout_height="match_parent">
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/test"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:paddingBottom="56dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <RelativeLayout
+        <LinearLayout
+            android:id="@+id/hosting_relative_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            <FrameLayout
-                android:id="@+id/view_musk"
+            <carbon.widget.LinearLayout
+                android:id="@+id/primary_navigation_container"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/colorBlack"
-                android:fitsSystemWindows="true"
+                android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:visibility="gone" />
+                android:visibility="visible">
+
+                <com.google.android.material.button.MaterialButton
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginRight="20dp"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    android:text="Search Mentor Now"
+                    android:textAllCaps="false"
+                    android:textSize="18sp"
+                    app:cornerRadius="6dp" />
+
+
+                <carbon.widget.RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginBottom="20dp"
+                    android:background="@drawable/bg_white_bottom_round_4dp"
+                    app:carbon_elevation="1dp">
+
+                    <com.google.android.material.button.MaterialButton
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:insetBottom="0dp"
+                        android:text="Add Search Filter"
+                        android:textAllCaps="false" />
+
+                </carbon.widget.RelativeLayout>
+
+            </carbon.widget.LinearLayout>
 
             <LinearLayout
-                android:id="@+id/my_main_container"
+                android:id="@+id/promotions"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <carbon.widget.LinearLayout
-                    android:id="@+id/primary_navigation_container"
+                <TextView
+                    android:id="@+id/payment_methods"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:visibility="visible">
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:paddingStart="16dp"
+                    android:paddingLeft="16dp"
+                    android:paddingTop="6dp"
+                    android:paddingEnd="16dp"
+                    android:paddingRight="16dp"
+                    android:paddingBottom="6dp"
+                    android:text="Promotions"
+                    android:textAllCaps="false"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/textColorPrimary"
+                    android:textSize="12sp"
+                    app:fontFamily="@font/cairo_regular" />
 
-                    <carbon.widget.LinearLayout
-                        android:id="@+id/percent_off_block"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginRight="20dp"
-                        android:background="@drawable/bg_green_top_round"
-                        android:orientation="horizontal"
-                        android:paddingTop="2dp"
-                        android:paddingBottom="2dp"
-                        android:visibility="invisible"
-                        app:carbon_elevation="5dp">
-
-                        <TextView
-                            android:id="@+id/promotion_text"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_marginLeft="15dp"
-                            android:layout_marginRight="15dp"
-                            android:layout_weight="9"
-                            android:text="45% off Instant Dume"
-                            android:textColor="@color/carbon_white"
-                            android:textSize="13sp"
-                            app:fontFamily="@font/cairo_regular" />
-
-                        <TextView
-                            android:id="@+id/promotion_validity_text"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_marginLeft="15dp"
-                            android:layout_marginRight="15dp"
-                            android:layout_weight="1"
-                            android:onClick="onHomePageViewClicked"
-                            android:text="5 days"
-                            android:textColor="#d8c1ebf0"
-                            android:textSize="13sp"
-                            android:textStyle="bold"
-                            app:fontFamily="@font/cairo_regular" />
-
-                    </carbon.widget.LinearLayout>
-
-                    <carbon.widget.RelativeLayout
-                        android:id="@+id/search_mentor_btn"
-                        android:layout_width="match_parent"
-                        android:layout_height="48dp"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginRight="20dp"
-                        android:background="@drawable/bg_white_round_corner"
-                        android:onClick="onHomePageViewClicked"
-                        android:padding="0dp"
-                        app:carbon_cornerRadius="0dp"
-                        app:carbon_elevation="5dp">
-
-                        <carbon.widget.ImageView
-                            android:id="@+id/search_image_view"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:layout_marginStart="15dp"
-                            android:layout_marginLeft="15dp"
-                            android:contentDescription="@string/search_icon"
-                            app:carbon_backgroundTint="@color/icon_color"
-                            app:srcCompat="@drawable/search_icon" />
-
-                        <TextView
-                            android:id="@+id/input_search"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_centerVertical="true"
-                            android:layout_marginStart="20dp"
-                            android:layout_marginLeft="20dp"
-                            android:layout_toEndOf="@id/search_image_view"
-                            android:layout_toRightOf="@id/search_image_view"
-                            android:background="@null"
-                            android:gravity="center_vertical"
-                            android:hint="@string/enter_search_point"
-                            android:singleLine="true"
-                            android:text="Search Mentors"
-                            android:textColor="@color/stu_text_color"
-                            android:textSize="18sp"
-                            app:fontFamily="@font/cairo_regular" />
-
-                        <carbon.widget.ImageView
-                            android:id="@+id/search_filter_image_view"
-                            android:layout_width="42dp"
-                            android:layout_height="36dp"
-                            android:layout_alignParentEnd="true"
-                            android:layout_alignParentRight="true"
-                            android:layout_centerVertical="true"
-                            android:layout_marginStart="15dp"
-                            android:layout_marginLeft="15dp"
-                            android:layout_marginEnd="10dp"
-                            android:layout_marginRight="10dp"
-                            android:clickable="true"
-                            android:contentDescription="@string/filter"
-                            android:focusable="true"
-                            android:onClick="onHomePageViewClicked"
-                            android:paddingLeft="9dp"
-                            android:paddingRight="9dp"
-                            android:paddingBottom="6dp"
-                            android:paddingTop="6dp"
-                            app:carbon_backgroundTint="@color/icon_color"
-                            app:carbon_cornerRadius="12dp"
-                            app:carbon_rippleColor="@color/colorRippleDefault"
-                            app:carbon_rippleHotspot="true"
-                            app:carbon_rippleStyle="background"
-                            app:srcCompat="@drawable/ic_search_filter" />
-
-                    </carbon.widget.RelativeLayout>
-
-                    <carbon.widget.RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="25dp"
-                        android:layout_marginRight="25dp"
-                        android:layout_marginBottom="10dp"
-                        android:background="@drawable/bg_white_bottom_round"
-                        app:carbon_elevation="3dp">
-
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/recent_search_recycler"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
-
-                    </carbon.widget.RelativeLayout>
-
-                </carbon.widget.LinearLayout>
-
-                <carbon.widget.LinearLayout
-                    android:id="@+id/secondary_noGps_navigation_container"
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/promotion_recycler"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginRight="20dp"
-                    android:layout_marginBottom="10dp"
-                    android:background="#2387ba"
-                    android:orientation="vertical"
-                    android:visibility="invisible"
-                    app:carbon_cornerRadius="5dp"
-                    app:carbon_elevation="5dp">
-
-                    <carbon.widget.RelativeLayout
-                        android:id="@+id/search_mentor_btn_nogps"
-                        android:layout_width="match_parent"
-                        android:layout_height="48dp"
-                        android:layout_marginLeft="15dp"
-                        android:layout_marginTop="15dp"
-                        android:layout_marginRight="15dp"
-                        android:layout_marginBottom="10dp"
-                        android:background="@color/carbon_white"
-                        android:onClick="onHomePageViewClicked"
-                        app:carbon_cornerRadius="3dp"
-                        app:carbon_elevation="3dp">
-
-                        <carbon.widget.ImageView
-                            android:id="@+id/search_image_view_nogps"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:layout_marginStart="15dp"
-                            android:layout_marginLeft="15dp"
-                            android:contentDescription="@string/search_icon"
-                            app:carbon_backgroundTint="@color/icon_color"
-                            app:srcCompat="@drawable/search_icon" />
-
-                        <TextView
-                            android:id="@+id/input_search_nogps"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_centerVertical="true"
-                            android:layout_marginStart="15dp"
-                            android:layout_marginLeft="15dp"
-                            android:layout_toEndOf="@id/search_image_view_nogps"
-                            android:layout_toRightOf="@id/search_image_view_nogps"
-                            android:background="@null"
-                            android:gravity="center_vertical"
-                            android:singleLine="true"
-                            android:text="Search Mentors"
-                            android:textColor="@color/stu_text_color"
-                            android:textSize="18sp"
-                            app:fontFamily="@font/cairo_regular" />
-
-                        <carbon.widget.ImageView
-                            android:id="@+id/nogps_search_filter_image"
-                            android:layout_width="42dp"
-                            android:layout_height="36dp"
-                            android:layout_alignParentEnd="true"
-                            android:layout_alignParentRight="true"
-                            android:layout_centerVertical="true"
-                            android:layout_marginStart="15dp"
-                            android:layout_marginLeft="15dp"
-                            android:layout_marginEnd="10dp"
-                            android:layout_marginRight="10dp"
-                            android:clickable="true"
-                            android:contentDescription="@string/filter"
-                            android:focusable="true"
-                            android:onClick="onHomePageViewClicked"
-                            android:paddingLeft="9dp"
-                            android:paddingRight="9dp"
-                            android:paddingBottom="6dp"
-                            android:paddingTop="6dp"
-                            app:carbon_backgroundTint="@color/icon_color"
-                            app:carbon_cornerRadius="12dp"
-                            app:carbon_rippleColor="@color/colorRippleDefault"
-                            app:carbon_rippleHotspot="true"
-                            app:carbon_rippleStyle="background"
-                            app:srcCompat="@drawable/ic_search_filter" />
-
-
-                    </carbon.widget.RelativeLayout>
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginRight="20dp"
-                        android:lineSpacingExtra="6dp"
-                        android:text="@string/N0_Gps_Text"
-                        android:textColor="@color/carbon_white"
-                        android:textSize="14sp" />
-
-                    <carbon.widget.RelativeLayout
-                        android:id="@+id/toggle_gps_dialogue_btn"
-                        android:layout_width="match_parent"
-                        android:layout_height="48dp"
-                        android:layout_marginLeft="15dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginRight="15dp"
-                        android:layout_marginBottom="15dp"
-                        android:background="@color/carbon_white"
-                        app:carbon_cornerRadius="3dp"
-                        app:carbon_elevation="3dp">
-
-                        <carbon.widget.ImageView
-                            android:id="@+id/toggle_gps__dialogue_image_view_one"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:layout_marginStart="15dp"
-                            android:layout_marginLeft="15dp"
-                            android:contentDescription="@string/search_icon"
-                            app:carbon_backgroundTint="@color/icon_color"
-                            app:srcCompat="@drawable/ic_gps" />
-
-                        <TextView
-                            android:id="@+id/toggle_gps_dialogue_text"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_centerVertical="true"
-                            android:layout_marginStart="15dp"
-                            android:layout_marginLeft="15dp"
-                            android:layout_toEndOf="@+id/toggle_gps__dialogue_image_view_one"
-                            android:layout_toRightOf="@+id/toggle_gps__dialogue_image_view_one"
-                            android:background="@null"
-                            android:gravity="center_vertical"
-                            android:singleLine="true"
-                            android:text="@string/Turn_on_location"
-                            android:textColor="@color/stu_text_color"
-                            android:textSize="18sp"
-                            app:fontFamily="@font/cairo_regular" />
-
-
-                    </carbon.widget.RelativeLayout>
-
-                </carbon.widget.LinearLayout>
-
+                    android:layout_height="300dp"/>
             </LinearLayout>
 
-        </RelativeLayout>
+            <LinearLayout
+                android:id="@+id/rs_host"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/recent_search_textview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:paddingStart="16dp"
+                    android:paddingLeft="16dp"
+                    android:paddingTop="6dp"
+                    android:paddingEnd="16dp"
+                    android:paddingRight="16dp"
+                    android:paddingBottom="6dp"
+                    android:text="Recent Search"
+                    android:textAllCaps="false"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/textColorPrimary"
+                    android:textSize="12sp"
+                    app:fontFamily="@font/cairo_regular" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recent_search_recycler"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/blog_host"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/blog_textview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:paddingStart="16dp"
+                    android:paddingLeft="16dp"
+                    android:paddingTop="6dp"
+                    android:paddingEnd="16dp"
+                    android:paddingRight="16dp"
+                    android:paddingBottom="6dp"
+                    android:text="Blog"
+                    android:textAllCaps="false"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/textColorPrimary"
+                    android:textSize="12sp"
+                    app:fontFamily="@font/cairo_regular" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/blog_recycler"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+
+        </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
-</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -50,7 +50,7 @@ import io.dume.dume.splash.SplashActivity;
 import io.dume.dume.util.MyApplication;
 import io.dume.dume.util.NetworkUtil;
 
-public class CustomStuAppCompatActivity extends AppCompatActivity implements MyConnectivityHandler {
+public class BaseAppCompatActivity extends AppCompatActivity implements MyConnectivityHandler {
     private View decor;
     private static final String TAG = "CustomStuAppCompatActiv";
     protected NetworkChangeReceiver networkChangeReceiver;

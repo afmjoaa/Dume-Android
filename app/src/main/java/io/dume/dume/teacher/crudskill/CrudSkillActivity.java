@@ -17,7 +17,6 @@ import androidx.annotation.Nullable;
 import com.google.android.material.appbar.AppBarLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.widget.NestedScrollView;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -51,7 +50,7 @@ import carbon.widget.LinearLayout;
 import io.dume.dume.R;
 import io.dume.dume.customView.HorizontalLoadView;
 import io.dume.dume.student.grabingInfo.GrabingInfoActivity;
-import io.dume.dume.student.pojo.CusStuAppComMapActivity;
+import io.dume.dume.student.pojo.BaseMapActivity;
 import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
 import io.dume.dume.student.pojo.SearchDataStore;
 import io.dume.dume.student.studentHelp.StudentHelpActivity;
@@ -62,7 +61,7 @@ import io.dume.dume.util.GridSpacingItemDecoration;
 import static io.dume.dume.util.DumeUtils.configureAppbar;
 import static io.dume.dume.util.ImageHelper.getRoundedCornerBitmap;
 
-public class CrudSkillActivity extends CusStuAppComMapActivity implements CrudContract.View,
+public class CrudSkillActivity extends BaseMapActivity implements CrudContract.View,
         MyGpsLocationChangeListener, OnMapReadyCallback {
     @BindView(R.id.crudLoad)
     HorizontalLoadView loadView;

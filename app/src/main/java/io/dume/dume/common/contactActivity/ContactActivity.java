@@ -2,10 +2,9 @@ package io.dume.dume.common.contactActivity;
 
 import android.os.Bundle;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.appcompat.widget.Toolbar;
+
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,10 +17,10 @@ import java.util.List;
 
 import io.dume.dume.R;
 import io.dume.dume.customView.HorizontalLoadView;
-import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
+import io.dume.dume.student.pojo.BaseAppCompatActivity;
 import io.dume.dume.util.DumeUtils;
 
-public class ContactActivity extends CustomStuAppCompatActivity implements ContactActivityContact.View {
+public class ContactActivity extends BaseAppCompatActivity implements ContactActivityContact.View {
 
     private ContactActivityContact.Presenter mPresenter;
     private static final int fromFlag = 31;

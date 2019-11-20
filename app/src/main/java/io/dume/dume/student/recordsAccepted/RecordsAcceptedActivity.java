@@ -84,7 +84,7 @@ import io.dume.dume.student.common.QualificationAdapter;
 import io.dume.dume.student.common.ReviewAdapter;
 import io.dume.dume.student.common.ReviewHighlightData;
 import io.dume.dume.student.homePage.adapter.HomePageRecyclerData;
-import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
+import io.dume.dume.student.pojo.BaseAppCompatActivity;
 import io.dume.dume.student.pojo.SearchDataStore;
 import io.dume.dume.student.recordsPage.Record;
 import io.dume.dume.student.recordsRejected.RecordsRejectedActivity;
@@ -99,7 +99,7 @@ import static io.dume.dume.util.DumeUtils.getAddress;
 import static io.dume.dume.util.DumeUtils.getLast;
 import static io.dume.dume.util.ImageHelper.getRoundedCornerBitmap;
 
-public class RecordsAcceptedActivity extends CustomStuAppCompatActivity implements RecordsAcceptedContract.View {
+public class RecordsAcceptedActivity extends BaseAppCompatActivity implements RecordsAcceptedContract.View {
 
     private RecordsAcceptedContract.Presenter mPresenter;
     private static final int fromFlag = 22;

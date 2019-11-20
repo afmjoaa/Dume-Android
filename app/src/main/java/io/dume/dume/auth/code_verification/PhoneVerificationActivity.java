@@ -27,13 +27,13 @@ import io.dume.dume.auth.auth_final.AuthRegisterActivity;
 import io.dume.dume.customView.HorizontalLoadView;
 import io.dume.dume.obligation.foreignObli.PayActivity;
 import io.dume.dume.student.homePage.HomePageActivity;
-import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
+import io.dume.dume.student.pojo.BaseAppCompatActivity;
 import io.dume.dume.teacher.homepage.TeacherActivtiy;
 import me.philio.pinentry.PinEntryView;
 
 import static io.dume.dume.util.DumeUtils.configureAppbar;
 
-public class PhoneVerificationActivity extends CustomStuAppCompatActivity implements PhoneVerificationContract.View {
+public class PhoneVerificationActivity extends BaseAppCompatActivity implements PhoneVerificationContract.View {
     private PhoneVerificationContract.Presenter presenter;
     private TextView detailsTextView;
     private static final String TAG = "PhoneVerificationActivi";

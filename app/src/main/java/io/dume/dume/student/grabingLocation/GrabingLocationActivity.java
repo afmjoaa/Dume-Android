@@ -70,7 +70,7 @@ import carbon.widget.Button;
 import carbon.widget.ImageView;
 import carbon.widget.RelativeLayout;
 import io.dume.dume.R;
-import io.dume.dume.student.pojo.CusStuAppComMapActivity;
+import io.dume.dume.student.pojo.BaseMapActivity;
 import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
 import io.dume.dume.student.profilePage.ProfilePageActivity;
 import io.dume.dume.student.studentSettings.SavedPlacesAdaData;
@@ -89,7 +89,7 @@ import static io.dume.dume.util.DumeUtils.configToolbarTittle;
 import static io.dume.dume.util.DumeUtils.hideKeyboard;
 import static io.dume.dume.util.DumeUtils.showKeyboard;
 
-public class GrabingLocationActivity extends CusStuAppComMapActivity implements OnMapReadyCallback,
+public class GrabingLocationActivity extends BaseMapActivity implements OnMapReadyCallback,
         GrabingLocaitonContract.View, MyGpsLocationChangeListener, View.OnClickListener {
 
     private GrabingLocaitonContract.Presenter mPresenter;

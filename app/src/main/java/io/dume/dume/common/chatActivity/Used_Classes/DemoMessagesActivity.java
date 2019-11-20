@@ -3,7 +3,7 @@ package io.dume.dume.common.chatActivity.Used_Classes;
 import android.os.Bundle;
 import android.os.Handler;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
+
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,14 +17,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 import io.dume.dume.R;
-import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
+import io.dume.dume.student.pojo.BaseAppCompatActivity;
 
 import static io.dume.dume.util.DumeUtils.showToast;
 
 /*
  * Created by troy379 on 04.04.17.
  */
-public abstract class DemoMessagesActivity extends CustomStuAppCompatActivity
+public abstract class DemoMessagesActivity extends BaseAppCompatActivity
         implements MessagesListAdapter.SelectionListener,
         MessagesListAdapter.OnLoadMoreListener {
 

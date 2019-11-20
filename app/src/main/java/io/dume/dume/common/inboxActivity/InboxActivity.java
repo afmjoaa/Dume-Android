@@ -46,7 +46,7 @@ import io.dume.dume.common.chatActivity.ChatActivity;
 import io.dume.dume.common.chatActivity.DemoModel;
 import io.dume.dume.common.chatActivity.Room;
 import io.dume.dume.common.contactActivity.ContactActivity;
-import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
+import io.dume.dume.student.pojo.BaseAppCompatActivity;
 import io.dume.dume.student.studentSettings.StudentSettingsActivity;
 import io.dume.dume.teacher.homepage.TeacherContract;
 import io.dume.dume.teacher.mentor_settings.AccountSettings;
@@ -54,7 +54,7 @@ import io.dume.dume.util.DumeUtils;
 
 import static io.dume.dume.util.DumeUtils.configureAppbarWithoutColloapsing;
 
-public class InboxActivity extends CustomStuAppCompatActivity implements InboxActivityContact.View {
+public class InboxActivity extends BaseAppCompatActivity implements InboxActivityContact.View {
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;

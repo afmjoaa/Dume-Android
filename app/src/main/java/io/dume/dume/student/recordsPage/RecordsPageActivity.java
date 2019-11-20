@@ -37,7 +37,7 @@ import java.util.Objects;
 
 import io.dume.dume.Google;
 import io.dume.dume.R;
-import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
+import io.dume.dume.student.pojo.BaseAppCompatActivity;
 import io.dume.dume.student.pojo.SearchDataStore;
 import io.dume.dume.student.recordsAccepted.RecordsAcceptedActivity;
 import io.dume.dume.student.recordsCompleted.RecordsCompletedActivity;
@@ -52,7 +52,7 @@ import io.dume.dume.util.DumeUtils;
 import static io.dume.dume.util.DumeUtils.RECORDTAB;
 import static io.dume.dume.util.DumeUtils.configureAppbarWithoutColloapsing;
 
-public class RecordsPageActivity extends CustomStuAppCompatActivity implements RecordsPageContract.View {
+public class RecordsPageActivity extends BaseAppCompatActivity implements RecordsPageContract.View {
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;

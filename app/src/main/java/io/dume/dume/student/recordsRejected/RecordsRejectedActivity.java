@@ -54,7 +54,7 @@ import androidx.viewpager.widget.ViewPager;
 import io.dume.dume.Google;
 import io.dume.dume.R;
 import io.dume.dume.student.homePage.adapter.HomePageRecyclerData;
-import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
+import io.dume.dume.student.pojo.BaseAppCompatActivity;
 import io.dume.dume.student.pojo.SearchDataStore;
 import io.dume.dume.student.recordsPage.Record;
 import io.dume.dume.student.studentHelp.StudentHelpActivity;
@@ -63,7 +63,7 @@ import io.dume.dume.util.DumeUtils;
 import io.dume.dume.util.VisibleToggleClickListener;
 import me.zhanghai.android.materialratingbar.MaterialRatingBar;
 
-public class RecordsRejectedActivity extends CustomStuAppCompatActivity implements RecordsRejectedContract.View {
+public class RecordsRejectedActivity extends BaseAppCompatActivity implements RecordsRejectedContract.View {
 
     private RecordsRejectedContract.Presenter mPresenter;
     private static final int fromFlag = 21;

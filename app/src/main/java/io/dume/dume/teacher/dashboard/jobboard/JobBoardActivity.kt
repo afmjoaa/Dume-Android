@@ -10,10 +10,9 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import carbon.widget.RecyclerView
-import com.facebook.internal.Utility
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import io.dume.dume.R
-import io.dume.dume.student.pojo.CustomStuAppCompatActivity
+import io.dume.dume.student.pojo.BaseAppCompatActivity
 import io.dume.dume.teacher.dashboard.DashboardContact
 import io.dume.dume.teacher.dashboard.DashboardPresenter
 import io.dume.dume.teacher.dashboard.adapters.CirclePagerIndicatorDecoration
@@ -25,7 +24,7 @@ import io.dume.dume.teacher.dashboard.pojo.JobsItem
 import io.dume.dume.util.DumeUtils.configureAppbar
 import kotlinx.android.synthetic.main.activity_job_board.*
 
-class JobBoardActivity : CustomStuAppCompatActivity(), DashboardContact.View<List<JobsItem>>, BottomNavigationView.OnNavigationItemSelectedListener, SwipeRefreshLayout.OnRefreshListener {
+class JobBoardActivity : BaseAppCompatActivity(), DashboardContact.View<List<JobsItem>>, BottomNavigationView.OnNavigationItemSelectedListener, SwipeRefreshLayout.OnRefreshListener {
 
 
     private val presenter = DashboardPresenter(this, this)

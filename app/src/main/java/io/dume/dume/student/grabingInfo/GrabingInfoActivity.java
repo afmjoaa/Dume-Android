@@ -89,7 +89,7 @@ import io.dume.dume.inter_face.OnTabModificationListener;
 import io.dume.dume.model.DumeModel;
 import io.dume.dume.model.TeacherModel;
 import io.dume.dume.student.grabingPackage.GrabingPackageActivity;
-import io.dume.dume.student.pojo.CusStuAppComMapActivity;
+import io.dume.dume.student.pojo.BaseMapActivity;
 import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
 import io.dume.dume.student.pojo.SearchDataStore;
 import io.dume.dume.student.studentHelp.StudentHelpActivity;
@@ -107,7 +107,7 @@ import static io.dume.dume.util.DumeUtils.getLast;
 import static io.dume.dume.util.ImageHelper.getRoundedCornerBitmap;
 import static io.dume.dume.util.ImageHelper.getRoundedCornerBitmapSquare;
 
-public class GrabingInfoActivity extends CusStuAppComMapActivity implements GrabingInfoContract.View,
+public class GrabingInfoActivity extends BaseMapActivity implements GrabingInfoContract.View,
         MyGpsLocationChangeListener, OnMapReadyCallback, OnViewClick, OnTabModificationListener {
 
     private SectionsPagerAdapter mSectionsPagerAdapter;

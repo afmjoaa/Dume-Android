@@ -86,7 +86,7 @@ import biz.laenger.android.vpbs.ViewPagerBottomSheetBehavior;
 import io.dume.dume.R;
 import io.dume.dume.customView.HorizontalLoadViewTwo;
 import io.dume.dume.student.homePage.adapter.HomePageRecyclerData;
-import io.dume.dume.student.pojo.CusStuAppComMapActivity;
+import io.dume.dume.student.pojo.BaseMapActivity;
 import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
 import io.dume.dume.student.pojo.SearchDataStore;
 import io.dume.dume.student.searchLoading.SearchLoadingActivity;
@@ -100,7 +100,7 @@ import static io.dume.dume.util.DumeUtils.firstTwo;
 import static io.dume.dume.util.DumeUtils.getScreenSize;
 import static io.dume.dume.util.ImageHelper.getRoundedCornerBitmap;
 
-public class GrabingPackageActivity extends CusStuAppComMapActivity implements GrabingPackageContract.View,
+public class GrabingPackageActivity extends BaseMapActivity implements GrabingPackageContract.View,
         MyGpsLocationChangeListener, OnMapReadyCallback {
 
     private static final String TAG = "GrabingPackageActivity";

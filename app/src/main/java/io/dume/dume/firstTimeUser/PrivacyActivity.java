@@ -11,11 +11,11 @@ import com.google.android.material.floatingactionbutton.ExtendedFloatingActionBu
 import io.dume.dume.R;
 import io.dume.dume.auth.DataStore;
 import io.dume.dume.auth.auth.AuthActivity;
-import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
+import io.dume.dume.student.pojo.BaseAppCompatActivity;
 
 import static io.dume.dume.util.DumeUtils.configureAppbar;
 
-public class PrivacyActivity extends CustomStuAppCompatActivity {
+public class PrivacyActivity extends BaseAppCompatActivity {
 
     private DataStore local;
     private WebView webViewPrivacey;

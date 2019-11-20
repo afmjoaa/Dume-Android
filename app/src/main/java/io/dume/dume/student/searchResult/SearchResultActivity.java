@@ -113,7 +113,7 @@ import io.dume.dume.student.common.ReviewHighlightData;
 import io.dume.dume.student.homePage.HomePageActivity;
 import io.dume.dume.student.homePage.HomePageModel;
 import io.dume.dume.student.homePage.adapter.HomePageRecyclerData;
-import io.dume.dume.student.pojo.CusStuAppComMapActivity;
+import io.dume.dume.student.pojo.BaseMapActivity;
 import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
 import io.dume.dume.student.pojo.SearchDataStore;
 import io.dume.dume.student.recordsAccepted.RecordsAcceptedActivity;
@@ -132,7 +132,7 @@ import io.dume.dume.util.VisibleToggleClickListener;
 import static io.dume.dume.util.DumeUtils.showKeyboard;
 import static io.dume.dume.util.ImageHelper.getRoundedCornerBitmap;
 
-public class SearchResultActivity extends CusStuAppComMapActivity implements OnMapReadyCallback,
+public class SearchResultActivity extends BaseMapActivity implements OnMapReadyCallback,
         SearchResultContract.View, MyGpsLocationChangeListener, GoogleMap.OnMarkerClickListener, GoogleMap.OnInfoWindowClickListener {
 
     private GoogleMap mMap;

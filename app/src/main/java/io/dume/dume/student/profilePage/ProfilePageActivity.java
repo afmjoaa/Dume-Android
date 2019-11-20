@@ -46,7 +46,7 @@ import carbon.widget.ImageView;
 import id.zelory.compressor.Compressor;
 import io.dume.dume.R;
 import io.dume.dume.student.grabingLocation.GrabingLocationActivity;
-import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
+import io.dume.dume.student.pojo.BaseAppCompatActivity;
 import io.dume.dume.util.DumeUtils;
 import io.dume.dume.util.FileUtil;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -58,7 +58,7 @@ import static io.dume.dume.util.DumeUtils.getUserUID;
 import static io.dume.dume.util.DumeUtils.hideKeyboard;
 import static io.dume.dume.util.DumeUtils.showKeyboard;
 
-public class ProfilePageActivity extends CustomStuAppCompatActivity implements ProfilePageContract.View,
+public class ProfilePageActivity extends BaseAppCompatActivity implements ProfilePageContract.View,
         CompoundButton.OnCheckedChangeListener {
 
     ProfilePageContract.Presenter mPresenter;

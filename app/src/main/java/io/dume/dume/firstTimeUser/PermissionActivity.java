@@ -8,20 +8,15 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import android.os.Bundle;
-import androidx.appcompat.widget.Toolbar;
 
 import android.view.View;
 
-import com.google.android.material.appbar.AppBarLayout;
-import com.jaeger.library.StatusBarUtil;
-
-import androidx.core.view.ViewCompat;
 import io.dume.dume.R;
-import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
+import io.dume.dume.student.pojo.BaseAppCompatActivity;
 
 import static io.dume.dume.util.DumeUtils.configureAppbar;
 
-public class PermissionActivity extends CustomStuAppCompatActivity implements View.OnClickListener {
+public class PermissionActivity extends BaseAppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "PermissionActivity";
     private static Boolean MLOCATIONPERMISSIONGRANTED = false;

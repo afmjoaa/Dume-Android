@@ -65,7 +65,7 @@ import io.dume.dume.student.common.SettingsAdapter;
 import io.dume.dume.student.heatMap.AccountRecyData;
 import io.dume.dume.student.heatMap.HeatMapAccountRecyAda;
 import io.dume.dume.student.homePage.HomePageActivity;
-import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
+import io.dume.dume.student.pojo.BaseAppCompatActivity;
 import io.dume.dume.teacher.adapters.BasicInfoAdapter;
 import io.dume.dume.teacher.homepage.TeacherActivtiy;
 import io.dume.dume.teacher.homepage.TeacherContract;
@@ -76,7 +76,7 @@ import io.dume.dume.util.DumeUtils;
 
 import static io.dume.dume.util.DumeUtils.configAppbarTittle;
 
-public class AccountSettings extends CustomStuAppCompatActivity implements AccountSettingsContract.MentorView {
+public class AccountSettings extends BaseAppCompatActivity implements AccountSettingsContract.MentorView {
     private CoordinatorLayout transitionContainer;
     private CollapsingToolbarLayout collapsingToolbarLayout;
     private HorizontalLoadView horizontalLoadView;

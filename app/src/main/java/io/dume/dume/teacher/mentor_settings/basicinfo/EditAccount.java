@@ -52,7 +52,7 @@ import butterknife.ButterKnife;
 import io.dume.dume.R;
 import io.dume.dume.customView.HorizontalLoadView;
 import io.dume.dume.student.grabingLocation.GrabingLocationActivity;
-import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
+import io.dume.dume.student.pojo.BaseAppCompatActivity;
 import io.dume.dume.teacher.adapters.AcAdapter;
 import io.dume.dume.teacher.homepage.TeacherContract;
 import io.dume.dume.teacher.homepage.TeacherDataStore;
@@ -63,7 +63,7 @@ import io.dume.dume.util.DumeUtils;
 
 import static io.dume.dume.util.DumeUtils.getAddress;
 
-public class EditAccount extends CustomStuAppCompatActivity implements EditContract.View, View.OnClickListener {
+public class EditAccount extends BaseAppCompatActivity implements EditContract.View, View.OnClickListener {
     private FloatingActionButton fb;
     private EditContract.Presenter presenter;
     private NestedScrollView mScrollView;

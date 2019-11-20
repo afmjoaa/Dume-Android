@@ -12,7 +12,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import androidx.interpolator.view.animation.LinearOutSlowInInterpolator;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatCheckBox;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -40,14 +39,14 @@ import java.util.Objects;
 
 import io.dume.dume.R;
 import io.dume.dume.customView.HorizontalLoadView;
-import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
+import io.dume.dume.student.pojo.BaseAppCompatActivity;
 import io.dume.dume.teacher.mentor_settings.basicinfo.EditAccount;
 import io.dume.dume.util.DatePickerFragment;
 import io.dume.dume.util.DumeUtils;
 
 import static io.dume.dume.util.DumeUtils.showKeyboard;
 
-public class AcademicActivity extends CustomStuAppCompatActivity implements AcademicContract.View,
+public class AcademicActivity extends BaseAppCompatActivity implements AcademicContract.View,
         CompoundButton.OnCheckedChangeListener {
 
     private HorizontalLoadView loadView;

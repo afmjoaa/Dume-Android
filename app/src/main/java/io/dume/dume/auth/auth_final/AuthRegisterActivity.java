@@ -23,7 +23,6 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.firebase.firestore.DocumentReference;
@@ -45,7 +44,7 @@ import io.dume.dume.common.privacyPolicy.PrivacyPolicyActivity;
 import io.dume.dume.customView.HorizontalLoadView;
 import io.dume.dume.obligation.foreignObli.PayActivity;
 import io.dume.dume.student.homePage.HomePageActivity;
-import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
+import io.dume.dume.student.pojo.BaseAppCompatActivity;
 import io.dume.dume.teacher.homepage.TeacherActivtiy;
 import io.dume.dume.util.DumeUtils;
 
@@ -53,7 +52,7 @@ import static io.dume.dume.student.pojo.StuBaseModel.setStuProfile;
 import static io.dume.dume.util.DumeUtils.configureAppbar;
 import static io.dume.dume.util.DumeUtils.hideKeyboard;
 
-public class AuthRegisterActivity extends CustomStuAppCompatActivity {
+public class AuthRegisterActivity extends BaseAppCompatActivity {
     EditText firstname, lastName, phoneNumber;
     AutoCompleteTextView email;
     private DataStore dataStore = null;

@@ -63,7 +63,7 @@ import io.dume.dume.student.grabingLocation.GrabingLocationActivity;
 import io.dume.dume.student.heatMap.AccountRecyData;
 import io.dume.dume.student.heatMap.HeatMapAccountRecyAda;
 import io.dume.dume.student.homePage.HomePageActivity;
-import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
+import io.dume.dume.student.pojo.BaseAppCompatActivity;
 import io.dume.dume.student.profilePage.ProfilePageActivity;
 import io.dume.dume.teacher.homepage.TeacherActivtiy;
 import io.dume.dume.teacher.homepage.TeacherContract;
@@ -74,7 +74,7 @@ import static io.dume.dume.util.DumeUtils.configAppbarTittle;
 import static io.dume.dume.util.DumeUtils.configureAppbar;
 import static io.dume.dume.util.DumeUtils.getAddress;
 
-public class StudentSettingsActivity extends CustomStuAppCompatActivity
+public class StudentSettingsActivity extends BaseAppCompatActivity
         implements StudentSettingsContract.View {
     private static final String TAG = "StudentSettingsActivity";
     private StudentSettingsContract.Presenter mPresenter;

@@ -34,7 +34,7 @@ android:fitsSystemWindows="true">
             app:expandedTitleMarginStart="@dimen/expTittleMarginStart"
             app:expandedTitleMarginTop="@dimen/expTittleMarginTop"
             app:expandedTitleTextAppearance="@style/MyTextApprncExp.lightBg"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:layout_scrollFlags="scroll|enterAlways"
             app:title="My Skill"
             app:titleEnabled="true">
 

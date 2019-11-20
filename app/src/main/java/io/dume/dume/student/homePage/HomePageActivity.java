@@ -108,7 +108,7 @@ import io.dume.dume.student.homePage.adapter.HomePageRecyclerAdapter;
 import io.dume.dume.student.homePage.adapter.HomePageRecyclerData;
 import io.dume.dume.student.homePage.adapter.RecentSearchAdapter;
 import io.dume.dume.student.homePage.adapter.RecentSearchData;
-import io.dume.dume.student.pojo.CusStuAppComMapActivity;
+import io.dume.dume.student.pojo.BaseMapActivity;
 import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
 import io.dume.dume.student.pojo.SearchDataStore;
 import io.dume.dume.student.profilePage.ProfilePageActivity;
@@ -132,7 +132,7 @@ import static io.dume.dume.util.DumeUtils.hideKeyboard;
 import static io.dume.dume.util.DumeUtils.showKeyboard;
 import static io.dume.dume.util.ImageHelper.getRoundedCornerBitmapSquare;
 
-public class HomePageActivity extends CusStuAppComMapActivity implements HomePageContract.View,
+public class HomePageActivity extends BaseMapActivity implements HomePageContract.View,
         NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback, MyGpsLocationChangeListener {
 
     private static final String TAG = "HomePageActivity";

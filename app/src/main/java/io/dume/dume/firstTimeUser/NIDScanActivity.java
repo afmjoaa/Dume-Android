@@ -4,8 +4,6 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.Animatable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -14,12 +12,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.ml.vision.FirebaseVision;
@@ -35,16 +31,15 @@ import com.otaliastudios.cameraview.controls.Hdr;
 import java.util.List;
 
 import androidx.annotation.NonNull;
-import androidx.core.view.GravityCompat;
 import ch.halcyon.squareprogressbar.SquareProgressBar;
 import io.dume.dume.R;
 import io.dume.dume.StateManager;
 import io.dume.dume.auth.auth_final.AuthRegisterActivity;
-import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
+import io.dume.dume.student.pojo.BaseAppCompatActivity;
 
 import static io.dume.dume.util.DumeUtils.configureAppbar;
 
-public class NIDScanActivity extends CustomStuAppCompatActivity implements View.OnClickListener {
+public class NIDScanActivity extends BaseAppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "scanActivity";
     private CameraView camera;

@@ -63,15 +63,15 @@ import io.dume.dume.Google;
 import io.dume.dume.R;
 import io.dume.dume.customView.HorizontalLoadView;
 import io.dume.dume.splash.SplashActivity;
-import io.dume.dume.student.pojo.CusStuAppComMapActivity;
-import io.dume.dume.student.pojo.DataSet;
+import io.dume.dume.student.pojo.BaseMapActivity;
+import io.dume.dume.student.pojo.HeatMapDataSet;
 import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
 import io.dume.dume.student.studentHelp.StudentHelpActivity;
 import io.dume.dume.teacher.homepage.TeacherContract;
 import io.dume.dume.util.DumeUtils;
 import io.dume.dume.util.VisibleToggleClickListener;
 
-public class HeatMapActivity extends CusStuAppComMapActivity implements OnMapReadyCallback, MyGpsLocationChangeListener,
+public class HeatMapActivity extends BaseMapActivity implements OnMapReadyCallback, MyGpsLocationChangeListener,
         HeatMapContract.View {
 
     private static final String TAG = "HeatMapActivity";
@@ -113,7 +113,7 @@ public class HeatMapActivity extends CusStuAppComMapActivity implements OnMapRea
             ALT_HEATMAP_GRADIENT_START_POINTS);
     private HeatmapTileProvider mProvider;
     private TileOverlay mOverlay;
-    private HashMap<String, DataSet> mLists = new HashMap<String, DataSet>();
+    private HashMap<String, HeatMapDataSet> mLists = new HashMap<String, HeatMapDataSet>();
     private HeatMapAccountRecyAda heatMapAccountRecyAda;
     private HorizontalLoadView myLoadView;
     private HeatMapModel heatMapModel;
@@ -176,9 +176,9 @@ public class HeatMapActivity extends CusStuAppComMapActivity implements OnMapRea
                                             startHeatMap(mMap, DumeUtils.STUDENT);
                                             hideProgress();
                                         } else {
-                                            mModel.getStuLocData(new TeacherContract.Model.Listener<DataSet>() {
+                                            mModel.getStuLocData(new TeacherContract.Model.Listener<HeatMapDataSet>() {
                                                 @Override
-                                                public void onSuccess(DataSet list) {
+                                                public void onSuccess(HeatMapDataSet list) {
                                                     mLists.put(DumeUtils.STUDENT, list);
                                                     mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
                                                         @Override
@@ -210,9 +210,9 @@ public class HeatMapActivity extends CusStuAppComMapActivity implements OnMapRea
                                             startHeatMap(mMap, DumeUtils.TEACHER);
                                             hideProgress();
                                         } else {
-                                            mModel.getMentorLocData(new TeacherContract.Model.Listener<DataSet>() {
+                                            mModel.getMentorLocData(new TeacherContract.Model.Listener<HeatMapDataSet>() {
                                                 @Override
-                                                public void onSuccess(DataSet list) {
+                                                public void onSuccess(HeatMapDataSet list) {
                                                     mLists.put(DumeUtils.TEACHER, list);
                                                     mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
                                                         @Override
@@ -410,9 +410,9 @@ public class HeatMapActivity extends CusStuAppComMapActivity implements OnMapRea
                 case DumeUtils.STUDENT:
                     chooseAccouTypeBtn.setText(accountTypeArr[1]);
                     chooseAccouTypeBtn.setCompoundDrawablesWithIntrinsicBounds(imageIcons[1], 0, R.drawable.ic_keyboard_arrow_down_black_24dp, 0);
-                    mModel.getMentorLocData(new TeacherContract.Model.Listener<DataSet>() {
+                    mModel.getMentorLocData(new TeacherContract.Model.Listener<HeatMapDataSet>() {
                         @Override
-                        public void onSuccess(DataSet list) {
+                        public void onSuccess(HeatMapDataSet list) {
                             mLists.put(DumeUtils.TEACHER, list);
                             mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
                                 @Override
@@ -435,9 +435,9 @@ public class HeatMapActivity extends CusStuAppComMapActivity implements OnMapRea
                 case DumeUtils.BOOTCAMP:
                 default:
                     chooseAccouTypeBtn.setText(accountTypeArr[0]);
-                    mModel.getStuLocData(new TeacherContract.Model.Listener<DataSet>() {
+                    mModel.getStuLocData(new TeacherContract.Model.Listener<HeatMapDataSet>() {
                         @Override
-                        public void onSuccess(DataSet list) {
+                        public void onSuccess(HeatMapDataSet list) {
                             mLists.put(DumeUtils.STUDENT, list);
                             mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
                                 @Override

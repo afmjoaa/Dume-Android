@@ -106,7 +106,7 @@ import io.dume.dume.student.homePage.adapter.HomePageRatingAdapter;
 import io.dume.dume.student.homePage.adapter.HomePageRatingData;
 import io.dume.dume.student.homePage.adapter.HomePageRecyclerAdapter;
 import io.dume.dume.student.homePage.adapter.HomePageRecyclerData;
-import io.dume.dume.student.pojo.CusStuAppComMapActivity;
+import io.dume.dume.student.pojo.BaseMapActivity;
 import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
 import io.dume.dume.student.pojo.SearchDataStore;
 import io.dume.dume.student.recordsPage.Record;
@@ -137,7 +137,7 @@ import static io.dume.dume.util.DumeUtils.animateImage;
 import static io.dume.dume.util.ImageHelper.getRoundedCornerBitmapSquare;
 import static java.lang.Integer.parseInt;
 
-public class TeacherActivtiy extends CusStuAppComMapActivity implements TeacherContract.View,
+public class TeacherActivtiy extends BaseMapActivity implements TeacherContract.View,
         NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback, MyGpsLocationChangeListener,
         RadioGroup.OnCheckedChangeListener {
     public TeacherContract.Presenter presenter;

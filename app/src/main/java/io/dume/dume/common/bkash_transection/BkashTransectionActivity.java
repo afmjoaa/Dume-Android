@@ -5,7 +5,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -16,15 +15,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import io.dume.dume.R;
-import io.dume.dume.student.homePage.HomePageActivity;
-import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
-import io.dume.dume.student.studentPayment.StudentPaymentActivity;
+import io.dume.dume.student.pojo.BaseAppCompatActivity;
 
-import static io.dume.dume.util.DumeUtils.configAppbarTittle;
 import static io.dume.dume.util.DumeUtils.configureAppbar;
 import static io.dume.dume.util.DumeUtils.showKeyboard;
 
-public class BkashTransectionActivity extends CustomStuAppCompatActivity implements BkashTransContact.View {
+public class BkashTransectionActivity extends BaseAppCompatActivity implements BkashTransContact.View {
 
     private Button submitBTN;
     private EditText transET;

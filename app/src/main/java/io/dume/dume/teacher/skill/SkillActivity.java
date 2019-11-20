@@ -33,7 +33,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.dume.dume.R;
 import io.dume.dume.customView.HorizontalLoadView;
-import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
+import io.dume.dume.student.pojo.BaseAppCompatActivity;
 import io.dume.dume.teacher.adapters.SkillAdapter;
 import io.dume.dume.teacher.crudskill.CrudSkillActivity;
 import io.dume.dume.teacher.homepage.TeacherActivtiy;
@@ -43,7 +43,7 @@ import io.dume.dume.teacher.pojo.Skill;
 import io.dume.dume.util.DumeUtils;
 import io.dume.dume.util.NetworkUtil;
 
-public class SkillActivity extends CustomStuAppCompatActivity implements SkillContract.View, View.OnClickListener {
+public class SkillActivity extends BaseAppCompatActivity implements SkillContract.View, View.OnClickListener {
     @BindView(R.id.loadView)
     HorizontalLoadView loadView;
     @BindView(R.id.skillRV)

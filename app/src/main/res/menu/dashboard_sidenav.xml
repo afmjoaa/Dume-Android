@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
-
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/profile"
         android:icon="@drawable/profile_icon"
@@ -11,13 +9,17 @@
         android:icon="@drawable/chat_inbox"
         android:title="Chats Inbox" />
     <item
+        android:id="@+id/payment"
+        android:icon="@drawable/ic_payment"
+        android:title="Payment" /><!--only available on the student side-->
+    <item
         android:id="@+id/heat_map"
         android:icon="@drawable/ic_heat_map"
         android:title="Heat Map" />
     <item
         android:id="@+id/settings"
         android:icon="@drawable/settings_icon"
-        android:title="Settings" />
+        android:title="Setting" />
     <item
         android:id="@+id/help"
         android:icon="@drawable/ic_help_outline_black_24dp"

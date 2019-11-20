@@ -47,7 +47,7 @@ import io.dume.dume.common.privacyPolicy.PrivacyPolicyActivity;
 import io.dume.dume.model.DumeModel;
 import io.dume.dume.student.common.SettingData;
 import io.dume.dume.student.common.SettingsAdapter;
-import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
+import io.dume.dume.student.pojo.BaseAppCompatActivity;
 import io.dume.dume.student.pojo.SearchDataStore;
 import io.dume.dume.teacher.homepage.TeacherContract;
 import io.dume.dume.teacher.homepage.TeacherDataStore;
@@ -58,7 +58,7 @@ import static io.dume.dume.util.DumeUtils.configAppbarTittle;
 import static io.dume.dume.util.DumeUtils.configureAppbar;
 import static io.dume.dume.util.DumeUtils.showKeyboard;
 
-public class StudentHelpActivity extends CustomStuAppCompatActivity implements StudentHelpContract.View {
+public class StudentHelpActivity extends BaseAppCompatActivity implements StudentHelpContract.View {
 
     private StudentHelpContract.Presenter mPresenter;
     private static final int fromFlag = 12;

@@ -5,16 +5,16 @@ import androidx.annotation.Nullable;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import androidx.core.widget.NestedScrollView;
-import androidx.appcompat.app.AppCompatActivity;
+
 import android.view.LayoutInflater;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.dume.dume.R;
-import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
+import io.dume.dume.student.pojo.BaseAppCompatActivity;
 import io.dume.dume.util.DumeUtils;
 
-public abstract class BaseActivity extends CustomStuAppCompatActivity {
+public abstract class BaseActivity extends BaseAppCompatActivity {
 
     private static final int fromFlag = 31;
     private static final String TAG = "BaseActivity";

@@ -1,18 +1,9 @@
 package io.dume.dume.teacher.dashboard
 
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
-import androidx.appcompat.widget.Toolbar
-import androidx.core.view.GravityCompat
-import androidx.drawerlayout.widget.DrawerLayout
-import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.otaliastudios.cameraview.controls.Flash
-import com.otaliastudios.cameraview.controls.Hdr
-import io.dume.dume.R
-import io.dume.dume.student.pojo.CustomStuAppCompatActivity
+import io.dume.dume.student.pojo.BaseAppCompatActivity
 
-open class DashboardCompatActivity : CustomStuAppCompatActivity() {
+open class DashboardCompatActivity : BaseAppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setActivityContext(this, 7654)

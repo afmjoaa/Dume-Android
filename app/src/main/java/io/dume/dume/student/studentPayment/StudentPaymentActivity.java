@@ -47,7 +47,7 @@ import io.dume.dume.common.bkash_transection.BkashTransectionActivity;
 import io.dume.dume.model.DumeModel;
 import io.dume.dume.student.homePage.HomePageModel;
 import io.dume.dume.student.homePage.adapter.HomePageRecyclerData;
-import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
+import io.dume.dume.student.pojo.BaseAppCompatActivity;
 import io.dume.dume.student.pojo.SearchDataStore;
 import io.dume.dume.student.recordsPage.Record;
 import io.dume.dume.student.recordsPage.RecordsPageModel;
@@ -68,7 +68,7 @@ import static io.dume.dume.util.DumeUtils.configureAppbar;
 import static io.dume.dume.util.DumeUtils.hideKeyboard;
 import static io.dume.dume.util.DumeUtils.showKeyboard;
 
-public class StudentPaymentActivity extends CustomStuAppCompatActivity implements StudentPaymentContract.View {
+public class StudentPaymentActivity extends BaseAppCompatActivity implements StudentPaymentContract.View {
 
     private StudentPaymentContract.Presenter mPresenter;
     private static final int fromFlag = 17;

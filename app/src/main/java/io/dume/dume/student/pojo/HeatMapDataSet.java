@@ -7,11 +7,11 @@ import com.google.android.gms.maps.model.LatLng;
 import java.util.ArrayList;
 
 @Keep
-public class DataSet {
+public class HeatMapDataSet {
     private ArrayList<LatLng> mDataset;
     private String mUrl;
 
-    public DataSet() {
+    public HeatMapDataSet() {
 
     }
 
@@ -31,7 +31,7 @@ public class DataSet {
         this.mUrl = mUrl;
     }
 
-    public DataSet(ArrayList<LatLng> dataSet, String url) {
+    public HeatMapDataSet(ArrayList<LatLng> dataSet, String url) {
         this.mDataset = dataSet;
         this.mUrl = url;
     }

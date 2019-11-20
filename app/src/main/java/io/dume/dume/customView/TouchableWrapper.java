@@ -4,8 +4,7 @@ import android.os.SystemClock;
 import android.view.MotionEvent;
 import android.widget.FrameLayout;
 
-import io.dume.dume.student.grabingLocation.GrabingLocationActivity;
-import io.dume.dume.student.pojo.CusStuAppComMapActivity;
+import io.dume.dume.student.pojo.BaseMapActivity;
 
 public class TouchableWrapper extends FrameLayout {
 
@@ -17,7 +16,7 @@ public class TouchableWrapper extends FrameLayout {
         super(context);
         // Force the host activity to implement the UpdateMapAfterUserInterection Interface
         try {
-            updateMapAfterUserInterection = (CusStuAppComMapActivity) context;
+            updateMapAfterUserInterection = (BaseMapActivity) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString() + " must implement UpdateMapAfterUserInterection");
         }

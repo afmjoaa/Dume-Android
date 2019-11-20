@@ -1,12 +1,7 @@
 package io.dume.dume.auth.auth;
 
-import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.graphics.Typeface;
 import android.os.Bundle;
-import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Gravity;
@@ -21,21 +16,19 @@ import com.google.android.material.floatingactionbutton.ExtendedFloatingActionBu
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 
-import androidx.core.app.ActivityCompat;
 import io.dume.dume.R;
 import io.dume.dume.auth.AuthModel;
 import io.dume.dume.auth.DataStore;
 import io.dume.dume.auth.auth_final.AuthRegisterActivity;
 import io.dume.dume.auth.code_verification.PhoneVerificationActivity;
-import io.dume.dume.customView.HorizontalLoadView;
 import io.dume.dume.obligation.foreignObli.PayActivity;
 import io.dume.dume.student.homePage.HomePageActivity;
-import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
+import io.dume.dume.student.pojo.BaseAppCompatActivity;
 import io.dume.dume.teacher.homepage.TeacherActivtiy;
 
 import static io.dume.dume.util.DumeUtils.configureAppbar;
 
-public class AuthActivity extends CustomStuAppCompatActivity implements AuthContract.View, TextView.OnEditorActionListener, TextWatcher {
+public class AuthActivity extends BaseAppCompatActivity implements AuthContract.View, TextView.OnEditorActionListener, TextWatcher {
     AuthContract.Presenter presenter;
     private TextInputEditText phoneEditText;
     private ExtendedFloatingActionButton floatingButoon;

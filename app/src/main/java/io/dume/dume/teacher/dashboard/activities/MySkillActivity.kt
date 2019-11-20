@@ -7,15 +7,14 @@ import androidx.core.content.ContextCompat
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import io.dume.dume.R
-import io.dume.dume.student.pojo.CustomStuAppCompatActivity
-import io.dume.dume.teacher.dashboard.DashboardCompatActivity
+import io.dume.dume.student.pojo.BaseAppCompatActivity
 import io.dume.dume.teacher.dashboard.DashboardContact
 import io.dume.dume.teacher.dashboard.DashboardPresenter
 import io.dume.dume.teacher.pojo.Skill
 import io.dume.dume.util.DumeUtils
 import kotlinx.android.synthetic.main.activity_my_skill.*
 
-class MySkillActivity : CustomStuAppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener, DashboardContact.View<List<Skill>>, SwipeRefreshLayout.OnRefreshListener {
+class MySkillActivity : BaseAppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener, DashboardContact.View<List<Skill>>, SwipeRefreshLayout.OnRefreshListener {
 
 
     private val presenter = DashboardPresenter(this, this)

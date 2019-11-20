@@ -20,8 +20,7 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 import androidx.interpolator.view.animation.FastOutLinearInInterpolator;
 import androidx.interpolator.view.animation.LinearOutSlowInInterpolator;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
+
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StrikethroughSpan;
@@ -66,7 +65,7 @@ import java.util.Objects;
 import io.dume.dume.Google;
 import io.dume.dume.R;
 import io.dume.dume.student.homePage.adapter.HomePageRecyclerData;
-import io.dume.dume.student.pojo.CustomStuAppCompatActivity;
+import io.dume.dume.student.pojo.BaseAppCompatActivity;
 import io.dume.dume.student.pojo.SearchDataStore;
 import io.dume.dume.student.recordsAccepted.RecordsAcceptedActivity;
 import io.dume.dume.student.recordsCurrent.RecordsCurrentActivity;
@@ -82,7 +81,7 @@ import me.zhanghai.android.materialratingbar.MaterialRatingBar;
 
 import static io.dume.dume.util.DumeUtils.getLast;
 
-public class RecordsCompletedActivity extends CustomStuAppCompatActivity implements RecordsCompletedContract.View {
+public class RecordsCompletedActivity extends BaseAppCompatActivity implements RecordsCompletedContract.View {
 
     private RecordsCompletedContract.Presenter mPresenter;
     private static final int fromFlag = 24;

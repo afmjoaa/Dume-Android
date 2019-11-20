@@ -72,7 +72,7 @@ import static android.graphics.Typeface.ITALIC;
 import static android.graphics.Typeface.NORMAL;
 import static android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE;
 
-public class CusStuAppComMapActivity extends CustomStuAppCompatActivity implements
+public class BaseMapActivity extends BaseAppCompatActivity implements
         OnCompleteListener<LocationSettingsResponse>, TouchableWrapper.UpdateMapAfterUserInterection,
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
         com.google.android.gms.location.LocationListener {
@@ -236,7 +236,7 @@ public class CusStuAppComMapActivity extends CustomStuAppCompatActivity implemen
                     settingsBuilder.setAlwaysShow(true);
                     result = LocationServices.getSettingsClient(activity)
                             .checkLocationSettings(settingsBuilder.build());
-                    result.addOnCompleteListener(CusStuAppComMapActivity.this);
+                    result.addOnCompleteListener(BaseMapActivity.this);
                 }
             });
         }
