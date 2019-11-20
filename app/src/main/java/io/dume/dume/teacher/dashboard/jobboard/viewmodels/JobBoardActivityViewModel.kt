@@ -1,5 +1,6 @@
 package io.dume.dume.teacher.dashboard.jobboard.viewmodels
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.dume.dume.teacher.dashboard.jobboard.models.JobItem
@@ -10,11 +11,9 @@ class JobBoardActivityViewModel : ViewModel() {
 
     // maintain MutableLiveData<JobItem>
 
-    var _allJobs: MutableLiveData<List<JobItem>>? = null
 
-    fun getAllJobs(): MutableLiveData<List<JobItem>>? {
-        _allJobs = jobRepo.__getAllJobs()
-        return _allJobs
+    fun getAllJobs(): LiveData<List<JobItem>> {
+        return jobRepo.__getAllJobs()
     }
 
 }

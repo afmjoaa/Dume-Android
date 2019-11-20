@@ -18,8 +18,7 @@ import java.util.ArrayList
 class JobItemCardAdapter : RecyclerView.Adapter<JobItemCardAdapter.VH>() {
 
     lateinit var context: Context
-    lateinit var jobItems: List<JobItem>
-
+    var jobItems: List<JobItem> = listOf()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
         context = parent.context
         return VH(LayoutInflater.from(parent.context).inflate(R.layout.job_item_card, parent, false))

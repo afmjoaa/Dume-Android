@@ -1,12 +1,14 @@
 package io.dume.dume.teacher.dashboard.jobboard.repositories
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.firestore.FirebaseFirestore
 import io.dume.dume.teacher.dashboard.jobboard.models.JobInfo
 import io.dume.dume.teacher.dashboard.jobboard.models.JobItem
 import io.dume.dume.teacher.dashboard.jobboard.models.RecordInfo
 
+@Suppress("UNCHECKED_CAST")
 class JobItemRepository private constructor() {
 
     companion object {
@@ -18,13 +20,12 @@ class JobItemRepository private constructor() {
     }
 
     private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
+    val allJobs: MutableLiveData<List<JobItem>> = MutableLiveData()
 
-    private var allJobs: MutableLiveData<List<JobItem>>? = null
+    fun __getAllJobs(): LiveData<List<JobItem>> {
 
-    fun __getAllJobs(): MutableLiveData<List<JobItem>>? {
-        val ret = mutableListOf<JobItem>()
-        ret.clear()
         db.collection("jobs").get().addOnSuccessListener { querySnapshot ->
+            val ret = mutableListOf<JobItem>()
             if (!querySnapshot.isEmpty) {
                 for (doc in querySnapshot) {
                     val data: MutableMap<String, Any> = doc.data
@@ -33,14 +34,10 @@ class JobItemRepository private constructor() {
                     Log.d("JobItemRepository: ", name)
                     ret.add(JobItem("", JobInfo(name, "", ""), RecordInfo(null, null, null)))
                 }
-                allJobs = MutableLiveData()
-                allJobs?.postValue(ret)
             }
+            allJobs.value = ret
         }
-        ret.add(JobItem("", JobInfo("manually added", "", ""), RecordInfo(null, null, null)))
-
-        Log.d("JobItemRepository: ", ret.size.toString())
-
+//        ret.add(JobItem("", JobInfo("manually added", "", ""), RecordInfo(null, null, null)))
         return allJobs
     }
 
