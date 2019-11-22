@@ -88,7 +88,9 @@
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/job_items_rv"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
+                            android:layout_height="wrap_content">
+
+                        </androidx.recyclerview.widget.RecyclerView>
                     </LinearLayout>
 
 
@@ -104,8 +106,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            app:elevation="3dp"
             android:background="@drawable/bg_white_top_round_8"
+            app:elevation="3dp"
             app:itemIconTint="@drawable/bottom_menu_teacher_style"
             app:itemTextColor="@drawable/bottom_menu_teacher_style"
             app:labelVisibilityMode="labeled"
