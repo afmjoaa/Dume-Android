@@ -1,8 +1,10 @@
 package io.dume.dume.teacher.dashboard.jobboard
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
@@ -26,12 +28,9 @@ import kotlinx.android.synthetic.main.activity_job_board.*
 
 class JobBoardActivity : BaseAppCompatActivity(), DashboardContact.View<List<JobsItem>>, BottomNavigationView.OnNavigationItemSelectedListener, SwipeRefreshLayout.OnRefreshListener {
 
-
     private val presenter = DashboardPresenter(this, this)
     private var jobBoardViewModel: JobBoardActivityViewModel? = null
 
-
-    val jobs = null
     val jAdapter: JobItemCardAdapter = JobItemCardAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,7 +45,13 @@ class JobBoardActivity : BaseAppCompatActivity(), DashboardContact.View<List<Job
 
 
         jobBoardViewModel = ViewModelProviders.of(this).get(JobBoardActivityViewModel::class.java)
-
+        jobBoardViewModel!!.isLoading.observe(this, Observer {
+            /*if (it) {
+                job_items_loading_pb.visibility = View.VISIBLE
+            } else {
+                job_items_loading_pb.visibility = View.GONE
+            }*/
+        })
         jobBoardViewModel!!.getAllJobs().observe(this, Observer {
             // set adapter or update it..
             updateJobRecView(it)
@@ -59,7 +64,7 @@ class JobBoardActivity : BaseAppCompatActivity(), DashboardContact.View<List<Job
         // Live data is updated...
         jAdapter.jobItems = updatedList
         jAdapter.notifyDataSetChanged()
-        Log.d("JobBoardActivity", "updated list")
+        // Log.d("JobBoardActivity", "updated list")
     }
 
 

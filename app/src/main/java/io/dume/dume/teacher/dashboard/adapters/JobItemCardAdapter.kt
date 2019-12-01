@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -36,13 +37,17 @@ class JobItemCardAdapter : RecyclerView.Adapter<JobItemCardAdapter.VH>() {
         val jImg = card.findViewById<ImageView>(R.id.job_item_image)
         //...
 
+        val applyBtn = card.findViewById<Button>(R.id.job_item_apply)
+
         jTitle?.text = jobItems[position].title
         jDesc?.text = jobItems[position].description
         salary.text = jobItems[position].salary.toString()
         location.text = jobItems[position].location
 
-        card.setOnClickListener {
-            Toast.makeText(context, "clicked  on: $position", Toast.LENGTH_SHORT).show()
+        applyBtn.setOnClickListener { v ->
+            Toast.makeText(context, "applying for: ${jobItems[position].title}", Toast.LENGTH_SHORT).show()
+            // create a record as pending here..
+
         }
 
 

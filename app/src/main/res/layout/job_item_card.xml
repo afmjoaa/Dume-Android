@@ -7,9 +7,11 @@
     android:layout_height="wrap_content"
     android:layout_margin="10dp"
     app:cardBackgroundColor="@color/white"
+    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
     app:cardCornerRadius="10dp">
 
     <RelativeLayout
+
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="10dp">
@@ -41,7 +43,7 @@
             android:layout_marginTop="@dimen/tendp"
             android:layout_toRightOf="@id/job_item_image"
             android:fontFamily="@font/redhat_regular"
-            android:text="I need a tutor who has experienced and able to guide all subjects of class five [emergency]...." />
+            android:text="Description goes here..." />
 
         <TextView
             android:id="@+id/job_item_proposal"
@@ -67,21 +69,34 @@
             android:fontFamily="@font/redhat_regular"
             android:text="7,000 BDT" />
 
+
         <TextView
             android:id="@+id/job_item_location"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/job_item_proposal"
-            android:layout_alignParentRight="true"
+            android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_toRightOf="@id/job_item_salary"
             android:drawableLeft="@drawable/ic_autocomplete_places"
             android:drawablePadding="5dp"
             android:drawableTint="@color/mColorPrimaryVariant"
             android:fontFamily="@font/redhat_regular"
-            android:gravity="end"
             android:text="Uttara Dhaka"
-            android:textColor="@color/mColorPrimaryVariant"
 
+            android:textColor="@color/mColorPrimaryVariant" />
+
+        <Button
+            android:id="@+id/job_item_apply"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/job_item_proposal"
+            android:layout_alignParentRight="true"
+            android:layout_toRightOf="@id/job_item_location"
+            android:drawableTint="@color/mColorPrimaryVariant"
+            android:text="Apply"
             android:textStyle="bold" />
 
     </RelativeLayout>
