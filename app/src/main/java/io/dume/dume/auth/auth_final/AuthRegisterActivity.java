@@ -21,6 +21,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.PhoneAuthCredential;
@@ -53,15 +54,15 @@ import static io.dume.dume.util.DumeUtils.configureAppbar;
 import static io.dume.dume.util.DumeUtils.hideKeyboard;
 
 public class AuthRegisterActivity extends BaseAppCompatActivity {
-    EditText firstname, lastName, phoneNumber;
-    AutoCompleteTextView email;
     private DataStore dataStore = null;
     private FirebaseFirestore fireStore;
     private Activity activity;
     private static final String TAG = "AuthRegisterActivity";
     private Context context;
     private HorizontalLoadView loadView;
-    private CheckBox privacyCB;
+    private TextInputEditText nidNo;
+    private TextInputEditText nidName;
+    private TextInputEditText nidBirthDate;
 
     private void configMentorProfile(DataStore dataStore) {
         Map<String, Object> mentorFeild = new HashMap<>();
@@ -416,25 +417,28 @@ public class AuthRegisterActivity extends BaseAppCompatActivity {
     }
 
     private void restoreData() {
-       /* firstname.setText(dataStore.getFirstName() == null ? "" : dataStore.getFirstName());
-        lastName.setText(dataStore.getLastName() == null ? "" : dataStore.getLastName());
-        email.setText(dataStore.getEmail() == null ? "" : dataStore.getEmail());
-        phoneNumber.setText(dataStore.getPhoneNumber() == null ? "" : dataStore.getPhoneNumber());*/
+        //get bundle data and show them
+        Long NIDNo = getIntent().getExtras().getLong("NIDNo");
+        String NIDName = getIntent().getExtras().getString("NIDName");
+        String NIDBirthDate = getIntent().getExtras().getString("NIDBirthDate");
+
+        nidNo.setText(NIDNo.toString() == null ? "" : NIDNo.toString());
+        nidName.setText(NIDName == null ? "" : NIDName);
+        nidBirthDate.setText(NIDBirthDate == null ? "" : NIDBirthDate.replace("Date of Birth ", ""));
     }
 
     private void init() {
         context = this;
-        firstname = findViewById(R.id.input_firstname);
-        lastName = findViewById(R.id.input_lastname);
-        email = findViewById(R.id.input_email);
-        phoneNumber = findViewById(R.id.phoneNumberEditText);
         loadView = findViewById(R.id.loadView);
-        privacyCB = findViewById(R.id.privacyCB);
+        nidNo = findViewById(R.id.nidNo);
+        nidName = findViewById(R.id.name);
+        nidBirthDate = findViewById(R.id.birthDate);
+
         fireStore = FirebaseFirestore.getInstance();
         ArrayList<String> emailAddress = getEmailAddress();
         if (emailAddress.size() != 0) {
-            email.setThreshold(1);
-            email.setAdapter(new ArrayAdapter<String>(this, R.layout.item_layout_suggestion, R.id.suggetionTextView, emailAddress));
+           /* email.setThreshold(1);
+            email.setAdapter(new ArrayAdapter<String>(this, R.layout.item_layout_suggestion, R.id.suggetionTextView, emailAddress));*/
         }
         for (String s : emailAddress) {
             Log.w(TAG, "init: " + s);
@@ -472,7 +476,7 @@ public class AuthRegisterActivity extends BaseAppCompatActivity {
 
     public void onViewClick(View view) {
         switch (view.getId()) {
-            case R.id.floating_button:
+            /*case R.id.floating_button:
                 if (firstname.getText().toString().isEmpty() || lastName.getText().toString().isEmpty() || phoneNumber.getText().toString().isEmpty() || email.getText().toString().isEmpty()) {
                     Toast.makeText(this, "Hey Man !!! Fill up all the data...", Toast.LENGTH_SHORT).show();
                     return;
@@ -654,7 +658,7 @@ public class AuthRegisterActivity extends BaseAppCompatActivity {
             case R.id.hiperlink_privacy_text:
             case R.id.hiperlink_terms_text:
                 startActivity(new Intent(AuthRegisterActivity.this, PrivacyPolicyActivity.class).setAction("fromHelp"));
-                break;
+                break;*/
         }
     }
 

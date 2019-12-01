@@ -80,7 +80,7 @@ android:fitsSystemWindows="true">
         app:itemIconTint="@drawable/bottom_menu_teacher_style"
         app:itemTextColor="@drawable/bottom_menu_teacher_style"
         app:labelVisibilityMode="labeled"
-        app:menu="@menu/bottom_nav_menu" />
+        app:menu="@menu/student_bottom_nav_menu" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

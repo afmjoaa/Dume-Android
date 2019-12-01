@@ -33,7 +33,7 @@ class MyTutionActivity : BaseAppCompatActivity(), BottomNavigationView.OnNavigat
     }
 
     override fun init() {
-        bottom_menu.selectedItemId = R.id.my_tution
+        bottom_menu.selectedItemId = R.id.my_tuition
         swipe_to_refres.setColorSchemeColors(ContextCompat.getColor(this, R.color.mColorPrimaryVariant))
         presenter.getTutions()
 
@@ -57,7 +57,7 @@ class MyTutionActivity : BaseAppCompatActivity(), BottomNavigationView.OnNavigat
     override fun onResume() {
         super.onResume()
         bottom_menu.setOnNavigationItemSelectedListener(null)
-        bottom_menu.selectedItemId = R.id.my_tution
+        bottom_menu.selectedItemId = R.id.my_tuition
         bottom_menu.setOnNavigationItemSelectedListener(this)
 
     }

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/search_mentor"
+        android:icon="@drawable/search_icon"
+        android:title="@string/search_mentor" />
+
+    <item
+        android:id="@+id/job_board"
+        android:icon="@drawable/job_board"
+        android:title="@string/job_board" />
+
+    <item
+        android:id="@+id/my_tuition"
+        android:icon="@drawable/tuition_icon"
+        android:title="@string/my_tuition" />
+
+</menu>

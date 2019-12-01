@@ -839,4 +839,8 @@ provided.Tap salary for details.  </string>
     <string name="search_mentor">Search Mentor</string>
     <string name="job_board">Job Board</string>
     <string name="my_tuition">My Tuition</string>
+    <string name="title_activity_teacher_dashboard">TeacherDashboard</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
 </resources>

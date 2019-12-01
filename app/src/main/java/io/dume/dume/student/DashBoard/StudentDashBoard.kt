@@ -5,6 +5,8 @@ import android.view.MenuItem
 import androidx.annotation.NonNull
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
+import androidx.fragment.app.commit
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import io.dume.dume.R
@@ -65,7 +67,8 @@ class StudentDashBoard : BaseAppCompatActivity() {
                 R.id.search_mentor -> {
                     configAppToolBarTitle(context, "Search Mentor")
                     appBarLayout.setExpanded(true, true)
-                    fm.beginTransaction().hide(active).show(searchMentorFragment).commit()
+                    fm.beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
+                            .hide(active).show(searchMentorFragment).commit()
                     active = searchMentorFragment
                     return true
                 }
@@ -73,7 +76,8 @@ class StudentDashBoard : BaseAppCompatActivity() {
                 R.id.job_board -> {
                     configAppToolBarTitle(context, "Job Board")
                     appBarLayout.setExpanded(true, true)
-                    fm.beginTransaction().hide(active).show(jobBoardFragment).commit()
+                    fm.beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
+                            .hide(active).show(jobBoardFragment).commit()
                     active = jobBoardFragment
                     return true
                 }
@@ -81,7 +85,8 @@ class StudentDashBoard : BaseAppCompatActivity() {
                 R.id.my_tuition -> {
                     configAppToolBarTitle(context, "My Tuition")
                     appBarLayout.setExpanded(true, true)
-                    fm.beginTransaction().hide(active).show(tuitionFragment).commit()
+                    fm.beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
+                            .hide(active).show(tuitionFragment).commit()
                     active = tuitionFragment
                     return true
                 }

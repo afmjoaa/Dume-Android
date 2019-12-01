@@ -6,7 +6,7 @@
         android:icon="@drawable/job_board"
         android:title="Job Board" />
     <item
-        android:id="@+id/my_tution"
+        android:id="@+id/my_tuition"
         android:icon="@drawable/tuition_icon"
         android:title="Tutions" />
     <item

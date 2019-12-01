@@ -32,7 +32,7 @@ class DashboardPresenter<T>(var context: Context, var view: DashboardContact.Vie
     override fun onBottomMenuClicked(item: MenuItem) {
         when (item.itemId) {
             R.id.my_job_board -> context.startActivity(Intent(context, JobBoardActivity::class.java))
-            R.id.my_tution -> context.startActivity(Intent(context, MyTutionActivity::class.java))
+            R.id.my_tuition -> context.startActivity(Intent(context, MyTutionActivity::class.java))
             R.id.my_skill -> context.startActivity(Intent(context, MySkillActivity::class.java))
             R.id.my_payment -> context.startActivity(Intent(context, MyPaymentActivity::class.java))
         }

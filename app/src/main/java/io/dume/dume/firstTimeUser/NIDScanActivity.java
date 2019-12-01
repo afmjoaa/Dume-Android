@@ -238,7 +238,11 @@ public class NIDScanActivity extends BaseAppCompatActivity implements View.OnCli
                                     stateManager.setValue("NIDBirthDate", NIDBirthDate );
                                     //Log.e(TAG, "last: " + NIDNo + " " + NIDName + " " + NIDBirthDate );
                                     //goto next activity
-                                    startActivity(new Intent(getApplicationContext(), AuthRegisterActivity.class));
+                                    Intent intent = new Intent(getApplicationContext(), AuthRegisterActivity.class);
+                                    intent.putExtra("NIDNo",NIDNo );
+                                    intent.putExtra("NIDName",NIDName );
+                                    intent.putExtra("NIDBirthDate",NIDBirthDate );
+                                    startActivity(intent);
                                 }
 
                             }

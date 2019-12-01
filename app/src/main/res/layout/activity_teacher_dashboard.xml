@@ -3,17 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawer_layout"
+    android:background="@color/white"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
-    android:fitsSystemWindows="true"
-    tools:context=".teacher.dashboard.activities.MyTutionActivity">
+    android:fitsSystemWindows="true">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/parent_coor_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".teacher.dashboard.jobboard.JobBoardActivity">
+        android:layout_height="match_parent">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/settingsAppbar"
@@ -36,8 +34,8 @@
                 app:expandedTitleMarginStart="@dimen/expTittleMarginStart"
                 app:expandedTitleMarginTop="@dimen/expTittleMarginTop"
                 app:expandedTitleTextAppearance="@style/MyTextApprncExp.lightBg"
-                app:layout_scrollFlags="scroll|exitUntilCollapsed"
-                app:title="Account Settings"
+                app:layout_scrollFlags="scroll|enterAlways"
+                app:title="My Skill"
                 app:titleEnabled="true">
 
                 <androidx.appcompat.widget.Toolbar
@@ -58,60 +56,40 @@
 
         </com.google.android.material.appbar.AppBarLayout>
 
-
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/swipe_to_refres"
+        <FrameLayout
+            android:id="@+id/main_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-            <androidx.core.widget.NestedScrollView
-                android:id="@+id/test"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/job_card_rv"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/job_items_rv"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/job_card_rv" />
-
-                </RelativeLayout>
-
-            </androidx.core.widget.NestedScrollView>
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            app:layout_constraintBottom_toTopOf="@id/nav_view"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/bottom_menu"
+            android:id="@+id/nav_view"
             style="@style/Widget.MaterialComponents.BottomNavigationView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="0dp"
+            app:elevation="4dp"
             android:background="@drawable/bg_white_top_round_8"
-            app:elevation="3dp"
+            app:itemHorizontalTranslationEnabled="true"
+            android:layout_gravity="bottom"
             app:itemIconTint="@drawable/bottom_menu_teacher_style"
             app:itemTextColor="@drawable/bottom_menu_teacher_style"
             app:labelVisibilityMode="labeled"
-            app:menu="@menu/bottom_menu_teacher_dashboard" />
+            app:menu="@menu/bottom_menu_teacher_dashboard"/>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/navigation"
-        android:layout_width="300dp"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_gravity="start"
         android:background="@color/white"
+        android:layout_gravity="start"
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/dashboard_nav_header"
         app:itemBackground="@drawable/drawer_item_background"

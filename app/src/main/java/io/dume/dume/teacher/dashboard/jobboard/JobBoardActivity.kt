@@ -69,7 +69,6 @@ class JobBoardActivity : BaseAppCompatActivity(), DashboardContact.View<List<Job
         job_card_rv.layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
         job_card_rv.addItemDecoration(CirclePagerIndicatorDecoration())
         job_card_rv.adapter = FeatureCardSlider()
-
         /*    var cardSnapHelper = CardSnapHelper()
             cardSnapHelper.attachToRecyclerView(job_card_rv)*/
 

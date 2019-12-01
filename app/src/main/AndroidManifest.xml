@@ -27,14 +27,19 @@
         android:roundIcon="@mipmap/icon_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/DefaultTheme.NoActionBar">
-        <activity android:name=".teacher.dashboard.activities.JobItemDetails"></activity>
+        <activity
+            android:name=".teacher.testing.TeacherDashboard"
+            android:launchMode="singleTop"
+            android:label="@string/title_activity_teacher_dashboard"
+            android:screenOrientation="portrait"
+            android:theme="@style/DefaultTheme.NoActionBar" />
+        <activity android:name=".teacher.dashboard.activities.JobItemDetails" />
         <activity
             android:name=".student.DashBoard.StudentDashBoard"
             android:label="@string/title_activity_student_dash_board"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
-            android:theme="@style/DefaultTheme.NoActionBar">
-        </activity>
+            android:theme="@style/DefaultTheme.NoActionBar" />
         <activity
             android:name=".firstTimeUser.NIDScanActivity"
             android:screenOrientation="portrait"
@@ -211,7 +216,6 @@
             android:name=".teacher.crudskill.CrudSkillActivity"
             android:label="Select category"
             android:theme="@style/AppTheme.NoActionBar.transparent" />
-
         <activity
             android:name=".common.aboutUs.AboutUsActivity"
             android:label="@string/title_activity_about_us"
@@ -220,7 +224,6 @@
             android:name=".common.privacyPolicy.PrivacyPolicyActivity"
             android:label="@string/title_activity_privacy_policy"
             android:theme="@style/AppTheme.NoActionBar.transparent.black" />
-
         <activity
             android:name=".common.inboxActivity.InboxActivity"
             android:label="@string/title_activity_inbox"
@@ -239,8 +242,7 @@
         <activity android:name=".teacher.homepage.TeacherActivityMock" />
         <activity
             android:name=".obligation.foreignObli.PayActivity"
-            android:theme="@style/AppTheme.NoActionBar.transparent.black" />
-     <!-- service and broadCasts -->
+            android:theme="@style/AppTheme.NoActionBar.transparent.black" /> <!-- service and broadCasts -->
         <receiver
             android:name=".broadcastReceiver.MyAlarmBroadCast"
             android:enabled="true"
