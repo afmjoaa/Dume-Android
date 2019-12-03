@@ -71,27 +71,58 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="40dp"
             android:orientation="vertical">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <carbon.widget.ImageView
+                    android:id="@+id/profileImage"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:scaleType="centerCrop"
+                    app:carbon_cornerRadius="50dp"
+                    app:srcCompat="@drawable/set_display_pic" />
+
+                <carbon.widget.ImageView
+                    android:layout_width="42dp"
+                    android:layout_height="32dp"
+                    android:layout_gravity="bottom|center_horizontal"
+                    android:layout_marginBottom="13dp"
+                    android:background="@drawable/cirecle_background_white"
+
+                    android:padding="6dp"
+                    android:translationX="32dp"
+                    app:carbon_elevation="4dp"
+                    app:srcCompat="@drawable/add_avatar" />
+
+            </FrameLayout>
+
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_marginBottom="6dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="6dp"
                 android:hint="Name"
-                app:hintEnabled="true"
                 app:errorEnabled="true"
                 app:errorIconDrawable="@drawable/error_icon"
+                app:hintEnabled="true"
                 app:startIconDrawable="@drawable/user_name">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
                     android:id="@+id/name"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
             </com.google.android.material.textfield.TextInputLayout>
-
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -99,18 +130,17 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="6dp"
                 android:hint="Email"
-                app:hintEnabled="true"
                 app:errorEnabled="true"
                 app:errorIconDrawable="@drawable/error_icon"
+                app:hintEnabled="true"
                 app:startIconDrawable="@drawable/user_mail">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
                     android:id="@+id/email"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
             </com.google.android.material.textfield.TextInputLayout>
-
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -118,14 +148,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="6dp"
                 android:hint="Birth Date"
-                app:hintEnabled="true"
                 app:errorEnabled="true"
                 app:errorIconDrawable="@drawable/error_icon"
+                app:hintEnabled="true"
                 app:startIconDrawable="@drawable/user_birthdate">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
                     android:id="@+id/birthDate"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -136,14 +166,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="6dp"
                 android:hint="NID No"
-                app:hintEnabled="true"
                 app:errorEnabled="true"
                 app:errorIconDrawable="@drawable/error_icon"
+                app:hintEnabled="true"
                 app:startIconDrawable="@drawable/nid_card_icon">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
                     android:id="@+id/nidNo"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -154,37 +184,56 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="6dp"
                 android:hint="Current Status"
-                app:hintEnabled="true"
                 app:errorEnabled="true"
                 app:errorIconDrawable="@drawable/error_icon"
+                app:hintEnabled="true"
                 app:startIconDrawable="@drawable/current_status_icon">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
                     android:id="@+id/currentStatus"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-                android:layout_width="wrap_content"
-                android:id="@+id/registerBtn"
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="18dp"
-                android:layout_marginTop="8dp"
-                android:contentDescription="@string/accept_amp_continue"
-                android:text="Register"
-                app:icon="@drawable/ic_sign_in_icon"
-                android:onClick="registerBtnClicked"
-                android:layout_gravity="right"/>
+                android:layout_marginBottom="6dp"
+                android:hint="Present Address"
+                app:errorEnabled="true"
+                app:errorIconDrawable="@drawable/error_icon"
+                app:hintEnabled="true"
+                app:startIconDrawable="@drawable/ic_heat_map">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/location"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
 
 
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/registerBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="18dp"
+        android:contentDescription="@string/accept_amp_continue"
+        android:onClick="registerBtnClicked"
+        android:text="Register"
+        app:icon="@drawable/ic_sign_in_icon"
+        app:layout_anchor="@id/test"
+        app:layout_anchorGravity="bottom|right" />
 
-   <!-- <include
-        layout="@layout/content_auth_final"
-        android:visibility="visible" />-->
+    <!-- <include
+         layout="@layout/content_auth_final"
+         android:visibility="visible" />-->
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -6,20 +6,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.RelativeLayout
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.snackbar.Snackbar
 import io.dume.dume.R
 import io.dume.dume.student.pojo.BaseFragment
 
-
-class SearchMentorFragment : BaseFragment() {
+class SearchMentorFragment : Fragment() {
     private lateinit var searchMentorViewModel: SearchMentorViewModel
 
-    override fun provideYourFragmentView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         searchMentorViewModel = ViewModelProviders.of(this).get(SearchMentorViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_search_mentor, container, false)
-
         return root
     }
 }

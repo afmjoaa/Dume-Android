@@ -1,10 +1,8 @@
 package io.dume.dume.student.grabingInfo;
 
-import android.net.Uri;
-
 import java.io.InputStream;
 
-import io.dume.dume.inter_face.usefulListeners;
+import io.dume.dume.interFace.usefulListeners;
 
 public interface GrabingInfoContract {
     interface View {

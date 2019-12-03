@@ -97,7 +97,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.Executors;
 
-import io.dume.dume.Google;
+import io.dume.dume.util.Google;
 import io.dume.dume.R;
 import io.dume.dume.broadcastReceiver.MyAlarmBroadCast;
 import io.dume.dume.common.inboxActivity.InboxActivity;

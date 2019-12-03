@@ -6,7 +6,7 @@ import android.view.View;
 
 import java.util.List;
 
-import io.dume.dume.Google;
+import io.dume.dume.util.Google;
 import io.dume.dume.teacher.homepage.TeacherContract;
 
 public class RecordsPagePresenter implements RecordsPageContract.Presenter {

@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
@@ -12,7 +11,7 @@ import android.graphics.drawable.LayerDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.LocationManager;
-import android.os.Build;
+
 import androidx.annotation.Keep;
 import androidx.annotation.StringRes;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -29,8 +28,6 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
-import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
@@ -61,7 +58,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import io.dume.dume.R;
-import io.dume.dume.inter_face.usefulListeners;
 import io.dume.dume.student.pojo.SearchDataStore;
 import io.dume.dume.student.recordsPage.Record;
 import io.dume.dume.teacher.homepage.TeacherContract;
@@ -492,48 +488,6 @@ public class DumeUtils {
         popup.show();
     }
 
-
-    public static void settingStatusBarTransparent(Activity activity) {
-
-        if (Build.VERSION.SDK_INT >= 19 && Build.VERSION.SDK_INT < 21) {
-            setWindowFlag(activity, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, true);
-        }
-        if (Build.VERSION.SDK_INT >= 19) {
-            activity.getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-        }
-        //make fully Android Transparent Status bar
-        if (Build.VERSION.SDK_INT >= 21) {
-            setWindowFlag(activity, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, false);
-            activity.getWindow().setStatusBarColor(Color.TRANSPARENT);
-        }
-
-        //lollipop only support white status bar icon color so have to fix it by the status bar util library
-        //by making translucent status bar and test thoroughly
-        //StatusBarUtil.setTranslucent(this, 100);
-        // StatusBarUtil.setTransparent(this);
-        //StatusBarUtil.setColor(Activity activity, int color)
-    }
-
-    private static void setWindowFlag(Activity activity, int bits, boolean on) {
-        Window win = activity.getWindow();
-        WindowManager.LayoutParams winParams = win.getAttributes();
-        if (on) {
-            winParams.flags |= bits;
-        } else {
-            winParams.flags &= ~bits;
-        }
-        win.setAttributes(winParams);
-    }
-
-    //make transparent status bar icon color dark
-    public static void setDarkStatusBarIcon(Activity activity) {
-        View decorView = activity.getWindow().getDecorView();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-        }
-    }
-
-
     public static String generateQueryString(String packageName, List<String> queryList, List<String> queryListName) {
         StringBuilder mQuery = new StringBuilder();
         endOfNest = new ArrayList<>(Arrays.asList("Subject", "Field", "Software", "Language", "Flavour", "Type", "Course", " Language ", "Item"));
@@ -750,22 +704,6 @@ public class DumeUtils {
             default:
                 return 0;
         }
-    }
-
-    public static void setKeyboardVisibilityListener(Activity activity, usefulListeners.KeyboardVisibilityListener keyboardVisibilityListener) {
-        View contentView = activity.findViewById(android.R.id.content);
-        contentView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                float mDensity = activity.getResources().getDisplayMetrics().density;
-                int heightDiff = contentView.getRootView().getHeight() - contentView.getHeight();
-                if (heightDiff >= (120 * mDensity)) {
-                    keyboardVisibilityListener.onKeyboardVisibilityChanged(true);
-                } else {
-                    keyboardVisibilityListener.onKeyboardVisibilityChanged(false);
-                }
-            }
-        });
     }
 
     private static Button requestBTN;

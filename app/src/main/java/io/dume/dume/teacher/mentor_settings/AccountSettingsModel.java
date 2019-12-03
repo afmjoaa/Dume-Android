@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import io.dume.dume.inter_face.UserQueryListener;
+import io.dume.dume.interFace.UserQueryListener;
 import io.dume.dume.teacher.pojo.Education;
 import io.dume.dume.teacher.pojo.GlobalListener;
 

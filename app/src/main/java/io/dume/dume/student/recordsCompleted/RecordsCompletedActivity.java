@@ -62,7 +62,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
-import io.dume.dume.Google;
+import io.dume.dume.util.Google;
 import io.dume.dume.R;
 import io.dume.dume.student.homePage.adapter.HomePageRecyclerData;
 import io.dume.dume.student.pojo.BaseAppCompatActivity;

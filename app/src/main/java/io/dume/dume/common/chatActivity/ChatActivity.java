@@ -47,7 +47,7 @@ import java.util.List;
 import java.util.Random;
 
 import carbon.widget.ImageView;
-import io.dume.dume.Google;
+import io.dume.dume.util.Google;
 import io.dume.dume.R;
 import io.dume.dume.common.chatActivity.Holders.IncomingVoiceMessageViewHolder;
 import io.dume.dume.common.chatActivity.Holders.OutcomingVoiceMessageViewHolder;

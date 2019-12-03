@@ -51,7 +51,7 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.interpolator.view.animation.FastOutLinearInInterpolator;
 import androidx.interpolator.view.animation.LinearOutSlowInInterpolator;
 import androidx.viewpager.widget.ViewPager;
-import io.dume.dume.Google;
+import io.dume.dume.util.Google;
 import io.dume.dume.R;
 import io.dume.dume.student.homePage.adapter.HomePageRecyclerData;
 import io.dume.dume.student.pojo.BaseAppCompatActivity;

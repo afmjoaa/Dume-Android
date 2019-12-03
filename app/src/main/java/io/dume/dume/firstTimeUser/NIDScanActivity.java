@@ -33,7 +33,7 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import ch.halcyon.squareprogressbar.SquareProgressBar;
 import io.dume.dume.R;
-import io.dume.dume.StateManager;
+import io.dume.dume.util.StateManager;
 import io.dume.dume.auth.auth_final.AuthRegisterActivity;
 import io.dume.dume.student.pojo.BaseAppCompatActivity;
 

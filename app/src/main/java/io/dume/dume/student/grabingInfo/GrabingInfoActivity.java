@@ -85,7 +85,7 @@ import java.util.Objects;
 
 import carbon.widget.RelativeLayout;
 import io.dume.dume.R;
-import io.dume.dume.inter_face.OnTabModificationListener;
+import io.dume.dume.interFace.OnTabModificationListener;
 import io.dume.dume.model.DumeModel;
 import io.dume.dume.model.TeacherModel;
 import io.dume.dume.student.grabingPackage.GrabingPackageActivity;

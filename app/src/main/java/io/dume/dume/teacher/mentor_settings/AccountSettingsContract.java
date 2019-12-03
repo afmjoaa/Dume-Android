@@ -5,8 +5,7 @@ import android.view.View;
 import java.util.ArrayList;
 import java.util.Map;
 
-import io.dume.dume.inter_face.UserQueryListener;
-import io.dume.dume.teacher.pojo.Education;
+import io.dume.dume.interFace.UserQueryListener;
 import io.dume.dume.teacher.pojo.GlobalListener;
 
 public interface AccountSettingsContract {

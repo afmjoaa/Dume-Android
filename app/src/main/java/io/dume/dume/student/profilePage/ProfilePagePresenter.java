@@ -2,24 +2,15 @@ package io.dume.dume.student.profilePage;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Color;
-import android.os.Build;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.GeoPoint;
 
 import java.util.Objects;
 
-import javax.annotation.Nullable;
-
 import io.dume.dume.R;
-import io.dume.dume.inter_face.usefulListeners;
+import io.dume.dume.interFace.usefulListeners;
 
 public class ProfilePagePresenter implements ProfilePageContract.Presenter {
 

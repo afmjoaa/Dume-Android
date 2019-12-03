@@ -524,6 +524,7 @@ public class ProfilePageActivity extends BaseAppCompatActivity implements Profil
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             if (requestCode == IMAGE_RESULT_CODE) {
                 final boolean isCamera;
@@ -534,7 +535,7 @@ public class ProfilePageActivity extends BaseAppCompatActivity implements Profil
                     if (action == null) {
                         isCamera = false;
                     } else {
-                        isCamera = action.equals(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                        isCamera = action.equals(MediaStore.ACTION_IMAGE_CAPTURE);
                     }
                 }
 
@@ -552,11 +553,11 @@ public class ProfilePageActivity extends BaseAppCompatActivity implements Profil
                         e.printStackTrace();
                     }
                     Glide.with(ProfilePageActivity.this).load(selectedImageUri).apply(new RequestOptions().override(100, 100).placeholder(R.drawable.set_display_pic)).into(profileUserDP);
-                    if(actualImage ==null){
+                    if (actualImage == null) {
                         compressedImage = null;
                         hideSpiner();
                         updateChangesClicked();
-                    }else {
+                    } else {
                         compressImage(actualImage);
                     }
                 }

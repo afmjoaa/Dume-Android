@@ -11,19 +11,12 @@ import androidx.lifecycle.ViewModelProviders
 import io.dume.dume.R
 import io.dume.dume.student.pojo.BaseFragment
 
-class StudentJobBoardFragment : BaseFragment() {
+class StudentJobBoardFragment : Fragment() {
     private lateinit var dashboardViewModelStudent: StudentJobBoardViewModel
 
-    override fun provideYourFragmentView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         dashboardViewModelStudent = ViewModelProviders.of(this).get(StudentJobBoardViewModel::class.java)
-
         val root = inflater.inflate(R.layout.fragment_student_job_board, container, false)
-        val textView: TextView = root.findViewById(R.id.text_home)
-
-        dashboardViewModelStudent.text.observe(this, Observer {
-            textView.text = it
-        })
         return root
     }
-
 }

@@ -59,7 +59,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import carbon.widget.LinearLayout;
-import io.dume.dume.Google;
+import io.dume.dume.util.Google;
 import io.dume.dume.R;
 import io.dume.dume.customView.HorizontalLoadView;
 import io.dume.dume.splash.SplashActivity;

@@ -843,4 +843,9 @@ provided.Tap salary for details.  </string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+    <string name="skip_this_step">Skip this step</string>
+    <string name="add_skill">Add skill</string>
+    <string name="post_job">Post Job</string>
+    <string name="send_code">Send Code</string>
+    <string name="entry_fee_reason">Please pay 50 TAKA to make your account active. Which is mandatory to stop spam and ensure quality service.</string>
 </resources>

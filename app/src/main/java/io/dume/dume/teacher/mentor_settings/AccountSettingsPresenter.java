@@ -2,13 +2,10 @@ package io.dume.dume.teacher.mentor_settings;
 
 import android.view.View;
 
-import java.util.ArrayList;
 import java.util.Map;
 
 import io.dume.dume.R;
-import io.dume.dume.inter_face.UserQueryListener;
-import io.dume.dume.teacher.pojo.Education;
-import io.dume.dume.teacher.pojo.GlobalListener;
+import io.dume.dume.interFace.UserQueryListener;
 
 public class AccountSettingsPresenter implements AccountSettingsContract.Presenter {
 

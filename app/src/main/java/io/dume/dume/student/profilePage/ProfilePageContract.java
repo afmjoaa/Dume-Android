@@ -6,7 +6,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.GeoPoint;
 
-import io.dume.dume.inter_face.usefulListeners;
+import io.dume.dume.interFace.usefulListeners;
 
 public interface ProfilePageContract {
     interface View {

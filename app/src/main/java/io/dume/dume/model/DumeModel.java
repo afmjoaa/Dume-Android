@@ -25,7 +25,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.Source;
 import com.google.firebase.firestore.WriteBatch;
 
-import io.dume.dume.myGeoFIreStore.GeoFirestore;
+import io.dume.dume.library.myGeoFIreStore.GeoFirestore;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,7 +34,7 @@ import java.util.Map;
 
 import javax.annotation.Nullable;
 
-import io.dume.dume.Google;
+import io.dume.dume.util.Google;
 import io.dume.dume.student.common.ReviewHighlightData;
 import io.dume.dume.student.homePage.HomePageModel;
 import io.dume.dume.student.studentPayment.adapterAndData.PaymentHistory;

@@ -76,7 +76,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import carbon.widget.ImageView;
-import io.dume.dume.Google;
+import io.dume.dume.util.Google;
 import io.dume.dume.R;
 import io.dume.dume.common.inboxActivity.InboxActivity;
 import io.dume.dume.model.DumeModel;

@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@+id/roleChooser">
+
+    <fragment
+        android:id="@+id/roleChooser"
+        android:name="io.dume.dume.firstTimeUser.Fragment.RoleChooserFragment"
+        android:label="RoleChooser"
+        tools:layout="@layout/fragment_role_chooser" >
+        <action
+            android:id="@+id/action_roleChooser_to_privacyFragment"
+            app:destination="@id/privacyFragment"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/permissionFragment"
+        android:name="io.dume.dume.firstTimeUser.Fragment.PermissionFragment"
+        android:label="fragment_permission"
+        tools:layout="@layout/fragment_permission" >
+        <action
+            android:id="@+id/action_permissionFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/privacyFragment"
+        android:name="io.dume.dume.firstTimeUser.Fragment.PrivacyFragment"
+        android:label="fragment_privacy"
+        tools:layout="@layout/fragment_privacy" >
+        <action
+            android:id="@+id/action_privacyFragment_to_permissionFragment"
+            app:destination="@id/permissionFragment"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="io.dume.dume.firstTimeUser.Fragment.LoginFragment"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login" >
+        <action
+            android:id="@+id/action_loginFragment_to_nidFragment"
+            app:destination="@id/nidFragment"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"/>
+        <action
+            android:id="@+id/action_loginFragment_to_registerFragment"
+            app:destination="@id/registerFragment"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/nidFragment"
+        android:name="io.dume.dume.firstTimeUser.Fragment.NidScanFragment"
+        android:label="fragment_nid"
+        tools:layout="@layout/fragment_nid_scan" >
+        <action
+            android:id="@+id/action_nidFragment_to_registerFragment"
+            app:destination="@id/registerFragment"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/registerFragment"
+        android:name="io.dume.dume.firstTimeUser.Fragment.RegisterFragment"
+        android:label="fragment_register"
+        tools:layout="@layout/fragment_register" >
+        <action
+            android:id="@+id/action_registerFragment_to_qualificationFragment"
+            app:destination="@id/qualificationFragment"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"/>
+        <action
+            android:id="@+id/action_registerFragment_to_postJobFragment"
+            app:destination="@id/postJobFragment"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/qualificationFragment"
+        android:name="io.dume.dume.firstTimeUser.Fragment.QualificationFragment"
+        android:label="fragment_qualification"
+        tools:layout="@layout/fragment_qualification" >
+        <action
+            android:id="@+id/action_qualificationFragment_to_addSkillFragment"
+            app:destination="@id/addSkillFragment"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/addSkillFragment"
+        android:name="io.dume.dume.teacher.testing.fragments.skills.TeacherSkillFragment"
+        android:label="fragment_add_skill"
+        tools:layout="@layout/fragment_teacher_skill" >
+        <action
+            android:id="@+id/action_addSkillFragment_to_paymentFragment"
+            app:destination="@id/paymentFragment"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/paymentFragment"
+        android:name="io.dume.dume.firstTimeUser.Fragment.PaymentFragment"
+        android:label="fragment_payment"
+        tools:layout="@layout/fragment_payment" />
+
+    <!-- student specific fragments -->
+    <fragment
+        android:id="@+id/postJobFragment"
+        android:name="io.dume.dume.student.DashBoard.Fragment.JobBoard.StudentJobBoardFragment"
+        android:label="fragment_post_job"
+        tools:layout="@layout/fragment_student_job_board" />
+
+</navigation>

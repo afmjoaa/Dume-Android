@@ -16,15 +16,6 @@ class TeacherSkillFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         teacherSkillViewModel = ViewModelProviders.of(this).get(TeacherSkillViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_teacher_skill, container, false)
-        val textView: TextView = root.findViewById(R.id.text_skill)
-        teacherSkillViewModel.text.observe(this, Observer {
-            textView.text = it
-        })
         return root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
     }
 }
