@@ -38,13 +38,13 @@ public class RoleChooserActivity extends BaseAppCompatActivity implements View.O
             local.setAccountManjor(DataStore.TEACHER);
             startActivity(new Intent(this, PermissionActivity.class));
         } else if (v.getId() == R.id.testEnam) {
-            startActivity(new Intent(this, TeacherDashboard.class));
+            startActivity(new Intent(this, StudentDashBoard.class));
             return;
         } else if (v.getId() == R.id.testJoaa) {
             startActivity(new Intent(this, ForwardFlowHostActivity.class));
             return;
         } else if (v.getId() == R.id.testSumon) {
-            startActivity(new Intent(this, StudentDashBoard.class));
+            startActivity(new Intent(this, TeacherDashboard.class));
             return;
         }
         startActivity(new Intent(this, PermissionActivity.class));
