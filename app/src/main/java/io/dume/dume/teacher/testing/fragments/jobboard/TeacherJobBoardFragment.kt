@@ -1,14 +1,16 @@
 package io.dume.dume.teacher.testing.fragments.jobboard
 
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import carbon.widget.RecyclerView
@@ -23,6 +25,7 @@ class TeacherJobBoardFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener
     private var jobBoardViewModel: TeacherJobBoardViewModel? = null
 
     val jAdapter: JobItemCardAdapter = JobItemCardAdapter()
+    private lateinit var swipeToRefresh: SwipeRefreshLayout
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -34,30 +37,31 @@ class TeacherJobBoardFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        val job_items_rv = view.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.job_items_rv)
-        val job_card_rv = view.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.job_card_rv)
-        val swipe_to_refres = view.findViewById<SwipeRefreshLayout>(R.id.swipe_to_refres)
-        job_items_rv.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-        job_items_rv.adapter = jAdapter
+        val jobItemsRv = view.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.job_items_rv)
+        val jobCardRv = view.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.job_card_rv)
+        swipeToRefresh = view.findViewById(R.id.swipe_to_refres)
+        jobItemsRv.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+        jobItemsRv.adapter = jAdapter
 
-        swipe_to_refres.setColorSchemeColors(ContextCompat.getColor(context!!, R.color.mColorPrimaryVariant))
-        job_card_rv.layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
-        job_card_rv.addItemDecoration(CirclePagerIndicatorDecoration())
-        job_card_rv.adapter = FeatureCardSlider()
+        swipeToRefresh.setColorSchemeColors(ContextCompat.getColor(context!!, R.color.mColorPrimaryVariant))
+        swipeToRefresh.setOnRefreshListener(this)
+        jobCardRv.layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
+        jobCardRv.addItemDecoration(CirclePagerIndicatorDecoration())
+        jobCardRv.adapter = FeatureCardSlider()
 
         /*    var cardSnapHelper = CardSnapHelper()
             cardSnapHelper.attachToRecyclerView(job_card_rv)*/
 
-        jobBoardViewModel!!.isLoading.observe(this, Observer {
-            /*if (it) {
-                job_items_loading_pb.visibility = View.VISIBLE
-            } else {
-                job_items_loading_pb.visibility = View.GONE
-            }*/
-        })
-        jobBoardViewModel!!.getAllJobs().observe(this, Observer {
+        /*jobBoardViewModel!!.__getAllJobs().observe(this, Observer {
             // set adapter or update it..
             updateJobRecView(it)
+        })*/
+
+        jobBoardViewModel!!.__getAllJobs()
+
+        jobBoardViewModel!!.jobListLive.observe(this, Observer {
+            updateJobRecView(it)
+            swipeToRefresh.isRefreshing = false
         })
 
     }
@@ -70,8 +74,9 @@ class TeacherJobBoardFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener
     }
 
     override fun onRefresh() {
+        // Toast.makeText(context, "swipe", Toast.LENGTH_SHORT).show()
+        // load data...
+        jobBoardViewModel!!.__getAllJobs()
 
     }
-
-
 }

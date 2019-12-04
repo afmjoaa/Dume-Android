@@ -12,9 +12,10 @@ class TeacherJobBoardViewModel : ViewModel() {
     // maintain MutableLiveData<JobItem>
 
     var isLoading: MutableLiveData<Boolean> = MutableLiveData(true)
+    var jobListLive: LiveData<List<JobItem>> = MutableLiveData()
 
-    fun getAllJobs(): LiveData<List<JobItem>> {
-        isLoading.value = false
-        return jobRepo.getAllJobsFromDb()
+    fun __getAllJobs(): LiveData<List<JobItem>> {
+        jobListLive = jobRepo.getAllJobsFromDb()
+        return jobListLive
     }
 }
