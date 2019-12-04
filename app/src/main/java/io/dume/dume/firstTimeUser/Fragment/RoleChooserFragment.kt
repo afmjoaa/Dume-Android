@@ -17,7 +17,6 @@ import io.dume.dume.firstTimeUser.PermissionActivity
 import io.dume.dume.student.DashBoard.StudentDashBoard
 import io.dume.dume.teacher.dashboard.jobboard.JobBoardActivity
 import kotlinx.android.synthetic.main.activity_role_chooser.view.*
-import kotlinx.android.synthetic.main.fragment_role_chooser.view.*
 import kotlinx.android.synthetic.main.fragment_role_chooser.view.asStudent
 import kotlinx.android.synthetic.main.fragment_role_chooser.view.asTeacher
 
@@ -35,7 +34,7 @@ class RoleChooserFragment : Fragment(), View.OnClickListener {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        context
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

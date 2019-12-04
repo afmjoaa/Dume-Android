@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/student_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -25,6 +26,7 @@
                 android:visibility="visible">
 
                 <com.google.android.material.button.MaterialButton
+                    android:id="@+id/student_search"
                     android:layout_width="match_parent"
                     android:layout_height="44dp"
                     android:layout_marginLeft="20dp"
@@ -48,6 +50,7 @@
                     app:carbon_elevation="1dp">
 
                     <com.google.android.material.button.MaterialButton
+                        android:id="@+id/student_search_filter"
                         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -108,7 +111,7 @@
                     android:paddingEnd="16dp"
                     android:paddingRight="16dp"
                     android:paddingBottom="6dp"
-                    android:text="Recent Search"
+                    android:text="Recent Searches"
                     android:textAllCaps="false"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:textColor="@color/textColorPrimary"

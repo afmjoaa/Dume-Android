@@ -3,11 +3,6 @@ package io.dume.dume.student.homePage.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Rect;
-import androidx.annotation.NonNull;
-import com.google.android.material.textfield.TextInputLayout;
-import androidx.interpolator.view.animation.FastOutLinearInInterpolator;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -25,6 +20,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.transitionseverywhere.Fade;
 import com.transitionseverywhere.Slide;
@@ -34,16 +30,21 @@ import com.transitionseverywhere.TransitionSet;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.dume.dume.util.Google;
+import androidx.annotation.NonNull;
+import androidx.interpolator.view.animation.FastOutLinearInInterpolator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import io.dume.dume.R;
 import io.dume.dume.common.chatActivity.DemoModel;
 import io.dume.dume.student.homePage.HomePageActivity;
+import io.dume.dume.student.homePage.HomePageContract;
 import io.dume.dume.student.homePage.HomePageModel;
 import io.dume.dume.student.homePage.HomePagePresenter;
 import io.dume.dume.student.recordsPage.Record;
 import io.dume.dume.teacher.homepage.TeacherActivtiy;
 import io.dume.dume.teacher.homepage.TeacherContract;
 import io.dume.dume.util.DumeUtils;
+import io.dume.dume.util.Google;
 import me.zhanghai.android.materialratingbar.MaterialRatingBar;
 
 import static io.dume.dume.util.DumeUtils.showKeyboard;
@@ -120,9 +121,9 @@ public class HomePageRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
                         Toast.makeText(context, list, Toast.LENGTH_SHORT).show();
                         removePromo(position);
 
-                        if(Google.getInstance().getAccountMajor().equals(DumeUtils.STUDENT)){
-                            new HomePagePresenter(context,homePageModel).getDataFromDB();
-                        }else if(Google.getInstance().getAccountMajor().equals(DumeUtils.TEACHER)){
+                        if (Google.getInstance().getAccountMajor().equals(DumeUtils.STUDENT)) {
+                            new HomePagePresenter(context, (HomePageContract.View) context, homePageModel).getDataFromDB();
+                        } else if (Google.getInstance().getAccountMajor().equals(DumeUtils.TEACHER)) {
                             TeacherActivtiy teacherActivtiy = (TeacherActivtiy) context;
                             teacherActivtiy.presenter.loadPromo();
                         }
@@ -141,11 +142,11 @@ public class HomePageRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
             headerVH.smallTitle.setVisibility(View.VISIBLE);
             headerVH.dismissBtn.setVisibility(View.GONE);
             headerVH.dismissBtnOne.setVisibility(View.GONE);
-            if(Google.getInstance().getAccountMajor().equals(DumeUtils.STUDENT)){
+            if (Google.getInstance().getAccountMajor().equals(DumeUtils.STUDENT)) {
                 headerVH.feedbackTextView.setVisibility(View.VISIBLE);
                 headerVH.feedbackTextViewLayout.setVisibility(View.VISIBLE);
                 headerVH.ratingPrimaryText.setText(String.format("How was your learning with %s", ratingData.get(position).getName()));
-            }else {
+            } else {
                 headerVH.feedbackTextView.setVisibility(View.GONE);
                 headerVH.feedbackTextViewLayout.setVisibility(View.GONE);
                 headerVH.ratingPrimaryText.setText(String.format("How was your experience with %s", ratingData.get(position).getName()));
@@ -379,12 +380,12 @@ public class HomePageRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
     public void addPromoToList(HomePageRecyclerData promoData) {
         Boolean add = true;
         for (int i = 0; i < data.size(); i++) {
-            if(promoData.getPromo_code().equals(data.get(i).getPromo_code())){
+            if (promoData.getPromo_code().equals(data.get(i).getPromo_code())) {
                 add = false;
                 break;
             }
         }
-        if(add){
+        if (add) {
             data.add(promoData);
             notifyItemInserted(data.size() - 1);
             notifyDataSetChanged();
