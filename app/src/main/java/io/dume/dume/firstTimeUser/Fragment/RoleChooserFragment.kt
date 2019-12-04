@@ -15,7 +15,8 @@ import io.dume.dume.firstTimeUser.ForwardFlowHostActivity
 import io.dume.dume.firstTimeUser.ForwardFlowViewModel
 import io.dume.dume.firstTimeUser.PermissionActivity
 import io.dume.dume.student.DashBoard.StudentDashBoard
-import io.dume.dume.teacher.dashboard.jobboard.JobBoardActivity
+import io.dume.dume.teacher.testing.TeacherDashboard
+
 import kotlinx.android.synthetic.main.activity_role_chooser.view.*
 import kotlinx.android.synthetic.main.fragment_role_chooser.view.asStudent
 import kotlinx.android.synthetic.main.fragment_role_chooser.view.asTeacher
@@ -61,7 +62,7 @@ class RoleChooserFragment : Fragment(), View.OnClickListener {
         } else if (v.id == R.id.asTeacher) {
             startActivity(Intent(activity, PermissionActivity::class.java))
         } else if (v.id == R.id.testEnam) {
-            startActivity(Intent(activity, JobBoardActivity::class.java))
+            startActivity(Intent(activity, TeacherDashboard::class.java))
             return
         } else if (v.id == R.id.testJoaa) {
             startActivity(Intent(activity, ForwardFlowHostActivity::class.java))

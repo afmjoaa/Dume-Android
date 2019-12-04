@@ -1,9 +1,8 @@
-package io.dume.dume.teacher.dashboard.jobboard.repositories
+package io.dume.dume.teacher.testing.fragments.jobboard
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.firestore.FirebaseFirestore
-import io.dume.dume.teacher.dashboard.jobboard.models.JobItem
 
 class JobItemRepository private constructor() {
 
