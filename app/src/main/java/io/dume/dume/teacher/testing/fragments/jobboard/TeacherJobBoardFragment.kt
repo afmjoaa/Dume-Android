@@ -23,4 +23,9 @@ class TeacherJobBoardFragment : Fragment() {
         })
         return root
     }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+    }
+
 }
