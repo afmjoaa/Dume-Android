@@ -11,6 +11,7 @@ import io.dume.dume.student.DashBoard.StudentDashBoard;
 import io.dume.dume.student.pojo.BaseAppCompatActivity;
 import io.dume.dume.teacher.dashboard.jobboard.JobBoardActivity;
 import io.dume.dume.teacher.testing.TeacherDashboard;
+import io.dume.dume.teacher.testing.fragments.jobboard.TeacherJobBoardFragment;
 
 public class RoleChooserActivity extends BaseAppCompatActivity implements View.OnClickListener {
     private DataStore local;
@@ -38,12 +39,12 @@ public class RoleChooserActivity extends BaseAppCompatActivity implements View.O
             local.setAccountManjor(DataStore.TEACHER);
             startActivity(new Intent(this, PermissionActivity.class));
         } else if (v.getId() == R.id.testEnam) {
-            startActivity(new Intent(this, JobBoardActivity.class));
+            startActivity(new Intent(this, TeacherDashboard.class));
             return;
-        }else if (v.getId() == R.id.testJoaa) {
+        } else if (v.getId() == R.id.testJoaa) {
             startActivity(new Intent(this, ForwardFlowHostActivity.class));
             return;
-        }else if (v.getId() == R.id.testSumon) {
+        } else if (v.getId() == R.id.testSumon) {
             startActivity(new Intent(this, StudentDashBoard.class));
             return;
         }

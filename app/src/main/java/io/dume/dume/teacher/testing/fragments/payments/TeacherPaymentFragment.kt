@@ -12,7 +12,7 @@ import io.dume.dume.R
 
 class TeacherPaymentFragment : Fragment() {
 
-    private lateinit var teacherPaymentViewModJObel: TeacherPaymentViewModel
+    private lateinit var teacherPaymentViewModel: TeacherPaymentViewModel
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         teacherPaymentViewModel = ViewModelProviders.of(this).get(TeacherPaymentViewModel::class.java)
@@ -23,4 +23,9 @@ class TeacherPaymentFragment : Fragment() {
         })
         return root
     }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+    }
+
 }
