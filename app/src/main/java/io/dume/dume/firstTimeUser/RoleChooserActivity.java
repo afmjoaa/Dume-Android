@@ -9,7 +9,6 @@ import io.dume.dume.auth.DataStore;
 import io.dume.dume.auth.auth.AuthActivity;
 import io.dume.dume.student.DashBoard.StudentDashBoard;
 import io.dume.dume.student.pojo.BaseAppCompatActivity;
-import io.dume.dume.teacher.dashboard.jobboard.JobBoardActivity;
 import io.dume.dume.teacher.testing.TeacherDashboard;
 import io.dume.dume.teacher.testing.fragments.jobboard.TeacherJobBoardFragment;
 

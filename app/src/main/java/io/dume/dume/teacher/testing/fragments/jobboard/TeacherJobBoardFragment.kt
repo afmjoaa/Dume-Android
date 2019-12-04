@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -13,12 +13,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import carbon.widget.RecyclerView
 import io.dume.dume.R
-import io.dume.dume.teacher.dashboard.adapters.CirclePagerIndicatorDecoration
-import io.dume.dume.teacher.dashboard.adapters.FeatureCardSlider
-import io.dume.dume.teacher.dashboard.adapters.JobItemCardAdapter
-import io.dume.dume.teacher.dashboard.jobboard.models.JobItem
-import io.dume.dume.teacher.dashboard.jobboard.viewmodels.JobBoardActivityViewModel
-import kotlinx.android.synthetic.main.activity_job_board.*
+import io.dume.dume.teacher.testing.adapters.CirclePagerIndicatorDecoration
+import io.dume.dume.teacher.testing.adapters.FeatureCardSlider
+import io.dume.dume.teacher.testing.adapters.JobItemCardAdapter
+
 
 class TeacherJobBoardFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
@@ -32,7 +30,6 @@ class TeacherJobBoardFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener
         val root = inflater.inflate(R.layout.fragment_teacher_job_board, container, false)
 
         return root
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -63,7 +60,6 @@ class TeacherJobBoardFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener
             updateJobRecView(it)
         })
 
-
     }
 
     private fun updateJobRecView(updatedList: List<JobItem>) {
@@ -76,7 +72,6 @@ class TeacherJobBoardFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener
     override fun onRefresh() {
 
     }
-
 
 
 }
