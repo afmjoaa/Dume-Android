@@ -33,7 +33,7 @@ import java.util.concurrent.TimeUnit;
 import javax.annotation.Nullable;
 
 import io.dume.dume.BuildConfig;
-import io.dume.dume.Google;
+import io.dume.dume.util.Google;
 import io.dume.dume.auth.auth.AuthContract;
 import io.dume.dume.auth.code_verification.PhoneVerificationContract;
 import io.dume.dume.splash.SplashActivity;

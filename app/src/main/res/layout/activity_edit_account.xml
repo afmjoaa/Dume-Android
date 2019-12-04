@@ -70,7 +70,7 @@
                     android:background="@drawable/cirecle_background_white"
                     android:padding="5dp"
                     android:layout_marginBottom="5dp"
-                    android:src="@drawable/ic_action_photo_edit"
+                    app:srcCompat="@drawable/add_avatar"
                     app:carbon_elevation="4dp" />
 
             </FrameLayout>

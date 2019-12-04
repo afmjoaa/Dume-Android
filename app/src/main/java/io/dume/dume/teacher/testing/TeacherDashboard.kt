@@ -24,8 +24,8 @@ class TeacherDashboard : BaseAppCompatActivity() {
     val paymentFragment: Fragment = TeacherPaymentFragment()
     val fm: FragmentManager = supportFragmentManager
     var active = jobBoardFragment
-    private lateinit var appBarLayout : AppBarLayout
-    private lateinit var navigationView : NavigationView
+    private lateinit var appBarLayout: AppBarLayout
+    private lateinit var navigationView: NavigationView
     private lateinit var bottomNavigationView: BottomNavigationView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,7 +35,7 @@ class TeacherDashboard : BaseAppCompatActivity() {
     }
 
 
-    private fun init(){
+    private fun init() {
         setActivityContext(this, 1112)
         settingStatusBarTransparent()
         setDarkStatusBarIcon()
@@ -45,18 +45,18 @@ class TeacherDashboard : BaseAppCompatActivity() {
         initLifeCycleComponents()
     }
 
-    private fun initView(){
+    private fun initView() {
         bottomNavigationView = nav_view
         appBarLayout = settingsAppbar
         navigationView = navigation
         navigationView.menu.findItem(R.id.payment).setVisible(false)
     }
 
-    private fun initListener(){
+    private fun initListener() {
         bottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
     }
 
-    private fun initLifeCycleComponents(){
+    private fun initLifeCycleComponents() {
         fm.beginTransaction().add(R.id.main_container, paymentFragment, "4").hide(paymentFragment).commit()
         fm.beginTransaction().add(R.id.main_container, skillFragment, "3").hide(skillFragment).commit()
         fm.beginTransaction().add(R.id.main_container, tuitionFragment, "2").hide(tuitionFragment).commit()
@@ -68,39 +68,57 @@ class TeacherDashboard : BaseAppCompatActivity() {
         override fun onNavigationItemSelected(@NonNull item: MenuItem): Boolean {
             when (item.itemId) {
                 R.id.my_job_board -> {
-                    DumeUtils.configAppToolBarTitle(context, "Job Board")
-                    appBarLayout.setExpanded(true, true)
-                    fm.beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
-                            .hide(active).show(jobBoardFragment).commit()
-                    active = jobBoardFragment
-                    return true
+                    if (active != jobBoardFragment) {
+                        DumeUtils.configAppToolBarTitle(context, "Job Board")
+                        appBarLayout.setExpanded(true, true)
+                        fm.beginTransaction().setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right, R.anim.slide_in_right, R.anim.slide_out_left)
+                                .hide(active).show(jobBoardFragment).commit()
+                        active = jobBoardFragment
+                        return true
+                    }
                 }
 
                 R.id.my_tuition -> {
-                    DumeUtils.configAppToolBarTitle(context, "My Tuition")
-                    appBarLayout.setExpanded(true, true)
-                    fm.beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
-                            .hide(active).show(tuitionFragment).commit()
-                    active = tuitionFragment
-                    return true
+                    if (active != tuitionFragment) {
+                        DumeUtils.configAppToolBarTitle(context, "My Tuition")
+                        appBarLayout.setExpanded(true, true)
+                        if (active == jobBoardFragment) {
+                            fm.beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
+                                    .hide(active).show(tuitionFragment).commit()
+                        } else {
+                            fm.beginTransaction().setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right, R.anim.slide_in_right, R.anim.slide_out_left)
+                                    .hide(active).show(tuitionFragment).commit()
+                        }
+                        active = tuitionFragment
+                        return true
+                    }
                 }
 
                 R.id.my_skill -> {
-                    DumeUtils.configAppToolBarTitle(context, "My Skill")
-                    appBarLayout.setExpanded(true, true)
-                    fm.beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
-                            .hide(active).show(skillFragment).commit()
-                    active = skillFragment
-                    return true
+                    if (active != skillFragment) {
+                        DumeUtils.configAppToolBarTitle(context, "My Skill")
+                        appBarLayout.setExpanded(true, true)
+                        if (active != paymentFragment) {
+                            fm.beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
+                                    .hide(active).show(skillFragment).commit()
+                        } else {
+                            fm.beginTransaction().setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right, R.anim.slide_in_right, R.anim.slide_out_left)
+                                    .hide(active).show(skillFragment).commit()
+                        }
+                        active = skillFragment
+                        return true
+                    }
                 }
 
                 R.id.my_payment -> {
-                    DumeUtils.configAppToolBarTitle(context, "Payments")
-                    appBarLayout.setExpanded(true, true)
-                    fm.beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
-                            .hide(active).show(paymentFragment).commit()
-                    active = paymentFragment
-                    return true
+                    if (active != paymentFragment) {
+                        DumeUtils.configAppToolBarTitle(context, "Payments")
+                        appBarLayout.setExpanded(true, true)
+                        fm.beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
+                                .hide(active).show(paymentFragment).commit()
+                        active = paymentFragment
+                        return true
+                    }
                 }
             }
             return false

@@ -174,7 +174,7 @@
 #-dontwarn org.imperiumlabs.**
 #-keep class org.imperiumlabs.**
 #-keep interface org.imperiumlabs.**
-#-keep class io.dume.dume.myGeoFIreStore.GeoFirestore.** { *; }
+#-keep class io.dume.dume.library.myGeoFIreStore.GeoFirestore.** { *; }
 
 #firebase
 # Keep custom model classes

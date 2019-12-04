@@ -12,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import io.dume.dume.auth.AuthModel;
 import io.dume.dume.auth.auth.AuthActivity;
 import io.dume.dume.firstTimeUser.RoleChooserActivity;
-import io.dume.dume.obligation.foreignObli.PayActivity;
+import io.dume.dume.foreignObligation.PayActivity;
 import io.dume.dume.teacher.homepage.TeacherContract;
 import io.dume.dume.util.DumeUtils;
 

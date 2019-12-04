@@ -90,7 +90,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import fr.castorflex.android.verticalviewpager.VerticalViewPager;
 import info.hoang8f.android.segmented.SegmentedGroup;
-import io.dume.dume.Google;
+import io.dume.dume.util.Google;
 import io.dume.dume.R;
 import io.dume.dume.common.aboutUs.AboutUsActivity;
 import io.dume.dume.common.bkash_transection.BkashTransectionActivity;

@@ -11,10 +11,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
-import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -22,10 +18,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.PhoneAuthCredential;
-import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
@@ -34,16 +27,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 import io.dume.dume.R;
 import io.dume.dume.auth.AuthGlobalContract;
 import io.dume.dume.auth.AuthModel;
 import io.dume.dume.auth.DataStore;
-import io.dume.dume.auth.code_verification.PhoneVerificationActivity;
-import io.dume.dume.common.privacyPolicy.PrivacyPolicyActivity;
 import io.dume.dume.customView.HorizontalLoadView;
-import io.dume.dume.obligation.foreignObli.PayActivity;
+import io.dume.dume.foreignObligation.PayActivity;
 import io.dume.dume.student.homePage.HomePageActivity;
 import io.dume.dume.student.pojo.BaseAppCompatActivity;
 import io.dume.dume.teacher.homepage.TeacherActivtiy;
@@ -51,7 +41,6 @@ import io.dume.dume.util.DumeUtils;
 
 import static io.dume.dume.student.pojo.StuBaseModel.setStuProfile;
 import static io.dume.dume.util.DumeUtils.configureAppbar;
-import static io.dume.dume.util.DumeUtils.hideKeyboard;
 
 public class AuthRegisterActivity extends BaseAppCompatActivity {
     private DataStore dataStore = null;

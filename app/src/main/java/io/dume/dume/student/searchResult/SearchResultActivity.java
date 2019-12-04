@@ -19,25 +19,6 @@ import android.graphics.drawable.LayerDrawable;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import com.google.android.material.appbar.AppBarLayout;
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.android.material.appbar.CollapsingToolbarLayout;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import androidx.core.app.ActivityCompat;
-import androidx.core.app.TaskStackBuilder;
-import androidx.core.content.ContextCompat;
-import androidx.core.view.ViewCompat;
-import androidx.interpolator.view.animation.FastOutLinearInInterpolator;
-import androidx.interpolator.view.animation.LinearOutSlowInInterpolator;
-import androidx.core.widget.NestedScrollView;
-import androidx.appcompat.app.ActionBar;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.appcompat.widget.Toolbar;
 import android.text.Editable;
 import android.text.SpannableString;
 import android.text.TextWatcher;
@@ -72,6 +53,11 @@ import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
@@ -99,8 +85,22 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.TaskStackBuilder;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.ViewCompat;
+import androidx.core.widget.NestedScrollView;
+import androidx.interpolator.view.animation.FastOutLinearInInterpolator;
+import androidx.interpolator.view.animation.LinearOutSlowInInterpolator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import carbon.widget.ImageView;
-import io.dume.dume.Google;
+import io.dume.dume.util.Google;
 import io.dume.dume.R;
 import io.dume.dume.customView.HorizontalLoadViewTwo;
 import io.dume.dume.library.RouteOverlayView;
@@ -126,7 +126,6 @@ import io.dume.dume.student.searchResultTabview.SearchResultTabviewActivity;
 import io.dume.dume.teacher.homepage.TeacherContract;
 import io.dume.dume.teacher.pojo.Academic;
 import io.dume.dume.util.DumeUtils;
-import io.dume.dume.util.OnSwipeTouchListener;
 import io.dume.dume.util.VisibleToggleClickListener;
 
 import static io.dume.dume.util.DumeUtils.showKeyboard;
@@ -182,7 +181,6 @@ public class SearchResultActivity extends BaseMapActivity implements OnMapReadyC
     private LinearLayout basicInfo;
     private LinearLayout basicInfoInsider;
     private LinearLayout.LayoutParams basicInfoInsiderLayoutParams;
-    private OnSwipeTouchListener onSwipeTouchListener;
     private View mCustomMarkerView;
     private ImageView mMarkerImageView;
     private LatLng mDummyLatLng;
@@ -2336,7 +2334,6 @@ public class SearchResultActivity extends BaseMapActivity implements OnMapReadyC
 
         Integer ageInt = age;
         String ageS = ageInt.toString();
-
         return ageS;
     }
 
@@ -2347,145 +2344,4 @@ public class SearchResultActivity extends BaseMapActivity implements OnMapReadyC
     public void setConfirmedOrCanceled(boolean confirmedOrCanceled) {
         isConfirmedOrCanceled = confirmedOrCanceled;
     }
-
-   /* private void getRouteBetweenMarker(LatLng One, LatLng Two) {
-        Routing routing = new Routing.Builder()
-                .travelMode(AbstractRouting.TravelMode.DRIVING)
-                .withListener(this)
-                .alternativeRoutes(false)
-                .waypoints(One, Two)
-                .key(getResources().getString(R.string.google_direction_key))
-                .build();
-        routing.execute();
-    }
-
-    private void erasePolylines() {
-        for (Polyline line : polylines) {
-            line.remove();
-        }
-        polylines.clear();
-    }
-
-    @Override
-    public void onRoutingFailure(RouteException e) {
-        if (e != null) {
-            Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
-            Log.e("fuck", "onRoutingFailure: " + e.getMessage());
-        } else {
-            Toast.makeText(this, "Something went wrong, Try again", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    @Override
-    public void onRoutingStart() {
-
-    }
-
-    @Override
-    public void onRoutingSuccess(ArrayList<Route> route, int shortestRouteIndex) {
-        if (polylines.size() > 0) {
-            for (Polyline poly : polylines) {
-                poly.remove();
-            }
-        }
-
-        polylines = new ArrayList<>();
-        //add route(s) to the map.
-        for (int i = 0; i < route.size(); i++) {
-
-            //In case of more than 5 alternative routes
-            int colorIndex = i % COLORS.length;
-            PolylineOptions polyOptions = new PolylineOptions();
-            polyOptions.color(getResources().getColor(COLORS[colorIndex]));
-            polyOptions.width(7 + i * 3);
-            polyOptions.addAll(route.get(i).getPoints());
-            Polyline polyline = mMap.addPolyline(polyOptions);
-            polylines.add(polyline);
-            Toast.makeText(getApplicationContext(), "Route " + (i + 1) + ": distance - " + route.get(i).getDistanceValue() + ": duration - " + route.get(i).getDurationValue(), Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    @Override
-    public void onRoutingCancelled() {
-
-    }*/
 }
-
-//testing the swipe here
-/* onSwipeTouchListener = new OnSwipeTouchListener(this) {
-    @Override
-    protected void onSwipeRight() {
-        Toast.makeText(SearchResultActivity.this, "Right Swipe", Toast.LENGTH_SHORT).show();
-    }
-    @Override
-    protected void onSwipeLeft() {
-        Toast.makeText(SearchResultActivity.this, "Left Swipe", Toast.LENGTH_SHORT).show();
-    }
-    @Override
-    protected void onSwipeTop() {
-    }
-    @Override
-    protected void onSwipeBottom() {
-    }
-};
-basicInfo.setOnTouchListener(onSwipeTouchListener);
-@Override
-public boolean dispatchTouchEvent(MotionEvent ev) {
-    onSwipeTouchListener.getGestureDetector().onTouchEvent(ev);
-    return super.dispatchTouchEvent(ev);
-}
-reviewRecyView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-            }
-
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                if (!recyclerView.canScrollVertically(1) && scrollFirstTime) {
-                    Toast.makeText(SearchResultActivity.this, "Last", Toast.LENGTH_SHORT).show();
-                    scrollFirstTime = false;
-                }
-            }
-        });
-
-  /* PolylineOptions line =
-        new PolylineOptions().add(mDummyLatLng, mDummyLatLngOne)
-                .width(5).color(Color.RED);
-Polyline polyline = mMap.addPolyline(line);
-polyline.remove();*/
-
-
-/*PolygonOptions area=
-        new PolygonOptions().add(mDummyLatLng, mDummyLatLngOne,
-                new LatLng(40.765136435316755, -73.97989511489868))
-                .strokeColor(Color.BLUE);
-mMap.addPolygon(area);*/
-//getRouteBetweenMarker(mDummyLatLng, mDummyLatLngOne);
-/* Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                activity.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-
-                    }
-                });
-            }
-        }, 1000);*/
-/*<fragment xmlns:android="http://schemas.android.com/apk/res/android"
-                            xmlns:map="http://schemas.android.com/apk/res-auto"
-                            android:id="@+id/mapOne"
-                            android:name="com.google.android.gms.maps.MapFragment"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            map:cameraZoom="15"
-                            map:liteMode="true"
-                            map:mapType="normal" />*/
-
- /*private void showDistance(LatLng anchor, LatLng skillAnchor) {
-       double distance = SphericalUtil.computeDistanceBetween(mMarkerA.getPosition(), mMarkerB.getPosition());
-      mTextView.setText("The markers are " + formatNumber(distance) + " apart.");
-    }*/

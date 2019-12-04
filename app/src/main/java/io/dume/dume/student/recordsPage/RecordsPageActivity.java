@@ -35,7 +35,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import io.dume.dume.Google;
+import io.dume.dume.util.Google;
 import io.dume.dume.R;
 import io.dume.dume.student.pojo.BaseAppCompatActivity;
 import io.dume.dume.student.pojo.SearchDataStore;

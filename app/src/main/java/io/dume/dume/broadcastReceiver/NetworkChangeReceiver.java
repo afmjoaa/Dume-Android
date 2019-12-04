@@ -18,7 +18,6 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
 
     private static final String TAG = "NetworkChangeReceiver";
     MyConnectivityHandler myConnectivityHandler;
-//    MyGpsHandlerOne myGpsHandlerOne;
 
     public void setNetworkListener(MyConnectivityHandler myConnectivityHandler) {
         this.myConnectivityHandler = myConnectivityHandler;

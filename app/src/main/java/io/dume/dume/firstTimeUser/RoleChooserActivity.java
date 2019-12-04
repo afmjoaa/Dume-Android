@@ -41,7 +41,7 @@ public class RoleChooserActivity extends BaseAppCompatActivity implements View.O
             startActivity(new Intent(this, JobBoardActivity.class));
             return;
         }else if (v.getId() == R.id.testJoaa) {
-            startActivity(new Intent(this, TeacherDashboard.class));
+            startActivity(new Intent(this, ForwardFlowHostActivity.class));
             return;
         }else if (v.getId() == R.id.testSumon) {
             startActivity(new Intent(this, StudentDashBoard.class));

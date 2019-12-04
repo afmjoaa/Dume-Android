@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp"
+    android:layout_marginBottom="16dp"
+    android:layout_marginTop="100dp"
+    tools:context=".firstTimeUser.Fragment.PaymentFragment">
+
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Entry Fee 50TK"
+        android:textAlignment="center"
+        android:layout_gravity="center_horizontal"
+        android:textAllCaps="false"
+        android:textColor="@color/textColorPrimary"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        app:fontFamily="@font/cairo_regular" />
+
+    <TextView
+        android:id="@+id/tvDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="10dp"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/entry_fee_reason"
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:textColor="@color/textColorPrimary"
+        android:textSize="18sp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        app:fontFamily="@font/cairo_light" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/asStudent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Pay Now"
+        android:layout_marginTop="40dp"
+        android:textAllCaps="false" />
+
+    <Button
+        android:id="@+id/testEnam"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:text="Pay Later"
+        android:textAllCaps="false" />
+
+</LinearLayout>

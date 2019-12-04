@@ -1,8 +1,6 @@
 package io.dume.dume.student.grabingInfo;
 
-import android.app.Activity;
 import android.content.Context;
-import android.net.Uri;
 
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.FirebaseStorage;
@@ -10,10 +8,9 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.InputStream;
-import java.util.HashMap;
 import java.util.Objects;
 
-import io.dume.dume.inter_face.usefulListeners;
+import io.dume.dume.interFace.usefulListeners;
 import io.dume.dume.student.pojo.StuBaseModel;
 
 public class GrabingInfoModel extends StuBaseModel implements GrabingInfoContract.Model {

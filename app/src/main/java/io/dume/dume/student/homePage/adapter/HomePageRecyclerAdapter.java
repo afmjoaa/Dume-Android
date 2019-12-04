@@ -34,7 +34,7 @@ import com.transitionseverywhere.TransitionSet;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.dume.dume.Google;
+import io.dume.dume.util.Google;
 import io.dume.dume.R;
 import io.dume.dume.common.chatActivity.DemoModel;
 import io.dume.dume.student.homePage.HomePageActivity;

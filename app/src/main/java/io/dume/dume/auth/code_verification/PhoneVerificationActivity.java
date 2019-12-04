@@ -25,7 +25,7 @@ import io.dume.dume.auth.DataStore;
 import io.dume.dume.auth.auth.AuthActivity;
 import io.dume.dume.auth.auth_final.AuthRegisterActivity;
 import io.dume.dume.customView.HorizontalLoadView;
-import io.dume.dume.obligation.foreignObli.PayActivity;
+import io.dume.dume.foreignObligation.PayActivity;
 import io.dume.dume.student.homePage.HomePageActivity;
 import io.dume.dume.student.pojo.BaseAppCompatActivity;
 import io.dume.dume.teacher.homepage.TeacherActivtiy;

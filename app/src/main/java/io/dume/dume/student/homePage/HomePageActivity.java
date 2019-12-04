@@ -87,7 +87,7 @@ import androidx.interpolator.view.animation.FastOutLinearInInterpolator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import info.hoang8f.android.segmented.SegmentedGroup;
-import io.dume.dume.Google;
+import io.dume.dume.util.Google;
 import io.dume.dume.R;
 import io.dume.dume.common.aboutUs.AboutUsActivity;
 import io.dume.dume.common.chatActivity.DemoModel;
@@ -96,7 +96,7 @@ import io.dume.dume.common.privacyPolicy.PrivacyPolicyActivity;
 import io.dume.dume.customView.HorizontalLoadView;
 import io.dume.dume.customView.HorizontalLoadViewTwo;
 import io.dume.dume.model.DumeModel;
-import io.dume.dume.obligation.foreignObli.PayActivity;
+import io.dume.dume.foreignObligation.PayActivity;
 import io.dume.dume.service.LocationServiceHandler;
 import io.dume.dume.service.MyLocationService;
 import io.dume.dume.student.grabingInfo.GrabingInfoActivity;
@@ -1625,11 +1625,6 @@ public class HomePageActivity extends BaseMapActivity implements HomePageContrac
             mySnackbar.show();
         }
     }
-
-    /*for animation of the rating bar
-     * mDecimalRatingBars.startAnimation(new RatingAnimation(mDecimalRatingBars));
-     * */
-
 
     @Override
     public void switchProfileDialog(String identify) {

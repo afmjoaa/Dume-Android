@@ -26,7 +26,7 @@ class StudentDashBoard : BaseAppCompatActivity() {
     val tuitionFragment: Fragment = StudentTuitionFragment()
     val fm: FragmentManager = supportFragmentManager
     var active = searchMentorFragment
-    private lateinit var appBarLayout : AppBarLayout
+    private lateinit var appBarLayout: AppBarLayout
     private lateinit var bottomNavigationView: BottomNavigationView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,7 +35,7 @@ class StudentDashBoard : BaseAppCompatActivity() {
         init()
     }
 
-    private fun init(){
+    private fun init() {
         setActivityContext(this, 1112)
         settingStatusBarTransparent()
         setDarkStatusBarIcon()
@@ -45,16 +45,16 @@ class StudentDashBoard : BaseAppCompatActivity() {
         initLifeCycleComponents()
     }
 
-    private fun initView(){
+    private fun initView() {
         bottomNavigationView = nav_view
         appBarLayout = settingsAppbar
     }
 
-    private fun initListener(){
+    private fun initListener() {
         bottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
     }
 
-    private fun initLifeCycleComponents(){
+    private fun initLifeCycleComponents() {
         fm.beginTransaction().add(R.id.main_container, tuitionFragment, "3").hide(tuitionFragment).commit()
         fm.beginTransaction().add(R.id.main_container, jobBoardFragment, "2").hide(jobBoardFragment).commit()
         fm.beginTransaction().add(R.id.main_container, searchMentorFragment, "1").commit()
@@ -65,30 +65,41 @@ class StudentDashBoard : BaseAppCompatActivity() {
         override fun onNavigationItemSelected(@NonNull item: MenuItem): Boolean {
             when (item.itemId) {
                 R.id.search_mentor -> {
-                    configAppToolBarTitle(context, "Search Mentor")
-                    appBarLayout.setExpanded(true, true)
-                    fm.beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
-                            .hide(active).show(searchMentorFragment).commit()
-                    active = searchMentorFragment
-                    return true
+                    if (active != searchMentorFragment) {
+                        configAppToolBarTitle(context, "Search Mentor")
+                        appBarLayout.setExpanded(true, true)
+                        fm.beginTransaction().setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right, R.anim.slide_in_right, R.anim.slide_out_left)
+                                .hide(active).show(searchMentorFragment).commit()
+                        active = searchMentorFragment
+                        return true
+                    }
                 }
 
                 R.id.job_board -> {
-                    configAppToolBarTitle(context, "Job Board")
-                    appBarLayout.setExpanded(true, true)
-                    fm.beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
-                            .hide(active).show(jobBoardFragment).commit()
-                    active = jobBoardFragment
-                    return true
+                    if (active != jobBoardFragment) {
+                        configAppToolBarTitle(context, "Job Board")
+                        appBarLayout.setExpanded(true, true)
+                        if (active == searchMentorFragment) {
+                            fm.beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
+                                    .hide(active).show(jobBoardFragment).commit()
+                        } else {
+                            fm.beginTransaction().setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right, R.anim.slide_in_right, R.anim.slide_out_left)
+                                    .hide(active).show(jobBoardFragment).commit()
+                        }
+                        active = jobBoardFragment
+                        return true
+                    }
                 }
 
                 R.id.my_tuition -> {
-                    configAppToolBarTitle(context, "My Tuition")
-                    appBarLayout.setExpanded(true, true)
-                    fm.beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
-                            .hide(active).show(tuitionFragment).commit()
-                    active = tuitionFragment
-                    return true
+                    if (active != tuitionFragment) {
+                        configAppToolBarTitle(context, "My Tuition")
+                        appBarLayout.setExpanded(true, true)
+                        fm.beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
+                                .hide(active).show(tuitionFragment).commit()
+                        active = tuitionFragment
+                        return true
+                    }
                 }
             }
             return false

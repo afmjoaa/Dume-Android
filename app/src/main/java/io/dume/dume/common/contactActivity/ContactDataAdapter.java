@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 import carbon.widget.ImageView;
-import io.dume.dume.Google;
+import io.dume.dume.util.Google;
 import io.dume.dume.R;
 import io.dume.dume.common.chatActivity.ChatActivity;
 import io.dume.dume.common.chatActivity.DemoModel;

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     package="io.dume.dume">
     <!-- when a object needs internet to execute a job -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
@@ -27,10 +26,12 @@
         android:roundIcon="@mipmap/icon_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/DefaultTheme.NoActionBar">
+        <activity android:name=".firstTimeUser.ForwardFlowHostActivity"
+            android:theme="@style/DefaultTheme.NoActionBar" />
         <activity
             android:name=".teacher.testing.TeacherDashboard"
-            android:launchMode="singleTop"
             android:label="@string/title_activity_teacher_dashboard"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/DefaultTheme.NoActionBar" />
         <activity android:name=".teacher.dashboard.activities.JobItemDetails" />
@@ -61,6 +62,10 @@
             android:name=".teacher.dashboard.jobboard.JobBoardActivity"
             android:launchMode="singleInstance"
             android:theme="@style/DefaultTheme.NoActionBar.NoAnimation" />
+
+        <activity
+            android:name=".teacher.skill.SkillActivity"
+            android:theme="@style/DefaultTheme.NoActionBar" />
 
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
@@ -210,9 +215,6 @@
             android:label="@string/title_activity_records_accepted"
             android:theme="@style/AppTheme.NoActionBar.transparent.accepted" />
         <activity
-            android:name=".teacher.skill.SkillActivity"
-            android:theme="@style/MyStyle" />
-        <activity
             android:name=".teacher.crudskill.CrudSkillActivity"
             android:label="Select category"
             android:theme="@style/AppTheme.NoActionBar.transparent" />
@@ -238,10 +240,9 @@
         <activity
             android:name=".common.appInfoActivity.AppInfoActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".teacher.addskill.AddSkillActivity" />
         <activity android:name=".teacher.homepage.TeacherActivityMock" />
         <activity
-            android:name=".obligation.foreignObli.PayActivity"
+            android:name=".foreignObligation.PayActivity"
             android:theme="@style/AppTheme.NoActionBar.transparent.black" /> <!-- service and broadCasts -->
         <receiver
             android:name=".broadcastReceiver.MyAlarmBroadCast"
