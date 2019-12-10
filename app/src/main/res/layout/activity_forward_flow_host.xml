@@ -9,9 +9,9 @@
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/settingsAppbar"
         android:layout_width="match_parent"
-        android:stateListAnimator="@animator/appbar_always_elevated"
         android:layout_height="@dimen/appbarLayoutHeightLow"
         android:background="@drawable/bg_black_bottom_round"
+        android:stateListAnimator="@animator/appbar_always_elevated"
         android:theme="@style/AppTheme.AppBarOverlay"
         tools:targetApi="lollipop">
 
@@ -60,20 +60,27 @@
         app:layout_anchor="@id/settingsAppbar"
         app:layout_anchorGravity="bottom" />
 
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/test"
+    <fragment
+        android:id="@+id/nav_host_fragment"
+        android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        app:defaultNavHost="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:navGraph="@navigation/nav_graph" />
 
-        <fragment
-            android:id="@+id/nav_host_fragment"
-            android:name="androidx.navigation.fragment.NavHostFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:defaultNavHost="true"
-            app:navGraph="@navigation/nav_graph" />
-
-    </androidx.core.widget.NestedScrollView>
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/registerBtn"
+        style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton.Icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:visibility="gone"
+        android:contentDescription="@string/accept_amp_continue"
+        android:text="Register"
+        app:icon="@drawable/ic_sign_in_icon"
+        app:layout_anchor="@id/nav_host_fragment"
+        app:layout_anchorGravity="bottom|end"
+        app:iconPadding="12dp"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

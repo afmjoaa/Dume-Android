@@ -15,7 +15,7 @@
         android:layout_marginEnd="4dp"
         android:layout_marginRight="4dp"
         android:layout_marginBottom="10dp"
-        android:text="For any query or help, please reach out to us..."
+        android:text="For any query, please reach out to us..."
         android:textAllCaps="false"
         android:textSize="16sp" />
 

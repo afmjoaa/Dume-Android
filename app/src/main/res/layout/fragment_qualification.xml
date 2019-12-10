@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:fab="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/parent_coor_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/recordsBgColor"
     tools:context=".teacher.skill.SkillActivity">
 
     <androidx.core.widget.NestedScrollView
@@ -19,7 +17,6 @@
             android:id="@+id/nested_host_linearlayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/recordsBgColor"
             android:orientation="vertical">
 
             <androidx.recyclerview.widget.RecyclerView
@@ -91,82 +88,26 @@
             app:icon="@drawable/ic_plus_icon_white"
             app:iconPadding="10dp" />
 
-        <com.getbase.floatingactionbutton.FloatingActionsMenu
-            android:id="@+id/multiple_actions"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginEnd="6dp"
-            android:layout_marginRight="6dp"
-            android:onClick="onClick"
-            app:elevation="0dp"
-            fab:fab_addButtonColorNormal="@color/mColorPrimary"
-            fab:fab_addButtonColorPressed="@color/colorDarkAzure"
-            fab:fab_addButtonPlusIconColor="@color/white"
-            fab:fab_labelStyle="@style/menu_labels_style">
-
-            <com.getbase.floatingactionbutton.FloatingActionButton
-                android:id="@+id/fab_instant"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onClick"
-                android:scaleType="fitCenter"
-                android:src="@drawable/dume_instant_grayscale_image"
-                app:fab_colorDisabled="@color/recordsBgColor"
-                app:fab_size="mini"
-                fab:fab_colorNormal="@color/colorBlack"
-                fab:fab_colorPressed="@color/colorWhite"
-                fab:fab_title="Weekly Tuition" />
-
-            <com.getbase.floatingactionbutton.FloatingActionButton
-                android:id="@+id/fab_gang"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onClick"
-                android:scaleType="fitCenter"
-                android:src="@drawable/dume_gang_image"
-                app:fab_colorDisabled="@color/recordsBgColor"
-                app:fab_size="mini"
-                fab:fab_colorNormal="@color/colorBlack"
-                fab:fab_colorPressed="@color/colorWhite"
-                fab:fab_title="Couching Service" />
-
-            <com.getbase.floatingactionbutton.FloatingActionButton
-                android:id="@+id/fab_regular"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onClick"
-                android:scaleType="fitCenter"
-                android:src="@drawable/dume_regular_image"
-                app:fab_colorDisabled="@color/recordsBgColor"
-                app:fab_size="mini"
-                fab:fab_colorNormal="@color/colorBlack"
-                fab:fab_colorPressed="@color/colorWhite"
-                fab:fab_title="Monthly Tuition" />
-
-        </com.getbase.floatingactionbutton.FloatingActionsMenu>
-
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/skipBtn"
             style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton.Icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/multiple_actions"
+            android:layout_below="@+id/registerBtn"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_marginLeft="16dp"
             android:layout_marginTop="4dp"
             android:layout_marginRight="16dp"
             android:layout_marginBottom="16dp"
-            android:paddingLeft="50dp"
-            android:paddingRight="50dp"
-            android:paddingStart="50dp"
-            android:paddingEnd="50dp"
+            android:paddingLeft="40dp"
+            android:paddingRight="40dp"
+            android:paddingStart="40dp"
+            android:paddingEnd="40dp"
             android:contentDescription="@string/skip_this_step"
-            android:text="Skip Now"
+            android:text="Skip For Now"
             android:textColor="@color/mColorPrimary"
-            app:backgroundTint="@color/transparent"
+            app:backgroundTint="@color/mColorSurface"
             app:icon="@drawable/ic_cancel_icon"
             app:iconPadding="10dp"
             app:iconTint="@color/mColorPrimary"

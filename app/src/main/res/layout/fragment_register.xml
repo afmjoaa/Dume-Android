@@ -1,25 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/parent_coor_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
     tools:context=".auth.auth_final.AuthRegisterActivity">
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/test"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
-            android:layout_marginBottom="40dp"
+            android:layout_marginBottom="50dp"
             android:orientation="vertical">
 
             <FrameLayout
@@ -43,7 +41,6 @@
                     android:layout_gravity="bottom|center_horizontal"
                     android:layout_marginBottom="13dp"
                     android:background="@drawable/cirecle_background_white"
-
                     android:padding="6dp"
                     android:translationX="32dp"
                     app:carbon_elevation="4dp"
@@ -55,7 +52,7 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="6dp"
+                android:layout_marginBottom="2dp"
                 android:hint="Name"
                 app:errorEnabled="true"
                 app:errorIconDrawable="@drawable/error_icon"
@@ -73,7 +70,7 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="6dp"
+                android:layout_marginBottom="2dp"
                 android:hint="Email"
                 app:errorEnabled="true"
                 app:errorIconDrawable="@drawable/error_icon"
@@ -91,7 +88,7 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="6dp"
+                android:layout_marginBottom="2dp"
                 android:hint="Birth Date"
                 app:errorEnabled="true"
                 app:errorIconDrawable="@drawable/error_icon"
@@ -109,7 +106,7 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="6dp"
+                android:layout_marginBottom="2dp"
                 android:hint="NID No"
                 app:errorEnabled="true"
                 app:errorIconDrawable="@drawable/error_icon"
@@ -127,7 +124,7 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="6dp"
+                android:layout_marginBottom="2dp"
                 android:hint="Current Status"
                 app:errorEnabled="true"
                 app:errorIconDrawable="@drawable/error_icon"
@@ -145,7 +142,7 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="6dp"
+                android:layout_marginBottom="2dp"
                 android:hint="Present Address"
                 app:errorEnabled="true"
                 app:errorIconDrawable="@drawable/error_icon"
@@ -159,23 +156,8 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
-
-    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:id="@+id/registerBtn"
-        style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton.Icon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:contentDescription="@string/accept_amp_continue"
-        android:onClick="registerBtnClicked"
-        android:text="Register"
-        app:icon="@drawable/ic_sign_in_icon"
-        app:iconPadding="12dp"
-        app:layout_anchor="@id/test"
-        app:layout_anchorGravity="bottom|right" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

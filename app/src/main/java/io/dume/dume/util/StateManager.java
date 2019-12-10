@@ -39,18 +39,28 @@ public class StateManager {
     }
 
     //get replacement
-    public SharedPreferences keyValue() {
+    public SharedPreferences getLocal() {
         return local;
     }
 
-    //just a temporary function
-    public String getStringValue(String key) {
-        return local.getString(key, "N/A");
+    //current state in the forward flow
+    public void setTeacherCurrentState(String state) {
+        edit.putString("teacherCurrentState", state);
+        edit.apply();
     }
 
-    //current state in the forward flow
-    public void setState(String state) {
-        edit.putString("state", state);
+    public void setStudentCurrentState(String state) {
+        edit.putString("teacherCurrentState", state);
+        edit.apply();
+    }
+
+    public void setRole(String role) {
+        edit.putString("role", role);
+        edit.apply();
+    }
+
+    public void setFirstTimeUser(Boolean state) {
+        edit.putBoolean("firstTimeUser", state);
         edit.apply();
     }
 }

@@ -31,7 +31,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:id="@+id/verify_phone"
+        android:id="@+id/sendCodeBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
@@ -44,7 +44,6 @@
         android:contentDescription="@string/send_code"
         android:text="@string/send_code"
         app:iconPadding="12dp"
-
         app:icon="@drawable/send_icon"/>
 
 </LinearLayout>

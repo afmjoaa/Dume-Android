@@ -5,8 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:layout_marginLeft="16dp"
-    android:layout_marginRight="16dp"
+    android:layout_marginLeft="26dp"
+    android:layout_marginRight="26dp"
     android:layout_marginBottom="16dp"
     android:layout_marginTop="100dp"
     tools:context=".firstTimeUser.Fragment.PaymentFragment">
@@ -36,8 +36,6 @@
         android:textAllCaps="false"
         android:textColor="@color/textColorPrimary"
         android:textSize="18sp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
         app:fontFamily="@font/cairo_light" />
 
     <com.google.android.material.button.MaterialButton

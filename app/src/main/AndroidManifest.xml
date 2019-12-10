@@ -27,7 +27,8 @@
         android:supportsRtl="true"
         android:theme="@style/DefaultTheme.NoActionBar">
         <activity android:name=".firstTimeUser.ForwardFlowHostActivity"
-            android:theme="@style/DefaultTheme.NoActionBar" />
+            android:theme="@style/DefaultTheme.NoActionBar"
+            android:windowSoftInputMode="adjustResize"/>
         <activity
             android:name=".teacher.testing.TeacherDashboard"
             android:label="@string/title_activity_teacher_dashboard"

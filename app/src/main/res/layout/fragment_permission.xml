@@ -5,7 +5,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_marginTop="60dp">
 
-
     <carbon.widget.ImageView
         android:id="@+id/locationPermissionImage"
         app:srcCompat="@drawable/permission_location"
@@ -44,11 +43,11 @@
         android:layout_below="@+id/tvTitle"
         android:layout_centerHorizontal="true"
         android:layout_gravity="center"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
+        android:layout_marginStart="26dp"
+        android:layout_marginLeft="26dp"
         android:layout_marginTop="4dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
+        android:layout_marginEnd="26dp"
+        android:layout_marginRight="26dp"
         android:layout_marginBottom="10dp"
         android:text="Location permission is needed as we use Google map to build the UI and search mentor/student."
         android:textAlignment="center"
@@ -63,11 +62,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvDescription"
-        android:layout_marginLeft="20dp"
+        android:layout_marginLeft="26dp"
         android:layout_marginTop="16dp"
-        android:layout_marginRight="20dp"
+        android:layout_marginRight="26dp"
         android:background="@drawable/round_button_before_pressed"
-        android:onClick="onClick"
         android:text="Accept &amp; Continue"
         android:textAllCaps="false"
         android:textColor="@color/white" />

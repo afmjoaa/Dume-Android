@@ -3,10 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:fab="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/parent_coor_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/recordsBgColor"
     tools:context=".teacher.skill.SkillActivity">
 
     <androidx.core.widget.NestedScrollView
@@ -19,7 +17,6 @@
             android:id="@+id/nested_host_linearlayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/recordsBgColor"
             android:orientation="vertical">
 
             <androidx.recyclerview.widget.RecyclerView
@@ -99,7 +96,7 @@
             android:layout_alignParentRight="true"
             android:layout_marginEnd="6dp"
             android:layout_marginRight="6dp"
-            android:onClick="onClick"
+            android:visibility="invisible"
             app:elevation="0dp"
             fab:fab_addButtonColorNormal="@color/mColorPrimary"
             fab:fab_addButtonColorPressed="@color/colorDarkAzure"
@@ -162,7 +159,7 @@
             android:contentDescription="@string/skip_this_step"
             android:text="Skip Now"
             android:textColor="@color/mColorPrimary"
-            app:backgroundTint="@color/transparent"
+            app:backgroundTint="@color/mColorSurface"
             app:icon="@drawable/ic_cancel_icon"
             app:iconPadding="10dp"
             app:iconTint="@color/mColorPrimary"

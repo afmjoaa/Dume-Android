@@ -1,14 +1,19 @@
 package io.dume.dume.firstTimeUser
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 class ForwardFlowViewModel : ViewModel() {
-    private val _title = MutableLiveData<String>()
+    val role = MutableLiveData<Role>()
+    val firstTimeUser = MutableLiveData<Boolean>()
+    val studentCurrentPosition = MutableLiveData<ForwardFlowStatStudent>()
+    val teacherCurrentPosition = MutableLiveData<ForwardFlowStatTeacher>()
 
-    val title: LiveData<String>
-        get() = _title
+    fun updateRole(roleOne: Role) = role.postValue(roleOne)
+    fun updateFirstTimeUser(status: Boolean) = firstTimeUser.postValue(status)
+    fun updateStudentCurrentPosition(forwardFlowStatStudent: ForwardFlowStatStudent) =
+            studentCurrentPosition.postValue(forwardFlowStatStudent)
 
-    fun updateActionBarTitle(title: String) = _title.postValue(title)
+    fun updateTeacherCurrentPosition(forwardFlowStatTeacher: ForwardFlowStatTeacher) =
+            teacherCurrentPosition.postValue(forwardFlowStatTeacher)
 }
