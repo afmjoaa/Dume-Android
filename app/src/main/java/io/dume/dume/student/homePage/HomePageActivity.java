@@ -309,7 +309,6 @@ public class HomePageActivity extends BaseMapActivity implements HomePageContrac
             mPresenter.getDataFromDB();
             searchDataStore.setProfileChanged(false);
         }
-
         sharedPreferences = context.getSharedPreferences(UNREAD_MESSAGE, MODE_PRIVATE);
         updateChatBadge(sharedPreferences.getInt("unread", 0));
     }
@@ -332,7 +331,7 @@ public class HomePageActivity extends BaseMapActivity implements HomePageContrac
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         getLocationPermission(mapFragment);
         mModel = new HomePageModel(this, this);
-        mPresenter = new HomePagePresenter(this, mModel);
+        mPresenter = new HomePagePresenter(this,this, mModel);
         mPresenter.homePageEnqueue();
         settingStatusBarTransparent();
         setDarkStatusBarIcon();
@@ -1141,12 +1140,6 @@ public class HomePageActivity extends BaseMapActivity implements HomePageContrac
     @Override
     public void onMapReady(GoogleMap googleMap) {
         Log.d(TAG, "onMapReady: map is ready");
-        /*if (ISNIGHT) {
-            setLightStatusBarIcon();
-            MapStyleOptions style = MapStyleOptions.loadRawResourceStyle(
-                    this, R.raw.map_style_night_no_landmarks);
-            googleMap.setMapStyle(style);
-        } else {}*/
         setDarkStatusBarIcon();
         MapStyleOptions style = MapStyleOptions.loadRawResourceStyle(
                 this, R.raw.map_style_default_no_landmarks);
@@ -1157,12 +1150,7 @@ public class HomePageActivity extends BaseMapActivity implements HomePageContrac
         mMap.setPadding((int) (10 * (getResources().getDisplayMetrics().density)), 0, 0, (int) (72 * (getResources().getDisplayMetrics().density)));
         onMapReadyGeneralConfig();
         getDeviceLocation(mMap);
-       /* mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
-            @Override
-            public void onMapLoaded() {
 
-            }
-        });*/
     }
 
     public void navigationTogglerConfig() {

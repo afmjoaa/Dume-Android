@@ -6,7 +6,6 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import io.dume.dume.student.homePage.adapter.HomePageRatingData;
@@ -15,6 +14,8 @@ import io.dume.dume.student.recordsPage.Record;
 import io.dume.dume.teacher.homepage.TeacherContract;
 
 public interface HomePageContract {
+
+
     interface View {
 
         void onSwitchAccount();

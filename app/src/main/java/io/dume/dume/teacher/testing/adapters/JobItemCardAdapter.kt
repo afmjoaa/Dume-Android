@@ -1,7 +1,6 @@
-package io.dume.dume.teacher.dashboard.adapters
+package io.dume.dume.teacher.testing.adapters
 
 import android.content.Context
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,14 +8,10 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import androidx.annotation.NonNull
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.card.MaterialCardView
 import io.dume.dume.R
-import io.dume.dume.teacher.dashboard.jobboard.models.JobItem
-import java.util.ArrayList
+import io.dume.dume.teacher.testing.fragments.jobboard.JobItem
 
 class JobItemCardAdapter : RecyclerView.Adapter<JobItemCardAdapter.VH>() {
 

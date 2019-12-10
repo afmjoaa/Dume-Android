@@ -1,6 +1,5 @@
 package io.dume.dume.student.homePage;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -8,7 +7,6 @@ import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.provider.Settings;
-import androidx.appcompat.app.AlertDialog;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import androidx.appcompat.app.AlertDialog;
 import io.dume.dume.R;
 import io.dume.dume.student.homePage.adapter.HomePageRatingData;
 import io.dume.dume.student.homePage.adapter.HomePageRecyclerData;
@@ -37,7 +36,6 @@ public class HomePagePresenter implements HomePageContract.Presenter {
     private HomePageContract.View mView;
     private HomePageContract.Model mModel;
     private Context context;
-    private Activity activity;
     private int mNotificationsCount = 0;
     private char mProfileChar = '!';
     private int mChatCount = 0;
@@ -62,10 +60,9 @@ public class HomePagePresenter implements HomePageContract.Presenter {
         }
     }
 
-    public HomePagePresenter(Context context, HomePageContract.Model mModel) {
+    public HomePagePresenter(Context context, HomePageContract.View view, HomePageContract.Model mModel) {
         this.context = context;
-        this.activity = (Activity) context;
-        this.mView = (HomePageContract.View) context;
+        this.mView = view;
         this.mModel = mModel;
     }
 
@@ -110,6 +107,7 @@ public class HomePagePresenter implements HomePageContract.Presenter {
                 break;
             case R.id.search_mentor_btn:
             case R.id.search_mentor_btn_nogps:
+            case R.id.student_search:
                 if (isProfileOK()) {
                     mView.gotoGrabingLocationPage();
                 }
@@ -130,6 +128,7 @@ public class HomePagePresenter implements HomePageContract.Presenter {
 
             case R.id.search_filter_image_view:
             case R.id.nogps_search_filter_image:
+            case R.id.student_search_filter:
                 mView.searchFilterClicked();
                 break;
 

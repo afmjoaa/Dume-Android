@@ -38,6 +38,7 @@ class RoleChooserFragment : Fragment(), View.OnClickListener {
     }
 
     override fun onClick(v: View?) {
+
         when (v!!.id) {
             R.id.asStudent -> {
                 viewModel.updateRole(Role.STUDENT)

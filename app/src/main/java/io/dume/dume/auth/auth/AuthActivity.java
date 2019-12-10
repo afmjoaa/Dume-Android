@@ -43,6 +43,7 @@ public class AuthActivity extends BaseAppCompatActivity implements AuthContract.
         setActivityContext(this, 1605);
         presenter = new AuthPresenter(this, this, new AuthModel(this, this));
         presenter.enqueue();
+        findLoadView();
         dataStore = DataStore.getInstance();
         presenter.setBundle();
 
