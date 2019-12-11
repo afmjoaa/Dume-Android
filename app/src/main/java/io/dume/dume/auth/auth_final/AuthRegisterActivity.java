@@ -389,7 +389,7 @@ public class AuthRegisterActivity extends BaseAppCompatActivity {
             });
         } else {
             toast("Unknown error 101!!");
-            Log.w(TAG, "saveUserToDb: " + "DataStore null or user not logged in");
+            Log.w(TAG, "saveUserToDb: " + "DataStore null or isExiting not logged in");
         }
     }
 
@@ -507,7 +507,7 @@ public class AuthRegisterActivity extends BaseAppCompatActivity {
                                     if (authResultTask.isSuccessful()) {
                                         hideDialog();
 
-                                        new AuthModel(activity, getApplicationContext()).onAccountTypeFound(authResultTask.getResult().getUser(), new AuthGlobalContract.AccountTypeFoundListener() {
+                                        new AuthModel(activity, getApplicationContext()).onAccountTypeFound(authResultTask.getResult().isExiting(), new AuthGlobalContract.AccountTypeFoundListener() {
                                             @Override
                                             public void onStart() {
                                                 showDialog();

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".firstTimeUser.Fragment.VerificationFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/detailsTxt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Enter the 6 digit verification code sent to you at " />
+
+        <!--<carbon.widget.EditText
+            android:id="@+id/pinEditTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="5dp"
+            android:background="@drawable/bg_white_round_corner"
+            android:fontFamily="monospace"
+            android:hint="Pin Code"
+            android:inputType="phone"
+            android:padding="8dp"
+            android:visibility="gone" />-->
+
+        <me.philio.pinentry.PinEntryView
+            android:id="@+id/pinEditTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="12dp"
+            app:accentType="character"
+            app:accentWidth="1dp"
+            app:digitBackground="@drawable/bg_white_round_corner"
+            app:digitElevation="3dp"
+            app:digitHeight="36dp"
+            app:digitSpacing="8dp"
+            app:digitTextColor="@android:color/black"
+            app:digitTextSize="8sp"
+            app:digitWidth="36dp"
+            app:mask=""
+            app:numDigits="6"
+            app:pinAccentColor="@color/colorAccent" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/resendButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@drawable/round_btn_joaa"
+                android:text="Resend Code"
+                android:textAllCaps="false"
+                android:textColor="@color/blue"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/timerTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Resend Code in 12 Second"
+                android:visibility="visible" />
+
+            <Button
+                android:id="@+id/verifyFab"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:layout_margin="10dp"
+                android:background="@drawable/round_button_before_pressed"
+                android:enabled="false"
+                android:text="Verify"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/editPhn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:onClick="onPhoneEdit"
+                android:text="Edit Phone Number"
+                android:textColor="@color/colorAccent" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</FrameLayout>

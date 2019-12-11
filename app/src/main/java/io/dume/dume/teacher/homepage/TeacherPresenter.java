@@ -304,7 +304,7 @@ public class TeacherPresenter implements TeacherContract.Presenter {
                             Log.e(TAG, exception.getLocalizedMessage());
                         }
                     } else {
-                        view.flush("Does not found any user");
+                        view.flush("Does not found any isExiting");
                     }
                 }
 
@@ -340,7 +340,7 @@ public class TeacherPresenter implements TeacherContract.Presenter {
                     });
                 }
             } else {
-                view.flush("Does not found any user");
+                view.flush("Does not found any isExiting");
             }
         }
     }

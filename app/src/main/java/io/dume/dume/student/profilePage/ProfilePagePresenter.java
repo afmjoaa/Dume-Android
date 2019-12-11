@@ -63,7 +63,7 @@ public class ProfilePagePresenter implements ProfilePageContract.Presenter {
                     mView.setAvatar(avatar);
                 }
             } else {
-                mView.flush("Does not found any user");
+                mView.flush("Does not found any isExiting");
                 Log.w(TAG, "onAccountTypeFound: document is not null");
             }
         });

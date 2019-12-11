@@ -43,7 +43,7 @@ public interface AuthContract {
 
     interface Model extends AuthGlobalContract.Model {
 
-        void sendMessage(String phoneNumber, Callback listener);
+        void sendCode(String phoneNumber, Callback listener);
 
         Intent getIntent();
 

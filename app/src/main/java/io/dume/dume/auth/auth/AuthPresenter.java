@@ -81,7 +81,7 @@ public class AuthPresenter implements AuthContract.Presenter {
             public void onUserFound() {
                 Log.w(TAG, "onUserFound: hiding dialog");
                 //view.hideProgress();
-                model.sendMessage("+88" + phoneNumber, new AuthContract.Model.Callback() {
+                model.sendCode("+88" + phoneNumber, new AuthContract.Model.Callback() {
                     @Override
                     public void onStart() {
                         view.showProgress();

@@ -41,7 +41,7 @@ public class PayPresenter implements PayContact.Presenter {
                     mView.noObligationFound();
                 }
             } else {
-                mView.flush("Does not found any user");
+                mView.flush("Does not found any isExiting");
             }
         });
 

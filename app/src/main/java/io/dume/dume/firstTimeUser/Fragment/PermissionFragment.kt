@@ -1,18 +1,20 @@
 package io.dume.dume.firstTimeUser.Fragment
 
 import android.Manifest
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import io.dume.dume.R
+import io.dume.dume.firstTimeUser.ForwardFlowStatStudent
+import io.dume.dume.firstTimeUser.ForwardFlowStatTeacher
 import io.dume.dume.firstTimeUser.ForwardFlowViewModel
-import io.dume.dume.firstTimeUser.PrivacyActivity
+import io.dume.dume.firstTimeUser.Role
 import kotlinx.android.synthetic.main.fragment_permission.*
 
 class PermissionFragment : Fragment(), View.OnClickListener {
@@ -29,9 +31,15 @@ class PermissionFragment : Fragment(), View.OnClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        activity?.run {
+            viewModel = ViewModelProviders.of(this).get(ForwardFlowViewModel::class.java)
+        } ?: throw Throwable("invalid activity")
+
         navController = Navigation.findNavController(view)
         init()
     }
+
+
 
     private fun init() {
         permissionBtn.setOnClickListener(this)
@@ -51,6 +59,11 @@ class PermissionFragment : Fragment(), View.OnClickListener {
 
                 } else {
                     checkPermissions()
+                }
+                if (viewModel.role.value == Role.STUDENT) {
+                    viewModel.updateStudentCurrentPosition(ForwardFlowStatStudent.LOGIN)
+                } else {
+                    viewModel.updateTeacherCurrentPosition(ForwardFlowStatTeacher.LOGIN)
                 }
                 navController.navigate(R.id.action_permissionFragment_to_loginFragment)
             }

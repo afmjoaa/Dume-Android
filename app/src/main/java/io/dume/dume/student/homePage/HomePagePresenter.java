@@ -229,7 +229,7 @@ public class HomePagePresenter implements HomePageContract.Presenter {
         }
 
         if (!gps_enabled && !network_enabled) {
-            // notify user
+            // notify isExiting
             AlertDialog.Builder dialog = new AlertDialog.Builder(context);
             dialog.setMessage(context.getResources().getString(R.string.gps_network_not_enabled));
             dialog.setPositiveButton(context.getResources().getString(R.string.open_location_settings), new DialogInterface.OnClickListener() {
@@ -263,7 +263,7 @@ public class HomePagePresenter implements HomePageContract.Presenter {
                 }
 
             } else {
-                mView.flush("Does not found any user");
+                mView.flush("Does not found any isExiting");
                 Log.w(TAG, "onAccountTypeFound: document is not null");
             }
         });
@@ -426,7 +426,7 @@ public class HomePagePresenter implements HomePageContract.Presenter {
 
                 }
             } else {
-                mView.flush("Does not found any user");
+                mView.flush("Does not found any isExiting");
             }
         });
 

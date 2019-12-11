@@ -3,7 +3,6 @@ package io.dume.dume.auth;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import androidx.annotation.NonNull;
 import android.util.Log;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -16,6 +15,7 @@ import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.auth.PhoneAuthProvider.ForceResendingToken;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -32,21 +32,22 @@ import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Nullable;
 
+import androidx.annotation.NonNull;
 import io.dume.dume.BuildConfig;
-import io.dume.dume.util.Google;
 import io.dume.dume.auth.auth.AuthContract;
 import io.dume.dume.auth.code_verification.PhoneVerificationContract;
 import io.dume.dume.splash.SplashActivity;
 import io.dume.dume.splash.SplashContract;
 import io.dume.dume.teacher.homepage.TeacherContract;
 import io.dume.dume.util.DumeUtils;
+import io.dume.dume.util.Google;
 
 public class AuthModel implements AuthContract.Model, SplashContract.Model, PhoneVerificationContract.Model {
     private static final String TAG = "AuthModel";
     Activity activity;
     Context context;
     private final FirebaseAuth mAuth;
-    private final Intent mIntent;
+    private Intent mIntent;
     private DataStore datastore = null;
     private final FirebaseFirestore firestore;
     private ListenerRegistration listenerRegistration;
@@ -73,7 +74,7 @@ public class AuthModel implements AuthContract.Model, SplashContract.Model, Phon
 
 
     @Override
-    public void sendMessage(String phoneNumber, Callback listener) {
+    public void sendCode(String phoneNumber, Callback listener) {
         listener.onStart();
         PhoneAuthProvider.getInstance().verifyPhoneNumber(phoneNumber, 60, TimeUnit.SECONDS, activity, new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
             @Override
@@ -108,6 +109,7 @@ public class AuthModel implements AuthContract.Model, SplashContract.Model, Phon
             @Override
             public void onCodeSent(String s, PhoneAuthProvider.ForceResendingToken forceResendingToken) {
                 listener.onSuccess(s, forceResendingToken);
+
                 super.onCodeSent(s, forceResendingToken);
             }
         });
@@ -185,13 +187,13 @@ public class AuthModel implements AuthContract.Model, SplashContract.Model, Phon
 
     public void checkImei(TeacherContract.Model.Listener<QuerySnapshot> imeiFound) {
         String firstIMEI = null;
-        try{
+        try {
             firstIMEI = DumeUtils.getImei(context).get(0);
-        }catch (Exception error){
-            Log.w(TAG, "checkImei: "  + error.getLocalizedMessage());
-        }finally {
-            if(firstIMEI == null){
-             firstIMEI = "111111111111111";
+        } catch (Exception error) {
+            Log.w(TAG, "checkImei: " + error.getLocalizedMessage());
+        } finally {
+            if (firstIMEI == null) {
+                firstIMEI = "111111111111111";
             }
         }
         listenerRegistration2 = firestore.collection("mini_users").whereArrayContains("imei", firstIMEI).addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -232,6 +234,25 @@ public class AuthModel implements AuthContract.Model, SplashContract.Model, Phon
         }
     }
 
+
+    public void verifyCode(String code, String verificationId, PhoneVerificationContract.Model.CodeVerificationCallBack listener) {
+
+            PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationId, code);
+            mAuth.signInWithCredential(credential).addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    listener.onSuccess();
+
+                } else {
+                    if (task.getException() != null) {
+                        listener.onFail(task.getException().getLocalizedMessage());
+                    }
+                }
+            }).addOnFailureListener(e -> {
+                listener.onFail(e.getLocalizedMessage());
+            });
+
+    }
+
     @Override
     public void onResendCode(Callback listener) {
         PhoneAuthProvider.getInstance().verifyPhoneNumber("+88" + datastore.getPhoneNumber(), 60, TimeUnit.SECONDS, activity, new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
@@ -263,6 +284,38 @@ public class AuthModel implements AuthContract.Model, SplashContract.Model, Phon
             }
         }, DataStore.resendingToken);
     }
+
+    public void resendCode(String phoneNumber, ForceResendingToken resendToken, Callback listener) {
+        PhoneAuthProvider.getInstance().verifyPhoneNumber("+88" + datastore.getPhoneNumber(), 60, TimeUnit.SECONDS, activity, new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+            @Override
+            public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
+                mAuth.signInWithCredential(phoneAuthCredential).addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        listener.onAutoSuccess(task.getResult());
+                    } else if (task.isCanceled()) {
+                        listener.onFail("Authentication Canceled");
+                    } else if (task.isComplete()) {
+                        Log.w(TAG, "onComplete: task completed");
+                    }
+
+                }).addOnFailureListener(e -> {
+                    listener.onFail(e.getLocalizedMessage());
+                });
+            }
+
+            @Override
+            public void onVerificationFailed(FirebaseException e) {
+                listener.onFail(e.getLocalizedMessage());
+            }
+
+            @Override
+            public void onCodeSent(String s, PhoneAuthProvider.ForceResendingToken forceResendingToken) {
+                listener.onSuccess(s, forceResendingToken);
+                super.onCodeSent(s, forceResendingToken);
+            }
+        }, resendToken);
+    }
+
 
     @Override
     public boolean isUserLoggedIn() {
@@ -344,9 +397,9 @@ public class AuthModel implements AuthContract.Model, SplashContract.Model, Phon
 
                         } else {
                             String account_major = "";
-                            if(o!= null){
+                            if (o != null) {
                                 account_major = o.toString();
-                            }else {
+                            } else {
                                 account_major = DumeUtils.STUDENT;
                             }
 
@@ -365,12 +418,12 @@ public class AuthModel implements AuthContract.Model, SplashContract.Model, Phon
                         }
 
                     } else {
-                        listener.onFail("Does not found any user");
+                        listener.onFail("Does not found any isExiting");
                         Log.w(TAG, "onAccountTypeFound: document is not null");
                     }
                 } else {
-                    if(task.getException()!= null)
-                    listener.onFail(task.getException().getLocalizedMessage());
+                    if (task.getException() != null)
+                        listener.onFail(task.getException().getLocalizedMessage());
                 }
             }
         });

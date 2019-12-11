@@ -7,7 +7,7 @@ public class StateManager {
 
     public static StateManager instance;
     private static SharedPreferences local;
-    private SharedPreferences.Editor edit;
+    private static SharedPreferences.Editor edit;
 
     private StateManager() {
     }
@@ -17,13 +17,14 @@ public class StateManager {
         if (instance == null) {
             instance = new StateManager();
             local = context.getSharedPreferences("state", Context.MODE_PRIVATE);
+            edit = local.edit();
         }
         return instance;
     }
 
     //set any value to the sharePreference
-    public void setValue(String key,  Object  value) {
-        edit = local.edit();
+    public void setValue(String key, Object value) {
+
         if (value instanceof String) {
             edit.putString(key, (String) value);
         } else if (value instanceof Integer) {
@@ -32,7 +33,7 @@ public class StateManager {
             edit.putBoolean(key, (Boolean) value);
         } else if (value instanceof Float) {
             edit.putFloat(key, (Float) value);
-        }else if (value instanceof Long) {
+        } else if (value instanceof Long) {
             edit.putLong(key, (Long) value);
         }
         edit.apply();

@@ -70,7 +70,7 @@ class CirclePagerIndicatorDecoration : RecyclerView.ItemDecoration() {
             return
         }
 
-        // find offset of active page (if the user is scrolling)
+        // find offset of active page (if the isExiting is scrolling)
         val activeChild = layoutManager.findViewByPosition(activePosition)
         val left = activeChild!!.left
         val width = activeChild.width

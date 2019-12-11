@@ -6,10 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import io.dume.dume.R
+import io.dume.dume.firstTimeUser.ForwardFlowStatStudent
+import io.dume.dume.firstTimeUser.ForwardFlowStatTeacher
 import io.dume.dume.firstTimeUser.ForwardFlowViewModel
+import io.dume.dume.firstTimeUser.Role
 import kotlinx.android.synthetic.main.fragment_privacy.*
 
 class PrivacyFragment : Fragment(), View.OnClickListener {
@@ -25,6 +29,11 @@ class PrivacyFragment : Fragment(), View.OnClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        activity?.run {
+            viewModel = ViewModelProviders.of(this).get(ForwardFlowViewModel::class.java)
+        } ?: throw Throwable("invalid activity")
+
         navController = Navigation.findNavController(view)
         init()
     }
@@ -36,6 +45,11 @@ class PrivacyFragment : Fragment(), View.OnClickListener {
     override fun onClick(v: View?) {
         when (v!!.id) {
             R.id.continueBtn -> {
+                if (viewModel.role.value == Role.STUDENT) {
+                    viewModel.updateStudentCurrentPosition(ForwardFlowStatStudent.PERMISSION)
+                } else {
+                    viewModel.updateTeacherCurrentPosition(ForwardFlowStatTeacher.PERMISSION)
+                }
                 navController.navigate(R.id.action_privacyFragment_to_permissionFragment)
             }
         }

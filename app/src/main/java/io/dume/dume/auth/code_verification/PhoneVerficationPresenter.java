@@ -99,11 +99,11 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
                 hideKeyboard(activity);
                 Log.w(TAG, "onSuccess: Verified Pin");
                 //view.hideProgress();
-                if (DataStore.STATION == 1) {//user exist
+                if (DataStore.STATION == 1) {//isExiting exist
                     mergeImei();
                     Log.w(TAG, "onSuccess: Verified Pin");
 
-                } else if (DataStore.STATION == 2) {//register user now
+                } else if (DataStore.STATION == 2) {//register isExiting now
                     saveUserToDb(model.getData());
                     Log.w(TAG, "onSuccess: Verified Pin");
                 } else {
@@ -412,7 +412,7 @@ public class PhoneVerficationPresenter implements PhoneVerificationContract.Pres
             });
         } else {
             view.showToast("Unknown error 101!!");
-            Log.w(TAG, "saveUserToDb: " + "DataStore null or user not logged in");
+            Log.w(TAG, "saveUserToDb: " + "DataStore null or isExiting not logged in");
         }
     }
 

@@ -6,14 +6,12 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
-import com.google.android.material.appbar.AppBarLayout
 import io.dume.dume.R
 import io.dume.dume.student.pojo.BaseAppCompatActivity
 import io.dume.dume.util.DumeUtils.configAppToolBarTitle
 import io.dume.dume.util.DumeUtils.configureAppbar
 import io.dume.dume.util.StateManager
 import kotlinx.android.synthetic.main.activity_forward_flow_host.*
-import kotlinx.android.synthetic.main.activity_forward_flow_host.settingsAppbar
 
 class ForwardFlowHostActivity : BaseAppCompatActivity(), View.OnClickListener {
     private lateinit var viewModel: ForwardFlowViewModel
@@ -23,6 +21,7 @@ class ForwardFlowHostActivity : BaseAppCompatActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_forward_flow_host)
         viewModel = ViewModelProviders.of(this).get(ForwardFlowViewModel::class.java)
+        viewModel.inject(this)
         navController = Navigation.findNavController(this, R.id.nav_host_fragment)
         init()
     }
@@ -34,11 +33,12 @@ class ForwardFlowHostActivity : BaseAppCompatActivity(), View.OnClickListener {
         sharedPreferenceObserver()
         initView()
         initListener()
+
     }
 
     private fun sharedPreferenceObserver() {
-         viewModel.role.observe(this, Observer {
-             StateManager.getInstance(this).setRole(it.flow)
+        viewModel.role.observe(this, Observer {
+            StateManager.getInstance(this).setRole(it.flow)
         })
 
         viewModel.firstTimeUser.observe(this, Observer {
@@ -61,7 +61,7 @@ class ForwardFlowHostActivity : BaseAppCompatActivity(), View.OnClickListener {
     private fun initListener() {
         registerBtn.setOnClickListener(this)
         navController.addOnDestinationChangedListener { controller, destination, arguments ->
-            when(destination.id) {
+            when (destination.id) {
                 R.id.roleChooser -> {
                     registerBtn.hide()
                     configAppToolBarTitle(this, "")
@@ -125,12 +125,12 @@ class ForwardFlowHostActivity : BaseAppCompatActivity(), View.OnClickListener {
         }
     }
 
-    private fun hideActionBar(){
+    private fun hideActionBar() {
         settingsAppbar.visibility = View.GONE
         supportActionBar?.hide()
     }
 
-    private fun showActionBar(){
+    private fun showActionBar() {
         settingsAppbar.visibility = View.VISIBLE
         supportActionBar?.show()
     }

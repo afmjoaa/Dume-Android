@@ -73,6 +73,7 @@ public class BaseAppCompatActivity extends AppCompatActivity implements MyConnec
         searchDataStore = SearchDataStore.getInstance();
         mDensity = getResources().getDisplayMetrics().density;
         init();
+        findLoadView();
     }
 
     @Override
@@ -185,7 +186,6 @@ public class BaseAppCompatActivity extends AppCompatActivity implements MyConnec
         }
         return super.onOptionsItemSelected(item);
     }
-
 
 
     @Override
@@ -359,7 +359,12 @@ public class BaseAppCompatActivity extends AppCompatActivity implements MyConnec
     }
 
     public void findLoadView() {
-        loadView = rootView.findViewById(R.id.loadView);
+        try {
+            loadView = rootView.findViewById(R.id.loadView);
+        } catch (Exception e){
+          //  Toast.makeText(context, "", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     public void showProgress() {
