@@ -66,7 +66,16 @@ class VerificationFragment : Fragment() {
             }
         })
         viewModel.error.observe(this, Observer { it?.let { parent.flush(it) } })
-        viewModel.load.observe(this, Observer { if (it) parent.showProgress() else parent.hideProgress() })
+        viewModel.load.observe(this, Observer {
+            if (it) {
+                parent.showProgress();
+                sendCodeBtn.isEnabled = false
+            } else {
+                parent.hideProgress()
+                sendCodeBtn.isEnabled = true
+
+            }
+        })
     }
 
     private fun initListeners() {

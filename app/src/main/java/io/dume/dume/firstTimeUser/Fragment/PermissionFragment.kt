@@ -40,7 +40,6 @@ class PermissionFragment : Fragment(), View.OnClickListener {
     }
 
 
-
     private fun init() {
         permissionBtn.setOnClickListener(this)
     }
@@ -50,6 +49,17 @@ class PermissionFragment : Fragment(), View.OnClickListener {
         val resTwo: Int? = context?.checkCallingOrSelfPermission(COURSE_LOCATION)
         return (resOne == PackageManager.PERMISSION_GRANTED
                 && resTwo == PackageManager.PERMISSION_GRANTED)
+    }
+
+
+    private fun navigateNext() {
+        if (viewModel.isLoggedIn()) {
+            if (viewModel.role.equals(Role.STUDENT)) {
+                navController.navigate(R.id.action_permissionFragment_to_registerFragment)
+            } else {
+                navController.navigate(R.id.action_permissionFragment_to_nidFragment)
+            }
+        } else navController.navigate(R.id.action_permissionFragment_to_loginFragment)
     }
 
     override fun onClick(v: View?) {
@@ -65,7 +75,7 @@ class PermissionFragment : Fragment(), View.OnClickListener {
                 } else {
                     viewModel.updateTeacherCurrentPosition(ForwardFlowStatTeacher.LOGIN)
                 }
-                navController.navigate(R.id.action_permissionFragment_to_loginFragment)
+                navigateNext()
             }
         }
     }

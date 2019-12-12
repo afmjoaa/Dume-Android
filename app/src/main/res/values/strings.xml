@@ -848,4 +848,8 @@ provided.Tap salary for details.  </string>
     <string name="post_job">Post Job</string>
     <string name="send_code">Send Code</string>
     <string name="entry_fee_reason">Please pay 50 TAKA to make your account active. Which is mandatory to stop spam and ensure quality service.</string>
+    <string name="nid_skip_details">Please note until NID verification you won\'t get any tuition. If you skip now you can provide it from your profile after initial setup...</string>
+    <string name="cancel">Cancel</string>
+    <string name="yes_skip">Yes, Skip</string>
+    <string name="skip_nid">Skip NID verification ?</string>
 </resources>

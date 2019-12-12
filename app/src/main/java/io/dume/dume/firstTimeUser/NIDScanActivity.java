@@ -14,7 +14,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -33,9 +32,9 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import ch.halcyon.squareprogressbar.SquareProgressBar;
 import io.dume.dume.R;
-import io.dume.dume.util.StateManager;
 import io.dume.dume.auth.auth_final.AuthRegisterActivity;
 import io.dume.dume.student.pojo.BaseAppCompatActivity;
+import io.dume.dume.util.StateManager;
 
 import static io.dume.dume.util.DumeUtils.configureAppbar;
 
@@ -62,11 +61,8 @@ public class NIDScanActivity extends BaseAppCompatActivity implements View.OnCli
         setActivityContext(this, 7766);
         configureAppbar(this, "NID Verification", true);
         initView();
-
         flag = false;
         stateManager = StateManager.getInstance(this);
-
-
         squareProgressBar.setWidth(7);
         squareProgressBar.setProgress(0);
         float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, getResources().getDisplayMetrics());
@@ -157,17 +153,10 @@ public class NIDScanActivity extends BaseAppCompatActivity implements View.OnCli
         dialog = materialAlertDialogBuilder.create();
         try {
             Button dismissBtn = customLayout.findViewById(R.id.dismiss_btn);
-            dismissBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    dialog.dismiss();
-                }
-            });
+            dismissBtn.setOnClickListener(v -> dialog.dismiss());
         } catch (NullPointerException npe) {
             npe.printStackTrace();
         }
-
-        //initializing the bottomSheet dialogue
         skipNIDScanDialog = new BottomSheetDialog(this);
         skipNIDScanView = this.getLayoutInflater().inflate(R.layout.custom_bottom_sheet_dialogue_cancel, null);
         skipNIDScanDialog.setContentView(skipNIDScanView);
@@ -224,28 +213,27 @@ public class NIDScanActivity extends BaseAppCompatActivity implements View.OnCli
 
         Task<FirebaseVisionText> result =
                 detector.processImage(image)
-                        .addOnSuccessListener(new OnSuccessListener<FirebaseVisionText>() {
-                            @Override
-                            public void onSuccess(FirebaseVisionText firebaseVisionText) {
-                                //Log.e(TAG, firebaseVisionText.getText());
-                                int validPercent = validDataPercent(firebaseVisionText);
-                                squareProgressBar.setProgress(validPercent);
-                                if(validPercent== 100){
-                                    //save to share preference
-                                    flag = true;
-                                    stateManager.setValue("NIDNo" , NIDNo);
-                                    stateManager.setValue("NIDName", NIDName );
-                                    stateManager.setValue("NIDBirthDate", NIDBirthDate );
-                                    //Log.e(TAG, "last: " + NIDNo + " " + NIDName + " " + NIDBirthDate );
-                                    //goto next activity
-                                    Intent intent = new Intent(getApplicationContext(), AuthRegisterActivity.class);
-                                    intent.putExtra("NIDNo",NIDNo );
-                                    intent.putExtra("NIDName",NIDName );
-                                    intent.putExtra("NIDBirthDate",NIDBirthDate );
-                                    startActivity(intent);
-                                }
+                        .addOnSuccessListener(firebaseVisionText -> {
+                            //Log.e(TAG, firebaseVisionText.getText());
+                            int validPercent = validDataPercent(firebaseVisionText);
+                            squareProgressBar.setProgress(validPercent);
+                            if(validPercent== 100){
+                                //save to share preference
+                                flag = true;
+                                stateManager.setValue("NIDNo" , NIDNo);
+                                stateManager.setValue("NIDName", NIDName );
+                                stateManager.setValue("NIDBirthDate", NIDBirthDate );
+                                //Log.e(TAG, "last: " + NIDNo + " " + NIDName + " " + NIDBirthDate );
+                                //goto next activity
+                                Intent intent = new Intent(getApplicationContext(), AuthRegisterActivity.class);
+                                intent.putExtra("NIDNo",NIDNo );
+                                intent.putExtra("NIDName",NIDName );
+                                intent.putExtra("NIDBirthDate",NIDBirthDate );
+                                startActivity(intent);
+
 
                             }
+
                         })
                         .addOnFailureListener(e -> Log.e("getText", "Failed to get text"));
     }

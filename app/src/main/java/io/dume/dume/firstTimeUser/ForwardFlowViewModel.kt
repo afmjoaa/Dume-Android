@@ -1,6 +1,7 @@
 package io.dume.dume.firstTimeUser
 
 import android.app.Activity
+import android.view.MenuItem
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.AuthResult
@@ -25,8 +26,9 @@ class ForwardFlowViewModel : ViewModel() {
     val load = MutableLiveData<Boolean>()
     val error = MutableLiveData<String>(null)
     var phoneNumber = MutableLiveData<String>()
-
     lateinit var activity: Activity
+    var menu = MutableLiveData<MenuItem>()
+    var scan = MutableLiveData<NID>()
 
 
     /* General Reference */
@@ -43,7 +45,9 @@ class ForwardFlowViewModel : ViewModel() {
         repository = AuthModel(activity, activity)
     }
 
-
+    /**
+     *  <p> listener to observe data from repository @link Model#sendCode </p>
+     *  */
     var repositoryListener = object : AuthContract.Model.Callback {
         override fun onStart() = run { load.value = true }
         override fun onFail(error: String?) = run { load.value = false; this@ForwardFlowViewModel.error.value = error }
@@ -97,6 +101,9 @@ class ForwardFlowViewModel : ViewModel() {
 
         })
     }
+
+    /** isLoggedIn returns true or false based on user loged status*/
+    fun isLoggedIn(): Boolean = repository.isUserLoggedIn
 
 
 }

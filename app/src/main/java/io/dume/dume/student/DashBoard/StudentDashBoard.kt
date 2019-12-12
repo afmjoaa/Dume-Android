@@ -1,15 +1,17 @@
 package io.dume.dume.student.DashBoard
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.annotation.NonNull
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
-import androidx.fragment.app.commit
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.navigation.NavigationView
+import com.google.firebase.auth.FirebaseAuth
 import io.dume.dume.R
+import io.dume.dume.firstTimeUser.ForwardFlowHostActivity
 import io.dume.dume.student.DashBoard.Fragment.JobBoard.StudentJobBoardFragment
 import io.dume.dume.student.DashBoard.Fragment.SearchMentor.SearchMentorFragment
 import io.dume.dume.student.DashBoard.Fragment.Tuition.StudentTuitionFragment
@@ -19,7 +21,7 @@ import io.dume.dume.util.DumeUtils.configAppToolBarTitle
 import kotlinx.android.synthetic.main.activity_student_dash_board2.*
 
 
-class StudentDashBoard : BaseAppCompatActivity() {
+class StudentDashBoard : BaseAppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     val searchMentorFragment: Fragment = SearchMentorFragment()
     val jobBoardFragment: Fragment = StudentJobBoardFragment()
@@ -28,6 +30,8 @@ class StudentDashBoard : BaseAppCompatActivity() {
     var active = searchMentorFragment
     private lateinit var appBarLayout: AppBarLayout
     private lateinit var bottomNavigationView: BottomNavigationView
+    private lateinit var sideNavigationView: NavigationView
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,6 +64,15 @@ class StudentDashBoard : BaseAppCompatActivity() {
         fm.beginTransaction().add(R.id.main_container, searchMentorFragment, "1").commit()
     }
 
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.logOut -> {
+                FirebaseAuth.getInstance().signOut()
+                startActivity(Intent(this, ForwardFlowHostActivity::class.java))
+            }
+        }
+        return true
+    }
 
     private val mOnNavigationItemSelectedListener = object : BottomNavigationView.OnNavigationItemSelectedListener {
         override fun onNavigationItemSelected(@NonNull item: MenuItem): Boolean {

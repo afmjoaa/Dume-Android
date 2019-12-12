@@ -1,6 +1,8 @@
 package io.dume.dume.firstTimeUser
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -13,9 +15,12 @@ import io.dume.dume.util.DumeUtils.configureAppbar
 import io.dume.dume.util.StateManager
 import kotlinx.android.synthetic.main.activity_forward_flow_host.*
 
+
 class ForwardFlowHostActivity : BaseAppCompatActivity(), View.OnClickListener {
     private lateinit var viewModel: ForwardFlowViewModel
     private lateinit var navController: NavController
+    private var menuState = false
+    private var menu: Menu? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,6 +66,7 @@ class ForwardFlowHostActivity : BaseAppCompatActivity(), View.OnClickListener {
     private fun initListener() {
         registerBtn.setOnClickListener(this)
         navController.addOnDestinationChangedListener { controller, destination, arguments ->
+            showActionCameraIcons(false)
             when (destination.id) {
                 R.id.roleChooser -> {
                     registerBtn.hide()
@@ -86,39 +92,36 @@ class ForwardFlowHostActivity : BaseAppCompatActivity(), View.OnClickListener {
                 }
                 R.id.nidFragment -> {
                     registerBtn.hide()
+                    menuState = true
                     showActionBar()
-                    configAppToolBarTitle(this, "NID Verification")
+                    showActionCameraIcons(true)
 
+                    configAppToolBarTitle(this, "NID Verification")
                 }
                 R.id.registerFragment -> {
                     registerBtn.show()
                     showActionBar()
                     configAppToolBarTitle(this, "Provide Info")
-
                 }
                 R.id.qualificationFragment -> {
                     registerBtn.hide()
                     showActionBar()
                     configAppToolBarTitle(this, "Add Qualification")
-
                 }
                 R.id.addSkillFragment -> {
                     registerBtn.hide()
                     showActionBar()
                     configAppToolBarTitle(this, "Add Skill")
-
                 }
                 R.id.postJobFragment -> {
                     registerBtn.hide()
                     showActionBar()
                     configAppToolBarTitle(this, "Post Job")
-
                 }
                 R.id.paymentFragment -> {
                     registerBtn.hide()
                     showActionBar()
                     configAppToolBarTitle(this, "Activation Fee")
-
                 }
             }
             settingsAppbar.setExpanded(true, true)
@@ -128,6 +131,28 @@ class ForwardFlowHostActivity : BaseAppCompatActivity(), View.OnClickListener {
     private fun hideActionBar() {
         settingsAppbar.visibility = View.GONE
         supportActionBar?.hide()
+    }
+
+    private fun showActionCameraIcons(menuState: Boolean) {
+        menu?.let {
+            if (menuState) {
+                for (i in 0 until menu!!.size()) menu!!.getItem(i)?.isVisible = true
+            } else {
+                for (i in 0 until menu!!.size()) menu!!.getItem(i)?.isVisible = false
+            }
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.nid_menu, menu)
+        this.menu = menu
+        return super.onCreateOptionsMenu(menu)
+
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        viewModel.menu.postValue(item)
+        return super.onOptionsItemSelected(item)
     }
 
     private fun showActionBar() {

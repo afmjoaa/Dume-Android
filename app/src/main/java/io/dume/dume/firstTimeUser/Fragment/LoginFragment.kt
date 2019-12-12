@@ -69,7 +69,16 @@ class LoginFragment : Fragment(), View.OnClickListener {
         viewModel.autoVerified.observe(this, Observer { if (it) skipNextAction() })
         viewModel.codeSent.observe(this, Observer { flush("Conde sent $it"); if (it) nextAction() })
         viewModel.error.observe(this, Observer { it?.let { flush(it) } })
-        viewModel.load.observe(this, Observer { if (it) parent.showProgress() else parent.hideProgress() })
+        viewModel.load.observe(this, Observer {
+            if (it) {
+                parent.showProgress();
+                sendCodeBtn.isEnabled = false
+            } else {
+                parent.hideProgress()
+                sendCodeBtn.isEnabled = true
+
+            }
+        })
     }
 
 
