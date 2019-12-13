@@ -204,8 +204,9 @@ class NidScanFragment : Fragment(), View.OnClickListener {
                         stateManager.setValue("NIDNo", NIDNo)
                         stateManager.setValue("NIDName", NIDName)
                         stateManager.setValue("NIDBirthDate", NIDBirthDate)
-
                         viewModel.scan.postValue(NID(NIDName!!, NIDBirthDate!!, NIDNo!!))
+
+
                         //val action = NidScanFragmentDirections.actionNidFragmentToRegisterFragment(nidName = NIDName, nidNo = NIDNo!!, nidBirthDate = NIDBirthDate)
                         navController.navigate(R.id.action_nidFragment_to_registerFragment)
 

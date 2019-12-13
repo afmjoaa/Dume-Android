@@ -5,11 +5,14 @@ import android.view.MenuItem
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.AuthResult
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.PhoneAuthProvider
 import io.dume.dume.auth.AuthGlobalContract
 import io.dume.dume.auth.AuthModel
 import io.dume.dume.auth.auth.AuthContract
 import io.dume.dume.auth.code_verification.PhoneVerificationContract
+import java.util.*
 
 class ForwardFlowViewModel : ViewModel() {
 
@@ -104,6 +107,22 @@ class ForwardFlowViewModel : ViewModel() {
 
     /** isLoggedIn returns true or false based on user loged status*/
     fun isLoggedIn(): Boolean = repository.isUserLoggedIn
+
+    fun getUserUID(): String {
+        return Objects.requireNonNull<FirebaseUser>(FirebaseAuth.getInstance().currentUser).getUid()
+    }
+
+    /**
+     *  upload image to firebase
+     * */
+
+    fun uploadPhoto(uri: String) {
+
+    }
+
+    fun register(userId: String) {
+
+    }
 
 
 }

@@ -229,6 +229,7 @@ public class StudentSettingsActivity extends BaseAppCompatActivity
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             if (requestCode == ADD_HOME_LOCATION) {
                 LatLng selectedLocation = data.getParcelableExtra("selected_location");

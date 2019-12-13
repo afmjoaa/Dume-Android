@@ -1,3 +1,3 @@
 package io.dume.dume.firstTimeUser
 
-class NID(name: String, birth_date: String, nid: Long)
+class NID(var name: String, var birth_date: String, var nid: Long)

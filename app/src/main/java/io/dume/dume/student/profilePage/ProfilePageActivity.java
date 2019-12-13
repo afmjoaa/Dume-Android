@@ -14,9 +14,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Parcelable;
 import android.provider.MediaStore;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.AppCompatCheckBox;
-import androidx.appcompat.widget.PopupMenu;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.MenuItem;
@@ -42,6 +39,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.AppCompatCheckBox;
+import androidx.appcompat.widget.PopupMenu;
 import carbon.widget.ImageView;
 import id.zelory.compressor.Compressor;
 import io.dume.dume.R;
@@ -299,14 +299,12 @@ public class ProfilePageActivity extends BaseAppCompatActivity implements Profil
                 }
             }
         });
-        inputCurrentStatus.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    inputCurrentStatus.setHint("RUMC HSC Candidate...");
-                    showKeyboard(activity);
-                } else {
-                    inputCurrentStatus.setHint("");
-                }
+        inputCurrentStatus.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                inputCurrentStatus.setHint("RUMC HSC Candidate...");
+                showKeyboard(activity);
+            } else {
+                inputCurrentStatus.setHint("");
             }
         });
 
@@ -582,7 +580,7 @@ public class ProfilePageActivity extends BaseAppCompatActivity implements Profil
                 .subscribe(new Consumer<File>() {
                     @Override
                     public void accept(File file) {
-                        //flush("i am here");
+
                         compressedImage = file;
                         hideSpiner();
                         updateChangesClicked();
