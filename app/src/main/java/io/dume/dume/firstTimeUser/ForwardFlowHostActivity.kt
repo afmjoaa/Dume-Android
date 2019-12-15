@@ -2,7 +2,6 @@ package io.dume.dume.firstTimeUser
 
 import android.os.Bundle
 import android.view.Menu
-import android.view.MenuItem
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -66,7 +65,7 @@ class ForwardFlowHostActivity : BaseAppCompatActivity(), View.OnClickListener {
     private fun initListener() {
         registerBtn.setOnClickListener(this)
         navController.addOnDestinationChangedListener { controller, destination, arguments ->
-            showActionCameraIcons(false)
+
             when (destination.id) {
                 R.id.roleChooser -> {
                     registerBtn.hide()
@@ -92,10 +91,7 @@ class ForwardFlowHostActivity : BaseAppCompatActivity(), View.OnClickListener {
                 }
                 R.id.nidFragment -> {
                     registerBtn.hide()
-                    menuState = true
                     showActionBar()
-                    showActionCameraIcons(true)
-
                     configAppToolBarTitle(this, "NID Verification")
                 }
                 R.id.registerFragment -> {
@@ -133,27 +129,6 @@ class ForwardFlowHostActivity : BaseAppCompatActivity(), View.OnClickListener {
         supportActionBar?.hide()
     }
 
-    private fun showActionCameraIcons(menuState: Boolean) {
-        menu?.let {
-            if (menuState) {
-                for (i in 0 until menu!!.size()) menu!!.getItem(i)?.isVisible = true
-            } else {
-                for (i in 0 until menu!!.size()) menu!!.getItem(i)?.isVisible = false
-            }
-        }
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.nid_menu, menu)
-        this.menu = menu
-        return super.onCreateOptionsMenu(menu)
-
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        viewModel.menu.postValue(item)
-        return super.onOptionsItemSelected(item)
-    }
 
     private fun showActionBar() {
         settingsAppbar.visibility = View.VISIBLE
@@ -165,6 +140,13 @@ class ForwardFlowHostActivity : BaseAppCompatActivity(), View.OnClickListener {
             R.id.registerBtn -> {
                 navController.navigate(R.id.action_registerFragment_to_qualificationFragment)
             }
+
+        }
+    }
+
+    fun onRegisterButtonClick(listener: (view: View) -> Unit) {
+        registerBtn.setOnClickListener {
+            listener(it)
         }
     }
 }

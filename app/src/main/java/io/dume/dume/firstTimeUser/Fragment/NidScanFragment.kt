@@ -5,14 +5,11 @@ import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.util.TypedValue
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
@@ -32,6 +29,7 @@ import io.dume.dume.firstTimeUser.NID
 import io.dume.dume.util.StateManager
 import kotlinx.android.synthetic.main.fragment_nid_scan.*
 
+
 class NidScanFragment : Fragment(), View.OnClickListener {
     private lateinit var navController: NavController
     private lateinit var viewModel: ForwardFlowViewModel
@@ -43,6 +41,8 @@ class NidScanFragment : Fragment(), View.OnClickListener {
     private var NIDNo: Long? = null
     private var NIDName: String? = null
     private var NIDBirthDate: String? = null
+
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_nid_scan, container, false)
     }
@@ -53,26 +53,43 @@ class NidScanFragment : Fragment(), View.OnClickListener {
             viewModel = ViewModelProviders.of(this).get(ForwardFlowViewModel::class.java)
         } ?: throw Throwable("invalid activity")
         navController = Navigation.findNavController(view)
+        parent = activity as ForwardFlowHostActivity
         initDialog()
         init()
         configureCamera()
     }
 
+    override fun onResume() {
+        super.onResume()
+        flag = false
+    }
+
+    override fun onPause() {
+        super.onPause()
+        camera.close()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        camera.destroy()
+    }
+
 
     private fun configureCamera() {
-        camera?.let {
-            camera.open()
-        }
-        stateManager = StateManager.getInstance(context)
-        squareProgressBar.setWidth(7)
-        squareProgressBar.setProgress(0)
-        val px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4f, resources.displayMetrics)
-        squareProgressBar.setColor("#0288d1")
-        squareProgressBar.setRoundedCorners(true, px)
 
+        camera?.setLifecycleOwner(viewLifecycleOwner)
+
+        Log.e("debug", "configureCamera ${camera}  isOpen : ${camera.isOpened} isTakingPicture : ${camera.isTakingPicture}")
+        stateManager = StateManager.getInstance(context)
+        squareProgressBar?.setWidth(7)
+        squareProgressBar?.setProgress(0)
+        val px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4f, resources.displayMetrics)
+        squareProgressBar?.setColor("#0288d1")
+        squareProgressBar?.setRoundedCorners(true, px)
         val handler = Handler()
         handler.postDelayed(object : Runnable {
             override fun run() {
+                Log.e("debug", "Picture Captured")
                 camera?.takePictureSnapshot()
                 if (!flag) {
                     handler.postDelayed(this, 1500)
@@ -83,7 +100,7 @@ class NidScanFragment : Fragment(), View.OnClickListener {
             override fun onPictureTaken(result: PictureResult) {
                 super.onPictureTaken(result)
                 val bitmap = BitmapFactory.decodeByteArray(result.data, 0, result.data.size, null)
-                squareProgressBar.setImageBitmap(bitmap)
+                squareProgressBar?.setImageBitmap(bitmap)
                 val firebaseVisionImage = FirebaseVisionImage.fromBitmap(bitmap)
                 if (firebaseVisionImage != null) {
                     recognizeText(firebaseVisionImage)
@@ -93,53 +110,41 @@ class NidScanFragment : Fragment(), View.OnClickListener {
             }
         })
 
-        viewModel.menu.observe(this, Observer {
-            parent.flush("clicked " + it.title)
-            it.let { item ->
-                val id = item.itemId
-                if (id == R.id.flush) {
-                    if (camera.getFlash() == Flash.TORCH) {
-                        item.icon = resources.getDrawable(R.drawable.flush_icon)
-                        camera.setFlash(Flash.OFF)
-                    } else {
-                        item.icon = resources.getDrawable(R.drawable.no_flush_icon)
-                        camera.setFlash(Flash.TORCH)
-                    }
-                } else if (id == R.id.hdr) {
-                    if (camera.getHdr() == Hdr.ON) {
-                        item.icon = resources.getDrawable(R.drawable.hdr_icon)
-                        camera.setHdr(Hdr.OFF)
-                    } else {
-                        item.icon = resources.getDrawable(R.drawable.no_hdr_icon)
-                        camera.setHdr(Hdr.ON)
-                    }
-                }
-            }
-        })
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        camera?.let {
-            camera.destroy()
-        }
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.nid_menu, menu)
 
     }
 
-    override fun onResume() {
-        super.onResume()
-        camera?.let {
-            if (!camera.isOpened) {
-                camera.open()
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        val id = item.itemId
+        if (id == R.id.flush) {
+            if (camera.getFlash() == Flash.TORCH) {
+                item.icon = resources.getDrawable(R.drawable.flush_icon)
+                camera.setFlash(Flash.OFF)
+            } else {
+                item.icon = resources.getDrawable(R.drawable.no_flush_icon)
+                camera.setFlash(Flash.TORCH)
+            }
+        } else if (id == R.id.hdr) {
+            if (camera.getHdr() == Hdr.ON) {
+                item.icon = resources.getDrawable(R.drawable.hdr_icon)
+                camera.setHdr(Hdr.OFF)
+            } else {
+                item.icon = resources.getDrawable(R.drawable.no_hdr_icon)
+                camera.setHdr(Hdr.ON)
             }
         }
-
+        return super.onOptionsItemSelected(item)
     }
 
     private fun init() {
+        setHasOptionsMenu(true)
         howNIDScanWork.setOnClickListener(this)
         dontHaveNIDBtn.setOnClickListener(this)
-        parent = activity as ForwardFlowHostActivity
     }
 
     override fun onClick(v: View?) {
@@ -186,16 +191,13 @@ class NidScanFragment : Fragment(), View.OnClickListener {
             cancelNoBtn.setText(getString(R.string.cancel))
             subText.setText(getString(R.string.nid_skip_details))
             cancelNoBtn.setOnClickListener(View.OnClickListener { skipNIDScanDialog.dismiss() })
-            cancelYesBtn.setOnClickListener(View.OnClickListener { skipNIDScanDialog.dismiss();parent.flush("go to next activity") })
+            cancelYesBtn.setOnClickListener(View.OnClickListener { skipNIDScanDialog.dismiss(); navController.navigate(R.id.action_nidFragment_to_registerFragment) })
         }
     }
 
     private fun recognizeText(image: FirebaseVisionImage) {
-
-        val detector = FirebaseVision.getInstance()
-                .onDeviceTextRecognizer
-
-        val result = detector.processImage(image)
+        val detector = FirebaseVision.getInstance().onDeviceTextRecognizer
+        detector.processImage(image)
                 .addOnSuccessListener { firebaseVisionText ->
                     val validPercent = validDataPercent(firebaseVisionText)
                     squareProgressBar.setProgress(validPercent)
@@ -205,13 +207,10 @@ class NidScanFragment : Fragment(), View.OnClickListener {
                         stateManager.setValue("NIDName", NIDName)
                         stateManager.setValue("NIDBirthDate", NIDBirthDate)
                         viewModel.scan.postValue(NID(NIDName!!, NIDBirthDate!!, NIDNo!!))
-
-
-                        //val action = NidScanFragmentDirections.actionNidFragmentToRegisterFragment(nidName = NIDName, nidNo = NIDNo!!, nidBirthDate = NIDBirthDate)
                         navController.navigate(R.id.action_nidFragment_to_registerFragment)
 
                     } else {
-                        parent.flush("ValidPercent is $validPercent")
+                        Log.e("debug", "ValidPercent is $validPercent")
                     }
 
                 }
@@ -239,7 +238,7 @@ class NidScanFragment : Fragment(), View.OnClickListener {
                         NIDName = blocks[j + 1].lines[0].text
                         returnPercent = returnPercent + 25
                     } catch (e: Exception) {
-                        parent.flush("Error in line number ${e.stackTrace[0].lineNumber} error : ${e.localizedMessage}")
+                        // parent.flush("Error in line number ${e.stackTrace[0].lineNumber} error : ${e.localizedMessage}")
                     }
 
                 }
@@ -249,7 +248,7 @@ class NidScanFragment : Fragment(), View.OnClickListener {
                         returnPercent = returnPercent + 25
                     }
                 } catch (e: Exception) {
-                    parent.flush(e.localizedMessage)
+                    //  parent.flush(e.localizedMessage)
                 }
 
             }

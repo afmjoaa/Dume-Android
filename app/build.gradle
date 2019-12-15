@@ -181,5 +181,7 @@ dependencies {
 
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.1.0'
 
+    implementation 'com.github.jrvansuita:PickImage:+'
+
 
 }

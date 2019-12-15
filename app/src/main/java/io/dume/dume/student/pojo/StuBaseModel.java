@@ -2,7 +2,6 @@ package io.dume.dume.student.pojo;
 
 import android.app.Activity;
 import android.content.Context;
-import androidx.annotation.NonNull;
 import android.util.Log;
 
 import com.google.android.gms.tasks.OnCanceledListener;
@@ -18,6 +17,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Map;
 
+import androidx.annotation.NonNull;
 import io.dume.dume.interFace.usefulListeners;
 
 public abstract class StuBaseModel{
@@ -37,7 +37,6 @@ public abstract class StuBaseModel{
         firestore = FirebaseFirestore.getInstance();
         mini_users = firestore.collection("mini_users").document(getUser().getUid());
         skillRef = firestore.collection("users/mentors/skills");
-
         userStudentProInfo = firestore.collection("/users/students/stu_pro_info").document(getUser().getUid());
     }
 

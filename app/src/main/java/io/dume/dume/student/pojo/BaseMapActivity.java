@@ -14,10 +14,6 @@ import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import android.text.SpannableStringBuilder;
 import android.text.style.StyleSpan;
 import android.util.Log;
@@ -53,11 +49,9 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.maps.android.ui.IconGenerator;
-
-import carbon.widget.Button;
-
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.maps.android.ui.IconGenerator;
 
 import java.io.IOException;
 import java.util.List;
@@ -65,6 +59,10 @@ import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import io.dume.dume.R;
 import io.dume.dume.customView.TouchableWrapper;
 
@@ -107,7 +105,7 @@ public class BaseMapActivity extends BaseAppCompatActivity implements
     public static Boolean MLOCATIONPERMISSIONGRANTED = false;
     private ImageView myImageMarker;
     private MyGpsLocationChangeListener myGpsLocationChangeListener;
-    private Button locationDoneBtn;
+    private MaterialButton locationDoneBtn;
     private LinearLayout searchBottomSheet;
     private carbon.widget.RelativeLayout inputSearchContainer;
     private FloatingActionButton fab;
