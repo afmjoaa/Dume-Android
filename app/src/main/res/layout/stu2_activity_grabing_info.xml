@@ -5,27 +5,9 @@
     android:id="@+id/parent_coor_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_vector"
     android:fitsSystemWindows="true"
     tools:context=".student.grabingInfo.GrabingInfoActivity">
 
-
-    <io.dume.dume.customView.WindowInsetsFrameLayout
-        android:id="@+id/map_container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fitsSystemWindows="true">
-
-
-        <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:tools="http://schemas.android.com/tools"
-            android:id="@+id/map"
-            android:name="com.google.android.gms.maps.SupportMapFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/background_vector"
-            android:fitsSystemWindows="true" />
-    </io.dume.dume.customView.WindowInsetsFrameLayout>
 
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/always_view_musk"
@@ -73,7 +55,7 @@
 
                 <Button
                     android:id="@+id/for_me_btn"
-                    style="?android:attr/borderlessButtonStyle"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:maxWidth="240dp"
@@ -386,6 +368,7 @@
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/container"
+        android:background="@color/mColorBackground"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />

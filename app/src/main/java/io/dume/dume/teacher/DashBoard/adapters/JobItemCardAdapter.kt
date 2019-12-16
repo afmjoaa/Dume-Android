@@ -1,4 +1,4 @@
-package io.dume.dume.teacher.testing.adapters
+package io.dume.dume.teacher.DashBoard.adapters
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -11,7 +11,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
 import io.dume.dume.R
-import io.dume.dume.teacher.testing.fragments.jobboard.JobItem
+import io.dume.dume.teacher.DashBoard.fragments.jobboard.JobItem
 
 class JobItemCardAdapter : RecyclerView.Adapter<JobItemCardAdapter.VH>() {
 

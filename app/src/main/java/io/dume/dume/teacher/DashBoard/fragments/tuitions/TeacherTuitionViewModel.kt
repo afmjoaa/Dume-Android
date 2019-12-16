@@ -1,13 +1,13 @@
-package io.dume.dume.teacher.testing.fragments.payments
+package io.dume.dume.teacher.DashBoard.fragments.tuitions
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class TeacherPaymentViewModel : ViewModel() {
+class TeacherTuitionViewModel : ViewModel() {
 
     private val _text = MutableLiveData<String>().apply {
-        value = "This is notifications Fragment"
+        value = "This is tuition Fragment"
     }
     val text: LiveData<String> = _text
 }

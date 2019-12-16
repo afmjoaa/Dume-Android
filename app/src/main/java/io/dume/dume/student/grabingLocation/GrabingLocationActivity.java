@@ -1,7 +1,6 @@
 package io.dume.dume.student.grabingLocation;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
@@ -32,6 +31,7 @@ import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -66,7 +66,6 @@ import java.util.Objects;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
-import carbon.widget.Button;
 import carbon.widget.ImageView;
 import carbon.widget.RelativeLayout;
 import io.dume.dume.R;
@@ -97,15 +96,12 @@ public class GrabingLocationActivity extends BaseMapActivity implements OnMapRea
     private GoogleMap mMap;
     private static final String TAG = "GrabingLocationActivity";
     private static final int fromFlag = 2;
-    private Context mContext;
     private LatLng mCenterLatLong;
     private SupportMapFragment mapFragment;
     private FloatingActionButton fab;
-    private View map;
     private Toolbar toolbar;
     private BottomSheetBehavior bottomSheetBehavior;
     private LinearLayout llBottomSheet;
-    private FloatingActionButton bottomSheetFab;
     private AppBarLayout myAppbarlayout;
     private CoordinatorLayout coordinatorLayout;
     private RecyclerView autoCompleteRecyView;
@@ -132,7 +128,6 @@ public class GrabingLocationActivity extends BaseMapActivity implements OnMapRea
     private static Map<String, Map<String, Object>> recently_used;
     private int ADD_HOME_LOCATION = 1001;
     private int ADD_WORK_LOCATION = 1002;
-    private int ADD_RECENT_PLACES = 1004;
     private int ADD_PARMANENT_ADDRESS = 1005;
     private GrabingLocationModel mModel;
     private LinearLayout hackSetLocationOnMap;
@@ -142,10 +137,6 @@ public class GrabingLocationActivity extends BaseMapActivity implements OnMapRea
     private NestedScrollView bottomSheetNSV;
 
 
-    //queriedLocation for text to geopoint
-    //mCenterLatLong for geopoint to text
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -153,8 +144,6 @@ public class GrabingLocationActivity extends BaseMapActivity implements OnMapRea
         buildGoogleApiClient();
         setActivityContextMap(this, fromFlag);
         findLoadView();
-        mContext = this;
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         getLocationPermission(mapFragment);
         mModel = new GrabingLocationModel(this);
@@ -164,7 +153,7 @@ public class GrabingLocationActivity extends BaseMapActivity implements OnMapRea
         mPresenter.grabingLocationPageEnqueue();
         setDarkStatusBarIcon();
         compositeDisposable = new CompositeDisposable();
-        //auto one
+
         initAdapterData = new ArrayList<AutocompletePrediction>();
         recyclerAutoAdapter = new PlaceAutoRecyAda(this, initAdapterData, mGoogleApiClient) {
             @Override
@@ -242,7 +231,6 @@ public class GrabingLocationActivity extends BaseMapActivity implements OnMapRea
                             flush("Successfully Added");
                             hideProgress();
                         }
-
                         @Override
                         public void onError(String msg) {
                             flush(msg);
@@ -288,8 +276,6 @@ public class GrabingLocationActivity extends BaseMapActivity implements OnMapRea
     @Override
     public void findView() {
         fab = findViewById(R.id.fab);
-        map = findViewById(R.id.map);
-        //mLocationMarkerText = (TextView) findViewById(R.id.locationMarkertext);
         toolbar = findViewById(R.id.accountToolbar);
         llBottomSheet = findViewById(R.id.searchBottomSheet);
         myAppbarlayout = findViewById(R.id.my_appbarLayout_cardView);
@@ -313,7 +299,6 @@ public class GrabingLocationActivity extends BaseMapActivity implements OnMapRea
     @Override
     public void initGrabingLocationPage() {
         fab.setAlpha(0.90f);
-        //initializing actionbar/toolbar
         setSupportActionBar(toolbar);
         ActionBar supportActionBar = getSupportActionBar();
         if (supportActionBar != null) {
@@ -757,25 +742,12 @@ public class GrabingLocationActivity extends BaseMapActivity implements OnMapRea
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        /*ISNIGHT = HOUR < 4 || HOUR > 24;
-        if (ISNIGHT) {
-            MapStyleOptions style = MapStyleOptions.loadRawResourceStyle(
-                    this, R.raw.map_style_night_json);
-            googleMap.setMapStyle(style);
-        } else {}*/
         MapStyleOptions style = MapStyleOptions.loadRawResourceStyle(
                 this, R.raw.map_style_default_json);
         googleMap.setMapStyle(style);
-
         mMap = googleMap;
         onMapReadyListener(mMap);
         mMap.setPadding((int) (10 * (getResources().getDisplayMetrics().density)), 0, 0, (int) (72 * (getResources().getDisplayMetrics().density)));
-        /*mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
-            @Override
-            public void onMapLoaded() {
-
-            }
-        });*/
 
         onMapReadyGeneralConfig();
         getDeviceLocation(mMap);
@@ -941,11 +913,6 @@ public class GrabingLocationActivity extends BaseMapActivity implements OnMapRea
         }
     }
 
-
-    /*public void onGrabingLocationViewClicked(View view) {
-        mPresenter.onGrabingLocationViewIntracted(view);
-    }*/
-
     protected synchronized void buildGoogleApiClient() {
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addApi(Places.GEO_DATA_API)
@@ -1108,29 +1075,22 @@ public class GrabingLocationActivity extends BaseMapActivity implements OnMapRea
     public void setCurrentAddress(GeoPoint currentAddress) {
         userLocation = currentAddress;
         String address = getAddress(currentAddress.getLatitude(), currentAddress.getLongitude());
-        //secondaryText[1] = "fuck fuck";
-        //recyclerMenualAdapter.update(getFinalData());
     }
 
     @Override
     public void setHomeAddress(Map<String, Object> homeAddress) {
-
-
     }
 
     @Override
     public void setWorkAddress(Map<String, Object> workAddress) {
-
     }
 
     @Override
     public void setSavedPlaces(ArrayList<Map<String, Object>> savedPlaces) {
-
     }
 
     @Override
     public void setBackInTimePlaces(ArrayList<Map<String, Object>> backInTimePlaces) {
-
     }
 
     @Override
@@ -1177,7 +1137,6 @@ public class GrabingLocationActivity extends BaseMapActivity implements OnMapRea
         if (d instanceof Animatable) {
             ((Animatable) d).start();
         }
-        //Log.d(TAG, "onClick: clicked gps icon");
         getDeviceLocation(mMap);
     }
 }

@@ -1,4 +1,4 @@
-package io.dume.dume.teacher.testing.fragments.jobboard
+package io.dume.dume.teacher.DashBoard.fragments.jobboard
 
 class JobItem {
     var title: String? = null

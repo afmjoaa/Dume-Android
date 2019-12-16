@@ -1,4 +1,4 @@
-package io.dume.dume.teacher.testing
+package io.dume.dume.teacher.DashBoard
 
 import android.os.Bundle
 import android.view.MenuItem
@@ -10,10 +10,10 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import io.dume.dume.R
 import io.dume.dume.student.pojo.BaseAppCompatActivity
-import io.dume.dume.teacher.testing.fragments.jobboard.TeacherJobBoardFragment
-import io.dume.dume.teacher.testing.fragments.payments.TeacherPaymentFragment
-import io.dume.dume.teacher.testing.fragments.skills.TeacherSkillFragment
-import io.dume.dume.teacher.testing.fragments.tuitions.TeacherTuitionFragment
+import io.dume.dume.teacher.DashBoard.fragments.jobboard.TeacherJobBoardFragment
+import io.dume.dume.teacher.DashBoard.fragments.payments.TeacherPaymentFragment
+import io.dume.dume.teacher.DashBoard.fragments.skills.TeacherSkillFragment
+import io.dume.dume.teacher.DashBoard.fragments.tuitions.TeacherTuitionFragment
 import io.dume.dume.util.DumeUtils
 import kotlinx.android.synthetic.main.activity_student_dash_board2.*
 

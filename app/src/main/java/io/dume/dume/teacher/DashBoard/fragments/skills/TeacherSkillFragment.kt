@@ -1,4 +1,4 @@
-package io.dume.dume.teacher.testing.fragments.skills
+package io.dume.dume.teacher.DashBoard.fragments.skills
 
 import android.os.Bundle
 import android.view.LayoutInflater

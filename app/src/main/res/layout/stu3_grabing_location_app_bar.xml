@@ -13,8 +13,6 @@
         android:layout_height="wrap_content"
         android:background="@drawable/bg_white_bottom_round"
         android:theme="@style/AppTheme.AppBarOverlay">
-        <!--android:background="@drawable/bg_white_bottom_round"-->
-
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/accountToolbar"
@@ -32,7 +30,6 @@
             app:theme="@style/ThemeToolbar.default"
             app:title="Select search point"
             app:titleTextAppearance="@style/MyTextApprncCol.lightBg">
-
 
         </androidx.appcompat.widget.Toolbar>
 
@@ -156,7 +153,7 @@
 
     </LinearLayout>
 
-    <carbon.widget.Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/location_done_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -166,16 +163,9 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginStart="16dp"
-        android:background="@color/colorBlack"
         android:text="Done"
         android:textAllCaps="false"
-        android:textColor="@color/carbon_white"
         android:textSize="18sp"
-        android:visibility="invisible"
-        app:carbon_cornerRadius="5dp"
-        app:carbon_elevation="5dp"
-        app:carbon_fontFamily="@font/cairo_regular"
-        app:carbon_rippleColor="#80ffffff"
-        app:carbon_rippleStyle="background" />
+        android:visibility="invisible" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
