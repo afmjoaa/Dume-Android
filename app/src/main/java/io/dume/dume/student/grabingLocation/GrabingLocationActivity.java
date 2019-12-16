@@ -9,19 +9,6 @@ import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-
-import com.google.android.material.appbar.AppBarLayout;
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import androidx.core.content.ContextCompat;
-import androidx.core.view.ViewCompat;
-import androidx.core.widget.NestedScrollView;
-import androidx.appcompat.app.ActionBar;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.appcompat.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.style.CharacterStyle;
@@ -54,6 +41,10 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.gson.Gson;
@@ -66,12 +57,21 @@ import java.util.Objects;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.ViewCompat;
+import androidx.core.widget.NestedScrollView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import carbon.widget.ImageView;
 import carbon.widget.RelativeLayout;
 import io.dume.dume.R;
 import io.dume.dume.student.pojo.BaseMapActivity;
 import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
-import io.dume.dume.student.profilePage.ProfilePageActivity;
 import io.dume.dume.student.studentSettings.SavedPlacesAdaData;
 import io.dume.dume.student.studentSettings.StudentSettingsActivity;
 import io.dume.dume.teacher.crudskill.CrudSkillActivity;
@@ -115,7 +115,7 @@ public class GrabingLocationActivity extends BaseMapActivity implements OnMapRea
     private PlaceMenualRecyAda recyclerMenualAdapter;
     private ArrayList<AutocompletePrediction> initAdapterData;
     private ImageView discardImage;
-    private Button locationDoneBtn;
+    private MaterialButton locationDoneBtn;
     private RelativeLayout inputSearchContainer;
     private String retrivedAction;
     private LatLng queriedLocation;
@@ -231,6 +231,7 @@ public class GrabingLocationActivity extends BaseMapActivity implements OnMapRea
                             flush("Successfully Added");
                             hideProgress();
                         }
+
                         @Override
                         public void onError(String msg) {
                             flush(msg);
@@ -751,15 +752,18 @@ public class GrabingLocationActivity extends BaseMapActivity implements OnMapRea
 
         onMapReadyGeneralConfig();
         getDeviceLocation(mMap);
+
+
         mMap.setOnCameraMoveStartedListener(new GoogleMap.OnCameraMoveStartedListener() {
             @Override
             public void onCameraMoveStarted(int i) {
                 locationDoneBtn.setEnabled(false);
-                locationDoneBtn.setBackgroundColor(getResources().getColor(R.color.disable_color));
+                // locationDoneBtn.setBackgroundColor(getResources().getColor(R.color.disable_color));
                 showProgress();
                 inputSearch.setText(R.string.LoadingText);
             }
         });
+
 
         mMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
             @Override
@@ -775,7 +779,6 @@ public class GrabingLocationActivity extends BaseMapActivity implements OnMapRea
                 String mainAddress = getAddress(mCenterLatLong.latitude, mCenterLatLong.longitude);
                 inputSearch.setText(mainAddress);
                 locationDoneBtn.setEnabled(true);
-                locationDoneBtn.setBackgroundColor(getResources().getColor(R.color.colorBlack));
                 hideProgress();
 
             }
@@ -792,14 +795,14 @@ public class GrabingLocationActivity extends BaseMapActivity implements OnMapRea
     //not interested right now
     @Override
     public void onLocationDoneBtnClicked() {
-
+        Toast.makeText(this, "onLocationDoneBtnClicked", Toast.LENGTH_SHORT).show();
         if (Objects.requireNonNull(retrivedAction).equals("fromPPA")) {
             //testing
             if (mCenterLatLong == null) {
                 flush("Please move map marker to select location...");
                 return;
             }
-            Intent goBackToPPAIntent = new Intent(this, ProfilePageActivity.class);
+            Intent goBackToPPAIntent = getIntent();
             goBackToPPAIntent.putExtra("selected_location", mCenterLatLong);
             setResult(RESULT_OK, goBackToPPAIntent);
             finish();
@@ -846,7 +849,7 @@ public class GrabingLocationActivity extends BaseMapActivity implements OnMapRea
         } else {
             showProgress();
             locationDoneBtn.setEnabled(false);
-            locationDoneBtn.setBackgroundColor(getResources().getColor(R.color.disable_color));
+            //locationDoneBtn.setBackgroundColor(getResources().getColor(R.color.disable_color));
             LatLng target = mMap.getCameraPosition().target;
 
             if (target == null) {
@@ -892,7 +895,7 @@ public class GrabingLocationActivity extends BaseMapActivity implements OnMapRea
                     mModel.updateRecentPlaces(identify, myMap, new TeacherContract.Model.Listener<Void>() {
                         @Override
                         public void onSuccess(Void list) {
-                            //locationDoneBtn.setEnabled(true);
+                            locationDoneBtn.setEnabled(true);
                             //locationDoneBtn.setBackgroundColor(getResources().getColor(R.color.colorBlack));
                             hideProgress();
                             startActivity(new Intent(GrabingLocationActivity.this, CrudSkillActivity.class).setAction(DumeUtils.STUDENT));

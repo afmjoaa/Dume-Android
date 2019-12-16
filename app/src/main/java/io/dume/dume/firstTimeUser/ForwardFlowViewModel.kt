@@ -1,7 +1,7 @@
 package io.dume.dume.firstTimeUser
 
 import android.app.Activity
-import android.view.MenuItem
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.AuthResult
@@ -12,6 +12,7 @@ import io.dume.dume.auth.AuthGlobalContract
 import io.dume.dume.auth.AuthModel
 import io.dume.dume.auth.auth.AuthContract
 import io.dume.dume.auth.code_verification.PhoneVerificationContract
+import io.dume.dume.poko.Register
 import java.util.*
 
 class ForwardFlowViewModel : ViewModel() {
@@ -30,7 +31,6 @@ class ForwardFlowViewModel : ViewModel() {
     val error = MutableLiveData<String>(null)
     var phoneNumber = MutableLiveData<String>()
     lateinit var activity: Activity
-    var menu = MutableLiveData<MenuItem>()
     var scan = MutableLiveData<NID>()
 
 
@@ -101,11 +101,12 @@ class ForwardFlowViewModel : ViewModel() {
             override fun onStart() = run { load.value = true }
             override fun onSuccess() = run { load.value = false; isExisting() }
             override fun onFail(error: String?) = run { load.value = false; this@ForwardFlowViewModel.error.value = error }
-
         })
     }
 
-    /** isLoggedIn returns true or false based on user loged status*/
+    /**
+     * isLoggedIn returns true or false based on user loged status
+     *  */
     fun isLoggedIn(): Boolean = repository.isUserLoggedIn
 
     fun getUserUID(): String {
@@ -120,8 +121,8 @@ class ForwardFlowViewModel : ViewModel() {
 
     }
 
-    fun register(userId: String) {
-
+    fun register(register: Register) {
+        Log.e("debug", "Wow...it works")
     }
 
 

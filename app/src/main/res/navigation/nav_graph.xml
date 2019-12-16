@@ -9,28 +9,28 @@
         android:id="@+id/roleChooser"
         android:name="io.dume.dume.firstTimeUser.Fragment.RoleChooserFragment"
         android:label="RoleChooser"
-        tools:layout="@layout/fragment_role_chooser" >
+        tools:layout="@layout/fragment_role_chooser">
         <action
             android:id="@+id/action_roleChooser_to_privacyFragment"
             app:destination="@id/privacyFragment"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"
             app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"/>
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
 
     <fragment
         android:id="@+id/permissionFragment"
         android:name="io.dume.dume.firstTimeUser.Fragment.PermissionFragment"
         android:label="fragment_permission"
-        tools:layout="@layout/fragment_permission" >
+        tools:layout="@layout/fragment_permission">
         <action
             android:id="@+id/action_permissionFragment_to_loginFragment"
             app:destination="@id/loginFragment"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"
             app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"/>
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
         <action
             android:id="@+id/action_permissionFragment_to_nidFragment"
             app:destination="@id/nidFragment" />
@@ -43,21 +43,21 @@
         android:id="@+id/privacyFragment"
         android:name="io.dume.dume.firstTimeUser.Fragment.PrivacyFragment"
         android:label="fragment_privacy"
-        tools:layout="@layout/fragment_privacy" >
+        tools:layout="@layout/fragment_privacy">
         <action
             android:id="@+id/action_privacyFragment_to_permissionFragment"
             app:destination="@id/permissionFragment"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"
             app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"/>
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
 
     <fragment
         android:id="@+id/loginFragment"
         android:name="io.dume.dume.firstTimeUser.Fragment.LoginFragment"
         android:label="fragment_login"
-        tools:layout="@layout/fragment_login" >
+        tools:layout="@layout/fragment_login">
         <action
             android:id="@+id/action_loginFragment_to_verificationFragment"
             app:destination="@id/verificationFragment" />
@@ -73,63 +73,63 @@
         android:id="@+id/nidFragment"
         android:name="io.dume.dume.firstTimeUser.Fragment.NidScanFragment"
         android:label="fragment_nid"
-        tools:layout="@layout/fragment_nid_scan" >
+        tools:layout="@layout/fragment_nid_scan">
         <action
             android:id="@+id/action_nidFragment_to_registerFragment"
             app:destination="@id/registerFragment"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"
             app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"/>
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
 
     <fragment
         android:id="@+id/registerFragment"
         android:name="io.dume.dume.firstTimeUser.Fragment.RegisterFragment"
         android:label="fragment_register"
-        tools:layout="@layout/fragment_register" >
+        tools:layout="@layout/fragment_register">
         <action
             android:id="@+id/action_registerFragment_to_qualificationFragment"
             app:destination="@id/qualificationFragment"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"
             app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"/>
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
         <action
             android:id="@+id/action_registerFragment_to_postJobFragment"
             app:destination="@id/postJobFragment"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"
             app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"/>
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
 
     <fragment
         android:id="@+id/qualificationFragment"
         android:name="io.dume.dume.firstTimeUser.Fragment.QualificationFragment"
         android:label="fragment_qualification"
-        tools:layout="@layout/fragment_qualification" >
+        tools:layout="@layout/fragment_qualification">
         <action
             android:id="@+id/action_qualificationFragment_to_addSkillFragment"
             app:destination="@id/addSkillFragment"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"
             app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"/>
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
 
     <fragment
         android:id="@+id/addSkillFragment"
         android:name="io.dume.dume.teacher.DashBoard.fragments.skills.TeacherSkillFragment"
         android:label="fragment_add_skill"
-        tools:layout="@layout/fragment_teacher_skill" >
+        tools:layout="@layout/fragment_teacher_skill">
         <action
             android:id="@+id/action_addSkillFragment_to_paymentFragment"
             app:destination="@id/paymentFragment"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"
             app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left" />
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
 
     <fragment
@@ -148,13 +148,26 @@
         android:id="@+id/verificationFragment"
         android:name="io.dume.dume.firstTimeUser.Fragment.VerificationFragment"
         android:label="fragment_verification"
-        tools:layout="@layout/fragment_verification" >
+        tools:layout="@layout/fragment_verification">
         <action
             android:id="@+id/action_verificationFragment_to_nidFragment"
-            app:destination="@id/nidFragment" />
+            app:destination="@id/nidFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:popUpTo="@id/roleChooser"
+            app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_verificationFragment_to_registerFragment"
-            app:destination="@id/registerFragment" />
+            app:destination="@id/registerFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:popUpTo="@id/roleChooser"
+            app:popUpToInclusive="true"
+            />
     </fragment>
 
 </navigation>

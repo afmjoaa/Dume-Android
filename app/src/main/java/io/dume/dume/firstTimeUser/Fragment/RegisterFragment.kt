@@ -1,19 +1,14 @@
 package io.dume.dume.firstTimeUser.Fragment
 
-import android.annotation.SuppressLint
 import android.app.Activity
-import android.content.ComponentName
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
-import android.os.Parcelable
-import android.provider.MediaStore
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -24,21 +19,25 @@ import com.bumptech.glide.request.RequestOptions
 import com.facebook.FacebookSdk.getApplicationContext
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.firestore.GeoPoint
-import id.zelory.compressor.Compressor
+import com.vansuita.pickimage.bean.PickResult
+import com.vansuita.pickimage.bundle.PickSetup
+import com.vansuita.pickimage.dialog.PickImageDialog
+import com.vansuita.pickimage.listeners.IPickResult
 import io.dume.dume.R
 import io.dume.dume.firstTimeUser.ForwardFlowHostActivity
 import io.dume.dume.firstTimeUser.ForwardFlowViewModel
-import io.dume.dume.util.FileUtil
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
+import io.dume.dume.poko.Register
+import io.dume.dume.student.grabingLocation.GrabingLocationActivity
+import io.dume.dume.util.DumeUtils.getAddress
 import kotlinx.android.synthetic.main.fragment_register.*
 import java.io.File
-import java.util.*
 
-class RegisterFragment : Fragment(), View.OnClickListener {
+class RegisterFragment : Fragment(), View.OnClickListener, IPickResult {
+
+
     private lateinit var navController: NavController
     private lateinit var viewModel: ForwardFlowViewModel
-    private var avatarString: String? = null
+    private var avatarString: Uri? = null
     private var outputFileUri: Uri? = null
     private val LOCATION_REQUEST_CODE = 2222
     private val IMAGE_RESULT_CODE = 3333
@@ -67,70 +66,26 @@ class RegisterFragment : Fragment(), View.OnClickListener {
     }
 
     private fun init() {
-        register_dp.setOnClickListener { view ->
-            if (avatarString == null || avatarString == "") {
-                openImageIntent()
-            } else {
-                val popup = PopupMenu(context!!, view)
-                popup.inflate(R.menu.menu_dp_long_click)
-                popup.setOnMenuItemClickListener { menuItem ->
-                    val id = menuItem.itemId
-                    when (id) {
-                        R.id.action_update -> openImageIntent()
-                        R.id.action_remove -> {
-                            avatarString = null
-                            compressedImage = null
-                            setAvatar(null)
-                            flush("Display pic Removed")
-                        }
-                    }
-                    false
-                }
-                popup.show()
-            }
-        }
+        register_dp.setOnClickListener(this)
+        register_location.setOnClickListener(this)
 
     }
 
-    fun setAvatar(uri: String?) {
+    fun setAvatar(uri: Uri) {
         avatarString = uri
         Glide.with(getApplicationContext()).load(uri).apply(RequestOptions().override(100, 100).placeholder(R.drawable.avatar)).into(register_dp)
-
     }
 
-    private fun openImageIntent() {
-        // Determine Uri of camera image to save.
-        val root = File(Environment.getExternalStorageDirectory().toString() + File.separator + "MyDir" + File.separator)
-        root.mkdirs()
-        val fname = "stu_" + viewModel.getUserUID() + ".jpg"
-        val sdImageMainDirectory = File(root, fname)
-        outputFileUri = Uri.fromFile(sdImageMainDirectory)
 
-        // Camera.
-        val cameraIntents = ArrayList<Intent>()
-        val captureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        val packageManager = context!!.getPackageManager()
-        val listCam = packageManager.queryIntentActivities(captureIntent, 0)
-        for (res in listCam) {
-            val packageName = res.activityInfo.packageName
-            val intent = Intent(captureIntent)
-            intent.component = ComponentName(packageName, res.activityInfo.name)
-            intent.setPackage(packageName)
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri)
-            cameraIntents.add(intent)
+    fun validate(): Register? {
+        if (register_name.text.toString() == "") {
+            register_name.setError("Name must not be empty")
+            return null
+        } else if (register_location.text.toString() == "" || userLocation == null) {
+            register_location.setError("Location must be chosen")
+            return null
         }
-
-        // Filesystem.
-        val galleryIntent = Intent()
-        galleryIntent.type = "image/*"
-        galleryIntent.action = Intent.ACTION_GET_CONTENT
-
-        // Chooser of filesystem options.
-        val chooserIntent = Intent.createChooser(galleryIntent, "Select Source")
-
-        // Add the camera options.
-        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, cameraIntents.toTypedArray<Parcelable>())
-        startActivityForResult(chooserIntent, IMAGE_RESULT_CODE)
+        return Register(register_name.text.toString(), register_birth_date.text.toString(), register_email.text.toString(), register_nid.text.toString().toLong(), userLocation!!, avatarString)
     }
 
 
@@ -150,74 +105,35 @@ class RegisterFragment : Fragment(), View.OnClickListener {
                 register_birth_date.setText(it.birth_date)
             }
         })
+
+        parent.onRegisterButtonClick {
+            validate()?.let {
+                parent.showProgress()
+                viewModel.register(it)
+                Handler().postDelayed({
+                    parent.hideProgress()
+                }, 2000)
+            }
+        }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+     fun setCurrentAddress(geoPoint: GeoPoint) {
+        userLocation = geoPoint
+        val address = getAddress(context, geoPoint.latitude, geoPoint.longitude)
+        register_location.setText(address)
+    }
+
+     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == IMAGE_RESULT_CODE) {
-                val isCamera: Boolean
-                if (data == null) {
-                    isCamera = true
-                } else {
-                    val action = data.action
-                    if (action == null) {
-                        isCamera = false
-                    } else {
-                        isCamera = action == MediaStore.ACTION_IMAGE_CAPTURE
-                    }
-                }
-
-                if (isCamera) {
-                    selectedImageUri = outputFileUri
-                } else {
-                    selectedImageUri = data?.data
-                }
-                if (selectedImageUri != null) {
-                    parent.showProgress()
-                    try {
-                        actualImage = FileUtil.from(context, selectedImageUri)
-                    } catch (e: Exception) {
-                        actualImage = null
-                        e.printStackTrace()
-                    }
-
-                    Glide.with(activity!!).load(selectedImageUri).apply(RequestOptions().override(100, 100).placeholder(R.drawable.set_display_pic)).into(register_dp)
-                    if (actualImage == null) {
-                        compressedImage = null
-                        parent.hideProgress()
-                    } else {
-                        compressImage(actualImage!!)
-                        parent.hideProgress()
-                    }
-                }
-                //Glide.with(this).load(selectedImageUri).apply(new RequestOptions().override(100, 100)).into(profileUserDP);
-            } else if (requestCode == LOCATION_REQUEST_CODE) {
-                val selectedLocation = data?.getParcelableExtra<LatLng>("selected_location")
+            if (requestCode == LOCATION_REQUEST_CODE) {
+                val selectedLocation = data!!.getParcelableExtra<LatLng>("selected_location")
                 if (selectedLocation != null) {
                     val retrivedLocation = GeoPoint(selectedLocation.latitude, selectedLocation.longitude)
-
+                    setCurrentAddress(retrivedLocation)
                 }
             }
         }
-
-    }
-
-    @SuppressLint("CheckResult")
-    private fun compressImage(actualImage: File) {
-        Compressor(context)
-                .compressToFileAsFlowable(actualImage, "student_photo")
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ file ->
-                    //flush("i am here");
-                    compressedImage = file
-
-                }, { throwable ->
-                    throwable.printStackTrace()
-                    flush(throwable.message)
-                    parent.hideProgress()
-                })
     }
 
     override fun onClick(v: View?) {
@@ -225,6 +141,45 @@ class RegisterFragment : Fragment(), View.OnClickListener {
             R.id.registerBtn -> {
                 navController.navigate(R.id.action_registerFragment_to_qualificationFragment)
             }
+            R.id.register_location -> {
+                startActivityForResult(Intent(context, GrabingLocationActivity::
+                class.java).setAction("fromPPA"), LOCATION_REQUEST_CODE)
+            }
+            R.id.register_dp -> {
+                PickImageDialog.build(PickSetup()).setOnPickResult(this).show(fragmentManager)
+                /*   if (avatarString == null || avatarString == "") {
+                       openImageIntent()
+                   } else {
+                       val popup = PopupMenu(context!!, v)
+                       popup.inflate(R.menu.menu_dp_long_click)
+                       popup.setOnMenuItemClickListener { menuItem ->
+                           val id = menuItem.itemId
+                           when (id) {
+                               R.id.action_update -> openImageIntent()
+                               R.id.action_remove -> {
+                                   avatarString = null
+                                   compressedImage = null
+                                   setAvatar(null)
+                                   flush("Display pic Removed")
+                               }
+                           }
+                           false
+                       }
+                       popup.show()
+                   }*/
+            }
         }
     }
+
+    /**
+     * Dialog that promts to pick an profile image to save
+     * */
+    public override fun onPickResult(r: PickResult) {
+        if (r.error == null) {
+            setAvatar(r.uri)
+        } else {
+            Toast.makeText(context, r.error.message, Toast.LENGTH_LONG).show()
+        }
+    }
+
 }

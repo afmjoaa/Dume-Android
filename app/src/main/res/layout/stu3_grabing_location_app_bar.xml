@@ -36,13 +36,13 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
             android:layout_below="@+id/accountToolbar"
-            android:layout_marginBottom="10dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginLeft="22dp"
-            android:layout_marginRight="20dp"
+            android:layout_gravity="center"
             android:layout_marginStart="22dp"
+            android:layout_marginLeft="22dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="10dp"
             android:gravity="center"
             android:orientation="horizontal">
 
@@ -74,10 +74,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_centerVertical="true"
-                    android:layout_marginEnd="30dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="30dp"
                     android:layout_marginStart="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginEnd="30dp"
+                    android:layout_marginRight="30dp"
                     android:background="@null"
                     android:focusable="true"
                     android:focusableInTouchMode="true"
@@ -126,7 +126,7 @@
         android:translationY="2dp"
         android:visibility="gone"
         app:layout_anchor="@id/my_appbarLayout_cardView"
-        app:layout_anchorGravity="bottom"/>
+        app:layout_anchorGravity="bottom" />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -142,10 +142,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="top|end"
-            android:layout_marginBottom="12dp"
             android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
             android:layout_marginTop="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="12dp"
             android:visibility="visible"
             app:backgroundTint="@color/colorWhite"
             app:fabSize="mini"
@@ -158,14 +158,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_marginBottom="20dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
         android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="20dp"
         android:text="Done"
         android:textAllCaps="false"
         android:textSize="18sp"
-        android:visibility="invisible" />
+        android:visibility="visible" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

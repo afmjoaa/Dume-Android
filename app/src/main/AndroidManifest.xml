@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="io.dume.dume">
     <!-- when a object needs internet to execute a job -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
@@ -26,9 +27,10 @@
         android:roundIcon="@mipmap/icon_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/DefaultTheme.NoActionBar">
-        <activity android:name=".firstTimeUser.ForwardFlowHostActivity"
+        <activity
+            android:name=".firstTimeUser.ForwardFlowHostActivity"
             android:theme="@style/DefaultTheme.NoActionBar"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".teacher.DashBoard.TeacherDashboard"
             android:label="@string/title_activity_teacher_dashboard"
@@ -136,6 +138,7 @@
         <activity
             android:name=".student.grabingLocation.GrabingLocationActivity"
             android:label="@string/title_activity_grabing_location"
+            android:theme="@style/DefaultTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize" />
         <activity android:name=".student.pojo.BaseMapActivity" />
         <activity
@@ -252,6 +255,17 @@
             android:name=".service.MyLocationService"
             android:enabled="true"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE" />
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="io.dume.dume.com.vansuita.pickimage.provider"
+            android:exported="false"
+            android:grantUriPermissions="true"
+            tools:replace="android:authorities">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/picker_provider_paths" />
+        </provider>
     </application>
 
 </manifest>
