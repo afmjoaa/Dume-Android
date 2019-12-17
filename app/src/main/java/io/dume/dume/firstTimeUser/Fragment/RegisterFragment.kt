@@ -26,8 +26,9 @@ import com.vansuita.pickimage.listeners.IPickResult
 import io.dume.dume.R
 import io.dume.dume.firstTimeUser.ForwardFlowHostActivity
 import io.dume.dume.firstTimeUser.ForwardFlowViewModel
-import io.dume.dume.poko.Register
+import io.dume.dume.poko.MiniUser
 import io.dume.dume.student.grabingLocation.GrabingLocationActivity
+import io.dume.dume.util.DumeUtils
 import io.dume.dume.util.DumeUtils.getAddress
 import kotlinx.android.synthetic.main.fragment_register.*
 import java.io.File
@@ -77,15 +78,31 @@ class RegisterFragment : Fragment(), View.OnClickListener, IPickResult {
     }
 
 
-    fun validate(): Register? {
+    fun validate(): MiniUser? {
         if (register_name.text.toString() == "") {
             register_name.setError("Name must not be empty")
             return null
         } else if (register_location.text.toString() == "" || userLocation == null) {
-            register_location.setError("Location must be chosen")
+            register_location_container.setError("Location must be chosen")
             return null
         }
-        return Register(register_name.text.toString(), register_birth_date.text.toString(), register_email.text.toString(), register_nid.text.toString().toLong(), userLocation!!, avatarString)
+        var last_name = ""
+        for ((i, parts) in register_name.text.toString().split(" ").withIndex()) if (i != 0) last_name += "$parts "
+
+        return MiniUser(name = register_name.text.toString(),
+                birth_date = register_birth_date.text.toString(),
+                mail = register_email.text.toString(),
+                nid = register_nid.text.toString().toLong(),
+                parmanent_location = userLocation!!,
+                avatar = avatarString.toString(),
+                accoount_major = viewModel.role.value!!.flow,
+                phone_number = viewModel.phoneNumber.value!!,
+                first_name = register_name.text.toString().split(" ")[0],
+                last_name = last_name,
+                obligated_user = null,
+                obligation = false,
+                imei = DumeUtils.getImei(context)
+        )
     }
 
 
@@ -117,13 +134,13 @@ class RegisterFragment : Fragment(), View.OnClickListener, IPickResult {
         }
     }
 
-     fun setCurrentAddress(geoPoint: GeoPoint) {
+    fun setCurrentAddress(geoPoint: GeoPoint) {
         userLocation = geoPoint
         val address = getAddress(context, geoPoint.latitude, geoPoint.longitude)
         register_location.setText(address)
     }
 
-     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == LOCATION_REQUEST_CODE) {

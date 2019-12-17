@@ -1,7 +1,6 @@
 package io.dume.dume.firstTimeUser
 
 import android.app.Activity
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.AuthResult
@@ -12,7 +11,7 @@ import io.dume.dume.auth.AuthGlobalContract
 import io.dume.dume.auth.AuthModel
 import io.dume.dume.auth.auth.AuthContract
 import io.dume.dume.auth.code_verification.PhoneVerificationContract
-import io.dume.dume.poko.Register
+import io.dume.dume.poko.MiniUser
 import java.util.*
 
 class ForwardFlowViewModel : ViewModel() {
@@ -121,8 +120,8 @@ class ForwardFlowViewModel : ViewModel() {
 
     }
 
-    fun register(register: Register) {
-        Log.e("debug", "Wow...it works")
+    fun register(miniUser: MiniUser) {
+        repository.addUser(miniUser,null!!)
     }
 
 

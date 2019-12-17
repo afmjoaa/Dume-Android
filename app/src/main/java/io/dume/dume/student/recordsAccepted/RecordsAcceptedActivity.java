@@ -797,7 +797,7 @@ public class RecordsAcceptedActivity extends BaseAppCompatActivity implements Re
             stuPreviousResultTV.setText(String.format("%s%s", "Previous Result : ", stuTemp));
             boolean is_self = (boolean) forMap.get("is_self");
             if (is_self) {
-                stuTemp = "Student";
+                stuTemp = "User";
             } else {
                 stuTemp = "Guardian";
             }
@@ -995,7 +995,7 @@ public class RecordsAcceptedActivity extends BaseAppCompatActivity implements Re
                     achievementInfoBtn.setText("Your Achievements");
                     moreInfoBtn.setText("Your Info");
                     contactMainText.setText("Contact with " + studentName);
-                    locationShowBtn.setText("Student Location");
+                    locationShowBtn.setText("User Location");
                     break;
                 case DumeUtils.BOOTCAMP:
                     break;

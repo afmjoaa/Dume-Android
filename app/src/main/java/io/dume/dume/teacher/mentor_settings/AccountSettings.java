@@ -404,7 +404,7 @@ public class AccountSettings extends BaseAppCompatActivity implements AccountSet
                         AlertMsgDialogue accountChangerAlertDialogue = new AlertMsgDialogue();
                         accountChangerAlertDialogue.setItemChoiceListener((dialogInterface, i) -> {
                             heatMapAccountRecyAda.update(getFinalData(position));
-                            String toChange = accountTypeArr[position].equals("Mentor") ? DumeUtils.TEACHER : accountTypeArr[position].equals("Student") ? DumeUtils.STUDENT : accountTypeArr[position];
+                            String toChange = accountTypeArr[position].equals("Mentor") ? DumeUtils.TEACHER : accountTypeArr[position].equals("User") ? DumeUtils.STUDENT : accountTypeArr[position];
                             if (toChange.equals("Boot Camp")) {
                                 toast("Bootcamp service is under development.");
                             } else {

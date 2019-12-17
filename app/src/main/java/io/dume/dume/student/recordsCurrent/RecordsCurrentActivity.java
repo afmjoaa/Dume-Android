@@ -835,7 +835,7 @@ public class RecordsCurrentActivity extends BaseAppCompatActivity implements Rec
                     showAdditionalRatingBtn.setText("Your Rating");
                     achievementInfoBtn.setText("Your Achievements");
                     moreInfoBtn.setText("Your Info");
-                    locationShowBtn.setText("Student Location");
+                    locationShowBtn.setText("User Location");
                     break;
                 case DumeUtils.BOOTCAMP:
                     cancelBtn.setVisibility(View.GONE);
@@ -1267,7 +1267,7 @@ public class RecordsCurrentActivity extends BaseAppCompatActivity implements Rec
             stuPreviousResultTV.setText(String.format("%s%s", "Previous Result : ", stuTemp));
             boolean is_self = (boolean) forMap.get("is_self");
             if (is_self) {
-                stuTemp = "Student";
+                stuTemp = "User";
             } else {
                 stuTemp = "Guardian";
             }

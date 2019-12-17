@@ -6,7 +6,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,6 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import androidx.annotation.NonNull;
 import io.dume.dume.R;
 import io.dume.dume.auth.AuthGlobalContract;
 import io.dume.dume.auth.AuthModel;
@@ -187,98 +187,6 @@ public class AuthRegisterActivity extends BaseAppCompatActivity {
         });
     }
 
-    private void configBootCampProfile(DataStore dataStore) {
-        //admin, member, viewer
-        Map<String, Object> bootCampField = new HashMap<>();
-        GeoPoint location = null;
-        bootCampField.put("associated_uid", "");
-        bootCampField.put("association_set", false);
-        bootCampField.put("user_role", "Admin");
-
-        List<Map<String, Object>> memberList = new ArrayList<Map<String, Object>>();
-        Map<String, Object> creator = new HashMap<>();
-        creator.put("uid", FirebaseAuth.getInstance().getCurrentUser().getUid());
-        creator.put("role", "Admin");
-        memberList.add(creator);
-        bootCampField.put("member_list", memberList);
-
-        bootCampField.put("bootcamp_name", "");
-        bootCampField.put("email", dataStore.getEmail());
-        bootCampField.put("phone_number", dataStore.getPhoneNumber());
-        bootCampField.put("obligation", false);
-        bootCampField.put("avatar", "");
-        bootCampField.put("location", location);
-        bootCampField.put("penalty", 0);
-
-        bootCampField.put("account_active", true);
-        bootCampField.put("pro_com_%", "60");
-
-        bootCampField.put("daily_i", "0");
-        bootCampField.put("daily_r", "0");
-        bootCampField.put("p_daily_i", "0");
-        bootCampField.put("p_daily_r", "0");
-
-        bootCampField.put("unread_msg", "0");
-        bootCampField.put("unread_noti", "0");
-        Map<String, Object> unreadRecords = new HashMap<>();
-        unreadRecords.put("pending_count", "0");
-        unreadRecords.put("accepted_count", "0");
-        unreadRecords.put("current_count", "0");
-        unreadRecords.put("completed_count", "0");
-        unreadRecords.put("rejected_count", "0");
-        bootCampField.put("unread_records", unreadRecords);
-
-        Map<String, Object> selfRating = new HashMap<>();
-        selfRating.put("star_rating", "5.00");
-        selfRating.put("star_count", "1");
-        selfRating.put("l_communication", "1");
-        selfRating.put("dl_communication", "0");
-        selfRating.put("l_behaviour", "1");
-        selfRating.put("dl_behaviour", "0");
-        selfRating.put("l_expertise", "1");
-        selfRating.put("dl_expertise", "0");
-        selfRating.put("l_experience", "1");
-        selfRating.put("dl_experience", "0");
-        selfRating.put("response_time", "0");
-        selfRating.put("student_guided", "0");
-        bootCampField.put("self_rating", selfRating);
-
-        Map<String, Object> paymentMap = new HashMap<>();
-        paymentMap.put("obligation_amount", "0");
-        paymentMap.put("obligation_currency", "BDT");
-        paymentMap.put("total_paid", "0");
-        paymentMap.put("penalty_paid", "0");
-        bootCampField.put("payments", paymentMap);
-
-        List<String> appliedPromoList = new ArrayList<>();
-        bootCampField.put("applied_promo", appliedPromoList);
-        List<String> availablePromoList = new ArrayList<>();
-        bootCampField.put("available_promo", availablePromoList);
-
-        List<String> rating_array = new ArrayList<>();
-        bootCampField.put("rating_array", rating_array);
-
-        Map<String, Object> achievements = new HashMap<>();
-        achievements.put("joined", true);
-        achievements.put("inaugural", false);
-        achievements.put("leading", false);
-        achievements.put("premier", false);
-        bootCampField.put("achievements", achievements);
-
-        if (FirebaseAuth.getInstance().getCurrentUser().getUid() != null) {
-            fireStore.document("users/bootcamps/camp_profile/" + FirebaseAuth.getInstance().getCurrentUser().getUid()).set(bootCampField).addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void aVoid) {
-                    Log.w(TAG, "onSuccess: Teacher Dummy Profile Created");
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Log.e(TAG, "onSuccess: Teacher Dummy Profile Creation Failed");
-                }
-            });
-        }
-    }
 
     private Map<String, Object> generateStuProInfo(DataStore dataStore) {
         Map<String, Object> stuProInfo = new HashMap<>();
@@ -366,7 +274,6 @@ public class AuthRegisterActivity extends BaseAppCompatActivity {
 
             String uid = FirebaseAuth.getInstance().getUid();
             if (uid == null) {
-
                 return;
             }
             DocumentReference userStudentProInfo = fireStore.collection("/users/students/stu_pro_info").document(uid);
@@ -374,9 +281,7 @@ public class AuthRegisterActivity extends BaseAppCompatActivity {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     configMentorProfile(dataStore);
-                    configBootCampProfile(dataStore);
                     setStuProfile((Activity) context, userStudentProInfo, generateStuProInfo(dataStore));
-                    //view.hideProgress();
                     nextActivity();
                     Log.w(TAG, "onComplete: User Added");
                 }

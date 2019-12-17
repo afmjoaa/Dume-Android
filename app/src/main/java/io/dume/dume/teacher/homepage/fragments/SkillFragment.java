@@ -237,7 +237,7 @@ public class SkillFragment extends Fragment {
 
                         if (list.size() == 0) {
                             noDataBlock.setVisibility(View.VISIBLE);
-                            DumeUtils.notifyDialog(getContext(), false, true, "Add your skill to get Student !!", "Right now you do not have any skill. To get students nearest you, You should add your skill right now. If you do not add skill, You will never get tution offer from student.", "Add Skill", new TeacherContract.Model.Listener<Boolean>() {
+                            DumeUtils.notifyDialog(getContext(), false, true, "Add your skill to get User !!", "Right now you do not have any skill. To get students nearest you, You should add your skill right now. If you do not add skill, You will never get tution offer from student.", "Add Skill", new TeacherContract.Model.Listener<Boolean>() {
                                 @Override
                                 public void onSuccess(Boolean yes) {
                                     if (yes) {

@@ -159,7 +159,7 @@ public class SearchLoadingActivity extends BaseMapActivity implements OnMapReady
         List<SearchDetailData> grabingInfoData = new ArrayList<>();
         SearchDetailData current = new SearchDetailData();
         current.setItemName((String) searchDataStore.getForWhom().get("stu_name"));
-        current.setItemInfo("Student name");
+        current.setItemInfo("User name");
         if ((Boolean) searchDataStore.getForWhom().get("is_self")) {
             current.setItemChange(searchDataStore.getAvatarString());
             current.setImageSrc(null);

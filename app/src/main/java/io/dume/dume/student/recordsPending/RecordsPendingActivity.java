@@ -865,7 +865,7 @@ public class RecordsPendingActivity extends BaseAppCompatActivity implements Rec
             stuPreviousResultTV.setText(String.format("%s%s", "Previous Result : ", stuTemp));
             boolean is_self = (boolean) forMap.get("is_self");
             if (is_self) {
-                stuTemp = "Student";
+                stuTemp = "User";
             } else {
                 stuTemp = "Guardian";
             }
@@ -1118,7 +1118,7 @@ public class RecordsPendingActivity extends BaseAppCompatActivity implements Rec
                     achievementInfoBtn.setText("Your Achievements");
                     moreInfoBtn.setText("Your Info");
                     rejectSubText.setTextColor(context.getResources().getColor(R.color.dark_light_red));
-                    locationShowBtn.setText("Student Location");
+                    locationShowBtn.setText("User Location");
                     break;
                 case DumeUtils.BOOTCAMP:
                     break;

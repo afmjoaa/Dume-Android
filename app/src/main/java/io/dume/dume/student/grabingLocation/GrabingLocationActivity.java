@@ -798,8 +798,6 @@ public class GrabingLocationActivity extends BaseMapActivity implements OnMapRea
                 }
 
                 mCenterLatLong = mMap.getCameraPosition().target;
-                //mZoom = mGoogleMap.getCameraPosition().zoom;
-                //mLocationMarkerText.setText("Lat : " + mCenterLatLong.latitude + "," + "Long : " + mCenterLatLong.longitude);
                 String mainAddress = getAddress(mCenterLatLong.latitude, mCenterLatLong.longitude);
                 inputSearch.setText(mainAddress);
                 locationDoneBtn.setEnabled(true);

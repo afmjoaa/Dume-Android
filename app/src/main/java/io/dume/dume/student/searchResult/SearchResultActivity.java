@@ -1684,7 +1684,7 @@ public class SearchResultActivity extends BaseMapActivity implements OnMapReadyC
         currentStatusTV.setText("Current Status : " + Temp);
         Map<String, Object> self_rating = (Map<String, Object>) sp_info.get("self_rating");
         Temp = (String) self_rating.get("student_guided");
-        currentlyMentoringTV.setText("Student Guided : " + Temp);
+        currentlyMentoringTV.setText("User Guided : " + Temp);
         Temp = (String) sp_info.get("marital");
         maritalStatusTV.setText("Marital Status : " + Temp);
         Temp = (String) sp_info.get("gender");
