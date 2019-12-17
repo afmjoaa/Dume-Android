@@ -1,4 +1,4 @@
-package io.dume.dume.teacher.testing.adapters
+package io.dume.dume.teacher.DashBoard.adapters
 
 import android.content.Context
 import android.graphics.Color

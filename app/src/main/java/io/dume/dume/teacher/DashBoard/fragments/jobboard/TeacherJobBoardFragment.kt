@@ -1,23 +1,20 @@
-package io.dume.dume.teacher.testing.fragments.jobboard
+package io.dume.dume.teacher.DashBoard.fragments.jobboard
 
 import android.os.Bundle
-import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import carbon.widget.RecyclerView
 import io.dume.dume.R
-import io.dume.dume.teacher.testing.adapters.CirclePagerIndicatorDecoration
-import io.dume.dume.teacher.testing.adapters.FeatureCardSlider
-import io.dume.dume.teacher.testing.adapters.JobItemCardAdapter
+import io.dume.dume.teacher.DashBoard.adapters.CirclePagerIndicatorDecoration
+import io.dume.dume.teacher.DashBoard.adapters.FeatureCardSlider
+import io.dume.dume.teacher.DashBoard.adapters.JobItemCardAdapter
 
 
 class TeacherJobBoardFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {

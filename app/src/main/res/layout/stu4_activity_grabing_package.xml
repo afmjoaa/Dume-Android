@@ -14,8 +14,7 @@
         android:layout_height="match_parent"
         android:fitsSystemWindows="true">
 
-        <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:tools="http://schemas.android.com/tools"
+        <fragment
             android:id="@+id/map"
             android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"
@@ -25,7 +24,7 @@
 
     </io.dume.dume.customView.WindowInsetsFrameLayout>
 
-    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <FrameLayout
         android:id="@+id/always_view_musk"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -431,9 +430,8 @@
                 android:layout_below="@id/example_bar_layout"
                 android:layout_centerHorizontal="true" />
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/package_search_btn"
-                style="@style/myButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/example_bar_layout"

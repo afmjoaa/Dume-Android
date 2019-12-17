@@ -2,7 +2,6 @@ package io.dume.dume.student.grabingInfo;
 
 import android.Manifest;
 import android.content.ContentUris;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -10,32 +9,15 @@ import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
-import android.provider.MediaStore;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import com.google.android.material.appbar.AppBarLayout;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.tabs.TabLayout;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.viewpager.widget.ViewPager;
-import androidx.interpolator.view.animation.FastOutLinearInInterpolator;
-import androidx.interpolator.view.animation.LinearOutSlowInInterpolator;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.widget.AppCompatRadioButton;
-import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -58,22 +40,15 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MapStyleOptions;
-import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.firestore.GeoPoint;
-import com.google.maps.android.ui.IconGenerator;
 import com.transitionseverywhere.Fade;
 import com.transitionseverywhere.Slide;
 import com.transitionseverywhere.Transition;
 import com.transitionseverywhere.TransitionManager;
 import com.transitionseverywhere.TransitionSet;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -83,14 +58,22 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.AppCompatRadioButton;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
+import androidx.interpolator.view.animation.FastOutLinearInInterpolator;
+import androidx.interpolator.view.animation.LinearOutSlowInInterpolator;
+import androidx.viewpager.widget.ViewPager;
 import carbon.widget.RelativeLayout;
 import io.dume.dume.R;
 import io.dume.dume.interFace.OnTabModificationListener;
 import io.dume.dume.model.DumeModel;
 import io.dume.dume.model.TeacherModel;
 import io.dume.dume.student.grabingPackage.GrabingPackageActivity;
-import io.dume.dume.student.pojo.BaseMapActivity;
-import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
+import io.dume.dume.student.pojo.BaseAppCompatActivity;
 import io.dume.dume.student.pojo.SearchDataStore;
 import io.dume.dume.student.studentHelp.StudentHelpActivity;
 import io.dume.dume.teacher.homepage.TeacherContract;
@@ -104,11 +87,10 @@ import io.dume.dume.util.RadioBtnDialogue;
 import io.dume.dume.util.VisibleToggleClickListener;
 
 import static io.dume.dume.util.DumeUtils.getLast;
-import static io.dume.dume.util.ImageHelper.getRoundedCornerBitmap;
 import static io.dume.dume.util.ImageHelper.getRoundedCornerBitmapSquare;
 
-public class GrabingInfoActivity extends BaseMapActivity implements GrabingInfoContract.View,
-        MyGpsLocationChangeListener, OnMapReadyCallback, OnViewClick, OnTabModificationListener {
+public class GrabingInfoActivity extends BaseAppCompatActivity implements GrabingInfoContract.View
+        , OnViewClick, OnTabModificationListener {
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
@@ -131,12 +113,6 @@ public class GrabingInfoActivity extends BaseMapActivity implements GrabingInfoC
             R.drawable.ic_payment,
             R.drawable.xxx_item_capacity
     };
-    private int[] navLabels = {
-            R.string.tab_payment,
-            R.string.tab_gender_preference,
-            R.string.tab_cross_ckeck
-    };
-    private String[] givenInfo = {"Ex.Others", "Ex.O level", "Ex.Physics", "Ex.3k - 6k", "Ex.Both", "→←"};
     protected TabLayout tabLayout;
     protected TextView hintIdOne;
     protected TextView hintIdTwo;
@@ -146,29 +122,18 @@ public class GrabingInfoActivity extends BaseMapActivity implements GrabingInfoC
     private GrabingInfoContract.Presenter mPresenter;
     private Toolbar toolbar;
     public FloatingActionButton fab;
-    private ActionBar supportActionBar;
-    private AppBarLayout mAppBarLayout;
-    private GoogleMap mMap;
-    private SupportMapFragment mapFragment;
     public Button forMeBtn;
     private FrameLayout viewMusk;
     private LinearLayout contractLayout;
-    private AppBarLayout myAppBarLayout;
     private LinearLayout tabHintLayout, forMeWrapper;
     private int selected_category_position;
-    private int dynamicTab;
     private LocalDb db;
     public String retrivedAction;
     protected List<String> queryList;
     protected List<String> queryListName;
-    private int[] wh;
-    private int tabMinWidthThree;
-    private int tabMinWidthTwo;
-    private int tabMinWidthOne;
     private LinearLayout.LayoutParams textParamThree;
     private LinearLayout.LayoutParams textParamTwo;
     private LinearLayout.LayoutParams textParamOne;
-    private RelativeLayout selectFromContact;
     private static final int REQUEST_CODE_PICK_CONTACTS = 1;
     private Uri uriContact;
     private String contactID;     // contacts unique ID
@@ -180,41 +145,32 @@ public class GrabingInfoActivity extends BaseMapActivity implements GrabingInfoC
     private TextView secondContactPerson;
     private TextView secondContactPersonNum;
     TeacherModel teacherModel;
-    public String forName = "Me";
     private ImageView secondContactSelectImage;
-    private RelativeLayout firstContactLayout;
     private carbon.widget.ImageView firstContactImageView;
     private TextView firstContactPerson;
     private TextView firstContactPersonNum;
     private ImageView firstContactSelectImage;
     private Drawable imgKeyBoardDown;
-    private Drawable imgKeyBoardUp;
     private Bitmap contactBitmap = null;
     private String contactName;
     private boolean forMySelf = true;
     private Bitmap photo = null;
     private FrameLayout alwaysViewMusk;
-    private String defaultUrl;
-    private View mCustomMarkerView;
-    private carbon.widget.ImageView mMarkerImageView;
-    private IconGenerator iconFactory;
-    private GrabingInfoModel mModel;
     private String contactAvatarString;
     private String[] splitMainSsss;
+    final private int REQUEST_MULTIPLE_PERMISSIONS = 124;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.stu2_activity_grabing_info);
-        setActivityContextMap(this, fromFlag);
+        setActivityContext(this, fromFlag);
         findLoadView();
         final GrabingInfoModel mModel = new GrabingInfoModel(this);
         mPresenter = new GrabingInfoPresenter(this, mModel);
         teacherModel = new DumeModel(this);
         mPresenter.grabingInfoPageEnqueue();
-        mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-        getLocationPermission(mapFragment);
         queryList = new ArrayList<>();
         queryListName = new ArrayList<>();
         retrivedAction = getIntent().getAction();
@@ -247,14 +203,12 @@ public class GrabingInfoActivity extends BaseMapActivity implements GrabingInfoC
         mViewPager = findViewById(R.id.container);
         fab = findViewById(R.id.fab);
         tabLayout = findViewById(R.id.tabs);
-        mAppBarLayout = findViewById(R.id.appbar);
         forMeBtn = findViewById(R.id.for_me_btn);
         viewMusk = findViewById(R.id.view_musk);
         alwaysViewMusk = findViewById(R.id.always_view_musk);
         contractLayout = findViewById(R.id.contract_layout);
         tabHintLayout = findViewById(R.id.tab_hint_layout);
         forMeWrapper = findViewById(R.id.formeWrapper);
-        selectFromContact = findViewById(R.id.select_other_contact);
         endOfNest = DumeUtils.getEndOFNest();
 
         secondContactLayout = findViewById(R.id.second_contact);
@@ -263,32 +217,26 @@ public class GrabingInfoActivity extends BaseMapActivity implements GrabingInfoC
         secondContactPersonNum = findViewById(R.id.account_type_textview_two_value);
         secondContactSelectImage = findViewById(R.id.account_selected_icon_container_two);
 
-        firstContactLayout = findViewById(R.id.first_contact);
         firstContactImageView = findViewById(R.id.account_icon);
         firstContactPerson = findViewById(R.id.account_type_textview);
         firstContactPersonNum = findViewById(R.id.account_type_textview_value);
         firstContactSelectImage = findViewById(R.id.account_selected_icon_container);
 
         //init code
-        wh = DumeUtils.getScreenSize(this);
-        tabMinWidthThree = ((wh[0] / 3) - (int) (24 * (getResources().getDisplayMetrics().density)));
-        tabMinWidthTwo = ((wh[0] / 2) - (int) (24 * (getResources().getDisplayMetrics().density)));
-        tabMinWidthOne = ((wh[0]) - (int) (24 * (getResources().getDisplayMetrics().density)));
+        int[] wh = DumeUtils.getScreenSize(this);
+        int tabMinWidthThree = ((wh[0] / 3) - (int) (24 * (getResources().getDisplayMetrics().density)));
+        int tabMinWidthTwo = ((wh[0] / 2) - (int) (24 * (getResources().getDisplayMetrics().density)));
+        int tabMinWidthOne = ((wh[0]) - (int) (24 * (getResources().getDisplayMetrics().density)));
         textParamThree = new LinearLayout.LayoutParams(tabMinWidthThree, LinearLayout.LayoutParams.WRAP_CONTENT);
         textParamTwo = new LinearLayout.LayoutParams(tabMinWidthTwo, LinearLayout.LayoutParams.WRAP_CONTENT);
         textParamOne = new LinearLayout.LayoutParams(tabMinWidthOne, LinearLayout.LayoutParams.WRAP_CONTENT);
         imgKeyBoardDown = getResources().getDrawable(R.drawable.ic_keyboard_arrow_down_black_24dp);
-        imgKeyBoardUp = getResources().getDrawable(R.drawable.ic_keyboard_arrow_up_black_24dp);
-        mCustomMarkerView = ((LayoutInflater) Objects.requireNonNull(getSystemService(LAYOUT_INFLATER_SERVICE))).inflate(R.layout.custom_marker_view, null);
-        mMarkerImageView = mCustomMarkerView.findViewById(R.id.profile_image);
-        iconFactory = new IconGenerator(this);
-
-    }
+      }
 
     @Override
     public void initGrabingInfoPage() {
         setSupportActionBar(toolbar);
-        supportActionBar = getSupportActionBar();
+        ActionBar supportActionBar = getSupportActionBar();
         if (supportActionBar != null) {
             supportActionBar.setDisplayHomeAsUpEnabled(true);
             supportActionBar.setDisplayShowHomeEnabled(true);
@@ -671,11 +619,6 @@ public class GrabingInfoActivity extends BaseMapActivity implements GrabingInfoC
             } else if (levelName.equals("Salary")) {
                 AppCompatRadioButton rd = new AppCompatRadioButton(this);
                 rd.setText("null");
-                try {
-                    mMap.clear();
-                } catch (Exception e) {
-                    Log.e(TAG, e.getLocalizedMessage());
-                }
                 onRadioButtonClick(rd, tabLayout.getSelectedTabPosition(), levelName);
             } else if (levelName.equals("Capacity")) {
                 AppCompatRadioButton rd = new AppCompatRadioButton(this);
@@ -848,7 +791,6 @@ public class GrabingInfoActivity extends BaseMapActivity implements GrabingInfoC
         startActivity(new Intent(this, GrabingPackageActivity.class));
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_grabing_info, menu);
@@ -883,97 +825,6 @@ public class GrabingInfoActivity extends BaseMapActivity implements GrabingInfoC
         fab.startAnimation(shrink);
     }
 
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        MapStyleOptions style = MapStyleOptions.loadRawResourceStyle(
-                this, R.raw.map_style_default_no_landmarks);
-        googleMap.setMapStyle(style);
-        mMap = googleMap;
-        onMapReadyListener(mMap);
-        mMap.setPadding((int) (10 * (getResources().getDisplayMetrics().density)), (int) (250 * (getResources().getDisplayMetrics().density)), 0, (int) (6 * (getResources().getDisplayMetrics().density)));
-        mMap.getUiSettings().setCompassEnabled(false);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            mMap.setMyLocationEnabled(false);
-        }
-        onMapReadyGeneralConfig();
-        switch (Objects.requireNonNull(getIntent().getAction())) {
-            case DumeUtils.STUDENT:
-                addCustomMarkerFromURL(searchDataStore.getAvatarString(), searchDataStore.getAnchorPoint());
-                moveCamera(searchDataStore.getAnchorPoint(), DEFAULT_ZOOM, "Device Location", mMap);
-                break;
-            case DumeUtils.TEACHER:
-            case DumeUtils.BOOTCAMP:
-            case ("frag_" + DumeUtils.TEACHER):
-            case ("frag_" + DumeUtils.BOOTCAMP):
-                GeoPoint geoPointTeacher = (GeoPoint) TeacherDataStore.getInstance().getDocumentSnapshot().get("location");
-                LatLng teacherLatLng = new LatLng(geoPointTeacher.getLatitude(), geoPointTeacher.getLongitude());
-                addCustomMarkerFromURL(TeacherDataStore.getInstance().gettAvatarString(), teacherLatLng);
-                moveCamera(teacherLatLng, DEFAULT_ZOOM, "Device Location", mMap);
-                break;
-        }
-    }
-
-    private void addCustomMarkerFromURL(String url, LatLng lattitudeLongitude) {
-        if (mMap == null) {
-            return;
-        }
-        if (url != null && !url.equals("")) {
-            Glide.with(getApplicationContext())
-                    .asBitmap()
-                    .load(url)
-                    .apply(new RequestOptions().override((int) (28 * (getResources().getDisplayMetrics().density)), (int) (28 * (getResources().getDisplayMetrics().density))).centerCrop().placeholder(R.drawable.alias_profile_icon))
-                    .into(new SimpleTarget<Bitmap>() {
-                        @Override
-                        public void onResourceReady(@NonNull Bitmap resource, @Nullable com.bumptech.glide.request.transition.Transition<? super Bitmap> transition) {
-                            mMap.addMarker(new MarkerOptions().position(lattitudeLongitude)
-                                    .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(mCustomMarkerView, resource))));
-                            //mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(lattitudeLongitude, 15f));
-                        }
-                    });
-        } else {
-            if (searchDataStore.getGender().equals("Male") || searchDataStore.getGender().equals("")) {
-                defaultUrl = "https://firebasestorage.googleapis.com/v0/b/dume-2d063.appspot.com/o/avatar.png?alt=media&token=801c75b7-59fe-4a13-9191-186ef50de707";
-            } else {
-                defaultUrl = "https://firebasestorage.googleapis.com/v0/b/dume-2d063.appspot.com/o/avatar_female.png?alt=media&token=7202ea91-4f0d-4bd6-838e-8b73d0db13eb";
-            }
-            Glide.with(getApplicationContext())
-                    .asBitmap()
-                    .load(defaultUrl)
-                    .apply(new RequestOptions().override((int) (28 * (getResources().getDisplayMetrics().density)), (int) (28 * (getResources().getDisplayMetrics().density))).centerCrop().placeholder(R.drawable.alias_profile_icon))
-                    .into(new SimpleTarget<Bitmap>() {
-                        @Override
-                        public void onResourceReady(@NonNull Bitmap resource, @Nullable com.bumptech.glide.request.transition.Transition<? super Bitmap> transition) {
-                            mMap.addMarker(new MarkerOptions().position(lattitudeLongitude)
-                                    .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(mCustomMarkerView, resource))));
-                            //mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(lattitudeLongitude, 15f));
-                        }
-                    });
-        }
-    }
-
-    //testing custom marker code here
-    private Bitmap getMarkerBitmapFromView(View view, Bitmap bitmap) {
-
-        mMarkerImageView.setImageBitmap(getRoundedCornerBitmap(bitmap, (int) (28 * (getResources().getDisplayMetrics().density))));
-        view.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
-        view.layout(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
-        view.buildDrawingCache();
-        Bitmap returnedBitmap = Bitmap.createBitmap(view.getMeasuredWidth(), view.getMeasuredHeight(),
-                Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(returnedBitmap);
-        canvas.drawColor(Color.WHITE, PorterDuff.Mode.SRC_IN);
-        Drawable drawable = view.getBackground();
-        if (drawable != null)
-            drawable.draw(canvas);
-        view.draw(canvas);
-        return returnedBitmap;
-
-    }
-
-    @Override
-    public void onMyGpsLocationChanged(Location location) {
-
-    }
 
     public void onGrabingInfoViewClicked(View view) {
         mPresenter.onGrabingInfoViewIntracted(view);
@@ -988,14 +839,6 @@ public class GrabingInfoActivity extends BaseMapActivity implements GrabingInfoC
                 break;
             case DumeUtils.TEACHER:
             case "frag_" + DumeUtils.TEACHER:
-                selected_category_position = getIntent().getIntExtra(DumeUtils.SELECTED_ID, 0);
-                forMeWrapper.setVisibility(View.GONE);
-                toolbar.setTitle("Select Skill");
-                queryList.add(new LocalDb().getCategories().get(selected_category_position));
-                queryListName.add("Category");
-                break;
-            case DumeUtils.BOOTCAMP:
-            case "frag_" + DumeUtils.BOOTCAMP:
                 selected_category_position = getIntent().getIntExtra(DumeUtils.SELECTED_ID, 0);
                 forMeWrapper.setVisibility(View.GONE);
                 toolbar.setTitle("Select Skill");
@@ -1154,10 +997,6 @@ public class GrabingInfoActivity extends BaseMapActivity implements GrabingInfoC
         } else mViewPager.setCurrentItem(fragment + 1);
     }
 
-    public void flush(String msg) {
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
-    }
-
     @Override
     public void onNewTabCreated(String tabName) {
         tabLayout.invalidate();
@@ -1287,7 +1126,6 @@ public class GrabingInfoActivity extends BaseMapActivity implements GrabingInfoC
         forMySelf = false;
     }
 
-    final private int REQUEST_MULTIPLE_PERMISSIONS = 124;
 
     private boolean addPermission(List<String> permissionsList, String permission) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -1485,13 +1323,4 @@ public class GrabingInfoActivity extends BaseMapActivity implements GrabingInfoC
     public void onBackPressed() {
         super.onBackPressed();
     }
-
-    //convert bitmap to uri
-    public Uri getImageUri(Context inContext, Bitmap inImage) {
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
-        return Uri.parse(path);
-    }
-
 }

@@ -13,8 +13,6 @@
         android:layout_height="wrap_content"
         android:background="@drawable/bg_white_bottom_round"
         android:theme="@style/AppTheme.AppBarOverlay">
-        <!--android:background="@drawable/bg_white_bottom_round"-->
-
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/accountToolbar"
@@ -32,7 +30,6 @@
             app:theme="@style/ThemeToolbar.default"
             app:title="Select search point"
             app:titleTextAppearance="@style/MyTextApprncCol.lightBg">
-
 
         </androidx.appcompat.widget.Toolbar>
 

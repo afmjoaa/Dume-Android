@@ -32,12 +32,11 @@
             android:theme="@style/DefaultTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".teacher.testing.TeacherDashboard"
+            android:name=".teacher.DashBoard.TeacherDashboard"
             android:label="@string/title_activity_teacher_dashboard"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/DefaultTheme.NoActionBar" />
-        <activity android:name=".teacher.dashboard.activities.JobItemDetails" />
         <activity
             android:name=".student.DashBoard.StudentDashBoard"
             android:label="@string/title_activity_student_dash_board"
@@ -48,23 +47,6 @@
             android:name=".firstTimeUser.NIDScanActivity"
             android:screenOrientation="portrait"
             android:theme="@style/DefaultTheme.NoActionBar" />
-        <activity android:name=".teacher.dashboard.DashboardCompatActivity" />
-        <activity
-            android:name=".teacher.dashboard.activities.MyPaymentActivity"
-            android:launchMode="singleInstance"
-            android:theme="@style/DefaultTheme.NoActionBar.NoAnimation" />
-        <activity
-            android:name=".teacher.dashboard.activities.MySkillActivity"
-            android:launchMode="singleInstance"
-            android:theme="@style/DefaultTheme.NoActionBar.NoAnimation" />
-        <activity
-            android:name=".teacher.dashboard.activities.MyTutionActivity"
-            android:launchMode="singleInstance"
-            android:theme="@style/DefaultTheme.NoActionBar.NoAnimation" />
-        <activity
-            android:name=".teacher.dashboard.jobboard.JobBoardActivity"
-            android:launchMode="singleInstance"
-            android:theme="@style/DefaultTheme.NoActionBar.NoAnimation" />
 
         <activity
             android:name=".teacher.skill.SkillActivity"
@@ -152,8 +134,7 @@
         <activity android:name=".student.pojo.BaseAppCompatActivity" />
         <activity
             android:name=".student.grabingInfo.GrabingInfoActivity"
-            android:label="@string/title_activity_grabing_info"
-            android:theme="@style/AppTheme.NoActionBar.transparent.defaultTwo" />
+            android:label="@string/title_activity_grabing_info" />
         <activity
             android:name=".student.grabingLocation.GrabingLocationActivity"
             android:label="@string/title_activity_grabing_location"
@@ -165,8 +146,7 @@
             android:theme="@style/AppTheme.NoActionBar.transparent" />
         <activity
             android:name=".student.grabingPackage.GrabingPackageActivity"
-            android:label=""
-            android:theme="@style/AppTheme.NoActionBar.transparent" />
+            android:label="" />
         <activity
             android:name=".student.studentSettings.StudentSettingsActivity"
             android:label="@string/title_activity_student_settings"

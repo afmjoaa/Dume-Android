@@ -701,8 +701,8 @@ public class GrabingPackageActivity extends BaseMapActivity implements GrabingPa
     public void dumeGangSelected() {
         checkPackage = 0;
         if (specificPromoText.getText() == specificPromoTextArr[0]
-                && bottomSheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED) {
-            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                && bottomSheetBehavior.getState() != ViewPagerBottomSheetBehavior.STATE_EXPANDED) {
+            bottomSheetBehavior.setState(ViewPagerBottomSheetBehavior.STATE_EXPANDED);
             TransitionSet set = new TransitionSet()
                     .addTransition(new Fade())
                     .addTransition(new Slide(Gravity.END))
@@ -718,8 +718,8 @@ public class GrabingPackageActivity extends BaseMapActivity implements GrabingPa
             dumeGangPriceText.setVisibility(View.GONE);
 
         } else if (specificPromoText.getText() == specificPromoTextArr[0]
-                && bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
-            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                && bottomSheetBehavior.getState() == ViewPagerBottomSheetBehavior.STATE_EXPANDED) {
+            bottomSheetBehavior.setState(ViewPagerBottomSheetBehavior.STATE_COLLAPSED);
         } else {
             specificPromoText.setText(specificPromoTextArr[0]);
             individualPromoTitle.setText(primaryPromoTextArr[0]);
@@ -795,8 +795,8 @@ public class GrabingPackageActivity extends BaseMapActivity implements GrabingPa
     public void regularDumeSelected() {
         checkPackage = 1;
         if (specificPromoText.getText() == specificPromoTextArr[1]
-                && bottomSheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED) {
-            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                && bottomSheetBehavior.getState() != ViewPagerBottomSheetBehavior.STATE_EXPANDED) {
+            bottomSheetBehavior.setState(ViewPagerBottomSheetBehavior.STATE_EXPANDED);
             TransitionSet set = new TransitionSet()
                     .addTransition(new Fade())
                     .setInterpolator(new LinearOutSlowInInterpolator());
@@ -811,8 +811,8 @@ public class GrabingPackageActivity extends BaseMapActivity implements GrabingPa
             regularDumePriceText.setVisibility(View.GONE);
 
         } else if (specificPromoText.getText() == specificPromoTextArr[1]
-                && bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
-            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                && bottomSheetBehavior.getState() == ViewPagerBottomSheetBehavior.STATE_EXPANDED) {
+            bottomSheetBehavior.setState(ViewPagerBottomSheetBehavior.STATE_COLLAPSED);
         } else {
             specificPromoText.setText(specificPromoTextArr[1]);
             individualPromoTitle.setText(primaryPromoTextArr[1]);
@@ -875,8 +875,8 @@ public class GrabingPackageActivity extends BaseMapActivity implements GrabingPa
     public void instantDumeSelected() {
         checkPackage = 2;
         if (specificPromoText.getText() == specificPromoTextArr[2]
-                && bottomSheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED) {
-            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                && bottomSheetBehavior.getState() != ViewPagerBottomSheetBehavior.STATE_EXPANDED) {
+            bottomSheetBehavior.setState(ViewPagerBottomSheetBehavior.STATE_EXPANDED);
             TransitionSet set = new TransitionSet()
                     .addTransition(new Fade())
                     .addTransition(new Slide(Gravity.START))
@@ -892,8 +892,8 @@ public class GrabingPackageActivity extends BaseMapActivity implements GrabingPa
             instantDumePriceText.setVisibility(View.GONE);
 
         } else if (specificPromoText.getText() == specificPromoTextArr[2]
-                && bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
-            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                && bottomSheetBehavior.getState() == ViewPagerBottomSheetBehavior.STATE_EXPANDED) {
+            bottomSheetBehavior.setState(ViewPagerBottomSheetBehavior.STATE_COLLAPSED);
         } else {
             specificPromoText.setText(specificPromoTextArr[2]);
             individualPromoTitle.setText(primaryPromoTextArr[2]);
@@ -970,7 +970,6 @@ public class GrabingPackageActivity extends BaseMapActivity implements GrabingPa
         MapStyleOptions style = MapStyleOptions.loadRawResourceStyle(
                 this, R.raw.map_style_default_no_landmarks);
         googleMap.setMapStyle(style);
-
         mMap = googleMap;
         onMapReadyListener(mMap);
         mMap.setPadding((int) (10 * (getResources().getDisplayMetrics().density)), 0, 0, (int) (400 * (getResources().getDisplayMetrics().density)));
@@ -1052,8 +1051,8 @@ public class GrabingPackageActivity extends BaseMapActivity implements GrabingPa
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
-            if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
-                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            if (bottomSheetBehavior.getState() == ViewPagerBottomSheetBehavior.STATE_EXPANDED) {
+                bottomSheetBehavior.setState(ViewPagerBottomSheetBehavior.STATE_COLLAPSED);
             } else {
                 super.onBackPressed();
             }
@@ -1098,11 +1097,8 @@ public class GrabingPackageActivity extends BaseMapActivity implements GrabingPa
          */
         private static final String ARG_SECTION_NUMBER = "section_number";
         private View rootView;
-        private View mainRootView;
-        private TextView textView;
         private WeekdaysDataSource weekdaysDataSource3;
         private GrabingPackageActivity myMainActivity;
-        private CoordinatorLayout coordinatorLayout;
         private String myTime;
         private TimePickerFragment thisTimePicker;
         private DatePickerFragment thisDatePicker;
@@ -1177,9 +1173,6 @@ public class GrabingPackageActivity extends BaseMapActivity implements GrabingPa
                                         }
                                     }
                                     myMainActivity.preferredDays = myMainActivity.searchDataStore.genSetRetPreferredDays(selectedDays, selectedDaysInt);
-                                   /* if (!TextUtils.isEmpty(selectedDays)) {
-                                        showSnackbarShort(selectedDays);
-                                    }*/
                                 }
                             });
 
@@ -1339,8 +1332,6 @@ public class GrabingPackageActivity extends BaseMapActivity implements GrabingPa
                             break;
                     }
                 }
-            } else {
-                //not visible here
             }
         }
 
@@ -1360,14 +1351,6 @@ public class GrabingPackageActivity extends BaseMapActivity implements GrabingPa
             } else return "No-days selected";
         }
 
-        public void showSnackbarShort(String message) {
-            mainRootView = ((Activity) myMainActivity).getWindow().getDecorView().findViewById(android.R.id.content);
-            coordinatorLayout = (CoordinatorLayout) mainRootView.findViewById(R.id.parent_coor_layout);
-            if (coordinatorLayout != null) {
-                showSnackbar(coordinatorLayout, message, null, Snackbar.LENGTH_SHORT, null);
-            }
-        }
-
         public Snackbar showSnackbar(@NonNull ViewGroup viewGroup, String message, String action, int length, View.OnClickListener onActionListener) {
             Snackbar snackbar = Snackbar.make(viewGroup, message, length);
             if (!TextUtils.isEmpty(action) && onActionListener != null)
@@ -1385,14 +1368,11 @@ public class GrabingPackageActivity extends BaseMapActivity implements GrabingPa
 
         @Override
         public Fragment getItem(int position) {
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a DataHolderFragment (defined as a static inner class below).
             return PlaceholderFragment.newInstance(position + 1);
         }
 
         @Override
         public int getCount() {
-            // Show 3 total pages.
             return 3;
         }
     }
