@@ -3,6 +3,7 @@ package io.dume.dume.auth
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.util.Log
 import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseTooManyRequestsException
@@ -10,9 +11,11 @@ import com.google.firebase.auth.*
 import com.google.firebase.auth.PhoneAuthProvider.ForceResendingToken
 import com.google.firebase.firestore.*
 import com.google.firebase.internal.api.FirebaseNoSignedInUserException
+import com.google.firebase.storage.FirebaseStorage
 import io.dume.dume.BuildConfig
 import io.dume.dume.auth.auth.AuthContract
 import io.dume.dume.auth.code_verification.PhoneVerificationContract
+import io.dume.dume.library.myGeoFIreStore.GeoFirestore
 import io.dume.dume.poko.MiniUser
 import io.dume.dume.poko.User
 import io.dume.dume.splash.SplashActivity
@@ -21,6 +24,7 @@ import io.dume.dume.teacher.homepage.TeacherContract
 import io.dume.dume.util.DumeUtils
 import io.dume.dume.util.Google
 import java.util.concurrent.TimeUnit
+import kotlin.random.Random
 
 class AuthModel(internal var activity: Activity, internal var context: Context) : AuthContract.Model, SplashContract.Model, PhoneVerificationContract.Model {
     private val mAuth: FirebaseAuth
@@ -35,6 +39,8 @@ class AuthModel(internal var activity: Activity, internal var context: Context) 
     private var miniUserRef: CollectionReference
     private var studentUserRef: CollectionReference
     private var mentorUserRef: CollectionReference
+    private var geoFirestore: GeoFirestore
+    private var storage: FirebaseStorage
 
 
     init {
@@ -42,9 +48,12 @@ class AuthModel(internal var activity: Activity, internal var context: Context) 
         mIntent = this.activity.intent
         datastore = DataStore.getInstance()
         firestore = FirebaseFirestore.getInstance()
+        storage = FirebaseStorage.getInstance()
         miniUserRef = firestore.collection("mini_users")
         studentUserRef = firestore.collection("users/students/stu_pro_info")
         mentorUserRef = firestore.collection("users/mentors/mentor_profile")
+        geoFirestore = GeoFirestore(mentorUserRef)
+
         Log.w(TAG, "AuthModel: " + firestore.hashCode())
     }
 
@@ -404,13 +413,13 @@ class AuthModel(internal var activity: Activity, internal var context: Context) 
         writeBatch.set(miniDocumentReference, user)
         writeBatch.set(mentorDocumentReference, prepareUser(miniUser = user))
         writeBatch.set(studentDocumentReference, prepareUser(miniUser = user))
-        writeBatch.commit().addOnCompleteListener { listener.onSuccess(null) }.addOnFailureListener { listener.onError(it.localizedMessage) }
+        writeBatch.commit().addOnCompleteListener { listener.onSuccess(null);geoFirestore.setLocation(FirebaseAuth.getInstance().uid, user.parmanent_location!!) }.addOnFailureListener { listener.onError(it.localizedMessage) }
     }
 
     /**
-     *  this functions is calling from AuthViewModel to create a new user.it performs upto three operation at once using batch write.
+     *  this functions is calling from AuthViewModel to create a new user from @param miniUser.it converts miniUser to User
      *  @returns Unit
-     *  @param user
+     *  @param miniUser
      */
 
     fun prepareUser(miniUser: MiniUser): User {
@@ -418,8 +427,38 @@ class AuthModel(internal var activity: Activity, internal var context: Context) 
                 first_name = miniUser.first_name,
                 last_name = miniUser.last_name,
                 phone_number = miniUser.phone_number,
-                avatar = miniUser.avatar
-                )
+                avatar = miniUser.avatar,
+                nid = miniUser.nid,
+                location = GeoPoint(miniUser.parmanent_location?.latitude!!, miniUser.parmanent_location?.longitude!!),
+                email = miniUser.mail,
+                birth_date = miniUser.birth_date,
+                id = FirebaseAuth.getInstance().uid
+        )
+    }
+
+    /**
+     *  upload image to firebase
+     * */
+
+    fun uploadPhoto(uri: Uri, listener: TeacherContract.Model.Listener<Uri>) {
+        storage.reference.child(uri.lastPathSegment ?: Random(30).nextInt().toString()).putFile(uri)
+                .apply {
+                    addOnSuccessListener {
+                        Log.e("debug", "url : ${it.task.result}")
+                        it.storage.downloadUrl.apply {
+                            addOnSuccessListener {
+                                listener.onSuccess(it)
+                            }
+                            addOnFailureListener {
+                                listener.onError(it.message)
+                            }
+                        }
+                    }
+                    addOnFailureListener {
+                        Log.e("debug", "uri : ${it.message}")
+                        listener.onError(it.message)
+                    }
+                }
     }
 
 

@@ -2,7 +2,7 @@ package io.dume.dume.poko
 
 import com.google.firebase.firestore.GeoPoint
 
- data class MiniUser(var name: String?,
+data class MiniUser(var name: String?,
                     var birth_date: String?,
                     var mail: String?,
                     var nid: Long?,

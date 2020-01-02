@@ -36,12 +36,36 @@ class NidScanFragment : Fragment(), View.OnClickListener {
     private lateinit var hiwDialog: AlertDialog
     private lateinit var skipNIDScanDialog: BottomSheetDialog
     private lateinit var parent: ForwardFlowHostActivity
-    private var flag: Boolean = false
+    private var isFragmentVisible: Boolean = true
     private lateinit var stateManager: StateManager
     private var NIDNo: Long? = null
     private var NIDName: String? = null
     private var NIDBirthDate: String? = null
 
+    val handler = Handler()
+
+    private var handlerCallback = object : Runnable {
+        override fun run() {
+            Log.e("debug", "Picture Captured")
+            camera?.takePictureSnapshot()
+            if (isFragmentVisible) {
+                handler.postDelayed(this, 1500)
+            }
+        }
+    }
+    private var cameralListener = object : CameraListener() {
+        override fun onPictureTaken(result: PictureResult) {
+            super.onPictureTaken(result)
+            val bitmap = BitmapFactory.decodeByteArray(result.data, 0, result.data.size, null)
+            squareProgressBar?.setImageBitmap(bitmap)
+            val firebaseVisionImage = FirebaseVisionImage.fromBitmap(bitmap)
+            if (firebaseVisionImage != null) {
+                recognizeText(firebaseVisionImage)
+            } else {
+                Log.e("getText", "null image found")
+            }
+        }
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_nid_scan, container, false)
@@ -61,12 +85,19 @@ class NidScanFragment : Fragment(), View.OnClickListener {
 
     override fun onResume() {
         super.onResume()
-        flag = false
+        isFragmentVisible = true
+        handler.postDelayed(handlerCallback, 2000)
+        camera.addCameraListener(cameralListener)
+
     }
 
     override fun onPause() {
         super.onPause()
         camera.close()
+        isFragmentVisible = false
+        handler.removeCallbacks(handlerCallback)
+        camera.removeCameraListener(cameralListener)
+
     }
 
     override fun onDestroy() {
@@ -86,29 +117,6 @@ class NidScanFragment : Fragment(), View.OnClickListener {
         val px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4f, resources.displayMetrics)
         squareProgressBar?.setColor("#0288d1")
         squareProgressBar?.setRoundedCorners(true, px)
-        val handler = Handler()
-        handler.postDelayed(object : Runnable {
-            override fun run() {
-                Log.e("debug", "Picture Captured")
-                camera?.takePictureSnapshot()
-                if (!flag) {
-                    handler.postDelayed(this, 1500)
-                }
-            }
-        }, 2000)
-        camera.addCameraListener(object : CameraListener() {
-            override fun onPictureTaken(result: PictureResult) {
-                super.onPictureTaken(result)
-                val bitmap = BitmapFactory.decodeByteArray(result.data, 0, result.data.size, null)
-                squareProgressBar?.setImageBitmap(bitmap)
-                val firebaseVisionImage = FirebaseVisionImage.fromBitmap(bitmap)
-                if (firebaseVisionImage != null) {
-                    recognizeText(firebaseVisionImage)
-                } else {
-                    Log.e("getText", "null image found")
-                }
-            }
-        })
 
     }
 
@@ -197,16 +205,21 @@ class NidScanFragment : Fragment(), View.OnClickListener {
 
     private fun recognizeText(image: FirebaseVisionImage) {
         val detector = FirebaseVision.getInstance().onDeviceTextRecognizer
+
         detector.processImage(image)
                 .addOnSuccessListener { firebaseVisionText ->
+
                     val validPercent = validDataPercent(firebaseVisionText)
-                    squareProgressBar.setProgress(validPercent)
+
+                    if (isFragmentVisible) {
+                        squareProgressBar?.setProgress(validPercent)
+                    }
                     if (validPercent == 100) {
-                        flag = true
                         stateManager.setValue("NIDNo", NIDNo)
                         stateManager.setValue("NIDName", NIDName)
                         stateManager.setValue("NIDBirthDate", NIDBirthDate)
                         viewModel.scan.postValue(NID(NIDName!!, NIDBirthDate!!, NIDNo!!))
+                        isFragmentVisible = false
                         navController.navigate(R.id.action_nidFragment_to_registerFragment)
 
                     } else {
@@ -262,3 +275,4 @@ class NidScanFragment : Fragment(), View.OnClickListener {
 
 
 }
+

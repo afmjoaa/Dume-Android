@@ -4,7 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,7 +16,6 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.facebook.FacebookSdk.getApplicationContext
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.firestore.GeoPoint
 import com.vansuita.pickimage.bean.PickResult
@@ -31,24 +30,15 @@ import io.dume.dume.student.grabingLocation.GrabingLocationActivity
 import io.dume.dume.util.DumeUtils
 import io.dume.dume.util.DumeUtils.getAddress
 import kotlinx.android.synthetic.main.fragment_register.*
-import java.io.File
 
 class RegisterFragment : Fragment(), View.OnClickListener, IPickResult {
 
 
     private lateinit var navController: NavController
     private lateinit var viewModel: ForwardFlowViewModel
-    private var avatarString: Uri? = null
-    private var outputFileUri: Uri? = null
     private val LOCATION_REQUEST_CODE = 2222
-    private val IMAGE_RESULT_CODE = 3333
     private var userLocation: GeoPoint? = null
     var action: String? = "null"
-    private var selectedImageUri: Uri? = null
-    private var compressedImage: File? = null
-    private var actualImage: File? = null
-    private var genderCheckedItem = 0
-    private var PResultCheckedItem = 0
     private lateinit var parent: ForwardFlowHostActivity
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -62,19 +52,21 @@ class RegisterFragment : Fragment(), View.OnClickListener, IPickResult {
         } ?: throw Throwable("invalid activity")
         parent = activity as ForwardFlowHostActivity
         navController = Navigation.findNavController(view)
-        init()
+        initalize()
         initObservers()
     }
 
-    private fun init() {
+    private fun initalize() {
         register_dp.setOnClickListener(this)
         register_location.setOnClickListener(this)
 
     }
 
     fun setAvatar(uri: Uri) {
-        avatarString = uri
-        Glide.with(getApplicationContext()).load(uri).apply(RequestOptions().override(100, 100).placeholder(R.drawable.avatar)).into(register_dp)
+        viewModel.avatar.postValue(uri)
+        context?.let {
+            Glide.with(it).load(uri).apply(RequestOptions().override(100, 100).placeholder(R.drawable.avatar)).into(register_dp)
+        }
     }
 
 
@@ -92,9 +84,9 @@ class RegisterFragment : Fragment(), View.OnClickListener, IPickResult {
         return MiniUser(name = register_name.text.toString(),
                 birth_date = register_birth_date.text.toString(),
                 mail = register_email.text.toString(),
-                nid = register_nid.text.toString().toLong(),
+                nid = if (register_nid.text.toString().equals("")) null else register_nid.text.toString().toLong(),
                 parmanent_location = userLocation!!,
-                avatar = avatarString.toString(),
+                avatar = null,
                 accoount_major = viewModel.role.value!!.flow,
                 phone_number = viewModel.phoneNumber.value!!,
                 first_name = register_name.text.toString().split(" ")[0],
@@ -116,20 +108,22 @@ class RegisterFragment : Fragment(), View.OnClickListener, IPickResult {
     private fun initObservers() {
         viewModel.scan.observe(this, Observer {
             it?.let {
-                flush("NID Data Recived")
+                //  flush("NID Data Recived")
                 register_name.setText(it.name)
                 register_nid.setText(it.nid.toString())
-                register_birth_date.setText(it.birth_date)
+                register_birth_date.setText(it.birth_date.replace("Date of Birth", ""))
             }
         })
+
+        viewModel.success.observe(this, Observer { it?.let { navController.navigate(R.id.action_registerFragment_to_qualificationFragment); parent.hideProgress() } })
+        viewModel.failure.observe(this, Observer { it?.let { flush(it.error); parent.hideProgress() } })
+
+
 
         parent.onRegisterButtonClick {
             validate()?.let {
                 parent.showProgress()
                 viewModel.register(it)
-                Handler().postDelayed({
-                    parent.hideProgress()
-                }, 2000)
             }
         }
     }
@@ -194,8 +188,10 @@ class RegisterFragment : Fragment(), View.OnClickListener, IPickResult {
     public override fun onPickResult(r: PickResult) {
         if (r.error == null) {
             setAvatar(r.uri)
+
+
         } else {
-            Toast.makeText(context, r.error.message, Toast.LENGTH_LONG).show()
+            Log.e("debug", "error -> ${r.error}")
         }
     }
 

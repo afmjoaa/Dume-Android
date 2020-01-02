@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import com.google.firebase.auth.FirebaseAuth
 import io.dume.dume.R
 import io.dume.dume.firstTimeUser.ForwardFlowStatStudent
 import io.dume.dume.firstTimeUser.ForwardFlowStatTeacher
@@ -54,6 +55,7 @@ class PermissionFragment : Fragment(), View.OnClickListener {
 
     private fun navigateNext() {
         if (viewModel.isLoggedIn()) {
+            viewModel.phoneNumber.postValue(FirebaseAuth.getInstance().currentUser!!.phoneNumber?.removeRange(0,3))
             if (viewModel.role.equals(Role.STUDENT)) {
                 navController.navigate(R.id.action_permissionFragment_to_registerFragment)
             } else {
