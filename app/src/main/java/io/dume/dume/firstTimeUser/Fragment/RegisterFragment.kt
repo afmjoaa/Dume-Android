@@ -23,8 +23,7 @@ import com.vansuita.pickimage.bundle.PickSetup
 import com.vansuita.pickimage.dialog.PickImageDialog
 import com.vansuita.pickimage.listeners.IPickResult
 import io.dume.dume.R
-import io.dume.dume.firstTimeUser.ForwardFlowHostActivity
-import io.dume.dume.firstTimeUser.ForwardFlowViewModel
+import io.dume.dume.firstTimeUser.*
 import io.dume.dume.poko.MiniUser
 import io.dume.dume.student.grabingLocation.GrabingLocationActivity
 import io.dume.dume.util.DumeUtils
@@ -69,6 +68,15 @@ class RegisterFragment : Fragment(), View.OnClickListener, IPickResult {
         }
     }
 
+
+    private fun updateForwardFlowState() {
+        if (viewModel.role.value == Role.STUDENT) {
+            viewModel.updateStudentCurrentPosition(ForwardFlowStatStudent.POSTJOB)
+           // navController.navigate()
+        } else {
+            viewModel.updateTeacherCurrentPosition(ForwardFlowStatTeacher.QUALIFICATION)
+        }
+    }
 
     fun validate(): MiniUser? {
         if (register_name.text.toString() == "") {
@@ -158,26 +166,6 @@ class RegisterFragment : Fragment(), View.OnClickListener, IPickResult {
             }
             R.id.register_dp -> {
                 PickImageDialog.build(PickSetup()).setOnPickResult(this).show(fragmentManager)
-                /*   if (avatarString == null || avatarString == "") {
-                       openImageIntent()
-                   } else {
-                       val popup = PopupMenu(context!!, v)
-                       popup.inflate(R.menu.menu_dp_long_click)
-                       popup.setOnMenuItemClickListener { menuItem ->
-                           val id = menuItem.itemId
-                           when (id) {
-                               R.id.action_update -> openImageIntent()
-                               R.id.action_remove -> {
-                                   avatarString = null
-                                   compressedImage = null
-                                   setAvatar(null)
-                                   flush("Display pic Removed")
-                               }
-                           }
-                           false
-                       }
-                       popup.show()
-                   }*/
             }
         }
     }
@@ -185,7 +173,7 @@ class RegisterFragment : Fragment(), View.OnClickListener, IPickResult {
     /**
      * Dialog that promts to pick an profile image to save
      * */
-    public override fun onPickResult(r: PickResult) {
+    override fun onPickResult(r: PickResult) {
         if (r.error == null) {
             setAvatar(r.uri)
 

@@ -10,14 +10,21 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import io.dume.dume.R
-import io.dume.dume.firstTimeUser.ForwardFlowHostActivity
-import io.dume.dume.firstTimeUser.ForwardFlowViewModel
+import io.dume.dume.firstTimeUser.*
 import kotlinx.android.synthetic.main.fragment_qualification.*
 
 class QualificationFragment : Fragment(), View.OnClickListener {
     private lateinit var navController: NavController
     private lateinit var viewModel: ForwardFlowViewModel
     private lateinit var parent: ForwardFlowHostActivity
+
+    init {
+
+    }
+
+    init {
+
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_qualification, container, false)
@@ -43,6 +50,13 @@ class QualificationFragment : Fragment(), View.OnClickListener {
         viewModel.failure.observe(this, Observer { parent.flush("Failure Again Called") })
     }
 
+    private fun updateForwardFlowState() {
+        if (viewModel.role.value == Role.STUDENT) {
+            viewModel.updateStudentCurrentPosition(ForwardFlowStatStudent.REGISTER)
+        } else {
+            viewModel.updateTeacherCurrentPosition(ForwardFlowStatTeacher.REGISTER)
+        }
+    }
 
     override fun onClick(v: View?) {
         when (v!!.id) {
