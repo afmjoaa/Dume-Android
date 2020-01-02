@@ -519,7 +519,7 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
                     Button setBtn = (Button) d.findViewById(R.id.set_btn);
                     NumberPicker np = (NumberPicker) d.findViewById(R.id.numberPicker1);
                     TextView tittleTV = d.findViewById(R.id.sub_text);
-                    tittleTV.setText("Minimum Student Count");
+                    tittleTV.setText("Minimum User Count");
                     np.setMaxValue(29);
                     np.setMinValue(1);
                     Field f = null;
@@ -582,7 +582,7 @@ public class DataHolderFragment extends Fragment implements RadioGroup.OnChecked
                     Button setBtn = (Button) d.findViewById(R.id.set_btn);
                     NumberPicker np = (NumberPicker) d.findViewById(R.id.numberPicker1);
                     TextView titleTV = d.findViewById(R.id.sub_text);
-                    titleTV.setText("Minimum Student Count");
+                    titleTV.setText("Minimum User Count");
                     np.setMaxValue(29);
                     np.setMinValue(1);
                     Field f = null;

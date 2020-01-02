@@ -37,7 +37,7 @@ public class PrivacyActivity extends BaseAppCompatActivity {
             configureAppbar(this, "Teacher Guide", true);
         } else {
             webViewPrivacey.loadUrl("file:///android_asset/pages/student_privacy.html");
-            configureAppbar(this, "Student Guide", true);
+            configureAppbar(this, "User Guide", true);
         }
         ExtendedFloatingActionButton testOne = findViewById(R.id.continueBtn);
         testOne.extend();

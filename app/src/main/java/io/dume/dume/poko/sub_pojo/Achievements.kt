@@ -1,8 +1,8 @@
 package io.dume.dume.poko.sub_pojo
 
 data class Achievements(
-    val inaugural: Boolean,
-    val joined: Boolean,
-    val leading: Boolean,
-    val premier: Boolean
+        val inaugural: Boolean = false,
+        val joined: Boolean = false,
+        val leading: Boolean = false,
+        val premier: Boolean = false
 )

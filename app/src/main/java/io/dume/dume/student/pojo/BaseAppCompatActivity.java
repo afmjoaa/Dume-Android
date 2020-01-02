@@ -146,7 +146,7 @@ public class BaseAppCompatActivity extends AppCompatActivity implements MyConnec
         networkChangeReceiver = new NetworkChangeReceiver();
         //setting the listener for the network
         networkChangeReceiver.setNetworkListener(this);
-        // Register the broadcast receiver with the intent filter object.
+        // MiniUser the broadcast receiver with the intent filter object.
         registerReceiver(networkChangeReceiver, intentFilter);
     }
 

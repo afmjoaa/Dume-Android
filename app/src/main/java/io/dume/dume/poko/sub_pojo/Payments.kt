@@ -1,8 +1,8 @@
 package io.dume.dume.poko.sub_pojo
 
 data class Payments(
-    val obligation_amount: String,
-    val obligation_currency: String,
-    val penalty_paid: String,
-    val total_paid: String
+        val obligation_amount: String = "0",
+        val obligation_currency: String = "BDT",
+        val penalty_paid: String = "0",
+        val total_paid: String = "0"
 )

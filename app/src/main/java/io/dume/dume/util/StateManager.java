@@ -60,6 +60,8 @@ public class StateManager {
         edit.apply();
     }
 
+
+
     public void setFirstTimeUser(Boolean state) {
         edit.putBoolean("firstTimeUser", state);
         edit.apply();

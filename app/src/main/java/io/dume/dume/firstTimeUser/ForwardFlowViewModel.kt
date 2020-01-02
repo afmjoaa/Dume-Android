@@ -1,7 +1,7 @@
 package io.dume.dume.firstTimeUser
 
 import android.app.Activity
-import android.util.Log
+import android.net.Uri
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.AuthResult
@@ -12,7 +12,10 @@ import io.dume.dume.auth.AuthGlobalContract
 import io.dume.dume.auth.AuthModel
 import io.dume.dume.auth.auth.AuthContract
 import io.dume.dume.auth.code_verification.PhoneVerificationContract
-import io.dume.dume.poko.Register
+import io.dume.dume.poko.MiniUser
+import io.dume.dume.poko.sub_pojo.Failure
+import io.dume.dume.poko.sub_pojo.Success
+import io.dume.dume.teacher.homepage.TeacherContract
 import java.util.*
 
 class ForwardFlowViewModel : ViewModel() {
@@ -25,19 +28,23 @@ class ForwardFlowViewModel : ViewModel() {
     val isExiting = MutableLiveData<UserState>()
     val resendToken = MutableLiveData<PhoneAuthProvider.ForceResendingToken>()
     val verificationId = MutableLiveData<String>()
+    val avatar = MutableLiveData<Uri>()
     val codeSent = MutableLiveData<Boolean>(false)
     val autoVerified = MutableLiveData<Boolean>(false)
     val load = MutableLiveData<Boolean>()
     val error = MutableLiveData<String>(null)
     var phoneNumber = MutableLiveData<String>()
-    lateinit var activity: Activity
     var scan = MutableLiveData<NID>()
+    var success = MutableLiveData<Success<String>>(null)
+    var failure = MutableLiveData<Failure<String>>(null)
 
+    /* Lateinit Reference */
+    lateinit var repository: AuthModel
+    lateinit var activity: Activity
 
     /* General Reference */
-    lateinit var repository: AuthModel
-
     fun updateRole(roleOne: Role) = role.postValue(roleOne)
+
     fun updateFirstTimeUser(status: Boolean) = firstTimeUser.postValue(status)
     fun updateStudentCurrentPosition(forwardFlowStatStudent: ForwardFlowStatStudent) = studentCurrentPosition.postValue(forwardFlowStatStudent)
     fun updateTeacherCurrentPosition(forwardFlowStatTeacher: ForwardFlowStatTeacher) = teacherCurrentPosition.postValue(forwardFlowStatTeacher)
@@ -113,17 +120,30 @@ class ForwardFlowViewModel : ViewModel() {
         return Objects.requireNonNull<FirebaseUser>(FirebaseAuth.getInstance().currentUser).getUid()
     }
 
-    /**
-     *  upload image to firebase
-     * */
 
-    fun uploadPhoto(uri: String) {
+    fun register(miniUser: MiniUser) {
+        if (avatar.value != null) {
+            repository.uploadPhoto(avatar.value!!, object : TeacherContract.Model.Listener<Uri> {
+                override fun onSuccess(list: Uri?) {
+                    miniUser.avatar = list.toString()
+                    addUserToDatabase(miniUser)
+                }
+
+                override fun onError(msg: String?) = run { failure.postValue(Failure(msg)) }
+
+            })
+        } else {
+            addUserToDatabase(miniUser)
+
+        }
 
     }
 
-    fun register(register: Register) {
-        Log.e("debug", "Wow...it works")
+    private fun addUserToDatabase(miniUser: MiniUser) {
+        repository.addUser(miniUser, object : TeacherContract.Model.Listener<Void> {
+            override fun onSuccess(list: Void?) = run { success.postValue(Success("")) }
+            override fun onError(msg: String?) = run { failure.postValue(Failure(msg)) }
+        })
     }
-
 
 }

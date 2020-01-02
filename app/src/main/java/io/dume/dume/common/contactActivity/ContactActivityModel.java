@@ -86,7 +86,7 @@ public class ContactActivityModel implements ContactActivityContact.Model {
                         } else {
                             pUid = pList.get(0);
                         }
-                        /*I am Student*/
+                        /*I am User*/
                         if (sh_uid.endsWith(FirebaseAuth.getInstance().getUid())) {
                             if (sp_info != null) {
                                 gender = (String) sp_info.get("gender");
