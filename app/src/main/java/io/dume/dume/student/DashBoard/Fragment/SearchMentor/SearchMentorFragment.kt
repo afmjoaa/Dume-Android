@@ -1,61 +1,41 @@
 package io.dume.dume.student.DashBoard.Fragment.SearchMentor
 
-import android.app.Dialog
-import android.content.*
+import android.content.Context
+import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.Color
-import android.graphics.drawable.Drawable
-import android.graphics.drawable.LayerDrawable
-import android.location.Location
 import android.os.Bundle
-import android.util.Log
-import android.view.*
+import android.view.Gravity
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.*
-import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.widget.Toolbar
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
-import androidx.core.widget.NestedScrollView
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.material.appbar.AppBarLayout
-import com.google.android.material.appbar.CollapsingToolbarLayout
-import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.navigation.NavigationView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.GeoPoint
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import info.hoang8f.android.segmented.SegmentedGroup
 import io.dume.dume.R
-import io.dume.dume.customView.HorizontalLoadView
-import io.dume.dume.customView.HorizontalLoadViewTwo
-import io.dume.dume.service.LocationServiceHandler
-import io.dume.dume.service.MyLocationService
-import io.dume.dume.student.grabingInfo.GrabingInfoActivity
 import io.dume.dume.student.grabingLocation.GrabingLocationActivity
+import io.dume.dume.student.homePage.HomePageActivity
 import io.dume.dume.student.homePage.HomePageContract
 import io.dume.dume.student.homePage.HomePageModel
 import io.dume.dume.student.homePage.HomePagePresenter
-import io.dume.dume.student.homePage.adapter.*
-import io.dume.dume.student.pojo.MyGpsLocationChangeListener
+import io.dume.dume.student.homePage.adapter.RecentSearchAdapter
+import io.dume.dume.student.homePage.adapter.RecentSearchData
 import io.dume.dume.student.pojo.SearchDataStore
 import io.dume.dume.student.profilePage.ProfilePageActivity
-import io.dume.dume.student.recordsPage.Record
 import io.dume.dume.student.searchLoading.SearchLoadingActivity
-import io.dume.dume.student.searchResult.SearchResultActivity
 import io.dume.dume.teacher.crudskill.CrudSkillActivity
-import io.dume.dume.teacher.homepage.TeacherContract
 import io.dume.dume.util.DumeUtils
 import io.dume.dume.util.DumeUtils.getEndOFNest
 import io.dume.dume.util.NetworkUtil
@@ -63,115 +43,21 @@ import kotlinx.android.synthetic.main.fragment_search_mentor.*
 import kotlinx.android.synthetic.main.fragment_search_mentor.view.*
 import java.util.*
 
-class SearchMentorFragment : Fragment(), HomePageContract.View, View.OnClickListener, OnMapReadyCallback, MyGpsLocationChangeListener {
-
+class SearchMentorFragment : Fragment(), HomePageContract.View, View.OnClickListener {
 
     private val TAG = "HomePageActivity"
-    private val RC_RECENT_SEARCH = 8989
-    private var menu: Menu? = null
-    private var switchAcountBtn: Button? = null
-    private var navigationView: NavigationView? = null
-    private var leftDrawable: Drawable? = null
-    private var filterDrawable: Drawable? = null
-    private var filterDrawableOne: Drawable? = null
-    private var less: Drawable? = null
-    private var more: Drawable? = null
-    private var nestedScrollViewContent: NestedScrollView? = null
-    private var fab: FloatingActionButton? = null
-    private var toolbar: Toolbar? = null
-    private var drawer: DrawerLayout? = null
-    private var mNotificationsCount = 0
-    private var mProfileChar = '%'
-    private var mChatCount = 0
-    private var mRecPendingCount = 0
-    private var mRecAcceptedCount = 0
-    private var mRecCurrentCount = 0
-    private var llBottomSheet: View? = null
-    private var bottomSheetBehavior: BottomSheetBehavior<*>? = null
-    private var firstTime: Boolean = false
-    private var viewMusk: FrameLayout? = null
-    private var searchMentorBtn: carbon.widget.RelativeLayout? = null
-    private var defaultAppBerLayout: AppBarLayout? = null
-    private var secondaryAppBarLayout: AppBarLayout? = null
-    private var profileDataLayout: LinearLayout? = null
-    private var mMap: GoogleMap? = null
-    private var map: View? = null
-    private var primaryNavContainer: LinearLayout? = null
-    private var secondaryToolbar: Toolbar? = null
-    private var secondaryCollapsableToolbar: CollapsingToolbarLayout? = null
-    private val fromFlag = 1
-    private var secondaryNavContainer: carbon.widget.LinearLayout? = null
-    private var mapFragment: SupportMapFragment? = null
-    private var locationServiceIntent: Intent? = null
-    private var mLocationService: MyLocationService? = null
-    internal var mLocationServiceIsBound: Boolean = false
-    private var locationServiceHandler: LocationServiceHandler? = null
-    private var coordinatorLayout: CoordinatorLayout? = null
-    private var startMentoringImageView: ImageView? = null
-    private var freeCashbackImageView: ImageView? = null
-    private var referMentorImageView: ImageView? = null
-    private var hPageBSRecycler: RecyclerView? = null
-    private var feedbackStrings: Array<String>? = null
-    private var radioSegmentGroup: SegmentedGroup? = null
-    private var supportActionBarMain: ActionBar? = null
-    private var supportActionBarSecond: ActionBar? = null
-    private var alProfile: MenuItem? = null
-    private var alNoti: MenuItem? = null
-    private var alChat: MenuItem? = null
-    private var alRecords: MenuItem? = null
-    private var alProfileIcon: LayerDrawable? = null
-    private var alNotiIcon: LayerDrawable? = null
-    private var alChatIcon: LayerDrawable? = null
-    private var alRecordsIcon: LayerDrawable? = null
-    private var optionMenu = R.menu.stu_homepage
     private lateinit var documentSnapshot: DocumentSnapshot
-    private var userNameTextView: TextView? = null
-    private var userAddressingTextView: TextView? = null
-    private var userRatingTextView: TextView? = null
-    private var userDP: carbon.widget.ImageView? = null
-    private var doMoreTextView: TextView? = null
-    private var doMoreDetailTextView: TextView? = null
-    private var promotionValidityTextView: TextView? = null
-    private var promotionTextView: TextView? = null
     private lateinit var mySnackbar: Snackbar
-    private var coordiHackFab: CoordinatorLayout? = null
-    private var loadViewOne: HorizontalLoadViewTwo? = null
-    private var bottomSheetNSV: NestedScrollView? = null
-    private lateinit var recentSearchRV: RecyclerView
     private var recentSearchAdapter: RecentSearchAdapter? = null
     private lateinit var recently_searched: Map<String, Map<String, Any>>
-    private var mCancelBottomSheetDialog: BottomSheetDialog? = null
-    private var cancelsheetRootView: View? = null
     private lateinit var filterBottomSheetDialog: BottomSheetDialog
     private lateinit var filterRootView: View
-    private var hPageBSRcyclerAdapter: HomePageRecyclerAdapter? = null
     private var enamSnackbar: Snackbar? = null
-    private var mentorAddLayout: LinearLayout? = null
-    private var mModel: HomePageModel? = null
-    private var loadView: HorizontalLoadView? = null
-    private lateinit var hackHeight: LinearLayout
-    private var promotionTV: TextView? = null
-    private var promotionExpireDate: TextView? = null
-    private var discount: Int = 0
-    private lateinit var headsUpPromoContainer: carbon.widget.LinearLayout
-    private var dumeInfo: TextView? = null
-    private var dumeInfoContainer: LinearLayout? = null
-    private var learnMoreBtnOne: Button? = null
-    private var startCouching: Button? = null
-    private var startTakingCouching: Button? = null
-    private var referLearnMore: TextView? = null
-    //private Button referMentorBtn;
-    private var how_invite_works: TextView? = null
-    private var freeCashBack: Button? = null
-    private var startMentoringBtn: Button? = null
-    private lateinit var sharedPreferences: SharedPreferences
-    private lateinit var searchFilterBtn: carbon.widget.ImageView
     private lateinit var selectedUnis: MutableList<String>
     private lateinit var checkedUnis: BooleanArray
     private lateinit var selectedDegrees: MutableList<String>
     private lateinit var checkedItems: BooleanArray
     private lateinit var prefs: SharedPreferences
-    private var dialog: Dialog? = null
     private lateinit var searchDataStore: SearchDataStore
     private lateinit var presenter: HomePagePresenter
     private lateinit var student_container: View
@@ -206,7 +92,7 @@ class SearchMentorFragment : Fragment(), HomePageContract.View, View.OnClickList
     }
 
     override fun onClick(p0: View?) {
-        presenter.onViewIntracted(p0)
+        //presenter.onViewIntracted(p0)
     }
 
     protected fun isProfileOK(): Boolean {
@@ -227,63 +113,12 @@ class SearchMentorFragment : Fragment(), HomePageContract.View, View.OnClickList
 
     }
 
-    override fun loadHeadsUpPromo(promoData: HomePageRecyclerData) {
-
-        if (promoData.max_dicount_percentage > discount) {
-            discount = promoData.max_dicount_percentage
-            val expirity = promoData.expirity
-            val now = Date()
-
-            if (now.time > expirity.time) {
-                mModel?.removeAppliedPromo(promoData, object : TeacherContract.Model.Listener<Boolean> {
-                    override fun onSuccess(deleted: Boolean?) {
-
-                    }
-
-                    override fun onError(msg: String) {
-                        Log.e(TAG, "onError: $msg")
-                    }
-                })
-            } else {
-                val leftMillis = expirity.time - now.time
-                val daysLeft = (leftMillis / (1000 * 60 * 60 * 24)).toInt()
-                setHeadsUpPromo(discount.toString(), if (daysLeft > 1) "$daysLeft days" else "less than a day", if (promoData.packageName == null) "" else promoData.packageName)
-
-            }
-        }
-    }
-
-    override fun loadPromoData(promoData: HomePageRecyclerData) {
-        hPageBSRcyclerAdapter?.addPromoToList(promoData)
-    }
-
-
     override fun findView() {
 
     }
 
 
-    override fun setHeadsUpPromo(discount: String, dayLeft: String, packageName: String) {
-        headsUpPromoContainer.setVisibility(View.VISIBLE)
-        searchMentorBtn?.setBackground(resources.getDrawable(R.drawable.bg_white_bottom_round))
-        var herePackageName = ""
-        if (packageName == SearchDataStore.DUME_GANG) {
-            herePackageName = "Coaching Service"
-        } else if (packageName == SearchDataStore.REGULAR_DUME) {
-            herePackageName = "Monthly Tuition"
-        } else {
-            herePackageName = "Weekly Tuition"
-        }
-        promotionTextView?.setText("$discount% off on $herePackageName")
-        promotionExpireDate?.setText(dayLeft)
-    }
-
     override fun init() {
-
-    }
-
-    override fun makingCallbackInterfaces() {
-
 
     }
 
@@ -363,23 +198,13 @@ class SearchMentorFragment : Fragment(), HomePageContract.View, View.OnClickList
 
     }
 
-    override fun onCenterCurrentLocation() {
+     fun onCenterCurrentLocation() {
 
 
     }
-
-    fun onNavigationItemSelected(item: MenuItem): Boolean {
-
-        return true
-    }
-
 
     override fun gotoProfilePage() {
         startActivity(Intent(context, ProfilePageActivity::class.java))
-    }
-
-    override fun gotoGrabingInfoPage() {
-        startActivity(Intent(context, GrabingInfoActivity::class.java))
     }
 
     override fun gotoGrabingLocationPage() {
@@ -399,26 +224,11 @@ class SearchMentorFragment : Fragment(), HomePageContract.View, View.OnClickList
         }
     }
 
-
-    /*
-      Updates the count of notifications in the ActionBar finishes here.
-    */
-
-
     override fun flush(msg: String) {
         val toast = Toast.makeText(context, msg, Toast.LENGTH_SHORT)
         val v = toast.getView().findViewById(android.R.id.message) as TextView
         v.gravity = Gravity.CENTER
         toast.show()
-    }
-
-    override fun setDocumentSnapshot(documentSnapshot: DocumentSnapshot) {
-        this.documentSnapshot = documentSnapshot
-        searchDataStore.setDocumentSnapshot(documentSnapshot.data)
-        searchDataStore.setUserNumber(documentSnapshot.getString("phone_number"))
-        searchDataStore.setUserMail(documentSnapshot.getString("email"))
-        searchDataStore.setUserUid(documentSnapshot.id)
-        searchDataStore.setGender(documentSnapshot.getString("gender"))
     }
 
     override fun showSnackBar(completePercent: String) {
@@ -469,8 +279,6 @@ class SearchMentorFragment : Fragment(), HomePageContract.View, View.OnClickList
         layout.setPadding(0, 0, 0, 0)
         val parentParams = layout.layoutParams as CoordinatorLayout.LayoutParams
         parentParams.height = (36 * resources.displayMetrics.density).toInt()
-        /* parentParams.setAnchorId(R.id.Secondary_toolbar);
-        parentParams.anchorGravity = Gravity.BOTTOM;*/
         layout.layoutParams = parentParams
         layout.addView(snackView, 0)
         val status = NetworkUtil.getConnectivityStatusString(context)
@@ -478,32 +286,8 @@ class SearchMentorFragment : Fragment(), HomePageContract.View, View.OnClickList
 
     }
 
-
-    override fun gotoTestingActivity() {
-        startActivity(Intent(context, SearchResultActivity::class.java))
-    }
-
-    override fun gotoBootCampActivity() {
-        flush("Boot Camp Service is coming soon...")
-    }
-
-    override fun checkNull(): Boolean {
-        return switchAcountBtn != null
-    }
-
-
     override fun searchFilterClicked() {
-        /* if (searchFilterBtn?.getVisibility() == View.VISIBLE) {
-             if (filterDrawable is Animatable) {
-                 (filterDrawable as Animatable).start()
-             }
-         }
-         if (searchFilterBtnOne?.getVisibility() == View.VISIBLE) {
-             if (filterDrawableOne is Animatable) {
-                 (filterDrawableOne as Animatable).start()
-             }
-         }
- */
+
         val mainText = filterBottomSheetDialog.findViewById<TextView>(R.id.main_text)
         val subText = filterBottomSheetDialog.findViewById<TextView>(R.id.sub_text)
         val proceedBtn = filterBottomSheetDialog.findViewById<Button>(R.id.cancel_yes_btn)
@@ -594,7 +378,7 @@ class SearchMentorFragment : Fragment(), HomePageContract.View, View.OnClickList
                 private var mUniDialog: AlertDialog? = null
 
                 override fun onClick(view: View) {
-                    val mBuilder = AlertDialog.Builder(context!!, R.style.RadioDialogTheme)
+                    val mBuilder = MaterialAlertDialogBuilder(context, R.style.ThemeOverlay_MaterialComponents_MaterialAlertDialog_Centered)
                     mBuilder.setTitle("Select filter universities")
                     mBuilder.setMultiChoiceItems(uniItems, checkedUnis) { dialogInterface, position, isChecked ->
                         if (isChecked) {
@@ -684,7 +468,7 @@ class SearchMentorFragment : Fragment(), HomePageContract.View, View.OnClickList
 
                 override fun onClick(view: View) {
 
-                    val mBuilder = AlertDialog.Builder(context!!, R.style.RadioDialogTheme)
+                    val mBuilder = MaterialAlertDialogBuilder(context, R.style.ThemeOverlay_MaterialComponents_MaterialAlertDialog_Centered)
                     mBuilder.setTitle("Select filter degrees")
                     mBuilder.setMultiChoiceItems(listItems, checkedItems) { dialogInterface, position, isChecked ->
                         if (isChecked) {
@@ -811,71 +595,6 @@ class SearchMentorFragment : Fragment(), HomePageContract.View, View.OnClickList
     }
 
 
-    override fun onMapReady(p0: GoogleMap?) {
-
-    }
-
-    override fun onMyGpsLocationChanged(location: Location?) {
-
-    }
-
-
-    override fun updateProfileBadge(character: Char) {
-    }
-
-    override fun updateNotificationsBadge(count: Int) {
-    }
-
-    override fun updateChatBadge(count: Int) {
-    }
-
-    override fun updateRecordsBadge(penCount: Int, acptCount: Int, curCount: Int) {
-    }
-
-    override fun gotoHeatMapActivity() {
-    }
-
-    override fun gotoRecordsPage() {
-    }
-
-    override fun gotoSettingActivity() {
-    }
-
-    override fun gotoHelpActivity() {
-    }
-
-    override fun gotoPaymentActivity() {
-    }
-
-    override fun gotoInboxActivity() {
-    }
-
-    override fun gotoAboutUsActivity() {
-    }
-
-    override fun gotoPrivacyPolicyActivity() {
-    }
-
-    override fun gotoNotificationTab() {
-    }
-
-    override fun referMentorImageViewClicked() {
-    }
-
-    override fun freeCashBackImageViewClicked() {
-    }
-
-    override fun startMentoringImageViewClicked() {
-    }
-
-    override fun testingCustomDialogue(myData: HomePageRatingData?, record: Record?) {
-    }
-
-    override fun gotoMentorProfile() {
-    }
-
-    override fun gotoStudentProfile() {
-    }
 
     override fun getAvatarString(): String {
         return ""
@@ -883,31 +602,6 @@ class SearchMentorFragment : Fragment(), HomePageContract.View, View.OnClickList
 
     override fun getSelfRating(): Map<String, Any> {
         return documentSnapshot.get("self_rating") as Map<String, Any>
-    }
-
-    override fun getUnreadRecords(): Map<String, Any> {
-        return documentSnapshot.get("unread_records") as Map<String, Any>
-    }
-
-    override fun unreadMsg(): String {
-        return ""
-    }
-
-    override fun unreadNoti(): String {
-        return ""
-    }
-
-    override fun getProfileComPercent(): String {
-        return ""
-    }
-
-    override fun getAppliedPromo(): ArrayList<String> {
-        return documentSnapshot.get("applied_promo") as ArrayList<String>
-    }
-
-    override fun getAvailablePromo(): ArrayList<String> {
-
-        return documentSnapshot.get("applied_promo") as ArrayList<String>
     }
 
     override fun generateMsgName(last: String?, first: String?): String {
@@ -930,12 +624,6 @@ class SearchMentorFragment : Fragment(), HomePageContract.View, View.OnClickList
     override fun setMsgName(msgName: String?) {
     }
 
-    override fun setAvailablePromo(availablePromo: ArrayList<String>?) {
-    }
-
-    override fun setAppliedPromo(appliedPromo: ArrayList<String>?) {
-    }
-
     override fun setProfileComPercent(num: String?) {
     }
 
@@ -952,15 +640,6 @@ class SearchMentorFragment : Fragment(), HomePageContract.View, View.OnClickList
     }
 
     override fun switchProfileDialog(identify: String?) {
-    }
-
-    override fun showProgressTwo() {
-    }
-
-    override fun hideProgressTwo() {
-    }
-
-    override fun showSingleBottomSheetRating(currentRatingDataList: HomePageRatingData?) {
     }
 
 }

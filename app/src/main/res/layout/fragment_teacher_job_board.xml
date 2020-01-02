@@ -5,8 +5,7 @@
     android:id="@+id/swipe_to_refres"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".teacher.dashboard.activities.MyTutionActivity">
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/test"

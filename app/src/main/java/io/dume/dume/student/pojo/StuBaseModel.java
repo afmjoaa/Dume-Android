@@ -12,7 +12,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Map;
@@ -20,36 +19,30 @@ import java.util.Map;
 import androidx.annotation.NonNull;
 import io.dume.dume.interFace.usefulListeners;
 
-public abstract class StuBaseModel{
+public abstract class StuBaseModel {
     private static final String TAG = "StuBaseModel";
     protected Context context;
     protected Activity activity;
-    protected final FirebaseAuth mAuth;
-    protected final FirebaseFirestore firestore;
-    protected final DocumentReference mini_users;
-    protected final DocumentReference userStudentProInfo;
-    public final CollectionReference skillRef;
+    private final FirebaseAuth mAuth;
+    protected final FirebaseFirestore fireStore;
+    private DocumentReference mini_users;
+    protected DocumentReference userStudentProInfo;
+    protected final CollectionReference skillRef;
 
     public StuBaseModel(Context context) {
         this.context = context;
         this.activity = (Activity) context;
         mAuth = FirebaseAuth.getInstance();
-        firestore = FirebaseFirestore.getInstance();
-        mini_users = firestore.collection("mini_users").document(getUser().getUid());
-        skillRef = firestore.collection("users/mentors/skills");
-        userStudentProInfo = firestore.collection("/users/students/stu_pro_info").document(getUser().getUid());
-    }
+        fireStore = FirebaseFirestore.getInstance();
+        skillRef = fireStore.collection("users/mentors/skills");
 
-    public boolean isUserLoggedIn() {
-        return mAuth.getCurrentUser() != null;
+        //////hard coded string for testing/////
+        mini_users = fireStore.collection("mini_users").document("fDTDMUod3UPN36nbBepXHVB9k1r1");
+        userStudentProInfo = fireStore.collection("/users/students/stu_pro_info").document("fDTDMUod3UPN36nbBepXHVB9k1r1");
     }
 
     public FirebaseUser getUser() {
         return mAuth.getCurrentUser();
-    }
-
-    public boolean updateUserInfo(Map<String, Object> userInfo) {
-        return mini_users.update(userInfo).isSuccessful();
     }
 
     public static boolean setStuProfile(Activity activity, DocumentReference userStudentProInfo, Map<String, Object> stuProfileInfo) {
@@ -63,7 +56,7 @@ public abstract class StuBaseModel{
         }).isSuccessful();
     }
 
-    public boolean updateStuProfile(Map<String, Object> stuProfileInfo, usefulListeners.uploadToDBListerer updateListener) {
+    protected boolean updateStuProfile(Map<String, Object> stuProfileInfo, usefulListeners.uploadToDBListerer updateListener) {
         return userStudentProInfo.update(stuProfileInfo).addOnCompleteListener(activity, new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
@@ -84,12 +77,4 @@ public abstract class StuBaseModel{
             }
         }).isSuccessful();
     }
-
-    public DocumentSnapshot getStuProfile() {
-        return userStudentProInfo.get().getResult();
-    }
-
 }
-//Map<String, Object> newMap = new HashMap<>();
-//only set get and update functions will be there
-//and addSnapshotListener or query functions will be in the specific model class

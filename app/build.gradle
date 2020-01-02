@@ -92,7 +92,7 @@ dependencies {
     implementation 'com.facebook.android:facebook-android-sdk:4.35.0'
     implementation 'com.squareup.okhttp:okhttp:2.7.5'
     implementation 'com.squareup.okhttp:okhttp-urlconnection:1.6.0'
-    //don't update firestore as 18 is still incompatible with geofirestore
+    //don't update fireStore as 18 is still incompatible with geofirestore
     implementation 'com.google.firebase:firebase-firestore:17.1.5'
     implementation 'androidx.multidex:multidex:2.0.1'
 

@@ -19,7 +19,7 @@
             android:id="@+id/settingsAppbar"
             android:layout_width="match_parent"
             android:layout_height="@dimen/appbarLayoutHeightLow"
-            android:background="@drawable/bg_black_bottom_round"
+            android:background="@drawable/bg_white_bottom_round_8dp"
             android:stateListAnimator="@animator/appbar_always_elevated"
             android:theme="@style/AppTheme.AppBarOverlay"
             tools:targetApi="lollipop">
@@ -28,7 +28,7 @@
                 android:id="@+id/accountCollapsing"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/bg_black_bottom_round"
+                android:background="@drawable/bg_white_bottom_round_8dp"
                 app:collapsedTitleGravity="start"
                 app:collapsedTitleTextAppearance="@style/MyTextApprncCol.lightBg"
                 app:expandedTitleGravity="start"

@@ -62,7 +62,7 @@ public class SkillPresenter implements SkillContract.Presenter {
       /*  FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
                 .setTimestampsInSnapshotsEnabled(true)
                 .build();
-        firestore.setFirestoreSettings(settings);*/
+        fireStore.setFirestoreSettings(settings);*/
         Log.w(TAG, "AuthModel: " + firestore.hashCode());
         mAuth = FirebaseAuth.getInstance();
     }
@@ -121,7 +121,7 @@ public class SkillPresenter implements SkillContract.Presenter {
             case R.id.multiple_actions:
                 break;
             /*case R.id.fabAdd:
-                DocumentReference mini_users = firestore.collection("mini_users").document(Objects.requireNonNull(mAuth.getCurrentUser()).getUid());
+                DocumentReference mini_users = fireStore.collection("mini_users").document(Objects.requireNonNull(mAuth.getCurrentUser()).getUid());
                 listenerRegistration = mini_users.addSnapshotListener((documentSnapshot, e) -> {
                     if (documentSnapshot != null) {
                         detachListener();

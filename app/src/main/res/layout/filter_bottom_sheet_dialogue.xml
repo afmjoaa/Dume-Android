@@ -27,41 +27,43 @@
         android:id="@+id/sub_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Mentor list will be filtered based on your selected filters. Provided if available..."
+        android:text="Mentor list will be filtered based on your selected filters. Provided if teacher available..."
         android:textColor="@color/textColorPrimary"
         android:textSize="14sp"
+        android:layout_marginBottom="10dp"
         app:fontFamily="@font/cairo_regular" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="4dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
         android:orientation="horizontal">
 
         <CheckBox
             android:id="@+id/uni_checkbox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
-            android:layout_marginRight="10dp"
-            android:checked="false"
             android:layout_gravity="center"
-            android:gravity="center"/>
+            android:checked="false"
+            android:gravity="center" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/input_layout_c_address"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp">
+            android:hint="University Specific"
+            app:errorEnabled="true"
+            app:errorIconDrawable="@drawable/error_icon"
+            app:hintEnabled="true"
+            app:startIconDrawable="@drawable/ic_home_place">
 
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/input_uni"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:focusable="false"
-                android:hint="University Specific"
-                android:inputType="textEmailAddress"
-                app:fontFamily="@font/cairo_regular" />
+                android:inputType="text" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -70,32 +72,34 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="4dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
         android:orientation="horizontal">
 
         <CheckBox
             android:id="@+id/degree_checkbox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
-            android:layout_marginRight="10dp"
-            android:checked="false"
             android:layout_gravity="center"
-            android:gravity="center"/>
+            android:checked="false"
+            android:gravity="center" />
 
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp">
+            android:hint="Degree Specific"
+            app:errorEnabled="true"
+            app:errorIconDrawable="@drawable/error_icon"
+            app:hintEnabled="true"
+            app:startIconDrawable="@drawable/academics_icon">
 
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/input_degree"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:focusable="false"
-                android:hint="Degree Specific"
-                android:inputType="textEmailAddress"
-                app:fontFamily="@font/cairo_regular" />
+                android:inputType="text" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -106,23 +110,22 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginLeft="6dp"
-        android:layout_marginRight="6dp"
-        android:layout_marginStart="6dp"
-        android:layout_marginEnd="6dp"
-        android:layout_marginBottom="4dp"
+        android:layout_marginStart="3dp"
+        android:layout_marginLeft="3dp"
         android:layout_marginTop="4dp"
+        android:layout_marginEnd="3dp"
+        android:layout_marginRight="3dp"
+        android:layout_marginBottom="4dp"
         android:gravity="center"
         android:orientation="horizontal"
         segmentedgroup:sc_border_width="1dp"
-        segmentedgroup:sc_corner_radius="4dp"
-        segmentedgroup:sc_tint_color="@color/colorAccent">
+        segmentedgroup:sc_corner_radius="4dp">
 
         <RadioButton
             android:id="@+id/permanent_radio"
             style="@style/RadioButton"
             android:layout_width="60dp"
-            android:layout_height="34dp"
+            android:layout_height="40dp"
             android:layout_weight="1"
             android:text="Use permanent address" />
 
@@ -130,7 +133,7 @@
             android:id="@+id/choose_radio"
             style="@style/RadioButton"
             android:layout_width="60dp"
-            android:layout_height="34dp"
+            android:layout_height="40dp"
             android:layout_weight="1"
             android:checked="true"
             android:text="Choose location" />
@@ -146,32 +149,32 @@
         android:orientation="horizontal">
 
         <!--<Button-->
-            <!--android:id="@+id/cancel_no_btn"-->
-            <!--style="@style/myButtonStyleWhite"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginEnd="10dp"-->
-            <!--android:layout_marginRight="10dp"-->
-            <!--android:layout_marginBottom="4dp"-->
-            <!--android:layout_weight="1"-->
-            <!--android:drawableEnd="@drawable/ic_save_settings"-->
-            <!--android:drawableRight="@drawable/ic_save_settings"-->
-            <!--android:text="Save"-->
-            <!--android:textAllCaps="false"-->
-            <!--android:textColor="@color/colorBlack"-->
-            <!--android:textSize="16sp"-->
-            <!--app:fontFamily="@font/cairo_regular" />-->
+        <!--android:id="@+id/cancel_no_btn"-->
+        <!--style="@style/myButtonStyleWhite"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginEnd="10dp"-->
+        <!--android:layout_marginRight="10dp"-->
+        <!--android:layout_marginBottom="4dp"-->
+        <!--android:layout_weight="1"-->
+        <!--android:drawableEnd="@drawable/ic_save_settings"-->
+        <!--android:drawableRight="@drawable/ic_save_settings"-->
+        <!--android:text="Save"-->
+        <!--android:textAllCaps="false"-->
+        <!--android:textColor="@color/colorBlack"-->
+        <!--android:textSize="16sp"-->
+        <!--app:fontFamily="@font/cairo_regular" />-->
 
         <Button
             android:id="@+id/cancel_yes_btn"
             style="@style/myButtonStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="4dp"
-            android:layout_marginLeft="1dp"
             android:layout_marginStart="1dp"
-            android:layout_marginRight="1dp"
+            android:layout_marginLeft="1dp"
             android:layout_marginEnd="1dp"
+            android:layout_marginRight="1dp"
+            android:layout_marginBottom="4dp"
             android:layout_weight="1"
             android:drawableEnd="@drawable/ic_proceed_settings"
             android:drawableRight="@drawable/ic_proceed_settings"

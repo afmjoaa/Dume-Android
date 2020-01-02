@@ -22,88 +22,19 @@ public interface HomePageContract {
 
         void configHomePage();
 
-        void makingCallbackInterfaces();
-
-        void setHeadsUpPromo(String discount, String dayLeft, String packageName);
-
         void init();
-
-        void loadHeadsUpPromo(HomePageRecyclerData promoData);
-
-        void loadPromoData(HomePageRecyclerData promoList);
 
         void findView();
 
-        void onCenterCurrentLocation();
-
-        void updateProfileBadge(char character);
-
-        void updateNotificationsBadge(int count);
-
-        void updateChatBadge(int count);
-
-        void updateRecordsBadge(int penCount, int acptCount, int curCount);
-
         void gotoProfilePage();
 
-        void gotoGrabingInfoPage();
-
         void gotoGrabingLocationPage();
-
-        void gotoHeatMapActivity();
-
-        void gotoRecordsPage();
-
-        void gotoSettingActivity();
-
-        void gotoHelpActivity();
-
-        void gotoPaymentActivity();
-
-        void gotoInboxActivity();
-
-        void gotoAboutUsActivity();
-
-        void gotoPrivacyPolicyActivity();
-
-        void gotoNotificationTab();
-
-        void referMentorImageViewClicked();
-
-        void freeCashBackImageViewClicked();
-
-        void startMentoringImageViewClicked();
-
-
-
-        //testing the customDialogue
-        void testingCustomDialogue(HomePageRatingData myData, Record record);
-
-        void gotoMentorProfile();
-
-        void gotoStudentProfile();
-
-        void flush(String msg);
-
-        void setDocumentSnapshot(DocumentSnapshot documentSnapshot);
 
         //getters
 
         String getAvatarString();
 
         Map<String, Object> getSelfRating();
-
-        Map<String, Object> getUnreadRecords();
-
-        String unreadMsg();
-
-        String unreadNoti();
-
-        String getProfileComPercent();
-
-        ArrayList<String> getAppliedPromo();
-
-        ArrayList<String> getAvailablePromo();
 
         String generateMsgName(String last, String first);
 
@@ -118,10 +49,6 @@ public interface HomePageContract {
         void setRating(Map<String, Object> selfRating);
 
         void setMsgName(String msgName);
-
-        void setAvailablePromo(ArrayList<String> availablePromo);
-
-        void setAppliedPromo(ArrayList<String> appliedPromo);
 
         void setProfileComPercent(String num);
 
@@ -139,19 +66,9 @@ public interface HomePageContract {
 
         void showPercentSnak(String message, String actionName);
 
-        void showProgressTwo();
-
-        void hideProgressTwo();
-
-        void gotoTestingActivity();
-
-        void gotoBootCampActivity();
-
-        boolean checkNull();
-
         void initRecentSearchRecycler(DocumentSnapshot documentSnapshot);
 
-        void showSingleBottomSheetRating(HomePageRatingData currentRatingDataList);
+        void flush(String msg);
 
         void searchFilterClicked();
     }
@@ -168,9 +85,6 @@ public interface HomePageContract {
 
         void defaultOptionMenuCreated();
 
-
-        void appliedPromo(DocumentSnapshot documentSnapshot);
-
         void getDataFromDB();
     }
 
@@ -182,9 +96,6 @@ public interface HomePageContract {
 
         void removeAppliedPromo(HomePageRecyclerData promoData, TeacherContract.Model.Listener<Boolean> listener);
 
-        void hawwa();
-
-
         void getPromo(String promoCode, TeacherContract.Model.Listener<HomePageRecyclerData> listener);
 
         void submitRating(String record_id, String skill_id, String opponent_uid, String myAccountType, Map<String, Boolean> inputRating, Float inputStar, String feedbackString, TeacherContract.Model.Listener<Void> listener);
@@ -194,13 +105,5 @@ public interface HomePageContract {
         void addShapShotListener(EventListener<DocumentSnapshot> updateViewListener);
 
         void removeCompletedRating(String identify, TeacherContract.Model.Listener<Void> listener);
-    }
-
-    interface ParentCallback {
-
-        void onNetworkPause();
-
-        void onNetworkResume();
-
     }
 }

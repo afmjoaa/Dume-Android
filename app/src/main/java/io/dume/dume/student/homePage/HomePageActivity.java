@@ -133,7 +133,7 @@ import static io.dume.dume.util.DumeUtils.showKeyboard;
 import static io.dume.dume.util.ImageHelper.getRoundedCornerBitmapSquare;
 
 public class HomePageActivity extends BaseMapActivity implements HomePageContract.View,
-        NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback, MyGpsLocationChangeListener {
+        NavigationView.OnNavigationItemSelectedListener, MyGpsLocationChangeListener {
 
     private static final String TAG = "HomePageActivity";
     private static final int RC_RECENT_SEARCH = 8989;
@@ -252,39 +252,6 @@ public class HomePageActivity extends BaseMapActivity implements HomePageContrac
 //       stopService(locationServiceIntent);
     }
 
-    @Override
-    public void loadHeadsUpPromo(HomePageRecyclerData promoData) {
-
-        if (promoData.getMax_dicount_percentage() > discount) {
-            discount = promoData.getMax_dicount_percentage();
-            Date expirity = promoData.getExpirity();
-            Date now = new Date();
-
-            if (now.getTime() > expirity.getTime()) {
-                mModel.removeAppliedPromo(promoData, new TeacherContract.Model.Listener<Boolean>() {
-                    @Override
-                    public void onSuccess(Boolean deleted) {
-
-                    }
-
-                    @Override
-                    public void onError(String msg) {
-                        Log.e(TAG, "onError: " + msg);
-                    }
-                });
-            } else {
-                long leftMillis = expirity.getTime() - now.getTime();
-                int daysLeft = (int) (leftMillis / (1000 * 60 * 60 * 24));
-                setHeadsUpPromo(discount.toString(), (daysLeft > 1 ? daysLeft + " days" : "less than a day"), promoData.getPackageName() == null ? "" : promoData.getPackageName());
-
-            }
-        }
-    }
-
-    @Override
-    public void loadPromoData(HomePageRecyclerData promoData) {
-        hPageBSRcyclerAdapter.addPromoToList(promoData);
-    }
 
     @Override
     protected void onStart() {
@@ -543,21 +510,6 @@ public class HomePageActivity extends BaseMapActivity implements HomePageContrac
         }
     }
 
-    @Override
-    public void setHeadsUpPromo(String discount, String dayLeft, String packageName) {
-        headsUpPromoContainer.setVisibility(View.VISIBLE);
-        searchMentorBtn.setBackground(getResources().getDrawable(R.drawable.bg_white_bottom_round));
-        String herePackageName = "";
-        if (packageName.equals(SearchDataStore.DUME_GANG)) {
-            herePackageName = "Coaching Service";
-        } else if (packageName.equals(SearchDataStore.REGULAR_DUME)) {
-            herePackageName = "Monthly Tuition";
-        } else {
-            herePackageName = "Weekly Tuition";
-        }
-        promotionTextView.setText(discount + "% off on " + herePackageName);
-        promotionExpireDate.setText(dayLeft);
-    }
 
     @Override
     public void init() {
@@ -601,52 +553,6 @@ public class HomePageActivity extends BaseMapActivity implements HomePageContrac
         secondaryToolbar.setOverflowIcon(drawable);
     }
 
-    @Override
-    public void makingCallbackInterfaces() {
-        locationServiceHandler = new LocationServiceHandler() {
-            @Override
-            public void onGpsProviderDisabled() {
-                //Toast.makeText(HomePageActivity.this, "Gps Disabled by callback", Toast.LENGTH_SHORT).show();
-                MAPCONTAINER.setVisibility(View.INVISIBLE);
-                primaryNavContainer.setVisibility(View.GONE);
-                secondaryNavContainer.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onGpsProviderEnabled() {
-                //Toast.makeText(HomePageActivity.this, "Gps enabled by callback", Toast.LENGTH_SHORT).show();
-                MAPCONTAINER.setVisibility(View.VISIBLE);
-                primaryNavContainer.setVisibility(View.VISIBLE);
-                secondaryNavContainer.setVisibility(View.GONE);
-                onCenterCurrentLocation();
-            }
-
-            @Override
-            public void onNetworkDisabled() {
-
-            }
-
-            @Override
-            public void onNetworkEnabled() {
-
-            }
-
-            @Override
-            public void onlocationChangedByGps(Location location) {
-
-            }
-
-            @Override
-            public void onlocationChangedByNetwork(Location location) {
-
-            }
-
-            @Override
-            public void onLocationServiceHandlerError(Exception e) {
-
-            }
-        };
-    }
 
 
     @Override
@@ -804,16 +710,6 @@ public class HomePageActivity extends BaseMapActivity implements HomePageContrac
         }
     }
 
-    @Override
-    public void onCenterCurrentLocation() {
-        Drawable d = fab.getDrawable();
-        if (d instanceof Animatable) {
-            ((Animatable) d).start();
-        }
-        Log.d(TAG, "onClick: clicked gps icon");
-        getDeviceLocation(mMap);
-
-    }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -926,28 +822,6 @@ public class HomePageActivity extends BaseMapActivity implements HomePageContrac
         alChatIcon.setDrawableByLayerId(R.id.ic_al_chat, alChatDrawable);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        mPresenter.onMenuItemInteracted(item);
-        Drawable drawableGeneral = item.getIcon();
-        if (drawableGeneral instanceof Animatable) {
-            ((Animatable) drawableGeneral).start();
-        }
-        int id = item.getItemId();
-        if (id == android.R.id.home) {
-            if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
-                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-            } else {
-                drawer.openDrawer(GravityCompat.START, true);
-                //super.onBackPressed();
-            }
-            return true;
-        } else if (id == R.id.action_help) {
-            gotoHelpActivity();
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
 
     public void bottomSheetCallbackConfig() {
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
@@ -1049,10 +923,6 @@ public class HomePageActivity extends BaseMapActivity implements HomePageContrac
         startActivity(new Intent(this, ProfilePageActivity.class));
     }
 
-    @Override
-    public void gotoGrabingInfoPage() {
-        startActivity(new Intent(this, GrabingInfoActivity.class));
-    }
 
     @Override
     public void gotoGrabingLocationPage() {
@@ -1072,86 +942,7 @@ public class HomePageActivity extends BaseMapActivity implements HomePageContrac
         }
     }
 
-    @Override
-    public void gotoHeatMapActivity() {
-        startActivity(new Intent(this, HeatMapActivity.class));
-    }
 
-    @Override
-    public void gotoRecordsPage() {
-        startActivity(new Intent(this, RecordsPageActivity.class).setAction(DumeUtils.STUDENT));
-    }
-
-    @Override
-    public void gotoSettingActivity() {
-        Intent settingIntent = new Intent(this, StudentSettingsActivity.class);
-        startActivity(settingIntent);
-    }
-
-    @Override
-    public void gotoHelpActivity() {
-        startActivity(new Intent(this, StudentHelpActivity.class));
-    }
-
-    @Override
-    public void gotoPaymentActivity() {
-        startActivity(new Intent(this, StudentPaymentActivity.class).setAction(DumeUtils.STUDENT));
-    }
-
-    @Override
-    public void gotoInboxActivity() {
-        startActivity(new Intent(this, InboxActivity.class));
-    }
-
-
-    @Override
-    public void gotoAboutUsActivity() {
-        startActivity(new Intent(this, AboutUsActivity.class));
-    }
-
-    @Override
-    public void gotoPrivacyPolicyActivity() {
-        startActivity(new Intent(this, PrivacyPolicyActivity.class));
-    }
-
-    @Override
-    public void gotoNotificationTab() {
-        Intent notificationTabIntent = new Intent(this, InboxActivity.class);
-        notificationTabIntent.putExtra("notiTab", 1);
-        startActivity(notificationTabIntent);
-    }
-
-    @Override
-    public void referMentorImageViewClicked() {
-        animateImage(referMentorImageView);
-    }
-
-    @Override
-    public void freeCashBackImageViewClicked() {
-        animateImage(freeCashbackImageView);
-    }
-
-    @Override
-    public void startMentoringImageViewClicked() {
-        animateImage(startMentoringImageView);
-    }
-
-
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        Log.d(TAG, "onMapReady: map is ready");
-        setDarkStatusBarIcon();
-        MapStyleOptions style = MapStyleOptions.loadRawResourceStyle(
-                this, R.raw.map_style_default_no_landmarks);
-        googleMap.setMapStyle(style);
-
-        mMap = googleMap;
-        onMapReadyListener(mMap);
-        mMap.setPadding((int) (10 * (getResources().getDisplayMetrics().density)), 0, 0, (int) (72 * (getResources().getDisplayMetrics().density)));
-        onMapReadyGeneralConfig();
-        getDeviceLocation(mMap);
-
-    }
 
     public void navigationTogglerConfig() {
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -1269,169 +1060,12 @@ public class HomePageActivity extends BaseMapActivity implements HomePageContrac
     /*
       Updates the count of notifications in the ActionBar finishes here.
     */
-
-    //testing the customDialogue
-    @Override
-    public void testingCustomDialogue(HomePageRatingData myData, Record record) {
-        // custom dialog
-        String keyToChange = "s_rate_status";
-        //dialog = new Dialog(context);
-        dialog.setContentView(R.layout.custom_rating_dialogue);
-        dialog.setCanceledOnTouchOutside(false);
-        DocumentSnapshot snapshot = record.getRecordSnap();
-
-        //all find view here
-        MaterialRatingBar mDecimalRatingBars = dialog.findViewById(R.id.rated_mentor_rating_bar);
-        RecyclerView itemRatingRecycleView = dialog.findViewById(R.id.rating_item_recycler);
-        carbon.widget.ImageView ratedMentorDP = dialog.findViewById(R.id.rated_mentor_dp);
-        TextView ratingPrimaryText = dialog.findViewById(R.id.rating_primary_text);
-        TextView ratingSecondaryText = dialog.findViewById(R.id.rating_secondary_text);
-        TextInputLayout feedbackTextViewLayout = dialog.findViewById(R.id.input_layout_firstname);
-        AutoCompleteTextView feedbackTextView = dialog.findViewById(R.id.feedback_textview);
-        Button dismissBtn = (Button) dialog.findViewById(R.id.skip_btn);
-        Button dismissBtnOne = (Button) dialog.findViewById(R.id.skip_btn_two);
-        Button nextSubmitBtn = dialog.findViewById(R.id.next_btn);
-        RelativeLayout dialogHostingLayout = dialog.findViewById(R.id.dialog_hosting_layout);
-        Button SubmitBtn = dialog.findViewById(R.id.submit_btn);
-        RelativeLayout firstLayout = dialog.findViewById(R.id.first_layout);
-        RelativeLayout secondLayout = dialog.findViewById(R.id.second_layout);
-
-        ratingPrimaryText.setText("How was your learning with " + myData.getName());
-        Glide.with(getApplicationContext()).load(myData.getAvatar()).into(ratedMentorDP);
-
-        //testing the recycle view here
-        HomePageRatingAdapter itemRatingRecycleAdapter = new HomePageRatingAdapter(this, myData);
-        itemRatingRecycleView.setAdapter(itemRatingRecycleAdapter);
-        itemRatingRecycleView.setLayoutManager(new LinearLayoutManager(this));
-
-        mDecimalRatingBars.setOnRatingChangeListener(new MaterialRatingBar.OnRatingChangeListener() {
-            @Override
-            public void onRatingChanged(MaterialRatingBar ratingBar, float rating) {
-                nextSubmitBtn.performClick();
-            }
-        });
-
-        feedbackTextView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    int rating = mDecimalRatingBars.getProgress();
-                    if (rating <= 100) {
-                        String userName = myData.getName();
-                        feedbackTextView.setHint("Share how " + userName + " can improve");
-                    } else if (rating > 100 && rating <= 200) {
-                        feedbackTextView.setHint(feedbackStrings[1]);
-                    } else if (rating > 200 && rating <= 300) {
-                        String userName = myData.getName();
-                        feedbackTextView.setHint("Say something about " + userName);
-                    } else if (rating > 300 && rating <= 400) {
-                        feedbackTextView.setHint(feedbackStrings[3]);
-                    } else if (rating > 400 && rating <= 500) {
-                        feedbackTextView.setHint(feedbackStrings[4]);
-                    }
-                    showKeyboard(HomePageActivity.this);
-                } else {
-                    feedbackTextView.setHint(feedbackStrings[4]);
-                }
-            }
-        });
-
-        nextSubmitBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                TransitionSet set = new TransitionSet()
-                        .addTransition(new Fade())
-                        .addTransition(new Slide(Gravity.START))
-                        .setInterpolator(new FastOutLinearInInterpolator());
-                TransitionManager.beginDelayedTransition(dialogHostingLayout, set);
-                if (nextSubmitBtn.getText().equals("Next") && mDecimalRatingBars.getProgress() != 0) {
-                    firstLayout.setVisibility(View.GONE);
-                    secondLayout.setVisibility(View.VISIBLE);
-
-                } else {
-                    Toast.makeText(HomePageActivity.this, "please rate your experience", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
-        SubmitBtn.setOnClickListener(view -> {
-            if (feedbackTextView.getText() != null && feedbackTextView.getText().toString().equals("")) {
-                feedbackTextView.setError("Please write your feedack.");
-            } else if (itemRatingRecycleAdapter.getInputRating() == null) {
-                flush("Make sure you hit the like or dislike thumb");
-            } else {
-                SubmitBtn.setEnabled(false);
-                showProgress();
-                mModel.submitRating(snapshot.getId(), snapshot.getString("skill_uid"), new DemoModel(context).opponentUid((List<String>) snapshot.get("participants")),
-                        Google.getInstance().getAccountMajor(), itemRatingRecycleAdapter.getInputRating(), mDecimalRatingBars.getRating(), feedbackTextView.getText().toString(), new TeacherContract.Model.Listener<Void>() {
-                            @Override
-                            public void onSuccess(Void list) {
-                                hideProgress();
-                                SubmitBtn.setEnabled(true);
-                                flush("Thanks for your review...");
-                            }
-
-                            @Override
-                            public void onError(String msg) {
-                                flush(msg);
-                                hideProgress();
-                                SubmitBtn.setEnabled(true);
-                            }
-                        });
-                dialog.dismiss();
-            }
-        });
-
-        dismissBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mModel.changeRecordStatus(snapshot.getId(), keyToChange, Record.BOTTOM_SHEET);
-                dialog.dismiss();
-            }
-        });
-        dismissBtnOne.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mModel.changeRecordStatus(snapshot.getId(), keyToChange, Record.BOTTOM_SHEET);
-                dialog.dismiss();
-            }
-        });
-
-        if (!dialog.isShowing()) {
-            dialog.show();
-        }
-    }
-
-    @Override
-    public void gotoMentorProfile() {
-        startActivity(new Intent(this, TeacherActivtiy.class));
-        finish();
-    }
-
-    @Override
-    public void gotoStudentProfile() {
-        startActivity(new Intent(this, PayActivity.class));
-        finish();
-    }
-
-
     @Override
     public void flush(String msg) {
         Toast toast = Toast.makeText(this, msg, Toast.LENGTH_SHORT);
         TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
         if (v != null) v.setGravity(Gravity.CENTER);
         toast.show();
-    }
-
-    @Override
-    public void setDocumentSnapshot(DocumentSnapshot documentSnapshot) {
-        this.documentSnapshot = documentSnapshot;
-        searchDataStore.setDocumentSnapshot(documentSnapshot.getData());
-        searchDataStore.setUserName(getUserName());
-        searchDataStore.setUserNumber(documentSnapshot.getString("phone_number"));
-        searchDataStore.setUserMail(documentSnapshot.getString("email"));
-        searchDataStore.setUserUid(documentSnapshot.getId());
-        searchDataStore.setAvatarString(getAvatarString());
-        searchDataStore.setGender(documentSnapshot.getString("gender"));
     }
 
     @Override
@@ -1443,39 +1077,6 @@ public class HomePageActivity extends BaseMapActivity implements HomePageContrac
     @Override
     public Map<String, Object> getSelfRating() {
         return (Map<String, Object>) documentSnapshot.get("self_rating");
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public Map<String, Object> getUnreadRecords() {
-        return (Map<String, Object>) documentSnapshot.get("unread_records");
-    }
-
-    @Override
-    public String unreadMsg() {
-        return documentSnapshot.getString("unread_msg");
-    }
-
-    @Override
-    public String unreadNoti() {
-        return documentSnapshot.getString("unread_noti");
-    }
-
-    @Override
-    public String getProfileComPercent() {
-        return documentSnapshot.getString("pro_com_%");
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public ArrayList<String> getAppliedPromo() {
-        return (ArrayList<String>) documentSnapshot.get("applied_promo");
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public ArrayList<String> getAvailablePromo() {
-        return (ArrayList<String>) documentSnapshot.get("applied_promo");
     }
 
     @Override
@@ -1537,18 +1138,6 @@ public class HomePageActivity extends BaseMapActivity implements HomePageContrac
         userAddressingTextView.setText(msgName);
         //referMentorBtn.setText(msgName.toLowerCase());
         freeCashBack.setText(msgName.toLowerCase());
-    }
-
-    //TODO
-    @Override
-    public void setAvailablePromo(ArrayList<String> availablePromo) {
-
-    }
-
-    //TODO
-    @Override
-    public void setAppliedPromo(ArrayList<String> appliedPromo) {
-
     }
 
 
@@ -1646,7 +1235,7 @@ public class HomePageActivity extends BaseMapActivity implements HomePageContrac
                         new DumeModel(context).switchAcount(DumeUtils.TEACHER, new TeacherContract.Model.Listener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
-                                gotoMentorProfile();
+                                //go to mentor activity
                             }
 
                             @Override
@@ -1708,52 +1297,6 @@ public class HomePageActivity extends BaseMapActivity implements HomePageContrac
         if (loadViewOne.getVisibility() == View.VISIBLE) {
             loadViewOne.setVisibility(View.INVISIBLE);
         }
-    }
-
-    @Override
-    public void showProgressTwo() {
-        if (loadView.getVisibility() == View.INVISIBLE || loadView.getVisibility() == View.GONE) {
-            loadView.setVisibility(View.VISIBLE);
-        }
-        if (!loadView.isRunningAnimation()) {
-            loadView.startLoading();
-        }
-    }
-
-    @Override
-    public void hideProgressTwo() {
-        if (loadView.isRunningAnimation()) {
-            loadView.stopLoading();
-        }
-        if (loadView.getVisibility() == View.VISIBLE) {
-            loadView.setVisibility(View.INVISIBLE);
-        }
-    }
-
-    @Override
-    public void gotoTestingActivity() {
-        startActivity(new Intent(this, SearchResultActivity.class));
-    }
-
-    @Override
-    public void gotoBootCampActivity() {
-        flush("Boot Camp Service is coming soon...");
-    }
-
-    @Override
-    public boolean checkNull() {
-        return switchAcountBtn != null;
-    }
-
-    @Override
-    public void showSingleBottomSheetRating(HomePageRatingData currentRatingDataList) {
-        List<HomePageRecyclerData> promoData = new ArrayList<>();
-        if (hPageBSRcyclerAdapter == null) {
-            hPageBSRcyclerAdapter = new HomePageRecyclerAdapter(this, promoData);
-            hPageBSRecycler.setAdapter(hPageBSRcyclerAdapter);
-            hPageBSRecycler.setLayoutManager(new LinearLayoutManager(this));
-        }
-        hPageBSRcyclerAdapter.addNewData(currentRatingDataList);
     }
 
     @Override

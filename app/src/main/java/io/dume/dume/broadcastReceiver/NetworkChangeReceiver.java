@@ -59,37 +59,14 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
 
                             }
                         }).start();
-
-
-                        //Toast.makeText(context, "Resume", Toast.LENGTH_SHORT).show();
                     }
                 }
-
-               /* //Handling the Gps connectivity
-                if ("android.location.PROVIDERS_CHANGED".equals(intent.getAction())) {
-                    Log.e(TAG, "Sulod sa GPS reciever");
-                    boolean gpsEnabled = DumeUtils.isGpsEnabled(context);
-
-                    if (gpsEnabled) {
-//                        myGpsHandlerOne.onGpsResume();
-                        Toast.makeText(context, "Gps on", Toast.LENGTH_SHORT).show();
-                    } else {
-//                        myGpsHandlerOne.onGpsPause();
-                        Toast.makeText(context, "Gps off", Toast.LENGTH_SHORT).show();
-                    }
-
-                }*/
             }
         } catch (Exception e) {
             e.printStackTrace();
-            /*if ("android.location.PROVIDERS_CHANGED".equals(intent.getAction())) {
-                myGpsHandlerOne.onGpsError(e);
-            }*/
             if (myConnectivityHandler != null) {
                 myConnectivityHandler.onError(e);
             }
-
-
         }
 
     }

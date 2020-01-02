@@ -30,7 +30,6 @@ class StudentDashBoard : BaseAppCompatActivity(), NavigationView.OnNavigationIte
     var active = searchMentorFragment
     private lateinit var appBarLayout: AppBarLayout
     private lateinit var bottomNavigationView: BottomNavigationView
-    private lateinit var sideNavigationView: NavigationView
 
 
     override fun onCreate(savedInstanceState: Bundle?) {

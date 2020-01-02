@@ -3,14 +3,14 @@
     android:id="@+id/settingsAppbar"
     android:layout_width="match_parent"
     android:layout_height="@dimen/appbarLayoutHeightLow"
-    android:background="@drawable/bg_black_bottom_round"
+    android:background="@drawable/bg_white_bottom_round_8dp"
     android:theme="@style/AppTheme.AppBarOverlay">
 
     <com.google.android.material.appbar.CollapsingToolbarLayout
         android:id="@+id/accountCollapsing"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/bg_black_bottom_round"
+        android:background="@drawable/bg_white_bottom_round_8dp"
         app:collapsedTitleGravity="start"
         app:collapsedTitleTextAppearance="@style/MyTextApprncCol.darkBg"
         app:expandedTitleGravity="start"

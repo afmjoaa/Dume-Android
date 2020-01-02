@@ -32,6 +32,7 @@ import io.dume.dume.util.DumeUtils;
 
 public class HomePagePresenter implements HomePageContract.Presenter {
 
+    /*implements HomePageContract.Presenter*/
     private static final String TAG = "homePageActivity";
     private HomePageContract.View mView;
     private HomePageContract.Model mModel;
@@ -66,12 +67,10 @@ public class HomePagePresenter implements HomePageContract.Presenter {
         this.mModel = mModel;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public void homePageEnqueue() {
         mView.findView();
         mView.init();
-        mView.makingCallbackInterfaces();
         mView.configHomePage();
         getDataFromDB();
     }
@@ -102,36 +101,18 @@ public class HomePagePresenter implements HomePageContract.Presenter {
                 break;
             case R.id.user_dp:
                 break;
-            case R.id.fab:
-                mView.onCenterCurrentLocation();
-                break;
             case R.id.search_mentor_btn:
             case R.id.search_mentor_btn_nogps:
             case R.id.student_search:
                 if (isProfileOK()) {
                     mView.gotoGrabingLocationPage();
                 }
-                //mView.gotoGrabingInfoPage();
                 break;
-            case R.id.refer_mentor_imageView:
-                mView.referMentorImageViewClicked();
-                break;
-            case R.id.free_cashback_imageView:
-                mView.freeCashBackImageViewClicked();
-                break;
-            case R.id.start_mentoring_imageView:
-                mView.startMentoringImageViewClicked();
-                break;
-            //temporary code goes here
-            case R.id.promotion_validity_text:
-                break;
-
             case R.id.search_filter_image_view:
             case R.id.nogps_search_filter_image:
             case R.id.student_search_filter:
                 mView.searchFilterClicked();
                 break;
-
         }
 
     }
@@ -142,40 +123,8 @@ public class HomePagePresenter implements HomePageContract.Presenter {
         int id = item.getItemId();
 
         switch (id) {
-            case R.id.student:
-                mView.gotoStudentProfile();
-                break;
-            case R.id.mentor:
-                mView.switchProfileDialog(DumeUtils.TEACHER);
-                break;
-            case R.id.boot_camp:
-                //add boot camp here
-                //mView.switchProfileDialog(DumeUtils.BOOTCAMP);
-                mView.gotoBootCampActivity();
-                break;
             case R.id.al_display_pic:
                 mView.gotoProfilePage();
-                break;
-            case R.id.al_records:
-                mView.gotoRecordsPage();
-                break;
-            case R.id.al_messages:
-                mView.gotoInboxActivity();
-                break;
-            case R.id.al_notifications:
-                mView.gotoNotificationTab();
-                break;
-            case R.id.heat_map:
-                mView.gotoHeatMapActivity();
-                break;
-            case R.id.settings:
-                mView.gotoSettingActivity();
-                break;
-            case R.id.help:
-                mView.gotoHelpActivity();
-                break;
-            case R.id.payments:
-                mView.gotoPaymentActivity();
                 break;
             case R.id.forum:
                 //TODO
@@ -187,25 +136,7 @@ public class HomePagePresenter implements HomePageContract.Presenter {
                 } catch (Exception err) {
                     Log.e(TAG, err.getLocalizedMessage());
                 }
-                //Toast.makeText(context, "Coming soon", Toast.LENGTH_SHORT).show();
                 break;
-            case R.id.messages:
-                mView.gotoInboxActivity();
-                break;
-            case R.id.notifications:
-                //will be added later
-                mView.gotoNotificationTab();
-                break;
-            case R.id.about_us:
-                mView.gotoAboutUsActivity();
-                break;
-            case R.id.privacy_policy:
-                mView.gotoPrivacyPolicyActivity();
-                break;
-            case R.id.records:
-                mView.gotoRecordsPage();
-                break;
-
         }
 
     }
@@ -270,36 +201,11 @@ public class HomePagePresenter implements HomePageContract.Presenter {
     }
 
 
-    @Override
-    public void appliedPromo(DocumentSnapshot documentSnapshot) {
-        ArrayList<String> applied_promo = null;
-        try {
-            applied_promo = (ArrayList<String>) documentSnapshot.get("applied_promo");
-        } catch (Exception err) {
-            Log.w(TAG, err.getLocalizedMessage());
-        } finally {
-            if (applied_promo != null) {
-                for (String applied : applied_promo) {
-                    Log.w(TAG, "appliedPromo: " + applied);
-                    Map<String, Object> promo_item = (Map<String, Object>) documentSnapshot.get(applied);
-                    Gson gson = new Gson();
-                    JsonElement jsonElement = gson.toJsonTree(promo_item);
-                    try {
-                        HomePageRecyclerData homePageRecyclerData = gson.fromJson(jsonElement, HomePageRecyclerData.class);
-                        if (homePageRecyclerData != null) {
-                            mView.loadHeadsUpPromo(homePageRecyclerData);
-                        }
-                    } catch (Exception e) {
-                        mView.flush(e.getMessage());
-                    }
-                }
-            }
-        }
-    }
+
 
     @Override
     public void getDataFromDB() {
-        mModel.addShapShotListener((documentSnapshot, e) -> {
+        /*mModel.addShapShotListener((documentSnapshot, e) -> {
             if (documentSnapshot != null) {
                 ArrayList<String> available_promo = (ArrayList<String>) documentSnapshot.get("available_promo");
                 appliedPromo(documentSnapshot);
@@ -428,20 +334,9 @@ public class HomePagePresenter implements HomePageContract.Presenter {
             } else {
                 mView.flush("Does not found any isExiting");
             }
-        });
+        });*/
 
 
     }
 
 }
-
-/*  public List<HomePageRatingData> getFinalRatingData() {
-        List<HomePageRatingData> data = new ArrayList<>();
-        String[] primaryText = getResources().getStringArray(R.array.rating_demo_data);
-        for (String aPrimaryText : primaryText) {
-            HomePageRatingData current = new HomePageRatingData();
-            current.ratingAboutName = aPrimaryText;
-            data.add(current);
-        }
-        return data;
-    }*/

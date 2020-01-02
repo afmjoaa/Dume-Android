@@ -122,7 +122,7 @@ public class HomePageRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
                         removePromo(position);
 
                         if (Google.getInstance().getAccountMajor().equals(DumeUtils.STUDENT)) {
-                            new HomePagePresenter(context, (HomePageContract.View) context, homePageModel).getDataFromDB();
+                            //new HomePagePresenter(context, (HomePageContract.View) context, homePageModel).getDataFromDB();
                         } else if (Google.getInstance().getAccountMajor().equals(DumeUtils.TEACHER)) {
                             TeacherActivtiy teacherActivtiy = (TeacherActivtiy) context;
                             teacherActivtiy.presenter.loadPromo();
@@ -198,27 +198,27 @@ public class HomePageRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
                         } else if (rating > 400 && rating <= 500) {
                             headerVH.feedbackTextView.setHint(feedbackStrings[4]);
                         }
-                        if (context instanceof HomePageActivity) {
+                      /*  if (context instanceof HomePageActivity) {
                             HomePageActivity myAct = (HomePageActivity) context;
                             showKeyboard(myAct);
                         } else if (context instanceof TeacherActivtiy) {
                             TeacherActivtiy myAct = (TeacherActivtiy) context;
                             showKeyboard(myAct);
-                        }
+                        }*/
                     } else {
                         headerVH.feedbackTextView.setHint(feedbackStrings[4]);
                     }
                 }
             });
 
-            if (context instanceof HomePageActivity) {
+            /*if (context instanceof HomePageActivity) {
                 HomePageActivity myAct = (HomePageActivity) context;
                 contentView = myAct.findViewById(android.R.id.content);
             } else if (context instanceof TeacherActivtiy) {
                 TeacherActivtiy myAct = (TeacherActivtiy) context;
                 contentView = myAct.findViewById(android.R.id.content);
             }
-
+*/
             if (contentView != null) {
                 contentView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                     @Override
@@ -237,7 +237,7 @@ public class HomePageRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
                         if (keypadHeight > screenHeight * 0.15) { // 0.15 ratio is perhaps enough to determine keypad height.
                             // keyboard is opened
                             if (headerVH.feedbackTextView.hasFocus()) {
-                                if (context instanceof HomePageActivity) {
+                               /* if (context instanceof HomePageActivity) {
                                     HomePageActivity myAct = (HomePageActivity) context;
                                     if (myAct.hackHeight.getVisibility() == View.GONE) {
                                         myAct.hackHeight.setVisibility(View.VISIBLE);
@@ -247,11 +247,11 @@ public class HomePageRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
                                     if (myAct.hackHeight.getVisibility() == View.GONE) {
                                         myAct.hackHeight.setVisibility(View.VISIBLE);
                                     }
-                                }
+                                }*/
                             }
                         } else {
                             if (headerVH.feedbackTextView.hasFocus()) {
-                                if (context instanceof HomePageActivity) {
+                               /* if (context instanceof HomePageActivity) {
                                     HomePageActivity myAct = (HomePageActivity) context;
                                     if (myAct.hackHeight.getVisibility() == View.VISIBLE) {
                                         myAct.hackHeight.setVisibility(View.GONE);
@@ -262,7 +262,7 @@ public class HomePageRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
                                         myAct.hackHeight.setVisibility(View.GONE);
                                     }
                                 }
-
+*/
                             }
                             // keyboard is closed
                         }
@@ -298,7 +298,7 @@ public class HomePageRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
                 } else if (itemRatingRecycleAdapter.getInputRating() == null) {
                     flush("Make sure you hit the like or dislike thumb");
                 } else {
-                    if (context instanceof HomePageActivity) {
+                    /*if (context instanceof HomePageActivity) {
                         HomePageActivity myAct = (HomePageActivity) context;
                         myAct.showProgressTwo();
 
@@ -306,7 +306,7 @@ public class HomePageRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
                         TeacherActivtiy myAct = (TeacherActivtiy) context;
                         myAct.showProgressTwo();
                         //myAct.showProgressTwo();
-                    }
+                    }*/
                     headerVH.submitBtn.setEnabled(false);
                     HomePageRatingData homePageRatingData = ratingData.get(position);
                     Record record = homePageRatingData.getRecord();
@@ -318,7 +318,7 @@ public class HomePageRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
                                     removeRatingItem(position);
                                     headerVH.submitBtn.setEnabled(true);
                                     flush("Thanks for your review...");
-                                    if (context instanceof HomePageActivity) {
+                                    /*if (context instanceof HomePageActivity) {
                                         HomePageActivity myAct = (HomePageActivity) context;
                                         myAct.hideProgressTwo();
 
@@ -326,7 +326,7 @@ public class HomePageRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
                                         TeacherActivtiy myAct = (TeacherActivtiy) context;
                                         myAct.hideProgressTwo();
                                         //myAct.showProgressTwo();
-                                    }
+                                    }*/
 
                                 }
 

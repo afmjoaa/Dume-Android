@@ -68,7 +68,7 @@ public class AuthModel implements AuthContract.Model, SplashContract.Model, Phon
         /*FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
                 .setTimestampsInSnapshotsEnabled(true)
                 .build();
-        firestore.setFirestoreSettings(settings);*/
+        fireStore.setFirestoreSettings(settings);*/
         Log.w(TAG, "AuthModel: " + firestore.hashCode());
     }
 

@@ -80,7 +80,7 @@ public class HomePageModel extends StuBaseModel implements HomePageContract.Mode
         promoMap.put("criteria", promoData.getCriteria());
 
 
-        firestore.collection(path).document(FirebaseAuth.getInstance().getUid())
+        fireStore.collection(path).document(FirebaseAuth.getInstance().getUid())
                 .update("applied_promo", FieldValue.arrayUnion(promo_code),
                         "available_promo", FieldValue.arrayRemove(promo_code),
                         promo_code, promoMap).addOnSuccessListener(aVoid -> listener.onSuccess("Promo Applied.")).addOnFailureListener(e -> listener.onError(e.getLocalizedMessage()));
@@ -101,14 +101,14 @@ public class HomePageModel extends StuBaseModel implements HomePageContract.Mode
         if (promoData.getMax_tution_count() > 1 && !promoData.isExpired()) {
             Integer max_tution_count = promoData.getMax_tution_count();
             max_tution_count -= 1;
-            firestore.collection(path).document(FirebaseAuth.getInstance().getUid()).update(promoData.getPromo_code() + ".max_tution_count", max_tution_count).addOnSuccessListener(new OnSuccessListener<Void>() {
+            fireStore.collection(path).document(FirebaseAuth.getInstance().getUid()).update(promoData.getPromo_code() + ".max_tution_count", max_tution_count).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
                     listener.onSuccess("Promo Updated");
                 }
             });
         } else {
-            firestore.collection(path).document(FirebaseAuth.getInstance().getUid())
+            fireStore.collection(path).document(FirebaseAuth.getInstance().getUid())
                     .update("applied_promo", FieldValue.arrayRemove(promoData.getPromo_code()),
                             promoData.getPromo_code(), FieldValue.delete()).addOnSuccessListener(aVoid -> listener.onSuccess("Promo Used")).addOnFailureListener(e -> listener.onError(e.getLocalizedMessage()));
 
@@ -125,7 +125,7 @@ public class HomePageModel extends StuBaseModel implements HomePageContract.Mode
             path = "/users/students/stu_pro_info";
 
         }
-        firestore.collection(path).document(FirebaseAuth.getInstance().getUid())
+        fireStore.collection(path).document(FirebaseAuth.getInstance().getUid())
                 .update("applied_promo", FieldValue.arrayRemove(promoData.getPromo_code()),
                         promoData.getPromo_code(), FieldValue.delete()).addOnSuccessListener(aVoid -> listener.onSuccess(true)).addOnFailureListener(e -> listener.onError(e.getLocalizedMessage()));
 
@@ -133,13 +133,8 @@ public class HomePageModel extends StuBaseModel implements HomePageContract.Mode
     }
 
     @Override
-    public void hawwa() {
-
-    }
-
-    @Override
     public void getPromo(String promoCode, TeacherContract.Model.Listener<HomePageRecyclerData> listener) {
-        firestore.collection("promo").whereEqualTo("promo_code", promoCode).get().addOnCompleteListener((Activity) context, new OnCompleteListener<QuerySnapshot>() {
+        fireStore.collection("promo").whereEqualTo("promo_code", promoCode).get().addOnCompleteListener((Activity) context, new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
@@ -183,7 +178,7 @@ public class HomePageModel extends StuBaseModel implements HomePageContract.Mode
         changeRecordStatus(record_id, keyToChange, Record.DONE);
 
 
-        firestore.collection(path).document(opponent_uid).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        fireStore.collection(path).document(opponent_uid).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
@@ -313,7 +308,7 @@ public class HomePageModel extends StuBaseModel implements HomePageContract.Mode
                         updateSelfRating.put("student_guided", student_guided.toString());
                         updateSelfRating.put("response_time", response_time.toString());
 
-                        firestore.collection("/users/mentors/skills/").document(skill_id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        fireStore.collection("/users/mentors/skills/").document(skill_id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                             @Override
                             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                                 if (task.isSuccessful()) {
@@ -343,11 +338,11 @@ public class HomePageModel extends StuBaseModel implements HomePageContract.Mode
                                         //1. mentorProfile
                                         //2. skill
                                         //3. skill.review
-                                        WriteBatch batch = firestore.batch();
-                                        DocumentReference mentorProfile = firestore.collection(path).document(opponent_uid);
+                                        WriteBatch batch = fireStore.batch();
+                                        DocumentReference mentorProfile = fireStore.collection(path).document(opponent_uid);
                                         batch.update(mentorProfile, "self_rating", updateSelfRating);
 
-                                        DocumentReference skill_Ref = firestore.collection("/users/mentors/skills/").document(skill_id);
+                                        DocumentReference skill_Ref = fireStore.collection("/users/mentors/skills/").document(skill_id);
                                         batch.update(skill_Ref, "sp_info.self_rating", updateSelfRating, "likes", likes, "dislikes", dislikes);
 
                                         //setting the skill feedback here
@@ -360,7 +355,7 @@ public class HomePageModel extends StuBaseModel implements HomePageContract.Mode
                                         reviewMap.put("reviewer_rating", inputStar.toString());
                                         reviewMap.put("time", FieldValue.serverTimestamp());
 
-                                        DocumentReference skillReview = firestore.collection("/users/mentors/skills/").document(skill_id).collection("reviews").document();
+                                        DocumentReference skillReview = fireStore.collection("/users/mentors/skills/").document(skill_id).collection("reviews").document();
                                         batch.set(skillReview, reviewMap);
 
                                         // Commit the batch
@@ -390,7 +385,7 @@ public class HomePageModel extends StuBaseModel implements HomePageContract.Mode
 
     @Override
     public void getSingleRecords(String recordId, TeacherContract.Model.Listener<Record> listener) {
-        firestore.collection("records").document(recordId).addSnapshotListener((Activity) context, new EventListener<DocumentSnapshot>() {
+        fireStore.collection("records").document(recordId).addSnapshotListener((Activity) context, new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
                 if (e != null) {
@@ -452,7 +447,7 @@ public class HomePageModel extends StuBaseModel implements HomePageContract.Mode
             path = "/users/students/stu_pro_info";
         }
 
-        firestore.collection(path).document(getUser().getUid()).update("rating_array", FieldValue.arrayRemove(identify)).addOnSuccessListener(new OnSuccessListener<Void>() {
+        fireStore.collection(path).document(getUser().getUid()).update("rating_array", FieldValue.arrayRemove(identify)).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 Log.w(TAG, "onSuccess: " + "Ok");
@@ -467,7 +462,7 @@ public class HomePageModel extends StuBaseModel implements HomePageContract.Mode
     }
 
     public void changeRecordStatus(String record_id, String keyToChange, String status) {
-        firestore.collection("records").document(record_id).update(keyToChange, status);
+        fireStore.collection("records").document(record_id).update(keyToChange, status);
     }
 
 }

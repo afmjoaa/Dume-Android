@@ -349,11 +349,11 @@ public class DumeModel extends HomePageModel implements TeacherModel {
 
 
     public void modifySeenStatusNotification(String doc_id, TeacherContract.Model.Listener<Boolean> listener) {
-        firestore.collection("push_notifications").document(doc_id).update("seen", true).addOnSuccessListener((Activity) context, aVoid -> listener.onSuccess(true)).addOnFailureListener(e -> listener.onError(e.getLocalizedMessage()));
+        fireStore.collection("push_notifications").document(doc_id).update("seen", true).addOnSuccessListener((Activity) context, aVoid -> listener.onSuccess(true)).addOnFailureListener(e -> listener.onError(e.getLocalizedMessage()));
     }
 
     public void deleteNotification(String doc_id, TeacherContract.Model.Listener<Boolean> listener) {
-        firestore.collection("push_notifications").document(doc_id).delete().addOnSuccessListener((Activity) context, aVoid -> listener.onSuccess(true)).addOnFailureListener(e -> listener.onError(e.getLocalizedMessage()));
+        fireStore.collection("push_notifications").document(doc_id).delete().addOnSuccessListener((Activity) context, aVoid -> listener.onSuccess(true)).addOnFailureListener(e -> listener.onError(e.getLocalizedMessage()));
     }
 
     public void reportIssue(String usermail, String issue, TeacherContract.Model.Listener<Void> listener) {
@@ -361,7 +361,7 @@ public class DumeModel extends HomePageModel implements TeacherModel {
         HashMap<String, Object> data = new HashMap<>();
         data.put("body", issue);
         data.put("email", usermail);
-        firestore.collection("contact").add(data).addOnSuccessListener((Activity) context, aVoid -> listener.onSuccess(null)).addOnFailureListener(e -> listener.onError(e.getLocalizedMessage()));
+        fireStore.collection("contact").add(data).addOnSuccessListener((Activity) context, aVoid -> listener.onSuccess(null)).addOnFailureListener(e -> listener.onError(e.getLocalizedMessage()));
 
 
     }

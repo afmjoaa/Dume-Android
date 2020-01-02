@@ -3,8 +3,10 @@ package io.dume.dume.firstTimeUser
 import android.os.Bundle
 import android.view.Menu
 import android.view.View
+import androidx.databinding.DataBindingUtil.setContentView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.observe
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import io.dume.dume.R
