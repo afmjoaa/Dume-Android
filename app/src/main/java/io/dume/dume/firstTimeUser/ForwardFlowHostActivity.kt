@@ -1,5 +1,6 @@
 package io.dume.dume.firstTimeUser
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.View
@@ -8,7 +9,9 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import io.dume.dume.R
+import io.dume.dume.student.DashBoard.StudentDashBoard
 import io.dume.dume.student.pojo.BaseAppCompatActivity
+import io.dume.dume.teacher.DashBoard.TeacherDashboard
 import io.dume.dume.util.DumeUtils.configAppToolBarTitle
 import io.dume.dume.util.DumeUtils.configureAppbar
 import io.dume.dume.util.StateManager
@@ -37,6 +40,43 @@ class ForwardFlowHostActivity : BaseAppCompatActivity(), View.OnClickListener {
         sharedPreferenceObserver()
         initView()
         initListener()
+        updateSate()
+
+    }
+
+    private fun updateSate() {
+        var role: String = StateManager.getInstance(this).sharedPreferences().all[StateManager.ROLE] as String
+        var isFirstTimeUser: Boolean = StateManager.getInstance(this).sharedPreferences().all[StateManager.FIRST_TIME_USER] as Boolean
+        var teacherCurrentPosition: String = StateManager.getInstance(this).sharedPreferences().all[StateManager.TEACHER_POSITION] as String
+        var studentCurrentPosition: String = StateManager.getInstance(this).sharedPreferences().all[StateManager.STUDENT_POSITION] as String
+
+        if (!isFirstTimeUser) {
+            if (role.equals(Role.STUDENT.flow)) {
+                when (studentCurrentPosition) {
+                    ForwardFlowStatStudent.ROLE.flow -> navController.navigate(R.id.roleChooser)
+                    ForwardFlowStatStudent.PRIVACY.flow -> navController.navigate(R.id.privacyFragment)
+                    ForwardFlowStatStudent.PERMISSION.flow -> navController.navigate(R.id.permissionFragment)
+                    ForwardFlowStatStudent.LOGIN.flow -> navController.navigate(R.id.loginFragment)
+                    ForwardFlowStatStudent.REGISTER.flow -> navController.navigate(R.id.registerFragment)
+                }
+            } else {
+                when (teacherCurrentPosition) {
+                    ForwardFlowStatTeacher.ROLE.flow -> navController.navigate(R.id.roleChooser)
+                    ForwardFlowStatTeacher.PRIVACY.flow -> navController.navigate(R.id.privacyFragment)
+                    ForwardFlowStatTeacher.PERMISSION.flow -> navController.navigate(R.id.permissionFragment)
+                    ForwardFlowStatTeacher.LOGIN.flow -> navController.navigate(R.id.loginFragment)
+                    ForwardFlowStatTeacher.REGISTER.flow -> navController.navigate(R.id.registerFragment)
+                    ForwardFlowStatTeacher.QUALIFICATION.flow -> navController.navigate(R.id.qualificationFragment)
+                    ForwardFlowStatTeacher.ADDSKILL.flow -> navController.navigate(R.id.addSkillFragment)
+                    ForwardFlowStatTeacher.PAYMENT.flow -> navController.navigate(R.id.paymentFragment)
+
+                }
+            }
+
+        } else {
+            if (role == Role.STUDENT.flow) startActivity(Intent(this, StudentDashBoard::class.java)) else startActivity(Intent(this, TeacherDashboard::class.java))
+        }
+
 
     }
 

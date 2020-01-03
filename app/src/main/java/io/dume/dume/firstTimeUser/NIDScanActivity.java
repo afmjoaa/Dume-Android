@@ -62,7 +62,7 @@ public class NIDScanActivity extends BaseAppCompatActivity implements View.OnCli
         configureAppbar(this, "NID Verification", true);
         initView();
         flag = false;
-        stateManager = StateManager.getInstance(this);
+        stateManager = StateManager.Companion.getInstance(this);
         squareProgressBar.setWidth(7);
         squareProgressBar.setProgress(0);
         float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, getResources().getDisplayMetrics());
