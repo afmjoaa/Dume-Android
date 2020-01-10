@@ -111,7 +111,7 @@ class NidScanFragment : Fragment(), View.OnClickListener {
         camera?.setLifecycleOwner(viewLifecycleOwner)
 
         Log.e("debug", "configureCamera ${camera}  isOpen : ${camera.isOpened} isTakingPicture : ${camera.isTakingPicture}")
-        stateManager = StateManager.getInstance(context)
+        stateManager = StateManager.getInstance(context!!)
         squareProgressBar?.setWidth(7)
         squareProgressBar?.setProgress(0)
         val px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4f, resources.displayMetrics)
@@ -215,9 +215,9 @@ class NidScanFragment : Fragment(), View.OnClickListener {
                         squareProgressBar?.setProgress(validPercent)
                     }
                     if (validPercent == 100) {
-                        stateManager.setValue("NIDNo", NIDNo)
-                        stateManager.setValue("NIDName", NIDName)
-                        stateManager.setValue("NIDBirthDate", NIDBirthDate)
+                        stateManager.setValue("NIDNo", NIDNo!!)
+                        stateManager.setValue("NIDName", NIDName!!)
+                        stateManager.setValue("NIDBirthDate", NIDBirthDate!!)
                         viewModel.scan.postValue(NID(NIDName!!, NIDBirthDate!!, NIDNo!!))
                         isFragmentVisible = false
                         navController.navigate(R.id.action_nidFragment_to_registerFragment)

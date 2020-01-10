@@ -45,12 +45,16 @@ class ForwardFlowHostActivity : BaseAppCompatActivity(), View.OnClickListener {
     }
 
     private fun updateSate() {
-        var role: String = StateManager.getInstance(this).sharedPreferences().all[StateManager.ROLE] as String
-        var isFirstTimeUser: Boolean = StateManager.getInstance(this).sharedPreferences().all[StateManager.FIRST_TIME_USER] as Boolean
-        var teacherCurrentPosition: String = StateManager.getInstance(this).sharedPreferences().all[StateManager.TEACHER_POSITION] as String
-        var studentCurrentPosition: String = StateManager.getInstance(this).sharedPreferences().all[StateManager.STUDENT_POSITION] as String
+        val role: String = StateManager.getInstance(this).sharedPreferences().all[StateManager.ROLE] as? String
+                ?: ""
+        val isFirstTimeUser: Boolean = StateManager.getInstance(this).sharedPreferences().all[StateManager.FIRST_TIME_USER] as? Boolean
+                ?: true
+        val teacherCurrentPosition: String = StateManager.getInstance(this).sharedPreferences().all[StateManager.TEACHER_POSITION] as? String
+                ?: ""
+        val studentCurrentPosition: String = StateManager.getInstance(this).sharedPreferences().all[StateManager.STUDENT_POSITION] as? String
+                ?: ""
 
-        if (!isFirstTimeUser) {
+        if (isFirstTimeUser) {
             if (role.equals(Role.STUDENT.flow)) {
                 when (studentCurrentPosition) {
                     ForwardFlowStatStudent.ROLE.flow -> navController.navigate(R.id.roleChooser)
@@ -59,7 +63,7 @@ class ForwardFlowHostActivity : BaseAppCompatActivity(), View.OnClickListener {
                     ForwardFlowStatStudent.LOGIN.flow -> navController.navigate(R.id.loginFragment)
                     ForwardFlowStatStudent.REGISTER.flow -> navController.navigate(R.id.registerFragment)
                 }
-            } else {
+            } else if (role.equals(Role.TEACHER.flow)) {
                 when (teacherCurrentPosition) {
                     ForwardFlowStatTeacher.ROLE.flow -> navController.navigate(R.id.roleChooser)
                     ForwardFlowStatTeacher.PRIVACY.flow -> navController.navigate(R.id.privacyFragment)

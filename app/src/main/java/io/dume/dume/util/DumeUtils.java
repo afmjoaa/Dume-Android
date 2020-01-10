@@ -60,7 +60,6 @@ import io.dume.dume.student.pojo.SearchDataStore;
 import io.dume.dume.student.recordsPage.Record;
 import io.dume.dume.teacher.homepage.TeacherContract;
 
-import static com.facebook.FacebookSdk.getApplicationContext;
 
 @Keep
 public class DumeUtils {
@@ -266,7 +265,7 @@ public class DumeUtils {
         toolbar.setTitle(title);
     }
 
-    public static void configAppToolBarTitle(Context context, String title){
+    public static void configAppToolBarTitle(Context context, String title) {
         AppCompatActivity activity = (AppCompatActivity) context;
         CollapsingToolbarLayout collapsingToolbarLayout = activity.findViewById(R.id.accountCollapsing);
         Toolbar toolbar = activity.findViewById(R.id.accountToolbar);
@@ -372,10 +371,10 @@ public class DumeUtils {
     public static void setMargins(View v, int l, int t, int r, int b) {
         if (v.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
             ViewGroup.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) v.getLayoutParams();
-            p.setMargins((int) (l * (getApplicationContext().getResources().getDisplayMetrics().density)),
-                    (int) (t * (getApplicationContext().getResources().getDisplayMetrics().density)),
-                    (int) (r * (getApplicationContext().getResources().getDisplayMetrics().density)),
-                    (int) (b * (getApplicationContext().getResources().getDisplayMetrics().density)));
+            p.setMargins((int) (l * (v.getContext().getResources().getDisplayMetrics().density)),
+                    (int) (t * (v.getContext().getResources().getDisplayMetrics().density)),
+                    (int) (r * (v.getContext().getResources().getDisplayMetrics().density)),
+                    (int) (b * (v.getContext().getResources().getDisplayMetrics().density)));
             v.requestLayout();
         }
     }
@@ -753,9 +752,9 @@ public class DumeUtils {
                 confirmNoBtn.setText("Retry");
                 confirmNoBtn.setEnabled(true);
             }
-            try{
+            try {
                 mMakeRequestBSD.show();
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             mMakeRequestBSD.setCancelable(cancelable);
@@ -763,7 +762,7 @@ public class DumeUtils {
         }
     }
 
-    public static Number getCalculatedSalary(Number mentorAskedSalary, String dbPackageName,  List<String> dbQueryList){
+    public static Number getCalculatedSalary(Number mentorAskedSalary, String dbPackageName, List<String> dbQueryList) {
         //adding if not found in previous records
         //TODO calculated salary
         //getting the subject array string
