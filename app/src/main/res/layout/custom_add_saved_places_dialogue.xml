@@ -7,7 +7,6 @@
     android:layout_marginBottom="10dp"
     android:background="@drawable/bg_round_corner_rela_layout">
 
-
     <TextView
         android:id="@+id/rating_secondary_text"
         android:layout_width="wrap_content"
@@ -20,125 +19,89 @@
         android:textAllCaps="false"
         android:textSize="18sp" />
 
-    <RelativeLayout
-        android:id="@+id/name_relativeLayout"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/input_layout_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/rating_secondary_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        android:layout_marginBottom="8dp">
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        android:hint="Name"
+        app:errorEnabled="true"
+        app:errorIconDrawable="@drawable/error_icon"
+        app:hintEnabled="true"
+        android:theme="@style/ProgressBarStyleUp">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/input_layout_name"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/name_textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:theme="@style/ProgressBarStyleUp">
+            android:focusableInTouchMode="true"
+            android:inputType="textShortMessage"
+            android:textSize="16sp"
+            app:fontFamily="@font/cairo_regular" />
 
-            <AutoCompleteTextView
-                android:id="@+id/name_textView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:focusableInTouchMode="true"
-                android:hint="Name"
-                android:inputType="textShortMessage"
-                android:textSize="16sp"
-                app:fontFamily="@font/cairo_regular" />
-        </com.google.android.material.textfield.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 
-        <carbon.widget.ImageView
-            android:id="@+id/empty_name_found"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="10dp"
-            android:layout_marginRight="10dp"
-            android:contentDescription="@string/search_icon"
-            android:translationY="5dp"
-            app:carbon_cornerRadius="8dp"
-            app:carbon_elevation="1dp"
-            android:visibility="gone"
-            app:srcCompat="@drawable/error_icon" />
 
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/address_relativeLayout"
-        android:layout_below="@+id/name_relativeLayout"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/input_layout_address"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/input_layout_name"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        android:layout_marginBottom="8dp">
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        android:hint="Address"
+        app:errorEnabled="true"
+        app:errorIconDrawable="@drawable/error_icon"
+        app:hintEnabled="true"
+        android:theme="@style/ProgressBarStyleUp">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/input_layout_address"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/address_textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:theme="@style/ProgressBarStyleUp">
-
-            <AutoCompleteTextView
-                android:id="@+id/address_textView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Address"
-                android:inputType="textShortMessage"
-                android:textSize="16sp"
-                app:fontFamily="@font/cairo_regular" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <carbon.widget.ImageView
-            android:id="@+id/empty_address_found"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="10dp"
-            android:layout_marginRight="10dp"
-            android:contentDescription="@string/search_icon"
-            android:translationY="5dp"
-            android:visibility="gone"
-            app:carbon_cornerRadius="8dp"
-            app:carbon_elevation="1dp"
-            app:srcCompat="@drawable/error_icon" />
-
-    </RelativeLayout>
+            android:inputType="textShortMessage"
+            android:textSize="16sp"
+            app:fontFamily="@font/cairo_regular" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <LinearLayout
         android:id="@+id/hosting_btn_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/address_relativeLayout"
+        android:layout_below="@+id/input_layout_address"
         android:gravity="end">
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/skip_btn"
-            style="@style/Base.Widget.AppCompat.Button.Borderless"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Discard"
-            android:textAlignment="center"
-            android:textSize="13sp" />
-
-        <Button
-            android:id="@+id/save_btn"
-            style="@style/Base.Widget.AppCompat.Button.Borderless"
+            style="@style/Widget.MaterialComponents.Button.Icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
-            android:drawableEnd="@drawable/ic_done_small"
-            android:drawableRight="@drawable/ic_done_small"
+            android:text="Discard"
+            android:textAlignment="center"
+            app:icon="@drawable/ic_discard_small"
+            app:iconPadding="8dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/save_btn"
+            style="@style/Widget.MaterialComponents.Button.Icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
             android:text="Save"
             android:textAlignment="center"
-            android:textSize="13sp" />
+            app:icon="@drawable/ic_done_small"
+            app:iconPadding="8dp" />
 
     </LinearLayout>
 

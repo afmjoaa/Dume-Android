@@ -46,6 +46,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.GeoPoint;
 
@@ -292,8 +293,8 @@ public class StudentSettingsActivity extends BaseAppCompatActivity
         AutoCompleteTextView addressTextView = dialog.findViewById(R.id.address_textView);
         Button discardBtn = dialog.findViewById(R.id.skip_btn);
         Button saveBtn = dialog.findViewById(R.id.save_btn);
-        ImageView emptyNameFound = dialog.findViewById(R.id.empty_name_found);
-        ImageView emptyAddressFound = dialog.findViewById(R.id.empty_address_found);
+        TextInputLayout emptyNameLayout = dialog.findViewById(R.id.input_layout_name);
+        TextInputLayout emptyAddressLayout = dialog.findViewById(R.id.input_layout_address);
         addressTextView.setText(address);
         if (addressName != null) {
             if (!addressName.equals("")) {
@@ -334,16 +335,16 @@ public class StudentSettingsActivity extends BaseAppCompatActivity
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (!s.equals("")) {
-                    emptyNameFound.setVisibility(View.GONE);
+                    emptyNameLayout.setError(null);
                 } else {
-                    emptyNameFound.setVisibility(View.VISIBLE);
+                    emptyNameLayout.setError("Name can't be empty.");
                 }
             }
 
             @Override
             public void afterTextChanged(Editable s) {
                 if (s.toString().equals("")) {
-                    emptyNameFound.setVisibility(View.VISIBLE);
+                    emptyNameLayout.setError("Name can't be empty.");
                 }
             }
         });
@@ -355,16 +356,16 @@ public class StudentSettingsActivity extends BaseAppCompatActivity
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (!s.equals("")) {
-                    emptyAddressFound.setVisibility(View.GONE);
+                    emptyAddressLayout.setError(null);
                 } else {
-                    emptyAddressFound.setVisibility(View.VISIBLE);
+                    emptyAddressLayout.setError("Address can't be empty.");
                 }
             }
 
             @Override
             public void afterTextChanged(Editable s) {
                 if (s.toString().equals("")) {
-                    emptyAddressFound.setVisibility(View.VISIBLE);
+                    emptyAddressLayout.setError("Address can't be empty.");
                 }
             }
         });
@@ -383,10 +384,10 @@ public class StudentSettingsActivity extends BaseAppCompatActivity
                 if (nameTextView.getText().toString().equals("") || addressTextView.getText().toString().equals("")) {
                     flush("Field can't be kept empty");
                     if (nameTextView.getText().toString().equals("")) {
-                        emptyNameFound.setVisibility(View.VISIBLE);
+                        emptyNameLayout.setError("Name can't be empty.");
                     }
                     if (addressTextView.getText().toString().equals("")) {
-                        emptyAddressFound.setVisibility(View.VISIBLE);
+                        emptyAddressLayout.setError("Address can't be empty.");
                     }
                 } else {
                     showProgress();

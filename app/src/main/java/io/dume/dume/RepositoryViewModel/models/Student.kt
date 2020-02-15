@@ -1,4 +1,5 @@
 package io.dume.dume.RepositoryViewModel.models
 
-class student {
-}
+data class Student(
+        val account_active: Boolean = true
+)

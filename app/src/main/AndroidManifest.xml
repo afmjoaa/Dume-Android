@@ -129,7 +129,6 @@
         <activity
             android:name=".student.profilePage.ProfilePageActivity"
             android:label="@string/title_activity_profile_page"
-            android:theme="@style/profilePageTheme"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity android:name=".student.pojo.BaseAppCompatActivity" />
         <activity

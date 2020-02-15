@@ -32,8 +32,8 @@
         android:clickable="true"
         android:focusable="true"
         android:src="@drawable/ic_action_save"
-        app:backgroundTint="@color/colorBlack"
-        app:rippleColor="@color/colorDarkAzure" />
+        app:backgroundTint="@color/mColorPrimary"
+        app:rippleColor="@color/colorRippleDefault" />
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/editAccountScrolling"
@@ -57,21 +57,21 @@
                     android:id="@+id/profileImage"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    android:scaleType="centerCrop"
-                    app:srcCompat="@drawable/set_display_pic"
-                    app:carbon_cornerRadius="50dp"
                     android:layout_marginBottom="5dp"
-                    app:carbon_elevation="3dp" />
+                    android:scaleType="centerCrop"
+                    app:carbon_cornerRadius="50dp"
+                    app:carbon_elevation="3dp"
+                    app:srcCompat="@drawable/set_display_pic" />
 
                 <carbon.widget.ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom|end"
+                    android:layout_marginBottom="5dp"
                     android:background="@drawable/cirecle_background_white"
                     android:padding="5dp"
-                    android:layout_marginBottom="5dp"
-                    app:srcCompat="@drawable/add_avatar"
-                    app:carbon_elevation="4dp" />
+                    app:carbon_elevation="4dp"
+                    app:srcCompat="@drawable/add_avatar" />
 
             </FrameLayout>
 
@@ -102,13 +102,13 @@
                         app:isb_indicator_text_size="10sp"
                         app:isb_max="100"
                         app:isb_min="0"
-                        app:isb_progress="100"
+                        app:isb_progress="10"
                         app:isb_seek_smoothly="true"
                         app:isb_show_indicator="circular_bubble"
                         app:isb_show_tick_marks_type="divider"
                         app:isb_thumb_color="@color/colorAccent"
                         app:isb_thumb_size="8dp"
-                        app:isb_tick_marks_color="#80108174"
+                        app:isb_tick_marks_color="@color/mColorSecondaryVariant"
                         app:isb_tick_marks_size="5dp"
                         app:isb_tick_marks_swept_hide="true"
                         app:isb_ticks_count="21"
@@ -143,16 +143,85 @@
 
             </RelativeLayout>
 
+            <info.hoang8f.android.segmented.SegmentedGroup xmlns:segmentedgroup="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/profileSegment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="14dp"
+                android:gravity="center"
+                android:orientation="horizontal"
+                segmentedgroup:sc_border_width="1dp"
+                segmentedgroup:sc_corner_radius="4dp">
+
+                <RadioButton
+                    android:id="@+id/student"
+                    style="@style/RadioButton"
+                    android:layout_width="60dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:text="Student Profile" />
+
+                <RadioButton
+                    android:id="@+id/teacher"
+                    style="@style/RadioButton"
+                    android:layout_width="60dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:checked="true"
+                    android:text="Teacher Profile" />
+
+            </info.hoang8f.android.segmented.SegmentedGroup>
+
+            <info.hoang8f.android.segmented.SegmentedGroup xmlns:segmentedgroup="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/activateSegment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="16dp"
+                android:gravity="center"
+                android:orientation="horizontal"
+                segmentedgroup:sc_border_width="1dp"
+                segmentedgroup:sc_corner_radius="4dp">
+
+                <RadioButton
+                    android:id="@+id/active"
+                    style="@style/RadioButton"
+                    android:layout_width="60dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:checked="true"
+                    android:text="Activate Account" />
+
+                <RadioButton
+                    android:id="@+id/deactive"
+                    style="@style/RadioButton"
+                    android:layout_width="60dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:text="Deactivate Account" />
+
+            </info.hoang8f.android.segmented.SegmentedGroup>
+
+
             <LinearLayout
                 android:id="@+id/user_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="18dp"
                 android:layout_marginLeft="18dp"
-                android:layout_marginTop="10dp"
                 android:layout_marginEnd="18dp"
                 android:layout_marginRight="18dp"
-                android:layout_marginBottom="10dp"
                 android:baselineAligned="false"
                 android:orientation="horizontal">
 
@@ -163,37 +232,24 @@
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/input_layout_firstname"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="10dp"
-                        android:layout_marginRight="10dp">
+                        android:layout_marginRight="10dp"
+                        android:hint="First Name"
+                        app:errorEnabled="true"
+                        app:errorIconDrawable="@drawable/error_icon"
+                        app:hintEnabled="true">
 
-                        <EditText
+                        <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/firstNameEt"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:autofillHints="fuck"
-                            android:hint="First Name"
                             android:inputType="textPersonName"
                             app:fontFamily="@font/cairo_regular" />
 
                     </com.google.android.material.textfield.TextInputLayout>
-
-                    <carbon.widget.ImageView
-                        android:id="@+id/empty_fn_found"
-                        android:layout_width="16dp"
-                        android:layout_height="16dp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginEnd="20dp"
-                        android:layout_marginRight="20dp"
-                        android:contentDescription="@string/search_icon"
-                        android:translationY="5dp"
-                        android:visibility="gone"
-                        app:carbon_cornerRadius="8dp"
-                        app:carbon_elevation="1dp"
-                        app:srcCompat="@drawable/error_icon" />
 
                 </RelativeLayout>
 
@@ -204,35 +260,23 @@
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/input_layout_lastname"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
-                        android:layout_marginLeft="10dp">
+                        android:layout_marginLeft="10dp"
+                        android:hint="Last Name"
+                        app:errorEnabled="true"
+                        app:errorIconDrawable="@drawable/error_icon"
+                        app:hintEnabled="true">
 
-                        <EditText
+                        <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/lastNameEdt"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Last Name"
                             android:inputType="textPersonName"
                             app:fontFamily="@font/cairo_regular" />
                     </com.google.android.material.textfield.TextInputLayout>
-
-                    <carbon.widget.ImageView
-                        android:id="@+id/empty_ln_found"
-                        android:layout_width="16dp"
-                        android:layout_height="16dp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginEnd="10dp"
-                        android:layout_marginRight="10dp"
-                        android:contentDescription="@string/search_icon"
-                        android:translationY="5dp"
-                        android:visibility="gone"
-                        app:carbon_cornerRadius="8dp"
-                        app:carbon_elevation="1dp"
-                        app:srcCompat="@drawable/error_icon" />
 
                 </RelativeLayout>
 
@@ -244,59 +288,49 @@
                 android:layout_marginStart="18dp"
                 android:layout_marginLeft="18dp"
                 android:layout_marginEnd="18dp"
-                android:layout_marginRight="18dp"
-                android:layout_marginBottom="10dp">
+                android:layout_marginRight="18dp">
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/input_layout_email"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:hint="@string/hint_email"
+                    app:errorEnabled="true"
+                    app:errorIconDrawable="@drawable/error_icon"
+                    app:hintEnabled="true">
 
-                    <EditText
+                    <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/mailEt"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/hint_email"
                         android:inputType="textEmailAddress"
                         app:fontFamily="@font/cairo_regular" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <carbon.widget.ImageView
-                    android:id="@+id/empty_email_found"
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginRight="10dp"
-                    android:contentDescription="@string/search_icon"
-                    android:translationY="5dp"
-                    android:visibility="gone"
-                    app:carbon_cornerRadius="8dp"
-                    app:carbon_elevation="1dp"
-                    app:srcCompat="@drawable/error_icon" />
-
             </RelativeLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/input_layout_phone_num"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="18dp"
                 android:layout_marginLeft="18dp"
                 android:layout_marginEnd="18dp"
                 android:layout_marginRight="18dp"
-                android:layout_marginBottom="10dp">
+                android:hint="@string/phone_number"
+                app:errorEnabled="true"
+                app:errorIconDrawable="@drawable/error_icon"
+                app:hintEnabled="true">
 
-                <EditText
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/phoneEdt"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:clickable="false"
                     android:focusable="false"
-                    android:hint="@string/phone_number"
                     android:inputType="phone"
                     android:textColor="#c2c2c2"
                     app:fontFamily="@font/cairo_regular" />
@@ -309,58 +343,48 @@
                 android:layout_marginStart="18dp"
                 android:layout_marginLeft="18dp"
                 android:layout_marginEnd="18dp"
-                android:layout_marginRight="18dp"
-                android:layout_marginBottom="10dp">
+                android:layout_marginRight="18dp">
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/input_layout_c_address"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:hint="@string/current_address"
+                    app:errorEnabled="true"
+                    app:errorIconDrawable="@drawable/error_icon"
+                    app:hintEnabled="true">
 
-                    <EditText
+                    <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/pickAddressET"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:focusable="false"
-                        android:hint="@string/current_address"
-                        android:inputType="textEmailAddress"
+                        android:inputType="text"
                         app:fontFamily="@font/cairo_regular" />
 
                 </com.google.android.material.textfield.TextInputLayout>
-
-                <carbon.widget.ImageView
-                    android:id="@+id/empty_address_found"
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginRight="10dp"
-                    android:contentDescription="@string/search_icon"
-                    android:translationY="5dp"
-                    android:visibility="gone"
-                    app:carbon_cornerRadius="8dp"
-                    app:carbon_elevation="1dp"
-                    app:srcCompat="@drawable/error_icon" />
 
             </RelativeLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/input_layout_current_status"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="18dp"
                 android:layout_marginLeft="18dp"
                 android:layout_marginEnd="18dp"
                 android:layout_marginRight="18dp"
-                android:layout_marginBottom="10dp">
+                android:hint="@string/current_status"
+                app:errorEnabled="true"
+                app:errorIconDrawable="@drawable/error_icon"
+                app:hintEnabled="true">
 
-                <EditText
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/input_current_status"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/current_status"
                     android:inputType="text"
                     app:fontFamily="@font/cairo_regular" />
 
@@ -368,20 +392,23 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/input_layout_Gender"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="18dp"
                 android:layout_marginLeft="18dp"
                 android:layout_marginEnd="18dp"
                 android:layout_marginRight="18dp"
-                android:layout_marginBottom="10dp">
+                android:hint="@string/gender"
+                app:errorEnabled="true"
+                app:errorIconDrawable="@drawable/error_icon"
+                app:hintEnabled="true">
 
-                <EditText
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/input_gender"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:focusable="false"
-                    android:hint="@string/gender"
                     android:inputType="text"
                     android:onClick="onClick"
                     app:fontFamily="@font/cairo_regular" />
@@ -392,18 +419,21 @@
                 android:id="@+id/input_layout_Religion"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:hint="Religion"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                app:errorEnabled="true"
+                app:errorIconDrawable="@drawable/error_icon"
+                app:hintEnabled="true"
                 android:layout_marginStart="18dp"
                 android:layout_marginLeft="18dp"
                 android:layout_marginEnd="18dp"
-                android:layout_marginRight="18dp"
-                android:layout_marginBottom="10dp">
+                android:layout_marginRight="18dp">
 
-                <EditText
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/input_religion"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:focusable="false"
-                    android:hint="Religion"
                     android:inputType="text"
                     android:onClick="onClick"
                     app:fontFamily="@font/cairo_regular" />
@@ -413,19 +443,22 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/input_layout_marital_status"
                 android:layout_width="match_parent"
-                android:layout_marginStart="18dp"
-                android:layout_marginEnd="18dp"
-                android:layout_marginLeft="18dp"
-                android:layout_marginRight="18dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp">
+                android:layout_marginStart="18dp"
+                android:layout_marginLeft="18dp"
+                android:layout_marginEnd="18dp"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                android:hint="@string/marital_status"
+                app:errorEnabled="true"
+                app:errorIconDrawable="@drawable/error_icon"
+                app:hintEnabled="true"
+                android:layout_marginRight="18dp">
 
-                <EditText
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/input_marital_status"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:focusable="false"
-                    android:hint="@string/marital_status"
                     android:inputType="text"
                     android:onClick="onClick"
                     app:fontFamily="@font/cairo_regular" />
@@ -436,18 +469,21 @@
                 android:id="@+id/input_layout_birth_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:hint="@string/birth_date"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                app:errorEnabled="true"
+                app:errorIconDrawable="@drawable/error_icon"
+                app:hintEnabled="true"
                 android:layout_marginStart="18dp"
-                android:layout_marginEnd="18dp"
                 android:layout_marginLeft="18dp"
-                android:layout_marginRight="18dp"
-                android:layout_marginBottom="10dp">
+                android:layout_marginEnd="18dp"
+                android:layout_marginRight="18dp">
 
-                <EditText
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/input_birth_date"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:focusable="false"
-                    android:hint="@string/birth_date"
                     android:inputType="date"
                     android:onClick="onClick"
                     app:fontFamily="@font/cairo_regular" />
@@ -459,6 +495,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
+
                 <TextView
                     android:id="@+id/recent_updates"
                     android:layout_width="match_parent"
@@ -491,9 +528,9 @@
                     android:clickable="true"
                     android:focusable="true"
                     android:foreground="?android:attr/selectableItemBackground"
+                    android:onClick="onClick"
                     android:orientation="vertical"
                     android:paddingLeft="18dp"
-                    android:onClick="onClick"
                     android:paddingRight="18dp">
 
                     <LinearLayout
@@ -533,12 +570,6 @@
                             app:fontFamily="@font/cairo_regular" />
                     </LinearLayout>
 
-                    <!--<View
-                        android:id="@+id/divider2"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_below="@+id/vertical_textview_container"
-                        android:background="#41a7a7a7" />-->
 
                 </RelativeLayout>
             </LinearLayout>

@@ -124,37 +124,6 @@
                     android:layout_height="300dp"/>
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/blog_host"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/blog_textview"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:paddingStart="16dp"
-                    android:paddingLeft="16dp"
-                    android:paddingTop="6dp"
-                    android:paddingEnd="16dp"
-                    android:paddingRight="16dp"
-                    android:paddingBottom="6dp"
-                    android:text="Blog"
-                    android:textAllCaps="false"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="@color/textColorPrimary"
-                    android:textSize="12sp"
-                    app:fontFamily="@font/cairo_regular" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/blog_recycler"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-            </LinearLayout>
-
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>

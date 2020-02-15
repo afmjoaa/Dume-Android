@@ -91,7 +91,7 @@ public class SearchResultModel extends StuBaseModel implements SearchResultContr
             NotificationChannel channel1 = new NotificationChannel(
                     CHANNEL_1_ID,
                     "Informative",
-                    NotificationManager.IMPORTANCE_HIGH
+                    NotificationManager.IMPORTANCE_DEFAULT
             );
             channel1.setDescription("Informative, Messenger, Promo, action");
             channel1.enableLights(true);

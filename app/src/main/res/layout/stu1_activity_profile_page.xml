@@ -118,12 +118,12 @@
                     android:maxLines="1"
                     android:rotation="45"
                     android:singleLine="true"
-                    app:carbon_elevation="3dp"
                     android:text="Change"
                     android:textAppearance="?android:textAppearanceLargeInverse"
                     android:textSize="10sp"
                     android:translationX="38dp"
                     android:translationY="8dp"
+                    app:carbon_elevation="3dp"
                     tools:ignore="SmallSp" />
 
             </androidx.cardview.widget.CardView>
@@ -204,12 +204,12 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginStart="8dp"
                 android:layout_gravity="center"
-                android:gravity="center"
-                android:layout_marginEnd="10dp">
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                android:gravity="center">
 
                 <com.warkiz.widget.IndicatorStayLayout
                     android:id="@+id/complete_seekbar_staylayout"
@@ -233,7 +233,7 @@
                         app:isb_show_tick_marks_type="divider"
                         app:isb_thumb_color="@color/colorAccent"
                         app:isb_thumb_size="8dp"
-                        app:isb_tick_marks_color="#80108174"
+                        app:isb_tick_marks_color="@color/mColorSecondaryVariant"
                         app:isb_tick_marks_size="5dp"
                         app:isb_tick_marks_swept_hide="true"
                         app:isb_ticks_count="21"
@@ -270,6 +270,40 @@
 
             </RelativeLayout>
 
+            <info.hoang8f.android.segmented.SegmentedGroup xmlns:segmentedgroup="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/segmentGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="16dp"
+                android:gravity="center"
+                android:orientation="horizontal"
+                segmentedgroup:sc_border_width="1dp"
+                segmentedgroup:sc_corner_radius="4dp">
+
+                <RadioButton
+                    android:id="@+id/permanent_radio"
+                    style="@style/RadioButton"
+                    android:layout_width="60dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:text="Student Profile" />
+
+                <RadioButton
+                    android:id="@+id/choose_radio"
+                    style="@style/RadioButton"
+                    android:layout_width="60dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:checked="true"
+                    android:text="Teacher Profile" />
+
+            </info.hoang8f.android.segmented.SegmentedGroup>
 
             <LinearLayout
                 android:id="@+id/user_name"
@@ -279,7 +313,6 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginEnd="20dp"
                 android:layout_marginRight="20dp"
-                android:layout_marginBottom="10dp"
                 android:baselineAligned="false"
                 android:orientation="horizontal">
 
@@ -290,37 +323,23 @@
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/input_layout_firstname"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="10dp"
-                        android:layout_marginRight="10dp">
+                        android:layout_marginRight="10dp"
+                        android:hint="First Name"
+                        app:errorEnabled="true"
+                        app:errorIconDrawable="@drawable/error_icon"
+                        app:hintEnabled="true">
 
-                        <AutoCompleteTextView
+                        <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/input_firstname"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:autofillHints="fuck"
-                            android:hint="First Name"
-                            android:inputType="textPersonName"
-                            app:fontFamily="@font/cairo_regular" />
+                            android:inputType="textPersonName" />
 
                     </com.google.android.material.textfield.TextInputLayout>
-
-                    <carbon.widget.ImageView
-                        android:id="@+id/empty_fn_found"
-                        android:layout_width="16dp"
-                        android:layout_height="16dp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginEnd="20dp"
-                        android:layout_marginRight="20dp"
-                        android:contentDescription="@string/search_icon"
-                        android:translationY="5dp"
-                        android:visibility="gone"
-                        app:carbon_cornerRadius="8dp"
-                        app:carbon_elevation="1dp"
-                        app:srcCompat="@drawable/error_icon" />
 
                 </RelativeLayout>
 
@@ -331,35 +350,23 @@
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/input_layout_lastname"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
-                        android:layout_marginLeft="10dp">
+                        android:layout_marginLeft="10dp"
+                        android:hint="Last Name"
+                        app:errorEnabled="true"
+                        app:errorIconDrawable="@drawable/error_icon"
+                        app:hintEnabled="true">
 
-                        <AutoCompleteTextView
+                        <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/input_lastname"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Last Name"
-                            android:inputType="textPersonName"
-                            app:fontFamily="@font/cairo_regular" />
-                    </com.google.android.material.textfield.TextInputLayout>
+                            android:inputType="textPersonName" />
 
-                    <carbon.widget.ImageView
-                        android:id="@+id/empty_ln_found"
-                        android:layout_width="16dp"
-                        android:layout_height="16dp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginEnd="10dp"
-                        android:layout_marginRight="10dp"
-                        android:contentDescription="@string/search_icon"
-                        android:translationY="5dp"
-                        android:visibility="gone"
-                        app:carbon_cornerRadius="8dp"
-                        app:carbon_elevation="1dp"
-                        app:srcCompat="@drawable/error_icon" />
+                    </com.google.android.material.textfield.TextInputLayout>
 
                 </RelativeLayout>
 
@@ -372,59 +379,47 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginEnd="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginBottom="10dp">
+                android:layout_marginRight="20dp">
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/input_layout_email"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:hint="@string/hint_email"
+                    app:errorEnabled="true"
+                    app:errorIconDrawable="@drawable/error_icon"
+                    app:hintEnabled="true">
 
-                    <AutoCompleteTextView
+                    <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/input_email"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/hint_email"
-                        android:inputType="textEmailAddress"
-                        app:fontFamily="@font/cairo_regular" />
+                        android:inputType="textEmailAddress" />
 
                 </com.google.android.material.textfield.TextInputLayout>
-
-                <carbon.widget.ImageView
-                    android:id="@+id/empty_email_found"
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginRight="10dp"
-                    android:contentDescription="@string/search_icon"
-                    android:translationY="5dp"
-                    android:visibility="gone"
-                    app:carbon_cornerRadius="8dp"
-                    app:carbon_elevation="1dp"
-                    app:srcCompat="@drawable/error_icon" />
 
             </RelativeLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/input_layout_c_address"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
                 android:layout_marginLeft="20dp"
+                android:layout_marginEnd="20dp"
                 android:layout_marginRight="20dp"
-                android:layout_marginBottom="10dp">
+                android:hint="@string/current_address"
+                app:errorEnabled="true"
+                app:errorIconDrawable="@drawable/error_icon"
+                app:hintEnabled="true">
 
-                <EditText
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/input_current_address"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:focusable="false"
-                    android:hint="@string/current_address"
-                    android:inputType="textEmailAddress"
                     android:onClick="onProfilePageClicked"
                     app:fontFamily="@font/cairo_regular" />
 
@@ -432,17 +427,20 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/input_layout_c_status"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
-                android:layout_marginBottom="10dp">
+                android:hint="@string/current_status"
+                app:errorEnabled="true"
+                app:errorIconDrawable="@drawable/error_icon"
+                app:hintEnabled="true">
 
-                <AutoCompleteTextView
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/input_current_status"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/current_status"
                     android:inputType="text"
                     app:fontFamily="@font/cairo_regular" />
 
@@ -450,19 +448,23 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/input_layout_p_result"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
                 android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp">
+                android:layout_marginEnd="20dp"
+                android:layout_marginRight="20dp"
+                android:hint="@string/previous_result"
+                app:errorEnabled="true"
+                app:errorIconDrawable="@drawable/error_icon"
+                app:hintEnabled="true">
 
-                <EditText
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/input_previous_result"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:focusable="false"
-                    android:hint="@string/previous_result"
                     android:inputType="text"
                     android:onClick="onProfilePageClicked"
                     app:fontFamily="@font/cairo_regular" />
@@ -502,21 +504,24 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/input_layout_Gender"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
                 android:layout_marginLeft="20dp"
+                android:layout_marginEnd="20dp"
                 android:layout_marginRight="20dp"
-                android:layout_marginBottom="10dp"
-                android:translationY="-6dp">
+                android:hint="@string/gender"
+                android:translationY="-6dp"
+                app:errorEnabled="true"
+                app:errorIconDrawable="@drawable/error_icon"
+                app:hintEnabled="true">
 
-                <EditText
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/input_gerder"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:focusable="false"
-                    android:hint="@string/gender"
                     android:inputType="text"
                     android:onClick="onProfilePageClicked"
                     app:fontFamily="@font/cairo_regular" />
@@ -528,16 +533,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
                 android:layout_marginLeft="20dp"
+                android:layout_marginEnd="20dp"
                 android:layout_marginRight="20dp"
-                android:layout_marginTop="10dp"
                 android:layout_marginBottom="16dp"
                 android:baselineAligned="false"
                 android:orientation="horizontal"
                 android:translationY="-6dp">
 
-                <Button
+                <com.google.android.material.button.MaterialButton
+                    style="@style/Widget.MaterialComponents.Button"
                     android:id="@+id/profile_discard_btn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -549,7 +554,8 @@
                     android:textAllCaps="false"
                     app:fontFamily="@font/cairo_regular" />
 
-                <Button
+                <com.google.android.material.button.MaterialButton
+                    style="@style/Widget.MaterialComponents.Button"
                     android:id="@+id/profile_update_btn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

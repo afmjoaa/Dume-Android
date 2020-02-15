@@ -18,55 +18,15 @@ public interface HomePageContract {
 
     interface View {
 
-        void onSwitchAccount();
-
-        void configHomePage();
-
         void init();
 
         void findView();
-
-        void gotoProfilePage();
 
         void gotoGrabingLocationPage();
 
         //getters
 
-        String getAvatarString();
-
-        Map<String, Object> getSelfRating();
-
-        String generateMsgName(String last, String first);
-
-        String getUserName();
-
         //setters
-
-        void setUserName(String last, String first);
-
-        void setAvatar(String avatarString);
-
-        void setRating(Map<String, Object> selfRating);
-
-        void setMsgName(String msgName);
-
-        void setProfileComPercent(String num);
-
-        void setUnreadMsg(String unreadMsg);
-
-        void setUnreadNoti(String unreadNoti);
-
-        void setUnreadRecords(Map<String, Object> unreadRecords);
-
-        void setAvatarForMenu(String avatar);
-
-        void showSnackBar(String completePercent);
-
-        void switchProfileDialog(String identify);
-
-        void showPercentSnak(String message, String actionName);
-
-        void initRecentSearchRecycler(DocumentSnapshot documentSnapshot);
 
         void flush(String msg);
 

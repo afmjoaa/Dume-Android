@@ -1,4 +1,6 @@
-package io.dume.dume.Repository
+package io.dume.dume.RepositoryViewModel
 
-class TeacherRepository {
+import androidx.lifecycle.ViewModel
+
+class TeacherViewModel : ViewModel() {
 }

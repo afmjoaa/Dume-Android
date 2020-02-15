@@ -65,6 +65,7 @@ public class    SearchLoadingModel extends StuBaseModel implements SearchLoading
             //adding 2k threshold value upto which we will count valid introctor profile with calculated salary
             offeredSalary = offeredSalary + 2000;
         }
+
         //testing the removal of rejected and pending here
         if (Google.getInstance().getRecords() != null) {
             recordDataRejected = DumeUtils.filterList(Google.getInstance().getRecords(), "Rejected");

@@ -1,9 +1,9 @@
 package io.dume.dume.student.DashBoard.Fragment.SearchMentor
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.graphics.Color
 import android.os.Bundle
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -11,8 +11,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
-import androidx.coordinatorlayout.widget.CoordinatorLayout
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -26,19 +24,16 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import io.dume.dume.R
 import io.dume.dume.student.grabingLocation.GrabingLocationActivity
-import io.dume.dume.student.homePage.HomePageActivity
 import io.dume.dume.student.homePage.HomePageContract
 import io.dume.dume.student.homePage.HomePageModel
 import io.dume.dume.student.homePage.HomePagePresenter
 import io.dume.dume.student.homePage.adapter.RecentSearchAdapter
 import io.dume.dume.student.homePage.adapter.RecentSearchData
 import io.dume.dume.student.pojo.SearchDataStore
-import io.dume.dume.student.profilePage.ProfilePageActivity
 import io.dume.dume.student.searchLoading.SearchLoadingActivity
 import io.dume.dume.teacher.crudskill.CrudSkillActivity
 import io.dume.dume.util.DumeUtils
 import io.dume.dume.util.DumeUtils.getEndOFNest
-import io.dume.dume.util.NetworkUtil
 import kotlinx.android.synthetic.main.fragment_search_mentor.*
 import kotlinx.android.synthetic.main.fragment_search_mentor.view.*
 import java.util.*
@@ -64,7 +59,17 @@ class SearchMentorFragment : Fragment(), HomePageContract.View, View.OnClickList
     private lateinit var recent_search_rv: RecyclerView
     private lateinit var model: HomePageModel
 
-    fun inititalizeVariable(root: View) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initializeVariable(view)
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.fragment_search_mentor, container, false)
+    }
+
+    @SuppressLint("InflateParams")
+    private fun initializeVariable(root: View) {
         model = HomePageModel(activity, context)
         presenter = HomePagePresenter(context, this, model)
         presenter.homePageEnqueue()
@@ -80,36 +85,7 @@ class SearchMentorFragment : Fragment(), HomePageContract.View, View.OnClickList
         searchDataStore = SearchDataStore.getInstance()
     }
 
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        inititalizeVariable(view)
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val root = inflater.inflate(R.layout.fragment_search_mentor, container, false)
-        return root
-    }
-
-    override fun onClick(p0: View?) {
-        //presenter.onViewIntracted(p0)
-    }
-
-    protected fun isProfileOK(): Boolean {
-        var percentage = 0
-
-        if (documentSnapshot != null) {
-            val beh = documentSnapshot.get("pro_com_%") as String
-            percentage = Integer.parseInt(beh)
-            if (percentage >= 90) {
-                return true
-            }
-
-        }
-        flush("Profile should be at least 90% completed")
-        val snackString = "Profile only $percentage% complete"
-        showPercentSnak(snackString, "GO TO PROFILE")
-        return false
+    override fun onClick(view: View?) {
 
     }
 
@@ -122,17 +98,12 @@ class SearchMentorFragment : Fragment(), HomePageContract.View, View.OnClickList
 
     }
 
-
-    override fun configHomePage() {
-
-    }
-
     //Need to work here after salah
-    override fun initRecentSearchRecycler(documentSnapshot: DocumentSnapshot) {
+    fun initRecentSearchRecycler(documentSnapshot: DocumentSnapshot) {
         val recentSearchData = ArrayList<RecentSearchData>()
         val preIdentifyOne = documentSnapshot.getString("next_rs_write")
         recently_searched = documentSnapshot.get("recent_search") as Map<String, Map<String, Any>>
-        if (recently_searched != null && recently_searched.size > 0) {
+        if (recently_searched.isNotEmpty()) {
             for ((key, value) in recently_searched) {
                 val recentSearchDataCurrent = RecentSearchData()
                 var primaryText = ""
@@ -194,19 +165,6 @@ class SearchMentorFragment : Fragment(), HomePageContract.View, View.OnClickList
     }
 
 
-    override fun onSwitchAccount() {
-
-    }
-
-     fun onCenterCurrentLocation() {
-
-
-    }
-
-    override fun gotoProfilePage() {
-        startActivity(Intent(context, ProfilePageActivity::class.java))
-    }
-
     override fun gotoGrabingLocationPage() {
         val chooseLocationRadio1 = prefs.getBoolean("chooseLocationRadio", true)
         if (chooseLocationRadio1) {
@@ -224,70 +182,7 @@ class SearchMentorFragment : Fragment(), HomePageContract.View, View.OnClickList
         }
     }
 
-    override fun flush(msg: String) {
-        val toast = Toast.makeText(context, msg, Toast.LENGTH_SHORT)
-        val v = toast.getView().findViewById(android.R.id.message) as TextView
-        v.gravity = Gravity.CENTER
-        toast.show()
-    }
-
-    override fun showSnackBar(completePercent: String) {
-        mySnackbar = Snackbar.make(student_container, "Replace with your own action", Snackbar.LENGTH_LONG)
-        val layout = mySnackbar.getView() as Snackbar.SnackbarLayout
-        val textView = layout.findViewById<View>(com.google.android.material.R.id.snackbar_text) as TextView
-        textView.visibility = View.INVISIBLE
-        val inflater = LayoutInflater.from(context)
-        val snackView = inflater.inflate(R.layout.custom_snackbar_layout_one, null)
-
-        val textViewStart = snackView.findViewById<TextView>(R.id.custom_snackbar_text)
-        textViewStart.text = "Profile only $completePercent% complete"
-
-
-        layout.setPadding(0, 0, 0, 0)
-        if (Integer.parseInt(completePercent) < 90) {
-            layout.setBackgroundColor(ContextCompat.getColor(context!!, R.color.snackbar_yellow))
-            textViewStart.setTextColor(Color.BLACK)
-        } else {
-            layout.setBackgroundColor(ContextCompat.getColor(context!!, R.color.snackbar_green))
-            textViewStart.setTextColor(Color.WHITE)
-        }
-        val parentParams = layout.layoutParams as CoordinatorLayout.LayoutParams
-        parentParams.height = (36 * resources.displayMetrics.density).toInt()
-
-        layout.layoutParams = parentParams
-        layout.addView(snackView, 0)
-        val status = NetworkUtil.getConnectivityStatusString(context)
-        if (!mySnackbar.isShown() && status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
-            mySnackbar.show()
-        }
-    }
-
-
-    override fun showPercentSnak(message: String, actionName: String) {
-        val layout = enamSnackbar?.getView() as Snackbar.SnackbarLayout
-        val textView = layout.findViewById<View>(com.google.android.material.R.id.snackbar_text) as TextView
-        textView.visibility = View.INVISIBLE
-        val inflater = LayoutInflater.from(context)
-        val snackView = inflater.inflate(R.layout.teachers_snakbar_layout, null)
-        // layout.setBackgroundColor(R.color.red);
-        val textViewStart = snackView.findViewById<TextView>(R.id.custom_snackbar_text)
-        textViewStart.text = message
-        val actionTV = snackView.findViewById<TextView>(R.id.actionTV)
-        actionTV.setTextColor(resources.getColor(R.color.snack_action))
-        actionTV.setOnClickListener { view -> startActivity(Intent(context, ProfilePageActivity::class.java)) }
-        actionTV.text = actionName
-        layout.setPadding(0, 0, 0, 0)
-        val parentParams = layout.layoutParams as CoordinatorLayout.LayoutParams
-        parentParams.height = (36 * resources.displayMetrics.density).toInt()
-        layout.layoutParams = parentParams
-        layout.addView(snackView, 0)
-        val status = NetworkUtil.getConnectivityStatusString(context)
-        enamSnackbar?.show()
-
-    }
-
     override fun searchFilterClicked() {
-
         val mainText = filterBottomSheetDialog.findViewById<TextView>(R.id.main_text)
         val subText = filterBottomSheetDialog.findViewById<TextView>(R.id.sub_text)
         val proceedBtn = filterBottomSheetDialog.findViewById<Button>(R.id.cancel_yes_btn)
@@ -594,52 +489,64 @@ class SearchMentorFragment : Fragment(), HomePageContract.View, View.OnClickList
         filterBottomSheetDialog.show()
     }
 
-
-
-    override fun getAvatarString(): String {
-        return ""
+    override fun flush(msg: String) {
+        val toast = Toast.makeText(context, msg, Toast.LENGTH_SHORT)
+        val v = toast.getView().findViewById(android.R.id.message) as TextView
+        v.gravity = Gravity.CENTER
+        toast.show()
     }
-
-    override fun getSelfRating(): Map<String, Any> {
-        return documentSnapshot.get("self_rating") as Map<String, Any>
-    }
-
-    override fun generateMsgName(last: String?, first: String?): String {
-        return ""
-    }
-
-    override fun getUserName(): String {
-        return ""
-    }
-
-    override fun setUserName(last: String?, first: String?) {
-    }
-
-    override fun setAvatar(avatarString: String?) {
-    }
-
-    override fun setRating(selfRating: MutableMap<String, Any>?) {
-    }
-
-    override fun setMsgName(msgName: String?) {
-    }
-
-    override fun setProfileComPercent(num: String?) {
-    }
-
-    override fun setUnreadMsg(unreadMsg: String?) {
-    }
-
-    override fun setUnreadNoti(unreadNoti: String?) {
-    }
-
-    override fun setUnreadRecords(unreadRecords: MutableMap<String, Any>?) {
-    }
-
-    override fun setAvatarForMenu(avatar: String?) {
-    }
-
-    override fun switchProfileDialog(identify: String?) {
-    }
-
 }
+
+
+/*fun showSnackBar(completePercent: String) {
+        mySnackbar = Snackbar.make(student_container, "Replace with your own action", Snackbar.LENGTH_LONG)
+        val layout = mySnackbar.getView() as Snackbar.SnackbarLayout
+        val textView = layout.findViewById<View>(com.google.android.material.R.id.snackbar_text) as TextView
+        textView.visibility = View.INVISIBLE
+        val inflater = LayoutInflater.from(context)
+        val snackView = inflater.inflate(R.layout.custom_snackbar_layout_one, null)
+
+        val textViewStart = snackView.findViewById<TextView>(R.id.custom_snackbar_text)
+        textViewStart.text = "Profile only $completePercent% complete"
+
+        layout.setPadding(0, 0, 0, 0)
+        if (Integer.parseInt(completePercent) < 90) {
+            layout.setBackgroundColor(ContextCompat.getColor(context!!, R.color.snackbar_yellow))
+            textViewStart.setTextColor(Color.BLACK)
+        } else {
+            layout.setBackgroundColor(ContextCompat.getColor(context!!, R.color.snackbar_green))
+            textViewStart.setTextColor(Color.WHITE)
+        }
+        val parentParams = layout.layoutParams as CoordinatorLayout.LayoutParams
+        parentParams.height = (36 * resources.displayMetrics.density).toInt()
+
+        layout.layoutParams = parentParams
+        layout.addView(snackView, 0)
+        val status = NetworkUtil.getConnectivityStatusString(context)
+        if (!mySnackbar.isShown() && status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
+            mySnackbar.show()
+        }
+    }
+
+
+    fun showPercentSnak(message: String, actionName: String) {
+        val layout = enamSnackbar?.getView() as Snackbar.SnackbarLayout
+        val textView = layout.findViewById<View>(com.google.android.material.R.id.snackbar_text) as TextView
+        textView.visibility = View.INVISIBLE
+        val inflater = LayoutInflater.from(context)
+        val snackView = inflater.inflate(R.layout.teachers_snakbar_layout, null)
+        // layout.setBackgroundColor(R.color.red);
+        val textViewStart = snackView.findViewById<TextView>(R.id.custom_snackbar_text)
+        textViewStart.text = message
+        val actionTV = snackView.findViewById<TextView>(R.id.actionTV)
+        actionTV.setTextColor(resources.getColor(R.color.snack_action))
+        actionTV.setOnClickListener { view -> startActivity(Intent(context, ProfilePageActivity::class.java)) }
+        actionTV.text = actionName
+        layout.setPadding(0, 0, 0, 0)
+        val parentParams = layout.layoutParams as CoordinatorLayout.LayoutParams
+        parentParams.height = (36 * resources.displayMetrics.density).toInt()
+        layout.layoutParams = parentParams
+        layout.addView(snackView, 0)
+        val status = NetworkUtil.getConnectivityStatusString(context)
+        enamSnackbar?.show()
+    }*/

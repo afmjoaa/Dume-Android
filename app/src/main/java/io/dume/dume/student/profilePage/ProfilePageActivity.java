@@ -30,6 +30,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.firestore.GeoPoint;
 import com.warkiz.widget.IndicatorSeekBar;
 import com.warkiz.widget.IndicatorStayLayout;
@@ -95,13 +96,13 @@ public class ProfilePageActivity extends BaseAppCompatActivity implements Profil
     private Uri selectedImageUri = null;
     private TextView profileCompleteTextView;
     private View dividerHorizontalUnderPCT;
-    private ImageView emailEmptyFound;
-    private ImageView lnEmptyFound;
-    private ImageView fnEmptyFound;
     private File compressedImage;
     private File actualImage = null;
     private int genderCheckedItem = 0;
     private int PResultCheckedItem = 0;
+    private TextInputLayout fnInputLayout;
+    private TextInputLayout lnInputLayout;
+    private TextInputLayout emailInputLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,16 +137,16 @@ public class ProfilePageActivity extends BaseAppCompatActivity implements Profil
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (!s.equals("")) {
-                    fnEmptyFound.setVisibility(View.GONE);
+                    fnInputLayout.setError(null);
                 } else {
-                    fnEmptyFound.setVisibility(View.VISIBLE);
+                    fnInputLayout.setError("Can't be empty.");
                 }
             }
 
             @Override
             public void afterTextChanged(Editable s) {
                 if (s.toString().equals("")) {
-                    fnEmptyFound.setVisibility(View.VISIBLE);
+                    fnInputLayout.setError("Can't be empty.");
                 }
             }
         });
@@ -158,16 +159,16 @@ public class ProfilePageActivity extends BaseAppCompatActivity implements Profil
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (!s.equals("")) {
-                    lnEmptyFound.setVisibility(View.GONE);
+                    lnInputLayout.setError(null);
                 } else {
-                    lnEmptyFound.setVisibility(View.VISIBLE);
+                    lnInputLayout.setError("Can't be empty.");
                 }
             }
 
             @Override
             public void afterTextChanged(Editable s) {
                 if (s.toString().equals("")) {
-                    lnEmptyFound.setVisibility(View.VISIBLE);
+                    lnInputLayout.setError("Can't be empty.");
                 }
             }
         });
@@ -180,16 +181,18 @@ public class ProfilePageActivity extends BaseAppCompatActivity implements Profil
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (!s.equals("")) {
-                    emailEmptyFound.setVisibility(View.GONE);
+                    emailInputLayout.setError(null);
+
                 } else {
-                    emailEmptyFound.setVisibility(View.VISIBLE);
+                    emailInputLayout.setError("Can't be empty.");
                 }
             }
 
             @Override
             public void afterTextChanged(Editable s) {
                 if (s.toString().equals("")) {
-                    emailEmptyFound.setVisibility(View.VISIBLE);
+                    emailInputLayout.setError("Can't be empty.");
+
                 }
             }
         });
@@ -330,10 +333,9 @@ public class ProfilePageActivity extends BaseAppCompatActivity implements Profil
         profileCompleteTextView = findViewById(R.id.profile_complete_text);
         dividerHorizontalUnderPCT = findViewById(R.id.divider_horizontal);
         //
-        fnEmptyFound = findViewById(R.id.empty_fn_found);
-        lnEmptyFound = findViewById(R.id.empty_ln_found);
-        emailEmptyFound = findViewById(R.id.empty_email_found);
-
+        fnInputLayout = findViewById(R.id.input_layout_firstname);
+        lnInputLayout = findViewById(R.id.input_layout_lastname);
+        emailInputLayout = findViewById(R.id.input_layout_email);
     }
 
 
@@ -846,15 +848,15 @@ public class ProfilePageActivity extends BaseAppCompatActivity implements Profil
     @Override
     public void showInvalideInfo() {
         if (getFirstName() == null || getFirstName().equals("")) {
-            fnEmptyFound.setVisibility(View.VISIBLE);
+            fnInputLayout.setError("Can't be empty.");
         }
         if (getLastName() == null || getLastName().equals("")) {
-            lnEmptyFound.setVisibility(View.VISIBLE);
+            lnInputLayout.setError("Can't be empty.");
         }
         if (getGmail() == null || getGmail().equals("")) {
-            emailEmptyFound.setVisibility(View.VISIBLE);
+            emailInputLayout.setError("Can't be empty.");
         }
-        flush("Please fill in the mandatory field");
+        //flush("Please fill in the mandatory field");
     }
 
 }

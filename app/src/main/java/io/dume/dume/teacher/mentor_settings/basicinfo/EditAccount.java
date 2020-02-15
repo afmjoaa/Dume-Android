@@ -35,6 +35,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.GeoPoint;
 import com.transitionseverywhere.TransitionManager;
@@ -83,10 +84,6 @@ public class EditAccount extends BaseAppCompatActivity implements EditContract.V
     private EditText selectMaritalStatusET;
     private EditText selectReligionET;
     private EditText selectBirthDataET;
-    private carbon.widget.ImageView emptyFirstNameFound;
-    private carbon.widget.ImageView emptyLastNameFound;
-    private carbon.widget.ImageView emptyEmailFound;
-    private carbon.widget.ImageView emptyLocationFound;
     private GeoPoint userLocation = null;
     private IndicatorSeekBar seekbar;
     private IndicatorStayLayout seekbarStaylayout;
@@ -107,6 +104,10 @@ public class EditAccount extends BaseAppCompatActivity implements EditContract.V
     private int maritalCheckedItem = 0;
     private int religionCheckedItem = 0;
     private Dialog dialog;
+    private TextInputLayout emptyFirstNameLayout;
+    private TextInputLayout emptyLastNameLayout;
+    private TextInputLayout emptyEmailLayout;
+    private TextInputLayout emptyLocationLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -170,12 +171,11 @@ public class EditAccount extends BaseAppCompatActivity implements EditContract.V
         selectMaritalStatusET = findViewById(R.id.input_marital_status);
         selectReligionET = findViewById(R.id.input_religion);
         selectBirthDataET = findViewById(R.id.input_birth_date);
-        emptyFirstNameFound = findViewById(R.id.empty_fn_found);
-        emptyLastNameFound = findViewById(R.id.empty_ln_found);
-        emptyEmailFound = findViewById(R.id.empty_email_found);
-        emptyLocationFound = findViewById(R.id.empty_address_found);
+        emptyFirstNameLayout = findViewById(R.id.input_layout_firstname);
+        emptyLastNameLayout = findViewById(R.id.input_layout_lastname);
+        emptyEmailLayout = findViewById(R.id.input_layout_email);
+        emptyLocationLayout = findViewById(R.id.input_layout_c_address);
         pHostRelative = findViewById(R.id.percent_host_relative);
-        //loadCarryData();
     }
 
     @Override
@@ -268,15 +268,6 @@ public class EditAccount extends BaseAppCompatActivity implements EditContract.V
             });
         }
 
-        /*mScrollView.getViewTreeObserver().addOnScrollChangedListener(() -> {
-            if (mScrollView.getScrollY() > oldScrollYPostion) {
-                fb.show();
-            } else if (mScrollView.getScrollY() < oldScrollYPostion || mScrollView.getScrollY() <= 0) {
-                fb.hide();
-            }
-            oldScrollYPostion = mScrollView.getScrollY();
-            Log.w(TAG, "onScrollChanged: " + oldScrollYPostion);
-        });*/
         avatar.setOnClickListener(this);
 
         first.addTextChangedListener(new TextWatcher() {
@@ -287,9 +278,9 @@ public class EditAccount extends BaseAppCompatActivity implements EditContract.V
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (!s.equals("")) {
-                    emptyFirstNameFound.setVisibility(View.GONE);
+                    emptyFirstNameLayout.setError(null);
                 } else {
-                    emptyFirstNameFound.setVisibility(View.VISIBLE);
+                    emptyFirstNameLayout.setError("Field can't be Empty.");
                 }
                 someThingChanged(true);
             }
@@ -297,7 +288,7 @@ public class EditAccount extends BaseAppCompatActivity implements EditContract.V
             @Override
             public void afterTextChanged(Editable s) {
                 if (s.toString().equals("")) {
-                    emptyFirstNameFound.setVisibility(View.VISIBLE);
+                    emptyFirstNameLayout.setError("Field can't be Empty.");
                 }
             }
         });
@@ -309,9 +300,9 @@ public class EditAccount extends BaseAppCompatActivity implements EditContract.V
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (!s.equals("")) {
-                    emptyLastNameFound.setVisibility(View.GONE);
+                    emptyLastNameLayout.setError(null);
                 } else {
-                    emptyLastNameFound.setVisibility(View.VISIBLE);
+                    emptyLastNameLayout.setError("Field can't be Empty.");
                 }
                 someThingChanged(true);
             }
@@ -319,7 +310,7 @@ public class EditAccount extends BaseAppCompatActivity implements EditContract.V
             @Override
             public void afterTextChanged(Editable s) {
                 if (s.toString().equals("")) {
-                    emptyLastNameFound.setVisibility(View.VISIBLE);
+                    emptyLastNameLayout.setError("Field can't be Empty.");
                 }
             }
         });
@@ -331,16 +322,16 @@ public class EditAccount extends BaseAppCompatActivity implements EditContract.V
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (!s.equals("")) {
-                    emptyEmailFound.setVisibility(View.GONE);
+                    emptyEmailLayout.setError(null);
                 } else {
-                    emptyEmailFound.setVisibility(View.VISIBLE);
+                    emptyEmailLayout.setError("Field can't be Empty.");
                 }
             }
 
             @Override
             public void afterTextChanged(Editable s) {
                 if (s.toString().equals("")) {
-                    emptyEmailFound.setVisibility(View.VISIBLE);
+                    emptyEmailLayout.setError("Field can't be Empty.");
                 }
             }
         });
@@ -352,9 +343,9 @@ public class EditAccount extends BaseAppCompatActivity implements EditContract.V
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (!s.equals("")) {
-                    emptyLocationFound.setVisibility(View.GONE);
+                    emptyLocationLayout.setError(null);
                 } else {
-                    emptyLocationFound.setVisibility(View.VISIBLE);
+                    emptyLocationLayout.setError("Field can't be Empty.");
                 }
                 someThingChanged(true);
             }
@@ -362,7 +353,7 @@ public class EditAccount extends BaseAppCompatActivity implements EditContract.V
             @Override
             public void afterTextChanged(Editable s) {
                 if (s.toString().equals("")) {
-                    emptyLocationFound.setVisibility(View.VISIBLE);
+                    emptyLocationLayout.setError("Field can't be Empty.");
                 }
                 generatePercent();
             }
@@ -712,16 +703,16 @@ public class EditAccount extends BaseAppCompatActivity implements EditContract.V
     public void invalidFound(String Name) {
         switch (Name) {
             case "first":
-                emptyFirstNameFound.setVisibility(View.VISIBLE);
+                emptyFirstNameLayout.setError("Field can't be empty.");
                 break;
             case "last":
-                emptyLastNameFound.setVisibility(View.VISIBLE);
+                emptyLastNameLayout.setError("Field can't be empty.");
                 break;
             case "email":
-                emptyEmailFound.setVisibility(View.VISIBLE);
+                emptyEmailLayout.setError("Field can't be empty.");
                 break;
             case "location":
-                emptyLocationFound.setVisibility(View.VISIBLE);
+                emptyLocationLayout.setError("Field can't be empty.");
                 break;
         }
     }
