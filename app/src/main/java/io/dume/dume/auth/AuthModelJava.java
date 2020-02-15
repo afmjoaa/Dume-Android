@@ -42,7 +42,7 @@ import io.dume.dume.teacher.homepage.TeacherContract;
 import io.dume.dume.util.DumeUtils;
 import io.dume.dume.util.Google;
 
-public class AuthModel implements AuthContract.Model, SplashContract.Model, PhoneVerificationContract.Model {
+public class AuthModelJava implements AuthContract.Model, SplashContract.Model, PhoneVerificationContract.Model {
     private static final String TAG = "AuthModel";
     Activity activity;
     Context context;
@@ -58,7 +58,7 @@ public class AuthModel implements AuthContract.Model, SplashContract.Model, Phon
     private Boolean foreignObligation;
 
 
-    public AuthModel(Activity activity, Context context) {
+    public AuthModelJava(Activity activity, Context context) {
         this.context = context;
         this.activity = activity;
         mAuth = FirebaseAuth.getInstance();

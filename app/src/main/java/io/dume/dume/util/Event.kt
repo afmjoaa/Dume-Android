@@ -1,8 +1,7 @@
-package io.dume.dume.util
-
 /**
  * Used as a wrapper for data that is exposed via a LiveData that represents an event.
  */
+package io.dume.dume.util
 open class Event<out T>(private val content: T) {
 
     var hasBeenHandled = false

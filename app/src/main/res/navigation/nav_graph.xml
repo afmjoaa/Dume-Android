@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@+id/roleChooser">
+    app:startDestination="@id/roleChooser">
 
     <fragment
         android:id="@+id/roleChooser"
@@ -16,7 +16,8 @@
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
+            app:popExitAnim="@anim/slide_out_right"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment
@@ -31,12 +32,6 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
-        <action
-            android:id="@+id/action_permissionFragment_to_nidFragment"
-            app:destination="@id/nidFragment" />
-        <action
-            android:id="@+id/action_permissionFragment_to_registerFragment"
-            app:destination="@id/registerFragment" />
     </fragment>
 
     <fragment
@@ -166,8 +161,7 @@
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"
             app:popUpTo="@id/roleChooser"
-            app:popUpToInclusive="true"
-            />
+            app:popUpToInclusive="true" />
     </fragment>
 
 </navigation>

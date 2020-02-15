@@ -88,7 +88,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="2dp"
-                android:hint="Birth Date"
+                android:hint="Birth Date (01/05/1996)"
                 app:errorEnabled="true"
                 app:errorIconDrawable="@drawable/error_icon"
                 app:hintEnabled="true"
@@ -106,11 +106,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="2dp"
-                android:hint="NID No"
+                android:hint="Do not have any NID Card"
+                app:boxBackgroundColor="@color/colorGrey"
                 app:errorEnabled="true"
                 app:errorIconDrawable="@drawable/error_icon"
                 app:hintEnabled="true"
-
                 app:startIconDrawable="@drawable/nid_card_icon">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -119,6 +119,7 @@
                     android:layout_height="wrap_content"
                     android:clickable="false"
                     android:cursorVisible="false"
+                    android:enabled="false"
                     android:focusable="false"
                     android:focusableInTouchMode="false" />
 

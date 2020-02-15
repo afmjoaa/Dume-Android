@@ -19,16 +19,16 @@
     </androidx.core.widget.NestedScrollView>
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:layout_width="wrap_content"
         android:id="@+id/continueBtn"
         style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton.Icon"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="18dp"
+        android:layout_marginBottom="?android:actionBarSize"
         android:contentDescription="@string/accept_amp_continue"
         android:text="Continue"
+        app:icon="@drawable/accept_icon"
         app:layout_anchor="@id/test"
-        app:layout_anchorGravity="bottom|center_horizontal"
-        app:icon="@drawable/accept_icon" />
+        app:layout_anchorGravity="bottom|center_horizontal" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

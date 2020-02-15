@@ -71,7 +71,7 @@ public class HomePagePresenter implements HomePageContract.Presenter {
     public void homePageEnqueue() {
         mView.findView();
         mView.init();
-        mView.configHomePage();
+//        mView.configHomePage();
         getDataFromDB();
     }
 
@@ -88,7 +88,7 @@ public class HomePagePresenter implements HomePageContract.Presenter {
         }
         mView.flush("Profile should be at least 90% completed");
         String snackString = "Profile only " + percentage + "% complete";
-        mView.showPercentSnak(snackString, "GO TO PROFILE");
+//        mView.showPercentSnak(snackString, "GO TO PROFILE");
         return false;
 
     }
@@ -97,7 +97,7 @@ public class HomePagePresenter implements HomePageContract.Presenter {
     public void onViewIntracted(View view) {
         switch (view.getId()) {
             case R.id.switch_account_btn:
-                mView.onSwitchAccount();
+//                mView.onSwitchAccount();
                 break;
             case R.id.user_dp:
                 break;
@@ -124,7 +124,7 @@ public class HomePagePresenter implements HomePageContract.Presenter {
 
         switch (id) {
             case R.id.al_display_pic:
-                mView.gotoProfilePage();
+//                mView.gotoProfilePage();
                 break;
             case R.id.forum:
                 //TODO
@@ -190,7 +190,7 @@ public class HomePagePresenter implements HomePageContract.Presenter {
             if (documentSnapshot != null) {
                 final String avatar = documentSnapshot.getString("avatar");
                 if (avatar != null && !avatar.equals("")) {
-                    mView.setAvatarForMenu(avatar);
+//                    mView.setAvatarForMenu(avatar);
                 }
 
             } else {

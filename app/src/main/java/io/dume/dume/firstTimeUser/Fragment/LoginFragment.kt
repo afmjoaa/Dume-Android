@@ -1,6 +1,9 @@
 package io.dume.dume.firstTimeUser.Fragment
 
+import android.annotation.SuppressLint
+import android.content.Context.TELEPHONY_SERVICE
 import android.os.Bundle
+import android.telephony.TelephonyManager
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -16,6 +19,7 @@ import io.dume.dume.R
 import io.dume.dume.firstTimeUser.*
 import io.dume.dume.util.DumeUtils
 import kotlinx.android.synthetic.main.fragment_login.*
+
 
 class LoginFragment : Fragment(), View.OnClickListener {
     private lateinit var navController: NavController
@@ -37,10 +41,18 @@ class LoginFragment : Fragment(), View.OnClickListener {
     }
 
 
+    @SuppressLint("MissingPermission", "HardwareIds")
     private fun init() {
+        try {
+            val tMgr = context?.getSystemService(TELEPHONY_SERVICE) as TelephonyManager
+            val mPhoneNumber = tMgr.line1Number
+            phoneNumberEditText.setText(mPhoneNumber)
+        } catch (e: Exception) {
+            print(e)
+        }
+
         sendCodeBtn.setOnClickListener(this)
         phoneNumberEditText.addTextChangedListener(object : TextWatcher {
-
             override fun afterTextChanged(s: Editable?) {
                 val phoneNumber = s.toString()
                 if (phoneNumber.isEmpty()) {
@@ -49,7 +61,7 @@ class LoginFragment : Fragment(), View.OnClickListener {
                 } else if (!DumeUtils.isInteger(phoneNumber)) {
                     showErrorInInput("Only Digits Allowed (0-9)")
                     sendCodeBtn.isEnabled = false
-                } else if (phoneNumber.length != 11) {
+                } else if (phoneNumber.length > 11) {
                     showErrorInInput("Should be 11 Digits")
                     sendCodeBtn.isEnabled = false
                 } else {
@@ -66,12 +78,23 @@ class LoginFragment : Fragment(), View.OnClickListener {
 
     private fun initObservers() {
 
-        viewModel.autoVerified.observe(this, Observer { if (it) skipNextAction() })
-        viewModel.codeSent.observe(this, Observer { flush("Conde sent $it"); if (it) nextAction() })
+        viewModel.autoVerified.observe(this, Observer {
+            it?.getContentIfNotHandled()?.let {
+                if (it) skipNextAction()
+            }
+        })
+        viewModel.codeSent.observe(this, Observer {
+            it?.getContentIfNotHandled()?.let {
+                if (it) {
+                    flush("Code sent to your number")
+                    nextAction()
+                }
+            }
+        })
         viewModel.error.observe(this, Observer { it?.let { flush(it) } })
         viewModel.load.observe(this, Observer {
             if (it) {
-                parent.showProgress();
+                parent.showProgress()
                 sendCodeBtn.isEnabled = false
             } else {
                 parent.hideProgress()
@@ -101,7 +124,8 @@ class LoginFragment : Fragment(), View.OnClickListener {
     }
 
     private fun showErrorInInput(msg: String) {
-        phoneNumberEditText.setError(msg)
+        phoneWrapper.setError(msg)
+
     }
 
     private fun updateForwardFlowState() {
@@ -115,7 +139,8 @@ class LoginFragment : Fragment(), View.OnClickListener {
     override fun onClick(v: View?) {
         when (v!!.id) {
             R.id.sendCodeBtn -> {
-                viewModel.login(phoneNumberEditText.text.toString())
+                if (phoneNumberEditText.text.toString().length != 11) showErrorInInput("Should be 11 Digits")
+                else viewModel.login(phoneNumberEditText.text.toString())
             }
         }
     }

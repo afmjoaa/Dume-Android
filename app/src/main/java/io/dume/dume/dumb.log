@@ -1,0 +1,10 @@
+   /* if (viewModel.isLoggedIn()) {
+             viewModel.phoneNumber.postValue(FirebaseAuth.getInstance().currentUser!!.phoneNumber?.removeRange(0,3))
+             if (viewModel.role.equals(Role.STUDENT)) {
+                 navController.navigate(R.id.action_permissionFragment_to_registerFragment)
+             } else {
+                 navController.navigate(R.id.action_permissionFragment_to_nidFragment)
+             }
+         } else */
+
+

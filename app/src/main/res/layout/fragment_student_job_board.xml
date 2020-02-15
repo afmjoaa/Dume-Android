@@ -70,6 +70,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         app:layout_anchor="@id/hosting_nestedScroll_layout"
+        android:layout_marginBottom="?android:actionBarSize"
         app:layout_anchorGravity="bottom|right">
 
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
@@ -85,6 +86,8 @@
             android:layout_marginBottom="12dp"
             android:contentDescription="@string/post_job"
             android:text="Post Job"
+            android:textAllCaps="false"
+
             app:icon="@drawable/post_job_icon" />
 
         <com.getbase.floatingactionbutton.FloatingActionsMenu
@@ -162,8 +165,10 @@
             app:icon="@drawable/ic_cancel_icon"
             app:iconPadding="10dp"
             app:iconTint="@color/mColorPrimary"
+            android:textAllCaps="false"
+
             app:strokeColor="@color/star_rating_color"
-            app:strokeWidth="2dp" />
+            app:strokeWidth="1dp" />
 
     </RelativeLayout>
 

@@ -16,6 +16,7 @@ import io.dume.dume.poko.MiniUser
 import io.dume.dume.poko.sub_pojo.Failure
 import io.dume.dume.poko.sub_pojo.Success
 import io.dume.dume.teacher.homepage.TeacherContract
+import io.dume.dume.util.Event
 import java.util.*
 
 class ForwardFlowViewModel : ViewModel() {
@@ -25,16 +26,16 @@ class ForwardFlowViewModel : ViewModel() {
     val firstTimeUser = MutableLiveData<Boolean>()
     val studentCurrentPosition = MutableLiveData<ForwardFlowStatStudent>()
     val teacherCurrentPosition = MutableLiveData<ForwardFlowStatTeacher>()
-    val isExiting = MutableLiveData<UserState>()
+    val isExiting = MutableLiveData<Event<UserState>>()
     val resendToken = MutableLiveData<PhoneAuthProvider.ForceResendingToken>()
     val verificationId = MutableLiveData<String>()
     val avatar = MutableLiveData<Uri>()
-    val codeSent = MutableLiveData<Boolean>(false)
-    val autoVerified = MutableLiveData<Boolean>(false)
+    val codeSent = MutableLiveData<Event<Boolean?>>(Event(false))
+    val autoVerified = MutableLiveData<Event<Boolean?>>(Event(false))
     val load = MutableLiveData<Boolean>()
     val error = MutableLiveData<String>(null)
     var phoneNumber = MutableLiveData<String>()
-    var scan = MutableLiveData<NID>()
+    var scan = MutableLiveData<Event<NID?>>(Event(null))
     var success = MutableLiveData<Success<String>>(null)
     var failure = MutableLiveData<Failure<String>>(null)
 
@@ -62,13 +63,13 @@ class ForwardFlowViewModel : ViewModel() {
         override fun onStart() = run { load.value = true }
         override fun onFail(error: String?) = run { load.value = false; this@ForwardFlowViewModel.error.value = error }
         override fun onSuccess(id: String?, forceResendingToken: PhoneAuthProvider.ForceResendingToken?) = run {
-            codeSent.value = true
+            codeSent.value = Event(true)
             resendToken.value = forceResendingToken
             verificationId.value = id
             load.value = false
         }
 
-        override fun onAutoSuccess(authResult: AuthResult?) = run { autoVerified.value = true; load.value = false }
+        override fun onAutoSuccess(authResult: AuthResult?) = run { autoVerified.value = Event(true); load.value = false }
 
     }
 
@@ -89,13 +90,13 @@ class ForwardFlowViewModel : ViewModel() {
     }
 
     /**
-     * called from @matchCode:onSuccess function
+     * called from [@matchCode:onSuccess] function
      *  */
     private fun isExisting(phoneNumber: String = this.phoneNumber.value!!) {
         repository.isExistingUser(phoneNumber, object : AuthGlobalContract.OnExistingUserCallback {
             override fun onStart() = run { load.value = true }
-            override fun onUserFound() = run { isExiting.value = UserState.USERFOUND; load.value = false }
-            override fun onNewUserFound() = run { isExiting.value = UserState.NEWUSERFOUND; load.value = false }
+            override fun onUserFound() = run { isExiting.value = Event(UserState.USERFOUND); load.value = false }
+            override fun onNewUserFound() = run { isExiting.value = Event(UserState.NEWUSERFOUND); load.value = false }
             override fun onError(err: String?) = run { error.value = err; load.value = false }
         })
     }
@@ -134,7 +135,6 @@ class ForwardFlowViewModel : ViewModel() {
             })
         } else {
             addUserToDatabase(miniUser)
-
         }
 
     }
@@ -145,5 +145,6 @@ class ForwardFlowViewModel : ViewModel() {
             override fun onError(msg: String?) = run { failure.postValue(Failure(msg)) }
         })
     }
+
 
 }

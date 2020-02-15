@@ -795,8 +795,7 @@ provided.Tap salary for details.  </string>
     <string name="imageview">imageview</string>
 
     <string name="how_nid_info"><![CDATA[Please center your NID front page in the camera window, to verify your identity.
-      \nCamera will auto detect and accept your National ID Card.
-      \nPlease provide good lighting condition so that camera may focus better.]]></string>
+      \nCamera will auto detect and accept your National ID Card. Provided good lighting condition is maintained…]]></string>
     <string name="flush">Flush</string>
     <string name="hdr">HDR</string>
     <string name="support">Support</string>
@@ -852,4 +851,5 @@ provided.Tap salary for details.  </string>
     <string name="cancel">Cancel</string>
     <string name="yes_skip">Yes, Skip</string>
     <string name="skip_nid">Skip NID verification ?</string>
+    <string name="sent_code_msg">Enter the 6 digit verification code sent to you at  <b>%s</b></string>
 </resources>

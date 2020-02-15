@@ -555,7 +555,6 @@ public class HomePageActivity extends BaseMapActivity implements HomePageContrac
 
 
 
-    @Override
     public void configHomePage() {
         //hiding the segment group
         dialog = new Dialog(context);
@@ -617,7 +616,6 @@ public class HomePageActivity extends BaseMapActivity implements HomePageContrac
         });
     }
 
-    @Override
     public void initRecentSearchRecycler(DocumentSnapshot documentSnapshot) {
         List<RecentSearchData> recentSearchData = new ArrayList<>();
         String preIdentifyOne = documentSnapshot.getString("next_rs_write");
@@ -695,7 +693,6 @@ public class HomePageActivity extends BaseMapActivity implements HomePageContrac
         }
     }
 
-    @Override
     public void onSwitchAccount() {
         if (home.isVisible()) {
             switchAcountBtn.setCompoundDrawablesWithIntrinsicBounds(leftDrawable, null, less, null);
@@ -918,7 +915,6 @@ public class HomePageActivity extends BaseMapActivity implements HomePageContrac
         });
     }
 
-    @Override
     public void gotoProfilePage() {
         startActivity(new Intent(this, ProfilePageActivity.class));
     }
@@ -1068,40 +1064,32 @@ public class HomePageActivity extends BaseMapActivity implements HomePageContrac
         toast.show();
     }
 
-    @Override
     public String getAvatarString() {
         return documentSnapshot.getString("avatar");
     }
 
-    @SuppressWarnings("unchecked")
-    @Override
     public Map<String, Object> getSelfRating() {
         return (Map<String, Object>) documentSnapshot.get("self_rating");
     }
 
-    @Override
     public String generateMsgName(String first, String last) {
         return "@" + first + last;
     }
 
-    @Override
     public String getUserName() {
         return userNameTextView.getText().toString();
     }
 
-    @Override
     public void setUserName(String first, String last) {
         userNameTextView.setText(String.format("%s %s", first, last));
     }
 
-    @Override
     public void setAvatar(String avatarString) {
         if (avatarString != null && !avatarString.equals("")) {
             Glide.with(this).load(avatarString).apply(new RequestOptions().override(100, 100).placeholder(R.drawable.demo_alias_dp)).into(userDP);
         }
     }
 
-    @Override
     public void setAvatarForMenu(String avatar) {
         if (avatar != null && !avatar.equals("")) {
             try{
@@ -1124,7 +1112,6 @@ public class HomePageActivity extends BaseMapActivity implements HomePageContrac
         }
     }
 
-    @Override
     public void setRating(Map<String, Object> selfRating) {
         if (selfRating != null) {
             String ret = (String) selfRating.get("star_rating");
@@ -1133,7 +1120,6 @@ public class HomePageActivity extends BaseMapActivity implements HomePageContrac
         }
     }
 
-    @Override
     public void setMsgName(String msgName) {
         userAddressingTextView.setText(msgName);
         //referMentorBtn.setText(msgName.toLowerCase());
@@ -1141,7 +1127,6 @@ public class HomePageActivity extends BaseMapActivity implements HomePageContrac
     }
 
 
-    @Override
     public void setProfileComPercent(String num) {
         if (Integer.parseInt(num) < 100) {
             updateProfileBadge('!');
@@ -1152,26 +1137,22 @@ public class HomePageActivity extends BaseMapActivity implements HomePageContrac
 
     public static String UNREAD_MESSAGE = "unread_message";
 
-    @Override
     public void setUnreadMsg(String unreadMsg) {
         updateChatBadge(Integer.parseInt(unreadMsg));
         sharedPreferences = context.getSharedPreferences(UNREAD_MESSAGE, MODE_PRIVATE);
         updateChatBadge(sharedPreferences.getInt("unread", 0));
     }
 
-    @Override
     public void setUnreadNoti(String unreadNoti) {
         updateNotificationsBadge(Integer.parseInt(unreadNoti));
     }
 
-    @Override
     public void setUnreadRecords(Map<String, Object> unreadRecords) {
         updateRecordsBadge(Integer.parseInt((String) unreadRecords.get("pending_count")),
                 Integer.parseInt((String) unreadRecords.get("accepted_count")),
                 Integer.parseInt((String) unreadRecords.get("current_count")));
     }
 
-    @Override
     public void showSnackBar(String completePercent) {
         mySnackbar = Snackbar.make(coordinatorLayout, "Replace with your own action", Snackbar.LENGTH_LONG);
         Snackbar.SnackbarLayout layout = (Snackbar.SnackbarLayout) mySnackbar.getView();
@@ -1203,7 +1184,6 @@ public class HomePageActivity extends BaseMapActivity implements HomePageContrac
         }
     }
 
-    @Override
     public void switchProfileDialog(String identify) {
         TextView mainText = mCancelBottomSheetDialog.findViewById(R.id.main_text);
         TextView subText = mCancelBottomSheetDialog.findViewById(R.id.sub_text);
@@ -1251,7 +1231,7 @@ public class HomePageActivity extends BaseMapActivity implements HomePageContrac
         mCancelBottomSheetDialog.show();
     }
 
-    @Override
+
     public void showPercentSnak(String message, String actionName) {
         Snackbar.SnackbarLayout layout = (Snackbar.SnackbarLayout) enamSnackbar.getView();
         TextView textView = (TextView) layout.findViewById(com.google.android.material.R.id.snackbar_text);

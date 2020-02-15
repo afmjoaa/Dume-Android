@@ -18,13 +18,7 @@ class QualificationFragment : Fragment(), View.OnClickListener {
     private lateinit var viewModel: ForwardFlowViewModel
     private lateinit var parent: ForwardFlowHostActivity
 
-    init {
 
-    }
-
-    init {
-
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_qualification, container, false)
@@ -46,8 +40,8 @@ class QualificationFragment : Fragment(), View.OnClickListener {
     }
 
     private fun initObservers() {
-        viewModel.success.observe(this, Observer { parent.flush("Success Again Called :  ${it.payload}") })
-        viewModel.failure.observe(this, Observer { parent.flush("Failure Again Called") })
+        viewModel.success.observe(this, Observer { it?.let { parent.flush("Success Again Called :  ${it.payload}") } })
+        viewModel.failure.observe(this, Observer { it?.let { parent.flush("Failure Again Called") } })
     }
 
     private fun updateForwardFlowState() {

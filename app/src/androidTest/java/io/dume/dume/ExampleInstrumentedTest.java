@@ -12,12 +12,13 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
  */
 @RunWith(AndroidJUnit4.class)
 public class ExampleInstrumentedTest {
+
+    // private Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
+
     @Test
     public void useAppContext() {
-        // Context of the app under test.
-        //Context appContext = InstrumentationRegistry.getTargetContext();
-
-        //assertEquals("io.dume.dume", appContext.getPackageName());
-
+        // String text = String.format(context.getString(R.string.sent_code_msg), "+880 1536100076");
+        // Log.e("debug", "useAppContext: " + text);
+        //  Assert.assertNotSame(text, context.getString(R.string.sent_code_msg));
     }
 }

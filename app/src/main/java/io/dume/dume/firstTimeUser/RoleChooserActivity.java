@@ -31,10 +31,10 @@ public class RoleChooserActivity extends BaseAppCompatActivity implements View.O
     public void onClick(View v) {
         if (v.getId() == R.id.asStudent) {
             local.setAccountManjor(DataStore.STUDENT);
-            startActivity(new Intent(this, PermissionActivity.class));
+            startActivity(new Intent(this, StudentDashBoard.class));
         } else if (v.getId() == R.id.asTeacher) {
             local.setAccountManjor(DataStore.TEACHER);
-            startActivity(new Intent(this, PermissionActivity.class));
+            startActivity(new Intent(this, TeacherDashboard.class));
         } else if (v.getId() == R.id.testEnam) {
             startActivity(new Intent(this, StudentDashBoard.class));
             return;
@@ -45,6 +45,6 @@ public class RoleChooserActivity extends BaseAppCompatActivity implements View.O
             startActivity(new Intent(this, TeacherDashboard.class));
             return;
         }
-        startActivity(new Intent(this, PermissionActivity.class));
+        startActivity(new Intent(this, TeacherDashboard.class));
     }
 }
