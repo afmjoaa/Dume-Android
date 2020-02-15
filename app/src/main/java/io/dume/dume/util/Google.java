@@ -1,7 +1,6 @@
 package io.dume.dume.util;
 
 import android.media.MediaPlayer;
-import androidx.annotation.Keep;
 
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Source;
@@ -9,6 +8,7 @@ import com.google.firebase.firestore.Source;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.Keep;
 import io.dume.dume.common.chatActivity.Room;
 import io.dume.dume.common.inboxActivity.InboxActivity;
 import io.dume.dume.student.recordsPage.Record;
@@ -29,9 +29,10 @@ public class Google {
     private String lastMsg;
     private int snapCounter = 0;
     private InboxActivity.PlaceholderFragment messageFragment;
-    private Integer totalStudent =0, totalMentor = 0;
+    private Integer totalStudent = 0, totalMentor = 0;
     private boolean obligation;
     private Source source = Source.DEFAULT;
+    public static boolean fromBack = false;
 
     public InboxActivity.PlaceholderFragment getMessageFragment() {
         return messageFragment;

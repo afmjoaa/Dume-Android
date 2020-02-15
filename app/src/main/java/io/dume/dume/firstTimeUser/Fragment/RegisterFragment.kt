@@ -72,7 +72,7 @@ class RegisterFragment : Fragment(), View.OnClickListener, IPickResult {
     private fun updateForwardFlowState() {
         if (viewModel.role.value == Role.STUDENT) {
             viewModel.updateStudentCurrentPosition(ForwardFlowStatStudent.POSTJOB)
-           // navController.navigate()
+            // navController.navigate()
         } else {
             viewModel.updateTeacherCurrentPosition(ForwardFlowStatTeacher.QUALIFICATION)
         }
@@ -89,7 +89,8 @@ class RegisterFragment : Fragment(), View.OnClickListener, IPickResult {
         var last_name = ""
         for ((i, parts) in register_name.text.toString().split(" ").withIndex()) if (i != 0) last_name += "$parts "
 
-        return MiniUser(name = register_name.text.toString(),
+        return MiniUser(
+                name = register_name.text.toString(),
                 birth_date = register_birth_date.text.toString(),
                 mail = register_email.text.toString(),
                 nid = if (register_nid.text.toString().equals("")) null else register_nid.text.toString().toLong(),
@@ -115,15 +116,26 @@ class RegisterFragment : Fragment(), View.OnClickListener, IPickResult {
 
     private fun initObservers() {
         viewModel.scan.observe(this, Observer {
-            it?.let {
-                //  flush("NID Data Recived")
+            it.getContentIfNotHandled()?.let {
                 register_name.setText(it.name)
                 register_nid.setText(it.nid.toString())
                 register_birth_date.setText(it.birth_date.replace("Date of Birth", ""))
             }
         })
 
-        viewModel.success.observe(this, Observer { it?.let { navController.navigate(R.id.action_registerFragment_to_qualificationFragment); parent.hideProgress() } })
+        viewModel.success.observe(this, Observer {
+            it?.let {
+                parent.hideProgress()
+                if (viewModel.role.value == Role.STUDENT) {
+                    viewModel.updateStudentCurrentPosition(ForwardFlowStatStudent.POSTJOB)
+                    navController.navigate(R.id.action_registerFragment_to_postJobFragment)
+
+                } else {
+                    viewModel.updateTeacherCurrentPosition(ForwardFlowStatTeacher.QUALIFICATION)
+                    navController.navigate(R.id.action_registerFragment_to_qualificationFragment)
+                }
+            }
+        })
         viewModel.failure.observe(this, Observer { it?.let { flush(it.error); parent.hideProgress() } })
 
 

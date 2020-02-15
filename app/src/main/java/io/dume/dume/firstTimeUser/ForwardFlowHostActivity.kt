@@ -1,13 +1,17 @@
 package io.dume.dume.firstTimeUser
 
+
 import android.content.Intent
 import android.os.Bundle
-import android.view.Menu
+import android.os.Handler
+import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import com.google.firebase.auth.FirebaseAuth
 import io.dume.dume.R
 import io.dume.dume.student.DashBoard.StudentDashBoard
 import io.dume.dume.student.pojo.BaseAppCompatActivity
@@ -17,12 +21,10 @@ import io.dume.dume.util.DumeUtils.configureAppbar
 import io.dume.dume.util.StateManager
 import kotlinx.android.synthetic.main.activity_forward_flow_host.*
 
-
 class ForwardFlowHostActivity : BaseAppCompatActivity(), View.OnClickListener {
     private lateinit var viewModel: ForwardFlowViewModel
     private lateinit var navController: NavController
-    private var menuState = false
-    private var menu: Menu? = null
+    private var doubleBackToExitPressedOnce = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,6 +47,7 @@ class ForwardFlowHostActivity : BaseAppCompatActivity(), View.OnClickListener {
     }
 
     private fun updateSate() {
+
         val role: String = StateManager.getInstance(this).sharedPreferences().all[StateManager.ROLE] as? String
                 ?: ""
         val isFirstTimeUser: Boolean = StateManager.getInstance(this).sharedPreferences().all[StateManager.FIRST_TIME_USER] as? Boolean
@@ -53,9 +56,13 @@ class ForwardFlowHostActivity : BaseAppCompatActivity(), View.OnClickListener {
                 ?: ""
         val studentCurrentPosition: String = StateManager.getInstance(this).sharedPreferences().all[StateManager.STUDENT_POSITION] as? String
                 ?: ""
-
+        FirebaseAuth.getInstance().currentUser?.let {
+            viewModel.phoneNumber.value = it.phoneNumber?.substring(3, 14)
+            Log.e("debug", "Phone Number" + it.phoneNumber?.substring(3, 14))
+        }
         if (isFirstTimeUser) {
             if (role.equals(Role.STUDENT.flow)) {
+                viewModel.role.value = Role.STUDENT
                 when (studentCurrentPosition) {
                     ForwardFlowStatStudent.ROLE.flow -> navController.navigate(R.id.roleChooser)
                     ForwardFlowStatStudent.PRIVACY.flow -> navController.navigate(R.id.privacyFragment)
@@ -64,11 +71,13 @@ class ForwardFlowHostActivity : BaseAppCompatActivity(), View.OnClickListener {
                     ForwardFlowStatStudent.REGISTER.flow -> navController.navigate(R.id.registerFragment)
                 }
             } else if (role.equals(Role.TEACHER.flow)) {
+                viewModel.role.value = Role.TEACHER
                 when (teacherCurrentPosition) {
                     ForwardFlowStatTeacher.ROLE.flow -> navController.navigate(R.id.roleChooser)
                     ForwardFlowStatTeacher.PRIVACY.flow -> navController.navigate(R.id.privacyFragment)
                     ForwardFlowStatTeacher.PERMISSION.flow -> navController.navigate(R.id.permissionFragment)
                     ForwardFlowStatTeacher.LOGIN.flow -> navController.navigate(R.id.loginFragment)
+                    ForwardFlowStatTeacher.NID.flow -> navController.navigate(R.id.nidFragment)
                     ForwardFlowStatTeacher.REGISTER.flow -> navController.navigate(R.id.registerFragment)
                     ForwardFlowStatTeacher.QUALIFICATION.flow -> navController.navigate(R.id.qualificationFragment)
                     ForwardFlowStatTeacher.ADDSKILL.flow -> navController.navigate(R.id.addSkillFragment)
@@ -168,11 +177,11 @@ class ForwardFlowHostActivity : BaseAppCompatActivity(), View.OnClickListener {
         }
     }
 
+
     private fun hideActionBar() {
         settingsAppbar.visibility = View.GONE
         supportActionBar?.hide()
     }
-
 
     private fun showActionBar() {
         settingsAppbar.visibility = View.VISIBLE
@@ -192,5 +201,30 @@ class ForwardFlowHostActivity : BaseAppCompatActivity(), View.OnClickListener {
         registerBtn.setOnClickListener {
             listener(it)
         }
+    }
+
+    override fun onBackPressed() {
+        if (navController.currentDestination?.id == R.id.nidFragment) {
+            if (doubleBackToExitPressedOnce) {
+                // super.onBackPressed()
+                super.onBackPressed()
+                return
+            }
+            this.doubleBackToExitPressedOnce = true
+            Toast.makeText(this, "Please click BACK again to start over", Toast.LENGTH_SHORT).show()
+            Handler().postDelayed({ doubleBackToExitPressedOnce = false }, 2000)
+        } else if (viewModel.role.value != null) {
+            if (viewModel.role.value!!.equals(Role.STUDENT) && navController.currentDestination?.id == R.id.registerFragment) {
+                if (doubleBackToExitPressedOnce) {
+                    // super.onBackPressed()
+                    super.onBackPressed()
+                    return
+                }
+                this.doubleBackToExitPressedOnce = true
+                Toast.makeText(this, "Please click BACK again to start over", Toast.LENGTH_SHORT).show()
+                Handler().postDelayed({ doubleBackToExitPressedOnce = false }, 2000)
+            } else super.onBackPressed()
+        } else super.onBackPressed()
+
     }
 }

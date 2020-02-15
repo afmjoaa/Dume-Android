@@ -26,6 +26,7 @@ import io.dume.dume.R
 import io.dume.dume.firstTimeUser.ForwardFlowHostActivity
 import io.dume.dume.firstTimeUser.ForwardFlowViewModel
 import io.dume.dume.firstTimeUser.NID
+import io.dume.dume.util.Event
 import io.dume.dume.util.StateManager
 import kotlinx.android.synthetic.main.fragment_nid_scan.*
 
@@ -93,23 +94,21 @@ class NidScanFragment : Fragment(), View.OnClickListener {
 
     override fun onPause() {
         super.onPause()
-        camera.close()
+        camera?.close()
         isFragmentVisible = false
         handler.removeCallbacks(handlerCallback)
-        camera.removeCameraListener(cameralListener)
+        camera?.removeCameraListener(cameralListener)
 
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        camera.destroy()
+        camera?.destroy()
     }
 
 
     private fun configureCamera() {
-
         camera?.setLifecycleOwner(viewLifecycleOwner)
-
         Log.e("debug", "configureCamera ${camera}  isOpen : ${camera.isOpened} isTakingPicture : ${camera.isTakingPicture}")
         stateManager = StateManager.getInstance(context!!)
         squareProgressBar?.setWidth(7)
@@ -126,24 +125,25 @@ class NidScanFragment : Fragment(), View.OnClickListener {
 
     }
 
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
         val id = item.itemId
         if (id == R.id.flush) {
-            if (camera.getFlash() == Flash.TORCH) {
+            if (camera?.getFlash() == Flash.TORCH) {
                 item.icon = resources.getDrawable(R.drawable.flush_icon)
-                camera.setFlash(Flash.OFF)
+                camera?.setFlash(Flash.OFF)
             } else {
                 item.icon = resources.getDrawable(R.drawable.no_flush_icon)
-                camera.setFlash(Flash.TORCH)
+                camera?.setFlash(Flash.TORCH)
             }
         } else if (id == R.id.hdr) {
-            if (camera.getHdr() == Hdr.ON) {
+            if (camera?.getHdr() == Hdr.ON) {
                 item.icon = resources.getDrawable(R.drawable.hdr_icon)
-                camera.setHdr(Hdr.OFF)
+                camera?.setHdr(Hdr.OFF)
             } else {
                 item.icon = resources.getDrawable(R.drawable.no_hdr_icon)
-                camera.setHdr(Hdr.ON)
+                camera?.setHdr(Hdr.ON)
             }
         }
         return super.onOptionsItemSelected(item)
@@ -218,7 +218,7 @@ class NidScanFragment : Fragment(), View.OnClickListener {
                         stateManager.setValue("NIDNo", NIDNo!!)
                         stateManager.setValue("NIDName", NIDName!!)
                         stateManager.setValue("NIDBirthDate", NIDBirthDate!!)
-                        viewModel.scan.postValue(NID(NIDName!!, NIDBirthDate!!, NIDNo!!))
+                        viewModel.scan.postValue(Event(NID(NIDName!!, NIDBirthDate!!, NIDNo!!)))
                         isFragmentVisible = false
                         navController.navigate(R.id.action_nidFragment_to_registerFragment)
 

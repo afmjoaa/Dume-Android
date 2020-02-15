@@ -69,7 +69,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
+        android:layout_marginBottom="?android:actionBarSize"
         app:layout_anchor="@id/hosting_nestedScroll_layout"
+
         app:layout_anchorGravity="bottom|right">
 
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
@@ -85,6 +87,7 @@
             android:layout_marginBottom="12dp"
             android:contentDescription="@string/add_skill"
             android:text="Add Qualification"
+            android:textAllCaps="false"
             app:icon="@drawable/ic_plus_icon_white"
             app:iconPadding="10dp" />
 
@@ -100,19 +103,19 @@
             android:layout_marginTop="4dp"
             android:layout_marginRight="16dp"
             android:layout_marginBottom="16dp"
-            android:paddingLeft="40dp"
-            android:paddingRight="40dp"
-            android:paddingStart="40dp"
-            android:paddingEnd="40dp"
             android:contentDescription="@string/skip_this_step"
+            android:paddingLeft="40dp"
+            android:paddingEnd="40dp"
+            android:paddingRight="40dp"
             android:text="Skip For Now"
+            android:textAllCaps="false"
             android:textColor="@color/mColorPrimary"
             app:backgroundTint="@color/mColorSurface"
             app:icon="@drawable/ic_cancel_icon"
             app:iconPadding="10dp"
             app:iconTint="@color/mColorPrimary"
             app:strokeColor="@color/star_rating_color"
-            app:strokeWidth="2dp" />
+            app:strokeWidth="1dp" />
 
     </RelativeLayout>
 

@@ -18,7 +18,6 @@ import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -56,7 +55,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
-
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -965,7 +963,7 @@ public class GrabingLocationActivity extends BaseMapActivity implements OnMapRea
                                 Log.i(TAG, "Query completed. Received final " + autocompletePredictions);
                                 publishTheAutoResults(autocompletePredictions);
                             },
-                            error -> Log.e(TAG, "error ", new RuntimeException(error)),
+                            error -> Log.e(TAG, "error " + error.getLocalizedMessage()),
                             () -> Log.e(TAG, "DONE "));
             compositeDisposable.add(disposable);
 
