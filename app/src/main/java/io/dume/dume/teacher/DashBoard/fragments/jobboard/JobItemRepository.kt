@@ -24,14 +24,6 @@ class JobItemRepository private constructor() {
             if (!querySnapshot.isEmpty) {
                 for (doc in querySnapshot) {
                     val obj = doc.toObject(JobItem::class.java)
-
-                    /*val data: MutableMap<String, Any> = doc.data
-                    val title = data["title"] as String
-                    val desc = data["description"] as String
-                    val toAdd = JobItem()
-                    toAdd.title = title
-                    toAdd.description = desc*/
-
                     ret.add(obj)
                 }
             }

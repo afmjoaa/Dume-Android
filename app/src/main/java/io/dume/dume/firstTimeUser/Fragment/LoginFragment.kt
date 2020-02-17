@@ -71,7 +71,9 @@ class LoginFragment : Fragment(), View.OnClickListener {
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = run { }
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) = run { }
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) = run {
+                phoneWrapper.error = null
+            }
 
         })
     }
@@ -126,13 +128,6 @@ class LoginFragment : Fragment(), View.OnClickListener {
 
     }
 
-    private fun updateForwardFlowState() {
-        if (viewModel.role.value == Role.STUDENT) {
-            viewModel.updateStudentCurrentPosition(ForwardFlowStatStudent.LOGIN)
-        } else {
-            viewModel.updateTeacherCurrentPosition(ForwardFlowStatTeacher.LOGIN)
-        }
-    }
 
     override fun onClick(v: View?) {
         when (v!!.id) {

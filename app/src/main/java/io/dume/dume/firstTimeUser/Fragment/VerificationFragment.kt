@@ -60,7 +60,7 @@ class VerificationFragment : Fragment() {
                         }
                     }
                     UserState.USERFOUND.userStat -> {
-                        Log.e("Joaa",it.response.toString() )
+                        Log.e("Joaa", it.response.toString())
                         //error found here
                         //as null is send
                         if (it.response!!.isEducated) {
@@ -75,7 +75,7 @@ class VerificationFragment : Fragment() {
                                 startActivity(Intent(activity, TeacherDashboard::class.java))
                                 finish()
                             }
-                        }else{
+                        } else {
                             if (viewModel.role.value == Role.STUDENT) {
                                 viewModel.updateStudentCurrentPosition(ForwardFlowStatStudent.POSTJOB)
                                 navController.navigate(R.id.action_verificationFragment_to_postJobFragment)
@@ -88,7 +88,12 @@ class VerificationFragment : Fragment() {
                 }
             }
         })
-        viewModel.error.observe(this, Observer { it?.let { parent.flush(it) } })
+        viewModel.error.observe(this, Observer {
+            it?.let {
+                parent.flush(it)
+                verifyFab.isEnabled = true
+            }
+        })
         viewModel.load.observe(this, Observer {
             if (it) {
                 parent.showProgress()
@@ -119,7 +124,10 @@ class VerificationFragment : Fragment() {
                 verifyFab.isEnabled = s.toString().length == 6
             }
         })
-        verifyFab.setOnClickListener { viewModel.matchCode(pinEditTxt.text.toString()) }
+        verifyFab.setOnClickListener {
+            it.isEnabled = false
+            viewModel.matchCode(pinEditTxt.text.toString())
+        }
         resendButton.setOnClickListener {
             it.visibility = View.GONE
             timerTxt.visibility = View.VISIBLE
@@ -128,7 +136,12 @@ class VerificationFragment : Fragment() {
         }
 
         myTimer = object : CountDownTimer(60000, 1000) {
-            override fun onFinish() = run { resendButton?.visibility = View.VISIBLE; timerTxt?.visibility = View.GONE }
+            override fun onFinish() = run {
+                resendButton?.visibility = View.VISIBLE
+                timerTxt?.visibility = View.GONE
+                verifyFab.isEnabled = true
+            }
+
             override fun onTick(millisUntilFinished: Long) = run { timerTxt?.text = StringBuilder("Resend Code in ${millisUntilFinished.div(1000)} seconds").toString() }
         }
         myTimer.start()

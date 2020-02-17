@@ -10,7 +10,6 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-
     <uses-permission android:name="android.permission.READ_CONTACTS" /> <!-- <uses-permission android:name="android.permission.RECEIVE_SMS" /> -->
     <uses-permission android:name="android.permission.READ_PHONE_NUMBERS" /> <!-- location permission -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -28,6 +27,7 @@
         android:roundIcon="@mipmap/icon_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/DefaultTheme.NoActionBar">
+        <activity android:name=".TestActivity"></activity>
         <activity
             android:name=".firstTimeUser.ForwardFlowHostActivity"
             android:theme="@style/DefaultTheme.NoActionBar"
@@ -44,11 +44,6 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/DefaultTheme.NoActionBar" />
-        <activity
-            android:name=".firstTimeUser.NIDScanActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/DefaultTheme.NoActionBar" />
-
         <activity
             android:name=".teacher.skill.SkillActivity"
             android:theme="@style/DefaultTheme.NoActionBar" />
@@ -68,6 +63,7 @@
         <!-- launcher activity (splash activity -->
         <activity
             android:name=".splash.SplashActivity"
+            android:label=""
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -95,29 +91,13 @@
             android:name=".teacher.homepage.TeacherActivtiy"
             android:label=""
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".firstTimeUser.PrivacyActivity"
-            android:theme="@style/DefaultTheme.NoActionBar" />
-        <activity
-            android:name=".firstTimeUser.PermissionActivity"
-            android:theme="@style/DefaultTheme.NoActionBar" />
+
         <activity
             android:name=".firstTimeUser.RoleChooserActivity"
             android:theme="@style/DefaultTheme.NoActionBar" />
         <activity android:name=".common.nexuspay.NexusPay" />
         <activity android:name=".common.bkash_otp.BkashOTP" />
         <activity android:name=".common.bkash_transection.BkashTransectionActivity" />
-        <activity
-            android:name=".auth.auth.AuthActivity"
-            android:theme="@style/DefaultTheme.NoActionBar" />
-        <activity
-            android:name=".auth.code_verification.PhoneVerificationActivity"
-            android:theme="@style/DefaultTheme.NoActionBar" />
-        <activity
-            android:name=".auth.auth_final.AuthRegisterActivity"
-            android:label="@string/title_activity_auth_final"
-            android:theme="@style/DefaultTheme.NoActionBar"
-            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".teacher.mentor_settings.AccountSettings"
             android:theme="@style/AppTheme.NoActionBar.transparent.black" />
