@@ -25,6 +25,7 @@ import com.vansuita.pickimage.listeners.IPickResult
 import io.dume.dume.R
 import io.dume.dume.firstTimeUser.*
 import io.dume.dume.poko.MiniUser
+import io.dume.dume.student.DashBoard.Fragment.JobBoard.StudentJobBoardFragment
 import io.dume.dume.student.grabingLocation.GrabingLocationActivity
 import io.dume.dume.util.DumeUtils
 import io.dume.dume.util.DumeUtils.getAddress
@@ -46,9 +47,8 @@ class RegisterFragment : Fragment(), View.OnClickListener, IPickResult {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        activity?.run {
-            viewModel = ViewModelProviders.of(this).get(ForwardFlowViewModel::class.java)
-        } ?: throw Throwable("invalid activity")
+        activity?.run { viewModel = ViewModelProviders.of(this).get(ForwardFlowViewModel::class.java) }
+                ?: throw Throwable("invalid activity")
         parent = activity as ForwardFlowHostActivity
         navController = Navigation.findNavController(view)
         initalize()
@@ -61,6 +61,7 @@ class RegisterFragment : Fragment(), View.OnClickListener, IPickResult {
 
     }
 
+
     fun setAvatar(uri: Uri) {
         viewModel.avatar.postValue(uri)
         context?.let {
@@ -68,44 +69,37 @@ class RegisterFragment : Fragment(), View.OnClickListener, IPickResult {
         }
     }
 
-
-    private fun updateForwardFlowState() {
-        if (viewModel.role.value == Role.STUDENT) {
-            viewModel.updateStudentCurrentPosition(ForwardFlowStatStudent.POSTJOB)
-            // navController.navigate()
-        } else {
-            viewModel.updateTeacherCurrentPosition(ForwardFlowStatTeacher.QUALIFICATION)
-        }
-    }
-
-    fun validate(): MiniUser? {
-        if (register_name.text.toString() == "") {
-            register_name.setError("Name must not be empty")
+    private fun validate(): MiniUser? {
+        if (register_name.text.isNullOrEmpty()) {
+            register_wrapper.error = "Name must not be empty"
             return null
-        } else if (register_location.text.toString() == "" || userLocation == null) {
-            register_location_container.setError("Location must be chosen")
+        } else if (register_email.text.isNullOrEmpty()) {
+            register_mail_wrapper.error = "Name must not be empty"
+            return null
+        } else if (register_location.text.isNullOrEmpty() || userLocation == null) {
+            register_location_container.error = "Location must be chosen"
             return null
         }
-        var last_name = ""
-        for ((i, parts) in register_name.text.toString().split(" ").withIndex()) if (i != 0) last_name += "$parts "
+        var lastName = ""
+        for ((i, parts) in register_name.text.toString().split(" ").withIndex()) if (i != 0) lastName += "$parts "
 
         return MiniUser(
                 name = register_name.text.toString(),
-                birth_date = register_birth_date.text.toString(),
+                birth_date = if (register_birth_date.text.isNullOrEmpty()) "N/A" else register_birth_date.text.toString(),
                 mail = register_email.text.toString(),
-                nid = if (register_nid.text.toString().equals("")) null else register_nid.text.toString().toLong(),
+                nid = if (register_nid.text.isNullOrEmpty()) null else register_nid.text.toString().toLong(),
                 parmanent_location = userLocation!!,
                 avatar = null,
                 accoount_major = viewModel.role.value!!.flow,
                 phone_number = viewModel.phoneNumber.value!!,
                 first_name = register_name.text.toString().split(" ")[0],
-                last_name = last_name,
+                last_name = lastName,
                 obligated_user = null,
                 obligation = false,
-                imei = DumeUtils.getImei(context)
+                imei = DumeUtils.getImei(context),
+                isEducated = false
         )
     }
-
 
     private fun flush(msg: String?) {
         msg?.let {
@@ -122,13 +116,14 @@ class RegisterFragment : Fragment(), View.OnClickListener, IPickResult {
                 register_birth_date.setText(it.birth_date.replace("Date of Birth", ""))
             }
         })
-
         viewModel.success.observe(this, Observer {
             it?.let {
                 parent.hideProgress()
                 if (viewModel.role.value == Role.STUDENT) {
                     viewModel.updateStudentCurrentPosition(ForwardFlowStatStudent.POSTJOB)
-                    navController.navigate(R.id.action_registerFragment_to_postJobFragment)
+                    val args = Bundle()
+                    args.putString(StudentJobBoardFragment.DESTINATION, "forward")
+                    navController.navigate(R.id.action_registerFragment_to_postJobFragment, args)
 
                 } else {
                     viewModel.updateTeacherCurrentPosition(ForwardFlowStatTeacher.QUALIFICATION)
@@ -148,7 +143,7 @@ class RegisterFragment : Fragment(), View.OnClickListener, IPickResult {
         }
     }
 
-    fun setCurrentAddress(geoPoint: GeoPoint) {
+    private fun setCurrentAddress(geoPoint: GeoPoint) {
         userLocation = geoPoint
         val address = getAddress(context, geoPoint.latitude, geoPoint.longitude)
         register_location.setText(address)

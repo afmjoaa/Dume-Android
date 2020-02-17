@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 import io.dume.dume.R;
-import io.dume.dume.auth.auth.AuthActivity;
+
 import io.dume.dume.student.homePage.HomePageActivity;
 import io.dume.dume.student.pojo.BaseAppCompatActivity;
 import io.dume.dume.teacher.homepage.TeacherActivtiy;
@@ -78,7 +78,7 @@ public class PayActivity extends BaseAppCompatActivity implements PayContact.Vie
     public void signOutAndLoginPrevious() {
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
             FirebaseAuth.getInstance().signOut();
-            Intent gotoAuthActivity = new Intent(this, AuthActivity.class);
+            //Intent gotoAuthActivity = new Intent(this, AuthActivity.class);
             newAllNumber.clear();
             Map<String, Map<String, Object>> obligatedUser = (Map<String, Map<String, Object>>) documentSnapSHot.get("obligated_user");
             if (obligatedUser.size() > 0) {
@@ -87,9 +87,9 @@ public class PayActivity extends BaseAppCompatActivity implements PayContact.Vie
                 }
 
                 if (obligatedUser.size() == 1) {
-                    gotoAuthActivity.putExtra("phone_number", newAllNumber.get(0));
-                    startActivity(gotoAuthActivity.setAction("previous_login"));
-                    finish();
+                   // gotoAuthActivity.putExtra("phone_number", newAllNumber.get(0));
+                  //  startActivity(gotoAuthActivity.setAction("previous_login"));
+                   // finish();
                 } else {
                     //selectOne
                     selectOneNum((String[]) newAllNumber.toArray());
@@ -186,9 +186,9 @@ public class PayActivity extends BaseAppCompatActivity implements PayContact.Vie
         selectOneNumDialogue.setSelectListener(new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                Intent gotoAuthActivity = new Intent(PayActivity.this, AuthActivity.class);
-                gotoAuthActivity.putExtra("phone_number", finalOutPut);
-                startActivity(gotoAuthActivity.setAction("previous_login"));
+               // Intent gotoAuthActivity = new Intent(PayActivity.this, AuthActivity.class);
+               // gotoAuthActivity.putExtra("phone_number", finalOutPut);
+               // startActivity(gotoAuthActivity.setAction("previous_login"));
                 finish();
             }
         });

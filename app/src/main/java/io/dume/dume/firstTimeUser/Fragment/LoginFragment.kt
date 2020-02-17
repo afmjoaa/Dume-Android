@@ -106,12 +106,10 @@ class LoginFragment : Fragment(), View.OnClickListener {
 
 
     private fun nextAction() {
-        updateForwardFlowState()
         navController.navigate(R.id.action_loginFragment_to_verificationFragment)
     }
 
     private fun skipNextAction() {
-        updateForwardFlowState()
         if (viewModel.role.value == Role.TEACHER) {
             navController.navigate(R.id.action_loginFragment_to_nidFragment)
         } else {
@@ -130,9 +128,9 @@ class LoginFragment : Fragment(), View.OnClickListener {
 
     private fun updateForwardFlowState() {
         if (viewModel.role.value == Role.STUDENT) {
-            viewModel.updateStudentCurrentPosition(ForwardFlowStatStudent.VERIFICATION)
+            viewModel.updateStudentCurrentPosition(ForwardFlowStatStudent.LOGIN)
         } else {
-            viewModel.updateTeacherCurrentPosition(ForwardFlowStatTeacher.VERIFICATION)
+            viewModel.updateTeacherCurrentPosition(ForwardFlowStatTeacher.LOGIN)
         }
     }
 

@@ -146,7 +146,7 @@ public class SkillActivity extends BaseAppCompatActivity implements SkillContrac
     public void init() {
         DumeUtils.configureAppbar(this, "Skill Management");
         noDataBlock = findViewById(R.id.no_data_block);
-        multiFab = findViewById(R.id.multiple_actions);
+        multiFab = findViewById(R.id.jobMultiple);
         fabRegular = findViewById(R.id.fab_regular);
         fabGang = findViewById(R.id.fab_gang);
         fabInstant = findViewById(R.id.fab_instant);

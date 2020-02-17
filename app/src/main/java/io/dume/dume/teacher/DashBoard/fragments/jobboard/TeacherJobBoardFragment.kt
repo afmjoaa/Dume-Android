@@ -46,14 +46,6 @@ class TeacherJobBoardFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener
         jobCardRv.addItemDecoration(CirclePagerIndicatorDecoration())
         jobCardRv.adapter = FeatureCardSlider()
 
-        /*    var cardSnapHelper = CardSnapHelper()
-            cardSnapHelper.attachToRecyclerView(job_card_rv)*/
-
-        /*jobBoardViewModel!!.__getAllJobs().observe(this, Observer {
-            // set adapter or update it..
-            updateJobRecView(it)
-        })*/
-
         jobBoardViewModel!!.__getAllJobs()
 
         jobBoardViewModel!!.jobListLive.observe(this, Observer {

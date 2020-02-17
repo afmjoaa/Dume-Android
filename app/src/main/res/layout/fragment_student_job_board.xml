@@ -8,53 +8,61 @@
     android:layout_height="match_parent"
     tools:context=".teacher.skill.SkillActivity">
 
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/hosting_nestedScroll_layout"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_to_refres"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="20dp">
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <LinearLayout
-            android:id="@+id/nested_host_linearlayout"
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/hosting_nestedScroll_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/skillRV"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="visible" />
+            android:layout_marginBottom="20dp">
 
             <LinearLayout
-                android:id="@+id/no_data_block"
+                android:id="@+id/nested_host_linearlayout"
                 android:layout_width="match_parent"
-                android:layout_height="440dp"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:visibility="gone">
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-                <carbon.widget.ImageView
-                    android:layout_width="wrap_content"
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/jobRecycleView"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:carbon_elevation="3dp"
-                    app:srcCompat="@drawable/no_data_wallpaper" />
+                    android:visibility="gone" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:text="Sorry, no item to show right now ..."
-                    android:textAlignment="center"
-                    android:textAllCaps="false"
-                    android:textColor="@color/textColorSecondary"
-                    android:textSize="16sp" />
+                <LinearLayout
+                    android:id="@+id/no_data_block"
+                    android:layout_width="match_parent"
+                    android:layout_height="440dp"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:visibility="visible">
+
+                    <carbon.widget.ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:carbon_elevation="3dp"
+                        app:srcCompat="@drawable/no_data_wallpaper" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Sorry, no item to show right now ..."
+                        android:textAlignment="center"
+                        android:textAllCaps="false"
+                        android:textColor="@color/textColorSecondary"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
 
             </LinearLayout>
 
-        </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
 
-    </androidx.core.widget.NestedScrollView>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <FrameLayout
         android:id="@+id/view_musk"
@@ -69,16 +77,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        app:layout_anchor="@id/hosting_nestedScroll_layout"
         android:layout_marginBottom="?android:actionBarSize"
+        app:layout_anchor="@id/hosting_nestedScroll_layout"
         app:layout_anchorGravity="bottom|right">
 
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-            android:id="@+id/registerBtn"
+            android:id="@+id/jobPost"
             style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton.Icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/multiple_actions"
+            android:layout_alignBottom="@+id/jobMultiple"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_marginLeft="16dp"
@@ -87,11 +95,10 @@
             android:contentDescription="@string/post_job"
             android:text="Post Job"
             android:textAllCaps="false"
-
             app:icon="@drawable/post_job_icon" />
 
         <com.getbase.floatingactionbutton.FloatingActionsMenu
-            android:id="@+id/multiple_actions"
+            android:id="@+id/jobMultiple"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
@@ -147,11 +154,11 @@
         </com.getbase.floatingactionbutton.FloatingActionsMenu>
 
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-            android:id="@+id/skipBtn"
+            android:id="@+id/jobSkip"
             style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton.Icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/multiple_actions"
+            android:layout_below="@+id/jobMultiple"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_marginLeft="16dp"
@@ -160,13 +167,12 @@
             android:layout_marginBottom="16dp"
             android:contentDescription="@string/skip_this_step"
             android:text="Skip Now"
+            android:textAllCaps="false"
             android:textColor="@color/mColorPrimary"
             app:backgroundTint="@color/mColorSurface"
             app:icon="@drawable/ic_cancel_icon"
             app:iconPadding="10dp"
             app:iconTint="@color/mColorPrimary"
-            android:textAllCaps="false"
-
             app:strokeColor="@color/star_rating_color"
             app:strokeWidth="1dp" />
 

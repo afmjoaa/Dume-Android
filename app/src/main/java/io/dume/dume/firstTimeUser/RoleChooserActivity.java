@@ -30,10 +30,10 @@ public class RoleChooserActivity extends BaseAppCompatActivity implements View.O
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.asStudent) {
-            local.setAccountManjor(DataStore.STUDENT);
+            local.accountManjor = DataStore.STUDENT;
             startActivity(new Intent(this, StudentDashBoard.class));
         } else if (v.getId() == R.id.asTeacher) {
-            local.setAccountManjor(DataStore.TEACHER);
+            local.accountManjor = DataStore.TEACHER;
             startActivity(new Intent(this, TeacherDashboard.class));
         } else if (v.getId() == R.id.testEnam) {
             startActivity(new Intent(this, StudentDashBoard.class));

@@ -78,13 +78,16 @@
             style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton.Icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/multiple_actions"
+            android:layout_alignBottom="@+id/jobMultiple"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:textAllCaps="false"
-
+            android:paddingLeft="22dp"
+            android:paddingEnd="22dp"
+            android:paddingRight="22dp"
+            android:paddingStart="22dp"
             android:layout_marginBottom="12dp"
             android:contentDescription="@string/add_skill"
             android:text="Add Skill"
@@ -92,7 +95,7 @@
             app:iconPadding="10dp" />
 
         <com.getbase.floatingactionbutton.FloatingActionsMenu
-            android:id="@+id/multiple_actions"
+            android:id="@+id/jobMultiple"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
@@ -152,7 +155,7 @@
             style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton.Icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/multiple_actions"
+            android:layout_below="@+id/jobMultiple"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_marginLeft="16dp"

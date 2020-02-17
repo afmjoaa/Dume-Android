@@ -5,7 +5,8 @@ import android.os.Bundle;
 import io.dume.dume.R;
 import io.dume.dume.student.pojo.BaseAppCompatActivity;
 
-public class AppInfoActivity extends BaseAppCompatActivity {
+public class
+AppInfoActivity extends BaseAppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

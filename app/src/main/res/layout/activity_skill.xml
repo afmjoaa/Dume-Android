@@ -10,7 +10,7 @@
     tools:context=".teacher.skill.SkillActivity">
 
     <androidx.core.widget.NestedScrollView
-        android:id="@+id/hosting_nestedScroll_layout"
+        android:id="@+id/jobBoardScroll"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="20dp"
@@ -85,7 +85,7 @@
         app:layout_anchorGravity="bottom" />
 
     <com.getbase.floatingactionbutton.FloatingActionsMenu
-        android:id="@+id/multiple_actions"
+        android:id="@+id/jobMultiple"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
@@ -93,7 +93,7 @@
         android:layout_alignParentBottom="true"
         android:layout_gravity="bottom|end"
         android:onClick="onClick"
-        app:layout_anchor="@+id/hosting_nestedScroll_layout"
+        app:layout_anchor="@+id/jobBoardScroll"
         app:layout_anchorGravity="bottom|end"
         fab:fab_addButtonColorNormal="@color/black"
         fab:fab_addButtonColorPressed="@color/colorDarkAzure"

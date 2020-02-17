@@ -6,6 +6,7 @@ import android.os.CountDownTimer
 import android.text.Editable
 import android.text.Html
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -45,7 +46,7 @@ class VerificationFragment : Fragment() {
     private fun initObservers() {
         viewModel.isExiting.observe(this, Observer {
             it?.getContentIfNotHandled()?.let {
-                when (it.userStat) {
+                when (it.state.userStat) {
                     UserState.ERROR.userStat -> {
                         parent.flush("Check your internet connection and try again")
                     }
@@ -59,16 +60,31 @@ class VerificationFragment : Fragment() {
                         }
                     }
                     UserState.USERFOUND.userStat -> {
-                        viewModel.updateFirstTimeUser(false)
-                        if (viewModel.role.value == Role.STUDENT) {
-                            startActivity(Intent(activity, StudentDashBoard::class.java))
-                            finish()
-                        } else {
-                            startActivity(Intent(activity, TeacherDashboard::class.java))
-                            finish()
+                        Log.e("Joaa",it.response.toString() )
+                        //error found here
+                        //as null is send
+                        if (it.response!!.isEducated) {
+                            viewModel.updateFirstTimeUser(false)
+
+                            if (viewModel.role.value == Role.STUDENT) {
+                                viewModel.updateStudentCurrentPosition(ForwardFlowStatStudent.LOGIN)
+                                startActivity(Intent(activity, StudentDashBoard::class.java))
+                                finish()
+                            } else {
+                                viewModel.updateTeacherCurrentPosition(ForwardFlowStatTeacher.LOGIN)
+                                startActivity(Intent(activity, TeacherDashboard::class.java))
+                                finish()
+                            }
+                        }else{
+                            if (viewModel.role.value == Role.STUDENT) {
+                                viewModel.updateStudentCurrentPosition(ForwardFlowStatStudent.POSTJOB)
+                                navController.navigate(R.id.action_verificationFragment_to_postJobFragment)
+                            } else {
+                                viewModel.updateTeacherCurrentPosition(ForwardFlowStatTeacher.QUALIFICATION)
+                                navController.navigate(R.id.action_verificationFragment_to_qualificationFragment)
+                            }
                         }
                     }
-
                 }
             }
         })
@@ -84,7 +100,7 @@ class VerificationFragment : Fragment() {
         })
         viewModel.phoneNumber.observe(this, Observer {
             it?.let {
-                detailsTxt.text = Html.fromHtml("Enter the 6 digit verification code sent to you at <b><b>+88 %s </b></b>".format(it))
+                detailsTxt.text = Html.fromHtml("Enter the 6 digit verification code sent to you at <br/><b><b>+88 %s </b></b>".format(it))
             }
         })
 

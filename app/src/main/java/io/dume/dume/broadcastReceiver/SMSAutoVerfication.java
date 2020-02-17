@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.telephony.SmsMessage;
 import android.util.Log;
 
-import io.dume.dume.auth.code_verification.PhoneVerificationActivity;
 
 public class SMSAutoVerfication extends BroadcastReceiver {
     private static final String SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
@@ -15,7 +14,7 @@ public class SMSAutoVerfication extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        String action = intent.getAction();
+     /*   String action = intent.getAction();
         Log.i(TAG, "Intent recieved: " + action);
         if (PhoneVerificationActivity.isAlive) {
             if (action != null) {
@@ -37,6 +36,6 @@ public class SMSAutoVerfication extends BroadcastReceiver {
                     }
                 }
             }
-        }
+        }*/
     }
 }

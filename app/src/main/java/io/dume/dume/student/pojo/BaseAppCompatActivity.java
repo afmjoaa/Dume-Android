@@ -41,7 +41,6 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import io.dume.dume.util.Google;
 import io.dume.dume.R;
-import io.dume.dume.auth.auth.AuthActivity;
 import io.dume.dume.broadcastReceiver.MyConnectivityHandler;
 import io.dume.dume.broadcastReceiver.NetworkChangeReceiver;
 import io.dume.dume.customView.HorizontalLoadView;
@@ -351,10 +350,10 @@ public class BaseAppCompatActivity extends AppCompatActivity implements MyConnec
     public void onSignOut() {
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
             FirebaseAuth.getInstance().signOut();
-            Intent intent = new Intent(getApplicationContext(), AuthActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
-            finish();
+           // Intent intent = new Intent(getApplicationContext(), AuthActivity.class);
+           // intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+           // startActivity(intent);
+           // finish();
         }
     }
 
