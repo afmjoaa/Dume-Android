@@ -40,16 +40,12 @@ class QualificationFragment : Fragment(), View.OnClickListener {
     }
 
     private fun initObservers() {
-        viewModel.success.observe(this, Observer { it?.let { parent.flush("Success Again Called :  ${it.payload}") } })
+        viewModel.success.observe(this, Observer {
+            it.getContentIfNotHandled()?.let{
+                it.let { parent.flush("Success Again Called :  ${it.payload}") }
+            }
+        })
         viewModel.failure.observe(this, Observer { it?.let { parent.flush("Failure Again Called") } })
-    }
-
-    private fun updateForwardFlowState() {
-        if (viewModel.role.value == Role.STUDENT) {
-            viewModel.updateStudentCurrentPosition(ForwardFlowStatStudent.REGISTER)
-        } else {
-            viewModel.updateTeacherCurrentPosition(ForwardFlowStatTeacher.REGISTER)
-        }
     }
 
     override fun onClick(v: View?) {

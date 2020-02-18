@@ -117,7 +117,7 @@ class RegisterFragment : Fragment(), View.OnClickListener, IPickResult {
             }
         })
         viewModel.success.observe(this, Observer {
-            it?.let {
+            it.getContentIfNotHandled()?.let{
                 parent.hideProgress()
                 if (viewModel.role.value == Role.STUDENT) {
                     viewModel.updateStudentCurrentPosition(ForwardFlowStatStudent.POSTJOB)
@@ -164,9 +164,6 @@ class RegisterFragment : Fragment(), View.OnClickListener, IPickResult {
 
     override fun onClick(v: View?) {
         when (v!!.id) {
-            R.id.registerBtn -> {
-                navController.navigate(R.id.action_registerFragment_to_qualificationFragment)
-            }
             R.id.register_location -> {
                 startActivityForResult(Intent(context, GrabingLocationActivity::
                 class.java).setAction("fromPPA"), LOCATION_REQUEST_CODE)
@@ -183,8 +180,6 @@ class RegisterFragment : Fragment(), View.OnClickListener, IPickResult {
     override fun onPickResult(r: PickResult) {
         if (r.error == null) {
             setAvatar(r.uri)
-
-
         } else {
             Log.e("debug", "error -> ${r.error}")
         }

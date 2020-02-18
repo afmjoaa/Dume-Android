@@ -75,12 +75,25 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:visibility="gone"
         android:contentDescription="@string/accept_amp_continue"
         android:text="Register"
+        android:visibility="gone"
         app:icon="@drawable/ic_sign_in_icon"
+        app:iconPadding="12dp"
         app:layout_anchor="@id/nav_host_fragment"
-        app:layout_anchorGravity="bottom|end"
-        app:iconPadding="12dp"/>
+        app:layout_anchorGravity="bottom|end" />
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/continueBtn"
+        style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton.Icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:contentDescription="@string/accept_amp_continue"
+        android:text="Continue"
+        android:visibility="gone"
+        app:icon="@drawable/accept_icon"
+        app:layout_anchor="@id/nav_host_fragment"
+        app:layout_anchorGravity="bottom|center_horizontal" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

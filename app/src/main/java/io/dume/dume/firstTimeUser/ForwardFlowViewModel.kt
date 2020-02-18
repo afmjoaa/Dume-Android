@@ -8,6 +8,7 @@ import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.PhoneAuthProvider
+import io.dume.dume.R
 import io.dume.dume.auth.AuthGlobalContract
 import io.dume.dume.auth.AuthModel
 import io.dume.dume.auth.AuthContract
@@ -36,7 +37,7 @@ class ForwardFlowViewModel : ViewModel() {
     val error = MutableLiveData<String>(null)
     var phoneNumber = MutableLiveData<String>()
     var scan = MutableLiveData<Event<NID?>>(Event(null))
-    var success = MutableLiveData<Success<String>>(null)
+    var success = MutableLiveData<Event<Success<String>?>>(Event(null))
     var failure = MutableLiveData<Failure<String>>(null)
 
     /* Lateinit Reference */
@@ -132,19 +133,20 @@ class ForwardFlowViewModel : ViewModel() {
                     miniUser.avatar = list.toString()
                     addUserToDatabase(miniUser)
                 }
-
                 override fun onError(msg: String?) = run { failure.postValue(Failure(msg)) }
-
             })
         } else {
             addUserToDatabase(miniUser)
         }
+    }
 
+    fun privacyContinue(){
+        success.postValue(Event(Success("")))
     }
 
     private fun addUserToDatabase(miniUser: MiniUser) {
         repository.addUser(miniUser, object : TeacherContract.Model.Listener<Void> {
-            override fun onSuccess(list: Void?) = run { success.postValue(Success("")) }
+            override fun onSuccess(list: Void?) = run { success.postValue(Event(Success(""))) }
             override fun onError(msg: String?) = run { failure.postValue(Failure(msg)) }
         })
     }

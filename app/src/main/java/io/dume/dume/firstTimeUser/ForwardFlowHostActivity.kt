@@ -113,59 +113,70 @@ class ForwardFlowHostActivity : BaseAppCompatActivity(), View.OnClickListener {
     }
 
     private fun initListener() {
-        registerBtn.setOnClickListener(this)
         navController.addOnDestinationChangedListener { controller, destination, arguments ->
 
             when (destination.id) {
                 R.id.roleChooser -> {
                     registerBtn.hide()
+                    continueBtn.hide()
                     configAppToolBarTitle(this, "")
                     hideActionBar()
                 }
                 R.id.permissionFragment -> {
                     registerBtn.hide()
+                    continueBtn.hide()
                     configAppToolBarTitle(this, "Provide Permission")
                     showActionBar()
                 }
                 R.id.privacyFragment -> {
                     registerBtn.hide()
+                    continueBtn.show()
                     showActionBar()
-                    configAppToolBarTitle(this, "Teacher Guide")
-
+                    if(Role.TEACHER.flow == viewModel.role.value?.flow){
+                        configAppToolBarTitle(this, "Teacher Guide")
+                    }else{
+                        configAppToolBarTitle(this, "Student Guide")
+                    }
                 }
                 R.id.loginFragment -> {
                     registerBtn.hide()
+                    continueBtn.hide()
                     showActionBar()
                     configAppToolBarTitle(this, "Login")
-
                 }
                 R.id.nidFragment -> {
                     registerBtn.hide()
+                    continueBtn.hide()
                     showActionBar()
                     configAppToolBarTitle(this, "NID Verification")
                 }
                 R.id.registerFragment -> {
                     registerBtn.show()
+                    continueBtn.hide()
                     showActionBar()
                     configAppToolBarTitle(this, "Provide Info")
                 }
                 R.id.qualificationFragment -> {
                     registerBtn.hide()
+                    continueBtn.hide()
                     showActionBar()
                     configAppToolBarTitle(this, "Add Qualification")
                 }
                 R.id.addSkillFragment -> {
                     registerBtn.hide()
+                    continueBtn.hide()
                     showActionBar()
                     configAppToolBarTitle(this, "Add Skill")
                 }
                 R.id.postJobFragment -> {
                     registerBtn.hide()
+                    continueBtn.hide()
                     showActionBar()
                     configAppToolBarTitle(this, "Post Job")
                 }
                 R.id.paymentFragment -> {
                     registerBtn.hide()
+                    continueBtn.hide()
                     showActionBar()
                     configAppToolBarTitle(this, "Activation Fee")
                 }
@@ -186,10 +197,7 @@ class ForwardFlowHostActivity : BaseAppCompatActivity(), View.OnClickListener {
     }
 
     override fun onClick(v: View?) {
-        when (v!!.id) {
-            R.id.registerBtn -> {
-                navController.navigate(R.id.action_registerFragment_to_qualificationFragment)
-            }
+        when (v?.id) {
 
         }
     }
@@ -199,6 +207,13 @@ class ForwardFlowHostActivity : BaseAppCompatActivity(), View.OnClickListener {
             listener(it)
         }
     }
+
+    fun onContinuePrivacyClick(listener: (view: View) -> Unit) {
+        continueBtn.setOnClickListener {
+            listener(it)
+        }
+    }
+
 
     override fun onBackPressed() {
         if (navController.currentDestination?.id == R.id.nidFragment) {
