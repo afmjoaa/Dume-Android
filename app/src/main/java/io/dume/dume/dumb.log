@@ -7,4 +7,146 @@
              }
          } else */
 
+             fun onAccountTypeFoundMock(user: FirebaseUser, listener: AuthGlobalContract.AccountTypeFoundListener) {
+                 listener.onStart()
+                 val mini_users = firestore.collection("mini_users").document(user.uid)
+                 mini_users.get().addOnCompleteListener { task ->
+                     if (task.isSuccessful) {
+                         // Document found in the offline cache
+                         val documentSnapshot = task.result
+                         if (documentSnapshot != null) {
+                             foreignObligation = documentSnapshot.getBoolean("foreign_obligation")
+                             obligation = documentSnapshot.getBoolean("obligation")
+                             //TODO solving err
+                             if (foreignObligation == null) {
+                                 foreignObligation = false
+                             }
+                             if (obligation == null) {
+                                 obligation = false
+                             }
+                             Google.getInstance().isObligation = obligation!!
+                             detachListener()
+                             val o = documentSnapshot.get("account_major")
+                             if (datastore != null && datastore!!.isBottomNavAccountMajor) {
+                                 if (datastore!!.accountManjor != null) {
+                                     datastore!!.isBottomNavAccountMajor = false
+                                     val newMap = HashMap<String, Any>()
+                                     newMap["account_major"] = datastore!!.accountManjor
+                                     val mini_users1 = mini_users.update(newMap).addOnFailureListener { e -> Log.e(TAG, "onFailure: Enam " + e.localizedMessage!!) }.addOnCompleteListener { taskOne ->
+
+                                         Log.e(TAG, "addOnCompleteListener: Enam ")
+                                         var account_major: String? = ""
+                                         account_major = datastore!!.accountManjor
+                                         assert(account_major != null)
+                                         if (!foreignObligation!!) {
+                                             if (account_major == "student") {
+                                                 Google.getInstance().accountMajor = DumeUtils.STUDENT
+                                                 listener.onStudentFound()
+                                             } else {
+                                                 Google.getInstance().accountMajor = DumeUtils.TEACHER
+                                                 listener.onTeacherFound()
+
+                                             }
+                                         } else {
+                                             listener.onForeignObligation()
+                                         }
+                                     }
+
+                                 } else {
+                                     Log.w(TAG, "onAccountTypeFound: UnKnown Error")
+                                 }
+
+                             } else {
+                                 var account_major = ""
+                                 if (o != null) {
+                                     account_major = o.toString()
+                                 } else {
+                                     account_major = DumeUtils.STUDENT
+                                 }
+
+                                 if (!foreignObligation!!) {
+                                     if (account_major == "student") {
+                                         Google.getInstance().accountMajor = DumeUtils.STUDENT
+
+                                         listener.onStudentFound()
+                                     } else {
+                                         Google.getInstance().accountMajor = DumeUtils.TEACHER
+                                         listener.onTeacherFound()
+                                     }
+                                 } else {
+                                     listener.onForeignObligation()
+                                 }
+                             }
+
+                         } else {
+                             listener.onFail("Does not found any isExiting")
+                             Log.w(TAG, "onAccountTypeFound: document is not null")
+                         }
+                     } else {
+                         if (task.exception != null)
+                             listener.onFail(task.exception!!.localizedMessage)
+                     }
+                 }
+             }
+
+
+
+                 fun isExistingUserMock(phoneNumber: String, listener: AuthGlobalContract.OnExistingUserCallback): Boolean {
+                     Log.w(TAG, "isExistingUser: ")
+                     listener.onStart()
+                     listenerRegistration1 = firestore.collection("mini_users").whereEqualTo("phone_number", phoneNumber).addSnapshotListener { queryDocumentSnapshots, e ->
+                         var documents: List<DocumentSnapshot>? = null
+                         detachListener()
+                         if (queryDocumentSnapshots != null) {
+                             documents = queryDocumentSnapshots.documents
+
+                             if (documents.isNotEmpty()) {
+                                 val miniUser = documents[0].toObject(MiniUser::class.java)
+                                 datastore!!.documentSnapshot = documents[0].data
+                                 val obligation = documents[0].data!!["obligation"] as Boolean
+                                 Google.getInstance().isObligation = obligation
+                                 listener.onUserFound(miniUser)
+
+                             } else {
+                                 listener.onNewUserFound()
+                                 checkImei(object : TeacherContract.Model.Listener<QuerySnapshot> {
+                                     override fun onSuccess(list: QuerySnapshot) = if (list.documents.size > 0) {
+                                         /*context.startActivity(new Intent(context, PayActivity.class));*/
+                                         var obligation = false
+                                         val obligatedUser = HashMap<String, Map<String, Any>>()
+                                         for (i in 0 until list.documents.size) {
+                                             obligation = list.documents[i].data!!["obligation"] as Boolean
+                                             if (obligation) {
+                                                 obligatedUser[list.documents[i].id] = list.documents[i].data as Map<String, Any>
+                                             }
+                                         }
+                                         if (obligatedUser.size > 0) {
+                                             DataStore.getInstance().isObligation = true
+                                             DataStore.getInstance().obligatedUser = obligatedUser
+                                         } else
+                                             DataStore.getInstance().isObligation = false
+                                         listener.onNewUserFound()
+
+                                     } else {
+                                         listener.onNewUserFound()
+                                     }
+
+                                     override fun onError(msg: String) {
+                                         listener.onError(msg)
+                                     }
+                                 })
+                             }
+                         } else {
+                             listener.onError("Internal Error. No queryDocumentSpanshot Returned By Google")
+                         }
+                         if (e != null) {
+                             listener.onError(e.localizedMessage)
+                         }
+                     }
+
+                     return false
+                 }
+
+
+
 

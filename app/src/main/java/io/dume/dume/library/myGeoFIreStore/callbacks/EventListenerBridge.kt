@@ -8,7 +8,7 @@ import com.google.firebase.firestore.GeoPoint
 /**
  * GeoQuery notifies listeners with this interface about documents that entered, exited, or moved within the query.
  */
-class EventListenerBridge(private val listener: GeoQueryEventListener): GeoQueryDataEventListener {
+class EventListenerBridge(private val listener: GeoQueryEventListener) : GeoQueryDataEventListener {
 
     override fun onDocumentEntered(documentSnapshot: DocumentSnapshot, location: GeoPoint) {
         listener.onKeyEntered(documentSnapshot.id, location)

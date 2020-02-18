@@ -44,13 +44,15 @@ class VerificationFragment : Fragment() {
 
 
     private fun initObservers() {
-        viewModel.isExiting.observe(this, Observer {
+        viewModel.isExiting.observe(viewLifecycleOwner, Observer {
             it?.getContentIfNotHandled()?.let {
                 when (it.state.userStat) {
                     UserState.ERROR.userStat -> {
                         parent.flush("Check your internet connection and try again")
                     }
                     UserState.NEWUSERFOUND.userStat -> {
+                        Log.e("TAG", "on new user found")
+
                         if (viewModel.role.value == Role.STUDENT) {
                             viewModel.updateStudentCurrentPosition(ForwardFlowStatStudent.REGISTER)
                             navController.navigate(R.id.action_verificationFragment_to_registerFragment)
@@ -61,11 +63,10 @@ class VerificationFragment : Fragment() {
                     }
                     UserState.USERFOUND.userStat -> {
                         Log.e("Joaa", it.response.toString())
-                        //error found here
-                        //as null is send
-                        if (it.response!!.isEducated) {
+                        val isEducated = if (it.response?.educated == null) false else it.response?.educated as Boolean
+                        if (isEducated) {
                             viewModel.updateFirstTimeUser(false)
-
+                            Log.e("TAG", "on uaser found educated true")
                             if (viewModel.role.value == Role.STUDENT) {
                                 viewModel.updateStudentCurrentPosition(ForwardFlowStatStudent.LOGIN)
                                 startActivity(Intent(activity, StudentDashBoard::class.java))
@@ -88,13 +89,13 @@ class VerificationFragment : Fragment() {
                 }
             }
         })
-        viewModel.error.observe(this, Observer {
+        viewModel.error.observe(viewLifecycleOwner, Observer {
             it?.let {
                 parent.flush(it)
                 verifyFab.isEnabled = true
             }
         })
-        viewModel.load.observe(this, Observer {
+        viewModel.load.observe(viewLifecycleOwner, Observer {
             if (it) {
                 parent.showProgress()
                 sendCodeBtn?.isEnabled = false
@@ -103,7 +104,7 @@ class VerificationFragment : Fragment() {
                 sendCodeBtn?.isEnabled = true
             }
         })
-        viewModel.phoneNumber.observe(this, Observer {
+        viewModel.phoneNumber.observe(viewLifecycleOwner, Observer {
             it?.let {
                 detailsTxt.text = Html.fromHtml("Enter the 6 digit verification code sent to you at <br/><b><b>+88 %s </b></b>".format(it))
             }
@@ -139,7 +140,7 @@ class VerificationFragment : Fragment() {
             override fun onFinish() = run {
                 resendButton?.visibility = View.VISIBLE
                 timerTxt?.visibility = View.GONE
-                verifyFab.isEnabled = true
+                verifyFab?.isEnabled = true
             }
 
             override fun onTick(millisUntilFinished: Long) = run { timerTxt?.text = StringBuilder("Resend Code in ${millisUntilFinished.div(1000)} seconds").toString() }
@@ -150,6 +151,11 @@ class VerificationFragment : Fragment() {
 
     override fun onDetach() {
         super.onDetach()
+        myTimer.cancel()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
         myTimer.cancel()
     }
 

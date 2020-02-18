@@ -11,8 +11,6 @@ import com.google.firebase.auth.PhoneAuthProvider
 import io.dume.dume.R
 import io.dume.dume.auth.AuthGlobalContract
 import io.dume.dume.auth.AuthModel
-import io.dume.dume.auth.AuthContract
-import io.dume.dume.auth.PhoneVerificationContract
 import io.dume.dume.poko.MiniUser
 import io.dume.dume.poko.sub_pojo.Failure
 import io.dume.dume.poko.sub_pojo.Success
@@ -60,7 +58,7 @@ class ForwardFlowViewModel : ViewModel() {
     /**
      *  <p> listener to observe data from repository @link Model#sendCode </p>
      *  */
-    var repositoryListener = object : AuthContract.Model.Callback {
+    var repositoryListener = object : AuthGlobalContract.CodeResponse {
         override fun onStart() = run { load.value = true }
         override fun onFail(error: String?) = run { load.value = false; this@ForwardFlowViewModel.error.value = error }
         override fun onSuccess(id: String?, forceResendingToken: PhoneAuthProvider.ForceResendingToken?) = run {
@@ -96,11 +94,12 @@ class ForwardFlowViewModel : ViewModel() {
     private fun isExisting(phoneNumber: String = this.phoneNumber.value!!) {
         repository.isExistingUser(phoneNumber, object : AuthGlobalContract.OnExistingUserCallback {
             override fun onStart() = run { load.value = true }
-            override fun onUserFound(miniUser : MiniUser?) = run {
+            override fun onUserFound(miniUser: MiniUser?) = run {
                 isExiting.value = Event(UserResponse(UserState.USERFOUND, miniUser))
                 load.value = false
             }
-            override fun onNewUserFound() = run { isExiting.value = Event(UserResponse(UserState.NEWUSERFOUND,null)); load.value = false }
+
+            override fun onNewUserFound() = run { isExiting.value = Event(UserResponse(UserState.NEWUSERFOUND, null)); load.value = false }
             override fun onError(err: String?) = run { error.value = err; load.value = false }
         })
     }
@@ -109,7 +108,7 @@ class ForwardFlowViewModel : ViewModel() {
      *  called when user enters pin code and presses verify button
      *  */
     fun matchCode(code: String, verificationId: String = this.verificationId.value!!) {
-        repository.verifyCode(code, verificationId, object : PhoneVerificationContract.Model.CodeVerificationCallBack {
+        repository.verifyCode(code, verificationId, object : AuthGlobalContract.CodeVerificationCallBack {
             override fun onStart() = run { load.value = true }
             override fun onSuccess() = run { load.value = false; isExisting() }
             override fun onFail(error: String?) = run { load.value = false; this@ForwardFlowViewModel.error.value = error }
@@ -146,6 +145,13 @@ class ForwardFlowViewModel : ViewModel() {
 
     private fun addUserToDatabase(miniUser: MiniUser) {
         repository.addUser(miniUser, object : TeacherContract.Model.Listener<Void> {
+            override fun onSuccess(list: Void?) = run { success.postValue(Event(Success(""))) }
+            override fun onError(msg: String?) = run { failure.postValue(Failure(msg)) }
+        })
+    }
+
+    fun toggleIsEducatedSync(uid: String, isEducated: Boolean) {
+        repository.isEducatedSync(uid, object : TeacherContract.Model.Listener<Void> {
             override fun onSuccess(list: Void?) = run { success.postValue(Event(Success(""))) }
             override fun onError(msg: String?) = run { failure.postValue(Failure(msg)) }
         })

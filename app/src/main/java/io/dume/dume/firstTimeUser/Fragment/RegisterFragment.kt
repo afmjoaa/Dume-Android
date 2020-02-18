@@ -11,7 +11,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.bumptech.glide.Glide
@@ -47,7 +47,7 @@ class RegisterFragment : Fragment(), View.OnClickListener, IPickResult {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        activity?.run { viewModel = ViewModelProviders.of(this).get(ForwardFlowViewModel::class.java) }
+        activity?.run { viewModel = ViewModelProvider(this).get(ForwardFlowViewModel::class.java) }
                 ?: throw Throwable("invalid activity")
         parent = activity as ForwardFlowHostActivity
         navController = Navigation.findNavController(view)
@@ -97,7 +97,7 @@ class RegisterFragment : Fragment(), View.OnClickListener, IPickResult {
                 obligated_user = null,
                 obligation = false,
                 imei = DumeUtils.getImei(context),
-                isEducated = false
+                educated = false
         )
     }
 
@@ -109,14 +109,14 @@ class RegisterFragment : Fragment(), View.OnClickListener, IPickResult {
     }
 
     private fun initObservers() {
-        viewModel.scan.observe(this, Observer {
+        viewModel.scan.observe(viewLifecycleOwner, Observer {
             it.getContentIfNotHandled()?.let {
                 register_name.setText(it.name)
                 register_nid.setText(it.nid.toString())
                 register_birth_date.setText(it.birth_date.replace("Date of Birth", ""))
             }
         })
-        viewModel.success.observe(this, Observer {
+        viewModel.success.observe(viewLifecycleOwner, Observer {
             it.getContentIfNotHandled()?.let{
                 parent.hideProgress()
                 if (viewModel.role.value == Role.STUDENT) {
@@ -131,7 +131,7 @@ class RegisterFragment : Fragment(), View.OnClickListener, IPickResult {
                 }
             }
         })
-        viewModel.failure.observe(this, Observer { it?.let { flush(it.error); parent.hideProgress() } })
+        viewModel.failure.observe(viewLifecycleOwner, Observer { it?.let { flush(it.error); parent.hideProgress() } })
 
 
 
@@ -164,6 +164,10 @@ class RegisterFragment : Fragment(), View.OnClickListener, IPickResult {
 
     override fun onClick(v: View?) {
         when (v!!.id) {
+
+            R.id.add_qualification_btn -> {
+                navController.navigate(R.id.action_registerFragment_to_qualificationFragment)
+            }
             R.id.register_location -> {
                 startActivityForResult(Intent(context, GrabingLocationActivity::
                 class.java).setAction("fromPPA"), LOCATION_REQUEST_CODE)

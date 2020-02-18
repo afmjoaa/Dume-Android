@@ -1,8 +1,8 @@
 package io.dume.dume.library.myGeoFIreStore.core
 
+import io.dume.dume.library.myGeoFIreStore.GeoLocation
 import io.dume.dume.library.myGeoFIreStore.util.Base32Utils
 import io.dume.dume.library.myGeoFIreStore.util.Base32Utils.BITS
-import io.dume.dume.library.myGeoFIreStore.GeoLocation
 import java.util.Locale.US
 
 // TODO: 05/05/19 Test if makeGeoHash() work correctly
@@ -29,13 +29,13 @@ class GeoHash {
     }
 
     //Constructor with latitude, longitude and DEFAULT_PRECISION
-    constructor(latitude: Double, longitude: Double): this(latitude, longitude, DEFAULT_PRECISION)
+    constructor(latitude: Double, longitude: Double) : this(latitude, longitude, DEFAULT_PRECISION)
 
     //Constructor with GeoLocation and DEFAULT_PRECISION
-    constructor(location: GeoLocation): this(location.latitude, location.longitude, DEFAULT_PRECISION)
+    constructor(location: GeoLocation) : this(location.latitude, location.longitude, DEFAULT_PRECISION)
 
     //Constructor with GeoLocation and precision
-    constructor(location: GeoLocation, precision: Int): this(location.latitude, location.longitude, precision)
+    constructor(location: GeoLocation, precision: Int) : this(location.latitude, location.longitude, precision)
 
     //Constructor with latitude, longitude and precision
     constructor(latitude: Double, longitude: Double, precision: Int) {
@@ -72,7 +72,7 @@ class GeoHash {
             var value = 0
             //Cycle every bit from 0 to BITS_PER_BASE32_CHAR (4)
             for (j in 0 until Base32Utils.BITS_PER_BASE32_CHAR) {
-                val evenBit = (((i* Base32Utils.BITS_PER_BASE32_CHAR) + j) % 2) == 0
+                val evenBit = (((i * Base32Utils.BITS_PER_BASE32_CHAR) + j) % 2) == 0
                 if (evenBit) {
                     //If it's in an even position we calculate the value based on the longitude
                     val mid = (lon[0] + lon[1]) / 2

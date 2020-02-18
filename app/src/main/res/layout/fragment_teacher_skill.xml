@@ -74,7 +74,7 @@
         app:layout_anchorGravity="bottom|right">
 
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-            android:id="@+id/registerBtn"
+            android:id="@+id/add_qualification_btn"
             style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton.Icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

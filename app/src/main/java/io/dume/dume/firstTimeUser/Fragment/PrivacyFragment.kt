@@ -45,7 +45,7 @@ class PrivacyFragment : Fragment(){
             }
         }
 
-        viewModel.success.observe(this, Observer{
+        viewModel.success.observe(viewLifecycleOwner, Observer{
             it.getContentIfNotHandled()?.let{
                 if (viewModel.role.value == Role.STUDENT) {
                     viewModel.updateStudentCurrentPosition(ForwardFlowStatStudent.PERMISSION)

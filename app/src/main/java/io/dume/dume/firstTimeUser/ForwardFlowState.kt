@@ -6,7 +6,7 @@ enum class ForwardFlowStatTeacher(val flow: String) {
     PRIVACY("privacy"),
     LOGIN("login"),
     NID("nid"),
-    REGISTER("register"),//register to location //DP not needed
+    REGISTER("register"), //register to location //DP not needed
     QUALIFICATION("qualification"),
     ADDSKILL("addSkill"),
     PAYMENT("payment")
@@ -17,7 +17,7 @@ enum class ForwardFlowStatStudent(val flow: String) {
     PERMISSION("permission"),
     PRIVACY("privacy"),
     LOGIN("login"),
-    REGISTER("register"),//location will be added here
+    REGISTER("register"), //location will be added here
     POSTJOB("PostJob")
 }
 

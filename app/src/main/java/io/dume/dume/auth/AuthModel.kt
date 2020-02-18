@@ -9,31 +9,24 @@ import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.*
 import com.google.firebase.auth.PhoneAuthProvider.ForceResendingToken
-import com.google.firebase.firestore.*
+import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.GeoPoint
 import com.google.firebase.internal.api.FirebaseNoSignedInUserException
 import com.google.firebase.storage.FirebaseStorage
-import io.dume.dume.BuildConfig
+import io.dume.dume.firstTimeUser.Role
 import io.dume.dume.library.myGeoFIreStore.GeoFirestore
 import io.dume.dume.poko.MiniUser
 import io.dume.dume.poko.User
-import io.dume.dume.splash.SplashActivity
-import io.dume.dume.splash.SplashContract
 import io.dume.dume.teacher.homepage.TeacherContract
-import io.dume.dume.util.DumeUtils
-import io.dume.dume.util.Google
 import java.util.concurrent.TimeUnit
 import kotlin.random.Random
 
-class AuthModel(internal var activity: Activity, internal var context: Context) : AuthContract.Model, SplashContract.Model, PhoneVerificationContract.Model {
+class AuthModel(internal var activity: Activity, internal var context: Context) {
     private val mAuth: FirebaseAuth
     private val mIntent: Intent?
     private var datastore: DataStore? = null
     private val firestore: FirebaseFirestore
-    private val listenerRegistration: ListenerRegistration? = null
-    private var listenerRegistration1: ListenerRegistration? = null
-    private var listenerRegistration2: ListenerRegistration? = null
-    private var obligation: Boolean? = null
-    private var foreignObligation: Boolean? = null
     private var miniUserRef: CollectionReference
     private var studentUserRef: CollectionReference
     private var mentorUserRef: CollectionReference
@@ -50,11 +43,9 @@ class AuthModel(internal var activity: Activity, internal var context: Context) 
         studentUserRef = firestore.collection("users/students/stu_pro_info")
         mentorUserRef = firestore.collection("users/mentors/mentor_profile")
         geoFirestore = GeoFirestore(mentorUserRef)
-
-        Log.w(TAG, "AuthModel: " + firestore.hashCode())
     }
 
-    override fun sendCode(phoneNumber: String, listener: AuthContract.Model.Callback) {
+    fun sendCode(phoneNumber: String, listener: AuthGlobalContract.CodeResponse) {
         listener.onStart()
         PhoneAuthProvider.getInstance().verifyPhoneNumber(phoneNumber, 60, TimeUnit.SECONDS, activity, object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
             override fun onVerificationCompleted(phoneAuthCredential: PhoneAuthCredential) {
@@ -84,7 +75,7 @@ class AuthModel(internal var activity: Activity, internal var context: Context) 
                 listener.onFail(e.localizedMessage)
             }
 
-            override fun onCodeSent(s: String, forceResendingToken: PhoneAuthProvider.ForceResendingToken) {
+            override fun onCodeSent(s: String, forceResendingToken: ForceResendingToken) {
                 listener.onSuccess(s, forceResendingToken)
 
                 super.onCodeSent(s, forceResendingToken)
@@ -92,110 +83,24 @@ class AuthModel(internal var activity: Activity, internal var context: Context) 
         })
     }
 
-    override fun getIntent(): Intent {
+    fun getIntent(): Intent {
         return mIntent ?: Intent()
     }
 
-    override fun isExistingUser(phoneNumber: String, listener: AuthGlobalContract.OnExistingUserCallback): Boolean {
-        Log.w(TAG, "isExistingUser: ")
+    fun isExistingUser(phoneNumber: String, listener: AuthGlobalContract.OnExistingUserCallback): Boolean {
         listener.onStart()
-        listenerRegistration1 = firestore.collection("mini_users").whereEqualTo("phone_number", phoneNumber).addSnapshotListener { queryDocumentSnapshots, e ->
-            var documents: List<DocumentSnapshot>? = null
-            detachListener()
-            if (queryDocumentSnapshots != null) {
-                documents = queryDocumentSnapshots.documents
-
-                if (documents.isNotEmpty()) {
-                    val miniUser = documents[0].toObject(MiniUser::class.java)
-                    datastore!!.documentSnapshot = documents[0].data
-                    val obligation = documents[0].data!!["obligation"] as Boolean
-                    Google.getInstance().isObligation = obligation
-                    listener.onUserFound(miniUser)
-
-                } else {
-                    //   listener.onNewUserFound();
-                    checkImei(object : TeacherContract.Model.Listener<QuerySnapshot> {
-                        override fun onSuccess(list: QuerySnapshot) = if (list.documents.size > 0) {
-                            /*context.startActivity(new Intent(context, PayActivity.class));*/
-                            var obligation = false
-                            val obligatedUser = HashMap<String, Map<String, Any>>()
-                            for (i in 0 until list.documents.size) {
-                                obligation = list.documents[i].data!!["obligation"] as Boolean
-                                if (obligation) {
-                                    obligatedUser[list.documents[i].id] = list.documents[i].data as Map<String, Any>
-                                }
-                            }
-                            if (obligatedUser.size > 0) {
-                                DataStore.getInstance().isObligation = true
-                                DataStore.getInstance().obligatedUser = obligatedUser
-                            } else
-                                DataStore.getInstance().isObligation = false
-                            listener.onNewUserFound()
-
-                        } else {
-                            listener.onNewUserFound()
-                        }
-
-                        override fun onError(msg: String) {
-                            listener.onError(msg)
-                        }
-                    })
-                }
-            } else {
-                listener.onError("Internal Error. No queryDocumentSpanshot Returned By Google")
+        firestore.collection("mini_users").whereEqualTo("phone_number", phoneNumber).get().apply {
+            addOnSuccessListener {
+                if (!it.documents.isEmpty()) listener.onUserFound(miniUser = it.documents[0].toObject(MiniUser::class.java))
+                else listener.onNewUserFound()
             }
-            if (e != null) {
-                listener.onError(e.localizedMessage)
-            }
+            addOnFailureListener { listener.onError(it.localizedMessage) }
         }
-
         return false
     }
 
-    fun checkImei(imeiFound: TeacherContract.Model.Listener<QuerySnapshot>) {
-        var firstIMEI: String? = null
-        try {
-            firstIMEI = DumeUtils.getImei(context)[0]
-        } catch (error: Exception) {
-            Log.w(TAG, "checkImei: " + error.localizedMessage!!)
-        } finally {
-            if (firstIMEI == null) {
-                firstIMEI = "111111111111111"
-            }
-        }
-        listenerRegistration2 = firestore.collection("mini_users").whereArrayContains("imei", firstIMEI).addSnapshotListener { queryDocumentSnapshots, e ->
-            if (queryDocumentSnapshots != null) {
-                imeiFound.onSuccess(queryDocumentSnapshots)
-                Log.e(TAG, "onEvent: " + queryDocumentSnapshots.documents.toString())
 
-            } else {
-                Log.e(TAG, "onEvent: Balda KIchui Painai")
-                imeiFound.onError(if (e == null) "Baler Erro" else e.localizedMessage)
-            }
-            listenerRegistration2!!.remove()
-        }
-    }
-
-    override fun verifyCode(code: String, listener: PhoneVerificationContract.Model.CodeVerificationCallBack?) {
-        if (listener != null && datastore != null) {
-            listener.onStart()
-            val credential = PhoneAuthProvider.getCredential(datastore!!.verificationId, code)
-            mAuth.signInWithCredential(credential).addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    listener.onSuccess()
-
-                } else {
-                    if (task.exception != null) {
-                        listener.onFail(task.exception!!.localizedMessage)
-                    }
-                }
-            }.addOnFailureListener { e -> listener.onFail(e.localizedMessage) }
-        }
-    }
-
-
-    fun verifyCode(code: String, verificationId: String, listener: PhoneVerificationContract.Model.CodeVerificationCallBack) {
-
+    fun verifyCode(code: String, verificationId: String, listener: AuthGlobalContract.CodeVerificationCallBack) {
         val credential = PhoneAuthProvider.getCredential(verificationId, code)
         mAuth.signInWithCredential(credential).addOnCompleteListener { task ->
             if (task.isSuccessful) {
@@ -210,8 +115,9 @@ class AuthModel(internal var activity: Activity, internal var context: Context) 
 
     }
 
-    override fun onResendCode(listener: AuthContract.Model.Callback) {
-        PhoneAuthProvider.getInstance().verifyPhoneNumber("+88" + datastore!!.phoneNumber, 60, TimeUnit.SECONDS, activity, object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+
+    fun resendCode(phoneNumber: String, resendToken: ForceResendingToken?, listener: AuthGlobalContract.CodeResponse) {
+        PhoneAuthProvider.getInstance().verifyPhoneNumber("+88" + phoneNumber, 60, TimeUnit.SECONDS, activity, object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
             override fun onVerificationCompleted(phoneAuthCredential: PhoneAuthCredential) {
                 mAuth.signInWithCredential(phoneAuthCredential).addOnCompleteListener { task ->
                     if (task.isSuccessful) {
@@ -229,33 +135,7 @@ class AuthModel(internal var activity: Activity, internal var context: Context) 
                 listener.onFail(e.localizedMessage)
             }
 
-            override fun onCodeSent(s: String, forceResendingToken: PhoneAuthProvider.ForceResendingToken) {
-                listener.onSuccess(s, forceResendingToken)
-                super.onCodeSent(s, forceResendingToken)
-            }
-        }, DataStore.resendingToken)
-    }
-
-    fun resendCode(phoneNumber: String, resendToken: ForceResendingToken?, listener: AuthContract.Model.Callback) {
-        PhoneAuthProvider.getInstance().verifyPhoneNumber("+88" + datastore!!.phoneNumber, 60, TimeUnit.SECONDS, activity, object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
-            override fun onVerificationCompleted(phoneAuthCredential: PhoneAuthCredential) {
-                mAuth.signInWithCredential(phoneAuthCredential).addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        listener.onAutoSuccess(task.result)
-                    } else if (task.isCanceled) {
-                        listener.onFail("Authentication Canceled")
-                    } else if (task.isComplete) {
-                        Log.w(TAG, "onComplete: task completed")
-                    }
-
-                }.addOnFailureListener { e -> listener.onFail(e.localizedMessage) }
-            }
-
-            override fun onVerificationFailed(e: FirebaseException) {
-                listener.onFail(e.localizedMessage)
-            }
-
-            override fun onCodeSent(s: String, forceResendingToken: PhoneAuthProvider.ForceResendingToken) {
+            override fun onCodeSent(s: String, forceResendingToken: ForceResendingToken) {
                 listener.onSuccess(s, forceResendingToken)
                 super.onCodeSent(s, forceResendingToken)
             }
@@ -263,135 +143,38 @@ class AuthModel(internal var activity: Activity, internal var context: Context) 
     }
 
 
-    override fun isUserLoggedIn(): Boolean {
+    fun isUserLoggedIn(): Boolean {
         val uid = mAuth.uid
         val foo = uid ?: "Null"
         Log.w(TAG, "isUserLoggedIn: $foo")
         return uid != null
     }
 
-    override fun getUser(): FirebaseUser? {
+    fun getUser(): FirebaseUser? {
         return mAuth.currentUser
     }
 
-    override fun getData(): DataStore? {
+    fun getData(): DataStore? {
         return datastore
     }
 
-    override fun onAccountTypeFound(user: FirebaseUser, listener: AuthGlobalContract.AccountTypeFoundListener) {
+
+    fun onAccountTypeFound(user: FirebaseUser, listener: AuthGlobalContract.AccountTypeFoundListener) {
         listener.onStart()
-        val mini_users = firestore.collection("mini_users").document(user.uid)
-        mini_users.get().addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                // Document found in the offline cache
-                val documentSnapshot = task.result
-                if (documentSnapshot != null) {
-                    foreignObligation = documentSnapshot.getBoolean("foreign_obligation")
-                    obligation = documentSnapshot.getBoolean("obligation")
-                    //TODO solving err
-                    if (foreignObligation == null) {
-                        foreignObligation = false
+        val miniUserRef = firestore.collection("mini_users").document(user.uid)
+        miniUserRef.get().apply {
+            addOnSuccessListener {
+                if (it != null) {
+                    it.toObject(MiniUser::class.java)?.apply {
+                        if (accoount_major == Role.TEACHER.flow) listener.onTeacherFound()
+                        else listener.onStudentFound()
                     }
-                    if (obligation == null) {
-                        obligation = false
-                    }
-                    Google.getInstance().isObligation = obligation!!
-                    detachListener()
-                    val o = documentSnapshot.get("account_major")
-                    if (datastore != null && datastore!!.isBottomNavAccountMajor) {
-                        if (datastore!!.accountManjor != null) {
-                            datastore!!.isBottomNavAccountMajor = false
-                            val newMap = HashMap<String, Any>()
-                            newMap["account_major"] = datastore!!.accountManjor
-                            val mini_users1 = mini_users.update(newMap).addOnFailureListener { e -> Log.e(TAG, "onFailure: Enam " + e.localizedMessage!!) }.addOnCompleteListener { taskOne ->
-
-                                Log.e(TAG, "addOnCompleteListener: Enam ")
-                                var account_major: String? = ""
-                                account_major = datastore!!.accountManjor
-                                assert(account_major != null)
-                                if (!foreignObligation!!) {
-                                    if (account_major == "student") {
-                                        Google.getInstance().accountMajor = DumeUtils.STUDENT
-                                        listener.onStudentFound()
-                                    } else {
-                                        Google.getInstance().accountMajor = DumeUtils.TEACHER
-                                        listener.onTeacherFound()
-
-                                    }
-                                } else {
-                                    listener.onForeignObligation()
-                                }
-                            }
-
-                        } else {
-                            Log.w(TAG, "onAccountTypeFound: UnKnown Error")
-                        }
-
-                    } else {
-                        var account_major = ""
-                        if (o != null) {
-                            account_major = o.toString()
-                        } else {
-                            account_major = DumeUtils.STUDENT
-                        }
-
-                        if (!foreignObligation!!) {
-                            if (account_major == "student") {
-                                Google.getInstance().accountMajor = DumeUtils.STUDENT
-
-                                listener.onStudentFound()
-                            } else {
-                                Google.getInstance().accountMajor = DumeUtils.TEACHER
-                                listener.onTeacherFound()
-                            }
-                        } else {
-                            listener.onForeignObligation()
-                        }
-                    }
-
-                } else {
-                    listener.onFail("Does not found any isExiting")
-                    Log.w(TAG, "onAccountTypeFound: document is not null")
-                }
-            } else {
-                if (task.exception != null)
-                    listener.onFail(task.exception!!.localizedMessage)
+                } else listener.onFail("No user found. please reopen the app.")
             }
+            addOnFailureListener { listener.onFail(it.message.toString()) }
         }
     }
 
-    override fun detachListener() {
-        listenerRegistration?.remove()
-        if (listenerRegistration1 != null) {
-            listenerRegistration1!!.remove()
-        }
-
-    }
-
-
-    override fun hasUpdate(listener: TeacherContract.Model.Listener<Boolean>) {
-        firestore.collection("app").document("dume_utils").get().addOnSuccessListener { documentSnapshot ->
-            Log.w(TAG, "hasUpdate: ")
-            val currentVersion = documentSnapshot.get("version_code") as Number?
-            val updateVersionName = documentSnapshot.get("version_name") as String?
-            val updateDescription = documentSnapshot.get("version_description") as String?
-            val totalStudent = documentSnapshot.get("total_students") as Number?
-            val totalMentors = documentSnapshot.get("total_mentors") as Number?
-            Google.getInstance().totalStudent = totalStudent?.toInt() ?: 0
-            Google.getInstance().totalMentor = totalMentors?.toInt() ?: 0
-            if (currentVersion != null) {
-                if (currentVersion.toInt() > BuildConfig.VERSION_CODE) {
-                   // SplashActivity.updateVersionName = updateVersionName!!
-                    //SplashActivity.updateDescription = updateDescription!!
-                    listener.onSuccess(true)
-                } else {
-                    listener.onSuccess(false)
-                }
-            } else
-                listener.onSuccess(false)
-
-        }.addOnFailureListener { e -> listener.onError(e.localizedMessage) }
-    }
 
     /**
      *  this functions is calling from AuthViewModel to create a new user.it performs upto three operation at once using batch write.
@@ -455,6 +238,10 @@ class AuthModel(internal var activity: Activity, internal var context: Context) 
                         listener.onError(it.message)
                     }
                 }
+    }
+
+    fun isEducatedSync(uid: String, listener: TeacherContract.Model.Listener<Void>) {
+        miniUserRef.document(uid).update("isEducated", true).addOnSuccessListener { listener.onSuccess(null) }.addOnFailureListener { listener.onError(it.localizedMessage) }
     }
 
 

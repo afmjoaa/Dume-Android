@@ -3,9 +3,6 @@ package io.dume.dume.library.myGeoFIreStore;
 
 // FULLY TESTED
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
@@ -18,6 +15,15 @@ import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import io.dume.dume.library.myGeoFIreStore.callbacks.EventListenerBridge;
 import io.dume.dume.library.myGeoFIreStore.callbacks.GeoQueryDataEventListener;
 import io.dume.dume.library.myGeoFIreStore.callbacks.GeoQueryEventListener;
@@ -25,70 +31,30 @@ import io.dume.dume.library.myGeoFIreStore.core.GeoHash;
 import io.dume.dume.library.myGeoFIreStore.core.GeoHashQuery;
 import io.dume.dume.library.myGeoFIreStore.util.GeoUtils;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
-import java.util.ArrayList;
-
 // TODO: 05/05/19 Android Studio show error for javadoc in @throws IllegalArgumentException
+
 /**
  * A GeoQuery object can be used for geo queries in a given circle. The GeoQuery class is thread safe.
  */
 public class GeoQuery {
     private static final int KILOMETER_TO_METER = 1000;
-
-
-    private static class LocationInfo {
-        final GeoPoint location;
-        final boolean inGeoQuery;
-        final GeoHash geoHash;
-        final DocumentSnapshot documentSnapshot;
-
-        LocationInfo(GeoPoint location, boolean inGeoQuery, DocumentSnapshot documentSnapshot) {
-            this.location = location;
-            this.inGeoQuery = inGeoQuery;
-            this.geoHash = new GeoHash(new io.dume.dume.library.myGeoFIreStore.GeoLocation(location.getLatitude(), location.getLongitude()));
-            this.documentSnapshot = documentSnapshot;
-        }
-    }
-
-    private static class GeoHashQueryListener {
-        final ListenerRegistration childAddedListener;
-        final ListenerRegistration childRemovedListener;
-        final ListenerRegistration childChangedListener;
-
-        GeoHashQueryListener(ListenerRegistration childAddedListener,
-                             ListenerRegistration childRemovedListener,
-                             ListenerRegistration childChangedListener){
-            this.childAddedListener = childAddedListener;
-            this.childRemovedListener = childRemovedListener;
-            this.childChangedListener = childChangedListener;
-        }
-    }
-
     private final io.dume.dume.library.myGeoFIreStore.GeoFirestore geoFirestore;
-
     private final Map<String, LocationInfo> locationInfos = new HashMap<>();
-    private Set<GeoHashQuery> queries;
     private final Map<GeoHashQuery, Query> firestoreQueries = new HashMap<>();
     private final Map<GeoHashQuery, GeoHashQueryListener> handles = new HashMap<>();
     private final Set<GeoHashQuery> outstandingQueries = new HashSet<>();
-
     private final Set<GeoQueryDataEventListener> eventListeners = new HashSet<>();
-
+    private Set<GeoHashQuery> queries;
     private GeoPoint center;
     private double radius;
     private String commonQueryString;
-
-
     /**
      * Creates a new GeoQuery object centered at the given location and with the given radius.
+     *
      * @param geoFirestore The GeoFirestore object this GeoQuery uses
-     * @param center The center of this query
-     * @param radius The radius of the query, in kilometers. The maximum radius that is
-     * supported is about 8587km. If a radius bigger than this is passed we'll cap it.
+     * @param center       The center of this query
+     * @param radius       The radius of the query, in kilometers. The maximum radius that is
+     *                     supported is about 8587km. If a radius bigger than this is passed we'll cap it.
      */
     GeoQuery(io.dume.dume.library.myGeoFIreStore.GeoFirestore geoFirestore, GeoPoint center, double radius, String commonQueryString) {
         this.geoFirestore = geoFirestore;
@@ -111,7 +77,7 @@ public class GeoQuery {
 
         boolean isInQuery = this.locationIsInQuery(location);
         if ((isNew || !wasInQuery) && isInQuery) {
-            for (final GeoQueryDataEventListener listener: this.eventListeners) {
+            for (final GeoQueryDataEventListener listener : this.eventListeners) {
                 this.geoFirestore.raiseEvent(new Runnable() {
                     @Override
                     public void run() {
@@ -120,7 +86,7 @@ public class GeoQuery {
                 });
             }
         } else if (!isNew && isInQuery) {
-            for (final GeoQueryDataEventListener listener: this.eventListeners) {
+            for (final GeoQueryDataEventListener listener : this.eventListeners) {
                 this.geoFirestore.raiseEvent(new Runnable() {
                     @Override
                     public void run() {
@@ -133,7 +99,7 @@ public class GeoQuery {
                 });
             }
         } else if (wasInQuery && !isInQuery) {
-            for (final GeoQueryDataEventListener listener: this.eventListeners) {
+            for (final GeoQueryDataEventListener listener : this.eventListeners) {
                 this.geoFirestore.raiseEvent(new Runnable() {
                     @Override
                     public void run() {
@@ -150,7 +116,7 @@ public class GeoQuery {
         if (this.queries == null) {
             return false;
         }
-        for (GeoHashQuery query: this.queries) {
+        for (GeoHashQuery query : this.queries) {
             if (query.containsGeoHash(geoHash)) {
                 return true;
             }
@@ -159,7 +125,7 @@ public class GeoQuery {
     }
 
     private void reset() {
-        for(Map.Entry<GeoHashQuery, Query> entry: this.firestoreQueries.entrySet()) {
+        for (Map.Entry<GeoHashQuery, Query> entry : this.firestoreQueries.entrySet()) {
             GeoHashQueryListener handle = handles.get(entry.getKey());
             handle.childAddedListener.remove();
             handle.childRemovedListener.remove();
@@ -183,7 +149,7 @@ public class GeoQuery {
 
     private void checkAndFireReady() {
         if (canFireReady()) {
-            for (final GeoQueryDataEventListener listener: this.eventListeners) {
+            for (final GeoQueryDataEventListener listener : this.eventListeners) {
                 this.geoFirestore.raiseEvent(new Runnable() {
                     @Override
                     public void run() {
@@ -198,14 +164,14 @@ public class GeoQuery {
         firestore.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull final Task<QuerySnapshot> task) {
-                if (task.isSuccessful()){
+                if (task.isSuccessful()) {
 
                     synchronized (GeoQuery.this) {
                         GeoQuery.this.outstandingQueries.remove(query);
                         GeoQuery.this.checkAndFireReady();
                     }
 
-                }else{
+                } else {
 
                     synchronized (GeoQuery.this) {
                         for (final GeoQueryDataEventListener listener : GeoQuery.this.eventListeners) {
@@ -228,7 +194,7 @@ public class GeoQuery {
         Set<GeoHashQuery> newQueries = GeoHashQuery.Companion.queriesAtLocation(new io.dume.dume.library.myGeoFIreStore.GeoLocation(center.getLatitude(), center.getLongitude()), radius);
         this.queries = newQueries;
 
-        for (GeoHashQuery query: oldQueries) {
+        for (GeoHashQuery query : oldQueries) {
             if (!newQueries.contains(query)) {
                 GeoHashQueryListener handle = handles.get(firestoreQueries.get(query));
                 if (handle != null) {
@@ -240,19 +206,19 @@ public class GeoQuery {
                 outstandingQueries.remove(query);
             }
         }
-        for (final GeoHashQuery query: newQueries) {
+        for (final GeoHashQuery query : newQueries) {
             if (!oldQueries.contains(query)) {
                 outstandingQueries.add(query);
                 CollectionReference collectionReference = this.geoFirestore.getCollectionReference();
                 int strLength = commonQueryString.length();
-                String strFrontCode = commonQueryString.substring(0, strLength-1);
-                String strEndCode = commonQueryString.substring(strLength-1, strLength);
+                String strFrontCode = commonQueryString.substring(0, strLength - 1);
+                String strEndCode = commonQueryString.substring(strLength - 1, strLength);
 
                 String startcode = commonQueryString;
-                char letter=strEndCode.charAt(0);
+                char letter = strEndCode.charAt(0);
                 letter++;
 
-                String endcode= strFrontCode + Character.toString(letter);
+                String endcode = strFrontCode + letter;
 
 
                 Query firestoreQuery = collectionReference.orderBy("g").startAt(query.getStartValue()).endAt(query.getEndValue())
@@ -269,9 +235,9 @@ public class GeoQuery {
                 ListenerRegistration childAddedListener = firestoreQuery.addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                        if (queryDocumentSnapshots != null && e == null){
-                            for(final DocumentChange docChange: queryDocumentSnapshots.getDocumentChanges()){
-                                if (docChange.getType() == DocumentChange.Type.ADDED){
+                        if (queryDocumentSnapshots != null && e == null) {
+                            for (final DocumentChange docChange : queryDocumentSnapshots.getDocumentChanges()) {
+                                if (docChange.getType() == DocumentChange.Type.ADDED) {
                                     childAdded(docChange.getDocument());
                                 }
                             }
@@ -281,9 +247,9 @@ public class GeoQuery {
                 ListenerRegistration childRemovedListener = firestoreQuery.addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                        if (queryDocumentSnapshots != null && e == null){
-                            for(final DocumentChange docChange: queryDocumentSnapshots.getDocumentChanges()){
-                                if (docChange.getType() == DocumentChange.Type.REMOVED){
+                        if (queryDocumentSnapshots != null && e == null) {
+                            for (final DocumentChange docChange : queryDocumentSnapshots.getDocumentChanges()) {
+                                if (docChange.getType() == DocumentChange.Type.REMOVED) {
                                     childRemoved(docChange.getDocument());
                                 }
                             }
@@ -293,9 +259,9 @@ public class GeoQuery {
                 ListenerRegistration childChangedListener = firestoreQuery.addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                        if (queryDocumentSnapshots != null && e == null){
-                            for(final DocumentChange docChange: queryDocumentSnapshots.getDocumentChanges()){
-                                if (docChange.getType() == DocumentChange.Type.MODIFIED){
+                        if (queryDocumentSnapshots != null && e == null) {
+                            for (final DocumentChange docChange : queryDocumentSnapshots.getDocumentChanges()) {
+                                if (docChange.getType() == DocumentChange.Type.MODIFIED) {
                                     childChanged(docChange.getDocument());
                                 }
                             }
@@ -309,7 +275,7 @@ public class GeoQuery {
                 firestoreQueries.put(query, firestoreQuery);
             }
         }
-        for (Map.Entry<String, LocationInfo> info: this.locationInfos.entrySet()) {
+        for (Map.Entry<String, LocationInfo> info : this.locationInfos.entrySet()) {
             LocationInfo oldLocationInfo = info.getValue();
 
             if (oldLocationInfo != null) {
@@ -349,7 +315,7 @@ public class GeoQuery {
             this.geoFirestore.getRefForDocumentID(documentID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    if (task.isSuccessful()){
+                    if (task.isSuccessful()) {
 
                         synchronized (GeoQuery.this) {
                             GeoPoint location = GeoFirestore.Companion.getLocationValue(task.getResult());
@@ -358,7 +324,7 @@ public class GeoQuery {
                                 final LocationInfo locInfo = locationInfos.remove(documentID);
                                 if (locInfo != null && locInfo.inGeoQuery) {
 
-                                    for (final GeoQueryDataEventListener listener: GeoQuery.this.eventListeners) {
+                                    for (final GeoQueryDataEventListener listener : GeoQuery.this.eventListeners) {
                                         GeoQuery.this.geoFirestore.raiseEvent(new Runnable() {
                                             @Override
                                             public void run() {
@@ -380,9 +346,8 @@ public class GeoQuery {
     /**
      * Adds a new GeoQueryEventListener to this GeoQuery.
      *
-     * @throws IllegalArgumentException If this listener was already added
-     *
      * @param listener The listener to add
+     * @throws IllegalArgumentException If this listener was already added
      */
     public synchronized void addGeoQueryEventListener(final GeoQueryEventListener listener) {
         addGeoQueryDataEventListener(new EventListenerBridge(listener));
@@ -391,9 +356,8 @@ public class GeoQuery {
     /**
      * Adds a new GeoQueryEventListener to this GeoQuery.
      *
-     * @throws IllegalArgumentException If this listener was already added
-     *
      * @param listener The listener to add
+     * @throws IllegalArgumentException If this listener was already added
      */
     public synchronized void addGeoQueryDataEventListener(final GeoQueryDataEventListener listener) {
         if (eventListeners.contains(listener)) {
@@ -403,7 +367,7 @@ public class GeoQuery {
         if (this.queries == null) {
             this.setupQueries();
         } else {
-            for (final Map.Entry<String, LocationInfo> entry: this.locationInfos.entrySet()) {
+            for (final Map.Entry<String, LocationInfo> entry : this.locationInfos.entrySet()) {
                 final LocationInfo info = entry.getValue();
 
                 if (info.inGeoQuery) {
@@ -436,7 +400,7 @@ public class GeoQuery {
         Set<GeoHashQuery> newQueries = GeoHashQuery.Companion.queriesAtLocation(new GeoLocation(center.getLatitude(), center.getLongitude()), radius);
         this.queries = newQueries;
 
-        for (GeoHashQuery query: oldQueries) {
+        for (GeoHashQuery query : oldQueries) {
             if (!newQueries.contains(query)) {
                 GeoHashQueryListener handle = handles.get(firestoreQueries.get(query));
                 if (handle != null) {
@@ -450,7 +414,7 @@ public class GeoQuery {
         }
 
         ArrayList<Query> queries = new ArrayList<Query>();
-        for (final GeoHashQuery query: newQueries) {
+        for (final GeoHashQuery query : newQueries) {
             if (!oldQueries.contains(query)) {
                 outstandingQueries.add(query);
                 CollectionReference collectionReference = this.geoFirestore.getCollectionReference();
@@ -464,9 +428,8 @@ public class GeoQuery {
     /**
      * Removes an event listener.
      *
-     * @throws IllegalArgumentException If the listener was removed already or never added
-     *
      * @param listener The listener to remove
+     * @throws IllegalArgumentException If the listener was removed already or never added
      */
     public synchronized void removeGeoQueryEventListener(GeoQueryEventListener listener) {
         removeGeoQueryEventListener(new EventListenerBridge(listener));
@@ -475,9 +438,8 @@ public class GeoQuery {
     /**
      * Removes an event listener.
      *
-     * @throws IllegalArgumentException If the listener was removed already or never added
-     *
      * @param listener The listener to remove
+     * @throws IllegalArgumentException If the listener was removed already or never added
      */
     public synchronized void removeGeoQueryEventListener(final GeoQueryDataEventListener listener) {
         if (!eventListeners.contains(listener)) {
@@ -499,6 +461,7 @@ public class GeoQuery {
 
     /**
      * Returns the current center of this query.
+     *
      * @return The current center
      */
     public synchronized GeoPoint getCenter() {
@@ -507,6 +470,7 @@ public class GeoQuery {
 
     /**
      * Sets the new center of this query and triggers new events if necessary.
+     *
      * @param center The new center
      */
     public synchronized void setCenter(GeoPoint center) {
@@ -518,6 +482,7 @@ public class GeoQuery {
 
     /**
      * Returns the radius of the query, in kilometers.
+     *
      * @return The radius of this query, in kilometers
      */
     public synchronized double getRadius() {
@@ -527,8 +492,9 @@ public class GeoQuery {
 
     /**
      * Sets the radius of this query, in kilometers, and triggers new events if necessary.
+     *
      * @param radius The radius of the query, in kilometers. The maximum radius that is
-     * supported is about 8587km. If a radius bigger than this is passed we'll cap it.
+     *               supported is about 8587km. If a radius bigger than this is passed we'll cap it.
      */
     public synchronized void setRadius(double radius) {
         // convert to meters
@@ -540,9 +506,10 @@ public class GeoQuery {
 
     /**
      * Sets the center and radius (in kilometers) of this query, and triggers new events if necessary.
+     *
      * @param center The new center
      * @param radius The radius of the query, in kilometers. The maximum radius that is
-     * supported is about 8587km. If a radius bigger than this is passed we'll cap it.
+     *               supported is about 8587km. If a radius bigger than this is passed we'll cap it.
      */
     public synchronized void setLocation(GeoPoint center, double radius) {
         this.center = center;
@@ -550,6 +517,34 @@ public class GeoQuery {
         this.radius = GeoUtils.INSTANCE.capRadius(radius) * KILOMETER_TO_METER;
         if (this.hasListeners()) {
             this.setupQueries();
+        }
+    }
+
+    private static class LocationInfo {
+        final GeoPoint location;
+        final boolean inGeoQuery;
+        final GeoHash geoHash;
+        final DocumentSnapshot documentSnapshot;
+
+        LocationInfo(GeoPoint location, boolean inGeoQuery, DocumentSnapshot documentSnapshot) {
+            this.location = location;
+            this.inGeoQuery = inGeoQuery;
+            this.geoHash = new GeoHash(new io.dume.dume.library.myGeoFIreStore.GeoLocation(location.getLatitude(), location.getLongitude()));
+            this.documentSnapshot = documentSnapshot;
+        }
+    }
+
+    private static class GeoHashQueryListener {
+        final ListenerRegistration childAddedListener;
+        final ListenerRegistration childRemovedListener;
+        final ListenerRegistration childChangedListener;
+
+        GeoHashQueryListener(ListenerRegistration childAddedListener,
+                             ListenerRegistration childRemovedListener,
+                             ListenerRegistration childChangedListener) {
+            this.childAddedListener = childAddedListener;
+            this.childRemovedListener = childRemovedListener;
+            this.childChangedListener = childChangedListener;
         }
     }
 }

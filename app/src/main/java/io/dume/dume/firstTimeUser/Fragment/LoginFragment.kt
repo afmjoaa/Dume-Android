@@ -80,12 +80,12 @@ class LoginFragment : Fragment(), View.OnClickListener {
 
     private fun initObservers() {
 
-        viewModel.autoVerified.observe(this, Observer {
+        viewModel.autoVerified.observe(viewLifecycleOwner, Observer {
             it?.getContentIfNotHandled()?.let {
                 if (it) skipNextAction()
             }
         })
-        viewModel.codeSent.observe(this, Observer {
+        viewModel.codeSent.observe(viewLifecycleOwner, Observer {
             it?.getContentIfNotHandled()?.let {
                 if (it) {
                     flush("Code sent to your number")
@@ -93,8 +93,8 @@ class LoginFragment : Fragment(), View.OnClickListener {
                 }
             }
         })
-        viewModel.error.observe(this, Observer { it?.let { flush(it) } })
-        viewModel.load.observe(this, Observer {
+        viewModel.error.observe(viewLifecycleOwner, Observer { it?.let { flush(it) } })
+        viewModel.load.observe(viewLifecycleOwner, Observer {
             if (it) {
                 parent.showProgress()
                 sendCodeBtn.isEnabled = false

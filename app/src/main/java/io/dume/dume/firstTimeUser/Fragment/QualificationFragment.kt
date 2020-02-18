@@ -10,14 +10,15 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import io.dume.dume.R
-import io.dume.dume.firstTimeUser.*
+import io.dume.dume.firstTimeUser.ForwardFlowHostActivity
+import io.dume.dume.firstTimeUser.ForwardFlowStatTeacher
+import io.dume.dume.firstTimeUser.ForwardFlowViewModel
 import kotlinx.android.synthetic.main.fragment_qualification.*
 
-class QualificationFragment : Fragment(), View.OnClickListener {
-    private lateinit var navController: NavController
+class QualificationFragment : Fragment() {
+    private var navController: NavController? = null
     private lateinit var viewModel: ForwardFlowViewModel
     private lateinit var parent: ForwardFlowHostActivity
-
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -26,7 +27,11 @@ class QualificationFragment : Fragment(), View.OnClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        navController = Navigation.findNavController(view)
+        try {
+            navController = Navigation.findNavController(view)
+        } catch (exception: Exception) {
+
+        }
         activity?.run {
             viewModel = ViewModelProviders.of(this).get(ForwardFlowViewModel::class.java)
         } ?: throw Throwable("invalid activity")
@@ -35,24 +40,33 @@ class QualificationFragment : Fragment(), View.OnClickListener {
     }
 
     private fun initialize() {
-        skipBtn.setOnClickListener(this)
+        initializeButton()
         initObservers()
     }
 
+    private fun initializeButton() {
+        skipBtn.setOnClickListener {
+            updateForwardFlowState()
+            navController?.navigate(R.id.action_qualificationFragment_to_addSkillFragment)
+        }
+        add_qualification_btn.setOnClickListener {
+
+        }
+    }
+
     private fun initObservers() {
-        viewModel.success.observe(this, Observer {
+        viewModel.success.observe(viewLifecycleOwner, Observer {
             it.getContentIfNotHandled()?.let{
                 it.let { parent.flush("Success Again Called :  ${it.payload}") }
             }
         })
-        viewModel.failure.observe(this, Observer { it?.let { parent.flush("Failure Again Called") } })
+        viewModel.failure.observe(viewLifecycleOwner, Observer { it?.let { parent.flush("Failure Again Called") } })
     }
 
-    override fun onClick(v: View?) {
-        when (v!!.id) {
-            R.id.skipBtn -> {
-                navController.navigate(R.id.action_qualificationFragment_to_addSkillFragment)
-            }
-        }
+    private fun updateForwardFlowState() {
+        viewModel.updateTeacherCurrentPosition(ForwardFlowStatTeacher.ADDSKILL)
     }
+
+
+
 }

@@ -4,7 +4,7 @@ import io.dume.dume.library.myGeoFIreStore.GeoLocation
 import io.dume.dume.library.myGeoFIreStore.util.Base32Utils
 import io.dume.dume.library.myGeoFIreStore.util.Constants
 import io.dume.dume.library.myGeoFIreStore.util.GeoUtils
-import java.util.HashSet
+import java.util.*
 
 // FULLY TESTED
 

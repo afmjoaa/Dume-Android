@@ -6,10 +6,10 @@ package io.dume.dume.library.myGeoFIreStore
  * A wrapper class for location coordinates.
  */
 class GeoLocation(
-    // The latitude of this location in the range of [-90, 90]
-    val latitude: Double,
-    // The longitude of this location in the range of [-180, 180]
-    val longitude: Double) {
+        // The latitude of this location in the range of [-90, 90]
+        val latitude: Double,
+        // The longitude of this location in the range of [-180, 180]
+        val longitude: Double) {
 
     companion object {
         /**
@@ -19,10 +19,10 @@ class GeoLocation(
          * @return True if these are valid geo coordinates
          */
         fun coordinatesValid(latitude: Double, longitude: Double) =
-            latitude >= -90 &&
-                    latitude <= 90 &&
-                    longitude >= -180 &&
-                    longitude <= 180
+                latitude >= -90 &&
+                        latitude <= 90 &&
+                        longitude >= -180 &&
+                        longitude <= 180
     }
 
     /**
@@ -52,7 +52,7 @@ class GeoLocation(
         var temp = this.latitude.toLong()
         result = (temp xor (temp ushr 32)).toInt()
         temp = this.longitude.toLong()
-        result = 31*result+(temp xor (temp ushr 32)).toInt()
+        result = 31 * result + (temp xor (temp ushr 32)).toInt()
         return result
     }
 }
