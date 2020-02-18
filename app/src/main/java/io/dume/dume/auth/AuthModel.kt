@@ -13,8 +13,6 @@ import com.google.firebase.firestore.*
 import com.google.firebase.internal.api.FirebaseNoSignedInUserException
 import com.google.firebase.storage.FirebaseStorage
 import io.dume.dume.BuildConfig
-import io.dume.dume.auth.auth.AuthContract
-import io.dume.dume.auth.code_verification.PhoneVerificationContract
 import io.dume.dume.library.myGeoFIreStore.GeoFirestore
 import io.dume.dume.poko.MiniUser
 import io.dume.dume.poko.User
@@ -42,7 +40,6 @@ class AuthModel(internal var activity: Activity, internal var context: Context) 
     private var geoFirestore: GeoFirestore
     private var storage: FirebaseStorage
 
-
     init {
         mAuth = FirebaseAuth.getInstance()
         mIntent = this.activity.intent
@@ -56,7 +53,6 @@ class AuthModel(internal var activity: Activity, internal var context: Context) 
 
         Log.w(TAG, "AuthModel: " + firestore.hashCode())
     }
-
 
     override fun sendCode(phoneNumber: String, listener: AuthContract.Model.Callback) {
         listener.onStart()
@@ -100,7 +96,7 @@ class AuthModel(internal var activity: Activity, internal var context: Context) 
         return mIntent ?: Intent()
     }
 
-    override fun isExistingUser(phoneNumber: String?, listener: AuthGlobalContract.OnExistingUserCallback): Boolean {
+    override fun isExistingUser(phoneNumber: String, listener: AuthGlobalContract.OnExistingUserCallback): Boolean {
         Log.w(TAG, "isExistingUser: ")
         listener.onStart()
         listenerRegistration1 = firestore.collection("mini_users").whereEqualTo("phone_number", phoneNumber).addSnapshotListener { queryDocumentSnapshots, e ->
@@ -109,11 +105,12 @@ class AuthModel(internal var activity: Activity, internal var context: Context) 
             if (queryDocumentSnapshots != null) {
                 documents = queryDocumentSnapshots.documents
 
-                if (documents.size >= 1) {
+                if (documents.isNotEmpty()) {
+                    val miniUser = documents[0].toObject(MiniUser::class.java)
                     datastore!!.documentSnapshot = documents[0].data
                     val obligation = documents[0].data!!["obligation"] as Boolean
                     Google.getInstance().isObligation = obligation
-                    listener.onUserFound()
+                    listener.onUserFound(miniUser)
 
                 } else {
                     //   listener.onNewUserFound();
@@ -140,10 +137,9 @@ class AuthModel(internal var activity: Activity, internal var context: Context) 
                         }
 
                         override fun onError(msg: String) {
-
+                            listener.onError(msg)
                         }
                     })
-
                 }
             } else {
                 listener.onError("Internal Error. No queryDocumentSpanshot Returned By Google")
@@ -385,8 +381,8 @@ class AuthModel(internal var activity: Activity, internal var context: Context) 
             Google.getInstance().totalMentor = totalMentors?.toInt() ?: 0
             if (currentVersion != null) {
                 if (currentVersion.toInt() > BuildConfig.VERSION_CODE) {
-                    SplashActivity.updateVersionName = updateVersionName
-                    SplashActivity.updateDescription = updateDescription
+                    SplashActivity.updateVersionName = updateVersionName!!
+                    SplashActivity.updateDescription = updateDescription!!
                     listener.onSuccess(true)
                 } else {
                     listener.onSuccess(false)

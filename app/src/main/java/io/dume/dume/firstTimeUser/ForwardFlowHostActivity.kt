@@ -60,34 +60,30 @@ class ForwardFlowHostActivity : BaseAppCompatActivity(), View.OnClickListener {
             viewModel.phoneNumber.value = it.phoneNumber?.substring(3, 14)
             Log.e("debug", "Phone Number" + it.phoneNumber?.substring(3, 14))
         }
-        if (isFirstTimeUser) {
-            if (role.equals(Role.STUDENT.flow)) {
-                viewModel.role.value = Role.STUDENT
-                when (studentCurrentPosition) {
-                    ForwardFlowStatStudent.ROLE.flow -> navController.navigate(R.id.roleChooser)
-                    ForwardFlowStatStudent.PRIVACY.flow -> navController.navigate(R.id.privacyFragment)
-                    ForwardFlowStatStudent.PERMISSION.flow -> navController.navigate(R.id.permissionFragment)
-                    ForwardFlowStatStudent.LOGIN.flow -> navController.navigate(R.id.loginFragment)
-                    ForwardFlowStatStudent.REGISTER.flow -> navController.navigate(R.id.registerFragment)
-                }
-            } else if (role.equals(Role.TEACHER.flow)) {
-                viewModel.role.value = Role.TEACHER
-                when (teacherCurrentPosition) {
-                    ForwardFlowStatTeacher.ROLE.flow -> navController.navigate(R.id.roleChooser)
-                    ForwardFlowStatTeacher.PRIVACY.flow -> navController.navigate(R.id.privacyFragment)
-                    ForwardFlowStatTeacher.PERMISSION.flow -> navController.navigate(R.id.permissionFragment)
-                    ForwardFlowStatTeacher.LOGIN.flow -> navController.navigate(R.id.loginFragment)
-                    ForwardFlowStatTeacher.NID.flow -> navController.navigate(R.id.nidFragment)
-                    ForwardFlowStatTeacher.REGISTER.flow -> navController.navigate(R.id.registerFragment)
-                    ForwardFlowStatTeacher.QUALIFICATION.flow -> navController.navigate(R.id.qualificationFragment)
-                    ForwardFlowStatTeacher.ADDSKILL.flow -> navController.navigate(R.id.addSkillFragment)
-                    ForwardFlowStatTeacher.PAYMENT.flow -> navController.navigate(R.id.paymentFragment)
+        if (role.equals(Role.STUDENT.flow)) {
+            viewModel.role.value = Role.STUDENT
+            when (studentCurrentPosition) {
+                ForwardFlowStatStudent.ROLE.flow -> navController.navigate(R.id.roleChooser)
+                ForwardFlowStatStudent.PRIVACY.flow -> navController.navigate(R.id.privacyFragment)
+                ForwardFlowStatStudent.PERMISSION.flow -> navController.navigate(R.id.permissionFragment)
+                ForwardFlowStatStudent.LOGIN.flow -> navController.navigate(R.id.loginFragment)
+                ForwardFlowStatStudent.REGISTER.flow -> navController.navigate(R.id.registerFragment)
+            }
+        } else if (role.equals(Role.TEACHER.flow)) {
+            viewModel.role.value = Role.TEACHER
+            when (teacherCurrentPosition) {
+                ForwardFlowStatTeacher.ROLE.flow -> navController.navigate(R.id.roleChooser)
+                ForwardFlowStatTeacher.PRIVACY.flow -> navController.navigate(R.id.privacyFragment)
+                ForwardFlowStatTeacher.PERMISSION.flow -> navController.navigate(R.id.permissionFragment)
+                ForwardFlowStatTeacher.LOGIN.flow -> navController.navigate(R.id.loginFragment)
+                ForwardFlowStatTeacher.NID.flow -> navController.navigate(R.id.nidFragment)
+                ForwardFlowStatTeacher.REGISTER.flow -> navController.navigate(R.id.registerFragment)
+                ForwardFlowStatTeacher.QUALIFICATION.flow -> navController.navigate(R.id.qualificationFragment)
+                ForwardFlowStatTeacher.ADDSKILL.flow -> navController.navigate(R.id.addSkillFragment)
+                ForwardFlowStatTeacher.PAYMENT.flow -> navController.navigate(R.id.paymentFragment)
 
-                }
             }
 
-        } else {
-            if (role == Role.STUDENT.flow) startActivity(Intent(this, StudentDashBoard::class.java)) else startActivity(Intent(this, TeacherDashboard::class.java))
         }
 
 

@@ -45,7 +45,7 @@ class TeacherJobBoardFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener
         jobCardRv.layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
         jobCardRv.addItemDecoration(CirclePagerIndicatorDecoration())
         jobCardRv.adapter = FeatureCardSlider()
-        
+
 
         jobBoardViewModel!!.__getAllJobs()
 

@@ -51,6 +51,6 @@ class RoleChooserFragment : Fragment(), View.OnClickListener {
                 navController.navigate(R.id.action_roleChooser_to_privacyFragment)
             }
         }
-        viewModel.updateFirstTimeUser(true)
+        //viewModel.updateFirstTimeUser(true)
     }
 }

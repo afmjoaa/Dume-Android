@@ -162,6 +162,12 @@
             app:popExitAnim="@anim/slide_out_right"
             app:popUpTo="@id/roleChooser"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_verificationFragment_to_postJobFragment"
+            app:destination="@id/postJobFragment" />
+        <action
+            android:id="@+id/action_verificationFragment_to_qualificationFragment"
+            app:destination="@id/qualificationFragment" />
     </fragment>
 
 </navigation>

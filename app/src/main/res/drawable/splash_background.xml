@@ -2,11 +2,11 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item android:drawable="@color/colorDeepIcon" />
-
+<!--colorDeepIcon-->
     <item>
         <bitmap
             android:antialias="true"
             android:gravity="center"
-            android:src="@drawable/icon_launcher" />
+            android:src="@drawable/splash_dume" />
     </item>
 </layer-list>

@@ -10,8 +10,8 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.PhoneAuthProvider
 import io.dume.dume.auth.AuthGlobalContract
 import io.dume.dume.auth.AuthModel
-import io.dume.dume.auth.auth.AuthContract
-import io.dume.dume.auth.code_verification.PhoneVerificationContract
+import io.dume.dume.auth.AuthContract
+import io.dume.dume.auth.PhoneVerificationContract
 import io.dume.dume.poko.MiniUser
 import io.dume.dume.poko.sub_pojo.Failure
 import io.dume.dume.poko.sub_pojo.Success
@@ -26,7 +26,7 @@ class ForwardFlowViewModel : ViewModel() {
     val firstTimeUser = MutableLiveData<Boolean>()
     val studentCurrentPosition = MutableLiveData<ForwardFlowStatStudent>()
     val teacherCurrentPosition = MutableLiveData<ForwardFlowStatTeacher>()
-    val isExiting = MutableLiveData<Event<UserState>>()
+    val isExiting = MutableLiveData<Event<UserResponse>>()
     val resendToken = MutableLiveData<PhoneAuthProvider.ForceResendingToken>()
     val verificationId = MutableLiveData<String>()
     val avatar = MutableLiveData<Uri>()
@@ -95,8 +95,11 @@ class ForwardFlowViewModel : ViewModel() {
     private fun isExisting(phoneNumber: String = this.phoneNumber.value!!) {
         repository.isExistingUser(phoneNumber, object : AuthGlobalContract.OnExistingUserCallback {
             override fun onStart() = run { load.value = true }
-            override fun onUserFound() = run { isExiting.value = Event(UserState.USERFOUND); load.value = false }
-            override fun onNewUserFound() = run { isExiting.value = Event(UserState.NEWUSERFOUND); load.value = false }
+            override fun onUserFound(miniUser : MiniUser?) = run {
+                isExiting.value = Event(UserResponse(UserState.USERFOUND, miniUser))
+                load.value = false
+            }
+            override fun onNewUserFound() = run { isExiting.value = Event(UserResponse(UserState.NEWUSERFOUND,null)); load.value = false }
             override fun onError(err: String?) = run { error.value = err; load.value = false }
         })
     }
@@ -115,7 +118,7 @@ class ForwardFlowViewModel : ViewModel() {
     /**
      * isLoggedIn returns true or false based on user loged status
      *  */
-    fun isLoggedIn(): Boolean = repository.isUserLoggedIn
+    fun isLoggedIn(): Boolean = repository.isUserLoggedIn()
 
     fun getUserUID(): String {
         return Objects.requireNonNull<FirebaseUser>(FirebaseAuth.getInstance().currentUser).getUid()

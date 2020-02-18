@@ -3,7 +3,6 @@ package io.dume.dume.auth;
 import androidx.annotation.Keep;
 
 import com.google.firebase.auth.PhoneAuthProvider;
-import com.google.firebase.ml.vision.text.FirebaseVisionText;
 
 import java.io.Serializable;
 import java.util.Map;
@@ -16,7 +15,7 @@ public class DataStore implements Serializable {
     public static int STATION = 1;
     private String firstName = null;
     private String lastName = null;
-    private String accountManjor = "student";
+    public String accountManjor = "student";
     private String flowState = "Role";
 
     private boolean isBottomNavAccountMajor = false;

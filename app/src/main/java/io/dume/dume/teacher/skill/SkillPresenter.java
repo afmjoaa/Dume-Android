@@ -118,7 +118,7 @@ public class SkillPresenter implements SkillContract.Presenter {
             case R.id.view_musk:
                 view.performMultiFabClick();
                 break;
-            case R.id.multiple_actions:
+            case R.id.jobMultiple:
                 break;
             /*case R.id.fabAdd:
                 DocumentReference mini_users = fireStore.collection("mini_users").document(Objects.requireNonNull(mAuth.getCurrentUser()).getUid());
