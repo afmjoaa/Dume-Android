@@ -16,7 +16,7 @@ package io.dume.dume.library.myGeoFIreStore.extension
  *          -list [[1,2,null],[3,4,5]]
  *          -list2 [1,2,3,4,5]
  */
-inline fun<T, R, C:MutableCollection<in R>> Iterable<T>.mapNotNullManyTo(destination: C, transform: (T)->Collection<R?>?): C {
+inline fun <T, R, C : MutableCollection<in R>> Iterable<T>.mapNotNullManyTo(destination: C, transform: (T) -> Collection<R?>?): C {
     forEach { element ->
         transform(element)?.let { collection ->
             val c = arrayListOf<R>()

@@ -5,5 +5,5 @@ package io.dume.dume.library.contract;
  */
 
 public interface AnimationCallback {
-  void onFinish();
+    void onFinish();
 }

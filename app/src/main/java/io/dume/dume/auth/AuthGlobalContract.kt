@@ -1,15 +1,27 @@
 package io.dume.dume.auth
 
+import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.PhoneAuthProvider
 import io.dume.dume.poko.MiniUser
 
 interface AuthGlobalContract {
+
+    interface CodeVerificationCallBack {
+        fun onStart()
+        fun onSuccess()
+        fun onFail(error: String?)
+    }
+    interface CodeResponse {
+        fun onStart()
+        fun onFail(error: String?)
+        fun onSuccess(id: String?, forceResendingToken: PhoneAuthProvider.ForceResendingToken?)
+        fun onAutoSuccess(authResult: AuthResult?)
+    }
+
     interface Model {
-        fun isUserLoggedIn(): Boolean
         fun getUser(): FirebaseUser?
         fun getData(): DataStore?
-        fun onAccountTypeFound(user: FirebaseUser, listener: AccountTypeFoundListener)
-        fun detachListener()
     }
 
     interface View {

@@ -5,7 +5,7 @@ import android.os.Looper
 
 // FULLY TESTED
 
-class AndroidEventRaiser: EventRaiser {
+class AndroidEventRaiser : EventRaiser {
     private val mainThreadHandler = Handler(Looper.getMainLooper())
 
     override fun raiseEvent(r: Runnable) {

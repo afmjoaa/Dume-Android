@@ -1,6 +1,5 @@
 package io.dume.dume.poko
 
-import bolts.Bolts
 import com.google.firebase.firestore.GeoPoint
 
 data class MiniUser(var name: String?,
@@ -14,8 +13,8 @@ data class MiniUser(var name: String?,
                     var last_name: String?,
                     var imei: List<String>?,
                     var obligated_user: Any?,
-                    var obligation: Boolean = false,
+                    var obligation: Boolean?,
                     var phone_number: String,
-                    var isEducated: Boolean = false) {
-    constructor() : this(null, null, null, null, null, null, "student", null, null, null, null, false, "", false)
+                    var educated: Boolean?) {
+    constructor() : this(null, null, null, null, null, null, "student", null, null, null, null, null, "", null)
 }

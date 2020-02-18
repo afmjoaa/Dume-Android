@@ -97,7 +97,7 @@ class RegisterFragment : Fragment(), View.OnClickListener, IPickResult {
                 obligated_user = null,
                 obligation = false,
                 imei = DumeUtils.getImei(context),
-                isEducated = false
+                educated = false
         )
     }
 
@@ -164,7 +164,7 @@ class RegisterFragment : Fragment(), View.OnClickListener, IPickResult {
 
     override fun onClick(v: View?) {
         when (v!!.id) {
-            R.id.registerBtn -> {
+            R.id.add_qualification_btn -> {
                 navController.navigate(R.id.action_registerFragment_to_qualificationFragment)
             }
             R.id.register_location -> {

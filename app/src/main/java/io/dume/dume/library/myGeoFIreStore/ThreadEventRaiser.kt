@@ -4,7 +4,7 @@ import java.util.concurrent.Executors
 
 // FULLY TESTED
 
-class ThreadEventRaiser: EventRaiser {
+class ThreadEventRaiser : EventRaiser {
 
     private val executorService = Executors.newSingleThreadExecutor()
 

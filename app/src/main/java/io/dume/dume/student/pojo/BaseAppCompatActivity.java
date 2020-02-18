@@ -3,7 +3,6 @@ package io.dume.dume.student.pojo;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.drawable.Animatable;
@@ -39,12 +38,11 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import io.dume.dume.util.Google;
 import io.dume.dume.R;
 import io.dume.dume.broadcastReceiver.MyConnectivityHandler;
 import io.dume.dume.broadcastReceiver.NetworkChangeReceiver;
 import io.dume.dume.customView.HorizontalLoadView;
-import io.dume.dume.splash.SplashActivity;
+import io.dume.dume.util.Google;
 import io.dume.dume.util.MyApplication;
 import io.dume.dume.util.NetworkUtil;
 
@@ -128,13 +126,13 @@ public class BaseAppCompatActivity extends AppCompatActivity implements MyConnec
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         String accountMajor = Google.getInstance().getAccountMajor();
-        if (FirebaseAuth.getInstance().getCurrentUser() != null && accountMajor == null) {
+   /*     if (FirebaseAuth.getInstance().getCurrentUser() != null && accountMajor == null) {
             Intent returnIntent = new Intent(this, SplashActivity.class);
             returnIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(returnIntent);
             //finish();
             System.exit(0);
-        }
+        }*/
         // Create an IntentFilter instance.
         IntentFilter intentFilter = new IntentFilter();
         // Add network connectivity change action.

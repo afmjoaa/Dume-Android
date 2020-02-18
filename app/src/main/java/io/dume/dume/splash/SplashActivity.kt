@@ -12,6 +12,8 @@ import androidx.appcompat.app.AppCompatActivity
 import io.dume.dume.auth.AuthModel
 import io.dume.dume.firstTimeUser.RoleChooserActivity
 import io.dume.dume.foreignObligation.PayActivity
+import io.dume.dume.student.DashBoard.StudentDashBoard
+import io.dume.dume.teacher.DashBoard.TeacherDashboard
 import io.dume.dume.teacher.homepage.TeacherContract
 import io.dume.dume.util.DumeUtils
 
@@ -25,7 +27,6 @@ class SplashActivity : AppCompatActivity(), SplashContract.View {
         presenter = SplashPresenter(this, AuthModel(this, this))
         prefs = getSharedPreferences(MY_PREFS_NAME, Context.MODE_PRIVATE)
         presenter.enqueue(this)
-        presenter.init(this)
 
     }
 
@@ -81,12 +82,12 @@ class SplashActivity : AppCompatActivity(), SplashContract.View {
     }
 
     override fun gotoTeacherActivity() {
-        gotoLoginActivity()
+        startActivity(Intent(this, TeacherDashboard::class.java))
         finish()
     }
 
     override fun gotoStudentActivity() {
-        gotoLoginActivity()
+        startActivity(Intent(this, StudentDashBoard::class.java))
         finish()
     }
 

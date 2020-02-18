@@ -6,6 +6,7 @@ package io.dume.dume.library.contract;
  */
 
 public interface Animator {
-  void play();
-  void stop(AnimationCallback callback);
+    void play();
+
+    void stop(AnimationCallback callback);
 }

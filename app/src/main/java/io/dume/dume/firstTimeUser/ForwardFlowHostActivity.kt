@@ -1,7 +1,6 @@
 package io.dume.dume.firstTimeUser
 
 
-import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
@@ -13,9 +12,7 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.google.firebase.auth.FirebaseAuth
 import io.dume.dume.R
-import io.dume.dume.student.DashBoard.StudentDashBoard
 import io.dume.dume.student.pojo.BaseAppCompatActivity
-import io.dume.dume.teacher.DashBoard.TeacherDashboard
 import io.dume.dume.util.DumeUtils.configAppToolBarTitle
 import io.dume.dume.util.DumeUtils.configureAppbar
 import io.dume.dume.util.StateManager
@@ -113,59 +110,59 @@ class ForwardFlowHostActivity : BaseAppCompatActivity(), View.OnClickListener {
     }
 
     private fun initListener() {
-        registerBtn.setOnClickListener(this)
+        add_qualification_btn.setOnClickListener(this)
         navController.addOnDestinationChangedListener { controller, destination, arguments ->
 
             when (destination.id) {
                 R.id.roleChooser -> {
-                    registerBtn.hide()
+                    add_qualification_btn.hide()
                     configAppToolBarTitle(this, "")
                     hideActionBar()
                 }
                 R.id.permissionFragment -> {
-                    registerBtn.hide()
+                    add_qualification_btn.hide()
                     configAppToolBarTitle(this, "Provide Permission")
                     showActionBar()
                 }
                 R.id.privacyFragment -> {
-                    registerBtn.hide()
+                    add_qualification_btn.hide()
                     showActionBar()
                     configAppToolBarTitle(this, "Teacher Guide")
 
                 }
                 R.id.loginFragment -> {
-                    registerBtn.hide()
+                    add_qualification_btn.hide()
                     showActionBar()
                     configAppToolBarTitle(this, "Login")
 
                 }
                 R.id.nidFragment -> {
-                    registerBtn.hide()
+                    add_qualification_btn.hide()
                     showActionBar()
                     configAppToolBarTitle(this, "NID Verification")
                 }
                 R.id.registerFragment -> {
-                    registerBtn.show()
+                    add_qualification_btn.show()
                     showActionBar()
                     configAppToolBarTitle(this, "Provide Info")
                 }
                 R.id.qualificationFragment -> {
-                    registerBtn.hide()
+                    add_qualification_btn.hide()
                     showActionBar()
                     configAppToolBarTitle(this, "Add Qualification")
                 }
                 R.id.addSkillFragment -> {
-                    registerBtn.hide()
+                    add_qualification_btn.hide()
                     showActionBar()
                     configAppToolBarTitle(this, "Add Skill")
                 }
                 R.id.postJobFragment -> {
-                    registerBtn.hide()
+                    add_qualification_btn.hide()
                     showActionBar()
                     configAppToolBarTitle(this, "Post Job")
                 }
                 R.id.paymentFragment -> {
-                    registerBtn.hide()
+                    add_qualification_btn.hide()
                     showActionBar()
                     configAppToolBarTitle(this, "Activation Fee")
                 }
@@ -187,7 +184,7 @@ class ForwardFlowHostActivity : BaseAppCompatActivity(), View.OnClickListener {
 
     override fun onClick(v: View?) {
         when (v!!.id) {
-            R.id.registerBtn -> {
+            R.id.add_qualification_btn -> {
                 navController.navigate(R.id.action_registerFragment_to_qualificationFragment)
             }
 
@@ -195,7 +192,7 @@ class ForwardFlowHostActivity : BaseAppCompatActivity(), View.OnClickListener {
     }
 
     fun onRegisterButtonClick(listener: (view: View) -> Unit) {
-        registerBtn.setOnClickListener {
+        add_qualification_btn.setOnClickListener {
             listener(it)
         }
     }
