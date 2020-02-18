@@ -381,8 +381,8 @@ class AuthModel(internal var activity: Activity, internal var context: Context) 
             Google.getInstance().totalMentor = totalMentors?.toInt() ?: 0
             if (currentVersion != null) {
                 if (currentVersion.toInt() > BuildConfig.VERSION_CODE) {
-                    SplashActivity.updateVersionName = updateVersionName!!
-                    SplashActivity.updateDescription = updateDescription!!
+                   // SplashActivity.updateVersionName = updateVersionName!!
+                    //SplashActivity.updateDescription = updateDescription!!
                     listener.onSuccess(true)
                 } else {
                     listener.onSuccess(false)

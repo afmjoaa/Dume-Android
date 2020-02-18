@@ -8,25 +8,31 @@ import android.util.Log
 import android.view.WindowManager
 import com.google.firebase.auth.FirebaseAuth
 import io.dume.dume.auth.AuthGlobalContract.AccountTypeFoundListener
+import io.dume.dume.firstTimeUser.Role
+import io.dume.dume.util.DumeUtils
+import io.dume.dume.util.Google
 import io.dume.dume.util.StateManager
 
 class SplashPresenter(var view: SplashContract.View, var model: SplashContract.Model) : SplashContract.Presenter {
+
     override fun init(myActivity: Activity) {
-        val window = myActivity.window
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-            window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-            window.statusBarColor = Color.TRANSPARENT
-        }
+
     }
 
     override fun enqueue(context: Context) {
-        //  val isFirstTimeUser: Boolean = StateManager.getInstance(context).sharedPreferences().all[StateManager.FIRST_TIME_USER] as? Boolean ?: true
+        val isFirstTimeUser: Boolean = StateManager.getInstance(context).sharedPreferences().all[StateManager.FIRST_TIME_USER] as? Boolean
+                ?: true
+        val role: String = StateManager.getInstance(context).sharedPreferences().all[StateManager.ROLE] as? String
+                ?: ""
+        if (role == Role.TEACHER.flow) {
+            Google.getInstance().accountMajor = DumeUtils.TEACHER
+        } else {
+            Google.getInstance().accountMajor = DumeUtils.STUDENT
+        }
 
-//        if (true) {
-//            view.gotoForwardFlowActivity()
-//        } else {
-            val user = FirebaseAuth.getInstance().currentUser
+        if (isFirstTimeUser) {
+            view.gotoForwardFlowActivity()
+        } else {
             if (model.isUserLoggedIn()) {
                 model.onAccountTypeFound(model.getUser()!!, object : AccountTypeFoundListener {
                     override fun onStart() {
@@ -59,7 +65,7 @@ class SplashPresenter(var view: SplashContract.View, var model: SplashContract.M
                 view.gotoLoginActivity()
                 Log.w(TAG, "enqueue: login")
             }
-        //}
+        }
     }
 
     companion object {

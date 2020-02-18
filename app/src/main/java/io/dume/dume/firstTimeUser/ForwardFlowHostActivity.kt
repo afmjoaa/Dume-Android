@@ -68,6 +68,7 @@ class ForwardFlowHostActivity : BaseAppCompatActivity(), View.OnClickListener {
                 ForwardFlowStatStudent.PERMISSION.flow -> navController.navigate(R.id.permissionFragment)
                 ForwardFlowStatStudent.LOGIN.flow -> navController.navigate(R.id.loginFragment)
                 ForwardFlowStatStudent.REGISTER.flow -> navController.navigate(R.id.registerFragment)
+                ForwardFlowStatStudent.POSTJOB.flow -> navController.navigate(R.id.postJobFragment)
             }
         } else if (role.equals(Role.TEACHER.flow)) {
             viewModel.role.value = Role.TEACHER

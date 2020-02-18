@@ -30,7 +30,7 @@
                     android:id="@+id/jobRecycleView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:visibility="gone" />
+                    android:visibility="visible" />
 
                 <LinearLayout
                     android:id="@+id/no_data_block"
@@ -38,7 +38,7 @@
                     android:layout_height="440dp"
                     android:gravity="center"
                     android:orientation="vertical"
-                    android:visibility="visible">
+                    android:visibility="gone">
 
                     <carbon.widget.ImageView
                         android:layout_width="wrap_content"
@@ -92,6 +92,7 @@
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:layout_marginBottom="12dp"
+            android:visibility="visible"
             android:contentDescription="@string/post_job"
             android:text="Post Job"
             android:textAllCaps="false"
@@ -103,12 +104,13 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:layout_marginEnd="6dp"
-            android:layout_marginRight="6dp"
+            android:layout_marginEnd="7dp"
+            android:layout_marginRight="7dp"
             android:visibility="invisible"
             app:elevation="0dp"
-            fab:fab_addButtonColorNormal="@color/mColorPrimary"
-            fab:fab_addButtonColorPressed="@color/colorDarkAzure"
+            android:stateListAnimator="@animator/appbar_no_elevation"
+            fab:fab_addButtonColorNormal="@color/star_rating_color"
+            fab:fab_addButtonColorPressed="@color/star_rating_color"
             fab:fab_addButtonPlusIconColor="@color/white"
             fab:fab_labelStyle="@style/menu_labels_style">
 
@@ -118,7 +120,7 @@
                 android:layout_height="wrap_content"
                 android:onClick="onClick"
                 android:scaleType="fitCenter"
-                android:src="@drawable/dume_instant_grayscale_image"
+                android:src="@drawable/dume_instant_image"
                 app:fab_colorDisabled="@color/recordsBgColor"
                 app:fab_size="mini"
                 fab:fab_colorNormal="@color/colorBlack"

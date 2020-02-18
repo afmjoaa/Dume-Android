@@ -851,5 +851,5 @@ provided.Tap salary for details.  </string>
     <string name="cancel">Cancel</string>
     <string name="yes_skip">Yes, Skip</string>
     <string name="skip_nid">Skip NID verification ?</string>
-    <string name="sent_code_msg">Enter the 6 digit verification code sent to you at <br/><b>%s</b></string>
+    <string name="sent_code_msg">Enter the 6 digit verification code sent to you at <br /><b>%s</b></string>
 </resources>

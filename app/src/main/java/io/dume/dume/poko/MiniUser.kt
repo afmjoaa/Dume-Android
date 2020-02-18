@@ -16,7 +16,6 @@ data class MiniUser(var name: String?,
                     var obligated_user: Any?,
                     var obligation: Boolean = false,
                     var phone_number: String,
-                    var isEducated: Boolean = false
-
-
-)
+                    var isEducated: Boolean = false) {
+    constructor() : this(null, null, null, null, null, null, "student", null, null, null, null, false, "", false)
+}

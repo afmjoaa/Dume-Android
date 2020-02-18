@@ -82,8 +82,6 @@ public class Google {
     }
 
     public String getAccountMajor() {
-
-
         return accountMajor;
     }
 

@@ -1,6 +1,7 @@
 package io.dume.dume.splash
 
 import android.content.ActivityNotFoundException
+import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
@@ -8,22 +9,24 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import io.dume.dume.auth.AuthModel
 import io.dume.dume.firstTimeUser.RoleChooserActivity
 import io.dume.dume.foreignObligation.PayActivity
 import io.dume.dume.teacher.homepage.TeacherContract
 import io.dume.dume.util.DumeUtils
 
+
 class SplashActivity : AppCompatActivity(), SplashContract.View {
     lateinit var presenter: SplashContract.Presenter
     private var prefs: SharedPreferences? = null
+
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        /*presenter = SplashPresenter(this, AuthModel(this, this))
+        presenter = SplashPresenter(this, AuthModel(this, this))
         prefs = getSharedPreferences(MY_PREFS_NAME, Context.MODE_PRIVATE)
         presenter.enqueue(this)
-        presenter.init(this)*/
-        startActivity(Intent(this, RoleChooserActivity::class.java))
-        finish()
+        presenter.init(this)
+
     }
 
     override fun foundUpdates() {
@@ -50,7 +53,7 @@ class SplashActivity : AppCompatActivity(), SplashContract.View {
     override fun foundErr(msg: String) {
         DumeUtils.notifyDialog(this, true, false, "No Internet or Error...", msg, "Retry", object : TeacherContract.Model.Listener<Boolean?> {
             override fun onSuccess(yes: Boolean?) { //already handled
-                presenter!!.enqueue(applicationContext)
+                presenter.enqueue(applicationContext)
             }
 
             override fun onError(msg: String) { //already handled
@@ -70,9 +73,11 @@ class SplashActivity : AppCompatActivity(), SplashContract.View {
         }
     }
 
-    override fun gotoForwardFlowActivity(){
+    override fun gotoForwardFlowActivity() {
         startActivity(Intent(this, RoleChooserActivity::class.java))
         finish()
+
+
     }
 
     override fun gotoTeacherActivity() {

@@ -5,6 +5,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -12,25 +15,25 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import io.dume.dume.R
-import io.dume.dume.firstTimeUser.ForwardFlowViewModel
+import io.dume.dume.firstTimeUser.Flag
 import io.dume.dume.student.DashBoard.StudentDashBoard
 import io.dume.dume.teacher.DashBoard.adapters.JobItemCardAdapter
 import io.dume.dume.teacher.DashBoard.fragments.jobboard.JobItem
+import io.dume.dume.teacher.crudskill.CrudSkillActivity
+import io.dume.dume.util.StateManager
 import kotlinx.android.synthetic.main.fragment_student_job_board.*
 import kotlinx.android.synthetic.main.fragment_student_job_board.view.*
 
 
 class StudentJobBoardFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private lateinit var viewModelStudent: StudentJobBoardViewModel
-    private lateinit var vm: ForwardFlowViewModel
     private var jobItemCardAdapter = JobItemCardAdapter()
+    private lateinit var jobPrimaryDialog: AlertDialog
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         viewModelStudent = ViewModelProviders.of(this).get(StudentJobBoardViewModel::class.java)
-        activity?.run {
-            vm = ViewModelProviders.of(this).get(ForwardFlowViewModel::class.java)
-        } ?: throw Throwable("invalid activity")
         return inflater.inflate(R.layout.fragment_student_job_board, container, false)
     }
 
@@ -41,27 +44,42 @@ class StudentJobBoardFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener
 
     private fun initialize() {
         initializeFabs()
-        val destination = arguments?.getString(DESTINATION)
-        if (destination != "forward") {
-            jobRecycleView.visibility = View.VISIBLE
-            no_data_block.visibility = View.GONE
-            initializeRV()
-        } else {
-            jobRecycleView.visibility = View.GONE
-            no_data_block.visibility = View.VISIBLE
-        }
+        initializeRV()
         initializeButtons()
+        initDialog()
+    }
+
+    private fun goToGrabbingActivity() {
+        context?.apply {
+            startActivity(Intent(this, CrudSkillActivity::class.java).setAction(Flag.FORWARDFLOW.flow))
+        }
     }
 
     private fun initializeButtons() {
+
         jobPost.setOnClickListener {
-            jobMultiple.visibility = View.VISIBLE
-            jobMultiple.expand()
+            if (jobPost.isExtended) {
+                jobPost.shrink()
+                jobMultiple.visibility = View.VISIBLE
+                jobMultiple.expand()
+            } else {
+                jobPost.extend()
+                jobMultiple.collapseImmediately()
+                jobMultiple.visibility = View.INVISIBLE
+            }
         }
+
         jobSkip.setOnClickListener {
-            vm.firstTimeUser.value = false
+            context?.let {
+                StateManager.getInstance(it).setFirstTimeUser(false)
+            }
             startActivity(Intent(context, StudentDashBoard::class.java))
             activity?.finish()
+        }
+
+        fab_regular.setOnClickListener {
+            jobPost.performClick()
+            jobPrimaryDialog.show()
         }
     }
 
@@ -100,12 +118,49 @@ class StudentJobBoardFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener
     }
 
     private fun updateJobRecView(updatedList: List<JobItem>) {
-        jobItemCardAdapter.jobItems = updatedList
-        jobItemCardAdapter.notifyDataSetChanged()
+        if (updatedList.isNullOrEmpty()) {
+            no_data_block.visibility = View.VISIBLE
+            jobRecycleView.visibility = View.GONE
+
+        } else {
+            no_data_block.visibility = View.GONE
+            jobRecycleView.visibility = View.VISIBLE
+
+            jobItemCardAdapter.jobItems = updatedList
+            jobItemCardAdapter.notifyDataSetChanged()
+        }
     }
 
     override fun onRefresh() {
         viewModelStudent.fetchJobs()
+    }
+
+    fun initDialog() {
+        /**
+         * Dialog that notifies user about HOW NID VERIFICATION WORKS?
+         * */
+        val materialAlertDialogBuilder = MaterialAlertDialogBuilder(context, R.style.ThemeOverlay_MaterialComponents_MaterialAlertDialog_Centered)
+        val customLayout = layoutInflater.inflate(R.layout.job_board_primary_info, null, false)
+        materialAlertDialogBuilder.setView(customLayout)
+        jobPrimaryDialog = materialAlertDialogBuilder.create()
+        try {
+            val dismissBtn = customLayout.findViewById<Button>(R.id.dismiss_btn)
+            val yesBtn = customLayout.findViewById<Button>(R.id.yes_button)
+            yesBtn.setOnClickListener {
+                jobPrimaryDialog.dismiss()
+                goToGrabbingActivity()
+            }
+            dismissBtn.setOnClickListener { v ->
+                jobPrimaryDialog.dismiss()
+            }
+        } catch (npe: NullPointerException) {
+            npe.printStackTrace()
+        }
+    }
+
+
+    private fun flush(msg: String) {
+        Toast.makeText(activity, msg, Toast.LENGTH_SHORT).show()
     }
 
     companion object {
