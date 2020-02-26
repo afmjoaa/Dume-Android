@@ -33,13 +33,14 @@ import kotlinx.android.synthetic.main.fragment_register.*
 
 class RegisterFragment : Fragment(), View.OnClickListener, IPickResult {
 
-
     private lateinit var navController: NavController
     private lateinit var viewModel: ForwardFlowViewModel
-    private val LOCATION_REQUEST_CODE = 2222
     private var userLocation: GeoPoint? = null
-    var action: String? = "null"
     private lateinit var parent: ForwardFlowHostActivity
+
+    companion object {
+        private const val LOCATION_REQUEST_CODE = 2222
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_register, container, false)
@@ -47,20 +48,17 @@ class RegisterFragment : Fragment(), View.OnClickListener, IPickResult {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        activity?.run { viewModel = ViewModelProvider(this).get(ForwardFlowViewModel::class.java) }
-                ?: throw Throwable("invalid activity")
+        activity?.run { viewModel = ViewModelProvider(this).get(ForwardFlowViewModel::class.java) } ?: throw Throwable("invalid activity")
         parent = activity as ForwardFlowHostActivity
         navController = Navigation.findNavController(view)
-        initalize()
+        initialize()
         initObservers()
     }
 
-    private fun initalize() {
+    private fun initialize() {
         register_dp.setOnClickListener(this)
         register_location.setOnClickListener(this)
-
     }
-
 
     fun setAvatar(uri: Uri) {
         viewModel.avatar.postValue(uri)
@@ -105,7 +103,6 @@ class RegisterFragment : Fragment(), View.OnClickListener, IPickResult {
         msg?.let {
             Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
         }
-
     }
 
     private fun initObservers() {
@@ -116,6 +113,7 @@ class RegisterFragment : Fragment(), View.OnClickListener, IPickResult {
                 register_birth_date.setText(it.birth_date.replace("Date of Birth", ""))
             }
         })
+
         viewModel.success.observe(viewLifecycleOwner, Observer {
             it.getContentIfNotHandled()?.let{
                 parent.hideProgress()
@@ -131,9 +129,8 @@ class RegisterFragment : Fragment(), View.OnClickListener, IPickResult {
                 }
             }
         })
+
         viewModel.failure.observe(viewLifecycleOwner, Observer { it?.let { flush(it.error); parent.hideProgress() } })
-
-
 
         parent.onRegisterButtonClick {
             validate()?.let {
@@ -164,7 +161,6 @@ class RegisterFragment : Fragment(), View.OnClickListener, IPickResult {
 
     override fun onClick(v: View?) {
         when (v!!.id) {
-
             R.id.add_qualification_btn -> {
                 navController.navigate(R.id.action_registerFragment_to_qualificationFragment)
             }

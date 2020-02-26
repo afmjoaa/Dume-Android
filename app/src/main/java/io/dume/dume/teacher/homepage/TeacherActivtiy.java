@@ -29,7 +29,6 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
@@ -167,7 +166,6 @@ public class TeacherActivtiy extends BaseMapActivity implements TeacherContract.
     private MenuItem skills;
     private LinearLayout bottomSheet;
     private View headerView;
-    private ListView listView;
     private BottomSheetBehavior bottomSheetBehavior;
     private boolean firstTime;
     private Toolbar secondaryToolbar;
@@ -364,7 +362,6 @@ public class TeacherActivtiy extends BaseMapActivity implements TeacherContract.
         switchAcountBtn.setCompoundDrawablesWithIntrinsicBounds(leftDrawable, null, more, null);
         bottomSheet = findViewById(R.id.amBottomSheet);
         coordinatorLayout = findViewById(R.id.parent_coor_layout);
-        listView = findViewById(R.id.messagesRV);
         secondaryToolbar = findViewById(R.id.Secondary_toolbar);
         secondaryAppBarLayout = findViewById(R.id.secondary_Appbar);
         secondaryCollapsableToolbar = findViewById(R.id.secondary_collapsing_toolbar);
@@ -576,7 +573,7 @@ public class TeacherActivtiy extends BaseMapActivity implements TeacherContract.
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
         bottomSheetCallbackConfig();
         //setting my snackbar callback
-        snackbar.addCallback(new Snackbar.Callback() {
+        snackBar.addCallback(new Snackbar.Callback() {
             @Override
             public void onDismissed(Snackbar snackbar, int event) {
                 //network resumed make functionality available
@@ -631,7 +628,7 @@ public class TeacherActivtiy extends BaseMapActivity implements TeacherContract.
         layout.setLayoutParams(parentParams);
         layout.addView(snackView, 0);
         int status = NetworkUtil.getConnectivityStatusString(context);
-        if (snackbar != null && !snackbar.isShown() && status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
+        if (snackBar != null && !snackBar.isShown() && status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
             enamSnackbar.show();
         }
     }
@@ -1613,7 +1610,7 @@ public class TeacherActivtiy extends BaseMapActivity implements TeacherContract.
         layout.setLayoutParams(parentParams);
         layout.addView(snackView, 0);
         int status = NetworkUtil.getConnectivityStatusString(context);
-        if (snackbar != null && !snackbar.isShown() && status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED && enamSnackbar != null && !enamSnackbar.isShown()) {
+        if (snackBar != null && !snackBar.isShown() && status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED && enamSnackbar != null && !enamSnackbar.isShown()) {
             mySnackbar.show();
         }
     }

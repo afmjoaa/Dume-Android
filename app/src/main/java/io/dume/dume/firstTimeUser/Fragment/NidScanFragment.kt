@@ -9,8 +9,9 @@ import android.view.*
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -47,24 +48,20 @@ class NidScanFragment : Fragment(), View.OnClickListener {
 
     private var handlerCallback = object : Runnable {
         override fun run() {
-            Log.e("debug", "Picture Captured")
+            //Log.e("debug", "Picture Captured")
             camera?.takePictureSnapshot()
             if (isFragmentVisible) {
                 handler.postDelayed(this, 1500)
             }
         }
     }
-    private var cameralListener = object : CameraListener() {
+    private var cameraListener = object : CameraListener() {
         override fun onPictureTaken(result: PictureResult) {
             super.onPictureTaken(result)
             val bitmap = BitmapFactory.decodeByteArray(result.data, 0, result.data.size, null)
             squareProgressBar?.setImageBitmap(bitmap)
             val firebaseVisionImage = FirebaseVisionImage.fromBitmap(bitmap)
-            if (firebaseVisionImage != null) {
-                recognizeText(firebaseVisionImage)
-            } else {
-                Log.e("getText", "null image found")
-            }
+            recognizeText(firebaseVisionImage)
         }
     }
 
@@ -75,7 +72,7 @@ class NidScanFragment : Fragment(), View.OnClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         activity?.run {
-            viewModel = ViewModelProviders.of(this).get(ForwardFlowViewModel::class.java)
+            viewModel = ViewModelProvider(this).get(ForwardFlowViewModel::class.java)
         } ?: throw Throwable("invalid activity")
         navController = Navigation.findNavController(view)
         parent = activity as ForwardFlowHostActivity
@@ -88,7 +85,7 @@ class NidScanFragment : Fragment(), View.OnClickListener {
         super.onResume()
         isFragmentVisible = true
         handler.postDelayed(handlerCallback, 2000)
-        camera.addCameraListener(cameralListener)
+        camera.addCameraListener(cameraListener)
 
     }
 
@@ -97,7 +94,7 @@ class NidScanFragment : Fragment(), View.OnClickListener {
         camera?.close()
         isFragmentVisible = false
         handler.removeCallbacks(handlerCallback)
-        camera?.removeCameraListener(cameralListener)
+        camera?.removeCameraListener(cameraListener)
 
     }
 
@@ -130,20 +127,22 @@ class NidScanFragment : Fragment(), View.OnClickListener {
 
         val id = item.itemId
         if (id == R.id.flush) {
-            if (camera?.getFlash() == Flash.TORCH) {
-                item.icon = resources.getDrawable(R.drawable.flush_icon)
-                camera?.setFlash(Flash.OFF)
+            if (camera?.flash == Flash.TORCH) {
+                item.icon = ContextCompat.getDrawable(context!!, R.drawable.flush_icon)
+                camera?.flash = Flash.OFF
             } else {
-                item.icon = resources.getDrawable(R.drawable.no_flush_icon)
-                camera?.setFlash(Flash.TORCH)
+                item.icon = ContextCompat.getDrawable(context!!, R.drawable.no_flush_icon)
+                camera?.flash = Flash.TORCH
             }
         } else if (id == R.id.hdr) {
-            if (camera?.getHdr() == Hdr.ON) {
-                item.icon = resources.getDrawable(R.drawable.hdr_icon)
-                camera?.setHdr(Hdr.OFF)
-            } else {
-                item.icon = resources.getDrawable(R.drawable.no_hdr_icon)
-                camera?.setHdr(Hdr.ON)
+            if (item.title.toString() == "HDR On") {
+                item.icon = ContextCompat.getDrawable(context!!,R.drawable.hdr_icon)
+                item.title= "HDR Off"
+                camera?.hdr = Hdr.OFF
+            }else if(item.title.toString() == "HDR Off"){
+                item.icon = ContextCompat.getDrawable(context!!,R.drawable.no_hdr_icon)
+                item.title= "HDR On"
+                camera?.hdr = Hdr.ON
             }
         }
         return super.onOptionsItemSelected(item)

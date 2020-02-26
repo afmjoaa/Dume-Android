@@ -22,7 +22,8 @@
         android:textAllCaps="false"
         android:textColor="@color/black"
         android:textSize="23sp"
-        app:fontFamily="@font/cairo_regular" />
+        app:fontFamily="@font/cairo_regular"
+        android:gravity="center_horizontal" />
 
     <TextView
         android:id="@+id/tvDescription"
@@ -35,7 +36,8 @@
         android:textAllCaps="false"
         android:textColor="@color/textColorPrimary"
         android:textSize="17sp"
-        app:fontFamily="@font/cairo_light" />
+        app:fontFamily="@font/cairo_light"
+        android:gravity="center_horizontal" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/asTeacher"

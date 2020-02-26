@@ -25,7 +25,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -33,7 +32,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,10 +39,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
@@ -52,19 +48,13 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.transitionseverywhere.Fade;
-import com.transitionseverywhere.Slide;
-import com.transitionseverywhere.TransitionManager;
-import com.transitionseverywhere.TransitionSet;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -83,53 +73,32 @@ import androidx.core.view.GravityCompat;
 import androidx.core.view.ViewCompat;
 import androidx.core.widget.NestedScrollView;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.interpolator.view.animation.FastOutLinearInInterpolator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import info.hoang8f.android.segmented.SegmentedGroup;
-import io.dume.dume.util.Google;
 import io.dume.dume.R;
-import io.dume.dume.common.aboutUs.AboutUsActivity;
-import io.dume.dume.common.chatActivity.DemoModel;
-import io.dume.dume.common.inboxActivity.InboxActivity;
-import io.dume.dume.common.privacyPolicy.PrivacyPolicyActivity;
 import io.dume.dume.customView.HorizontalLoadView;
 import io.dume.dume.customView.HorizontalLoadViewTwo;
 import io.dume.dume.model.DumeModel;
-import io.dume.dume.foreignObligation.PayActivity;
 import io.dume.dume.service.LocationServiceHandler;
 import io.dume.dume.service.MyLocationService;
-import io.dume.dume.student.grabingInfo.GrabingInfoActivity;
 import io.dume.dume.student.grabingLocation.GrabingLocationActivity;
-import io.dume.dume.student.heatMap.HeatMapActivity;
-import io.dume.dume.student.homePage.adapter.HomePageRatingAdapter;
-import io.dume.dume.student.homePage.adapter.HomePageRatingData;
 import io.dume.dume.student.homePage.adapter.HomePageRecyclerAdapter;
-import io.dume.dume.student.homePage.adapter.HomePageRecyclerData;
 import io.dume.dume.student.homePage.adapter.RecentSearchAdapter;
 import io.dume.dume.student.homePage.adapter.RecentSearchData;
 import io.dume.dume.student.pojo.BaseMapActivity;
 import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
 import io.dume.dume.student.pojo.SearchDataStore;
 import io.dume.dume.student.profilePage.ProfilePageActivity;
-import io.dume.dume.student.recordsPage.Record;
-import io.dume.dume.student.recordsPage.RecordsPageActivity;
 import io.dume.dume.student.searchLoading.SearchLoadingActivity;
-import io.dume.dume.student.searchResult.SearchResultActivity;
 import io.dume.dume.student.studentHelp.StudentHelpActivity;
-import io.dume.dume.student.studentPayment.StudentPaymentActivity;
-import io.dume.dume.student.studentSettings.StudentSettingsActivity;
 import io.dume.dume.teacher.crudskill.CrudSkillActivity;
-import io.dume.dume.teacher.homepage.TeacherActivtiy;
 import io.dume.dume.teacher.homepage.TeacherContract;
 import io.dume.dume.util.DumeUtils;
 import io.dume.dume.util.NetworkUtil;
-import me.zhanghai.android.materialratingbar.MaterialRatingBar;
 
-import static io.dume.dume.util.DumeUtils.animateImage;
 import static io.dume.dume.util.DumeUtils.getEndOFNest;
 import static io.dume.dume.util.DumeUtils.hideKeyboard;
-import static io.dume.dume.util.DumeUtils.showKeyboard;
 import static io.dume.dume.util.ImageHelper.getRoundedCornerBitmapSquare;
 
 public class HomePageActivity extends BaseMapActivity implements HomePageContract.View,
@@ -575,7 +544,7 @@ public class HomePageActivity extends BaseMapActivity implements HomePageContrac
         //bottom sheet config
         bottomSheetCallbackConfig();
         //setting my snackbar callback
-        snackbar.addCallback(new Snackbar.Callback() {
+        snackBar.addCallback(new Snackbar.Callback() {
             @Override
             public void onDismissed(Snackbar snackbar, int event) {
                 //network resumed make functionality available
@@ -1179,7 +1148,7 @@ public class HomePageActivity extends BaseMapActivity implements HomePageContrac
         layout.setLayoutParams(parentParams);
         layout.addView(snackView, 0);
         int status = NetworkUtil.getConnectivityStatusString(context);
-        if (snackbar != null && !snackbar.isShown() && status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
+        if (snackBar != null && !snackBar.isShown() && status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
             mySnackbar.show();
         }
     }

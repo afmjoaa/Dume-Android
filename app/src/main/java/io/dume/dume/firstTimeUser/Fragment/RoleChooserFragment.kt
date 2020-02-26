@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
@@ -33,12 +34,11 @@ class RoleChooserFragment : Fragment(), View.OnClickListener {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         activity?.run {
-            viewModel = ViewModelProviders.of(this).get(ForwardFlowViewModel::class.java)
+            viewModel = ViewModelProvider(this).get(ForwardFlowViewModel::class.java)
         } ?: throw Throwable("invalid activity")
     }
 
     override fun onClick(v: View?) {
-
         when (v!!.id) {
             R.id.asStudent -> {
                 viewModel.updateRole(Role.STUDENT)
@@ -51,6 +51,5 @@ class RoleChooserFragment : Fragment(), View.OnClickListener {
                 navController.navigate(R.id.action_roleChooser_to_privacyFragment)
             }
         }
-        //viewModel.updateFirstTimeUser(true)
     }
 }

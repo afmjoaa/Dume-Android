@@ -72,7 +72,7 @@ public class SkillActivity extends BaseAppCompatActivity implements SkillContrac
         presenter.enqueue();
         documentSnapshot = TeacherDataStore.getInstance().getDocumentSnapshot();
         //setting my snackbar callback
-        snackbar.addCallback(new Snackbar.Callback() {
+        snackBar.addCallback(new Snackbar.Callback() {
             @Override
             public void onDismissed(Snackbar snackbar, int event) {
                 multiFab.setTranslationY(0);

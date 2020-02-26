@@ -6,6 +6,7 @@
     <item
         android:id="@+id/flush"
         android:title="@string/flush"
+        android:contentDescription="1"
         android:orderInCategory="1"
         android:tooltipText="Toggle Flush"
         android:icon="@drawable/flush_icon"
@@ -16,9 +17,10 @@
         android:id="@+id/hdr"
         android:title="@string/hdr"
         android:orderInCategory="2"
+        android:contentDescription="1"
         android:tooltipText="Toggle HDR"
         android:icon="@drawable/no_hdr_icon"
-        app:showAsAction="always"
+        app:showAsAction="ifRoom"
         />
 
 </menu>
