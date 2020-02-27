@@ -1,6 +1,5 @@
 package io.dume.dume.firstTimeUser
 
-
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
@@ -8,7 +7,6 @@ import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.google.firebase.auth.FirebaseAuth
