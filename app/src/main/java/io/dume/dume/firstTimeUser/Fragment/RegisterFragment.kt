@@ -43,6 +43,7 @@ class RegisterFragment : Fragment(), View.OnClickListener, IPickResult {
 
     companion object {
         private const val LOCATION_REQUEST_CODE = 2222
+        private const val ACCOUNT_REQUEST_CODE = 3333
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -51,7 +52,8 @@ class RegisterFragment : Fragment(), View.OnClickListener, IPickResult {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        activity?.run { viewModel = ViewModelProvider(this).get(ForwardFlowViewModel::class.java) } ?: throw Throwable("invalid activity")
+        activity?.run { viewModel = ViewModelProvider(this).get(ForwardFlowViewModel::class.java) }
+                ?: throw Throwable("invalid activity")
         parent = activity as ForwardFlowHostActivity
         navController = Navigation.findNavController(view)
         initialize()
@@ -69,43 +71,50 @@ class RegisterFragment : Fragment(), View.OnClickListener, IPickResult {
         } else {
             register_nid_wrapper.visibility = View.VISIBLE
         }
+
+        //get the email and populate the value
+
     }
 
     private fun initListener() {
         register_dp.setOnClickListener(this)
         register_location.setOnClickListener(this)
 
-        register_name.addTextChangedListener{
+        register_name.addTextChangedListener {
             val name = it.toString()
             if (name.isEmpty()) {
                 register_name_wrapper.error = "Name must not be empty"
-            }else if(name.length > 1){
+            } else if (name.length > 1) {
                 register_name_wrapper.error = null
             }
         }
-        register_email.addTextChangedListener{
+        register_email.addTextChangedListener {
             val mail = it.toString()
             if (mail.isEmpty()) {
                 register_name_wrapper.error = "Email must not be empty"
-            }else if(mail.length > 1){
+            } else if (mail.length > 1) {
                 register_name_wrapper.error = null
             }
         }
-        register_location.addTextChangedListener{
+        register_location.addTextChangedListener {
             val location = it.toString()
-            if(location.length > 1){
-                register_location_wrapper.error  = null
+            if (location.length > 1) {
+                register_location_wrapper.error = null
             }
         }
 
-        register_birth_date.setOnFocusChangeListener { view, b -> {
-
-        }}
-        register_current_status.setOnFocusChangeListener { view, b -> {
-
-        }}
-        // (01/05/1996)
-
+        register_birth_date.setOnFocusChangeListener { view, b ->
+            when (b) {
+                true -> register_birth_date.hint = "31/02/1996"
+                false -> register_birth_date.hint = ""
+            }
+        }
+        register_current_status.setOnFocusChangeListener { view, b ->
+            when (b) {
+                true -> register_current_status.hint = "MIST BME Student"
+                false -> register_current_status.hint = ""
+            }
+        }
     }
 
     private fun initObservers() {
@@ -113,16 +122,14 @@ class RegisterFragment : Fragment(), View.OnClickListener, IPickResult {
             it.getContentIfNotHandled()?.let {
                 register_name.setText(it.name)
 
-                //fix hint
+                register_nid_wrapper.hint = "NID No"
                 register_nid.setText(it.nid.toString())
-
-                //fix hint
                 register_birth_date.setText(it.birth_date.replace("Date of Birth", ""))
             }
         })
 
         viewModel.success.observe(viewLifecycleOwner, Observer {
-            it.getContentIfNotHandled()?.let{
+            it.getContentIfNotHandled()?.let {
                 parent.hideProgress()
                 if (viewModel.role.value == Role.STUDENT) {
                     viewModel.updateStudentCurrentPosition(ForwardFlowStatStudent.POSTJOB)

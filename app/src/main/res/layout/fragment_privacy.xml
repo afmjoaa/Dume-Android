@@ -238,7 +238,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="6dp"
                     android:text="@string/fbpagelink"
-                    android:textColor="@color/textColorPrimary"
+                    android:textColor="@color/mColorPrimary"
                     android:textSize="16sp"
                     android:textStyle="italic"
                     app:fontFamily="@font/cairo_regular" />
@@ -248,7 +248,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/fbgrplink"
-                    android:textColor="@color/textColorPrimary"
+                    android:textColor="@color/mColorPrimary"
                     android:textSize="16sp"
                     android:textStyle="italic"
                     app:fontFamily="@font/cairo_regular" />

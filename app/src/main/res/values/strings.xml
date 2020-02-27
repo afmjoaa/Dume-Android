@@ -638,11 +638,7 @@ provided.Tap salary for details.  </string>
     <string name="youtubeink">
         <a href="https://www.youtube.com/channel/UCTsU1wD66SEWBrDzrnnrYaw">Youtube Channel Link</a>
     </string>
-    <string name="fbpagelink">
-        <a href="https://www.facebook.com/groups/1623868617935891/">FB Page Link</a>
-    </string>
-    <string name="fbgrplink">
-        <a href="https://www.facebook.com/dumebd">FB Group Link</a>
-    </string>
+    <string name="fbpagelink">&#160;<u>FB Page Link</u>&#160;&#160;</string>
+    <string name="fbgrplink">&#160;<u>FB Group Link</u>&#160;&#160;</string>
     <string name="hotline">&#160;<u>Hotline : 01303464617</u>&#160;&#160;</string>
 </resources>
