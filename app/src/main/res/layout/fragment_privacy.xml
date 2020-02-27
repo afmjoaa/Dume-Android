@@ -11,7 +11,6 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-
         <LinearLayout
             android:id="@+id/privacy_host"
             android:layout_width="match_parent"
@@ -19,51 +18,246 @@
             android:layout_margin="16dp"
             android:orientation="vertical">
 
-            <LinearLayout
+            <TextView
                 android:id="@+id/teacher_guide"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:text="@string/teacher_guideline_desc"
+                android:textColor="@color/textColorSecondary"
+                android:textSize="16sp"
+                app:fontFamily="@font/cairo_regular" />
+
+            <TextView
+                android:id="@+id/student_guide"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:text="@string/student_guideline_desc"
+                android:textColor="@color/textColorSecondary"
+                android:textSize="16sp"
+                app:fontFamily="@font/cairo_regular" />
+
+            <LinearLayout
+                android:id="@+id/used_keyword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/sub_text"
+                    android:id="@+id/title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Teacher Guideline : "
+                    android:layout_marginBottom="12dp"
+                    android:text="Used Keywords"
                     android:textColor="@color/textColorPrimary"
-                    android:textSize="16sp"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
                     app:fontFamily="@font/cairo_regular" />
 
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:orientation="horizontal">
 
+                    <TextView
+                        android:id="@+id/oneTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Job Board     :  "
+                        android:textColor="@color/textColorSecondary"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        app:fontFamily="@font/cairo_regular" />
 
+                    <TextView
+                        android:id="@+id/oneDesc"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Student post tuition here &amp; mentor can request on them."
+                        android:textColor="@color/textColorSecondary"
+                        android:textSize="16sp"
+                        app:fontFamily="@font/cairo_regular" />
 
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/twoTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="My Tuition   :  "
+                        android:textColor="@color/textColorSecondary"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        app:fontFamily="@font/cairo_regular" />
+
+                    <TextView
+                        android:id="@+id/twoDesc"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="You can find all your pending, current, completed &amp; cancelled tuition here."
+                        android:textColor="@color/textColorSecondary"
+                        android:textSize="16sp"
+                        app:fontFamily="@font/cairo_regular" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/threeTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Skill               :  "
+                        android:textColor="@color/textColorSecondary"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        app:fontFamily="@font/cairo_regular" />
+
+                    <TextView
+                        android:id="@+id/threeDesc"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Teacher can create skill with expected salary which he/she is willing to sell."
+                        android:textColor="@color/textColorSecondary"
+                        android:textSize="16sp"
+                        app:fontFamily="@font/cairo_regular" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/fourTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Service Fee :  "
+                        android:textColor="@color/textColorSecondary"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        app:fontFamily="@font/cairo_regular" />
+
+                    <TextView
+                        android:id="@+id/fourDesc"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="We charge 25% of your tuition salary as our service charge only for the first month form the teacher."
+                        android:textColor="@color/textColorSecondary"
+                        android:textSize="16sp"
+                        app:fontFamily="@font/cairo_regular" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/fiveTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Heat Map    :  "
+                        android:textColor="@color/textColorSecondary"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        app:fontFamily="@font/cairo_regular" />
+
+                    <TextView
+                        android:id="@+id/fiveDesc"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Student and teacher geographical density is shown here."
+                        android:textColor="@color/textColorSecondary"
+                        android:textSize="16sp"
+                        app:fontFamily="@font/cairo_regular" />
+
+                </LinearLayout>
 
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/student_guide"
+                android:id="@+id/links"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="76dp"
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/text"
+                    android:id="@+id/link_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Student Guideline : "
+                    android:layout_marginBottom="10dp"
+                    android:text="Links"
+                    android:textColor="@color/textColorPrimary"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:fontFamily="@font/cairo_regular" />
+
+                <TextView
+                    android:id="@+id/hotline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="6dp"
+                    android:text="@string/hotline"
+                    android:textColor="@color/mColorPrimary"
+                    android:textSize="16sp"
+                    android:textStyle="italic"
+                    app:fontFamily="@font/cairo_regular" />
+
+                <TextView
+                    android:id="@+id/youtube"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="6dp"
+                    android:text="@string/youtubeink"
                     android:textColor="@color/textColorPrimary"
                     android:textSize="16sp"
+                    android:textStyle="italic"
                     app:fontFamily="@font/cairo_regular" />
+
+                <TextView
+                    android:id="@+id/fb_page"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="6dp"
+                    android:text="@string/fbpagelink"
+                    android:textColor="@color/textColorPrimary"
+                    android:textSize="16sp"
+                    android:textStyle="italic"
+                    app:fontFamily="@font/cairo_regular" />
+
+                <TextView
+                    android:id="@+id/fb_group"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/fbgrplink"
+                    android:textColor="@color/textColorPrimary"
+                    android:textSize="16sp"
+                    android:textStyle="italic"
+                    app:fontFamily="@font/cairo_regular" />
+
 
             </LinearLayout>
 
         </LinearLayout>
 
-
-        <!--<WebView
-            android:id="@+id/termsWebView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />-->
 
     </androidx.core.widget.NestedScrollView>
 

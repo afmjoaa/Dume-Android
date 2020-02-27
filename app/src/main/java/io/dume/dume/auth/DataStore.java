@@ -37,6 +37,8 @@ public class DataStore implements Serializable {
         isBottomNavAccountMajor = bottomNavAccountMajor;
     }
 
+
+
     public Map<String, Map<String, Object>> getObligatedUser() {
         return obligatedUser;
     }

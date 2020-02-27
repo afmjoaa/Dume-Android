@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nested_verification"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".firstTimeUser.Fragment.VerificationFragment">
+    android:layout_height="wrap_content"
+    tools:context=".firstTimeUser.Fragment.VerificationFragment"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:orientation="vertical">
-
 
         <TextView
             android:id="@+id/detailsTxt"
@@ -20,7 +21,6 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:text="@string/sent_code_msg"
-
             android:textSize="16sp" />
 
 
@@ -85,4 +85,4 @@
 
     </LinearLayout>
 
-</FrameLayout>
+</androidx.core.widget.NestedScrollView>

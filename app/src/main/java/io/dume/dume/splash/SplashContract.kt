@@ -5,7 +5,6 @@ import io.dume.dume.auth.AuthGlobalContract
 
 interface SplashContract {
     interface View : AuthGlobalContract.View {
-        fun foundUpdates()
         fun foundErr(msg: String)
         fun gotoLoginActivity()
         fun gotoForwardFlowActivity()

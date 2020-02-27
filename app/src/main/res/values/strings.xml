@@ -1,21 +1,5 @@
 <resources>
     <string name="app_name">Dume</string>
-    <string name="drawer_open">Open</string>
-    <string name="drawer_close">Close</string>
-    <string name="dume">Dume</string>
-    <string name="socialConnect">Or connect with social by signing in as ..</string>
-    <string-array name="promo_text_array">
-        <item> Searching Teachers, Mentors, Coaching or boot camp Dume got you all  covered</item>
-        <item> Dume will find you the best mentor on your demand, whenever you need</item>
-        <item> Finding tuition was never been easier, just sign in as a mentor and get  started </item>
-        <item> Reach maximum people with Dume and let your talent shine </item>
-        <item> You never really learn something until you teach it, So start sharing your skill with dume </item>
-    </string-array>
-    <string-array name="changing_text_array">
-        <item> Start learning with Dume </item>
-        <item> Start mentoring with Dume  </item>
-        <item> Publish your boot camp with Dume </item>
-    </string-array>
     <string name="title_activity_auth_final">Confirm your info</string>
 
     <string name="action_settings">Settings</string>
@@ -57,13 +41,6 @@
     <string name="profile">Profile</string>
     <string name="title_activity_maps">Map</string>
     <string name="refresh">Refresh</string>
-    <string name="intro1">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fugiat,</string>
-    <string name="intro2">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloremque impedit ipsum nostrum odit officia rerum?</string>
-    <string name="intro3">Lorem ipsum dolor sit amet, consectetur adipisicing elit. At, sit!</string>
-    <string name="intro4">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</string>
-    <string name="intro5">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur.</string>
-    <string name="intro6">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cum cupiditate eos possimus saepe!</string>
-
 
     <string-array name="gender">
         <item>Male</item>
@@ -104,8 +81,6 @@
     <string name="tab_cross_ckeck">Cross Check</string>
     <string name="demo_data">demo</string>
     <string name="title_activity_grabing_location">Grabing Location</string>
-    <string name="fucking_testing_lorum">This is working example of bottom sheet   remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem IpsumThis is working example of bottom sheet   remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem IpsumThis is working example of bottom sheet   remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem IpsumThis is working example of bottom sheet   remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem IpsumThis is working example of bottom sheet   remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem IpsumThis is working example of bottom sheet   remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem IpsumThis is working example of bottom sheet   remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem IpsumThis is working example of bottom sheet   remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem IpsumThis is working example of bottom sheet   remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum</string>
-    <string name="testing_lorum">This is working example of bottom sheet   remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem IpsumThis is working example of bottom sheet   remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem IpsumThis is working example of bottom sheet   remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem IpsumThis is working example of bottom sheet   remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem IpsumThis is working example of bottom sheet   remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem IpsumThis is working example of bottom sheet   remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem IpsumThis is working example of bottom sheet   remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem IpsumThis is working example of bottom sheet   remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem IpsumThis is working example of bottom sheet   remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum</string>
     <string name="gps_network_not_enabled">Gps_network_not_enabled</string>
     <string name="open_location_settings">Open_location_settings</string>
     <string name="Cancel">Cancel</string>
@@ -116,47 +91,10 @@
     <string name="enter_anchor_point">Enter anchor point</string>
     <string name="autocomplete_image">autocomplete_image</string>
     <string name="set_location_on_map">Set location on map</string>
-    <string-array name="BanglaMedium">
-        <item>One</item>
-        <item>Two</item>
-        <item>Three</item>
-        <item>Four</item>
-        <item>Five</item>
-        <item>Six</item>
-        <item>Seven</item>
-        <item>Eight</item>
-        <item>Nine</item>
-        <item>Ten</item>
-    </string-array>
-    <string-array name="EnglishMedium">
-        <item>Play</item>
-        <item>Nursery</item>
-        <item>KG-1</item>
-        <item>KG-2</item>
-        <item>One</item>
-        <item>Two</item>
-        <item>Three</item>
-        <item>Four</item>
-        <item>Five</item>
-        <item>Six</item>
-        <item>Seven</item>
-        <item>Eight</item>
-        <item>Nine</item>
-        <item>Ten</item>
-        <item>A-Level</item>
-        <item>O-Level</item>
-    </string-array>
 
     <string name="title_activity_heat_map">Heat Map</string>
     <string name="title_activity_grabing_package">Select Package</string>
-    <string name="tab_text_1">Tab 1</string>
-    <string name="tab_text_2">Tab 2</string>
-    <string name="tab_text_3">Tab 3</string>
     <string name="title_activity_student_settings">Settings</string>
-
-    <!-- Strings related to Settings -->
-
-    <!-- Example General settings -->
     <string name="pref_header_general">General</string>
 
     <string name="pref_title_social_recommendations">Enable social recommendations</string>
@@ -260,95 +198,6 @@
 
     <string name="pref_title_vibrate">Vibrate</string>
     <string name="title_activity_student_payment">Payment</string>
-    <string name="large_text">
-        "Material is the metaphor.\n\n"
-
-        "A material metaphor is the unifying theory of a rationalized space and a system of motion."
-        "The material is grounded in tactile reality, inspired by the study of paper and ink, yet "
-        "technologically advanced and open to imagination and magic.\n"
-        "Surfaces and edges of the material provide visual cues that are grounded in reality. The "
-        "use of familiar tactile attributes helps users quickly understand affordances. Yet the "
-        "flexibility of the material creates new affordances that supercede those in the physical "
-        "world, without breaking the rules of physics.\n"
-        "The fundamentals of light, surface, and movement are key to conveying how objects move, "
-        "interact, and exist in space and in relation to each other. Realistic lighting shows "
-        "seams, divides space, and indicates moving parts.\n\n"
-
-        "Bold, graphic, intentional.\n\n"
-
-        "The foundational elements of print based design typography, grids, space, scale, color, "
-        "and use of imagery guide visual treatments. These elements do far more than please the "
-        "eye. They create hierarchy, meaning, and focus. Deliberate color choices, edge to edge "
-        "imagery, large scale typography, and intentional white space create a bold and graphic "
-        "interface that immerse the user in the experience.\n"
-        "An emphasis on user actions makes core functionality immediately apparent and provides "
-        "waypoints for the user.\n\n"
-
-        "Motion provides meaning.\n\n"
-
-        "Motion respects and reinforces the user as the prime mover. Primary user actions are "
-        "inflection points that initiate motion, transforming the whole design.\n"
-        "All action takes place in a single environment. Objects are presented to the user without "
-        "breaking the continuity of experience even as they transform and reorganize.\n"
-        "Motion is meaningful and appropriate, serving to focus attention and maintain continuity. "
-        "Feedback is subtle yet clear. Transitions are efﬁcient yet coherent.\n\n"
-
-        "3D world.\n\n"
-
-        "The material environment is a 3D space, which means all objects have x, y, and z "
-        "dimensions. The z-axis is perpendicularly aligned to the plane of the display, with the "
-        "positive z-axis extending towards the viewer. Every sheet of material occupies a single "
-        "position along the z-axis and has a standard 1dp thickness.\n"
-        "On the web, the z-axis is used for layering and not for perspective. The 3D world is "
-        "emulated by manipulating the y-axis.\n\n"
-
-        "Light and shadow.\n\n"
-
-        "Within the material environment, virtual lights illuminate the scene. Key lights create "
-        "directional shadows, while ambient light creates soft shadows from all angles.\n"
-        "Shadows in the material environment are cast by these two light sources. In Android "
-        "development, shadows occur when light sources are blocked by sheets of material at "
-        "various positions along the z-axis. On the web, shadows are depicted by manipulating the "
-        "y-axis only. The following example shows the card with a height of 6dp.\n\n"
-
-        "Resting elevation.\n\n"
-
-        "All material objects, regardless of size, have a resting elevation, or default elevation "
-        "that does not change. If an object changes elevation, it should return to its resting "
-        "elevation as soon as possible.\n\n"
-
-        "Component elevations.\n\n"
-
-        "The resting elevation for a component type is consistent across apps (e.g., FAB elevation "
-        "does not vary from 6dp in one app to 16dp in another app).\n"
-        "Components may have different resting elevations across platforms, depending on the depth "
-        "of the environment (e.g., TV has a greater depth than mobile or desktop).\n\n"
-
-        "Responsive elevation and dynamic elevation offsets.\n\n"
-
-        "Some component types have responsive elevation, meaning they change elevation in response "
-        "to user input (e.g., normal, focused, and pressed) or system events. These elevation "
-        "changes are consistently implemented using dynamic elevation offsets.\n"
-        "Dynamic elevation offsets are the goal elevation that a component moves towards, relative "
-        "to the component’s resting state. They ensure that elevation changes are consistent "
-        "across actions and component types. For example, all components that lift on press have "
-        "the same elevation change relative to their resting elevation.\n"
-        "Once the input event is completed or cancelled, the component will return to its resting "
-        "elevation.\n\n"
-
-        "Avoiding elevation interference.\n\n"
-
-        "Components with responsive elevations may encounter other components as they move between "
-        "their resting elevations and dynamic elevation offsets. Because material cannot pass "
-        "through other material, components avoid interfering with one another any number of ways, "
-        "whether on a per component basis or using the entire app layout.\n"
-        "On a component level, components can move or be removed before they cause interference. "
-        "For example, a floating action button (FAB) can disappear or move off screen before a "
-        "user picks up a card, or it can move if a snackbar appears.\n"
-        "On the layout level, design your app layout to minimize opportunities for interference. "
-        "For example, position the FAB to one side of stream of a cards so the FAB won’t interfere "
-        "when a user tries to pick up one of cards.\n\n"
-    </string>
     <string name="title_activity_student_help">Help</string>
     <string name="title_activity_search_result_tabview">Search result</string>
     <string name="title_activity_search_result">Search result</string>
@@ -393,78 +242,9 @@
         <item>A-Ratio</item>
     </string-array>
 
-    <string-array name="QualificationInstitutionText">
-        <item>Institution</item>
-        <item>RUMC</item>
-        <item>NDC</item>
-        <item>BUET</item>
-        <item>BUET</item>
-    </string-array>
-
-    <string-array name="QualificationExamText">
-        <item>Exam</item>
-        <item>O Lvl</item>
-        <item>A Lvl</item>
-        <item>Grad</item>
-        <item>Post_Grad</item>
-    </string-array>
-
-    <string-array name="QualificationSessionText">
-        <item>Session</item>
-        <item>2008</item>
-        <item>2010</item>
-        <item>2014</item>
-        <item>2016</item>
-    </string-array>
-
-    <string-array name="QualificationResultText">
-        <item>Result</item>
-        <item>GPA - 5.00</item>
-        <item>GPA - 5.00</item>
-        <item>CGPA - 4.00</item>
-        <item>CGPA - 4.00</item>
-    </string-array>
-
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string-array name="Education">
-        <item>School</item>
-        <item>College</item>
-        <item>Admission Test</item>
-        <item>University</item>
-    </string-array>
-    <string-array name="BanglaMediumSchool">
-        <item>One</item>
-        <item>Two</item>
-        <item>Three</item>
-        <item>Four</item>
-        <item>Five</item>
-        <item>Six</item>
-        <item>Seven</item>
-        <item>Eight</item>
-        <item>Nine</item>
-        <item>Ten</item>
-
-    </string-array>
-    <string-array name="EnglishMediumSchool">
-        <item>Play</item>
-        <item>Nursery</item>
-        <item>KG-1</item>
-        <item>KG-2</item>
-        <item>One</item>
-        <item>Two</item>
-        <item>Three</item>
-        <item>Four</item>
-        <item>Five</item>
-        <item>Six</item>
-        <item>Seven</item>
-        <item>Eight</item>
-        <item>Nine</item>
-        <item>Ten</item>
-        <item>A-Level</item>
-        <item>O-Level</item>
-    </string-array>
 
     <string name="mapTag">mapTag</string>
     <string name="arrow">arrow</string>
@@ -531,7 +311,6 @@
         <item name="voice">Voice message (custom)</item>
     </string-array>
 
-    <string name="medicare">Medicare Offices</string>
     <string name="estimated_capacity">Estimated Capacity</string>
     <string name="estimated_salary">Estimated Salary</string>
 
@@ -797,7 +576,7 @@ provided.Tap salary for details.  </string>
     <string name="how_nid_info"><![CDATA[Please center your NID front page in the camera window, to verify your identity.
       \nCamera will auto detect and accept your National ID Card. Provided good lighting condition is maintained…]]></string>
     <string name="flush">Flush</string>
-    <string name="hdr">HDR</string>
+    <string name="hdr">HDR On</string>
     <string name="support">Support</string>
 
     <string-array name="University">
@@ -852,4 +631,17 @@ provided.Tap salary for details.  </string>
     <string name="yes_skip">Yes, Skip</string>
     <string name="skip_nid">Skip NID verification ?</string>
     <string name="sent_code_msg">Enter the 6 digit verification code sent to you at <br /><b>%s</b></string>
+    <string name="teacher_guideline_desc">To become a teacher in Dume platform you need to fill up all your info including your qualification &amp; NID no. After successful completion you can create skill on the subject you wanna give tuition.</string>
+    <string name="student_guideline_desc">To find teacher in Dume platform just complete your login flow &amp; search mentor or post tuition job.</string>
+
+    <string name="youtubeink">
+        <a href="https://www.youtube.com/channel/UCTsU1wD66SEWBrDzrnnrYaw">Youtube Channel Link</a>
+    </string>
+    <string name="fbpagelink">
+        <a href="https://www.facebook.com/groups/1623868617935891/">FB Page Link</a>
+    </string>
+    <string name="fbgrplink">
+        <a href="https://www.facebook.com/dumebd">FB Group Link</a>
+    </string>
+    <string name="hotline">&#160;<u>Hotline : 01303464617</u>&#160;&#160;</string>
 </resources>

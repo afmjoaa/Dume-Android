@@ -1,22 +1,29 @@
 package io.dume.dume.firstTimeUser.Fragment
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context.TELEPHONY_SERVICE
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.telephony.TelephonyManager
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import io.dume.dume.R
-import io.dume.dume.firstTimeUser.*
+import io.dume.dume.firstTimeUser.ForwardFlowHostActivity
+import io.dume.dume.firstTimeUser.ForwardFlowViewModel
+import io.dume.dume.firstTimeUser.Role
 import io.dume.dume.util.DumeUtils
 import kotlinx.android.synthetic.main.fragment_login.*
 
@@ -25,6 +32,11 @@ class LoginFragment : Fragment(), View.OnClickListener {
     private lateinit var navController: NavController
     private lateinit var viewModel: ForwardFlowViewModel
     private lateinit var parent: ForwardFlowHostActivity
+
+    companion object {
+        private const val REQUEST_NUMBER = 2
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_login, container, false)
     }
@@ -32,7 +44,7 @@ class LoginFragment : Fragment(), View.OnClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         activity?.run {
-            viewModel = ViewModelProviders.of(this).get(ForwardFlowViewModel::class.java)
+            viewModel = ViewModelProvider(this).get(ForwardFlowViewModel::class.java)
         } ?: throw Throwable("invalid activity")
         parent = activity as ForwardFlowHostActivity
         navController = Navigation.findNavController(view)
@@ -41,14 +53,28 @@ class LoginFragment : Fragment(), View.OnClickListener {
     }
 
 
-    @SuppressLint("MissingPermission", "HardwareIds")
+    @SuppressLint("HardwareIds")
     private fun init() {
         try {
-            val tMgr = context?.getSystemService(TELEPHONY_SERVICE) as TelephonyManager
-            val mPhoneNumber = tMgr.line1Number
-            phoneNumberEditText.setText(mPhoneNumber)
+            if (ActivityCompat.checkSelfPermission(context!!, Manifest.permission.READ_PHONE_NUMBERS) != PackageManager.PERMISSION_GRANTED ||
+                    ActivityCompat.checkSelfPermission(context!!, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED
+            ) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    requestPermissions(arrayOf(Manifest.permission.READ_PHONE_STATE, Manifest.permission.READ_PHONE_NUMBERS), REQUEST_NUMBER)
+                } else {
+                    requestPermissions(arrayOf(Manifest.permission.READ_PHONE_STATE), REQUEST_NUMBER)
+                }
+            } else {
+                val tMgr = context?.getSystemService(TELEPHONY_SERVICE) as TelephonyManager
+                val mPhoneNumber = tMgr.line1Number
+                Log.e("LoginFragment", "init: $mPhoneNumber")
+                if (mPhoneNumber.startsWith("01") && mPhoneNumber.length == 11){
+                    phoneNumberEditText.setText(mPhoneNumber)
+                    phoneNumberEditText.setSelection(mPhoneNumber.length)
+                }
+            }
         } catch (e: Exception) {
-            print(e)
+            Log.d("phoneNumber", e.printStackTrace().toString())
         }
 
         sendCodeBtn.setOnClickListener(this)
@@ -76,6 +102,26 @@ class LoginFragment : Fragment(), View.OnClickListener {
             }
 
         })
+    }
+
+    @SuppressLint("MissingPermission", "HardwareIds")
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == REQUEST_NUMBER) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                try {
+                    val tMgr = context?.getSystemService(TELEPHONY_SERVICE) as TelephonyManager
+                    val mPhoneNumber: String = tMgr.line1Number
+                    Log.e("LoginFragment", "init: $mPhoneNumber")
+                    if (mPhoneNumber.startsWith("01") && mPhoneNumber.length == 11){
+                        phoneNumberEditText.setText(mPhoneNumber)
+                        phoneNumberEditText.setSelection(mPhoneNumber.length)
+                    }
+                } catch (e: java.lang.Exception) {
+                    Log.e("LoginFragment", "onRequestPermissionsResult: ")
+                }
+            }
+        }
     }
 
     private fun initObservers() {
@@ -137,5 +183,7 @@ class LoginFragment : Fragment(), View.OnClickListener {
             }
         }
     }
+
+
 }
 

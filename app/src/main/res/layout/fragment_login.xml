@@ -1,52 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nested_permission"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="24dp"
-    android:layout_marginBottom="18dp"
-    android:orientation="vertical">
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/phoneWrapper"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:hint="Phone Number"
-        android:paddingStart="16dp"
-        android:paddingLeft="16dp"
-        android:paddingEnd="16dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="18dp"
+        android:orientation="vertical">
 
-        android:paddingRight="16dp"
-        app:errorEnabled="true"
-        app:errorIconDrawable="@drawable/error_icon"
-        app:hintEnabled="true"
-        app:startIconDrawable="@drawable/phone_icon">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/phoneNumberEditText"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/phoneWrapper"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="number" />
+            android:layout_marginBottom="8dp"
+            android:hint="Phone Number"
+            android:paddingStart="16dp"
+            android:paddingLeft="16dp"
+            android:paddingEnd="16dp"
+            android:paddingRight="16dp"
+            app:errorEnabled="true"
+            app:errorIconDrawable="@drawable/error_icon"
+            app:hintEnabled="true"
+            app:startIconDrawable="@drawable/phone_icon">
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/phoneNumberEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number" />
 
-    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:id="@+id/sendCodeBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:enabled="false"
-        android:layout_marginBottom="16dp"
-        android:contentDescription="@string/send_code"
-        android:text="@string/send_code"
-        app:iconPadding="12dp"
-        app:icon="@drawable/send_icon"/>
+        </com.google.android.material.textfield.TextInputLayout>
 
-</LinearLayout>
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/sendCodeBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:enabled="false"
+            android:layout_marginBottom="16dp"
+            android:contentDescription="@string/send_code"
+            android:text="@string/send_code"
+            app:iconPadding="12dp"
+            app:icon="@drawable/send_icon"/>
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>
+
+

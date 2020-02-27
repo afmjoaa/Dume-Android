@@ -36,13 +36,13 @@
             android:name=".teacher.DashBoard.TeacherDashboard"
             android:label="@string/title_activity_teacher_dashboard"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait"
+            android:screenOrientation="fullSensor"
             android:theme="@style/DefaultTheme.NoActionBar" />
         <activity
             android:name=".student.DashBoard.StudentDashBoard"
             android:label="@string/title_activity_student_dash_board"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait"
+            android:screenOrientation="fullSensor"
             android:theme="@style/DefaultTheme.NoActionBar" />
         <activity
             android:name=".teacher.skill.SkillActivity"
@@ -63,11 +63,10 @@
         <!-- launcher activity (splash activity -->
         <activity
             android:name=".splash.SplashActivity"
-            android:label=""
+            android:label="Dume"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -92,9 +91,6 @@
             android:label=""
             android:theme="@style/AppTheme.NoActionBar" />
 
-        <activity
-            android:name=".firstTimeUser.RoleChooserActivity"
-            android:theme="@style/DefaultTheme.NoActionBar" />
         <activity android:name=".common.nexuspay.NexusPay" />
         <activity android:name=".common.bkash_otp.BkashOTP" />
         <activity android:name=".common.bkash_transection.BkashTransectionActivity" />

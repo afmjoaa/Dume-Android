@@ -3,6 +3,5 @@
 
     <style name="MyNumberPickerTheme" parent="@android:style/Widget.Material.NumberPicker">
         <item name="colorControlNormal">@color/colorAccent</item>
-        <!--<item name="android:background">#b3e5fc</item>-->
     </style>
 </resources>

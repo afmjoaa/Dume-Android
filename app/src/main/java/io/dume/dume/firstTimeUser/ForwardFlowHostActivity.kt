@@ -1,13 +1,12 @@
 package io.dume.dume.firstTimeUser
 
-
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.google.firebase.auth.FirebaseAuth
@@ -26,7 +25,7 @@ class ForwardFlowHostActivity : BaseAppCompatActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_forward_flow_host)
-        viewModel = ViewModelProviders.of(this).get(ForwardFlowViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(ForwardFlowViewModel::class.java)
         viewModel.inject(this)
         navController = Navigation.findNavController(this, R.id.nav_host_fragment)
         init()
@@ -35,12 +34,11 @@ class ForwardFlowHostActivity : BaseAppCompatActivity(), View.OnClickListener {
     private fun init() {
         setActivityContext(this, 1113)
         setDarkStatusBarIcon()
-        configureAppbar(this, "Testing", true)
+        configureAppbar(this, "Dume", true)
         sharedPreferenceObserver()
         initView()
         initListener()
         updateSate()
-
     }
 
     private fun updateSate() {
@@ -113,7 +111,6 @@ class ForwardFlowHostActivity : BaseAppCompatActivity(), View.OnClickListener {
 
         registerBtn.setOnClickListener(this)
         navController.addOnDestinationChangedListener { controller, destination, arguments ->
-
             when (destination.id) {
                 R.id.roleChooser -> {
                     registerBtn.hide()
@@ -131,11 +128,7 @@ class ForwardFlowHostActivity : BaseAppCompatActivity(), View.OnClickListener {
                     registerBtn.hide()
                     continueBtn.show()
                     showActionBar()
-                    if(Role.TEACHER.flow == viewModel.role.value?.flow){
-                        configAppToolBarTitle(this, "Teacher Guide")
-                    }else{
-                        configAppToolBarTitle(this, "Student Guide")
-                    }
+                    configAppToolBarTitle(this, "User Guide")
                 }
                 R.id.loginFragment -> {
                     registerBtn.hide()
@@ -143,6 +136,13 @@ class ForwardFlowHostActivity : BaseAppCompatActivity(), View.OnClickListener {
                     showActionBar()
                     configAppToolBarTitle(this, "Login")
                 }
+                R.id.verificationFragment ->{
+                    registerBtn.hide()
+                    continueBtn.hide()
+                    showActionBar()
+                    configAppToolBarTitle(this, "Verify")
+                }
+
                 R.id.nidFragment -> {
                     registerBtn.hide()
                     continueBtn.hide()
@@ -180,12 +180,12 @@ class ForwardFlowHostActivity : BaseAppCompatActivity(), View.OnClickListener {
                     configAppToolBarTitle(this, "Activation Fee")
                 }
             }
-            settingsAppbar.setExpanded(true, true)
         }
     }
 
 
     private fun hideActionBar() {
+        settingsAppbar.setExpanded(false, false)
         settingsAppbar.visibility = View.GONE
         supportActionBar?.hide()
     }
@@ -193,6 +193,7 @@ class ForwardFlowHostActivity : BaseAppCompatActivity(), View.OnClickListener {
     private fun showActionBar() {
         settingsAppbar.visibility = View.VISIBLE
         supportActionBar?.show()
+        settingsAppbar.setExpanded(true, true)
     }
 
     override fun onClick(v: View?) {
