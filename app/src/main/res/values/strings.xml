@@ -459,7 +459,8 @@ provided.Tap salary for details.  </string>
         <item>NexusPay/Rocket</item>
     </string-array>
 
-    <string name="agree_terms"><![CDATA[By clicking Agree to Continue button your are agreed to our Policy & Terms of Services]]></string>
+    <string name="agree_terms"><![CDATA[By clicking Agree & Continue button you are agree to our privacy policy & terms of services]]></string>
+    <string name="afterSplashTitleOne">Set default</string>
     <string name="choosing_text_mentor">Finding tuition have never been easy with dume</string>
     <string name="intro_mentor">You can build your profile for mentor or boot-camp/coaching center with ease. Just add skill and let other find you at what you are best.</string>
     <string name="example_capacity">Ex.8옷-12옷</string>
