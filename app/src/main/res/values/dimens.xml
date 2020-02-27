@@ -27,14 +27,10 @@
     <dimen name="appbar_padding_top">8dp</dimen>
     <dimen name="activity_margin">16dp</dimen>
     <dimen name="card_padding">40dp</dimen>
-<<<<<<< HEAD
     <dimen name="tendp">10dp</dimen>
-
     <dimen name="top_action_bar_padding_horizontal">8dp</dimen>
     <dimen name="top_action_bar_height">64dp</dimen>
     <dimen name="top_action_button_padding">12dp</dimen>
-=======
     <dimen name="app_bar_normal_height">56dp</dimen>
->>>>>>> 7b71aa289deb14804a1469b8c431e106775c7bc4
 
 </resources>
