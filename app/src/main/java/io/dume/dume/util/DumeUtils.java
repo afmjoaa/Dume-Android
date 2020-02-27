@@ -1,8 +1,11 @@
 package io.dume.dume.util;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Point;
 import android.graphics.Typeface;
@@ -784,6 +787,31 @@ public class DumeUtils {
         return calculatedSalary;
     }
 
+
+    public static String getFacebookPageURL(Context context, String fbUrl, String pageID ) {
+        PackageManager packageManager = context.getPackageManager();
+        try {
+            int versionCode = packageManager.getPackageInfo("com.facebook.katana", 0).versionCode;
+            if (versionCode >= 3002850) { //newer versions of fb app
+                return "fb://facewebmodal/f?href=" + fbUrl;
+            } else {
+                return "fb://page/" + pageID;
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            return fbUrl;
+        }
+    }
+
+    static String getEmail(Context context) {
+        AccountManager accountManager = AccountManager.get(context);
+        Account[] accounts = accountManager.getAccountsByType("com.google");
+        Account account;
+        if (accounts.length > 0) account = accounts[0];
+        else account = null;
+
+        if (account == null)return null;
+        else return account.name;
+    }
 
 }
 
