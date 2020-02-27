@@ -11,7 +11,6 @@ import androidx.annotation.NonNull
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
@@ -52,7 +51,6 @@ class StudentDashBoard : BaseAppCompatActivity(), NavigationView.OnNavigationIte
 
     private fun init() {
         setActivityContext(this, 1112)
-
         initView()
         initListener()
         initLifeCycleComponents()

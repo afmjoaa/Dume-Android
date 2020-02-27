@@ -12,14 +12,6 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import com.google.android.material.appbar.AppBarLayout;
-import androidx.core.app.ActivityCompat;
-import androidx.core.widget.NestedScrollView;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -38,14 +30,19 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.appbar.AppBarLayout;
 import com.google.gson.Gson;
 import com.google.maps.android.ui.IconGenerator;
 
 import java.util.List;
 import java.util.Objects;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.widget.NestedScrollView;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import carbon.widget.LinearLayout;
 import io.dume.dume.R;
 import io.dume.dume.customView.HorizontalLoadView;
@@ -63,10 +60,9 @@ import static io.dume.dume.util.ImageHelper.getRoundedCornerBitmap;
 
 public class CrudSkillActivity extends BaseMapActivity implements CrudContract.View,
         MyGpsLocationChangeListener, OnMapReadyCallback {
-    @BindView(R.id.crudLoad)
+
     HorizontalLoadView loadView;
     private CrudContract.Presenter presenter;
-    @BindView(R.id.categoryRV)
     RecyclerView categoryGrid;
     private String fromWhere;
     private static final String TAG = "CrudSkillActivity";
@@ -88,7 +84,6 @@ public class CrudSkillActivity extends BaseMapActivity implements CrudContract.V
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_crud_skill);
         setActivityContextMap(this, fromFlag);
-        ButterKnife.bind(this);
         presenter = new CrudPresent(new CrudModel(), this);
         presenter.enqueue();
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
@@ -102,6 +97,8 @@ public class CrudSkillActivity extends BaseMapActivity implements CrudContract.V
         appBarLayout = findViewById(R.id.settingsAppbar);
         hackElevation = findViewById(R.id.hack_elevation);
         alwaysViewMusk = findViewById(R.id.always_view_musk);
+        categoryGrid = findViewById(R.id.categoryRV);
+        loadView = findViewById(R.id.crudLoad);
         mCustomMarkerView = ((LayoutInflater) Objects.requireNonNull(getSystemService(LAYOUT_INFLATER_SERVICE))).inflate(R.layout.custom_marker_view, null);
         mMarkerImageView = mCustomMarkerView.findViewById(R.id.profile_image);
         iconFactory = new IconGenerator(this);
@@ -205,7 +202,6 @@ public class CrudSkillActivity extends BaseMapActivity implements CrudContract.V
         if (fromWhere != null) {
             switch (fromWhere) {
                 case DumeUtils.STUDENT:
-                    //addCustomMarkerFromURL(searchDataStore.getAvatarString(), searchDataStore.getAnchorPoint());
                     alwaysViewMusk.postDelayed(new Runnable() {
                         @Override
                         public void run() {

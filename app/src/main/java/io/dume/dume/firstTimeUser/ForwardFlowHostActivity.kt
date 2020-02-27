@@ -111,6 +111,7 @@ class ForwardFlowHostActivity : BaseAppCompatActivity(), View.OnClickListener {
 
         registerBtn.setOnClickListener(this)
         navController.addOnDestinationChangedListener { controller, destination, arguments ->
+            job_buttons.visibility = View.INVISIBLE
             when (destination.id) {
                 R.id.roleChooser -> {
                     registerBtn.hide()
@@ -136,7 +137,7 @@ class ForwardFlowHostActivity : BaseAppCompatActivity(), View.OnClickListener {
                     showActionBar()
                     configAppToolBarTitle(this, "Login")
                 }
-                R.id.verificationFragment ->{
+                R.id.verificationFragment -> {
                     registerBtn.hide()
                     continueBtn.hide()
                     showActionBar()
@@ -172,6 +173,8 @@ class ForwardFlowHostActivity : BaseAppCompatActivity(), View.OnClickListener {
                     continueBtn.hide()
                     showActionBar()
                     configAppToolBarTitle(this, "Post Job")
+                    job_buttons.visibility = View.VISIBLE
+
                 }
                 R.id.paymentFragment -> {
                     registerBtn.hide()
@@ -213,7 +216,6 @@ class ForwardFlowHostActivity : BaseAppCompatActivity(), View.OnClickListener {
             listener(it)
         }
     }
-
 
     override fun onBackPressed() {
         if (navController.currentDestination?.id == R.id.nidFragment) {

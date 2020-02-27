@@ -1,5 +1,6 @@
 package io.dume.dume.student.DashBoard.Fragment.JobBoard
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,20 +12,22 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import io.dume.dume.R
 import io.dume.dume.firstTimeUser.Flag
+import io.dume.dume.firstTimeUser.ForwardFlowHostActivity
 import io.dume.dume.student.DashBoard.StudentDashBoard
 import io.dume.dume.teacher.DashBoard.adapters.JobItemCardAdapter
 import io.dume.dume.teacher.DashBoard.fragments.jobboard.JobItem
 import io.dume.dume.teacher.crudskill.CrudSkillActivity
 import io.dume.dume.util.StateManager
+import kotlinx.android.synthetic.main.activity_forward_flow_host.*
+import kotlinx.android.synthetic.main.activity_student_dash_board2.*
 import kotlinx.android.synthetic.main.fragment_student_job_board.*
-import kotlinx.android.synthetic.main.fragment_student_job_board.view.*
 
 
 class StudentJobBoardFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
@@ -32,14 +35,19 @@ class StudentJobBoardFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener
     private var jobItemCardAdapter = JobItemCardAdapter()
     private lateinit var jobPrimaryDialog: AlertDialog
 
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        viewModelStudent = ViewModelProviders.of(this).get(StudentJobBoardViewModel::class.java)
+        viewModelStudent = ViewModelProvider(this).get(StudentJobBoardViewModel::class.java)
         return inflater.inflate(R.layout.fragment_student_job_board, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initialize()
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
     }
 
     private fun initialize() {
@@ -57,31 +65,71 @@ class StudentJobBoardFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener
 
     private fun initializeButtons() {
 
-        jobPost.setOnClickListener {
-            if (jobPost.isExtended) {
-                jobPost.shrink()
-                jobMultiple.visibility = View.VISIBLE
-                jobMultiple.expand()
-            } else {
-                jobPost.extend()
-                jobMultiple.collapseImmediately()
-                jobMultiple.visibility = View.INVISIBLE
+        if (activity is ForwardFlowHostActivity) {
+            val parent = activity as ForwardFlowHostActivity
+            parent.jobPost.setOnClickListener {
+                if ( parent.jobPost.isExtended) {
+                    parent.jobPost.shrink()
+                    parent.jobMultiple.visibility = View.VISIBLE
+                    parent.jobMultiple.expand()
+                } else {
+                    parent.jobPost.extend()
+                    parent.jobMultiple.collapseImmediately()
+                    parent.jobMultiple.visibility = View.INVISIBLE
+                }
+            }
+            parent.jobSkip.setOnClickListener {
+                context?.let {
+                    StateManager.getInstance(it).setFirstTimeUser(false)
+                }
+                startActivity(Intent(context, StudentDashBoard::class.java))
+                parent.finish()
+            }
+
+            parent.fab_regular.setOnClickListener {
+                parent.jobPost.performClick()
+                jobPrimaryDialog.show()
+            }
+            parent.fab_instant.setOnClickListener {
+                parent.jobPost.performClick()
+                jobPrimaryDialog.show()
+            }
+
+        } else if (activity is StudentDashBoard) {
+            val parent = activity as StudentDashBoard
+            parent.jobPost.setOnClickListener {
+                if ( parent.jobPost.isExtended) {
+                    parent.jobPost.shrink()
+                    parent.jobMultiple.visibility = View.VISIBLE
+                    parent.jobMultiple.expand()
+                } else {
+                    parent.jobPost.extend()
+                    parent.jobMultiple.collapseImmediately()
+                    parent.jobMultiple.visibility = View.INVISIBLE
+                }
+            }
+            parent.jobSkip.setOnClickListener {
+                context?.let {
+                    StateManager.getInstance(it).setFirstTimeUser(false)
+                }
+                startActivity(Intent(context, StudentDashBoard::class.java))
+                parent.finish()
+            }
+
+            parent.fab_regular.setOnClickListener {
+                parent.jobPost.performClick()
+                jobPrimaryDialog.show()
+            }
+            parent.fab_instant.setOnClickListener {
+                parent.jobPost.performClick()
+                jobPrimaryDialog.show()
             }
         }
 
-        jobSkip.setOnClickListener {
-            context?.let {
-                StateManager.getInstance(it).setFirstTimeUser(false)
-            }
-            startActivity(Intent(context, StudentDashBoard::class.java))
-            activity?.finish()
-        }
 
-        fab_regular.setOnClickListener {
-            jobPost.performClick()
-            jobPrimaryDialog.show()
-        }
     }
+
+
 
     private fun initializeRV() {
         jobRecycleView.layoutManager = LinearLayoutManager(context, carbon.widget.RecyclerView.VERTICAL, false)
@@ -89,7 +137,7 @@ class StudentJobBoardFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener
         swipe_to_refres.setColorSchemeColors(ContextCompat.getColor(context!!, R.color.mColorPrimaryVariant))
         swipe_to_refres.setOnRefreshListener(this)
         viewModelStudent.fetchJobs()
-        viewModelStudent.jobListLive.observe(this, Observer {
+        viewModelStudent.jobListLive.observe(viewLifecycleOwner, Observer {
             updateJobRecView(it)
             swipe_to_refres.isRefreshing = false
         })
