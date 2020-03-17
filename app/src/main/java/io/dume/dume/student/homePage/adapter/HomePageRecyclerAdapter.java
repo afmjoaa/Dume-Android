@@ -35,19 +35,14 @@ import androidx.interpolator.view.animation.FastOutLinearInInterpolator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import io.dume.dume.R;
-import io.dume.dume.common.chatActivity.DemoModel;
-import io.dume.dume.student.homePage.HomePageActivity;
-import io.dume.dume.student.homePage.HomePageContract;
+import io.dume.dume.commonActivity.chatActivity.DemoModel;
 import io.dume.dume.student.homePage.HomePageModel;
-import io.dume.dume.student.homePage.HomePagePresenter;
 import io.dume.dume.student.recordsPage.Record;
 import io.dume.dume.teacher.homepage.TeacherActivtiy;
 import io.dume.dume.teacher.homepage.TeacherContract;
 import io.dume.dume.util.DumeUtils;
 import io.dume.dume.util.Google;
 import me.zhanghai.android.materialratingbar.MaterialRatingBar;
-
-import static io.dume.dume.util.DumeUtils.showKeyboard;
 
 public class HomePageRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 

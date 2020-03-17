@@ -42,9 +42,9 @@ import java.util.List;
 
 import io.dume.dume.util.Google;
 import io.dume.dume.R;
-import io.dume.dume.common.appInfoActivity.AppInfoActivity;
-import io.dume.dume.common.privacyPolicy.PrivacyPolicyActivity;
-import io.dume.dume.model.DumeModel;
+import io.dume.dume.commonActivity.appInfoActivity.AppInfoActivity;
+import io.dume.dume.commonActivity.privacyPolicy.PrivacyPolicyActivity;
+import io.dume.dume.commonActivity.model.DumeModel;
 import io.dume.dume.student.common.SettingData;
 import io.dume.dume.student.common.SettingsAdapter;
 import io.dume.dume.student.pojo.BaseAppCompatActivity;

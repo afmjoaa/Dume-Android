@@ -10,7 +10,7 @@ import com.google.firebase.firestore.GeoPoint;
 import java.util.Objects;
 
 import io.dume.dume.R;
-import io.dume.dume.interFace.usefulListeners;
+import io.dume.dume.interfaces.usefulListeners;
 
 public class ProfilePagePresenter implements ProfilePageContract.Presenter {
 

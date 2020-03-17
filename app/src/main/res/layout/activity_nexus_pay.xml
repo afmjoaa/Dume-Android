@@ -4,6 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".common.nexuspay.NexusPay">
+    tools:context=".commonActivity.nexuspay.NexusPay">
 
 </androidx.constraintlayout.widget.ConstraintLayout>

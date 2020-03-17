@@ -26,7 +26,7 @@ import java.util.Map;
 import java.util.Random;
 
 import io.dume.dume.R;
-import io.dume.dume.interFace.usefulListeners;
+import io.dume.dume.interfaces.usefulListeners;
 import io.dume.dume.student.homePage.HomePageActivity;
 import io.dume.dume.student.pojo.SearchDataStore;
 import io.dume.dume.student.pojo.StuBaseModel;

@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 import carbon.widget.RelativeLayout;
 import io.dume.dume.R;
-import io.dume.dume.common.inboxActivity.InboxActivity;
+import io.dume.dume.commonActivity.inboxActivity.InboxActivity;
 import io.dume.dume.student.recordsPage.RecordsPageActivity;
 import io.dume.dume.teacher.pojo.Inbox;
 import io.dume.dume.util.DumeUtils;

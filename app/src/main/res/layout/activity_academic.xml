@@ -12,7 +12,7 @@
         android:id="@+id/included_appber"
         layout="@layout/activity_header" />
 
-    <io.dume.dume.customView.HorizontalLoadView
+    <io.dume.dume.components.customView.HorizontalLoadView
         android:id="@+id/academicLoad"
         android:layout_width="20dp"
         android:layout_height="3dp"

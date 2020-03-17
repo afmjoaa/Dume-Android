@@ -23,7 +23,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import io.dume.dume.R;
-import io.dume.dume.model.DumeModel;
+import io.dume.dume.commonActivity.model.DumeModel;
 import io.dume.dume.student.homePage.adapter.HomePageRatingData;
 import io.dume.dume.student.homePage.adapter.HomePageRecyclerData;
 import io.dume.dume.student.recordsPage.Record;

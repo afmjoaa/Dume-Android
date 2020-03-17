@@ -43,8 +43,8 @@ import java.util.Map;
 
 import io.dume.dume.util.Google;
 import io.dume.dume.R;
-import io.dume.dume.common.bkash_transection.BkashTransectionActivity;
-import io.dume.dume.model.DumeModel;
+import io.dume.dume.commonActivity.bkash_transection.BkashTransectionActivity;
+import io.dume.dume.commonActivity.model.DumeModel;
 import io.dume.dume.student.homePage.HomePageModel;
 import io.dume.dume.student.homePage.adapter.HomePageRecyclerData;
 import io.dume.dume.student.pojo.BaseAppCompatActivity;

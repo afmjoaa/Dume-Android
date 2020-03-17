@@ -61,7 +61,7 @@ import java.util.Scanner;
 import carbon.widget.LinearLayout;
 import io.dume.dume.util.Google;
 import io.dume.dume.R;
-import io.dume.dume.customView.HorizontalLoadView;
+import io.dume.dume.components.customView.HorizontalLoadView;
 import io.dume.dume.splash.SplashActivity;
 import io.dume.dume.student.pojo.BaseMapActivity;
 import io.dume.dume.student.pojo.HeatMapDataSet;

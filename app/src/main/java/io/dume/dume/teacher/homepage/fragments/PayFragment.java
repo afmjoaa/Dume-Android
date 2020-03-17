@@ -1,6 +1,5 @@
 package io.dume.dume.teacher.homepage.fragments;
 
-import androidx.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,7 +19,7 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.dume.dume.R;
-import io.dume.dume.common.bkash_transection.BkashTransectionActivity;
+import io.dume.dume.commonActivity.bkash_transection.BkashTransectionActivity;
 import io.dume.dume.teacher.adapters.PayAdapter;
 import io.dume.dume.teacher.homepage.TeacherActivtiy;
 import io.dume.dume.teacher.homepage.TeacherContract;

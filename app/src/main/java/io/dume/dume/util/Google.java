@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.Keep;
-import io.dume.dume.common.chatActivity.Room;
-import io.dume.dume.common.inboxActivity.InboxActivity;
+import io.dume.dume.commonActivity.chatActivity.Room;
+import io.dume.dume.commonActivity.inboxActivity.InboxActivity;
 import io.dume.dume.student.recordsPage.Record;
 
 @Keep

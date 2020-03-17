@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import io.dume.dume.R;
-import io.dume.dume.model.DumeModel;
+import io.dume.dume.commonActivity.model.DumeModel;
 import io.dume.dume.student.pojo.SearchDataStore;
 import io.dume.dume.teacher.homepage.TeacherContract;
 
@@ -30,7 +30,7 @@ public class SkillPresenter implements SkillContract.Presenter {
 
 
     private static final String TAG = "SkillPresenter";
-    private io.dume.dume.model.TeacherModel teacherModel;
+    private io.dume.dume.commonActivity.model.TeacherModel teacherModel;
     private Map<String, Object> documentSnapshot;
     private int percentage;
     Context context;

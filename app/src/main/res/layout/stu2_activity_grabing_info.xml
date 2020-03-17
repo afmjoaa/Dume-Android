@@ -355,7 +355,7 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <io.dume.dume.customView.HorizontalLoadView
+    <io.dume.dume.components.customView.HorizontalLoadView
         android:id="@+id/loadView"
         android:layout_width="20dp"
         android:layout_height="3dp"

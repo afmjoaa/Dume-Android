@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/white"
-    tools:context=".common.inboxActivity.InboxActivity$PlaceholderFragment">
+    tools:context=".commonActivity.inboxActivity.InboxActivity$PlaceholderFragment">
 
     <RelativeLayout
         android:id="@+id/hostRelativeLayout"

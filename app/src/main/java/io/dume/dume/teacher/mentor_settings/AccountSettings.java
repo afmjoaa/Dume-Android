@@ -58,8 +58,8 @@ import java.util.List;
 import java.util.Map;
 
 import io.dume.dume.R;
-import io.dume.dume.customView.HorizontalLoadView;
-import io.dume.dume.model.DumeModel;
+import io.dume.dume.components.customView.HorizontalLoadView;
+import io.dume.dume.commonActivity.model.DumeModel;
 import io.dume.dume.student.common.SettingData;
 import io.dume.dume.student.common.SettingsAdapter;
 import io.dume.dume.student.heatMap.AccountRecyData;

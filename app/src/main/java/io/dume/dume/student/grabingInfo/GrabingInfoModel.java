@@ -10,7 +10,7 @@ import com.google.firebase.storage.UploadTask;
 import java.io.InputStream;
 import java.util.Objects;
 
-import io.dume.dume.interFace.usefulListeners;
+import io.dume.dume.interfaces.usefulListeners;
 import io.dume.dume.student.pojo.StuBaseModel;
 
 public class GrabingInfoModel extends StuBaseModel implements GrabingInfoContract.Model {

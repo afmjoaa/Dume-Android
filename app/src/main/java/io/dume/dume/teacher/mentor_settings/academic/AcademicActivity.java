@@ -38,7 +38,7 @@ import java.util.Calendar;
 import java.util.Objects;
 
 import io.dume.dume.R;
-import io.dume.dume.customView.HorizontalLoadView;
+import io.dume.dume.components.customView.HorizontalLoadView;
 import io.dume.dume.student.pojo.BaseAppCompatActivity;
 import io.dume.dume.teacher.mentor_settings.basicinfo.EditAccount;
 import io.dume.dume.util.DatePickerFragment;

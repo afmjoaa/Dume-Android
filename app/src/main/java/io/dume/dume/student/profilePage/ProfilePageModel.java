@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import io.dume.dume.interFace.usefulListeners;
+import io.dume.dume.interfaces.usefulListeners;
 import io.dume.dume.student.pojo.StuBaseModel;
 
 public class ProfilePageModel extends StuBaseModel implements ProfilePageContract.Model {

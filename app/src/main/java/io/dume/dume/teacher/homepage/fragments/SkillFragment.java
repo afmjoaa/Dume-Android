@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,17 +17,14 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.hanks.htextview.scale.ScaleTextView;
-
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import carbon.widget.ImageView;
 import io.dume.dume.R;
-import io.dume.dume.model.DumeModel;
+import io.dume.dume.commonActivity.model.DumeModel;
 import io.dume.dume.student.pojo.SearchDataStore;
 import io.dume.dume.teacher.adapters.SkillAdapter;
 import io.dume.dume.teacher.crudskill.CrudSkillActivity;

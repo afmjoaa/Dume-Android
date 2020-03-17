@@ -1,6 +1,5 @@
 package io.dume.dume.student.grabingPackage;
 
-import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
@@ -84,7 +83,7 @@ import java.util.Objects;
 import biz.laenger.android.vpbs.BottomSheetUtils;
 import biz.laenger.android.vpbs.ViewPagerBottomSheetBehavior;
 import io.dume.dume.R;
-import io.dume.dume.customView.HorizontalLoadViewTwo;
+import io.dume.dume.components.customView.HorizontalLoadViewTwo;
 import io.dume.dume.student.homePage.adapter.HomePageRecyclerData;
 import io.dume.dume.student.pojo.BaseMapActivity;
 import io.dume.dume.student.pojo.MyGpsLocationChangeListener;

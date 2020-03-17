@@ -32,7 +32,7 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.dume.dume.R;
-import io.dume.dume.customView.HorizontalLoadView;
+import io.dume.dume.components.customView.HorizontalLoadView;
 import io.dume.dume.student.pojo.BaseAppCompatActivity;
 import io.dume.dume.teacher.adapters.SkillAdapter;
 import io.dume.dume.teacher.crudskill.CrudSkillActivity;

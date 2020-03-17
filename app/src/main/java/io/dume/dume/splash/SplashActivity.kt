@@ -1,21 +1,13 @@
 package io.dume.dume.splash
 
-import android.content.ActivityNotFoundException
-import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
-import android.net.Uri
-import android.os.Build
 import android.os.Bundle
-import android.util.Log
-import android.view.WindowManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.jaeger.library.StatusBarUtil
 import io.dume.dume.TestActivity
-import io.dume.dume.auth.AuthModel
+import io.dume.dume.firstTimeUser.AuthRepository
 import io.dume.dume.firstTimeUser.ForwardFlowHostActivity
-import io.dume.dume.foreignObligation.PayActivity
+import io.dume.dume.commonActivity.foreignObligation.PayActivity
 import io.dume.dume.student.DashBoard.StudentDashBoard
 import io.dume.dume.teacher.DashBoard.TeacherDashboard
 import io.dume.dume.teacher.homepage.TeacherContract
@@ -27,7 +19,7 @@ class SplashActivity : AppCompatActivity(), SplashContract.View {
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initView()
-        presenter = SplashPresenter(this, AuthModel(this, this))
+        presenter = SplashPresenter(this, AuthRepository(this, this))
         presenter.enqueue(this)
     }
 

@@ -77,7 +77,7 @@
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
-    <io.dume.dume.customView.HorizontalLoadViewTwo
+    <io.dume.dume.components.customView.HorizontalLoadViewTwo
         android:id="@+id/loadViewTwo"
         android:layout_width="20dp"
         android:layout_height="3dp"
@@ -88,7 +88,7 @@
         app:layout_anchor="@id/homeBottomSheet"
         app:layout_anchorGravity="top"/>
 
-    <io.dume.dume.customView.HorizontalLoadView
+    <io.dume.dume.components.customView.HorizontalLoadView
         android:id="@+id/loadView"
         android:layout_width="20dp"
         android:layout_height="3dp"

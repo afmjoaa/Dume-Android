@@ -1,7 +1,5 @@
 package io.dume.dume.student.pojo;
 
-import androidx.annotation.Keep;
-
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.GeoPoint;
@@ -11,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import androidx.annotation.Keep;
 import io.dume.dume.util.DumeUtils;
 
 @Keep
@@ -303,7 +302,6 @@ public class SearchDataStore implements Serializable {
         generatedforWhom.put("stu_phone_number", number);
         generatedforWhom.put("stu_photo", photo);
         generatedforWhom.put("is_self", self);
-
         String o = (String) documentSnapshot.get("last_name");
         String o1 = (String) documentSnapshot.get("first_name");
         String request_user_name = o1 + " " + o;

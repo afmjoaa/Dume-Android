@@ -10,7 +10,7 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.dume.dume.interFace.OnTabModificationListener;
+import io.dume.dume.interfaces.OnTabModificationListener;
 import io.dume.dume.teacher.model.LocalDb;
 
 public class SectionsPagerAdapter extends FragmentStatePagerAdapter {

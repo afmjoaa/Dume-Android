@@ -57,7 +57,7 @@ import java.util.Map;
 
 import carbon.widget.ImageView;
 import io.dume.dume.R;
-import io.dume.dume.model.DumeModel;
+import io.dume.dume.commonActivity.model.DumeModel;
 import io.dume.dume.student.common.SettingData;
 import io.dume.dume.student.common.SettingsAdapter;
 import io.dume.dume.student.grabingLocation.GrabingLocationActivity;

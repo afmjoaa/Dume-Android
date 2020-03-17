@@ -19,7 +19,7 @@ class TeacherTuitionFragment : Fragment() {
         teacherTuitionViewModel = ViewModelProviders.of(this).get(TeacherTuitionViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_teacher_tuition, container, false)
         val textView: TextView = root.findViewById(R.id.text_home)
-        teacherTuitionViewModel.text.observe(this, Observer {
+        teacherTuitionViewModel.text.observe(viewLifecycleOwner, Observer {
             textView.text = it
         })
         return root

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".common.aboutUs.AboutUsActivity"
+    tools:context=".commonActivity.aboutUs.AboutUsActivity"
     tools:showIn="@layout/common2_activity_about_us">
 
     <WebView

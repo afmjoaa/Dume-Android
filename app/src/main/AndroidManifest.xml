@@ -91,9 +91,9 @@
             android:label=""
             android:theme="@style/AppTheme.NoActionBar" />
 
-        <activity android:name=".common.nexuspay.NexusPay" />
-        <activity android:name=".common.bkash_otp.BkashOTP" />
-        <activity android:name=".common.bkash_transection.BkashTransectionActivity" />
+        <activity android:name=".commonActivity.nexuspay.NexusPay" />
+        <activity android:name=".commonActivity.bkash_otp.BkashOTP" />
+        <activity android:name=".commonActivity.bkash_transection.BkashTransectionActivity" />
         <activity
             android:name=".teacher.mentor_settings.AccountSettings"
             android:theme="@style/AppTheme.NoActionBar.transparent.black" />
@@ -178,57 +178,57 @@
             android:label="Select category"
             android:theme="@style/AppTheme.NoActionBar.transparent" />
         <activity
-            android:name=".common.aboutUs.AboutUsActivity"
+            android:name=".commonActivity.aboutUs.AboutUsActivity"
             android:label="@string/title_activity_about_us"
             android:theme="@style/AppTheme.NoActionBar.transparent.black" />
         <activity
-            android:name=".common.privacyPolicy.PrivacyPolicyActivity"
+            android:name=".commonActivity.privacyPolicy.PrivacyPolicyActivity"
             android:label="@string/title_activity_privacy_policy"
             android:theme="@style/AppTheme.NoActionBar.transparent.black" />
         <activity
-            android:name=".common.inboxActivity.InboxActivity"
+            android:name=".commonActivity.inboxActivity.InboxActivity"
             android:label="@string/title_activity_inbox"
             android:theme="@style/AppTheme.NoActionBar.transparent.default" />
         <activity
-            android:name=".common.chatActivity.ChatActivity"
+            android:name=".commonActivity.chatActivity.ChatActivity"
             android:theme="@style/AppTheme.NoActionBar.transparent.default" />
         <activity
-            android:name=".common.contactActivity.ContactActivity"
+            android:name=".commonActivity.contactActivity.ContactActivity"
             android:label="@string/title_activity_contact"
             android:theme="@style/AppTheme.NoActionBar.transparent.contact" />
         <activity
-            android:name=".common.appInfoActivity.AppInfoActivity"
+            android:name=".commonActivity.appInfoActivity.AppInfoActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".teacher.homepage.TeacherActivityMock" />
         <activity
-            android:name=".foreignObligation.PayActivity"
+            android:name=".commonActivity.foreignObligation.PayActivity"
             android:theme="@style/AppTheme.NoActionBar.transparent.black" /> <!-- service and broadCasts -->
         <receiver
-            android:name=".broadcastReceiver.MyAlarmBroadCast"
+            android:name=".components.broadcastReceiver.MyAlarmBroadCast"
             android:enabled="true"
             android:exported="false" />
         <receiver
-            android:name=".broadcastReceiver.NetworkChangeReceiver"
+            android:name=".components.broadcastReceiver.NetworkChangeReceiver"
             android:label="NetworkChangeReceiver">
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
                 <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
             </intent-filter>
         </receiver> <!-- receive sms to auto verify receiver -->
-        <receiver android:name=".broadcastReceiver.SMSAutoVerfication">
+        <receiver android:name=".components.broadcastReceiver.SMSAutoVerfication">
             <intent-filter>
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>
         </receiver> <!-- Services -->
         <service
-            android:name=".service.MyNotification"
+            android:name=".components.broadcastReceiver.service.MyNotification"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
         <service
-            android:name=".service.MyLocationService"
+            android:name=".components.broadcastReceiver.service.MyLocationService"
             android:enabled="true"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE" />
 

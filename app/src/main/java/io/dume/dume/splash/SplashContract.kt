@@ -1,7 +1,7 @@
 package io.dume.dume.splash
 
 import android.content.Context
-import io.dume.dume.auth.AuthGlobalContract
+import io.dume.dume.firstTimeUser.AuthGlobalContract
 
 interface SplashContract {
     interface View : AuthGlobalContract.View {

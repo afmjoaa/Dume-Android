@@ -8,7 +8,7 @@
     android:background="@drawable/background_vector"
     tools:context=".teacher.crudskill.CrudSkillActivity">
 
-    <io.dume.dume.customView.WindowInsetsFrameLayout
+    <io.dume.dume.components.customView.WindowInsetsFrameLayout
         android:id="@+id/map_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -22,7 +22,7 @@
             android:layout_height="match_parent"
             android:background="@drawable/background_vector"
             android:fitsSystemWindows="true" />
-    </io.dume.dume.customView.WindowInsetsFrameLayout>
+    </io.dume.dume.components.customView.WindowInsetsFrameLayout>
 
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/always_view_musk"
@@ -83,7 +83,7 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <io.dume.dume.customView.HorizontalLoadView
+    <io.dume.dume.components.customView.HorizontalLoadView
         android:id="@+id/crudLoad"
         android:layout_width="15dp"
         android:layout_height="10dp"

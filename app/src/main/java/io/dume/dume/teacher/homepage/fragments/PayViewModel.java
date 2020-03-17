@@ -1,11 +1,10 @@
 package io.dume.dume.teacher.homepage.fragments;
 
-import androidx.lifecycle.ViewModel;
 import android.content.Context;
 
 import java.util.ArrayList;
 
-import io.dume.dume.model.DumeModel;
+import io.dume.dume.commonActivity.model.DumeModel;
 import io.dume.dume.teacher.homepage.TeacherContract;
 import io.dume.dume.teacher.pojo.Pay;
 

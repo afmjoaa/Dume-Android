@@ -2,7 +2,7 @@ package io.dume.dume.student.recordsPending;
 
 import android.net.Uri;
 
-import io.dume.dume.interFace.usefulListeners;
+import io.dume.dume.interfaces.usefulListeners;
 
 public interface RecordsPendingContract {
     interface View {

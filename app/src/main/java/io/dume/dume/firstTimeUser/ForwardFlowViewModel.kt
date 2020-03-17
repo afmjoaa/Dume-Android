@@ -8,9 +8,6 @@ import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.PhoneAuthProvider
-import io.dume.dume.R
-import io.dume.dume.auth.AuthGlobalContract
-import io.dume.dume.auth.AuthModel
 import io.dume.dume.poko.MiniUser
 import io.dume.dume.poko.sub_pojo.Failure
 import io.dume.dume.poko.sub_pojo.Success
@@ -39,7 +36,7 @@ class ForwardFlowViewModel : ViewModel() {
     var failure = MutableLiveData<Failure<String>>(null)
 
     /* Lateinit Reference */
-    lateinit var repository: AuthModel
+    lateinit var repository: AuthRepository
     lateinit var activity: Activity
 
     /* General Reference */
@@ -52,7 +49,7 @@ class ForwardFlowViewModel : ViewModel() {
 
     fun inject(activity: Activity) {
         this.activity = activity
-        repository = AuthModel(activity, activity)
+        repository = AuthRepository(activity, activity)
     }
 
     /**

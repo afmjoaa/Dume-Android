@@ -2,7 +2,7 @@ package io.dume.dume.student.grabingInfo;
 
 import java.io.InputStream;
 
-import io.dume.dume.interFace.usefulListeners;
+import io.dume.dume.interfaces.usefulListeners;
 
 public interface GrabingInfoContract {
     interface View {

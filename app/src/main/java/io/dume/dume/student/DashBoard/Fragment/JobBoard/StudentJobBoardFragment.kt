@@ -26,7 +26,6 @@ import io.dume.dume.teacher.DashBoard.fragments.jobboard.JobItem
 import io.dume.dume.teacher.crudskill.CrudSkillActivity
 import io.dume.dume.util.StateManager
 import kotlinx.android.synthetic.main.activity_forward_flow_host.*
-import kotlinx.android.synthetic.main.activity_student_dash_board2.*
 import kotlinx.android.synthetic.main.fragment_student_job_board.*
 
 
@@ -34,6 +33,7 @@ class StudentJobBoardFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener
     private lateinit var viewModelStudent: StudentJobBoardViewModel
     private var jobItemCardAdapter = JobItemCardAdapter()
     private lateinit var jobPrimaryDialog: AlertDialog
+    private var fromForwardFlow: Boolean = false
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -48,6 +48,9 @@ class StudentJobBoardFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
+        if (activity is ForwardFlowHostActivity) {
+            fromForwardFlow = true
+        }
     }
 
     private fun initialize() {
@@ -59,16 +62,18 @@ class StudentJobBoardFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener
 
     private fun goToGrabbingActivity() {
         context?.apply {
-            startActivity(Intent(this, CrudSkillActivity::class.java).setAction(Flag.FORWARDFLOW.flow))
+            if (fromForwardFlow) startActivity(Intent(this, CrudSkillActivity::class.java).setAction(Flag.FORWARDFLOW.flow))
+            else startActivity(Intent(this, CrudSkillActivity::class.java).setAction(Flag.STUDENT_DASHBOARD.flow))
         }
+
     }
 
     private fun initializeButtons() {
 
-        if (activity is ForwardFlowHostActivity) {
+        if (fromForwardFlow) {
             val parent = activity as ForwardFlowHostActivity
             parent.jobPost.setOnClickListener {
-                if ( parent.jobPost.isExtended) {
+                if (parent.jobPost.isExtended) {
                     parent.jobPost.shrink()
                     parent.jobMultiple.visibility = View.VISIBLE
                     parent.jobMultiple.expand()
@@ -95,10 +100,10 @@ class StudentJobBoardFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener
                 jobPrimaryDialog.show()
             }
 
-        } else if (activity is StudentDashBoard) {
+        } else {
             val parent = activity as StudentDashBoard
             parent.jobPost.setOnClickListener {
-                if ( parent.jobPost.isExtended) {
+                if (parent.jobPost.isExtended) {
                     parent.jobPost.shrink()
                     parent.jobMultiple.visibility = View.VISIBLE
                     parent.jobMultiple.expand()
@@ -128,7 +133,6 @@ class StudentJobBoardFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener
 
 
     }
-
 
 
     private fun initializeRV() {

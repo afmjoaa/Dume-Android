@@ -54,7 +54,7 @@ import butterknife.ButterKnife;
 import carbon.widget.RelativeLayout;
 import io.dume.dume.util.Google;
 import io.dume.dume.R;
-import io.dume.dume.model.DumeModel;
+import io.dume.dume.commonActivity.model.DumeModel;
 import io.dume.dume.student.common.ReviewAdapter;
 import io.dume.dume.student.common.ReviewHighlightData;
 import io.dume.dume.student.pojo.SearchDataStore;

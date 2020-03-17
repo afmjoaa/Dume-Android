@@ -5,7 +5,7 @@ import android.view.View;
 import java.util.Map;
 
 import io.dume.dume.R;
-import io.dume.dume.interFace.UserQueryListener;
+import io.dume.dume.interfaces.UserQueryListener;
 
 public class AccountSettingsPresenter implements AccountSettingsContract.Presenter {
 

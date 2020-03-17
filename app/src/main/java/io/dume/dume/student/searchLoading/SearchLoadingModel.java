@@ -14,9 +14,9 @@ import java.util.List;
 import java.util.Map;
 
 import io.dume.dume.util.Google;
-import io.dume.dume.library.myGeoFIreStore.GeoFirestore;
-import io.dume.dume.library.myGeoFIreStore.GeoQuery;
-import io.dume.dume.library.myGeoFIreStore.callbacks.GeoQueryDataEventListener;
+import io.dume.dume.components.library.myGeoFIreStore.GeoFirestore;
+import io.dume.dume.components.library.myGeoFIreStore.GeoQuery;
+import io.dume.dume.components.library.myGeoFIreStore.callbacks.GeoQueryDataEventListener;
 import io.dume.dume.student.pojo.SearchDataStore;
 import io.dume.dume.student.pojo.StuBaseModel;
 import io.dume.dume.student.recordsPage.Record;

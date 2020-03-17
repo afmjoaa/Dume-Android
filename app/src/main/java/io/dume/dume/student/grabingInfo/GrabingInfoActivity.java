@@ -1,6 +1,7 @@
 package io.dume.dume.student.grabingInfo;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.ContentUris;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -23,7 +24,6 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
@@ -69,9 +69,10 @@ import androidx.interpolator.view.animation.LinearOutSlowInInterpolator;
 import androidx.viewpager.widget.ViewPager;
 import carbon.widget.RelativeLayout;
 import io.dume.dume.R;
-import io.dume.dume.interFace.OnTabModificationListener;
-import io.dume.dume.model.DumeModel;
-import io.dume.dume.model.TeacherModel;
+import io.dume.dume.commonActivity.model.DumeModel;
+import io.dume.dume.commonActivity.model.TeacherModel;
+import io.dume.dume.firstTimeUser.Flag;
+import io.dume.dume.interfaces.OnTabModificationListener;
 import io.dume.dume.student.grabingPackage.GrabingPackageActivity;
 import io.dume.dume.student.pojo.BaseAppCompatActivity;
 import io.dume.dume.student.pojo.SearchDataStore;
@@ -231,7 +232,7 @@ public class GrabingInfoActivity extends BaseAppCompatActivity implements Grabin
         textParamTwo = new LinearLayout.LayoutParams(tabMinWidthTwo, LinearLayout.LayoutParams.WRAP_CONTENT);
         textParamOne = new LinearLayout.LayoutParams(tabMinWidthOne, LinearLayout.LayoutParams.WRAP_CONTENT);
         imgKeyBoardDown = getResources().getDrawable(R.drawable.ic_keyboard_arrow_down_black_24dp);
-      }
+    }
 
     @Override
     public void initGrabingInfoPage() {
@@ -455,6 +456,7 @@ public class GrabingInfoActivity extends BaseAppCompatActivity implements Grabin
         firstContactPersonNum.setText(searchDataStore.getUserNumber());
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public void configGrabingInfoPage() {
         forMeBtn.setOnClickListener(new VisibleToggleClickListener() {
@@ -593,12 +595,7 @@ public class GrabingInfoActivity extends BaseAppCompatActivity implements Grabin
 
         });
         //gathering the touch event here
-        alwaysViewMusk.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                return true;
-            }
-        });
+        alwaysViewMusk.setOnTouchListener((view, motionEvent) -> true);
     }
 
     @Override
@@ -626,10 +623,7 @@ public class GrabingInfoActivity extends BaseAppCompatActivity implements Grabin
                 onRadioButtonClick(rd, tabLayout.getSelectedTabPosition(), levelName);
             } else if (levelName.equals("Cross Check")) {
                 switch (retrivedAction) {
-                    case DumeUtils.TEACHER:
-                    case DumeUtils.BOOTCAMP:
-                    case "frag_" + DumeUtils.BOOTCAMP:
-                    case "frag_" + DumeUtils.TEACHER:
+                    case "teacher_dashboard":
                         HashMap<String, Object> queryMap = new HashMap<>();
                         for (int i = 0; i < queryList.size(); i++) {
                             queryMap.put(queryListName.get(i), queryList.get(i));
@@ -745,7 +739,7 @@ public class GrabingInfoActivity extends BaseAppCompatActivity implements Grabin
                         });
                         break;
 
-                    case DumeUtils.STUDENT:
+                    case "student_dashboard":
                         showProgress();
                         fab.setBackgroundTintList(ColorStateList.valueOf(Color.GRAY));
                         fab.setEnabled(false);
@@ -759,8 +753,23 @@ public class GrabingInfoActivity extends BaseAppCompatActivity implements Grabin
                         }
                         gotoGrabingPackage();
                         break;
+                    case "forward_flow":
+                        /*showProgress();
+                        fab.setBackgroundTintList(ColorStateList.valueOf(Color.GRAY));
+                        fab.setEnabled(false);
+                        searchDataStore.genSetRetJizz(queryList, queryListName);
+                        if (forMySelf) {
+                            searchDataStore.genSetRetForWhom(searchDataStore.getUserName(), searchDataStore.getUserNumber(), searchDataStore.getUserUid(), searchDataStore.getAvatarString(), forMySelf);
+                        } else {
+                            String name = secondContactPerson.getText().toString();
+                            String phoneNum = secondContactPersonNum.getText().toString();
+                            searchDataStore.genSetRetForWhom(name, phoneNum, searchDataStore.getUserUid(), getContactAvatarUri(), forMySelf);
+                        }
+                        gotoGrabingPackage();*/
+                        Toast.makeText(getApplicationContext(), "Data Need to Save and Redirect to Student Dashboard", Toast.LENGTH_SHORT).show();
+                        break;
                 }
-            }else if(levelName.equals("Gender")){
+            } else if (levelName.equals("Gender")) {
                 flush("Please select your gender preference...");
             }
         } else {
@@ -831,28 +840,24 @@ public class GrabingInfoActivity extends BaseAppCompatActivity implements Grabin
     }
 
     public void getAction() {
-        switch (Objects.requireNonNull(retrivedAction)) {
-            case DumeUtils.STUDENT:
-                selected_category_position = getIntent().getIntExtra(DumeUtils.SELECTED_ID, 0);
-                queryList.add(new LocalDb().getCategories().get(selected_category_position));
-                queryListName.add("Category");
-                break;
-            case DumeUtils.TEACHER:
-            case "frag_" + DumeUtils.TEACHER:
-                selected_category_position = getIntent().getIntExtra(DumeUtils.SELECTED_ID, 0);
-                forMeWrapper.setVisibility(View.GONE);
-                toolbar.setTitle("Select Skill");
-                queryList.add(new LocalDb().getCategories().get(selected_category_position));
-                queryListName.add("Category");
-                break;
-            default:
-                selected_category_position = getIntent().getIntExtra(DumeUtils.SELECTED_ID, 0);
-                queryList.add(new LocalDb().getCategories().get(selected_category_position));
-                queryListName.add("Category");
-                break;
+        if (retrivedAction.equals(Flag.FORWARDFLOW.getFlow())) {
+            selected_category_position = getIntent().getIntExtra(DumeUtils.SELECTED_ID, 0);
+            queryList.add(new LocalDb().getCategories().get(selected_category_position));
+            queryListName.add("Category");
+            toolbar.setTitle("Forward Flow");
+        } else if (retrivedAction.equals(Flag.TEACHER_DASHBOARD.getFlow())) {
+            selected_category_position = getIntent().getIntExtra(DumeUtils.SELECTED_ID, 0);
+            forMeWrapper.setVisibility(View.GONE);
+            toolbar.setTitle("Select Skill");
+            queryList.add(new LocalDb().getCategories().get(selected_category_position));
+            queryListName.add("Category");
+        } else if (retrivedAction.equals(Flag.STUDENT_DASHBOARD.getFlow())) {
+            selected_category_position = getIntent().getIntExtra(DumeUtils.SELECTED_ID, 0);
+            queryList.add(new LocalDb().getCategories().get(selected_category_position));
+            queryListName.add("Category");
         }
-
     }
+
 
     @Override
     public void onRadioButtonClick(CompoundButton view, int fragmentId, String levelName) {
@@ -879,15 +884,15 @@ public class GrabingInfoActivity extends BaseAppCompatActivity implements Grabin
             } else if (fragmentId == 1) {
                 hintIdTwo.setText(queryList.get(fragmentId + 1));
             } else if (fragmentId == (tabLayout.getTabCount() - 1)) {
-                try{
+                try {
                     hintIdThree.setText(queryList.get(fragmentId + 1));
-                }catch (Exception err){
+                } catch (Exception err) {
                     Log.e(TAG, err.getLocalizedMessage());
                 }
             } else if (fragmentId == (tabLayout.getTabCount() - 2)) {
-                try{
+                try {
                     hintIdTwo.setText(queryList.get(fragmentId + 1));
-                }catch (Exception err){
+                } catch (Exception err) {
                     Log.e(TAG, err.getLocalizedMessage());
                 }
             }
@@ -988,9 +993,9 @@ public class GrabingInfoActivity extends BaseAppCompatActivity implements Grabin
 
     public void generateNextTabs(int fragment) {
         if (!(fragment < tabLayout.getTabCount() - 1)) {
-            if(hintIdThree.getText().toString().toLowerCase().startsWith("ex.")){
+            if (hintIdThree.getText().toString().toLowerCase().startsWith("ex.")) {
                 flush("Please select at least one field...");
-            }else {
+            } else {
                 mSectionsPagerAdapter.newTab(db.getGenderPreferencesList());
                 mViewPager.setCurrentItem(fragment + 1);
             }

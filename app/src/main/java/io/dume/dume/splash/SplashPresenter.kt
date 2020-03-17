@@ -1,11 +1,11 @@
 package io.dume.dume.splash
 
 import android.content.Context
-import io.dume.dume.auth.AuthGlobalContract.AccountTypeFoundListener
-import io.dume.dume.auth.AuthModel
+import io.dume.dume.firstTimeUser.AuthGlobalContract.AccountTypeFoundListener
+import io.dume.dume.firstTimeUser.AuthRepository
 import io.dume.dume.util.StateManager
 
-class SplashPresenter(var view: SplashContract.View, var model: AuthModel) : SplashContract.Presenter {
+class SplashPresenter(var view: SplashContract.View, var repository: AuthRepository) : SplashContract.Presenter {
 
     override fun enqueue(context: Context) {
         val isFirstTimeUser: Boolean = StateManager.getInstance(context).sharedPreferences().all[StateManager.FIRST_TIME_USER] as? Boolean
@@ -14,8 +14,8 @@ class SplashPresenter(var view: SplashContract.View, var model: AuthModel) : Spl
         if (isFirstTimeUser) {
             view.gotoForwardFlowActivity()
         } else {
-            if (model.isUserLoggedIn()) {
-                model.onAccountTypeFound(model.getUser()!!, object : AccountTypeFoundListener {
+            if (repository.isUserLoggedIn()) {
+                repository.onAccountTypeFound(repository.getUser()!!, object : AccountTypeFoundListener {
                     override fun onStart() = run { }
                     override fun onTeacherFound() = view.gotoTeacherActivity()
                     override fun onStudentFound() = view.gotoStudentActivity()

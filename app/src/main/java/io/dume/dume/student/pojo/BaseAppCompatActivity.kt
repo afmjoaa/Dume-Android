@@ -24,9 +24,9 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.jaeger.library.StatusBarUtil
 import io.dume.dume.R
-import io.dume.dume.broadcastReceiver.MyConnectivityHandler
-import io.dume.dume.broadcastReceiver.NetworkChangeReceiver
-import io.dume.dume.customView.HorizontalLoadView
+import io.dume.dume.components.broadcastReceiver.MyConnectivityHandler
+import io.dume.dume.components.broadcastReceiver.NetworkChangeReceiver
+import io.dume.dume.components.customView.HorizontalLoadView
 import io.dume.dume.util.MyApplication
 import io.dume.dume.util.NetworkUtil
 import java.io.IOException

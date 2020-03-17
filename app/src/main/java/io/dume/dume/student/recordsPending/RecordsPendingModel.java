@@ -19,7 +19,7 @@ import com.google.firebase.storage.UploadTask;
 import java.util.Map;
 import java.util.Objects;
 
-import io.dume.dume.interFace.usefulListeners;
+import io.dume.dume.interfaces.usefulListeners;
 import io.dume.dume.student.recordsPage.RecordsPageModel;
 
 public class RecordsPendingModel extends RecordsPageModel implements RecordsPendingContract.Model {

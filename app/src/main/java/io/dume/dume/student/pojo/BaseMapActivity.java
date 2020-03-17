@@ -64,7 +64,7 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import io.dume.dume.R;
-import io.dume.dume.customView.TouchableWrapper;
+import io.dume.dume.components.customView.TouchableWrapper;
 
 import static android.graphics.Typeface.ITALIC;
 import static android.graphics.Typeface.NORMAL;

@@ -17,7 +17,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.Map;
 
 import androidx.annotation.NonNull;
-import io.dume.dume.interFace.usefulListeners;
+import io.dume.dume.interfaces.usefulListeners;
 
 public abstract class StuBaseModel {
     private static final String TAG = "StuBaseModel";

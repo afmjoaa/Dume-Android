@@ -5,7 +5,7 @@
     android:id="@+id/parent_coor_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".common.contactActivity.ContactActivity">
+    tools:context=".commonActivity.contactActivity.ContactActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar"
@@ -49,7 +49,7 @@
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
-    <io.dume.dume.customView.HorizontalLoadView
+    <io.dume.dume.components.customView.HorizontalLoadView
         android:id="@+id/loadView"
         android:layout_width="20dp"
         android:layout_height="3dp"
