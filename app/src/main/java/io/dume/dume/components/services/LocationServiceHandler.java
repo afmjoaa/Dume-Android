@@ -1,4 +1,4 @@
-package io.dume.dume.components.broadcastReceiver.service;
+package io.dume.dume.components.services;
 
 import android.location.Location;
 

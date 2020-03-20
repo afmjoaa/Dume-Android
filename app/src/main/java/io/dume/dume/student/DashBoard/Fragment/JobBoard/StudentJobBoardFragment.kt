@@ -62,8 +62,8 @@ class StudentJobBoardFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener
 
     private fun goToGrabbingActivity() {
         context?.apply {
-            if (fromForwardFlow) startActivity(Intent(this, CrudSkillActivity::class.java).setAction(Flag.FORWARDFLOW.flow))
-            else startActivity(Intent(this, CrudSkillActivity::class.java).setAction(Flag.STUDENT_DASHBOARD.flow))
+            if (fromForwardFlow) startActivity(Intent(this, CrudSkillActivity::class.java).setAction(Flag.FORWARD_STUDENT.flow))
+            else startActivity(Intent(this, CrudSkillActivity::class.java).setAction(Flag.STUDENT_POST.flow))
         }
 
     }

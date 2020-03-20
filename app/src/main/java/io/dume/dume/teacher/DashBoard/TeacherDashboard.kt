@@ -34,12 +34,16 @@ import io.dume.dume.util.StateManager
 import kotlinx.android.synthetic.main.activity_student_dash_board2.*
 
 class TeacherDashboard : BaseAppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, BottomNavigationView.OnNavigationItemSelectedListener {
+
+
     private val jobBoardFragment: Fragment = TeacherJobBoardFragment()
     private val tuitionFragment: Fragment = TeacherTuitionFragment()
     private val skillFragment: Fragment = TeacherSkillFragment()
     private val paymentFragment: Fragment = TeacherPaymentFragment()
     val fm: FragmentManager = supportFragmentManager
     var active = jobBoardFragment
+
+
     private val appUpdateManager: AppUpdateManager by lazy { AppUpdateManagerFactory.create(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -177,24 +181,24 @@ class TeacherDashboard : BaseAppCompatActivity(), NavigationView.OnNavigationIte
         super.onResume()
         appUpdateManager.appUpdateInfo.addOnSuccessListener { appUpdateInfo ->
 
-                    // If the update is downloaded but not installed, notify the user to complete the update.
-                    if (appUpdateInfo.installStatus() == InstallStatus.DOWNLOADED) {
-                        popupSnackbarForCompleteUpdate()
-                    }
+            // If the update is downloaded but not installed, notify the user to complete the update.
+            if (appUpdateInfo.installStatus() == InstallStatus.DOWNLOADED) {
+                popupSnackbarForCompleteUpdate()
+            }
 
-                    try {
-                        if (appUpdateInfo.updateAvailability() == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS) {
-                            // If an in-app update is already running, resume the update.
-                            appUpdateManager.startUpdateFlowForResult(
-                                    appUpdateInfo,
-                                    AppUpdateType.IMMEDIATE,
-                                    this,
-                                    APP_UPDATE_REQUEST_CODE)
-                        }
-                    } catch (e: IntentSender.SendIntentException) {
-                        Log.e("TeacherDashboard", "IMMEDIATE update fail: " +  e.printStackTrace())
-                    }
+            try {
+                if (appUpdateInfo.updateAvailability() == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS) {
+                    // If an in-app update is already running, resume the update.
+                    appUpdateManager.startUpdateFlowForResult(
+                            appUpdateInfo,
+                            AppUpdateType.IMMEDIATE,
+                            this,
+                            APP_UPDATE_REQUEST_CODE)
                 }
+            } catch (e: IntentSender.SendIntentException) {
+                Log.e("TeacherDashboard", "IMMEDIATE update fail: " + e.printStackTrace())
+            }
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -243,5 +247,12 @@ class TeacherDashboard : BaseAppCompatActivity(), NavigationView.OnNavigationIte
 
     companion object {
         private const val APP_UPDATE_REQUEST_CODE = 1234
+    }
+
+    enum class Action {
+        SKILL,
+        PAYMENT,
+        TUTION,
+        JOB_BOARD
     }
 }

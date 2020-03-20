@@ -77,6 +77,7 @@ import io.dume.dume.student.grabingPackage.GrabingPackageActivity;
 import io.dume.dume.student.pojo.BaseAppCompatActivity;
 import io.dume.dume.student.pojo.SearchDataStore;
 import io.dume.dume.student.studentHelp.StudentHelpActivity;
+import io.dume.dume.teacher.DashBoard.TeacherDashboard;
 import io.dume.dume.teacher.homepage.TeacherContract;
 import io.dume.dume.teacher.homepage.TeacherDataStore;
 import io.dume.dume.teacher.model.LocalDb;
@@ -608,8 +609,6 @@ public class GrabingInfoActivity extends BaseAppCompatActivity implements Grabin
         if (tabLayout.getSelectedTabPosition() == (tabLayout.getTabCount() - 1)) {
             String levelName = (String) tabLayout.getTabAt(tabLayout.getSelectedTabPosition()).getText();
             if (endOfNest.contains(levelName)) {
-                //flush("this should work : " + tabLayout.getSelectedTabPosition());
-                //flush("i am here");
                 AppCompatRadioButton rd = new AppCompatRadioButton(this);
                 rd.setText("null");
                 onRadioButtonClick(rd, tabLayout.getSelectedTabPosition(), levelName);
@@ -622,152 +621,117 @@ public class GrabingInfoActivity extends BaseAppCompatActivity implements Grabin
                 rd.setText("null");
                 onRadioButtonClick(rd, tabLayout.getSelectedTabPosition(), levelName);
             } else if (levelName.equals("Cross Check")) {
-                switch (retrivedAction) {
-                    case "teacher_dashboard":
-                        HashMap<String, Object> queryMap = new HashMap<>();
-                        for (int i = 0; i < queryList.size(); i++) {
-                            queryMap.put(queryListName.get(i), queryList.get(i));
-                        }
-                        showProgress();
-                        fab.setBackgroundTintList(ColorStateList.valueOf(Color.GRAY));
-                        fab.setEnabled(false);
-                        String packageName = TeacherDataStore.getInstance().getPackageName();
-                        String queryString = DumeUtils.generateQueryString(packageName, queryList, queryListName);
-                        String commonQueryString = DumeUtils.generateCommonQueryString(packageName, queryList, queryListName);
-                        ArrayList<Skill> skillArrayList = TeacherDataStore.getInstance().getSkillArrayList();
+                if (retrivedAction.equals(Flag.TEACHER_SKILL.getFlow()) || retrivedAction.equals(Flag.FORWARD_TEACHER.getFlow())) {
+                    HashMap<String, Object> queryMap = new HashMap<>();
+                    for (int i = 0; i < queryList.size(); i++) {
+                        queryMap.put(queryListName.get(i), queryList.get(i));
+                    }
+                    showProgress();
+                    fab.setBackgroundTintList(ColorStateList.valueOf(Color.GRAY));
+                    fab.setEnabled(false);
+                    String packageName = TeacherDataStore.getInstance().getPackageName();
+                    String queryString = DumeUtils.generateQueryString(packageName, queryList, queryListName);
+                    String commonQueryString = DumeUtils.generateCommonQueryString(packageName, queryList, queryListName);
+                    ArrayList<Skill> skillArrayList = TeacherDataStore.getInstance().getSkillArrayList();
 
 
-                        int thresholdHere = packageName.equals(SearchDataStore.DUME_GANG) ? 4 : 3;
-                        int levelHere = queryList.size() - thresholdHere;
-                        String beforeListFoundHere = "";
-                        switch (levelHere) {
+                    int thresholdHere = packageName.equals(SearchDataStore.DUME_GANG) ? 4 : 3;
+                    int levelHere = queryList.size() - thresholdHere;
+                    String beforeListFoundHere = "";
+                    switch (levelHere) {
+                        case 1:
+                            beforeListFoundHere = queryList.get(0);
+                            break;
+                        case 2:
+                            beforeListFoundHere = queryList.get(0) + queryList.get(1);
+                            break;
+                        case 3:
+                            beforeListFoundHere = queryList.get(0) + queryList.get(1) + queryList.get(2);
+                            break;
+                        case 4:
+                            beforeListFoundHere = queryList.get(0) + queryList.get(1) + queryList.get(2) + queryList.get(3);
+                            break;
+                    }
+
+                    for (Skill item : skillArrayList) {
+                        int threshold = item.getPackage_name().equals(SearchDataStore.DUME_GANG) ? 4 : 3;
+                        int level = item.getQuery_list().size() - threshold;
+                        String beforeListFound = "";
+                        switch (level) {
                             case 1:
-                                beforeListFoundHere = queryList.get(0);
+                                beforeListFound = item.getQuery_list().get(0);
                                 break;
                             case 2:
-                                beforeListFoundHere = queryList.get(0) + queryList.get(1);
+                                beforeListFound = item.getQuery_list().get(0) + item.getQuery_list().get(1);
                                 break;
                             case 3:
-                                beforeListFoundHere = queryList.get(0) + queryList.get(1) + queryList.get(2);
+                                beforeListFound = item.getQuery_list().get(0) + item.getQuery_list().get(1) + item.getQuery_list().get(2);
                                 break;
                             case 4:
-                                beforeListFoundHere = queryList.get(0) + queryList.get(1) + queryList.get(2) + queryList.get(3);
+                                beforeListFound = item.getQuery_list().get(0) + item.getQuery_list().get(1) + item.getQuery_list().get(2) + item.getQuery_list().get(3);
                                 break;
                         }
+                        if (beforeListFoundHere.equals(beforeListFound)) {
+                            flush("Skill Already Exists");
+                            hideProgress();
+                            Intent intent = new Intent(GrabingInfoActivity.this, TeacherDashboard.class).setAction(TeacherDashboard.Action.SKILL.toString());
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+                            return;
+                        }
+                    }
 
-                        for (Skill item : skillArrayList) {
-                            int threshold = item.getPackage_name().equals(SearchDataStore.DUME_GANG) ? 4 : 3;
-                            int level = item.getQuery_list().size() - threshold;
-                            String beforeListFound = "";
-                            switch (level) {
-                                case 1:
-                                    beforeListFound = item.getQuery_list().get(0);
-                                    break;
-                                case 2:
-                                    beforeListFound = item.getQuery_list().get(0) + item.getQuery_list().get(1);
-                                    break;
-                                case 3:
-                                    beforeListFound = item.getQuery_list().get(0) + item.getQuery_list().get(1) + item.getQuery_list().get(2);
-                                    break;
-                                case 4:
-                                    beforeListFound = item.getQuery_list().get(0) + item.getQuery_list().get(1) + item.getQuery_list().get(2) + item.getQuery_list().get(3);
-                                    break;
-                            }
-                            if (beforeListFoundHere.equals(beforeListFound)) {
-                                flush("Skill Already Exists");
-                                if (retrivedAction.startsWith("frag")) {
-                                    hideProgress();
-                                    Intent intent = new Intent(GrabingInfoActivity.this, SkillActivity.class);
-                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                    //finishAffinity();
-                                    startActivity(intent);
-                                    finish();
-                                } else {
-                                    hideProgress();
-                                    Intent intent = new Intent(GrabingInfoActivity.this, SkillActivity.class);
-                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                    startActivity(intent);
-                                }
-                                return;
-                            }
+                    float salary = Float.parseFloat(queryMap.get("Salary").toString().replace("k", ""));
+                    HashMap<String, Object> likes = new HashMap<>();
+                    HashMap<String, Object> dislikes = new HashMap<>();
+                    if (getLast(queryMap) != null) {
+                        String mainSsss = (String) getLast(queryMap);
+                        splitMainSsss = mainSsss.split("\\s*(=>|,)\\s*");
+                    }
+                    for (String splited : splitMainSsss) {
+                        likes.put(splited, 1);
+                        dislikes.put(splited, 0);
+                    }
+                    //FieldValue.serverTimestamp() done in the dumeModel instead of new date();
+                    Skill skill = new Skill(true, queryMap.get("Gender").toString(), salary * 1000, new Date(), queryMap, queryString
+                            , new GeoPoint(84.9, 180), 0, 0, "", 0.0f, likes, dislikes, packageName);
+                    skill.setQuery_list(queryList);
+                    skill.setQuery_list_name(queryListName);
+                    skill.setCommonQueryString(commonQueryString);
+                    skill.setPackage_name(packageName);
+                    teacherModel.saveSkill(skill, new TeacherContract.Model.Listener<Void>() {
+                        @Override
+                        public void onSuccess(Void list) {
+                            hideProgress();
+                            Intent intent = new Intent(GrabingInfoActivity.this, SkillActivity.class).setAction("skill_added");
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+
                         }
 
-                        float salary = Float.parseFloat(queryMap.get("Salary").toString().replace("k", ""));
-                        HashMap<String, Object> likes = new HashMap<>();
-                        HashMap<String, Object> dislikes = new HashMap<>();
-                        if (getLast(queryMap) != null) {
-                            String mainSsss = (String) getLast(queryMap);
-                            splitMainSsss = mainSsss.split("\\s*(=>|,)\\s*");
+                        @Override
+                        public void onError(String msg) {
+                            flush(msg);
+                            hideProgress();
+                            fab.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent)));
+                            fab.setEnabled(true);
                         }
-                        for (String splited : splitMainSsss) {
-                            likes.put(splited, 1);
-                            dislikes.put(splited, 0);
-                        }
-                        //FieldValue.serverTimestamp() done in the dumeModel instead of new date();
-                        Skill skill = new Skill(true, queryMap.get("Gender").toString(), salary * 1000, new Date(), queryMap, queryString
-                                , new GeoPoint(84.9, 180), 0, 0, "", 0.0f, likes, dislikes, packageName);
-                        skill.setQuery_list(queryList);
-                        skill.setQuery_list_name(queryListName);
-                        skill.setCommonQueryString(commonQueryString);
-                        skill.setPackage_name(packageName);
-                        teacherModel.saveSkill(skill, new TeacherContract.Model.Listener<Void>() {
-                            @Override
-                            public void onSuccess(Void list) {
-                                if (retrivedAction.startsWith("frag")) {
-                                    hideProgress();
-                                    Intent intent = new Intent(GrabingInfoActivity.this, SkillActivity.class).setAction("skill_added");
-                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                    //finishAffinity();
-                                    startActivity(intent);
-                                    finish();
-                                } else {
-                                    //| Intent.FLAG_ACTIVITY_CLEAR_TASK
-                                    hideProgress();
-                                    Intent intent = new Intent(GrabingInfoActivity.this, SkillActivity.class).setAction("skill_added");
-                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                    startActivity(intent);
-                                }
-                            }
+                    });
 
-                            @Override
-                            public void onError(String msg) {
-                                flush(msg);
-                                hideProgress();
-                                fab.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent)));
-                                fab.setEnabled(true);
-                            }
-                        });
-                        break;
+                } else {
+                    showProgress();
+                    fab.setBackgroundTintList(ColorStateList.valueOf(Color.GRAY));
+                    fab.setEnabled(false);
+                    searchDataStore.genSetRetJizz(queryList, queryListName);
+                    if (forMySelf) {
+                        searchDataStore.genSetRetForWhom(searchDataStore.getUserName(), searchDataStore.getUserNumber(), searchDataStore.getUserUid(), searchDataStore.getAvatarString(), forMySelf);
+                    } else {
+                        String name = secondContactPerson.getText().toString();
+                        String phoneNum = secondContactPersonNum.getText().toString();
+                        searchDataStore.genSetRetForWhom(name, phoneNum, searchDataStore.getUserUid(), getContactAvatarUri(), forMySelf);
+                    }
+                    gotoGrabingPackage();
 
-                    case "student_dashboard":
-                        showProgress();
-                        fab.setBackgroundTintList(ColorStateList.valueOf(Color.GRAY));
-                        fab.setEnabled(false);
-                        searchDataStore.genSetRetJizz(queryList, queryListName);
-                        if (forMySelf) {
-                            searchDataStore.genSetRetForWhom(searchDataStore.getUserName(), searchDataStore.getUserNumber(), searchDataStore.getUserUid(), searchDataStore.getAvatarString(), forMySelf);
-                        } else {
-                            String name = secondContactPerson.getText().toString();
-                            String phoneNum = secondContactPersonNum.getText().toString();
-                            searchDataStore.genSetRetForWhom(name, phoneNum, searchDataStore.getUserUid(), getContactAvatarUri(), forMySelf);
-                        }
-                        gotoGrabingPackage();
-                        break;
-                    case "forward_flow":
-                        /*showProgress();
-                        fab.setBackgroundTintList(ColorStateList.valueOf(Color.GRAY));
-                        fab.setEnabled(false);
-                        searchDataStore.genSetRetJizz(queryList, queryListName);
-                        if (forMySelf) {
-                            searchDataStore.genSetRetForWhom(searchDataStore.getUserName(), searchDataStore.getUserNumber(), searchDataStore.getUserUid(), searchDataStore.getAvatarString(), forMySelf);
-                        } else {
-                            String name = secondContactPerson.getText().toString();
-                            String phoneNum = secondContactPersonNum.getText().toString();
-                            searchDataStore.genSetRetForWhom(name, phoneNum, searchDataStore.getUserUid(), getContactAvatarUri(), forMySelf);
-                        }
-                        gotoGrabingPackage();*/
-                        Toast.makeText(getApplicationContext(), "Data Need to Save and Redirect to Student Dashboard", Toast.LENGTH_SHORT).show();
-                        break;
                 }
             } else if (levelName.equals("Gender")) {
                 flush("Please select your gender preference...");
@@ -776,6 +740,11 @@ public class GrabingInfoActivity extends BaseAppCompatActivity implements Grabin
             //other general block "just go to the next one"
             Objects.requireNonNull(tabLayout.getTabAt(tabLayout.getSelectedTabPosition() + 1)).select();
         }
+    }
+
+
+    private void postJob() {
+
     }
 
     @Override
@@ -797,7 +766,7 @@ public class GrabingInfoActivity extends BaseAppCompatActivity implements Grabin
         fab.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent)));
         fab.setEnabled(true);
         hideProgress();
-        startActivity(new Intent(this, GrabingPackageActivity.class));
+        startActivity(new Intent(this, GrabingPackageActivity.class).setAction(retrivedAction));
     }
 
     @Override
@@ -840,22 +809,13 @@ public class GrabingInfoActivity extends BaseAppCompatActivity implements Grabin
     }
 
     public void getAction() {
-        if (retrivedAction.equals(Flag.FORWARDFLOW.getFlow())) {
-            selected_category_position = getIntent().getIntExtra(DumeUtils.SELECTED_ID, 0);
-            queryList.add(new LocalDb().getCategories().get(selected_category_position));
-            queryListName.add("Category");
-            toolbar.setTitle("Forward Flow");
-        } else if (retrivedAction.equals(Flag.TEACHER_DASHBOARD.getFlow())) {
-            selected_category_position = getIntent().getIntExtra(DumeUtils.SELECTED_ID, 0);
+        if (retrivedAction.equals(Flag.FORWARD_TEACHER.getFlow()) || retrivedAction.equals(Flag.TEACHER_SKILL.getFlow())) {
             forMeWrapper.setVisibility(View.GONE);
             toolbar.setTitle("Select Skill");
-            queryList.add(new LocalDb().getCategories().get(selected_category_position));
-            queryListName.add("Category");
-        } else if (retrivedAction.equals(Flag.STUDENT_DASHBOARD.getFlow())) {
-            selected_category_position = getIntent().getIntExtra(DumeUtils.SELECTED_ID, 0);
-            queryList.add(new LocalDb().getCategories().get(selected_category_position));
-            queryListName.add("Category");
         }
+        selected_category_position = getIntent().getIntExtra(DumeUtils.SELECTED_ID, 0);
+        queryList.add(new LocalDb().getCategories().get(selected_category_position));
+        queryListName.add("Category");
     }
 
 

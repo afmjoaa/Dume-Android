@@ -32,7 +32,8 @@ import io.dume.dume.util.DumeUtils
 import io.dume.dume.util.DumeUtils.configAppToolBarTitle
 import kotlinx.android.synthetic.main.activity_student_dash_board2.*
 
-class StudentDashBoard : BaseAppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
+class
+StudentDashBoard : BaseAppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
         BottomNavigationView.OnNavigationItemSelectedListener {
 
     private val searchMentorFragment: Fragment = SearchMentorFragment()
@@ -224,5 +225,11 @@ class StudentDashBoard : BaseAppCompatActivity(), NavigationView.OnNavigationIte
 
     companion object {
         private const val APP_UPDATE_REQUEST_CODE = 1234
+    }
+
+    enum class Action {
+        SEARCH,
+        TUTION,
+        JOB_BOARD
     }
 }

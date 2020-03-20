@@ -13,22 +13,6 @@ import android.graphics.drawable.LayerDrawable;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import com.google.android.material.appbar.AppBarLayout;
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.tabs.TabLayout;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.core.content.ContextCompat;
-import androidx.core.view.ViewCompat;
-import androidx.viewpager.widget.ViewPager;
-import androidx.interpolator.view.animation.LinearOutSlowInInterpolator;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -63,9 +47,13 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
-import com.google.maps.android.ui.IconGenerator;
 import com.touchboarder.weekdaysbuttons.WeekdaysDataItem;
 import com.touchboarder.weekdaysbuttons.WeekdaysDataSource;
 import com.transitionseverywhere.Fade;
@@ -80,18 +68,35 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.ViewCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.interpolator.view.animation.LinearOutSlowInInterpolator;
+import androidx.viewpager.widget.ViewPager;
 import biz.laenger.android.vpbs.BottomSheetUtils;
 import biz.laenger.android.vpbs.ViewPagerBottomSheetBehavior;
 import io.dume.dume.R;
 import io.dume.dume.components.customView.HorizontalLoadViewTwo;
+import io.dume.dume.firstTimeUser.AuthRepository;
+import io.dume.dume.firstTimeUser.Flag;
+import io.dume.dume.student.DashBoard.StudentDashBoard;
 import io.dume.dume.student.homePage.adapter.HomePageRecyclerData;
 import io.dume.dume.student.pojo.BaseMapActivity;
 import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
 import io.dume.dume.student.pojo.SearchDataStore;
 import io.dume.dume.student.searchLoading.SearchLoadingActivity;
 import io.dume.dume.student.studentHelp.StudentHelpActivity;
+import io.dume.dume.teacher.homepage.TeacherContract;
 import io.dume.dume.util.DatePickerFragment;
 import io.dume.dume.util.DumeUtils;
+import io.dume.dume.util.StateManager;
 import io.dume.dume.util.TimePickerFragment;
 
 import static io.dume.dume.util.DumeUtils.firstThree;
@@ -163,7 +168,6 @@ public class GrabingPackageActivity extends BaseMapActivity implements GrabingPa
     private String defaultUrl;
     private View mCustomMarkerView;
     private carbon.widget.ImageView mMarkerImageView;
-    private IconGenerator iconFactory;
     private int SEARCH_REQUEST_CODE = 0101;
     private String gangDiscount = null;
     private String regularDiscount = null;
@@ -175,7 +179,7 @@ public class GrabingPackageActivity extends BaseMapActivity implements GrabingPa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.stu4_activity_grabing_package);
         setActivityContextMap(this, fromFlag);
-        mPresenter = new GrabingPackagePresenter(this, new GrabingPackageModel());
+        mPresenter = new GrabingPackagePresenter(this);
         mPresenter.grabingPackagePageEnqueue();
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         getLocationPermission(mapFragment);
@@ -250,7 +254,6 @@ public class GrabingPackageActivity extends BaseMapActivity implements GrabingPa
         alwaysViewMusk = findViewById(R.id.always_view_musk);
         mCustomMarkerView = ((LayoutInflater) Objects.requireNonNull(getSystemService(LAYOUT_INFLATER_SERVICE))).inflate(R.layout.custom_marker_view, null);
         mMarkerImageView = mCustomMarkerView.findViewById(R.id.profile_image);
-        iconFactory = new IconGenerator(this);
 
         dumeGangPercentageOffImage = findViewById(R.id.dume_gang_percent_off_image);
         regularDumePercentageOffImage = findViewById(R.id.regular_dume_percent_off_image);
@@ -348,27 +351,10 @@ public class GrabingPackageActivity extends BaseMapActivity implements GrabingPa
                     TextView tab_label = (TextView) tabView.findViewById(R.id.nav_label);
                     ImageView tab_icon = (ImageView) tabView.findViewById(R.id.nav_icon);
                     Drawable drawableIcon = tab_icon.getDrawable();
-
                     if (drawableIcon instanceof Animatable) {
                         ((Animatable) drawableIcon).start();
                     }
                 }
-                int tabPosition = tab.getPosition();
-                switch (tabPosition) {
-                    case 0:
-
-                        break;
-                    case 1:
-
-                        break;
-                    case 2:
-
-                        break;
-                    default:
-                        break;
-                }
-
-
             }
 
             @Override
@@ -391,20 +377,6 @@ public class GrabingPackageActivity extends BaseMapActivity implements GrabingPa
                     if (drawableIcon instanceof Animatable) {
                         ((Animatable) drawableIcon).start();
                     }
-                }
-                int tabPosition = tab.getPosition();
-                switch (tabPosition) {
-                    case 0:
-
-                        break;
-                    case 1:
-
-                        break;
-                    case 2:
-
-                        break;
-                    default:
-                        break;
                 }
             }
         });
@@ -583,11 +555,6 @@ public class GrabingPackageActivity extends BaseMapActivity implements GrabingPa
     @Override
     public void executeSearchActivity() {
         Calendar instance = Calendar.getInstance();
-        /*if (preferredDays != null && startDate != null && startTime != null) {
-            //handle at last
-        } else if (preferredDays == null) {
-            flush("Internal error !!");
-        } else */
         if (startDate == null && startTime == null) {
             //TODO testing auto time date
             int hourOfDay = instance.get(Calendar.HOUR_OF_DAY);
@@ -629,10 +596,6 @@ public class GrabingPackageActivity extends BaseMapActivity implements GrabingPa
             hintIdTwo.setText(String.format("%s", currentDateStr));
             startDate = searchDataStore.genSetRetStartDate(instance.get(Calendar.YEAR), instance.get(Calendar.MONTH), instance.get(Calendar.DAY_OF_MONTH), currentDateStr);
         } else if (startDate == null) {
-            /*executeClicked = true;
-            flush("please select start date...");
-            mViewPager.setCurrentItem(1, true);*/
-
             //now date
             //datePickerEt.setText(currentDateStr);
             instance.add(Calendar.DATE, 1);
@@ -642,10 +605,6 @@ public class GrabingPackageActivity extends BaseMapActivity implements GrabingPa
 
 
         } else {
-            /*executeClickedTwo = true;
-            flush("please select start time...");
-            mViewPager.setCurrentItem(2, true);*/
-
             //time here
             int hourOfDay = instance.get(Calendar.HOUR_OF_DAY);
             int minute = instance.get(Calendar.MINUTE);
@@ -690,10 +649,47 @@ public class GrabingPackageActivity extends BaseMapActivity implements GrabingPa
                 searchDataStore.setPackageName(SearchDataStore.INSTANT_DUME);
                 break;
         }
-        Intent intent = new Intent(this, SearchLoadingActivity.class);
-        intent.setAction("from_GPA");
-        startActivity(intent);
-        finish();
+
+
+        if (Flag.STUDENT_POST.getFlow().equals(getIntent().getAction())) {
+            //TODO database
+
+
+            Intent intent = new Intent(this, StudentDashBoard.class).setAction(StudentDashBoard.Action.JOB_BOARD.toString());
+            startActivity(intent);
+            finish();
+        } else if (Flag.FORWARD_STUDENT.getFlow().equals(getIntent().getAction())) {
+            showProgress();
+             AuthRepository authRepository = new AuthRepository(this, this);
+             if(FirebaseAuth.getInstance().getCurrentUser() != null ){
+                 authRepository.isEducatedSync(FirebaseAuth.getInstance().getCurrentUser().getUid(), new TeacherContract.Model.Listener<Void>() {
+                     @Override
+                     public void onSuccess(Void list) {
+                         hideProgress();
+                         StateManager.Companion.getInstance(getContext()).setFirstTimeUser(false);
+                         Intent intent = new Intent(getContext(), StudentDashBoard.class).setAction(StudentDashBoard.Action.JOB_BOARD.toString());
+                         startActivity(intent);
+                         finish();
+                     }
+                     @Override
+                     public void onError(String msg) {
+                         Log.e(TAG, "Network err " + msg);
+                         flush(msg);
+                         hideProgress();
+                     }
+                 });
+             }
+
+
+
+        } else {
+            Intent intent = new Intent(this, SearchLoadingActivity.class);
+            intent.setAction("from_GPA");
+            startActivity(intent);
+            finish();
+        }
+
+
     }
 
     @Override
@@ -1318,14 +1314,14 @@ public class GrabingPackageActivity extends BaseMapActivity implements GrabingPa
                             }
                             break;
                         case 3:
-                            try{
+                            try {
                                 if (myMainActivity.executeClickedTwo) {
                                     if (timePickerEt.getText().toString().equals("")) {
                                         emptyTPF.setVisibility(View.VISIBLE);
                                     }
                                     myMainActivity.executeClickedTwo = false;
                                 }
-                            }catch (Exception err){
+                            } catch (Exception err) {
                                 Log.e(TAG, err.getLocalizedMessage());
                             }
                             break;

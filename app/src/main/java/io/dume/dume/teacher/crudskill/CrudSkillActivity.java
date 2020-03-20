@@ -46,7 +46,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import carbon.widget.LinearLayout;
 import io.dume.dume.R;
 import io.dume.dume.components.customView.HorizontalLoadView;
-import io.dume.dume.firstTimeUser.Flag;
 import io.dume.dume.student.grabingInfo.GrabingInfoActivity;
 import io.dume.dume.student.pojo.BaseMapActivity;
 import io.dume.dume.student.pojo.MyGpsLocationChangeListener;
@@ -56,7 +55,6 @@ import io.dume.dume.teacher.adapters.CategoryAdapter;
 import io.dume.dume.util.DumeUtils;
 import io.dume.dume.util.GridSpacingItemDecoration;
 
-import static io.dume.dume.util.DumeUtils.configureAppbar;
 import static io.dume.dume.util.ImageHelper.getRoundedCornerBitmap;
 
 public class CrudSkillActivity extends BaseMapActivity implements CrudContract.View,
@@ -115,13 +113,6 @@ public class CrudSkillActivity extends BaseMapActivity implements CrudContract.V
         spacing = (int) ((wh[0] - ((330) * (getResources().getDisplayMetrics().density))) / 4);
         float mDensity = getResources().getDisplayMetrics().density;
         //initializing the title
-        if (fromWhere.equals(Flag.FORWARDFLOW.getFlow())) {
-            configureAppbar(this, "Select category : Forward Flow");
-        } else if (fromWhere.equals(Flag.STUDENT_DASHBOARD.getFlow())) {
-            configureAppbar(this, "Select category  : Student");
-        } else {
-            configureAppbar(this, "Select category : Teacher");
-        }
         mainScrollingContainer.getBackground().setAlpha(90);
         //testing code here for elevation
         appBarLayout.addOnOffsetChangedListener((appBarLayout, verticalOffset) -> {
@@ -170,13 +161,8 @@ public class CrudSkillActivity extends BaseMapActivity implements CrudContract.V
         categoryGrid.setAdapter(new CategoryAdapter(categoryList, drawableList) {
             @Override
             protected void onCategoryItemClick(View view, int position) {
-                if (fromWhere.equals(Flag.FORWARDFLOW.getFlow())) {
-                    startActivity(new Intent(getApplicationContext(), GrabingInfoActivity.class).setAction(Flag.FORWARDFLOW.getFlow()).putExtra(DumeUtils.SELECTED_ID, position));
-                } else if (fromWhere.equals(Flag.STUDENT_DASHBOARD.getFlow())) {
-                    startActivity(new Intent(getApplicationContext(), GrabingInfoActivity.class).setAction(Flag.STUDENT_DASHBOARD.getFlow()).putExtra(DumeUtils.SELECTED_ID, position));
-                } else if (fromWhere.equals(Flag.STUDENT_DASHBOARD.getFlow())) {
-                    startActivity(new Intent(getApplicationContext(), GrabingInfoActivity.class).setAction(Flag.TEACHER_DASHBOARD.getFlow()).putExtra(DumeUtils.SELECTED_ID, position));
-                }
+                startActivity(new Intent(getApplicationContext(), GrabingInfoActivity.class).setAction(getIntent().getAction()).putExtra(DumeUtils.SELECTED_ID, position));
+
             }
         });
     }

@@ -32,10 +32,13 @@ enum class Role(val flow: String) {
     STUDENT("student")
 }
 
- enum class Flag( var flow: String) {
-    FORWARDFLOW("forward_flow"),
-    STUDENT_DASHBOARD("student_dashboard"),
-    TEACHER_DASHBOARD("teacher_dashboard")
+enum class Flag(var flow: String) {
+    FORWARD_TEACHER("forward_teacher"),
+    FORWARD_STUDENT("forward_student"),
+    STUDENT_SEARCH("student_search"),
+    STUDENT_POST("student_post"),
+    TEACHER_SKILL("teacher_skill"),
+
 }
 
 

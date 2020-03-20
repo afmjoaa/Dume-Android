@@ -152,8 +152,6 @@ class AuthRepository(internal var activity: Activity, internal var context: Cont
     }
 
 
-
-
     fun onAccountTypeFound(user: FirebaseUser, listener: AuthGlobalContract.AccountTypeFoundListener) {
         listener.onStart()
         val miniUserRef = firestore.collection("mini_users").document(user.uid)
@@ -236,7 +234,10 @@ class AuthRepository(internal var activity: Activity, internal var context: Cont
     }
 
     fun isEducatedSync(uid: String, listener: TeacherContract.Model.Listener<Void>) {
-        miniUserRef.document(uid).update("isEducated", true).addOnSuccessListener { listener.onSuccess(null) }.addOnFailureListener { listener.onError(it.localizedMessage) }
+
+        miniUserRef.document(uid).update("isEducated", true).addOnSuccessListener {
+            listener.onSuccess(null)
+        }.addOnFailureListener { listener.onError(it.localizedMessage) }
     }
 
 

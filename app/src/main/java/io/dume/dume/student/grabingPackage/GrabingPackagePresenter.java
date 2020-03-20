@@ -9,15 +9,13 @@ import io.dume.dume.R;
 public class GrabingPackagePresenter implements GrabingPackageContract.Presenter {
 
     private GrabingPackageContract.View mView;
-    private GrabingPackageContract.Model mModel;
     private Context context;
     private Activity activity;
 
-    public GrabingPackagePresenter(Context context, GrabingPackageContract.Model mModel) {
+    public GrabingPackagePresenter(Context context) {
         this.context = context;
         this.activity = (Activity) context;
         this.mView = (GrabingPackageContract.View) context;
-        this.mModel = mModel;
     }
 
     @Override
@@ -29,20 +27,8 @@ public class GrabingPackagePresenter implements GrabingPackageContract.Presenter
 
     @Override
     public void onGrabingPackageViewIntracted(View view) {
-        switch (view.getId()) {
-            case R.id.package_search_btn:
-                mView.executeSearchActivity();
-                break;
-           /* case R.id.dume_gang_container:
-                mView.dumeGangSelected();
-                break;
-            case R.id.regular_dume_container:
-                mView.regularDumeSelected();
-                break;
-            case R.id.instant_dume_container:
-                mView.instantDumeSelected();
-                break;*/
-
+        if (view.getId() == R.id.package_search_btn) {
+            mView.executeSearchActivity();
         }
     }
 }

@@ -27,9 +27,4 @@ public interface GrabingPackageContract {
         void onGrabingPackageViewIntracted(android.view.View view);
 
     }
-
-    interface Model {
-
-        void grabingPackagePagehawwa();
-    }
 }
