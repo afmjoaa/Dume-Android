@@ -27,7 +27,15 @@
         android:roundIcon="@mipmap/icon_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/DefaultTheme.NoActionBar">
-        <activity android:name=".TestActivity"></activity>
+        <activity
+            android:name=".TestActivity"
+            android:label="Test">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
         <activity
             android:name=".firstTimeUser.ForwardFlowHostActivity"
             android:theme="@style/DefaultTheme.NoActionBar"
@@ -65,10 +73,12 @@
             android:name=".splash.SplashActivity"
             android:label="Dume"
             android:theme="@style/SplashTheme">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
         <activity
             android:name=".student.homePage.HomePageActivity"

@@ -302,6 +302,7 @@ public class SearchDataStore implements Serializable {
         generatedforWhom.put("stu_phone_number", number);
         generatedforWhom.put("stu_photo", photo);
         generatedforWhom.put("is_self", self);
+        //TODO need to set the document snapshot
         String o = (String) documentSnapshot.get("last_name");
         String o1 = (String) documentSnapshot.get("first_name");
         String request_user_name = o1 + " " + o;

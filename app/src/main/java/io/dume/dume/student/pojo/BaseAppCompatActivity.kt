@@ -1,6 +1,7 @@
 package io.dume.dume.student.pojo
 
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Dialog
 import android.content.Context
@@ -68,6 +69,21 @@ open class BaseAppCompatActivity() : AppCompatActivity(), MyConnectivityHandler 
         unregisterReceiver(networkChangeReceiver)
     }
 
+
+    @SuppressLint("InflateParams")
+    fun headsUp(msg: String) {
+        val inflater = layoutInflater
+        val layout: View = inflater.inflate(R.layout.dume_toast, null)
+
+        val text: TextView = layout.findViewById(R.id.text) as TextView
+        text.setText(msg)
+
+        val toast = Toast(applicationContext)
+        toast.setGravity(Gravity.TOP, 0, 0)
+        toast.duration = Toast.LENGTH_LONG
+        toast.view = layout
+        toast.show()
+    }
     override fun onStart() {
         super.onStart()
         val status = NetworkUtil.getConnectivityStatusString(context)

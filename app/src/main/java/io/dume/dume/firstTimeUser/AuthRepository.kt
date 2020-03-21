@@ -16,7 +16,8 @@ import com.google.firebase.internal.api.FirebaseNoSignedInUserException
 import com.google.firebase.storage.FirebaseStorage
 import io.dume.dume.components.library.myGeoFIreStore.GeoFirestore
 import io.dume.dume.poko.MiniUser
-import io.dume.dume.poko.User
+import io.dume.dume.poko.Student
+import io.dume.dume.poko.Teacher
 import io.dume.dume.teacher.homepage.TeacherContract
 import java.util.concurrent.TimeUnit
 import kotlin.random.Random
@@ -171,7 +172,7 @@ class AuthRepository(internal var activity: Activity, internal var context: Cont
 
     /**
      *  this functions is calling from AuthViewModel to create a new user.it performs upto three operation at once using batch write.
-     *  @returns Unit
+     *  @returns [Unit]
      *  @param user
      */
 
@@ -183,19 +184,38 @@ class AuthRepository(internal var activity: Activity, internal var context: Cont
         val studentDocumentReference = studentUserRef.document(FirebaseAuth.getInstance().uid!!)
 
         writeBatch.set(miniDocumentReference, user)
-        writeBatch.set(mentorDocumentReference, prepareUser(miniUser = user))
-        writeBatch.set(studentDocumentReference, prepareUser(miniUser = user))
+        writeBatch.set(mentorDocumentReference, prepareStudent(miniUser = user))
+        writeBatch.set(studentDocumentReference, prepareStudent(miniUser = user))
         writeBatch.commit().addOnCompleteListener { listener.onSuccess(null);geoFirestore.setLocation(FirebaseAuth.getInstance().uid, user.parmanent_location!!) }.addOnFailureListener { listener.onError(it.localizedMessage) }
     }
 
     /**
-     *  this functions is calling from AuthViewModel to create a new user from @param miniUser.it converts miniUser to User
-     *  @returns Unit
+     *  this functions is calling from AuthViewModel to create a new [Student] Student from @param miniUser.it converts miniUser to User
+     *  @returns [Student]
      *  @param miniUser
      */
 
-    fun prepareUser(miniUser: MiniUser): User {
-        return User(name = miniUser.name,
+    fun prepareStudent(miniUser: MiniUser): Student {
+        return Student(name = miniUser.name,
+                first_name = miniUser.first_name,
+                last_name = miniUser.last_name,
+                phone_number = miniUser.phone_number,
+                avatar = miniUser.avatar,
+                location = GeoPoint(miniUser.parmanent_location?.latitude!!, miniUser.parmanent_location?.longitude!!),
+                email = miniUser.mail,
+                birth_date = miniUser.birth_date,
+                id = FirebaseAuth.getInstance().uid
+        )
+    }
+
+    /**
+     *  this functions is calling from AuthViewModel to create a new [Teacher] from @param miniUser.it converts miniUser to User
+     *  @returns [Teacher]
+     *  @param miniUser
+     */
+
+    fun prepareTeacher(miniUser: MiniUser): Teacher {
+        return Teacher(name = miniUser.name,
                 first_name = miniUser.first_name,
                 last_name = miniUser.last_name,
                 phone_number = miniUser.phone_number,
